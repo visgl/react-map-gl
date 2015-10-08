@@ -1,0 +1,47 @@
+{
+  "name": "react-map-gl",
+  "description": "A React wrapper for MapboxGL-js and overlay API.",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uber/react-mapbox-gl.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "alphaify": "^1.0.0",
+    "bowser": "^0.7.3",
+    "canvas-composite-types": "^1.0.0",
+    "d3": "^3.5.5",
+    "debounce": "^1.0.0",
+    "gl-matrix": "^2.3.1",
+    "global": "^4.3.0",
+    "keymirror": "^0.1.1",
+    "mapbox-gl": "~0.11.1",
+    "nop": "^1.0.0",
+    "object-assign": "^3.0.0",
+    "svg-transform": "0.0.1"
+  },
+  "devDependencies": {
+    "bistre": "^1.0.1",
+    "budo": "^4.2.1",
+    "husky": "^0.8.1",
+    "uber-standard": "^3.6.4"
+  },
+  "scripts": {
+    "start": "budo ./example/main.js --live -t | bistre",
+    "lint": "uber-standard",
+    "precommit": "npm run lint -s",
+    "prepush": "npm run lint -s"
+  },
+  "peerDependencies": {
+    "immutable": "^3.7.3",
+    "r-dom": "^1.3.0",
+    "react": "^0.13.0"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "2.x"
+  }
+}
