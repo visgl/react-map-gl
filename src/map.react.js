@@ -485,14 +485,16 @@ var MapboxGLMap = React.createClass({
       bbox: getBBoxFromTransform(transform, width, height)
     });
 
-    if(!this.props.onClickFeatures) {
+    if (!this.props.onClickFeatures) {
         return;
     }
 
     var pos = opt.pos;
 
-    // radius enables point features, like marker symbols, to be clicked. 
-    map.featuresAt([pos.x, pos.y], {radius: 15}, function callback(error, features) {
+    // radius enables point features, like marker symbols, to be clicked.
+    map.featuresAt([pos.x, pos.y],
+            {radius: 15},
+            function callback(error, features) {
       if (error) {
         throw error;
       }
