@@ -145,7 +145,16 @@ var MapboxGLMap = React.createClass({
     /**
       * Show attribution control or not.
       */
-    attributionControl: React.PropTypes.bool
+    attributionControl: React.PropTypes.bool,
+
+    /**
+      * Called when a feature is clicked on. Features must set the
+      * `interactive` property to `true` for this to work properly. see the
+      * Mapbox example: https://www.mapbox.com/mapbox-gl-js/example/featuresat/
+      * The first argument of the callback will be the array of feature the
+      * mouse is over. This is the same response returned from `featuresAt`.
+      */
+    onClickFeatures: React.PropTypes.func
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -475,6 +484,25 @@ var MapboxGLMap = React.createClass({
       isDragging: false,
       bbox: getBBoxFromTransform(transform, width, height)
     });
+
+    if (!this.props.onClickFeatures) {
+        return;
+    }
+
+    var pos = opt.pos;
+
+    // radius enables point features, like marker symbols, to be clicked.
+    map.featuresAt([pos.x, pos.y],
+            {radius: 15},
+            function callback(error, features) {
+      if (error) {
+        throw error;
+      }
+      if (!features.length) {
+        return;
+      }
+      this.props.onClickFeatures(features);
+    }.bind(this));
   },
 
   _onZoom: function _onZoom(opt) {
