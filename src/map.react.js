@@ -477,6 +477,7 @@ var MapboxGLMap = React.createClass({
     var width = this.props.width;
     var height = this.props.height;
     var transform = cloneTransform(map.transform);
+
     this._onChangeViewport({
       latitude: transform.center.lat,
       longitude: transform.center.lng,
@@ -486,15 +487,15 @@ var MapboxGLMap = React.createClass({
     });
 
     if (!this.props.onClickFeatures) {
-        return;
+      return;
     }
 
     var pos = opt.pos;
 
-    // radius enables point features, like marker symbols, to be clicked.
-    map.featuresAt([pos.x, pos.y],
-            {radius: 15},
-            function callback(error, features) {
+    // Radius enables point features, like marker symbols, to be clicked.
+    map.featuresAt([pos.x, pos.y], {
+      radius: 15
+    }, function callback(error, features) {
       if (error) {
         throw error;
       }
