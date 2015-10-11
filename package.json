@@ -6,7 +6,7 @@
   "keywords": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/uber/react-mapbox-gl.git"
+    "url": "https://github.com/uber/react-map-gl.git"
   },
   "license": "MIT",
   "dependencies": {
@@ -26,12 +26,15 @@
   "devDependencies": {
     "bistre": "^1.0.1",
     "budo": "^4.2.1",
-    "husky": "^0.8.1",
+    "envify": "^3.4.0",
+    "opn": "^3.0.2",
+    "prova": "^2.1.2",
     "uber-standard": "^3.6.4"
   },
   "scripts": {
     "start": "budo ./example/main.js --live -t | bistre",
     "lint": "uber-standard",
+    "test": "npm run lint && prova -q -b -t envify -l chrome test/*",
     "precommit": "npm run lint -s",
     "prepush": "npm run lint -s"
   },
