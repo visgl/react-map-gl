@@ -1,0 +1,7 @@
+PropTypes: {
+  width: React.PropTypes.number.isRequired,
+  height: React.PropTypes.number.isRequired,
+  project: React.PropTypes.func.isRequired,
+  unproject: React.PropTypes.func.isRequired,
+  isDragging: React.PropTypes.bool
+}
