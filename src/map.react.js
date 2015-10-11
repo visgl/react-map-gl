@@ -64,7 +64,7 @@ function cloneTransform(original) {
   return transform;
 }
 
-var MapboxGLMap = React.createClass({
+var MapGL = React.createClass({
 
   displayName: 'MapGL',
 
@@ -606,7 +606,7 @@ var MapboxGLMap = React.createClass({
   }
 });
 
-MapboxGLMap.fitBounds = function fitBounds(width, height, _bounds, options) {
+MapGL.fitBounds = function fitBounds(width, height, _bounds, options) {
   var bounds = new LngLatBounds([_bounds[0].reverse(), _bounds[1].reverse()]);
   options = options || {};
   var padding = typeof options.padding === 'undefined' ? 0 : options.padding;
@@ -629,4 +629,4 @@ MapboxGLMap.fitBounds = function fitBounds(width, height, _bounds, options) {
   };
 };
 
-module.exports = MapboxGLMap;
+module.exports = MapGL;
