@@ -28,6 +28,7 @@ var prefix =
 
 var config = {
   DEFAULTS: {},
+  MAPBOX_API_ACCESS_TOKEN: null,
   CURSOR: {
     GRABBING: prefix + 'grabbing',
     GRAB: prefix + 'grab'

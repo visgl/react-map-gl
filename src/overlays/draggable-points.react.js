@@ -21,6 +21,7 @@
 
 var assign = require('object-assign');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Immutable = require('immutable');
 var r = require('r-dom');
 var transform = require('svg-transform');
@@ -77,7 +78,7 @@ var DraggablePointsOverlay = React.createClass({
 
   _onDrag: function _onDrag(event) {
     event.stopPropagation();
-    var pixel = mouse(this.refs.container.getDOMNode(), event);
+    var pixel = mouse(ReactDOM.findDOMNode(this.refs.container), event);
     var latlng = this.props.unproject(pixel);
     this.props.onUpdatePoint({
       key: this.state.draggedPointKey,
@@ -95,7 +96,7 @@ var DraggablePointsOverlay = React.createClass({
   _addPoint: function _addPoint(event) {
     event.stopPropagation();
     event.preventDefault();
-    var pixel = mouse(this.refs.container.getDOMNode(), event);
+    var pixel = mouse(ReactDOM.findDOMNode(this.refs.container), event);
     var location = this.props.unproject(pixel);
     this.props.onAddPoint([location.lat, location.lng]);
   },
