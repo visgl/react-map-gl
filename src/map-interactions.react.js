@@ -20,6 +20,7 @@
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var MapboxGL = require('mapbox-gl');
 var Point = MapboxGL.Point;
 var document = require('global/document');
@@ -78,7 +79,7 @@ var MapInteractions = React.createClass({
   },
 
   _getMousePos: function _getMousePos(event) {
-    var el = this.refs.container.getDOMNode();
+    var el = ReactDOM.findDOMNode(this.refs.container);
     return mousePos(el, event);
   },
 

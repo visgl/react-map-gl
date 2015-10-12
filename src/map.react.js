@@ -21,6 +21,7 @@
 
 var assert = require('assert');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var debounce = require('debounce');
 var r = require('r-dom');
 var d3 = require('d3');
@@ -237,7 +238,7 @@ var MapGL = React.createClass({
       mapStyle = this.props.mapStyle;
     }
     var map = new MapboxGL.Map({
-      container: this.refs.mapboxMap.getDOMNode(),
+      container: ReactDOM.findDOMNode(this.refs.mapboxMap),
       center: [this.state.longitude, this.state.latitude],
       zoom: this.state.zoom,
       style: mapStyle,
