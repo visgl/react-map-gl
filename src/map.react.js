@@ -101,13 +101,18 @@ var MapGL = React.createClass({
       */
     zoom: React.PropTypes.number.isRequired,
     /**
-      * The mapbox style the component should use. Can either be a string url
+      * The Mapbox style the component should use. Can either be a string url
       * or a MapboxGL style Immutable.Map object.
       */
     mapStyle: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.instanceOf(Immutable.Map)
     ]),
+    /**
+      * The Mapbox API access token to provide to mapbox-gl-js. This is required
+      * when using Mapbox provided vector tiles and styles.
+      */
+    mapboxApiAccessToken: React.PropTypes.string,
     /**
       * `onChangeViewport` callback is fired when the user interacted with the
       * map. The object passed to the callback containers `latitude`,
