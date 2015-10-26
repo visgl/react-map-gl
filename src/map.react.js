@@ -312,32 +312,34 @@ var MapGL = React.createClass({
     var prevLayers = prevStyle.get('layers');
     var nextLayers = nextStyle.get('layers');
     var updates = [];
-    var exitingIds = [];
+    var exiting = [];
     var prevMap = {};
     var nextMap = {};
     nextLayers.forEach(function map(layer, index) {
       var id = layer.get('id');
+      var layerImBehind = nextLayers.get(index + 1);
       nextMap[id] = {
         layer: layer,
         id: id,
         // The `id` of the layer before this one.
-        before: index > 0 ? nextLayers.get(index - 1).get('id') : null,
+        before: layerImBehind ? layerImBehind.get('id') : null,
         enter: true
       };
     });
     prevLayers.forEach(function map(layer, index) {
       var id = layer.get('id');
+      var layerImBehind = prevLayers.get(index + 1);
       prevMap[id] = {
         layer: layer,
         id: id,
-        before: index > 0 ? prevLayers.get(index - 1).get('id') : null
+        before: layerImBehind ? layerImBehind.get('id') : null
       };
       if (nextMap[id]) {
         // Not a new layer.
         nextMap[id].enter = false;
       } else {
         // This layer is being removed.
-        exitingIds.push(id);
+        exiting.push(prevMap[id]);
       }
     });
     nextLayers.reverse().forEach(function map(layer) {
@@ -351,7 +353,7 @@ var MapGL = React.createClass({
         updates.push(nextMap[id]);
       }
     });
-    return {updates: updates, exitingIds: exitingIds};
+    return {updates: updates, exiting: exiting};
   },
 
   // Individually update the maps source and layers that have changed if all
@@ -390,6 +392,16 @@ var MapGL = React.createClass({
     var sourcesDiff = this._diffSources(prevStyle, nextStyle);
     var layersDiff = this._diffLayers(prevStyle, nextStyle);
 
+    // TODO: It's rather difficult to determine style diffing in the presence
+    // of refs. For now, if any style update has a ref, fallback to no diffing.
+    // We can come back to this case if there's a solid usecase.
+    if (layersDiff.updates.some(function updatedNodeHasRef(node) {
+      return node.layer.get('ref');
+    })) {
+      map.setStyle(nextStyle.toJS());
+      return;
+    }
+
     map.batch(function batchStyleUpdates() {
       sourcesDiff.enter.forEach(function each(enter) {
         map.addSource(enter.id, enter.source.toJS());
@@ -401,8 +413,10 @@ var MapGL = React.createClass({
       sourcesDiff.exit.forEach(function each(exit) {
         map.removeSource(exit.id);
       });
-      layersDiff.exitingIds.forEach(function forEach(id) {
-        map.removeLayer(id);
+      layersDiff.exiting.forEach(function forEach(exit) {
+        if (map.style.getLayer(exit.id)) {
+          map.removeLayer(exit.id);
+        }
       });
       layersDiff.updates.forEach(function forEach(update) {
         if (!update.enter) {
