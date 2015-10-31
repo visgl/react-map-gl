@@ -18,7 +18,7 @@
     "gl-matrix": "^2.3.1",
     "global": "^4.3.0",
     "keymirror": "^0.1.1",
-    "mapbox-gl": "~0.11.1",
+    "mapbox-gl": "0.11.1",
     "nop": "^1.0.0",
     "object-assign": "^3.0.0",
     "svg-transform": "0.0.1"
