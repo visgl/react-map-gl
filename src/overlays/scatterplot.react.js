@@ -73,6 +73,9 @@ var ScatterplotOverlay = React.createClass({
     var ctx = canvas.getContext('2d');
     var props = this.props;
     var scale = Math.pow(this.props.zoom / this.props.defaultZoom, 6);
+    //dot doesn't scale according to the map zoom level:
+    //var radius = this.props.dotRadius;    
+    //dot scales according to zoom level:
     var radius = this.props.dotRadius * scale;
     var fill = this.props.dotFill;
     ctx.save();
