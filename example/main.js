@@ -46,21 +46,6 @@ var App = React.createClass({
 
   displayName: 'App',
 
-  _onChangeViewport: function _onChangeViewport(opt) {
-    this.setState({
-      latitude: opt.latitude,
-      longitude: opt.longitude,
-      zoom: opt.zoom,
-      bbox: opt.bbox
-    });
-  },
-
-  getInitialState: function getInitialState() {
-    return {
-      map: {latitude: 37.7577, longitude: -122.4376, zoom: 8}
-    };
-  },
-
   render: function render() {
     var common = {
       width: 400,
