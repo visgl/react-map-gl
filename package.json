@@ -1,9 +1,13 @@
 {
   "name": "react-map-gl",
   "description": "A React wrapper for MapboxGL-js and overlay API.",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "main": "src/index.js",
-  "keywords": ["mapbox", "mapbox-gl", "react"],
+  "keywords": [
+    "mapbox",
+    "mapbox-gl",
+    "react"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/uber/react-map-gl.git"
