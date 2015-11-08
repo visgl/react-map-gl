@@ -56,7 +56,7 @@ Other third party overlays can also be created. For example, the
 [webgl-heatmap](https://github.com/vicapow/webgl-heatmap) to create geographic
 heatmaps.
 
-![heatmap-example.gif]()
+![](heatmap-example.gif)
 
 Example usage:
 
