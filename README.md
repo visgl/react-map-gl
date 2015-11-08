@@ -11,23 +11,13 @@ be Mapbox APIs that haven't yet been exposed.
 
 ## Overview
 
-react-map-gl provides an `overlay` API so you can add visualization overlays.
-
-Supported Overlays:
-
-1. ChoroplethOverlay
-2. ScatterplotOverlay
-3. DraggablePointsOverlay
-4. SVGOverlay
-5. CanvasOverlay
-
-## Installation
+### Installation
 
 ```
 npm install react-map-gl --save
 ```
 
-## Usage
+### Usage
 
 ````js
 <MapGL width={400} height={400} latitude={37.7577} longitude={-122.4376}
@@ -39,12 +29,46 @@ npm install react-map-gl --save
 
 ### Using overlays
 
+react-map-gl provides an overlay API so you can use the builtin visualization
+overlays, or create your own. Here's an example of using the build in
+ScatterplotOverlay.
+
 ````js
+var ScatterplotOverlay = require('react-map-gl/src/overlays/scatterplot.react');
+// ...
 <MapGL {...mapProps}>
   <ScatterplotOverlay locations={locations} dotRadius={4} globalOpacity={1}
     compositeOperation="screen" />
   // Add additional overlays here...
 ])
+````
+
+Other built in overlays include:
+
+1. ChoroplethOverlay
+2. ScatterplotOverlay
+3. DraggablePointsOverlay
+4. SVGOverlay
+5. CanvasOverlay
+
+Other third party overlays can also be created. For example, the
+[heatmap-overlay](https://github.com/vicapow/react-map-gl-heatmap-overlay) uses
+[webgl-heatmap](https://github.com/vicapow/webgl-heatmap) to create geographic
+heatmaps.
+
+![heatmap-example.gif]()
+
+Example usage:
+
+````js
+var HeatmapOverlay = require('react-map-gl-heatmap-overlay');
+var cities = require('example-cities');
+// ...
+    render: function render() {
+      return <MapGL ...viewportProps>
+        <HeatmapOverlay locations={cities} />
+      </MapGL>;
+    }
 ````
 
 
