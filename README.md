@@ -43,13 +43,15 @@ var ScatterplotOverlay = require('react-map-gl/src/overlays/scatterplot.react');
 ])
 ````
 
-Other built in overlays include:
+#### Build in overlays
 
 1. ChoroplethOverlay
-2. ScatterplotOverlay
-3. DraggablePointsOverlay
-4. SVGOverlay
-5. CanvasOverlay
+. ScatterplotOverlay
+. DraggablePointsOverlay
+. SVGOverlay
+. CanvasOverlay
+
+#### Third party overlays
 
 Other third party overlays can also be created. For example, the
 [heatmap-overlay](https://github.com/vicapow/react-map-gl-heatmap-overlay) uses
