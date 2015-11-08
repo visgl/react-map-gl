@@ -26,6 +26,11 @@ function relativeMousePosition(container, event) {
   return [x, y];
 }
 
+function scaleRelativeToZoom(zoom, relativeToZoom) {
+  return Math.pow(2, zoom) / Math.pow(2, relativeToZoom);
+}
+
 module.exports = {
-  relativeMousePosition: relativeMousePosition
+  relativeMousePosition: relativeMousePosition,
+  scaleRelativeToZoom: scaleRelativeToZoom
 };
