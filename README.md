@@ -4,8 +4,8 @@ react-map-gl provides a [React](http://facebook.github.io/react/) friendly
 API wrapper around [Mapbox GL JS](https://www.mapbox.com/mapbox-gl-js/). A webGL
 based vector tile mapping library.
 
-WARNING: This project is still very new and the API may change. There also may
-be Mapbox APIs that haven't yet been exposed.
+WARNING: This project is new and the API may change. There also may be Mapbox
+APIs that haven't yet been exposed.
 
 ![](react-map-gl-screenshots.png)
 
@@ -46,10 +46,10 @@ var ScatterplotOverlay = require('react-map-gl/src/overlays/scatterplot.react');
 #### Build in overlays
 
 1. ChoroplethOverlay
-. ScatterplotOverlay
-. DraggablePointsOverlay
-. SVGOverlay
-. CanvasOverlay
+2. ScatterplotOverlay
+3. DraggablePointsOverlay
+4. SVGOverlay
+5. CanvasOverlay
 
 #### Third party overlays
 

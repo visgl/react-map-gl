@@ -25,7 +25,6 @@ var ReactDOM = require('react-dom');
 var debounce = require('debounce');
 var r = require('r-dom');
 var d3 = require('d3');
-var noop = require('./noop');
 var assign = require('object-assign');
 var Immutable = require('immutable');
 var MapboxGL = require('mapbox-gl');
@@ -166,7 +165,7 @@ var MapGL = React.createClass({
   getDefaultProps: function getDefaultProps() {
     return {
       mapStyle: 'mapbox://styles/mapbox/light-v8',
-      onChangeViewport: noop,
+      onChangeViewport: null,
       mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
       attributionControl: true
     };
@@ -183,6 +182,17 @@ var MapGL = React.createClass({
   componentWillReceiveProps: function componentWillReceiveProps(newProps) {
     var stateChanges = this._updateStateFromProps(this.state, newProps);
     this.setState(stateChanges);
+  },
+
+  _cursor: function _cursor() {
+    var isInteractive = this.props.onChangeViewport
+      || this.props.onClickFeature
+      || this.props.onHoverFeatures;
+    if (isInteractive) {
+      return this.props.isDragging ?
+        config.CURSOR.GRABBING : config.CURSOR.GRAB;
+    }
+    return 'inherit';
   },
 
   // Use props to create an object of state changes.
@@ -256,7 +266,6 @@ var MapGL = React.createClass({
 
     this._map = map;
     this._updateMapViewport();
-    this._onChangeViewport();
   },
 
   _updateMapViewport: function _updateMapViewport() {
@@ -456,6 +465,9 @@ var MapGL = React.createClass({
   },
 
   _onMouseDrag: function _onMouseDrag(opt) {
+    if (!this.props.onChangeViewport) {
+      return;
+    }
     var p2 = opt.pos;
     var map = this._getMap();
     var width = this.props.width;
@@ -463,7 +475,7 @@ var MapGL = React.createClass({
     // take the start latlng and put it where the mouse is down.
     var transform = cloneTransform(map.transform);
     assert(this.state.startLatLng, '`startDragLatLng` prop is required for ' +
-      'mouse drag behavior.');
+      'mouse drag behavior to calculate where to position the map.');
     transform.setLocationAtPoint(this.state.startLatLng, p2);
     var bbox = getBBoxFromTransform(transform, width, height);
     this._onChangeViewport({
@@ -591,8 +603,7 @@ var MapGL = React.createClass({
     var style = assign({}, props.style, {
       width: props.width,
       height: props.height,
-      cursor: this.props.isDragging ?
-        config.CURSOR.GRABBING : config.CURSOR.GRAB
+      cursor: this._cursor()
     });
 
     var transform = new Transform();
@@ -602,12 +613,13 @@ var MapGL = React.createClass({
     transform.center.lat = this.props.latitude;
     transform.center.lng = this.props.longitude;
 
-    return r.div({
-        style: assign({}, this.props.style, {
-          width: this.props.width,
-          height: this.props.height
-        })
-      }, [
+    var content = [
+      r.div({ref: 'mapboxMap', style: style, className: props.className}),
+      this._renderOverlays(transform)
+    ];
+
+    if (this.props.onChangeViewport) {
+      content = [
         r(MapInteractions, {
           onMouseDown: this._onMouseDown,
           onMouseDrag: this._onMouseDrag,
@@ -617,12 +629,16 @@ var MapGL = React.createClass({
           onZoomEnd: this._onZoomEnd,
           width: this.props.width,
           height: this.props.height
-        }, [
-          r.div({ref: 'mapboxMap', style: style, className: props.className}),
-          this._renderOverlays(transform)
-        ])
-      ]
-    );
+        }, content)
+      ];
+    }
+
+    return r.div({
+      style: assign({}, this.props.style, {
+        width: this.props.width,
+        height: this.props.height
+      })
+    }, content);
   }
 });
 
