@@ -73,6 +73,10 @@ var cities = require('example-cities');
     }
 ````
 
+Want to create and share your own overlay? Fork the
+[react-map-gl-example-overlay](https://github.com/vicapow/react-map-gl-example-overlay)
+project to get started.
+
 
 ### ImmutableJS all the things
 
