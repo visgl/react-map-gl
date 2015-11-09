@@ -24,6 +24,7 @@ var React = require('react');
 var r = require('r-dom');
 var window = require('global/window');
 
+var NotInteractiveExample = require('./examples/not-interactive.react');
 var ChoroplethExample = require('./examples/choropleth.react');
 var CustomExample = require('./examples/custom.react');
 var GeodataCreator = require('./examples/geodata-creator.react');
@@ -57,7 +58,8 @@ var App = React.createClass({
       r(ScatterplotExample, common),
       r(ChoroplethExample, common),
       r(CustomExample, common),
-      r(GeodataCreator, common)
+      r(GeodataCreator, common),
+      r(NotInteractiveExample, common)
     ]);
   }
 });
