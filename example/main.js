@@ -20,6 +20,7 @@
 'use strict';
 
 var document = require('global/document');
+var ReactDOM = require('react-dom');
 var React = require('react');
 var r = require('r-dom');
 var window = require('global/window');
@@ -64,4 +65,6 @@ var App = React.createClass({
   }
 });
 
-React.render(r(App), document.body);
+var reactContainer = document.createElement('div');
+document.body.appendChild(reactContainer);
+ReactDOM.render(r(App), reactContainer);
