@@ -26,13 +26,13 @@ var r = require('r-dom');
 var d3 = require('d3');
 var assign = require('object-assign');
 var Immutable = require('immutable');
-var MapboxGL = require('mapbox-gl');
-var LngLatBounds = MapboxGL.LngLatBounds;
-var Point = MapboxGL.Point;
+var mapboxgl = require('mapbox-gl');
+var LngLatBounds = mapboxgl.LngLatBounds;
+var Point = mapboxgl.Point;
 // NOTE: Transform is not a public API so we should be careful to always lock
 // down mapbox-gl to a specific major, minor, and patch version.
 var Transform = require('mapbox-gl/js/geo/transform');
-var vec4 = require('gl-matrix').vec4;
+var ViewportMercator = require('viewport-mercator-project');
 
 var config = require('./config');
 var MapInteractions = require('./map-interactions.react');
@@ -42,12 +42,15 @@ function mod(value, divisor) {
   return modulus < 0 ? divisor + modulus : modulus;
 }
 
-function unproject(transform, point) {
-  return transform.pointLocation(MapboxGL.Point.convert(point));
+function unprojectFromTransform(transform, point) {
+  return transform.pointLocation(Point.convert(point));
 }
 
 function getBBoxFromTransform(transform, width, height) {
-  return [unproject(transform, [0, 0]), unproject(transform, [width, height])];
+  return [
+    unprojectFromTransform(transform, [0, 0]),
+    unprojectFromTransform(transform, [width, height])
+  ];
 }
 
 function cloneTransform(original) {
@@ -204,7 +207,7 @@ var MapGL = React.createClass({
       height: props.height,
       mapStyle: props.mapStyle,
       startLatLng: props.startDragLatLng &&
-        new MapboxGL.LngLat(props.startDragLatLng[1], props.startDragLatLng[0])
+        new mapboxgl.LngLat(props.startDragLatLng[1], props.startDragLatLng[0])
     };
 
     assign(stateChanges, {
@@ -216,7 +219,7 @@ var MapGL = React.createClass({
       prevMapStyle: state.mapStyle
     });
 
-    MapboxGL.accessToken = props.mapboxApiAccessToken;
+    mapboxgl.accessToken = props.mapboxApiAccessToken;
 
     return stateChanges;
   },
@@ -251,7 +254,7 @@ var MapGL = React.createClass({
     } else {
       mapStyle = this.props.mapStyle;
     }
-    var map = new MapboxGL.Map({
+    var map = new mapboxgl.Map({
       container: this.refs.mapboxMap.getDOMNode(),
       center: [this.state.longitude, this.state.latitude],
       zoom: this.state.zoom,
@@ -456,7 +459,7 @@ var MapGL = React.createClass({
 
   _onMouseDown: function _onMouseDown(opt) {
     var map = this._getMap();
-    var startLatLng = unproject(map.transform, opt.pos);
+    var startLatLng = unprojectFromTransform(map.transform, opt.pos);
     this._onChangeViewport({
       isDragging: true,
       startDragLatLng: [startLatLng.lat, startLatLng.lng]
@@ -541,7 +544,7 @@ var MapGL = React.createClass({
     var map = this._getMap();
     var props = this.props;
     var transform = cloneTransform(map.transform);
-    var around = unproject(transform, opt.pos);
+    var around = unprojectFromTransform(transform, opt.pos);
     transform.zoom = transform.scaleZoom(map.transform.scale * opt.scale);
     transform.setLocationAtPoint(around, opt.pos);
     this._onChangeViewport({
@@ -560,23 +563,23 @@ var MapGL = React.createClass({
   _renderOverlays: function _renderOverlays(transform) {
     var children = [];
 
-    // Calculate the transformation matrix once for a given render cycle
-    // instead of for each point.
-    // from: mapbox-gl-js/js/geo/transform.js
-    var tileZoom = transform.tileZoom;
-    var coordinatePointMatrix = transform.coordinatePointMatrix(tileZoom);
-    function coordinatePoint(coord) {
-      var matrix = coordinatePointMatrix;
-      var p = vec4.transformMat4([], [coord.column, coord.row, 0, 1], matrix);
-      return new Point(p[0] / p[3], p[1] / p[3]);
+    var viewportConfig = {
+      center: [this.props.longitude, this.props.latitude],
+      zoom: this.props.zoom,
+      tileSize: 512,
+      dimensions: [this.props.width, this.props.height]
+    };
+
+    var viewport = ViewportMercator(viewportConfig);
+
+    function project(latLng) {
+      var pixel = viewport.project([latLng[1], latLng[0]]);
+      return {x: pixel[0], y: pixel[1]};
     }
 
-    function locationPoint(latlng) {
-      return coordinatePoint(transform.locationCoordinate(latlng));
-    }
-
-    function fastProject(latlng) {
-      return locationPoint(new MapboxGL.LngLat(latlng[1], latlng[0]));
+    function unproject(pixel) {
+      var lngLat = viewport.unproject(pixel);
+      return mapboxgl.LngLat.convert(lngLat);
     }
 
     React.Children.forEach(this.props.children, function _map(child) {
@@ -587,8 +590,8 @@ var MapGL = React.createClass({
         width: this.props.width,
         height: this.props.height,
         isDragging: this.props.isDragging,
-        project: fastProject,
-        unproject: unproject.bind(null, transform)
+        project: project,
+        unproject: unproject
       }));
     }, this);
     return r.div({
