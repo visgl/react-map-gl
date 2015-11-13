@@ -6,7 +6,9 @@
   "keywords": [
     "mapbox",
     "mapbox-gl",
-    "react"
+    "react",
+    "react-mapbox-gl",
+    "react mapbox"
   ],
   "repository": {
     "type": "git",
