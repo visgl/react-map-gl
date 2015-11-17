@@ -495,7 +495,9 @@ var MapGL = React.createClass({
     if (!this.props.onHoverFeatures) {
       return;
     }
-    map.featuresAt([pos.x, pos.y], {}, function callback(error, features) {
+    map.featuresAt([pos.x, pos.y], {
+      radius: 1
+    }, function callback(error, features) {
       if (error) {
         throw error;
       }
