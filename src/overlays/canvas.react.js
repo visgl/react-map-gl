@@ -28,6 +28,7 @@ function devicePixelRatio() {
 }
 
 var CanvasOverlay = React.createClass({
+
   displayName: 'CanvasOverlay',
 
   propTypes: {

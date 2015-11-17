@@ -24,7 +24,9 @@ var r = require('r-dom');
 var assign = require('object-assign');
 
 var SVGOverlay = React.createClass({
+
   displayName: 'SVGOverlay',
+
   propTypes: {
     width: React.PropTypes.number,
     height: React.PropTypes.number,
@@ -32,6 +34,7 @@ var SVGOverlay = React.createClass({
     project: React.PropTypes.func,
     isDragging: React.PropTypes.bool
   },
+
   render: function render() {
     var style = assign({}, {
       pointerEvents: 'none',

@@ -33,12 +33,12 @@ var DraggablePointsOverlay = React.createClass({
 
   displayName: 'DraggablePointsOverlay',
 
-  PropTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
+  propTypes: {
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
     points: React.PropTypes.instanceOf(Immutable.List),
-    project: React.PropTypes.func.isRequired,
-    unproject: React.PropTypes.func.isRequired,
+    project: React.PropTypes.func,
+    unproject: React.PropTypes.func,
     isDragging: React.PropTypes.bool,
     keyAccessor: React.PropTypes.func,
     locationAccessor: React.PropTypes.func,
