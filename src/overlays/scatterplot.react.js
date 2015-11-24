@@ -20,7 +20,6 @@
 'use strict';
 
 var React = require('react');
-var ReactDOM = require('react-dom');
 var window = require('global/window');
 var d3 = require('d3');
 var r = require('r-dom');
@@ -68,7 +67,7 @@ var ScatterplotOverlay = React.createClass({
 
   _redraw: function _redraw() {
     var pixelRatio = window.devicePixelRatio;
-    var canvas = ReactDOM.findDOMNode(this);
+    var canvas = this.refs.overlay;
     var ctx = canvas.getContext('2d');
     var props = this.props;
     var radius = this.props.dotRadius;
