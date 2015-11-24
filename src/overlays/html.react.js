@@ -24,7 +24,9 @@ var r = require('r-dom');
 var assign = require('object-assign');
 
 var HTMLOverlay = React.createClass({
+
   displayName: 'HTMLOverlay',
+
   propTypes: {
     width: React.PropTypes.number,
     height: React.PropTypes.number,
@@ -32,6 +34,7 @@ var HTMLOverlay = React.createClass({
     project: React.PropTypes.func,
     isDragging: React.PropTypes.bool
   },
+
   render: function render() {
     var style = assign({}, {
       position: 'absolute',

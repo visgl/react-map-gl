@@ -27,6 +27,7 @@ var Immutable = require('immutable');
 var COMPOSITE_TYPES = require('canvas-composite-types');
 
 var ScatterplotOverlay = React.createClass({
+
   displayName: 'ScatterplotOverlay',
 
   propTypes: {
@@ -97,6 +98,7 @@ var ScatterplotOverlay = React.createClass({
     }
     ctx.restore();
   },
+
   render: function render() {
     var pixelRatio = window.devicePixelRatio;
     return r.canvas({

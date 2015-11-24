@@ -47,9 +47,9 @@ var initialPoints = [
 
 var ids = initialPoints[initialPoints.length - 1].id;
 
-var DemoGeodataCreator = React.createClass({
+var GeodataCreator = React.createClass({
 
-  displayName: 'DemoGeodataCreator',
+  displayName: 'GeodataCreatorExample',
 
   PropTypes: {
     width: React.PropTypes.number.isRequired,
@@ -146,4 +146,4 @@ var DemoGeodataCreator = React.createClass({
   }
 });
 
-module.exports = DemoGeodataCreator;
+module.exports = GeodataCreator;
