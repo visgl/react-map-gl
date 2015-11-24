@@ -20,7 +20,6 @@
 'use strict';
 
 var React = require('react');
-var ReactDOM = require('react-dom');
 var window = require('global/window');
 var r = require('r-dom');
 
@@ -49,7 +48,7 @@ var CanvasOverlay = React.createClass({
 
   _redraw: function _redraw() {
     var pixelRatio = devicePixelRatio();
-    var canvas = ReactDOM.findDOMNode(this);
+    var canvas = this.refs.overlay;
     var ctx = canvas.getContext('2d');
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
