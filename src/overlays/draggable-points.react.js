@@ -41,7 +41,7 @@ var DraggablePointsOverlay = React.createClass({
     unproject: React.PropTypes.func,
     isDragging: React.PropTypes.bool,
     keyAccessor: React.PropTypes.func,
-    locationAccessor: React.PropTypes.func,
+    lngLatAccessor: React.PropTypes.func,
     onAddPoint: React.PropTypes.func,
     onUpdatePoint: React.PropTypes.func,
     renderPoint: React.PropTypes.func
@@ -52,7 +52,7 @@ var DraggablePointsOverlay = React.createClass({
       keyAccessor: function keyAccessor(point) {
         return point.get('id');
       },
-      locationAccessor: function locationAccessor(point) {
+      lngLatAccessor: function lngLatAccessor(point) {
         return point.get('location').toArray();
       },
       onAddPoint: nop,
@@ -78,11 +78,9 @@ var DraggablePointsOverlay = React.createClass({
   _onDrag: function _onDrag(event) {
     event.stopPropagation();
     var pixel = mouse(this.refs.container.getDOMNode(), event);
-    var latlng = this.props.unproject(pixel);
-    this.props.onUpdatePoint({
-      key: this.state.draggedPointKey,
-      location: [latlng.lat, latlng.lng]
-    });
+    var lngLat = this.props.unproject(pixel);
+    var key = this.state.draggedPointKey;
+    this.props.onUpdatePoint({key: key, location: lngLat});
   },
 
   _onDragEnd: function _onDragEnd(event) {
@@ -96,8 +94,7 @@ var DraggablePointsOverlay = React.createClass({
     event.stopPropagation();
     event.preventDefault();
     var pixel = mouse(this.refs.container.getDOMNode(), event);
-    var location = this.props.unproject(pixel);
-    this.props.onAddPoint([location.lat, location.lng]);
+    this.props.onAddPoint(this.props.unproject(pixel));
   },
 
   render: function render() {
@@ -117,8 +114,7 @@ var DraggablePointsOverlay = React.createClass({
       onContextMenu: this._addPoint
     }, [
       r.g({style: {cursor: 'pointer'}}, points.map(function _map(point, index) {
-        var _pixel = this.props.project(this.props.locationAccessor(point));
-        var pixel = [_pixel.x, _pixel.y];
+        var pixel = this.props.project(this.props.lngLatAccessor(point));
         return r.g({
           key: index,
           transform: transform([{translate: pixel}]),

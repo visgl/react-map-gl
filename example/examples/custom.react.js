@@ -44,7 +44,7 @@ var wiggle = (function _wiggle() {
 
 // Example data.
 var locations = Immutable.fromJS(d3.range(30).map(function _map() {
-  return [location.latitude + wiggle(0.01), location.longitude + wiggle(0.01)];
+  return [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)];
 }));
 
 var OverlayExample = React.createClass({
@@ -88,30 +88,30 @@ var OverlayExample = React.createClass({
       onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
     }, this.props), [
       r(CanvasOverlay, {redraw: function _redrawCanvas(opt) {
-        var p1 = opt.project([location.latitude, location.longitude]);
+        var p1 = opt.project([location.longitude, location.latitude]);
         opt.ctx.clearRect(0, 0, opt.width, opt.height);
         opt.ctx.strokeStyle = alphaify('#1FBAD6', 0.4);
         opt.ctx.lineWidth = 2;
         locations.forEach(function forEach(loc, index) {
           opt.ctx.beginPath();
           var p2 = opt.project(loc.toArray());
-          opt.ctx.moveTo(p1.x, p1.y);
-          opt.ctx.lineTo(p2.x, p2.y);
+          opt.ctx.moveTo(p1[0], p1[1]);
+          opt.ctx.lineTo(p2[0], p2[1]);
           opt.ctx.stroke();
           opt.ctx.beginPath();
           opt.ctx.fillStyle = alphaify('#1FBAD6', 0.4);
-          opt.ctx.arc(p2.x, p2.y, 6, 0, 2 * Math.PI);
+          opt.ctx.arc(p2[0], p2[1], 6, 0, 2 * Math.PI);
           opt.ctx.fill();
           opt.ctx.beginPath();
           opt.ctx.fillStyle = '#FFFFFF';
           opt.ctx.textAlign = 'center';
-          opt.ctx.fillText(index, p2.x, p2.y + 4);
+          opt.ctx.fillText(index, p2[0], p2[1] + 4);
         });
       }}),
       // We use invisible SVG elements to support interactivity.
       r(SVGOverlay, {
         redraw: function _redrwaSVGOverlay(opt) {
-          var p1 = opt.project([location.latitude, location.longitude]);
+          var p1 = opt.project([location.longitude, location.latitude]);
           var style = {
             // transparent but still clickable.
             fill: 'rgba(0, 0, 0, 0)'
@@ -128,10 +128,9 @@ var OverlayExample = React.createClass({
                 var windowAlert = window.alert;
                 windowAlert('center');
               },
-              transform: transform([{translate: [p1.x, p1.y]}]),
+              transform: transform([{translate: p1}]),
               key: 0
             })].concat(locations.map(function _map(loc, index) {
-              var p2 = opt.project([loc.get(0), loc.get(1)]);
               return r.circle({
                 style: style,
                 r: 6,
@@ -139,7 +138,7 @@ var OverlayExample = React.createClass({
                   var windowAlert = window.alert;
                   windowAlert('dot ' + index);
                 },
-                transform: transform([{translate: [p2.x, p2.y]}]),
+                transform: transform([{translate: opt.project(loc.toArray())}]),
                 key: index + 1
               });
             }, this))

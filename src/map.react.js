@@ -574,16 +574,6 @@ var MapGL = React.createClass({
 
     var viewport = ViewportMercator(viewportConfig);
 
-    function project(latLng) {
-      var pixel = viewport.project([latLng[1], latLng[0]]);
-      return {x: pixel[0], y: pixel[1]};
-    }
-
-    function unproject(pixel) {
-      var lngLat = viewport.unproject(pixel);
-      return mapboxgl.LngLat.convert(lngLat);
-    }
-
     React.Children.forEach(this.props.children, function _map(child) {
       if (!child) {
         return;
@@ -592,8 +582,8 @@ var MapGL = React.createClass({
         width: this.props.width,
         height: this.props.height,
         isDragging: this.props.isDragging,
-        project: project,
-        unproject: unproject
+        project: viewport.project,
+        unproject: viewport.unproject
       }));
     }, this);
     return r.div({

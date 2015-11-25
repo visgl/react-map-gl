@@ -38,7 +38,7 @@ function wiggle(scale) {
 
 // Example data.
 var locations = Immutable.fromJS(d3.range(4000).map(function _map() {
-  return [location.latitude + wiggle(0.01), location.longitude + wiggle(0.01)];
+  return [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)];
 }));
 
 var ScatterplotOverlayExample = React.createClass({

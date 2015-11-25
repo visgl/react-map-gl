@@ -36,7 +36,7 @@ var ScatterplotOverlay = React.createClass({
     project: React.PropTypes.func,
     isDragging: React.PropTypes.bool,
     locations: React.PropTypes.instanceOf(Immutable.List),
-    latLngAccessor: React.PropTypes.func,
+    lngLatAccessor: React.PropTypes.func,
     renderWhileDragging: React.PropTypes.bool,
     globalOpacity: React.PropTypes.number,
     dotRadius: React.PropTypes.number,
@@ -46,7 +46,7 @@ var ScatterplotOverlay = React.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      latLngAccessor: function latLngAccessor(location) {
+      lngLatAccessor: function lngLatAccessor(location) {
         return [location.get(0), location.get(1)];
       },
       renderWhileDragging: true,
@@ -81,9 +81,8 @@ var ScatterplotOverlay = React.createClass({
       this.props.locations
     ) {
       this.props.locations.forEach(function _forEach(location) {
-        var latLng = this.props.latLngAccessor(location);
-        var pixel = this.props.project(latLng);
-        var pixelRounded = [d3.round(pixel.x, 1), d3.round(pixel.y, 1)];
+        var pixel = this.props.project(this.props.lngLatAccessor(location));
+        var pixelRounded = [d3.round(pixel[0], 1), d3.round(pixel[1], 1)];
         if (pixelRounded[0] + radius >= 0 &&
             pixelRounded[0] - radius < props.width &&
             pixelRounded[1] + radius >= 0 &&

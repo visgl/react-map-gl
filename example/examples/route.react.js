@@ -86,7 +86,7 @@ var RouteOverlayExample = React.createClass({
   _redrawSVGOverlay: function _redrawSVGOverlay(opt) {
     var routes = ROUTES.map(function _map(route, index) {
       var points = route.coordinates.map(opt.project).map(function __map(p) {
-        return [d3.round(p.x, 1), d3.round(p.y, 1)];
+        return [d3.round(p[0], 1), d3.round(p[1], 1)];
       });
       return r.g({key: index}, this._renderRoute(points, index));
     }, this);
@@ -100,7 +100,7 @@ var RouteOverlayExample = React.createClass({
     ctx.clearRect(0, 0, width, height);
     ROUTES.map(function _map(route, index) {
       route.coordinates.map(opt.project).forEach(function _forEach(p, i) {
-        var point = [d3.round(p.x, 1), d3.round(p.y, 1)];
+        var point = [d3.round(p[0], 1), d3.round(p[1], 1)];
         ctx.fillStyle = d3.rgb(color(index)).brighter(1).toString();
         ctx.beginPath();
         ctx.arc(point[0], point[1], 2, 0, Math.PI * 2);

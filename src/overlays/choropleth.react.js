@@ -47,9 +47,6 @@ var ChoroplethOverlay = React.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      latLngAccessor: function latLngAccessor(location) {
-        return [location.get(0), location.get(1)];
-      },
       renderWhileDragging: true,
       globalOpacity: 1,
       colorDomain: null,
@@ -79,8 +76,8 @@ var ChoroplethOverlay = React.createClass({
     ctx.clearRect(0, 0, this.props.width, this.props.height);
 
     function projectPoint(lon, lat) {
-      var point = project([lat, lon]);
-      this.stream.point(point.x, point.y);
+      var point = project([lon, lat]);
+      this.stream.point(point[0], point[1]);
     }
 
     if (this.props.renderWhileDragging || !this.props.isDragging) {
