@@ -32,11 +32,11 @@ var CanvasOverlay = React.createClass({
   displayName: 'CanvasOverlay',
 
   propTypes: {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired,
     redraw: React.PropTypes.func.isRequired,
-    project: React.PropTypes.func,
-    isDragging: React.PropTypes.bool
+    project: React.PropTypes.func.isRequired,
+    isDragging: React.PropTypes.bool.isRequired
   },
 
   componentDidMount: function componentDidMount() {

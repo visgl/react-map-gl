@@ -54,6 +54,9 @@ var RouteOverlayExample = React.createClass({
   },
 
   _onChangeViewport: function _onChangeViewport(opt) {
+    if (this.props.onChangeViewport) {
+      return this.props.onChangeViewport(opt);
+    }
     this.setState({
       latitude: opt.latitude,
       longitude: opt.longitude,
@@ -110,19 +113,16 @@ var RouteOverlayExample = React.createClass({
   },
 
   render: function render() {
-    return r(MapGL, assign({
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
-      zoom: this.state.zoom,
-      width: this.props.width,
-      height: this.props.height,
-      startDragLngLat: this.state.startDragLngLat,
-      isDragging: this.state.isDragging,
-      onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
-    }, this.props), [
-      r(SVGOverlay, {redraw: this._redrawSVGOverlay}),
-      r(CanvasOverlay, {redraw: this._redrawCanvasOverlay})
-    ]);
+    return r(MapGL, assign({}, this.state, this.props, {
+      onChangeViewport: this._onChangeViewport,
+      overlays: function overlays(viewport) {
+        return [
+          r(SVGOverlay, assign({redraw: this._redrawSVGOverlay}, viewport)),
+          r(CanvasOverlay, assign({redraw: this._redrawCanvasOverlay},
+            viewport))
+        ];
+      }.bind(this)
+    }, this.props));
   }
 });
 

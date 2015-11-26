@@ -31,17 +31,17 @@ var ScatterplotOverlay = React.createClass({
   displayName: 'ScatterplotOverlay',
 
   propTypes: {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    project: React.PropTypes.func,
-    isDragging: React.PropTypes.bool,
-    locations: React.PropTypes.instanceOf(Immutable.List),
-    lngLatAccessor: React.PropTypes.func,
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired,
+    project: React.PropTypes.func.isRequired,
+    isDragging: React.PropTypes.bool.isRequired,
+    locations: React.PropTypes.instanceOf(Immutable.List).isRequired,
+    lngLatAccessor: React.PropTypes.func.isRequired,
     renderWhileDragging: React.PropTypes.bool,
-    globalOpacity: React.PropTypes.number,
-    dotRadius: React.PropTypes.number,
-    dotFill: React.PropTypes.string,
-    compositeOperation: React.PropTypes.oneOf(COMPOSITE_TYPES)
+    globalOpacity: React.PropTypes.number.isRequired,
+    dotRadius: React.PropTypes.number.isRequired,
+    dotFill: React.PropTypes.string.isRequired,
+    compositeOperation: React.PropTypes.oneOf(COMPOSITE_TYPES).isRequired
   },
 
   getDefaultProps: function getDefaultProps() {

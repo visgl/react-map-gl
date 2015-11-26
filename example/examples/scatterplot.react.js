@@ -61,6 +61,9 @@ var ScatterplotOverlayExample = React.createClass({
   },
 
   _onChangeViewport: function _onChangeViewport(opt) {
+    if (this.props.onChangeViewport) {
+      return this.props.onChangeViewport(opt);
+    }
     this.setState({
       latitude: opt.latitude,
       longitude: opt.longitude,
@@ -71,23 +74,17 @@ var ScatterplotOverlayExample = React.createClass({
   },
 
   render: function render() {
-    return r(MapGL, assign({
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
-      zoom: this.state.zoom,
-      isDragging: this.state.isDragging,
-      startDragLngLat: this.state.startDragLngLat,
-      width: this.props.width,
-      height: this.props.height,
-      onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
-    }, this.props), [
-      r(ScatterplotOverlay, {
-        locations: locations,
-        dotRadius: 2,
-        globalOpacity: 1,
-        compositeOperation: 'screen'
-      })
-    ]);
+    return r(MapGL, assign({}, this.state, this.props, {
+      onChangeViewport: this._onChangeViewport,
+      overlays: function overlay(viewport) {
+        return r(ScatterplotOverlay, assign({}, viewport, {
+          locations: locations,
+          dotRadius: 2,
+          globalOpacity: 1,
+          compositeOperation: 'screen'
+        }));
+      }
+    }, this.props));
   }
 });
 

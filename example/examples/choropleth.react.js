@@ -17,7 +17,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
 'use strict';
 
 var assign = require('object-assign');
@@ -57,6 +56,9 @@ var ChoroplethOverlayExample = React.createClass({
   },
 
   _onChangeViewport: function _onChangeViewport(opt) {
+    if (this.props.onChangeViewport) {
+      return this.props.onChangeViewport(opt);
+    }
     this.setState({
       latitude: opt.latitude,
       longitude: opt.longitude,
@@ -67,24 +69,18 @@ var ChoroplethOverlayExample = React.createClass({
   },
 
   render: function render() {
-    return r(MapGL, assign({
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
-      zoom: this.state.zoom,
-      width: this.props.width,
-      height: this.props.height,
-      startDragLngLat: this.state.startDragLngLat,
-      isDragging: this.state.isDragging,
-      onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
-    }, this.props), [
-      r(ChoroplethOverlay, {
-        globalOpacity: 0.8,
-        colorDomain: [0, 500, 1000],
-        colorRange: ['#31a354', '#addd8e', '#f7fcb9'],
-        renderWhileDragging: false,
-        features: ZIPCODES_SF.get('features')
-      })
-    ]);
+    return r(MapGL, assign({}, this.state, this.props, {
+      onChangeViewport: this._onChangeViewport,
+      overlays: function overlays(viewport) {
+        return r(ChoroplethOverlay, assign({}, viewport, {
+          globalOpacity: 0.8,
+          colorDomain: [0, 500, 1000],
+          colorRange: ['#31a354', '#addd8e', '#f7fcb9'],
+          renderWhileDragging: false,
+          features: ZIPCODES_SF.get('features')
+        }));
+      }
+    }, this.props));
   }
 });
 

@@ -155,7 +155,14 @@ var MapGL = React.createClass({
       * The first argument of the callback will be the array of feature the
       * mouse is over. This is the same response returned from `featuresAt`.
       */
-    onClickFeatures: React.PropTypes.func
+    onClickFeatures: React.PropTypes.func,
+
+    /**
+      * A Callback used to render data overlays. This function will be passed
+      * a viewport object that includes two methods, `project` and `unproject`
+      * as well as the props, latitude, longitude, zoom, width, and height.
+      */
+    overlays: React.PropTypes.func
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -542,8 +549,9 @@ var MapGL = React.createClass({
   },
 
   _renderOverlays: function _renderOverlays(transform) {
-    var children = [];
-
+    if (!this.props.overlays) {
+      return null;
+    }
     var viewportConfig = {
       center: [this.props.longitude, this.props.latitude],
       zoom: this.props.zoom,
@@ -551,24 +559,24 @@ var MapGL = React.createClass({
       dimensions: [this.props.width, this.props.height]
     };
 
-    var viewport = ViewportMercator(viewportConfig);
+    var mercator = ViewportMercator(viewportConfig);
 
-    React.Children.forEach(this.props.children, function _map(child) {
-      if (!child) {
-        return;
-      }
-      children.push(React.cloneElement(child, {
-        width: this.props.width,
-        height: this.props.height,
-        isDragging: this.props.isDragging,
-        project: viewport.project,
-        unproject: viewport.unproject
-      }));
-    }, this);
+    // This is the `viewport` object exposed to the overlays.
+    var viewport = {
+      width: this.props.width,
+      height: this.props.height,
+      longitude: this.props.longitude,
+      latitude: this.props.latitude,
+      zoom: this.props.zoom,
+      isDragging: this.props.isDragging,
+      project: mercator.project,
+      unproject: mercator.unproject
+    };
+
     return r.div({
       className: 'overlays',
       style: {position: 'absolute', left: 0, top: 0}
-    }, children);
+    }, this.props.overlays(viewport));
   },
 
   render: function render() {
@@ -588,7 +596,8 @@ var MapGL = React.createClass({
 
     var content = [
       r.div({ref: 'mapboxMap', style: style, className: props.className}),
-      this._renderOverlays(transform)
+      this._renderOverlays(transform),
+      r.div({position: 'absolute', left: 0, top: 0}, this.props.children)
     ];
 
     if (this.props.onChangeViewport) {

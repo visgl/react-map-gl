@@ -30,19 +30,19 @@ var ChoroplethOverlay = React.createClass({
   displayName: 'ChoroplethOverlay',
 
   propTypes: {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    project: React.PropTypes.func,
-    isDragging: React.PropTypes.bool,
-    renderWhileDragging: React.PropTypes.bool,
-    globalOpacity: React.PropTypes.number,
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired,
+    project: React.PropTypes.func.isRequired,
+    isDragging: React.PropTypes.bool.isRequired,
+    renderWhileDragging: React.PropTypes.bool.isRequired,
+    globalOpacity: React.PropTypes.number.isRequired,
     /**
       * An Immutable List of feature objects.
       */
     features: React.PropTypes.instanceOf(Immutable.List),
     colorDomain: React.PropTypes.array,
-    colorRange: React.PropTypes.array,
-    valueAccessor: React.PropTypes.func
+    colorRange: React.PropTypes.array.isRequired,
+    valueAccessor: React.PropTypes.func.isRequired
   },
 
   getDefaultProps: function getDefaultProps() {

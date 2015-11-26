@@ -68,6 +68,9 @@ var GeodataCreator = React.createClass({
   },
 
   _onChangeViewport: function _onChangeViewport(opt) {
+    if (this.props.onChangeViewport) {
+      return this.props.onChangeViewport(opt);
+    }
     this.setState({
       latitude: opt.latitude,
       longitude: opt.longitude,
@@ -95,52 +98,50 @@ var GeodataCreator = React.createClass({
     this.setState({points: points});
   },
 
+  _renderOverlays: function _renderOverlays(viewport) {
+    return [
+      r(SVGOverlay, assign({}, viewport, {redraw: function _redraw(opt) {
+        if (!this.state.points.size) {
+          return null;
+        }
+        var d = 'M' + this.state.points.map(function _map(point) {
+          return opt.project(point.get('location').toArray());
+        }).join('L');
+        return r.path({
+          style: {stroke: '#1FBAD6', strokeWidth: 2, fill: 'none'},
+          d: d
+        });
+      }.bind(this)})),
+      r(DraggableOverlay, assign({}, viewport, {
+        points: this.state.points,
+        onAddPoint: this._onAddPoint,
+        onUpdatePoint: this._onUpdatePoint,
+        renderPoint: function renderPoint(point, pixel) {
+          return r.g({}, [
+            r.circle({
+              r: 10,
+              style: {
+                fill: alphaify('#1FBAD6', 0.5),
+                pointerEvents: 'all'
+              }
+            }),
+            r.text({
+              style: {fill: 'white', textAnchor: 'middle'},
+              y: 5
+            }, point.get('id'))
+          ]);
+        }
+      }))
+    ];
+  },
+
   render: function render() {
     return r.div([
-      r(MapGL, assign({
-        latitude: this.state.latitude,
-        longitude: this.state.longitude,
-        zoom: this.state.zoom,
-        width: this.props.width,
-        height: this.props.height,
-        startDragLngLat: this.state.startDragLngLat,
-        isDragging: this.state.isDragging,
+      r(MapGL, assign({}, this.state, this.props, {
         style: {float: 'left'},
-        onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
-      }, this.props), [
-        r(SVGOverlay, {redraw: function _redraw(opt) {
-          if (!this.state.points.size) {
-            return null;
-          }
-          var d = 'M' + this.state.points.map(function _map(point) {
-            return opt.project(point.get('location').toArray());
-          }).join('L');
-          return r.path({
-            style: {stroke: '#1FBAD6', strokeWidth: 2, fill: 'none'},
-            d: d
-          });
-        }.bind(this)}),
-        r(DraggableOverlay, {
-          points: this.state.points,
-          onAddPoint: this._onAddPoint,
-          onUpdatePoint: this._onUpdatePoint,
-          renderPoint: function renderPoint(point, pixel) {
-            return r.g({}, [
-              r.circle({
-                r: 10,
-                style: {
-                  fill: alphaify('#1FBAD6', 0.5),
-                  pointerEvents: 'all'
-                }
-              }),
-              r.text({
-                style: {fill: 'white', textAnchor: 'middle'},
-                y: 5
-              }, point.get('id'))
-            ]);
-          }
-        })
-      ])
+        onChangeViewport: this._onChangeViewport,
+        overlays: this._renderOverlays
+      }, this.props))
     ]);
   }
 });

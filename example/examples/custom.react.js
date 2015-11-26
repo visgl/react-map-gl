@@ -67,6 +67,9 @@ var OverlayExample = React.createClass({
   },
 
   _onChangeViewport: function _onChangeViewport(opt) {
+    if (this.props.onChangeViewport) {
+      return this.props.onChangeViewport(opt);
+    }
     this.setState({
       latitude: opt.latitude,
       longitude: opt.longitude,
@@ -76,40 +79,33 @@ var OverlayExample = React.createClass({
     });
   },
 
-  render: function render() {
-    return r(MapGL, assign({
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
-      zoom: this.state.zoom,
-      startDragLngLat: this.state.startDragLngLat,
-      isDragging: this.state.isDragging,
-      width: this.props.width,
-      height: this.props.height,
-      onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
-    }, this.props), [
-      r(CanvasOverlay, {redraw: function _redrawCanvas(opt) {
-        var p1 = opt.project([location.longitude, location.latitude]);
-        opt.ctx.clearRect(0, 0, opt.width, opt.height);
-        opt.ctx.strokeStyle = alphaify('#1FBAD6', 0.4);
-        opt.ctx.lineWidth = 2;
-        locations.forEach(function forEach(loc, index) {
-          opt.ctx.beginPath();
-          var p2 = opt.project(loc.toArray());
-          opt.ctx.moveTo(p1[0], p1[1]);
-          opt.ctx.lineTo(p2[0], p2[1]);
-          opt.ctx.stroke();
-          opt.ctx.beginPath();
-          opt.ctx.fillStyle = alphaify('#1FBAD6', 0.4);
-          opt.ctx.arc(p2[0], p2[1], 6, 0, 2 * Math.PI);
-          opt.ctx.fill();
-          opt.ctx.beginPath();
-          opt.ctx.fillStyle = '#FFFFFF';
-          opt.ctx.textAlign = 'center';
-          opt.ctx.fillText(index, p2[0], p2[1] + 4);
-        });
-      }}),
+  _renderOverlays: function _renderOverlays(viewport) {
+    return [
+      r(CanvasOverlay, assign({}, viewport, {
+        redraw: function _redrawCanvas(opt) {
+          var p1 = opt.project([location.longitude, location.latitude]);
+          opt.ctx.clearRect(0, 0, opt.width, opt.height);
+          opt.ctx.strokeStyle = alphaify('#1FBAD6', 0.4);
+          opt.ctx.lineWidth = 2;
+          locations.forEach(function forEach(loc, index) {
+            opt.ctx.beginPath();
+            var p2 = opt.project(loc.toArray());
+            opt.ctx.moveTo(p1[0], p1[1]);
+            opt.ctx.lineTo(p2[0], p2[1]);
+            opt.ctx.stroke();
+            opt.ctx.beginPath();
+            opt.ctx.fillStyle = alphaify('#1FBAD6', 0.4);
+            opt.ctx.arc(p2[0], p2[1], 6, 0, 2 * Math.PI);
+            opt.ctx.fill();
+            opt.ctx.beginPath();
+            opt.ctx.fillStyle = '#FFFFFF';
+            opt.ctx.textAlign = 'center';
+            opt.ctx.fillText(index, p2[0], p2[1] + 4);
+          });
+        }
+      })),
       // We use invisible SVG elements to support interactivity.
-      r(SVGOverlay, {
+      r(SVGOverlay, assign({}, viewport, {
         redraw: function _redrwaSVGOverlay(opt) {
           var p1 = opt.project([location.longitude, location.latitude]);
           var style = {
@@ -144,8 +140,15 @@ var OverlayExample = React.createClass({
             }, this))
           );
         }.bind(this)
-      })
-    ]);
+      }))
+    ];
+  },
+
+  render: function render() {
+    return r(MapGL, assign({}, this.state, this.props, {
+      onChangeViewport: this._onChangeViewport,
+      overlays: this._renderOverlays
+    }, this.props));
   }
 });
 
