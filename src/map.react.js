@@ -27,7 +27,6 @@ var d3 = require('d3');
 var assign = require('object-assign');
 var Immutable = require('immutable');
 var mapboxgl = require('mapbox-gl');
-var LngLat = mapboxgl.LngLat;
 var LngLatBounds = mapboxgl.LngLatBounds;
 var Point = mapboxgl.Point;
 
@@ -220,8 +219,6 @@ var MapGL = React.createClass({
 
   _onChangeViewport: function _onChangeViewport(_changes) {
     var map = this._getMap();
-    var width = this.props.width;
-    var height = this.props.height;
     var center = map.getCenter();
     var changes = assign({
       latitude: center.lat,
@@ -463,8 +460,6 @@ var MapGL = React.createClass({
     }
     var p2 = opt.pos;
     var map = this._getMap();
-    var width = this.props.width;
-    var height = this.props.height;
     // take the start lnglat and put it where the mouse is down.
     var transform = cloneTransform(map.transform);
     assert(this.state.startDragLngLat, '`startDragLngLat` prop is required ' +
@@ -499,8 +494,6 @@ var MapGL = React.createClass({
 
   _onMouseUp: function _onMouseUp(opt) {
     var map = this._getMap();
-    var width = this.props.width;
-    var height = this.props.height;
     var transform = cloneTransform(map.transform);
 
     this._onChangeViewport({
@@ -532,7 +525,6 @@ var MapGL = React.createClass({
 
   _onZoom: function _onZoom(opt) {
     var map = this._getMap();
-    var props = this.props;
     var transform = cloneTransform(map.transform);
     var around = unprojectFromTransform(transform, opt.pos);
     transform.zoom = transform.scaleZoom(map.transform.scale * opt.scale);
