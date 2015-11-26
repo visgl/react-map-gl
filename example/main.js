@@ -54,12 +54,12 @@ var App = React.createClass({
       mapboxApiAccessToken: getAccessToken()
     };
     return r.div([
-      // r(RouteExample, common),
-      // r(ScatterplotExample, common),
-      // r(ChoroplethExample, common)
-      // r(CustomExample, common),
+      r(RouteExample, common),
+      r(ScatterplotExample, common),
+      r(ChoroplethExample, common),
+      r(CustomExample, common),
       r(GeodataCreator, common),
-      // r(NotInteractiveExample, common)
+      r(NotInteractiveExample, common)
     ]);
   }
 });

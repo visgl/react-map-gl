@@ -48,13 +48,6 @@ function unprojectFromTransform(transform, point) {
   return transform.pointLocation(Point.convert(point));
 }
 
-function getBBoxFromTransform(transform, width, height) {
-  return [
-    unprojectFromTransform(transform, [0, 0]),
-    unprojectFromTransform(transform, [width, height])
-  ];
-}
-
 function cloneTransform(original) {
   var transform = new Transform(original._minZoom, original._maxZoom);
   transform.latRange = original.latRange;
@@ -119,7 +112,7 @@ var MapGL = React.createClass({
     /**
       * `onChangeViewport` callback is fired when the user interacted with the
       * map. The object passed to the callback containers `latitude`,
-      * `longitude`, `zoom` and `bbox`. information.
+      * `longitude` and `zoom` information.
       */
     onChangeViewport: React.PropTypes.func,
     /**
@@ -229,13 +222,11 @@ var MapGL = React.createClass({
     var map = this._getMap();
     var width = this.props.width;
     var height = this.props.height;
-    var bbox = getBBoxFromTransform(map.transform, width, height);
     var center = map.getCenter();
     var changes = assign({
       latitude: center.lat,
       longitude: center.lng,
       zoom: map.getZoom(),
-      bbox: bbox,
       isDragging: this.props.isDragging,
       startDragLngLat: this.state.startDragLngLat
     }, _changes);
@@ -479,12 +470,10 @@ var MapGL = React.createClass({
     assert(this.state.startDragLngLat, '`startDragLngLat` prop is required ' +
       'for mouse drag behavior to calculate where to position the map.');
     transform.setLocationAtPoint(this.state.startDragLngLat, p2);
-    var bbox = getBBoxFromTransform(transform, width, height);
     this._onChangeViewport({
       latitude: transform.center.lat,
       longitude: transform.center.lng,
       zoom: transform.zoom,
-      bbox: bbox,
       isDragging: true
     });
   },
@@ -518,8 +507,7 @@ var MapGL = React.createClass({
       latitude: transform.center.lat,
       longitude: transform.center.lng,
       zoom: transform.zoom,
-      isDragging: false,
-      bbox: getBBoxFromTransform(transform, width, height)
+      isDragging: false
     });
 
     if (!this.props.onClickFeatures) {
@@ -553,8 +541,7 @@ var MapGL = React.createClass({
       latitude: transform.center.lat,
       longitude: transform.center.lng,
       zoom: transform.zoom,
-      isDragging: true,
-      bbox: getBBoxFromTransform(transform, props.width, props.height)
+      isDragging: true
     });
   },
 
