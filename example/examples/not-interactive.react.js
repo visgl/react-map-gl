@@ -56,8 +56,7 @@ var NotInteractiveExample = React.createClass({
       longitude: this.state.longitude,
       zoom: this.state.zoom,
       width: this.props.width,
-      height: this.props.height,
-      startDragLatLng: this.state.startDragLatLng
+      height: this.props.height
     }, this.props));
   }
 });

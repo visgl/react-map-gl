@@ -2,9 +2,15 @@
 
 ### Breaking changes
 
-Accessors that were previously `latLngAccessor` are have been renamed to
-`lngLatAccessor`. This is more inline with
+#### Renaming references of LatLng to LngLat
+
+This is more inline with
 [MapboxGL-js](https://github.com/mapbox/mapbox-gl-js/pull/1433) and GeoJSON.
+
+Accessors that were previously `latLngAccessor` are have been renamed to
+`lngLatAccessor`.
+
+Rename the viewport prop `startDragLatLng` to `startDragLngLat`.
 
 The `project` function prop passed to overlays now expecteds an array of
 the form `[logitude, latitude]` instead of `[latitude, longitude]`.

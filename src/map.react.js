@@ -27,8 +27,10 @@ var d3 = require('d3');
 var assign = require('object-assign');
 var Immutable = require('immutable');
 var mapboxgl = require('mapbox-gl');
+var LngLat = mapboxgl.LngLat;
 var LngLatBounds = mapboxgl.LngLatBounds;
 var Point = mapboxgl.Point;
+
 // NOTE: Transform is not a public API so we should be careful to always lock
 // down mapbox-gl to a specific major, minor, and patch version.
 var Transform = require('mapbox-gl/js/geo/transform');
@@ -139,7 +141,7 @@ var MapGL = React.createClass({
       * during dragging. Where the map is depends on where you first clicked on
       * the map.
       */
-    startDragLatLng: React.PropTypes.array,
+    startDragLngLat: React.PropTypes.array,
     /**
       * Called when a feature is hovered over. Features must set the
       * `interactive` property to `true` for this to work properly. see the
@@ -206,8 +208,7 @@ var MapGL = React.createClass({
       width: props.width,
       height: props.height,
       mapStyle: props.mapStyle,
-      startLatLng: props.startDragLatLng &&
-        new mapboxgl.LngLat(props.startDragLatLng[1], props.startDragLatLng[0])
+      startDragLngLat: props.startDragLngLat && props.startDragLngLat.slice()
     };
 
     assign(stateChanges, {
@@ -230,14 +231,13 @@ var MapGL = React.createClass({
     var height = this.props.height;
     var bbox = getBBoxFromTransform(map.transform, width, height);
     var center = map.getCenter();
-    var startLatLng = this.state.startLatLng;
     var changes = assign({
       latitude: center.lat,
       longitude: center.lng,
       zoom: map.getZoom(),
       bbox: bbox,
       isDragging: this.props.isDragging,
-      startDragLatLng: startLatLng && [startLatLng.lat, startLatLng.lng]
+      startDragLngLat: this.state.startDragLngLat
     }, _changes);
     changes.longitude = mod(changes.longitude + 180, 360) - 180;
     this.props.onChangeViewport(changes);
@@ -459,10 +459,10 @@ var MapGL = React.createClass({
 
   _onMouseDown: function _onMouseDown(opt) {
     var map = this._getMap();
-    var startLatLng = unprojectFromTransform(map.transform, opt.pos);
+    var lngLat = unprojectFromTransform(map.transform, opt.pos);
     this._onChangeViewport({
       isDragging: true,
-      startDragLatLng: [startLatLng.lat, startLatLng.lng]
+      startDragLngLat: [lngLat.lng, lngLat.lat]
     });
   },
 
@@ -474,11 +474,11 @@ var MapGL = React.createClass({
     var map = this._getMap();
     var width = this.props.width;
     var height = this.props.height;
-    // take the start latlng and put it where the mouse is down.
+    // take the start lnglat and put it where the mouse is down.
     var transform = cloneTransform(map.transform);
-    assert(this.state.startLatLng, '`startDragLatLng` prop is required for ' +
-      'mouse drag behavior to calculate where to position the map.');
-    transform.setLocationAtPoint(this.state.startLatLng, p2);
+    assert(this.state.startDragLngLat, '`startDragLngLat` prop is required ' +
+      'for mouse drag behavior to calculate where to position the map.');
+    transform.setLocationAtPoint(this.state.startDragLngLat, p2);
     var bbox = getBBoxFromTransform(transform, width, height);
     this._onChangeViewport({
       latitude: transform.center.lat,

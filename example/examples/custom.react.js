@@ -61,7 +61,7 @@ var OverlayExample = React.createClass({
       latitude: location.latitude,
       longitude: location.longitude,
       zoom: 12.4,
-      startDragLatLng: null,
+      startDragLngLat: null,
       isDragging: false
     };
   },
@@ -71,7 +71,7 @@ var OverlayExample = React.createClass({
       latitude: opt.latitude,
       longitude: opt.longitude,
       zoom: opt.zoom,
-      startDragLatLng: opt.startDragLatLng,
+      startDragLngLat: opt.startDragLngLat,
       isDragging: opt.isDragging
     });
   },
@@ -81,7 +81,7 @@ var OverlayExample = React.createClass({
       latitude: this.state.latitude,
       longitude: this.state.longitude,
       zoom: this.state.zoom,
-      startDragLatLng: this.state.startDragLatLng,
+      startDragLngLat: this.state.startDragLngLat,
       isDragging: this.state.isDragging,
       width: this.props.width,
       height: this.props.height,

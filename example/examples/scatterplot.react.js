@@ -55,7 +55,7 @@ var ScatterplotOverlayExample = React.createClass({
       latitude: location.latitude,
       longitude: location.longitude,
       zoom: 11,
-      startDragLatLng: null,
+      startDragLngLat: null,
       isDragging: false
     };
   },
@@ -65,7 +65,7 @@ var ScatterplotOverlayExample = React.createClass({
       latitude: opt.latitude,
       longitude: opt.longitude,
       zoom: opt.zoom,
-      startDragLatLng: opt.startDragLatLng,
+      startDragLngLat: opt.startDragLngLat,
       isDragging: opt.isDragging
     });
   },
@@ -76,7 +76,7 @@ var ScatterplotOverlayExample = React.createClass({
       longitude: this.state.longitude,
       zoom: this.state.zoom,
       isDragging: this.state.isDragging,
-      startDragLatLng: this.state.startDragLatLng,
+      startDragLngLat: this.state.startDragLngLat,
       width: this.props.width,
       height: this.props.height,
       onChangeViewport: this.props.onChangeViewport || this._onChangeViewport

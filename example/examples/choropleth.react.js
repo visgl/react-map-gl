@@ -51,7 +51,7 @@ var ChoroplethOverlayExample = React.createClass({
       latitude: location.latitude,
       longitude: location.longitude,
       zoom: 11,
-      startDragLatLng: null,
+      startDragLngLat: null,
       isDragging: false
     };
   },
@@ -61,7 +61,7 @@ var ChoroplethOverlayExample = React.createClass({
       latitude: opt.latitude,
       longitude: opt.longitude,
       zoom: opt.zoom,
-      startDragLatLng: opt.startDragLatLng,
+      startDragLngLat: opt.startDragLngLat,
       isDragging: opt.isDragging
     });
   },
@@ -73,7 +73,7 @@ var ChoroplethOverlayExample = React.createClass({
       zoom: this.state.zoom,
       width: this.props.width,
       height: this.props.height,
-      startDragLatLng: this.state.startDragLatLng,
+      startDragLngLat: this.state.startDragLngLat,
       isDragging: this.state.isDragging,
       onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
     }, this.props), [

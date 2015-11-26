@@ -48,7 +48,7 @@ var RouteOverlayExample = React.createClass({
       latitude: 37.7736092599127,
       longitude: -122.42312591099463,
       zoom: 12.011557070552028,
-      startDragLatLng: null,
+      startDragLngLat: null,
       isDragging: false
     };
   },
@@ -58,7 +58,7 @@ var RouteOverlayExample = React.createClass({
       latitude: opt.latitude,
       longitude: opt.longitude,
       zoom: opt.zoom,
-      startDragLatLng: opt.startDragLatLng,
+      startDragLngLat: opt.startDragLngLat,
       isDragging: opt.isDragging
     });
   },
@@ -116,7 +116,7 @@ var RouteOverlayExample = React.createClass({
       zoom: this.state.zoom,
       width: this.props.width,
       height: this.props.height,
-      startDragLatLng: this.state.startDragLatLng,
+      startDragLngLat: this.state.startDragLngLat,
       isDragging: this.state.isDragging,
       onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
     }, this.props), [

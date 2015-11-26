@@ -61,7 +61,7 @@ var GeodataCreator = React.createClass({
       longitude: -122.40677,
       latitude: 37.78949,
       zoom: 12.76901,
-      startDragLatLng: null,
+      startDragLngLat: null,
       isDragging: false,
       points: Immutable.fromJS(initialPoints)
     };
@@ -72,7 +72,7 @@ var GeodataCreator = React.createClass({
       latitude: opt.latitude,
       longitude: opt.longitude,
       zoom: opt.zoom,
-      startDragLatLng: opt.startDragLatLng,
+      startDragLngLat: opt.startDragLngLat,
       isDragging: opt.isDragging
     });
   },
@@ -103,7 +103,7 @@ var GeodataCreator = React.createClass({
         zoom: this.state.zoom,
         width: this.props.width,
         height: this.props.height,
-        startDragLatLng: this.state.startDragLatLng,
+        startDragLngLat: this.state.startDragLngLat,
         isDragging: this.state.isDragging,
         style: {float: 'left'},
         onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
