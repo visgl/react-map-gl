@@ -29,7 +29,7 @@ npm install react-map-gl --save
 
 ### Using overlays
 
-react-map-gl provides an overlay API so you can use the builtin visualization
+react-map-gl provides an overlay API so you can use the built-in visualization
 overlays, or create your own. Here's an example of using the build in
 ScatterplotOverlay.
 
