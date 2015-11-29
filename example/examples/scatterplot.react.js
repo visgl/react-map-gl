@@ -28,6 +28,8 @@ var d3 = require('d3');
 var MapGL = require('../../src/index.js');
 var ScatterplotOverlay = require('../../src/overlays/scatterplot.react');
 
+var INITIAL_ZOOM = 11;
+
 // San Francisco
 var location = require('./../data/cities.json')[0];
 
@@ -37,8 +39,11 @@ function wiggle(scale) {
 }
 
 // Example data.
-var locations = Immutable.fromJS(d3.range(4000).map(function _map() {
-  return [location.latitude + wiggle(0.01), location.longitude + wiggle(0.01)];
+var dots = Immutable.fromJS(d3.range(2000).map(function _map() {
+  return {
+    location: [location.latitude + wiggle(0.01), location.longitude + wiggle(0.01)],
+    value: Math.random() * 3
+  }
 }));
 
 var ScatterplotOverlayExample = React.createClass({
@@ -54,7 +59,7 @@ var ScatterplotOverlayExample = React.createClass({
     return {
       latitude: location.latitude,
       longitude: location.longitude,
-      zoom: 11,
+      zoom: INITIAL_ZOOM,
       startDragLatLng: null,
       isDragging: false
     };
@@ -82,10 +87,11 @@ var ScatterplotOverlayExample = React.createClass({
       onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
     }, this.props), [
       r(ScatterplotOverlay, {
-        locations: locations,
-        dotRadius: 2,
+        dots: dots,
         globalOpacity: 1,
-        compositeOperation: 'screen'
+        compositeOperation: 'screen',
+        zoom: this.state.zoom,
+        initZoom: INITIAL_ZOOM
       })
     ]);
   }

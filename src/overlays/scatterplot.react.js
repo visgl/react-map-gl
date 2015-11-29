@@ -25,6 +25,11 @@ var d3 = require('d3');
 var r = require('r-dom');
 var Immutable = require('immutable');
 var COMPOSITE_TYPES = require('canvas-composite-types');
+var scaleRelativeToZoom = require('./../utils').scaleRelativeToZoom;
+
+function scaleRelativeToZoom(radius, relativeToZoom, zoom) {
+  return radius * Math.pow(2, zoom) / Math.pow(2, relativeToZoom);
+}
 
 var ScatterplotOverlay = React.createClass({
 
@@ -35,22 +40,26 @@ var ScatterplotOverlay = React.createClass({
     height: React.PropTypes.number,
     project: React.PropTypes.func,
     isDragging: React.PropTypes.bool,
-    locations: React.PropTypes.instanceOf(Immutable.List),
+    dots: React.PropTypes.instanceOf(Immutable.List),
     latLngAccessor: React.PropTypes.func,
+    radiusAccesor: React.PropTypes.func,
     renderWhileDragging: React.PropTypes.bool,
     globalOpacity: React.PropTypes.number,
-    dotRadius: React.PropTypes.number,
     dotFill: React.PropTypes.string,
-    compositeOperation: React.PropTypes.oneOf(COMPOSITE_TYPES)
+    compositeOperation: React.PropTypes.oneOf(COMPOSITE_TYPES),
+    zoom: React.PropTypes.number,
+    initZoom: React.PropTypes.number
   },
 
   getDefaultProps: function getDefaultProps() {
     return {
-      latLngAccessor: function latLngAccessor(location) {
-        return [location.get(0), location.get(1)];
+      latLngAccessor: function latLngAccessor(dot) {
+        return [dot.get('location').get(0), dot.get('location').get(1)];
+      },
+      radiusAccesor: function radiusAccesor(dot){
+        return dot.get('value');
       },
       renderWhileDragging: true,
-      dotRadius: 4,
       dotFill: '#1FBAD6',
       globalOpacity: 1,
       // Same as browser default.
@@ -71,17 +80,19 @@ var ScatterplotOverlay = React.createClass({
     var canvas = this.getDOMNode();
     var ctx = canvas.getContext('2d');
     var props = this.props;
-    var radius = this.props.dotRadius;
     var fill = this.props.dotFill;
+    var scalar = scaleRelativeToZoom(this.props.zoom, this.props.initZoom);
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
     ctx.clearRect(0, 0, props.width, props.height);
     ctx.globalCompositeOperation = this.props.compositeOperation;
     if ((this.props.renderWhileDragging || !this.props.isDragging) &&
-      this.props.locations
+      this.props.dots
     ) {
-      this.props.locations.forEach(function _forEach(location) {
-        var latLng = this.props.latLngAccessor(location);
+      this.props.dots.forEach(function _forEach(dot) {
+        var latLng = this.props.latLngAccessor(dot);
+        var radius = this.props.radiusAccesor(dot);
+        radius *= scalar;
         var pixel = this.props.project(latLng);
         var pixelRounded = [d3.round(pixel.x, 1), d3.round(pixel.y, 1)];
         if (pixelRounded[0] + radius >= 0 &&
