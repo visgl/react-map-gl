@@ -7,7 +7,6 @@ raster tiles. MapboxGL-js provides impressive vector tile rendering capabilities
 that you can find out more about [here](https://www.mapbox.com/mapbox-gl-js/).
 Although the Mapbox
 [vector tile specification](https://www.mapbox.com/developers/vector-tiles/) is 
-<<<<<<< HEAD
 [open source](https://github.com/mapbox/vector-tile-spec), there aren't yet very
 many free alternatives to Mapbox's paid 
 [vector tile API](https://www.mapbox.com/pricing/). Because of this, the
