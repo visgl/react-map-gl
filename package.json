@@ -6,6 +6,7 @@
   "dependencies": {
     "bistre": "^1.0.1",
     "brfs": "^1.4.1",
+    "browserify": "^12.0.1",
     "budo": "^4.2.2",
     "d3": "^3.5.8",
     "highlight.js": "^8.8.0",
@@ -16,11 +17,13 @@
     "react": "^0.13.3",
     "react-map-gl": "^0.2.1",
     "react-map-gl-heatmap-overlay": "^0.2.1",
-    "uber-standard": "^3.7.1"
+    "uber-standard": "^3.7.1",
+    "uglifyify": "^3.0.1"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "budo ./main.js --live -t brfs | bistre",
+    "start": "budo ./index.js --serve bundle.js -t brfs --live| bistre",
+    "build": "browserify -g uglifyify ./index.js -t brfs > bundle.js",
     "lint": "uber-standard"
   },
   "repository": {
