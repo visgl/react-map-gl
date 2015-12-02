@@ -117,6 +117,8 @@ run the compiler to build the files again.
 
 ### 0.6
 
+Support for React 0.14 as well as several other API changes
+
 ### Breaking changes
 
 #### No longer provide viewport props transparently to overlay children.
