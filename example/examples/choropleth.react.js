@@ -17,7 +17,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
 'use strict';
 
 var assign = require('object-assign');
@@ -48,42 +47,35 @@ var ChoroplethOverlayExample = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      zoom: 11,
-      startDragLatLng: null,
-      isDragging: false
+      viewport: {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: 11,
+        startDragLngLat: null,
+        isDragging: false
+      }
     };
   },
 
-  _onChangeViewport: function _onChangeViewport(opt) {
-    this.setState({
-      latitude: opt.latitude,
-      longitude: opt.longitude,
-      zoom: opt.zoom,
-      startDragLatLng: opt.startDragLatLng,
-      isDragging: opt.isDragging
-    });
+  _onChangeViewport: function _onChangeViewport(viewport) {
+    if (this.props.onChangeViewport) {
+      return this.props.onChangeViewport(viewport);
+    }
+    this.setState({viewport: viewport});
   },
 
   render: function render() {
-    return r(MapGL, assign({
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
-      zoom: this.state.zoom,
-      width: this.props.width,
-      height: this.props.height,
-      startDragLatLng: this.state.startDragLatLng,
-      isDragging: this.state.isDragging,
-      onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
-    }, this.props), [
-      r(ChoroplethOverlay, {
+    var mapProps = assign({}, this.state.viewport, this.props, {
+      onChangeViewport: this._onChangeViewport
+    });
+    return r(MapGL, mapProps, [
+      r(ChoroplethOverlay, assign({}, mapProps, {
         globalOpacity: 0.8,
         colorDomain: [0, 500, 1000],
         colorRange: ['#31a354', '#addd8e', '#f7fcb9'],
         renderWhileDragging: false,
         features: ZIPCODES_SF.get('features')
-      })
+      }))
     ]);
   }
 });

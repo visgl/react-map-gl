@@ -38,7 +38,7 @@ function wiggle(scale) {
 
 // Example data.
 var locations = Immutable.fromJS(d3.range(4000).map(function _map() {
-  return [location.latitude + wiggle(0.01), location.longitude + wiggle(0.01)];
+  return [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)];
 }));
 
 var ScatterplotOverlayExample = React.createClass({
@@ -52,42 +52,44 @@ var ScatterplotOverlayExample = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      zoom: 11,
-      startDragLatLng: null,
-      isDragging: false
+      viewport: {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: 11,
+        startDragLngLat: null,
+        isDragging: false
+      }
     };
   },
 
   _onChangeViewport: function _onChangeViewport(opt) {
+    if (this.props.onChangeViewport) {
+      return this.props.onChangeViewport(opt);
+    }
     this.setState({
-      latitude: opt.latitude,
-      longitude: opt.longitude,
-      zoom: opt.zoom,
-      startDragLatLng: opt.startDragLatLng,
-      isDragging: opt.isDragging
+      viewport: {
+        latitude: opt.latitude,
+        longitude: opt.longitude,
+        zoom: opt.zoom,
+        startDragLngLat: opt.startDragLngLat,
+        isDragging: opt.isDragging
+      }
     });
   },
 
   render: function render() {
-    return r(MapGL, assign({
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
-      zoom: this.state.zoom,
-      isDragging: this.state.isDragging,
-      startDragLatLng: this.state.startDragLatLng,
-      width: this.props.width,
-      height: this.props.height,
-      onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
-    }, this.props), [
-      r(ScatterplotOverlay, {
-        locations: locations,
-        dotRadius: 2,
-        globalOpacity: 1,
-        compositeOperation: 'screen'
-      })
-    ]);
+    var viewport = assign({}, this.state.viewport, this.props);
+    return r(MapGL, assign({}, viewport, {
+      onChangeViewport: this._onChangeViewport
+    }), [
+        r(ScatterplotOverlay, assign({}, viewport, {
+          locations: locations,
+          dotRadius: 2,
+          globalOpacity: 1,
+          compositeOperation: 'screen'
+        }))
+      ]
+    );
   }
 });
 

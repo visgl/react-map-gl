@@ -29,10 +29,10 @@ var Immutable = require('immutable');
 var mapboxgl = require('mapbox-gl');
 var LngLatBounds = mapboxgl.LngLatBounds;
 var Point = mapboxgl.Point;
+
 // NOTE: Transform is not a public API so we should be careful to always lock
 // down mapbox-gl to a specific major, minor, and patch version.
 var Transform = require('mapbox-gl/js/geo/transform');
-var ViewportMercator = require('viewport-mercator-project');
 
 var config = require('./config');
 var MapInteractions = require('./map-interactions.react');
@@ -44,13 +44,6 @@ function mod(value, divisor) {
 
 function unprojectFromTransform(transform, point) {
   return transform.pointLocation(Point.convert(point));
-}
-
-function getBBoxFromTransform(transform, width, height) {
-  return [
-    unprojectFromTransform(transform, [0, 0]),
-    unprojectFromTransform(transform, [width, height])
-  ];
 }
 
 function cloneTransform(original) {
@@ -117,7 +110,7 @@ var MapGL = React.createClass({
     /**
       * `onChangeViewport` callback is fired when the user interacted with the
       * map. The object passed to the callback containers `latitude`,
-      * `longitude`, `zoom` and `bbox`. information.
+      * `longitude` and `zoom` information.
       */
     onChangeViewport: React.PropTypes.func,
     /**
@@ -139,7 +132,7 @@ var MapGL = React.createClass({
       * during dragging. Where the map is depends on where you first clicked on
       * the map.
       */
-    startDragLatLng: React.PropTypes.array,
+    startDragLngLat: React.PropTypes.array,
     /**
       * Called when a feature is hovered over. Features must set the
       * `interactive` property to `true` for this to work properly. see the
@@ -161,7 +154,14 @@ var MapGL = React.createClass({
       * The first argument of the callback will be the array of feature the
       * mouse is over. This is the same response returned from `featuresAt`.
       */
-    onClickFeatures: React.PropTypes.func
+    onClickFeatures: React.PropTypes.func,
+
+    /**
+      * A Callback used to render data overlays. This function will be passed
+      * a viewport object that includes two methods, `project` and `unproject`
+      * as well as the props, latitude, longitude, zoom, width, and height.
+      */
+    overlays: React.PropTypes.func
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -206,8 +206,7 @@ var MapGL = React.createClass({
       width: props.width,
       height: props.height,
       mapStyle: props.mapStyle,
-      startLatLng: props.startDragLatLng &&
-        new mapboxgl.LngLat(props.startDragLatLng[1], props.startDragLatLng[0])
+      startDragLngLat: props.startDragLngLat && props.startDragLngLat.slice()
     };
 
     assign(stateChanges, {
@@ -226,18 +225,13 @@ var MapGL = React.createClass({
 
   _onChangeViewport: function _onChangeViewport(_changes) {
     var map = this._getMap();
-    var width = this.props.width;
-    var height = this.props.height;
-    var bbox = getBBoxFromTransform(map.transform, width, height);
     var center = map.getCenter();
-    var startLatLng = this.state.startLatLng;
     var changes = assign({
       latitude: center.lat,
       longitude: center.lng,
       zoom: map.getZoom(),
-      bbox: bbox,
       isDragging: this.props.isDragging,
-      startDragLatLng: startLatLng && [startLatLng.lat, startLatLng.lng]
+      startDragLngLat: this.state.startDragLngLat
     }, _changes);
     changes.longitude = mod(changes.longitude + 180, 360) - 180;
     this.props.onChangeViewport(changes);
@@ -459,10 +453,10 @@ var MapGL = React.createClass({
 
   _onMouseDown: function _onMouseDown(opt) {
     var map = this._getMap();
-    var startLatLng = unprojectFromTransform(map.transform, opt.pos);
+    var lngLat = unprojectFromTransform(map.transform, opt.pos);
     this._onChangeViewport({
       isDragging: true,
-      startDragLatLng: [startLatLng.lat, startLatLng.lng]
+      startDragLngLat: [lngLat.lng, lngLat.lat]
     });
   },
 
@@ -472,19 +466,15 @@ var MapGL = React.createClass({
     }
     var p2 = opt.pos;
     var map = this._getMap();
-    var width = this.props.width;
-    var height = this.props.height;
-    // take the start latlng and put it where the mouse is down.
+    // take the start lnglat and put it where the mouse is down.
     var transform = cloneTransform(map.transform);
-    assert(this.state.startLatLng, '`startDragLatLng` prop is required for ' +
-      'mouse drag behavior to calculate where to position the map.');
-    transform.setLocationAtPoint(this.state.startLatLng, p2);
-    var bbox = getBBoxFromTransform(transform, width, height);
+    assert(this.state.startDragLngLat, '`startDragLngLat` prop is required ' +
+      'for mouse drag behavior to calculate where to position the map.');
+    transform.setLocationAtPoint(this.state.startDragLngLat, p2);
     this._onChangeViewport({
       latitude: transform.center.lat,
       longitude: transform.center.lng,
       zoom: transform.zoom,
-      bbox: bbox,
       isDragging: true
     });
   },
@@ -510,16 +500,13 @@ var MapGL = React.createClass({
 
   _onMouseUp: function _onMouseUp(opt) {
     var map = this._getMap();
-    var width = this.props.width;
-    var height = this.props.height;
     var transform = cloneTransform(map.transform);
 
     this._onChangeViewport({
       latitude: transform.center.lat,
       longitude: transform.center.lng,
       zoom: transform.zoom,
-      isDragging: false,
-      bbox: getBBoxFromTransform(transform, width, height)
+      isDragging: false
     });
 
     if (!this.props.onClickFeatures) {
@@ -544,7 +531,6 @@ var MapGL = React.createClass({
 
   _onZoom: function _onZoom(opt) {
     var map = this._getMap();
-    var props = this.props;
     var transform = cloneTransform(map.transform);
     var around = unprojectFromTransform(transform, opt.pos);
     transform.zoom = transform.scaleZoom(map.transform.scale * opt.scale);
@@ -553,53 +539,12 @@ var MapGL = React.createClass({
       latitude: transform.center.lat,
       longitude: transform.center.lng,
       zoom: transform.zoom,
-      isDragging: true,
-      bbox: getBBoxFromTransform(transform, props.width, props.height)
+      isDragging: true
     });
   },
 
   _onZoomEnd: function _onZoomEnd() {
     this._onChangeViewport({isDragging: false});
-  },
-
-  _renderOverlays: function _renderOverlays(transform) {
-    var children = [];
-
-    var viewportConfig = {
-      center: [this.props.longitude, this.props.latitude],
-      zoom: this.props.zoom,
-      tileSize: 512,
-      dimensions: [this.props.width, this.props.height]
-    };
-
-    var viewport = ViewportMercator(viewportConfig);
-
-    function project(latLng) {
-      var pixel = viewport.project([latLng[1], latLng[0]]);
-      return {x: pixel[0], y: pixel[1]};
-    }
-
-    function unproject(pixel) {
-      var lngLat = viewport.unproject(pixel);
-      return mapboxgl.LngLat.convert(lngLat);
-    }
-
-    React.Children.forEach(this.props.children, function _map(child) {
-      if (!child) {
-        return;
-      }
-      children.push(React.cloneElement(child, {
-        width: this.props.width,
-        height: this.props.height,
-        isDragging: this.props.isDragging,
-        project: project,
-        unproject: unproject
-      }));
-    }, this);
-    return r.div({
-      className: 'overlays',
-      style: {position: 'absolute', left: 0, top: 0}
-    }, children);
   },
 
   render: function render() {
@@ -619,7 +564,10 @@ var MapGL = React.createClass({
 
     var content = [
       r.div({ref: 'mapboxMap', style: style, className: props.className}),
-      this._renderOverlays(transform)
+      r.div({
+        className: 'overlays',
+        style: {position: 'absolute', left: 0, top: 0}
+      }, this.props.children)
     ];
 
     if (this.props.onChangeViewport) {

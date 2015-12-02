@@ -31,18 +31,18 @@ var SVGOverlay = require('../../src/overlays/svg.react');
 
 // A mock example path.
 var initialPoints = [
-  {location: [37.79450507471435, -122.39508481737994], id: 0},
-  {location: [37.79227619464379, -122.39750244137034], id: 1},
-  {location: [37.789251178427776, -122.4013303460217], id: 2},
-  {location: [37.786862920252986, -122.40475531334141], id: 3},
-  {location: [37.78861431712821, -122.40505751634022], id: 4},
-  {location: [37.79060449046487, -122.40556118800487], id: 5},
-  {location: [37.790047247333675, -122.4088854209916], id: 6},
-  {location: [37.79275381746233, -122.4091876239904], id: 7},
-  {location: [37.795619489534374, -122.40989276432093], id: 8},
-  {location: [37.79792786675678, -122.41049717031848], id: 9},
-  {location: [37.80031576728801, -122.4109001076502], id: 10},
-  {location: [37.79920142331301, -122.41916032295062], id: 11}
+  {location: [-122.39508481737994, 37.79450507471435], id: 0},
+  {location: [-122.39750244137034, 37.79227619464379], id: 1},
+  {location: [-122.4013303460217, 37.789251178427776], id: 2},
+  {location: [-122.40475531334141, 37.786862920252986], id: 3},
+  {location: [-122.40505751634022, 37.78861431712821], id: 4},
+  {location: [-122.40556118800487, 37.79060449046487], id: 5},
+  {location: [-122.4088854209916, 37.790047247333675], id: 6},
+  {location: [-122.4091876239904, 37.79275381746233], id: 7},
+  {location: [-122.40989276432093, 37.795619489534374], id: 8},
+  {location: [-122.41049717031848, 37.79792786675678], id: 9},
+  {location: [-122.4109001076502, 37.80031576728801], id: 10},
+  {location: [-122.41916032295062, 37.79920142331301], id: 11}
 ];
 
 var ids = initialPoints[initialPoints.length - 1].id;
@@ -58,28 +58,27 @@ var GeodataCreator = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      longitude: -122.40677,
-      latitude: 37.78949,
-      zoom: 12.76901,
-      startDragLatLng: null,
-      isDragging: false,
+      viewport: {
+        longitude: -122.40677,
+        latitude: 37.78949,
+        zoom: 12.76901,
+        startDragLngLat: null,
+        isDragging: false
+      },
       points: Immutable.fromJS(initialPoints)
     };
   },
 
-  _onChangeViewport: function _onChangeViewport(opt) {
-    this.setState({
-      latitude: opt.latitude,
-      longitude: opt.longitude,
-      zoom: opt.zoom,
-      startDragLatLng: opt.startDragLatLng,
-      isDragging: opt.isDragging
-    });
+  _onChangeViewport: function _onChangeViewport(viewport) {
+    if (this.props.onChangeViewport) {
+      return this.props.onChangeViewport(viewport);
+    }
+    this.setState({viewport: viewport});
   },
 
-  _onAddPoint: function _onAddPoint(_location) {
+  _onAddPoint: function _onAddPoint(location) {
     var points = this.state.points.push(new Immutable.Map({
-      location: new Immutable.List(_location),
+      location: new Immutable.List(location),
       id: ++ids
     }));
     this.setState({points: points});
@@ -95,53 +94,51 @@ var GeodataCreator = React.createClass({
     this.setState({points: points});
   },
 
-  render: function render() {
-    return r.div([
-      r(MapGL, assign({
-        latitude: this.state.latitude,
-        longitude: this.state.longitude,
-        zoom: this.state.zoom,
-        width: this.props.width,
-        height: this.props.height,
-        startDragLatLng: this.state.startDragLatLng,
-        isDragging: this.state.isDragging,
-        style: {float: 'left'},
-        onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
-      }, this.props), [
-        r(SVGOverlay, {redraw: function _redraw(opt) {
+  _renderOverlays: function _renderOverlays(viewport) {
+    return [
+      r(SVGOverlay, assign({}, viewport, {
+        redraw: function _redraw(opt) {
           if (!this.state.points.size) {
             return null;
           }
           var d = 'M' + this.state.points.map(function _map(point) {
-            var p = opt.project(point.get('location').toArray());
-            return [p.x, p.y];
+            return opt.project(point.get('location').toArray());
           }).join('L');
           return r.path({
             style: {stroke: '#1FBAD6', strokeWidth: 2, fill: 'none'},
             d: d
           });
-        }.bind(this)}),
-        r(DraggableOverlay, {
-          points: this.state.points,
-          onAddPoint: this._onAddPoint,
-          onUpdatePoint: this._onUpdatePoint,
-          renderPoint: function renderPoint(point, pixel) {
-            return r.g({}, [
-              r.circle({
-                r: 10,
-                style: {
-                  fill: alphaify('#1FBAD6', 0.5),
-                  pointerEvents: 'all'
-                }
-              }),
-              r.text({
-                style: {fill: 'white', textAnchor: 'middle'},
-                y: 5
-              }, point.get('id'))
-            ]);
-          }
-        })
-      ])
+        }.bind(this)
+      })),
+      r(DraggableOverlay, assign({}, viewport, {
+        points: this.state.points,
+        onAddPoint: this._onAddPoint,
+        onUpdatePoint: this._onUpdatePoint,
+        renderPoint: function renderPoint(point, pixel) {
+          return r.g({}, [
+            r.circle({
+              r: 10,
+              style: {
+                fill: alphaify('#1FBAD6', 0.5),
+                pointerEvents: 'all'
+              }
+            }),
+            r.text({
+              style: {fill: 'white', textAnchor: 'middle'},
+              y: 5
+            }, point.get('id'))
+          ]);
+        }
+      }))
+    ];
+  },
+
+  render: function render() {
+    var viewport = assign({}, this.state.viewport, this.props);
+    return r.div([
+      r(MapGL, assign({}, viewport, {
+        onChangeViewport: this._onChangeViewport
+      }), [this._renderOverlays(viewport)])
     ]);
   }
 });

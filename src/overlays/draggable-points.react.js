@@ -28,23 +28,25 @@ var document = require('global/document');
 var nop = require('nop');
 var config = require('../config');
 var mouse = require('../utils').relativeMousePosition;
+var ViewportMercator = require('viewport-mercator-project');
 
 var DraggablePointsOverlay = React.createClass({
 
   displayName: 'DraggablePointsOverlay',
 
   propTypes: {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    points: React.PropTypes.instanceOf(Immutable.List),
-    project: React.PropTypes.func,
-    unproject: React.PropTypes.func,
-    isDragging: React.PropTypes.bool,
-    keyAccessor: React.PropTypes.func,
-    locationAccessor: React.PropTypes.func,
-    onAddPoint: React.PropTypes.func,
-    onUpdatePoint: React.PropTypes.func,
-    renderPoint: React.PropTypes.func
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired,
+    latitude: React.PropTypes.number.isRequired,
+    longitude: React.PropTypes.number.isRequired,
+    zoom: React.PropTypes.number.isRequired,
+    points: React.PropTypes.instanceOf(Immutable.List).isRequired,
+    isDragging: React.PropTypes.bool.isRequired,
+    keyAccessor: React.PropTypes.func.isRequired,
+    lngLatAccessor: React.PropTypes.func.isRequired,
+    onAddPoint: React.PropTypes.func.isRequired,
+    onUpdatePoint: React.PropTypes.func.isRequired,
+    renderPoint: React.PropTypes.func.isRequired
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -52,7 +54,7 @@ var DraggablePointsOverlay = React.createClass({
       keyAccessor: function keyAccessor(point) {
         return point.get('id');
       },
-      locationAccessor: function locationAccessor(point) {
+      lngLatAccessor: function lngLatAccessor(point) {
         return point.get('location').toArray();
       },
       onAddPoint: nop,
@@ -78,11 +80,10 @@ var DraggablePointsOverlay = React.createClass({
   _onDrag: function _onDrag(event) {
     event.stopPropagation();
     var pixel = mouse(this.refs.container, event);
-    var latlng = this.props.unproject(pixel);
-    this.props.onUpdatePoint({
-      key: this.state.draggedPointKey,
-      location: [latlng.lat, latlng.lng]
-    });
+    var mercator = ViewportMercator(this.props);
+    var lngLat = mercator.unproject(pixel);
+    var key = this.state.draggedPointKey;
+    this.props.onUpdatePoint({key: key, location: lngLat});
   },
 
   _onDragEnd: function _onDragEnd(event) {
@@ -96,12 +97,13 @@ var DraggablePointsOverlay = React.createClass({
     event.stopPropagation();
     event.preventDefault();
     var pixel = mouse(this.refs.container, event);
-    var location = this.props.unproject(pixel);
-    this.props.onAddPoint([location.lat, location.lng]);
+    var mercator = ViewportMercator(this.props);
+    this.props.onAddPoint(mercator.unproject(pixel));
   },
 
   render: function render() {
     var points = this.props.points;
+    var mercator = ViewportMercator(this.props);
     return r.svg({
       ref: 'container',
       width: this.props.width,
@@ -117,8 +119,7 @@ var DraggablePointsOverlay = React.createClass({
       onContextMenu: this._addPoint
     }, [
       r.g({style: {cursor: 'pointer'}}, points.map(function _map(point, index) {
-        var _pixel = this.props.project(this.props.locationAccessor(point));
-        var pixel = [_pixel.x, _pixel.y];
+        var pixel = mercator.project(this.props.lngLatAccessor(point));
         return r.g({
           key: index,
           transform: transform([{translate: pixel}]),
