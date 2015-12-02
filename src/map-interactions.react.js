@@ -78,7 +78,7 @@ var MapInteractions = React.createClass({
   },
 
   _getMousePos: function _getMousePos(event) {
-    var el = this.refs.container.getDOMNode();
+    var el = this.refs.container;
     return mousePos(el, event);
   },
 

@@ -22,17 +22,20 @@
 var React = require('react');
 var r = require('r-dom');
 var assign = require('object-assign');
+var ViewportMercator = require('viewport-mercator-project');
 
 var SVGOverlay = React.createClass({
 
   displayName: 'SVGOverlay',
 
   propTypes: {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    redraw: React.PropTypes.func,
-    project: React.PropTypes.func,
-    isDragging: React.PropTypes.bool
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired,
+    latitude: React.PropTypes.number.isRequired,
+    longitude: React.PropTypes.number.isRequired,
+    zoom: React.PropTypes.number.isRequired,
+    redraw: React.PropTypes.func.isRequired,
+    isDragging: React.PropTypes.bool.isRequired
   },
 
   render: function render() {
@@ -42,6 +45,7 @@ var SVGOverlay = React.createClass({
       left: 0,
       top: 0
     }, this.props.style);
+    var mercator = ViewportMercator(this.props);
     return r.svg({
       ref: 'overlay',
       width: this.props.width,
@@ -50,8 +54,8 @@ var SVGOverlay = React.createClass({
     }, this.props.redraw({
       width: this.props.width,
       height: this.props.height,
-      project: this.props.project,
-      unproject: this.props.unproject,
+      project: mercator.project,
+      unproject: mercator.unproject,
       isDragging: this.props.isDragging
     }));
   }

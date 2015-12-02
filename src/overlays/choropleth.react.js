@@ -20,6 +20,7 @@
 'use strict';
 
 var React = require('react');
+var ViewportMercator = require('viewport-mercator-project');
 var window = require('global/window');
 var d3 = require('d3');
 var r = require('r-dom');
@@ -30,26 +31,25 @@ var ChoroplethOverlay = React.createClass({
   displayName: 'ChoroplethOverlay',
 
   propTypes: {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    project: React.PropTypes.func,
-    isDragging: React.PropTypes.bool,
-    renderWhileDragging: React.PropTypes.bool,
-    globalOpacity: React.PropTypes.number,
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired,
+    latitude: React.PropTypes.number.isRequired,
+    longitude: React.PropTypes.number.isRequired,
+    zoom: React.PropTypes.number.isRequired,
+    isDragging: React.PropTypes.bool.isRequired,
+    renderWhileDragging: React.PropTypes.bool.isRequired,
+    globalOpacity: React.PropTypes.number.isRequired,
     /**
       * An Immutable List of feature objects.
       */
     features: React.PropTypes.instanceOf(Immutable.List),
     colorDomain: React.PropTypes.array,
-    colorRange: React.PropTypes.array,
-    valueAccessor: React.PropTypes.func
+    colorRange: React.PropTypes.array.isRequired,
+    valueAccessor: React.PropTypes.func.isRequired
   },
 
   getDefaultProps: function getDefaultProps() {
     return {
-      latLngAccessor: function latLngAccessor(location) {
-        return [location.get(0), location.get(1)];
-      },
       renderWhileDragging: true,
       globalOpacity: 1,
       colorDomain: null,
@@ -70,17 +70,17 @@ var ChoroplethOverlay = React.createClass({
 
   _redraw: function _redraw() {
     var pixelRatio = window.devicePixelRatio;
-    var canvas = this.getDOMNode();
+    var canvas = this.refs.overlay;
     var ctx = canvas.getContext('2d');
-    var project = this.props.project;
+    var mercator = ViewportMercator(this.props);
 
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
     ctx.clearRect(0, 0, this.props.width, this.props.height);
 
     function projectPoint(lon, lat) {
-      var point = project([lat, lon]);
-      this.stream.point(point.x, point.y);
+      var point = mercator.project([lon, lat]);
+      this.stream.point(point[0], point[1]);
     }
 
     if (this.props.renderWhileDragging || !this.props.isDragging) {

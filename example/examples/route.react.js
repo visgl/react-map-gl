@@ -45,22 +45,21 @@ var RouteOverlayExample = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      latitude: 37.7736092599127,
-      longitude: -122.42312591099463,
-      zoom: 12.011557070552028,
-      startDragLatLng: null,
-      isDragging: false
+      viewport: {
+        latitude: 37.7736092599127,
+        longitude: -122.42312591099463,
+        zoom: 12.011557070552028,
+        startDragLngLat: null,
+        isDragging: false
+      }
     };
   },
 
-  _onChangeViewport: function _onChangeViewport(opt) {
-    this.setState({
-      latitude: opt.latitude,
-      longitude: opt.longitude,
-      zoom: opt.zoom,
-      startDragLatLng: opt.startDragLatLng,
-      isDragging: opt.isDragging
-    });
+  _onChangeViewport: function _onChangeViewport(viewport) {
+    if (this.props.onChangeViewport) {
+      return this.props.onChangeViewport(viewport);
+    }
+    this.setState({viewport: viewport});
   },
 
   _renderRoute: function _renderRoute(points, index) {
@@ -86,7 +85,7 @@ var RouteOverlayExample = React.createClass({
   _redrawSVGOverlay: function _redrawSVGOverlay(opt) {
     var routes = ROUTES.map(function _map(route, index) {
       var points = route.coordinates.map(opt.project).map(function __map(p) {
-        return [d3.round(p.x, 1), d3.round(p.y, 1)];
+        return [d3.round(p[0], 1), d3.round(p[1], 1)];
       });
       return r.g({key: index}, this._renderRoute(points, index));
     }, this);
@@ -100,7 +99,7 @@ var RouteOverlayExample = React.createClass({
     ctx.clearRect(0, 0, width, height);
     ROUTES.map(function _map(route, index) {
       route.coordinates.map(opt.project).forEach(function _forEach(p, i) {
-        var point = [d3.round(p.x, 1), d3.round(p.y, 1)];
+        var point = [d3.round(p[0], 1), d3.round(p[1], 1)];
         ctx.fillStyle = d3.rgb(color(index)).brighter(1).toString();
         ctx.beginPath();
         ctx.arc(point[0], point[1], 2, 0, Math.PI * 2);
@@ -110,18 +109,12 @@ var RouteOverlayExample = React.createClass({
   },
 
   render: function render() {
-    return r(MapGL, assign({
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
-      zoom: this.state.zoom,
-      width: this.props.width,
-      height: this.props.height,
-      startDragLatLng: this.state.startDragLatLng,
-      isDragging: this.state.isDragging,
-      onChangeViewport: this.props.onChangeViewport || this._onChangeViewport
-    }, this.props), [
-      r(SVGOverlay, {redraw: this._redrawSVGOverlay}),
-      r(CanvasOverlay, {redraw: this._redrawCanvasOverlay})
+    var viewport = assign({}, this.state.viewport, this.props);
+    return r(MapGL, assign({}, viewport, {
+      onChangeViewport: this._onChangeViewport
+    }), [
+      r(SVGOverlay, assign({redraw: this._redrawSVGOverlay}, viewport)),
+      r(CanvasOverlay, assign({redraw: this._redrawCanvasOverlay}, viewport))
     ]);
   }
 });
