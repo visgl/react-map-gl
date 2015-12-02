@@ -58,26 +58,22 @@ var GeodataCreator = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      longitude: -122.40677,
-      latitude: 37.78949,
-      zoom: 12.76901,
-      startDragLngLat: null,
-      isDragging: false,
+      viewport: {
+        longitude: -122.40677,
+        latitude: 37.78949,
+        zoom: 12.76901,
+        startDragLngLat: null,
+        isDragging: false
+      },
       points: Immutable.fromJS(initialPoints)
     };
   },
 
-  _onChangeViewport: function _onChangeViewport(opt) {
+  _onChangeViewport: function _onChangeViewport(viewport) {
     if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(opt);
+      return this.props.onChangeViewport(viewport);
     }
-    this.setState({
-      latitude: opt.latitude,
-      longitude: opt.longitude,
-      zoom: opt.zoom,
-      startDragLngLat: opt.startDragLngLat,
-      isDragging: opt.isDragging
-    });
+    this.setState({viewport: viewport});
   },
 
   _onAddPoint: function _onAddPoint(location) {
@@ -100,18 +96,20 @@ var GeodataCreator = React.createClass({
 
   _renderOverlays: function _renderOverlays(viewport) {
     return [
-      r(SVGOverlay, assign({}, viewport, {redraw: function _redraw(opt) {
-        if (!this.state.points.size) {
-          return null;
-        }
-        var d = 'M' + this.state.points.map(function _map(point) {
-          return opt.project(point.get('location').toArray());
-        }).join('L');
-        return r.path({
-          style: {stroke: '#1FBAD6', strokeWidth: 2, fill: 'none'},
-          d: d
-        });
-      }.bind(this)})),
+      r(SVGOverlay, assign({}, viewport, {
+        redraw: function _redraw(opt) {
+          if (!this.state.points.size) {
+            return null;
+          }
+          var d = 'M' + this.state.points.map(function _map(point) {
+            return opt.project(point.get('location').toArray());
+          }).join('L');
+          return r.path({
+            style: {stroke: '#1FBAD6', strokeWidth: 2, fill: 'none'},
+            d: d
+          });
+        }.bind(this)
+      })),
       r(DraggableOverlay, assign({}, viewport, {
         points: this.state.points,
         onAddPoint: this._onAddPoint,
@@ -136,12 +134,11 @@ var GeodataCreator = React.createClass({
   },
 
   render: function render() {
+    var viewport = assign({}, this.state.viewport, this.props);
     return r.div([
-      r(MapGL, assign({}, this.state, this.props, {
-        style: {float: 'left'},
-        onChangeViewport: this._onChangeViewport,
-        overlays: this._renderOverlays
-      }, this.props))
+      r(MapGL, assign({}, viewport, {
+        onChangeViewport: this._onChangeViewport
+      }), [this._renderOverlays(viewport)])
     ]);
   }
 });

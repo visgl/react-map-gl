@@ -47,40 +47,36 @@ var ChoroplethOverlayExample = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      zoom: 11,
-      startDragLngLat: null,
-      isDragging: false
+      viewport: {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: 11,
+        startDragLngLat: null,
+        isDragging: false
+      }
     };
   },
 
-  _onChangeViewport: function _onChangeViewport(opt) {
+  _onChangeViewport: function _onChangeViewport(viewport) {
     if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(opt);
+      return this.props.onChangeViewport(viewport);
     }
-    this.setState({
-      latitude: opt.latitude,
-      longitude: opt.longitude,
-      zoom: opt.zoom,
-      startDragLngLat: opt.startDragLngLat,
-      isDragging: opt.isDragging
-    });
+    this.setState({viewport: viewport});
   },
 
   render: function render() {
-    return r(MapGL, assign({}, this.state, this.props, {
-      onChangeViewport: this._onChangeViewport,
-      overlays: function overlays(viewport) {
-        return r(ChoroplethOverlay, assign({}, viewport, {
-          globalOpacity: 0.8,
-          colorDomain: [0, 500, 1000],
-          colorRange: ['#31a354', '#addd8e', '#f7fcb9'],
-          renderWhileDragging: false,
-          features: ZIPCODES_SF.get('features')
-        }));
-      }
-    }, this.props));
+    var mapProps = assign({}, this.state.viewport, this.props, {
+      onChangeViewport: this._onChangeViewport
+    });
+    return r(MapGL, mapProps, [
+      r(ChoroplethOverlay, assign({}, mapProps, {
+        globalOpacity: 0.8,
+        colorDomain: [0, 500, 1000],
+        colorRange: ['#31a354', '#addd8e', '#f7fcb9'],
+        renderWhileDragging: false,
+        features: ZIPCODES_SF.get('features')
+      }))
+    ]);
   }
 });
 

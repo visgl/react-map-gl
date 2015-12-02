@@ -2,6 +2,55 @@
 
 ### Breaking changes
 
+#### No longer provide viewport props transparently to overlay children.
+
+Require viewport props to be explicitly provided to overlays. Previously,
+viewport overlay props all had to be optional because the elements were created
+once and then cloned inside of `<MapGL>`. This also made it difficult to follow
+what props were being passed automatically to overlays. In addition, it meant
+that overlays could only be direct children of the `<MapGL>` element.
+
+This shouldn't require changes to overlays, other than marking viewport props
+as required. It will only involve passing the needed props explicitly to
+overlays.
+
+Old way:
+
+```js
+<MapGL ...viewport>
+  <Overlay1 />
+  <Overlay2 />
+</MapGL>
+```
+
+New way:
+
+```js
+<MapGL ...viewport>
+  <Overlay1 ...viewport/>
+  <Overlay2 ...viewport/>
+</MapGL>
+```
+
+For any third party overlay's that depend on `project` or `unproject` props,
+either update them to calculate the `project`/`unproject` functions from the
+viewport using the [ViewportMercatorProject](github.com/uber-common/viewport-mercator-project) module or provide them explicitly in the same render function as the
+`<MapGL/>` component. example:
+
+```js
+var ViewportMercator = require('viewport-mercator-project');
+// ...
+  render() {
+    var mercator = ViewportMercator(this.state.viewport);
+    return <MapGL ...viewport>
+      <Overlay1 project={mercator.project} unproject={this.mercator.unproject ...viewport/>
+      {/* or equivalently */}
+      <Overlay2 ...viewport ...mercator/>
+    </MapGL>;
+  }
+</MapGL>
+```
+
 #### Renaming references of LatLng to LngLat
 
 This is more inline with
@@ -24,3 +73,17 @@ the form `[longitude, latitude]` instead of a MapboxGL
 
 DraggablePointsOverlay's `locationAccessor` prop was renamed `lngLatAccessor`
 to be more consistent with other overlays.
+
+#### `bbox` property of the `onChangeViewport` event was removed
+
+This should be calculated instead using the [ViewportMercatorProject](github.com/uber-common/viewport-mercator-project) module instead.
+
+```js
+var mercator = ViewportMercator(viewport);
+var bbox = [mercator.unproject([0, 0]), mercator.unproject([width, height])];
+```
+
+### Non-breaking changes
+
+`unproject` was added to the arguments passed to the `redraw` callback in the
+`CanvasOverlay`.

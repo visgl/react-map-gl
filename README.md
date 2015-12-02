@@ -21,8 +21,8 @@ npm install react-map-gl --save
 
 ````js
 <MapGL width={400} height={400} latitude={37.7577} longitude={-122.4376}
-  zoom={8} onChangeViewport={function(opts) {
-    // opts = {latitude, longitude, zoom, bbox}
+  zoom={8} onChangeViewport={(viewport) => {
+    var {latitude, longitude, zoom} = viewport;
   }}
 />
 ````
@@ -67,8 +67,8 @@ var HeatmapOverlay = require('react-map-gl-heatmap-overlay');
 var cities = require('example-cities');
 // ...
     render: function render() {
-      return <MapGL ...viewportProps>
-        <HeatmapOverlay locations={cities} />
+      return <MapGL ...viewport>
+        return <HeatmapOverlay locations={cities} ...viewport/>
       </MapGL>;
     }
 ````

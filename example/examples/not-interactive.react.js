@@ -43,20 +43,16 @@ var NotInteractiveExample = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      zoom: 11
+      viewport: {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: 11
+      }
     };
   },
 
   render: function render() {
-    return r(MapGL, assign({
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
-      zoom: this.state.zoom,
-      width: this.props.width,
-      height: this.props.height
-    }, this.props));
+    return r(MapGL, assign({}, this.state.viewport, this.props));
   }
 });
 

@@ -28,6 +28,7 @@ var document = require('global/document');
 var nop = require('nop');
 var config = require('../config');
 var mouse = require('../utils').relativeMousePosition;
+var ViewportMercator = require('viewport-mercator-project');
 
 var DraggablePointsOverlay = React.createClass({
 
@@ -36,9 +37,10 @@ var DraggablePointsOverlay = React.createClass({
   propTypes: {
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
+    latitude: React.PropTypes.number.isRequired,
+    longitude: React.PropTypes.number.isRequired,
+    zoom: React.PropTypes.number.isRequired,
     points: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    project: React.PropTypes.func.isRequired,
-    unproject: React.PropTypes.func.isRequired,
     isDragging: React.PropTypes.bool.isRequired,
     keyAccessor: React.PropTypes.func.isRequired,
     lngLatAccessor: React.PropTypes.func.isRequired,
@@ -78,7 +80,8 @@ var DraggablePointsOverlay = React.createClass({
   _onDrag: function _onDrag(event) {
     event.stopPropagation();
     var pixel = mouse(this.refs.container.getDOMNode(), event);
-    var lngLat = this.props.unproject(pixel);
+    var mercator = ViewportMercator(this.props);
+    var lngLat = mercator.unproject(pixel);
     var key = this.state.draggedPointKey;
     this.props.onUpdatePoint({key: key, location: lngLat});
   },
@@ -94,11 +97,13 @@ var DraggablePointsOverlay = React.createClass({
     event.stopPropagation();
     event.preventDefault();
     var pixel = mouse(this.refs.container.getDOMNode(), event);
-    this.props.onAddPoint(this.props.unproject(pixel));
+    var mercator = ViewportMercator(this.props);
+    this.props.onAddPoint(mercator.unproject(pixel));
   },
 
   render: function render() {
     var points = this.props.points;
+    var mercator = ViewportMercator(this.props);
     return r.svg({
       ref: 'container',
       width: this.props.width,
@@ -114,7 +119,7 @@ var DraggablePointsOverlay = React.createClass({
       onContextMenu: this._addPoint
     }, [
       r.g({style: {cursor: 'pointer'}}, points.map(function _map(point, index) {
-        var pixel = this.props.project(this.props.lngLatAccessor(point));
+        var pixel = mercator.project(this.props.lngLatAccessor(point));
         return r.g({
           key: index,
           transform: transform([{translate: pixel}]),

@@ -33,7 +33,6 @@ var Point = mapboxgl.Point;
 // NOTE: Transform is not a public API so we should be careful to always lock
 // down mapbox-gl to a specific major, minor, and patch version.
 var Transform = require('mapbox-gl/js/geo/transform');
-var ViewportMercator = require('viewport-mercator-project');
 
 var config = require('./config');
 var MapInteractions = require('./map-interactions.react');
@@ -548,37 +547,6 @@ var MapGL = React.createClass({
     this._onChangeViewport({isDragging: false});
   },
 
-  _renderOverlays: function _renderOverlays(transform) {
-    if (!this.props.overlays) {
-      return null;
-    }
-    var viewportConfig = {
-      center: [this.props.longitude, this.props.latitude],
-      zoom: this.props.zoom,
-      tileSize: 512,
-      dimensions: [this.props.width, this.props.height]
-    };
-
-    var mercator = ViewportMercator(viewportConfig);
-
-    // This is the `viewport` object exposed to the overlays.
-    var viewport = {
-      width: this.props.width,
-      height: this.props.height,
-      longitude: this.props.longitude,
-      latitude: this.props.latitude,
-      zoom: this.props.zoom,
-      isDragging: this.props.isDragging,
-      project: mercator.project,
-      unproject: mercator.unproject
-    };
-
-    return r.div({
-      className: 'overlays',
-      style: {position: 'absolute', left: 0, top: 0}
-    }, this.props.overlays(viewport));
-  },
-
   render: function render() {
     var props = this.props;
     var style = assign({}, props.style, {
@@ -596,8 +564,10 @@ var MapGL = React.createClass({
 
     var content = [
       r.div({ref: 'mapboxMap', style: style, className: props.className}),
-      this._renderOverlays(transform),
-      r.div({position: 'absolute', left: 0, top: 0}, this.props.children)
+      r.div({
+        className: 'overlays',
+        style: {position: 'absolute', left: 0, top: 0}
+      }, this.props.children)
     ];
 
     if (this.props.onChangeViewport) {

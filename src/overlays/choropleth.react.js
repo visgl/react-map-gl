@@ -20,6 +20,7 @@
 'use strict';
 
 var React = require('react');
+var ViewportMercator = require('viewport-mercator-project');
 var window = require('global/window');
 var d3 = require('d3');
 var r = require('r-dom');
@@ -32,7 +33,9 @@ var ChoroplethOverlay = React.createClass({
   propTypes: {
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
-    project: React.PropTypes.func.isRequired,
+    latitude: React.PropTypes.number.isRequired,
+    longitude: React.PropTypes.number.isRequired,
+    zoom: React.PropTypes.number.isRequired,
     isDragging: React.PropTypes.bool.isRequired,
     renderWhileDragging: React.PropTypes.bool.isRequired,
     globalOpacity: React.PropTypes.number.isRequired,
@@ -69,14 +72,14 @@ var ChoroplethOverlay = React.createClass({
     var pixelRatio = window.devicePixelRatio;
     var canvas = this.getDOMNode();
     var ctx = canvas.getContext('2d');
-    var project = this.props.project;
+    var mercator = ViewportMercator(this.props);
 
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
     ctx.clearRect(0, 0, this.props.width, this.props.height);
 
     function projectPoint(lon, lat) {
-      var point = project([lon, lat]);
+      var point = mercator.project([lon, lat]);
       this.stream.point(point[0], point[1]);
     }
 

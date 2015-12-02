@@ -52,11 +52,13 @@ var ScatterplotOverlayExample = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      zoom: 11,
-      startDragLngLat: null,
-      isDragging: false
+      viewport: {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: 11,
+        startDragLngLat: null,
+        isDragging: false
+      }
     };
   },
 
@@ -65,26 +67,29 @@ var ScatterplotOverlayExample = React.createClass({
       return this.props.onChangeViewport(opt);
     }
     this.setState({
-      latitude: opt.latitude,
-      longitude: opt.longitude,
-      zoom: opt.zoom,
-      startDragLngLat: opt.startDragLngLat,
-      isDragging: opt.isDragging
+      viewport: {
+        latitude: opt.latitude,
+        longitude: opt.longitude,
+        zoom: opt.zoom,
+        startDragLngLat: opt.startDragLngLat,
+        isDragging: opt.isDragging
+      }
     });
   },
 
   render: function render() {
-    return r(MapGL, assign({}, this.state, this.props, {
-      onChangeViewport: this._onChangeViewport,
-      overlays: function overlay(viewport) {
-        return r(ScatterplotOverlay, assign({}, viewport, {
+    var viewport = assign({}, this.state.viewport, this.props);
+    return r(MapGL, assign({}, viewport, {
+      onChangeViewport: this._onChangeViewport
+    }), [
+        r(ScatterplotOverlay, assign({}, viewport, {
           locations: locations,
           dotRadius: 2,
           globalOpacity: 1,
           compositeOperation: 'screen'
-        }));
-      }
-    }, this.props));
+        }))
+      ]
+    );
   }
 });
 

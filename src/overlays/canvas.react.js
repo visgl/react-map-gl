@@ -20,12 +20,9 @@
 'use strict';
 
 var React = require('react');
+var ViewportMercator = require('viewport-mercator-project');
 var window = require('global/window');
 var r = require('r-dom');
-
-function devicePixelRatio() {
-  return window.devicePixelRatio || 1;
-}
 
 var CanvasOverlay = React.createClass({
 
@@ -34,8 +31,10 @@ var CanvasOverlay = React.createClass({
   propTypes: {
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
+    latitude: React.PropTypes.number.isRequired,
+    longitude: React.PropTypes.number.isRequired,
+    zoom: React.PropTypes.number.isRequired,
     redraw: React.PropTypes.func.isRequired,
-    project: React.PropTypes.func.isRequired,
     isDragging: React.PropTypes.bool.isRequired
   },
 
@@ -48,23 +47,25 @@ var CanvasOverlay = React.createClass({
   },
 
   _redraw: function _redraw() {
-    var pixelRatio = devicePixelRatio();
+    var pixelRatio = window.devicePixelRatio || 1;
     var canvas = this.getDOMNode();
     var ctx = canvas.getContext('2d');
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
+    var mercator = ViewportMercator(this.props);
     this.props.redraw({
       width: this.props.width,
       height: this.props.height,
       ctx: ctx,
-      project: this.props.project,
+      project: mercator.project,
+      unproject: mercator.unproject,
       isDragging: this.props.isDragging
     });
     ctx.restore();
   },
 
   render: function render() {
-    var pixelRatio = devicePixelRatio();
+    var pixelRatio = window.devicePixelRatio || 1;
     return r.canvas({
       ref: 'overlay',
       width: this.props.width * pixelRatio,

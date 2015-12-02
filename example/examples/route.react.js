@@ -45,25 +45,21 @@ var RouteOverlayExample = React.createClass({
 
   getInitialState: function getInitialState() {
     return {
-      latitude: 37.7736092599127,
-      longitude: -122.42312591099463,
-      zoom: 12.011557070552028,
-      startDragLngLat: null,
-      isDragging: false
+      viewport: {
+        latitude: 37.7736092599127,
+        longitude: -122.42312591099463,
+        zoom: 12.011557070552028,
+        startDragLngLat: null,
+        isDragging: false
+      }
     };
   },
 
-  _onChangeViewport: function _onChangeViewport(opt) {
+  _onChangeViewport: function _onChangeViewport(viewport) {
     if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(opt);
+      return this.props.onChangeViewport(viewport);
     }
-    this.setState({
-      latitude: opt.latitude,
-      longitude: opt.longitude,
-      zoom: opt.zoom,
-      startDragLngLat: opt.startDragLngLat,
-      isDragging: opt.isDragging
-    });
+    this.setState({viewport: viewport});
   },
 
   _renderRoute: function _renderRoute(points, index) {
@@ -113,16 +109,13 @@ var RouteOverlayExample = React.createClass({
   },
 
   render: function render() {
-    return r(MapGL, assign({}, this.state, this.props, {
-      onChangeViewport: this._onChangeViewport,
-      overlays: function overlays(viewport) {
-        return [
-          r(SVGOverlay, assign({redraw: this._redrawSVGOverlay}, viewport)),
-          r(CanvasOverlay, assign({redraw: this._redrawCanvasOverlay},
-            viewport))
-        ];
-      }.bind(this)
-    }, this.props));
+    var viewport = assign({}, this.state.viewport, this.props);
+    return r(MapGL, assign({}, viewport, {
+      onChangeViewport: this._onChangeViewport
+    }), [
+      r(SVGOverlay, assign({redraw: this._redrawSVGOverlay}, viewport)),
+      r(CanvasOverlay, assign({redraw: this._redrawCanvasOverlay}, viewport))
+    ]);
   }
 });
 
