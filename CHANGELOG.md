@@ -17,7 +17,7 @@ overlays.
 Old way:
 
 ```js
-<MapGL ...viewport>
+<MapGL {...viewport}>
   <Overlay1 />
   <Overlay2 />
 </MapGL>
@@ -26,9 +26,9 @@ Old way:
 New way:
 
 ```js
-<MapGL ...viewport>
-  <Overlay1 ...viewport/>
-  <Overlay2 ...viewport/>
+<MapGL {...viewport}>
+  <Overlay1 {...viewport}/>
+  <Overlay2 {...viewport}/>
 </MapGL>
 ```
 
@@ -43,15 +43,18 @@ var ViewportMercator = require('viewport-mercator-project');
   render() {
     var mercator = ViewportMercator(this.state.viewport);
     return <MapGL ...viewport>
-      <Overlay1 project={mercator.project} unproject={this.mercator.unproject ...viewport/>
+      <Overlay1
+        project={mercator.project}
+        unproject={this.mercator.unproject
+        {...viewport}/>
       {/* or equivalently */}
-      <Overlay2 ...viewport ...mercator/>
+      <Overlay2 {...mercator} {...viewport}/>
     </MapGL>;
   }
 </MapGL>
 ```
 
-#### Renaming references of LatLng to LngLat
+#### Swapping LatLng for LngLat
 
 This is more inline with
 [MapboxGL-js](https://github.com/mapbox/mapbox-gl-js/pull/1433) and GeoJSON.

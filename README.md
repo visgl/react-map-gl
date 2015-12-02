@@ -36,8 +36,12 @@ ScatterplotOverlay.
 ````js
 var ScatterplotOverlay = require('react-map-gl/src/overlays/scatterplot.react');
 // ...
-<MapGL {...mapProps}>
-  <ScatterplotOverlay locations={locations} dotRadius={4} globalOpacity={1}
+<MapGL {...viewport}>
+  <ScatterplotOverlay
+    {...viewport}
+    locations={locations}
+    dotRadius={4}
+    globalOpacity={1}
     compositeOperation="screen" />
   // Add additional overlays here...
 ])
@@ -67,8 +71,8 @@ var HeatmapOverlay = require('react-map-gl-heatmap-overlay');
 var cities = require('example-cities');
 // ...
     render: function render() {
-      return <MapGL ...viewport>
-        return <HeatmapOverlay locations={cities} ...viewport/>
+      return <MapGL {...viewport}>
+        return <HeatmapOverlay locations={cities} {...viewport}/>
       </MapGL>;
     }
 ````
