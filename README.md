@@ -48,7 +48,7 @@ var ScatterplotOverlay = require('react-map-gl/src/overlays/scatterplot.react');
 ])
 ````
 
-#### Build in overlays
+#### Built in overlays
 
 1. ChoroplethOverlay
 2. ScatterplotOverlay
