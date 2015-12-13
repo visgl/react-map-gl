@@ -7,7 +7,7 @@ based vector tile mapping library.
 WARNING: This project is new and the API may change. There also may be Mapbox
 APIs that haven't yet been exposed.
 
-![](react-map-gl-screenshots.png)
+![react-map-gl-screenshots](https://cloud.githubusercontent.com/assets/499192/11028165/49f41da2-86bc-11e5-85eb-9279621ef971.png)
 
 ## Overview
 
@@ -63,7 +63,7 @@ Other third party overlays can also be created. For example, the
 [webgl-heatmap](https://github.com/vicapow/webgl-heatmap) to create geographic
 heatmaps.
 
-![](heatmap-example.gif)
+![heatmap-example](https://cloud.githubusercontent.com/assets/499192/11028150/33f34640-86bc-11e5-9678-3fa1798394d5.gif)
 
 Example usage:
 
