@@ -48,6 +48,9 @@
     "precommit": "npm run lint -s",
     "prepush": "npm run lint -s"
   },
+  "files": [
+    "src"
+  ],
   "peerDependencies": {
     "immutable": "^3.7.3",
     "r-dom": "^2.1.0",
