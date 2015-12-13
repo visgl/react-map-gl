@@ -20,7 +20,6 @@
     "bowser": "^0.7.3",
     "canvas-composite-types": "^1.0.0",
     "d3": "^3.5.5",
-    "debounce": "^1.0.0",
     "global": "^4.3.0",
     "keymirror": "^0.1.1",
     "mapbox-gl": "0.11.4",

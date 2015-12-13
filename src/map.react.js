@@ -21,7 +21,6 @@
 
 var assert = require('assert');
 var React = require('react');
-var debounce = require('debounce');
 var r = require('r-dom');
 var d3 = require('d3');
 var assign = require('object-assign');
@@ -282,10 +281,10 @@ var MapGL = React.createClass({
     }
   },
 
-  _resizeMap: debounce(function _resizeMap() {
+  _resizeMap: function _resizeMap() {
     var map = this._getMap();
     map.resize();
-  }, 100),
+  },
 
   _diffSources: function _diffSources(prevStyle, nextStyle) {
     var prevSources = prevStyle.get('sources');
