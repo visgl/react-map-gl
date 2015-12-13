@@ -282,10 +282,10 @@ var MapGL = React.createClass({
     }
   },
 
-  _resizeMap: debounce(function _resizeMap() {
+  _resizeMap: function _resizeMap() {
     var map = this._getMap();
     map.resize();
-  }, 100),
+  },
 
   _diffSources: function _diffSources(prevStyle, nextStyle) {
     var prevSources = prevStyle.get('sources');
