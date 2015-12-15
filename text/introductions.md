@@ -2,7 +2,7 @@ Provides a [React](http://facebook.github.io/react/) friendly API wrapper
 for [MapboxGL-js](https://www.mapbox.com/mapbox-gl-js/), A WebGL powered
 vector and raster tile mapping library.
 
-All of the following examples use [OpenStreeMap](http://www.openstreetmap.org/)
+All of the following examples use [OpenStreetMap](http://www.openstreetmap.org/)
 raster tiles. MapboxGL-js provides impressive vector tile rendering capabilities
 that you can find out more about [here](https://www.mapbox.com/mapbox-gl-js/).
 Although the Mapbox
