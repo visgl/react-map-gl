@@ -33,7 +33,7 @@ var ScatterPlotOverlay = require('react-map-gl/src/overlays/scatterplot.react');
 var DraggablePoints = require('react-map-gl/src/overlays/draggable-points.react');
 /* eslint-enable max-len */
 var HeatmapOverlay = require('react-map-gl-heatmap-overlay');
-var osmMapStyle = require('./osm-map-style');
+var stamenMapStyle = require('./stamen-map-style');
 var CodeSnippet = require('./code-snippet.react');
 var d3 = require('d3');
 
@@ -66,7 +66,7 @@ var Docs = React.createClass({
         latitude: 37.78,
         longitude: -122.45,
         zoom: 11,
-        mapStyle: osmMapStyle,
+        mapStyle: stamenMapStyle,
         width: 450,
         height: 450,
         startDragLatLng: null

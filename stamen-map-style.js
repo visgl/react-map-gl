@@ -23,22 +23,21 @@ var Immutable = require('immutable');
 
 module.exports = Immutable.Map({
   version: 8,
-  name: 'Testing OSM raster source',
+  name: 'Testing Stamen raster source',
   sources: {
-    'raster-osm-source': {
+    'raster-stamen-source': {
       type: 'raster',
       tileSize: 256,
       scheme: 'xyz',
-      tilejson: '2.0.0',
-      tiles: ['http://tile.openstreetmap.org/{z}/{x}/{y}.png']
+      tiles: ['http://tile.stamen.com/terrain/{z}/{x}/{y}.png']
     }
   },
   layers: [
     {
-      id: 'raster-osm',
+      id: 'raster-stamen',
       type: 'raster',
-      source: 'raster-osm-source',
-      'source-layer': 'rastor_osm_full',
+      source: 'raster-stamen-source',
+      'source-layer': 'raster_stamen_full',
       paint: {
         'raster-opacity': 1
       }
