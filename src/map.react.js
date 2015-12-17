@@ -153,7 +153,13 @@ var MapGL = React.createClass({
       * The first argument of the callback will be the array of feature the
       * mouse is over. This is the same response returned from `featuresAt`.
       */
-    onClickFeatures: React.PropTypes.func
+    onClickFeatures: React.PropTypes.func,
+
+    /**
+      * Passed to Mapbox Map constructor which passes it to the canvas context.
+      * This is unseful when you want to export the canvas as a PNG.
+      */
+    preserveDrawingBuffer: React.PropTypes.bool
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -161,6 +167,7 @@ var MapGL = React.createClass({
       mapStyle: 'mapbox://styles/mapbox/light-v8',
       onChangeViewport: null,
       mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
+      preserveDrawingBuffer: false,
       attributionControl: true
     };
   },
@@ -245,7 +252,8 @@ var MapGL = React.createClass({
       center: [this.state.longitude, this.state.latitude],
       zoom: this.state.zoom,
       style: mapStyle,
-      interactive: false
+      interactive: false,
+      preserveDrawingBuffer: this.props.preserveDrawingBuffer
       // ,
       // attributionControl: this.props.attributionControl
     });
