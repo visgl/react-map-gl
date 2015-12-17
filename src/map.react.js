@@ -153,14 +153,7 @@ var MapGL = React.createClass({
       * The first argument of the callback will be the array of feature the
       * mouse is over. This is the same response returned from `featuresAt`.
       */
-    onClickFeatures: React.PropTypes.func,
-
-    /**
-      * A Callback used to render data overlays. This function will be passed
-      * a viewport object that includes two methods, `project` and `unproject`
-      * as well as the props, latitude, longitude, zoom, width, and height.
-      */
-    overlays: React.PropTypes.func
+    onClickFeatures: React.PropTypes.func
   },
 
   getDefaultProps: function getDefaultProps() {
