@@ -1,5 +1,7 @@
-Provides a [React](http://facebook.github.io/react/) friendly API wrapper
-for [MapboxGL-js](https://www.mapbox.com/mapbox-gl-js/), A WebGL powered
+# Getting Started
+
+React-map-gl is a [React](http://facebook.github.io/react/)-friendly API wrapper
+for [MapboxGL-js](https://www.mapbox.com/mapbox-gl-js/), a WebGL-powered
 vector and raster tile mapping library.
 
 MapboxGL-js provides impressive vector tile rendering capabilities
@@ -14,7 +16,5 @@ examples here don't use the paid vector tile API and instead use map tiles by
 [CC BY 3.0](http://creativecommons.org/licenses/by/3.0) and data by
 [OpenStreetMap](http://openstreetmap.org),
 under [CC BY SA](http://creativecommons.org/licenses/by-sa/3.0).
-
-## Introduction
 
 Here's a simple example of creating a map:

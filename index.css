@@ -1,0 +1,95 @@
+html, body {
+  font-family: 'Roboto', sans-serif;
+  padding:0px;
+  margin: 0px;
+  margin-bottom: 100px;
+  font-size: 1.1em;
+  line-height: 1.75em;
+}
+
+h1{font-weight: 100}
+h2{font-weight: 100; margin-top: 48px}
+
+a {
+  text-decoration: none;
+  color: #08F;
+}
+
+#header {
+  position: fixed;
+  top: 0px;
+  margin: auto auto;
+  height: 50px;
+  width: 100%;
+  background-color: #222222;
+  box-shadow: 0px 2px 10px #888;
+}
+
+#header-content {
+  margin: auto auto;
+  height: 50px;
+  line-height: 50px;
+  box-sizing: border-box;
+  width: 920px;
+}
+
+#header-logo {
+  height: 50px;
+  line-height: 50px;
+  box-sizing: border-box;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  color: #1FBAD6;
+  margin-top: -4px;
+  font-size: 32px;
+  float: left;
+}
+
+#header-nav {
+  height: 50px;
+  line-height: 50px;
+  box-sizing: border-box;
+  color: white;
+  font-size: 16px;
+  float: right;
+}
+
+#sidebar {
+  float: left;
+  width: 200px;
+  box-sizing: border-box;
+  font-size: 14px;
+  padding-top: 25px;
+}
+
+#container {
+  box-sizing: border-box;
+  width: 960px;
+  margin: 50px auto auto auto;
+  padding: 20px;
+  padding-bottom: 100px;
+}
+
+#content {
+  width: 700px;
+  float: right;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+}
+
+.menuitem {
+  cursor: pointer;
+}
+
+.hljs {
+  line-height: 1.25em;
+  cursor: default;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

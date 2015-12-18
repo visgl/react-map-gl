@@ -19,26 +19,38 @@
 // THE SOFTWARE.
 'use strict';
 
-var jss = require('js-stylesheet');
-var fs = require('fs');
+var r = require('r-dom');
+var React = require('react');
+var ReactDOM = require('react-dom');
+var PureRenderMixin = require('react-addons-pure-render-mixin');
+var hljs = require('highlight.js');
 var d3 = require('d3');
 
-function addStyleSheet(text) {
-  d3.select('body').append('style')
-    .attr('type', 'text/css')
-    .text(text);
-}
+module.exports = React.createClass({
+  displayName: 'CodeSnippet',
 
-jss({
-  body: {
-    'font-family': 'helvetica'
+  mixins: [PureRenderMixin],
+
+  propTypes: {
+    text: React.PropTypes.string.isRequired
   },
-  h1: {
-    'font-size': '40px',
-    'font-weight': '300'
+
+  _updateHighlight: function _updateHighlight() {
+    var code = d3.select(ReactDOM.findDOMNode(this.refs.code)).node();
+    hljs.highlightBlock(code);
+  },
+
+  componentDidMount: function componentDidMount() {
+    this._updateHighlight();
+  },
+
+  componentDidUpdate: function componentDidUpdate() {
+    this._updateHighlight();
+  },
+
+  render: function render() {
+    return r.pre({ref: 'code'}, [
+      r.code({className: this.props.language}, this.props.text)
+    ]);
   }
 });
-
-addStyleSheet(
-  fs.readFileSync('node_modules/highlight.js/styles/tomorrow.css', 'utf-8')
-);
