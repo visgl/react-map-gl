@@ -50,10 +50,9 @@ module.exports = React.createClass({
         width: 700,
         height: 450,
         isDragging: true,
-        startDragLngLat: null
       },
       locations: Immutable.fromJS(d3.range(2000).map(function _map() {
-        return [37.788 + wiggle(0.01), -122.408 + wiggle(0.01)];
+        return [-122.408 + wiggle(0.01), 37.788 + wiggle(0.01)];
       }))
     };
   },
@@ -111,4 +110,3 @@ module.exports = React.createClass({
   }
 
 });
-
