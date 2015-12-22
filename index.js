@@ -20,24 +20,56 @@
 'use strict';
 
 var r = require('r-dom');
+var React = require('react');
 var ReactDOM = require('react-dom');
-var document = require('global/document');
-var Sidebar = require('./sidebar');
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
+var createHistory = require('history/lib/createHashHistory');
 
-var locHash = location.hash.replace('#', '');
-
-var sidebar = r(Sidebar, {
-    content: document.getElementById('content'),
-    active: locHash === '' ? 'Getting Started' : locHash
+var history = createHistory({
+  queryKey: false
 });
 
-ReactDOM.render(sidebar, document.getElementById('sidebar'));
+var contents = {
+  'Getting Started': require('./content/getting-started/getting-started'),
+  'Scatterplot': require('./content/scatterplot/scatterplot'),
+  'Draggable Points': require('./content/draggable-points/draggable-points'),
+  'Third Party Overlays': require('./content/third-party-overlay/third-party-overlay'),
+}
 
-// // Load the hash-linked component if it exists, otherwise load Getting Started.
-// var title = 'Getting Started';
-// var hash = location.hash.replace('#', '');
-// if (hash in contents) {
-//   title = hash;
-// }
-// React.render(r(contents[title]), document.getElementById('content'));
-// location.hash = title;
+var titles = Object.keys(contents);
+
+var Sidebar = React.createClass({
+  render: function() {
+    var items = [];
+    for (var i = 0; i < titles.length; i++) {
+      var title = titles[i];
+      var component = contents[title];
+      items.push(
+        r.a({
+          href: '#' + title
+        }, title)
+      );
+      items.push(r.br());
+    }
+    return r.div(items);
+  }
+});
+
+var routes = [{
+  path: '/',
+  component: contents['Getting Started']
+}];
+
+for (var i = 0; i < titles.length; i++) {
+  var title = titles[i];
+  routes.push({
+    path: title,
+    component: contents[title]
+  });
+}
+
+ReactDOM.render(r(Sidebar), document.getElementById('sidebar'));
+ReactDOM.render(r(Router, {routes: routes, history: history}),
+  document.getElementById('content'));

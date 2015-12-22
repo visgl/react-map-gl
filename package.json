@@ -10,6 +10,7 @@
     "budo": "^6.1.0",
     "d3": "^3.5.8",
     "highlight.js": "^8.8.0",
+    "history": "^1.17.0",
     "immutable": "^3.7.6",
     "js-stylesheet": "0.0.1",
     "marked": "^0.3.5",
@@ -20,11 +21,10 @@
     "react-dom": "^0.14.3",
     "react-map-gl": "^0.6.1",
     "react-map-gl-heatmap-overlay": "^1.0.0",
-    "set-location-hash": "^0.3.0",
+    "react-router": "^1.0.2",
     "uber-standard": "^3.7.1",
     "uglifyify": "^3.0.1"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "budo ./index.js --serve bundle.js --live -- -t brfs | bistre",
     "build": "browserify -g uglifyify ./index.js -t brfs > bundle.js",
