@@ -49,11 +49,13 @@ module.exports = React.createClass({
         mapStyle: stamenMapStyle,
         width: 700,
         height: 450,
-        startDragLatLng: null
       },
-      locations: Immutable.fromJS(d3.range(2000).map(function _map() {
-        return [37.788 + wiggle(0.01), -122.408 + wiggle(0.01)];
-      }))
+      locations: d3.range(2000).map(function _map() {
+        return {
+          longitude: -122.408 + wiggle(0.01),
+          latitude: 37.788 + wiggle(0.01)
+        };
+      })
     };
   },
 
@@ -91,6 +93,11 @@ module.exports = React.createClass({
       r(MapGL, assign({onChangeViewport: this._onChangeViewport}, this.state.map), [
 
         r(HeatmapOverlay, {
+          width: this.state.map.width,
+          height: this.state.map.height,
+          longitude: this.state.map.longitude,
+          latitude: this.state.map.latitude,
+          zoom: this.state.map.zoom,
           locations: this.state.locations,
           latLngAccessor: function latLngAccessor(location) {
             return location.toArray();
@@ -107,4 +114,3 @@ module.exports = React.createClass({
   }
 
 });
-

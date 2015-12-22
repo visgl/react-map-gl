@@ -29,11 +29,10 @@ var contents = {
   'Getting Started': require('./content/getting-started/getting-started'),
   'Scatterplot': require('./content/scatterplot/scatterplot'),
   'Draggable Points': require('./content/draggable-points/draggable-points'),
-  // 'Third Party Overlays': require('./content/third-party-overlay/third-party-overlay'),
+  'Third Party Overlays': require('./content/third-party-overlay/third-party-overlay'),
 }
 
 var titles = Object.keys(contents);
-
 
 var MenuItem = React.createClass({
 
