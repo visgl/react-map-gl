@@ -99,6 +99,35 @@ module.exports = React.createClass({
         text: fs.readFileSync(__dirname + '/draggable-points-overlay.md', 'utf-8')
       }),
 
+      r(CodeSnippet, {
+        language: 'html',
+        text: '<MapGL\n' +
+              '  width={' + this.state.map.width + '}\n' +
+              '  height={' + this.state.map.height + '}\n' +
+              '  latitude={' + d3.round(this.state.map.latitude, 3) + '}\n' +
+              '  longitude={' + d3.round(this.state.map.longitude, 3) + '}\n' +
+              '  zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
+              '  mapStyle={mapStyle}>\n\n' +
+              '    <DraggablePoints \n' +
+              '      {...viewport}\n' +
+              '      points={points} />\n\n' +
+              '</MapGL>'
+      }),
+
+      r(Markdown, {
+        text: "Where points is a list of points:"
+      }),
+
+      r(CodeSnippet, {
+        language: 'js',
+        text: 'var points = [\n' +
+              '  {location:[-122.39508481737994, 37.79450507471435 ], id: 0},\n' +
+              '  {location:[-122.39750244137034, 37.79227619464379 ], id: 1},\n' +
+              '  {location:[-122.4013303460217,  37.789251178427776], id: 2},\n' +
+              '  ...\n' +
+              ']'
+      }),
+
       r(MapGL, assign({onChangeViewport: this._onChangeViewport}, this.state.map), [
         r(DraggablePoints, assign({}, this.state.map, {
           points: this.state.draggablePoints,
