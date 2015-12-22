@@ -70,23 +70,15 @@ module.exports = React.createClass({
       }),
 
       r(CodeSnippet, {
-        language: 'js',
-        text: fs.readFileSync(__dirname + '/overlay-props.txt', 'utf-8')
-      }),
-
-      r(Markdown, {
-        text: fs.readFileSync(__dirname + '/third-party-overlay-example.md', 'utf-8')
-      }),
-
-      r(CodeSnippet, {
         language: 'html',
-        text: '<MapGL width={' + this.state.map.width + '} ' +
-        'height={' + this.state.map.height + '} ' +
-        'latitude={' + d3.round(this.state.map.latitude, 3) + '} ' +
-        'longitude={' + d3.round(this.state.map.longitude, 3) + '} ' +
-        'zoom={' + d3.round(this.state.map.zoom, 3) + '} ' +
-        'mapStyle={mapStyle}>\n' +
-        '  <HeatmapOverlay ...overlayProps /> \n' +
+        text: '<MapGL\n' +
+        '  width={' + this.state.map.width + '}\n' +
+        '  height={' + this.state.map.height + '}\n' +
+        '  latitude={' + d3.round(this.state.map.latitude, 3) + '}\n' +
+        '  longitude={' + d3.round(this.state.map.longitude, 3) + '}\n' +
+        '  zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
+        '  mapStyle={mapStyle}>\n\n' +
+        '    <HeatmapOverlay {...viewport} {...overlayProps} />\n\n' +
         '</MapGL>'
       }),
 

@@ -1,5 +1,3 @@
 # Third Party Overlays
 
-You can also create your own overlays. Overlays will be passed the
-following props [transparently](https://
-github.com/uber/react-map-gl/blob/master/src/map.react.js#L589):
+Here's an example of the third party [react-map-gl-heatmap-overlay](https://github.com/vicapow/react-map-gl-heatmap-overlay) which uses a fork of [Florian Boesch](https://github.com/pyalot)'s [WebGL Heatmap](https://github.com/vicapow/webgl-heatmap).
