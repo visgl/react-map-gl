@@ -3,7 +3,7 @@ html {
 }
 
 html, body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Helvetica Neue', 'Roboto', sans-serif;
   padding:0px;
   margin: 0px;
   margin-bottom: 100px;
@@ -41,9 +41,9 @@ a {
   height: 50px;
   line-height: 50px;
   box-sizing: border-box;
-  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-family: 'Helvetica Neue', 'Yanone Kaffeesatz', sans-serif;
   color: #1FBAD6;
-  margin-top: -4px;
+  margin-top: -3px;
   font-size: 32px;
   float: left;
 }
