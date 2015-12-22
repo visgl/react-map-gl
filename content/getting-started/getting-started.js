@@ -56,12 +56,13 @@ module.exports = React.createClass({
       }),
       r(CodeSnippet, {
         language: 'html',
-        text: '<MapGL\n    width={' + this.state.map.width + '}\n' +
-        '    height={' + this.state.map.height + '}\n' +
-        '    latitude={' + d3.round(this.state.map.latitude, 3) + '}\n' +
-        '    longitude={' + d3.round(this.state.map.longitude, 3) + '}\n' +
-        '    zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
-        '    mapStyle={mapStyle}\n/>'
+        text: '<MapGL\n' +
+        '  width={' + this.state.map.width + '}\n' +
+        '  height={' + this.state.map.height + '}\n' +
+        '  latitude={' + d3.round(this.state.map.latitude, 3) + '}\n' +
+        '  longitude={' + d3.round(this.state.map.longitude, 3) + '}\n' +
+        '  zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
+        '  mapStyle={mapStyle} />'
       }),
       r(MapGL, assign({onChangeViewport: this._onChangeViewport}, this.state.map)),
     ])

@@ -67,17 +67,19 @@ module.exports = React.createClass({
 
       r(CodeSnippet, {
         language: 'html',
-        text: '<MapGL width={' + this.state.map.width + '} ' +
-        'height={' + this.state.map.height + '} ' +
-        'latitude={' + d3.round(this.state.map.latitude, 3) + '} ' +
-        'longitude={' + d3.round(this.state.map.longitude, 3) + '} ' +
-        'zoom={' + d3.round(this.state.map.zoom, 3) + '} ' +
-        'mapStyle={mapStyle}>\n' +
-          '  <ScatterPlotOverlay \n' +
-          '    locations={locations}\n' +
-          '    dotRadius={2} \n' +
-          '    globalOpacity={1} \n' +
-          '    compositeOperation=\'screen\' /> \n' +
+        text: '<MapGL\n' +
+        '  width={' + this.state.map.width + '}\n' +
+        '  height={' + this.state.map.height + '}\n' +
+        '  latitude={' + d3.round(this.state.map.latitude, 3) + '}\n' +
+        '  longitude={' + d3.round(this.state.map.longitude, 3) + '}\n' +
+        '  zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
+        '  mapStyle={mapStyle}>\n\n' +
+        '    <ScatterPlotOverlay \n' +
+        '      {...viewport}\n' +
+        '      locations={locations}\n' +
+        '      dotRadius={2} \n' +
+        '      globalOpacity={1} \n' +
+        '      compositeOperation=\'screen\' />\n\n' +
         '</MapGL>'
       }),
 
