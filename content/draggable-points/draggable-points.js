@@ -35,18 +35,18 @@ var CodeSnippet = require('../../common/code-snippet.react');
 var Markdown = require('../../common/markdown');
 
 var initialPoints = [
-  {location: [37.79450507471435, -122.39508481737994], id: 0},
-  {location: [37.79227619464379, -122.39750244137034], id: 1},
-  {location: [37.789251178427776, -122.4013303460217], id: 2},
-  {location: [37.786862920252986, -122.40475531334141], id: 3},
-  {location: [37.78861431712821, -122.40505751634022], id: 4},
-  {location: [37.79060449046487, -122.40556118800487], id: 5},
-  {location: [37.790047247333675, -122.4088854209916], id: 6},
-  {location: [37.79275381746233, -122.4091876239904], id: 7},
-  {location: [37.795619489534374, -122.40989276432093], id: 8},
-  {location: [37.79792786675678, -122.41049717031848], id: 9},
-  {location: [37.80031576728801, -122.4109001076502], id: 10},
-  {location: [37.79920142331301, -122.41916032295062], id: 11}
+  {location:[-122.39508481737994, 37.79450507471435 ], id: 0},
+  {location:[-122.39750244137034, 37.79227619464379 ], id: 1},
+  {location:[-122.4013303460217,  37.789251178427776], id: 2},
+  {location:[-122.40475531334141, 37.786862920252986], id: 3},
+  {location:[-122.40505751634022, 37.78861431712821 ], id: 4},
+  {location:[-122.40556118800487, 37.79060449046487 ], id: 5},
+  {location:[-122.4088854209916,  37.790047247333675], id: 6},
+  {location:[-122.4091876239904,  37.79275381746233 ], id: 7},
+  {location:[-122.40989276432093, 37.795619489534374], id: 8},
+  {location:[-122.41049717031848, 37.79792786675678 ], id: 9},
+  {location:[-122.4109001076502,  37.80031576728801 ], id:10},
+  {location:[-122.41916032295062, 37.79920142331301 ], id:11}
 ];
 
 var pointIds = initialPoints[initialPoints.length - 1].id;
@@ -89,7 +89,7 @@ module.exports = React.createClass({
     var points = this.state.draggablePoints.set(index, point);
     this.setState({draggablePoints: points});
   },
-  
+
   _onChangeViewport: function _onChangeViewport(opt) {
       this.setState({map: assign({}, this.state.map, opt)});
   },
@@ -102,6 +102,11 @@ module.exports = React.createClass({
 
       r(MapGL, assign({onChangeViewport: this._onChangeViewport}, this.state.map), [
         r(DraggablePoints, {
+          width: this.state.map.width,
+          height: this.state.map.height,
+          longitude: this.state.map.longitude,
+          latitude: this.state.map.latitude,
+          zoom: this.state.map.zoom,
           points: this.state.draggablePoints,
           onAddPoint: this._onAddPoint,
           onUpdatePoint: this._onUpdatePoint,
@@ -126,4 +131,3 @@ module.exports = React.createClass({
   }
 
 });
-

@@ -28,7 +28,7 @@ var setLocationHash = require('set-location-hash');
 var contents = {
   'Getting Started': require('./content/getting-started/getting-started'),
   'Scatterplot': require('./content/scatterplot/scatterplot'),
-  // 'Draggable Points': require('./content/draggable-points/draggable-points'),
+  'Draggable Points': require('./content/draggable-points/draggable-points'),
   // 'Third Party Overlays': require('./content/third-party-overlay/third-party-overlay'),
 }
 
@@ -36,18 +36,18 @@ var titles = Object.keys(contents);
 
 
 var MenuItem = React.createClass({
-  
+
   componentDidMount: function() {
     if (this.props.active) {
       this.handleClick();
     }
   },
-  
+
   handleClick: function() {
     ReactDOM.render(r(this.props.component), this.props.content);
     setLocationHash(this.props.title);
   },
-  
+
   render: function() {
       return r.p({
         className: 'menuitem',
@@ -59,7 +59,7 @@ var MenuItem = React.createClass({
 
 
 module.exports = React.createClass({
-  
+
   render: function(render) {
     var items = [];
     for (var i = 0; i < titles.length; i++) {
@@ -76,8 +76,3 @@ module.exports = React.createClass({
   }
 
 });
-
-
-
-
-
