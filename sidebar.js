@@ -44,7 +44,7 @@ var MenuItem = React.createClass({
 
   handleClick: function() {
     ReactDOM.render(r(this.props.component), this.props.content);
-    setLocationHash(this.props.title);
+    setLocationHash(this.props.title, {replace: true});
   },
 
   render: function() {
@@ -60,6 +60,9 @@ var MenuItem = React.createClass({
 module.exports = React.createClass({
 
   render: function(render) {
+    if (this.props.active === '') {
+      this.props.active = 'Getting Started';
+    }
     var items = [];
     for (var i = 0; i < titles.length; i++) {
       var title = titles[i];

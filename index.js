@@ -24,9 +24,11 @@ var ReactDOM = require('react-dom');
 var document = require('global/document');
 var Sidebar = require('./sidebar');
 
+var locHash = location.hash.replace('#', '');
+
 var sidebar = r(Sidebar, {
     content: document.getElementById('content'),
-    active: location.hash.replace('#', '')
+    active: locHash === '' ? 'Getting Started' : locHash
 });
 
 ReactDOM.render(sidebar, document.getElementById('sidebar'));
