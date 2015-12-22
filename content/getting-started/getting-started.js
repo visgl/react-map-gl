@@ -41,7 +41,6 @@ module.exports = React.createClass({
         mapStyle: stamenMapStyle,
         width: 700,
         height: 450,
-        startDragLatLng: null,
       },
     };
   },
@@ -49,7 +48,7 @@ module.exports = React.createClass({
   _onChangeViewport: function _onChangeViewport(opt) {
       this.setState({map: assign({}, this.state.map, opt)});
   },
-  
+
   render: function render() {
     return r.div([
       r(Markdown, {
@@ -69,4 +68,3 @@ module.exports = React.createClass({
   }
 
 });
-

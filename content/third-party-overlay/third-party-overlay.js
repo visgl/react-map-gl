@@ -92,12 +92,7 @@ module.exports = React.createClass({
 
       r(MapGL, assign({onChangeViewport: this._onChangeViewport}, this.state.map), [
 
-        r(HeatmapOverlay, {
-          width: this.state.map.width,
-          height: this.state.map.height,
-          longitude: this.state.map.longitude,
-          latitude: this.state.map.latitude,
-          zoom: this.state.map.zoom,
+        r(HeatmapOverlay, assign({}, this.state.map, {
           locations: this.state.locations,
           latLngAccessor: function latLngAccessor(location) {
             return location.toArray();
@@ -108,7 +103,7 @@ module.exports = React.createClass({
           sizeAccessor: function sizeAccessor() {
             return 10;
           }
-        })
+        }))
       ])
     ]);
   }

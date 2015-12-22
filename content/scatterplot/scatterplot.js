@@ -93,18 +93,12 @@ module.exports = React.createClass({
 
       r(MapGL, assign({onChangeViewport: this._onChangeViewport},
         this.state.map), [
-        r(ScatterPlotOverlay, {
-          width: this.state.map.width,
-          height: this.state.map.height,
-          latitude: this.state.map.latitude,
-          longitude: this.state.map.longitude,
-          zoom: this.state.map.zoom,
+        r(ScatterPlotOverlay, assign({}, this.state.map, {
           locations: this.state.locations,
-          isDragging: this.state.map.isDragging,
           dotRadius: 2,
           globalOpacity: 1,
           compositeOperation: 'screen'
-        })
+        }))
       ]),
     ]);
   }

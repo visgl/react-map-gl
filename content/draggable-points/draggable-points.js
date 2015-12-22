@@ -66,7 +66,6 @@ module.exports = React.createClass({
         mapStyle: stamenMapStyle,
         width: 700,
         height: 450,
-        startDragLatLng: null
       },
       draggablePoints: Immutable.fromJS(initialPoints),
     };
@@ -101,12 +100,7 @@ module.exports = React.createClass({
       }),
 
       r(MapGL, assign({onChangeViewport: this._onChangeViewport}, this.state.map), [
-        r(DraggablePoints, {
-          width: this.state.map.width,
-          height: this.state.map.height,
-          longitude: this.state.map.longitude,
-          latitude: this.state.map.latitude,
-          zoom: this.state.map.zoom,
+        r(DraggablePoints, assign({}, this.state.map, {
           points: this.state.draggablePoints,
           onAddPoint: this._onAddPoint,
           onUpdatePoint: this._onUpdatePoint,
@@ -125,7 +119,7 @@ module.exports = React.createClass({
               }, point.get('id'))
             ]);
           }
-        })
+        }))
       ]),
     ]);
   }
