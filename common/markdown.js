@@ -1,3 +1,5 @@
+'use strict';
+
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,24 +19,23 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
 var marked = require('marked');
 var r = require('r-dom');
 var React = require('react');
 
 module.exports = React.createClass({
-    displayName: 'Markdown',
+  displayName: 'Markdown',
 
-    propTypes: {
-        text: React.PropTypes.string.isRequired
-    },
+  propTypes: {
+    text: React.PropTypes.string.isRequired
+  },
 
-    render: function render() {
-        return r.div({
-            dangerouslySetInnerHTML: {
-                __html: marked(this.props.text)
-            }
-        });
-    }
+  render: function render() {
+    return r.div({
+      dangerouslySetInnerHTML: {
+        __html: marked(this.props.text)
+      }
+    });
+  }
 });

@@ -1,3 +1,5 @@
+'use strict';
+
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,7 +19,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
 var r = require('r-dom');
 var d3 = require('d3');
@@ -32,47 +33,46 @@ var CodeSnippet = require('../../common/code-snippet.react');
 var stamenMapStyle = require('../../common/stamen-map-style');
 
 module.exports = React.createClass({
+  getInitialState: function getInitialState() {
+    return {
+      map: {
+        latitude: 37.78,
+        longitude: -122.45,
+        zoom: 11,
+        mapStyle: stamenMapStyle,
+        width: 700,
+        height: 450
+      }
+    };
+  },
 
-    getInitialState: function getInitialState() {
-        return {
-            map: {
-                latitude: 37.78,
-                longitude: -122.45,
-                zoom: 11,
-                mapStyle: stamenMapStyle,
-                width: 700,
-                height: 450
-            }
-        };
-    },
+  _onChangeViewport: function _onChangeViewport(opt) {
+    this.setState({map: assign({}, this.state.map, opt)});
+  },
 
-    _onChangeViewport: function _onChangeViewport(opt) {
-        this.setState({map: assign({}, this.state.map, opt)});
-    },
+  render: function render() {
+    return r.div([
+      r(Markdown, {
+        text: fs.readFileSync(
+          path.join(__dirname, 'getting-started.md'), 'utf-8'
+        )
+      }),
 
-    render: function render() {
-        return r.div([
-            r(Markdown, {
-            text: fs.readFileSync(
-                path.join(__dirname, 'getting-started.md'), 'utf-8'
-            )
-            }),
+      r(CodeSnippet, {
+        language: 'html',
+        text: '<MapGL\n' +
+          '  width={' + this.state.map.width + '}\n' +
+          '  height={' + this.state.map.height + '}\n' +
+          '  latitude={' + d3.round(this.state.map.latitude, 3) + '}\n' +
+          '  longitude={' + d3.round(this.state.map.longitude, 3) + '}\n' +
+          '  zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
+          '  mapStyle={mapStyle} />'
+      }),
 
-            r(CodeSnippet, {
-            language: 'html',
-            text: '<MapGL\n' +
-            '  width={' + this.state.map.width + '}\n' +
-            '  height={' + this.state.map.height + '}\n' +
-            '  latitude={' + d3.round(this.state.map.latitude, 3) + '}\n' +
-            '  longitude={' + d3.round(this.state.map.longitude, 3) + '}\n' +
-            '  zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
-            '  mapStyle={mapStyle} />'
-            }),
-
-            r(MapGL,
-            assign({onChangeViewport: this._onChangeViewport}, this.state.map)
-            )
-        ]);
-    }
+      r(MapGL,
+        assign({onChangeViewport: this._onChangeViewport}, this.state.map)
+      )
+    ]);
+  }
 
 });

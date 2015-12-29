@@ -22,7 +22,7 @@
     "react-map-gl": "^0.6.1",
     "react-map-gl-heatmap-overlay": "^1.0.0",
     "react-router": "^1.0.2",
-    "uber-standard": "^3.7.1",
+    "uber-standard": "^5.1.0",
     "uglifyify": "^3.0.1"
   },
   "scripts": {
