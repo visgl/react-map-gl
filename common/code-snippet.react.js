@@ -27,30 +27,30 @@ var hljs = require('highlight.js');
 var d3 = require('d3');
 
 module.exports = React.createClass({
-  displayName: 'CodeSnippet',
+    displayName: 'CodeSnippet',
 
-  mixins: [PureRenderMixin],
+    mixins: [PureRenderMixin],
 
-  propTypes: {
-    text: React.PropTypes.string.isRequired
-  },
+    propTypes: {
+        text: React.PropTypes.string.isRequired
+    },
 
-  _updateHighlight: function _updateHighlight() {
-    var code = d3.select(ReactDOM.findDOMNode(this.refs.code)).node();
-    hljs.highlightBlock(code);
-  },
+    _updateHighlight: function _updateHighlight() {
+        var code = d3.select(ReactDOM.findDOMNode(this.refs.code)).node();
+        hljs.highlightBlock(code);
+    },
 
-  componentDidMount: function componentDidMount() {
-    this._updateHighlight();
-  },
+    componentDidMount: function componentDidMount() {
+        this._updateHighlight();
+    },
 
-  componentDidUpdate: function componentDidUpdate() {
-    this._updateHighlight();
-  },
+    componentDidUpdate: function componentDidUpdate() {
+        this._updateHighlight();
+    },
 
-  render: function render() {
-    return r.pre({ref: 'code'}, [
-      r.code({className: this.props.language}, this.props.text)
-    ]);
-  }
+    render: function render() {
+        return r.pre({ref: 'code'}, [
+            r.code({className: this.props.language}, this.props.text)
+        ]);
+    }
 });
