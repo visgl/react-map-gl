@@ -1,3 +1,5 @@
+'use strict';
+
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,28 +19,23 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var jss = require('js-stylesheet');
-var fs = require('fs');
-var d3 = require('d3');
+var marked = require('marked');
+var r = require('r-dom');
+var React = require('react');
 
-function addStyleSheet(text) {
-  d3.select('body').append('style')
-    .attr('type', 'text/css')
-    .text(text);
-}
+module.exports = React.createClass({
+  displayName: 'Markdown',
 
-jss({
-  body: {
-    'font-family': 'helvetica'
+  propTypes: {
+    text: React.PropTypes.string.isRequired
   },
-  h1: {
-    'font-size': '40px',
-    'font-weight': '300'
+
+  render: function render() {
+    return r.div({
+      dangerouslySetInnerHTML: {
+        __html: marked(this.props.text)
+      }
+    });
   }
 });
-
-addStyleSheet(
-  fs.readFileSync('node_modules/highlight.js/styles/tomorrow.css', 'utf-8')
-);

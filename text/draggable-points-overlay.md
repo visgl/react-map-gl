@@ -1,3 +1,0 @@
-### Draggable Points Overlay
-
-Test

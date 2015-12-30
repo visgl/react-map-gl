@@ -1,3 +1,5 @@
+'use strict';
+
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,11 +19,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
 var r = require('r-dom');
-var React = require('react/addons');
-var PureRenderMixin = React.addons.PureRenderMixin;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 var hljs = require('highlight.js');
 var d3 = require('d3');
 
@@ -35,7 +37,7 @@ module.exports = React.createClass({
   },
 
   _updateHighlight: function _updateHighlight() {
-    var code = d3.select(this.getDOMNode()).select('code').node();
+    var code = d3.select(ReactDOM.findDOMNode(this.refs.code)).node();
     hljs.highlightBlock(code);
   },
 
@@ -48,7 +50,7 @@ module.exports = React.createClass({
   },
 
   render: function render() {
-    return r.pre({}, [
+    return r.pre({ref: 'code'}, [
       r.code({className: this.props.language}, this.props.text)
     ]);
   }
