@@ -1,0 +1,3 @@
+# Interactivity
+
+Being a stateless component, the `<MapGL>` instance wont change what's shown in its viewport unless it receives new props. To update the `<MapGL>` component's viewport, use the `onChangeViewport` callback. Note that a `viewport` object is only the set of props that uniquely specifies what to show in the map so if you're using JSX, the following...
