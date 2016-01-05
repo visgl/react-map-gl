@@ -82,14 +82,13 @@ var ScatterplotOverlayExample = React.createClass({
     return r(MapGL, assign({}, viewport, {
       onChangeViewport: this._onChangeViewport
     }), [
-        r(ScatterplotOverlay, assign({}, viewport, {
-          locations: locations,
-          dotRadius: 2,
-          globalOpacity: 1,
-          compositeOperation: 'screen'
-        }))
-      ]
-    );
+      r(ScatterplotOverlay, assign({}, viewport, {
+        locations: locations,
+        dotRadius: 2,
+        globalOpacity: 1,
+        compositeOperation: 'screen'
+      }))
+    ]);
   }
 });
 

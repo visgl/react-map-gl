@@ -186,9 +186,9 @@ var MapGL = React.createClass({
   },
 
   _cursor: function _cursor() {
-    var isInteractive = this.props.onChangeViewport
-      || this.props.onClickFeature
-      || this.props.onHoverFeatures;
+    var isInteractive = this.props.onChangeViewport ||
+      this.props.onClickFeature ||
+      this.props.onHoverFeatures;
     if (isInteractive) {
       return this.props.isDragging ?
         config.CURSOR.GRABBING : config.CURSOR.GRAB;

@@ -35,13 +35,13 @@
     "opn": "^3.0.2",
     "prova": "^2.1.2",
     "react-dom": "0.14.x",
-    "uber-standard": "^3.6.4",
+    "uber-standard": "^5.1.0",
     "immutable": "^3.7.3",
     "r-dom": "^2.1.0",
     "react": "0.14.x"
   },
   "scripts": {
-    "start": "budo ./example/main.js --live -t | bistre",
+    "start": "budo ./example/main.js --live -- -t envify | bistre",
     "lint": "uber-standard",
     "test": "npm run lint && prova -q -b -t envify -l chrome test/*",
     "precommit": "npm run lint -s",

@@ -114,27 +114,26 @@ var OverlayExample = React.createClass({
               cursor: 'pointer'
             }
           }, [r.circle({
-              style: assign({}, style, {stroke: alphaify('#1FBAD6', 0.8)}),
-              r: 10,
+            style: assign({}, style, {stroke: alphaify('#1FBAD6', 0.8)}),
+            r: 10,
+            onClick: function onClick() {
+              var windowAlert = window.alert;
+              windowAlert('center');
+            },
+            transform: transform([{translate: p1}]),
+            key: 0
+          })].concat(locations.map(function _map(loc, index) {
+            return r.circle({
+              style: style,
+              r: 6,
               onClick: function onClick() {
                 var windowAlert = window.alert;
-                windowAlert('center');
+                windowAlert('dot ' + index);
               },
-              transform: transform([{translate: p1}]),
-              key: 0
-            })].concat(locations.map(function _map(loc, index) {
-              return r.circle({
-                style: style,
-                r: 6,
-                onClick: function onClick() {
-                  var windowAlert = window.alert;
-                  windowAlert('dot ' + index);
-                },
-                transform: transform([{translate: opt.project(loc.toArray())}]),
-                key: index + 1
-              });
-            }, this))
-          );
+              transform: transform([{translate: opt.project(loc.toArray())}]),
+              key: index + 1
+            });
+          }, this)));
         }.bind(this)
       }))
     ];

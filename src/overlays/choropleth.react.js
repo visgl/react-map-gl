@@ -80,7 +80,9 @@ var ChoroplethOverlay = React.createClass({
 
     function projectPoint(lon, lat) {
       var point = mercator.project([lon, lat]);
+      /* eslint-disable no-invalid-this */
       this.stream.point(point[0], point[1]);
+      /* eslint-enable no-invalid-this */
     }
 
     if (this.props.renderWhileDragging || !this.props.isDragging) {
