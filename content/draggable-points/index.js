@@ -26,7 +26,6 @@ var r = require('r-dom');
 var React = require('react');
 var fs = require('fs');
 var MapGL = require('react-map-gl');
-var d3 = require('d3');
 var Immutable = require('immutable');
 var path = require('path');
 
@@ -35,7 +34,7 @@ require('react-map-gl/src/overlays/draggable-points.react');
 
 var stamenMapStyle = require('../../common/stamen-map-style');
 var CodeSnippet = require('../../common/code-snippet.react');
-var Markdown = require('../../common/markdown');
+var Markdown = require('../../common/markdown.react');
 
 var initialPoints = [
   {location: [-122.39508481737994, 37.79450507471435], id: 0},
@@ -58,9 +57,9 @@ module.exports = React.createClass({
   getInitialState: function getInitialState() {
     return {
       map: {
-        latitude: 37.78,
-        longitude: -122.45,
-        zoom: 11,
+        latitude: 37.79479838619875,
+        longitude: -122.40476263042069,
+        zoom: 13.2803194471232,
         mapStyle: stamenMapStyle,
         width: 700,
         height: 450
@@ -87,47 +86,12 @@ module.exports = React.createClass({
     this.setState({draggablePoints: points});
   },
 
-  _onChangeViewport: function _onChangeViewport(opt) {
-    this.setState({map: assign({}, this.state.map, opt)});
+  _onChangeViewport: function _onChangeViewport(viewport) {
+    this.setState({map: assign({}, this.state.map, viewport)});
   },
 
   render: function render() {
     return r.div([
-      r(Markdown, {
-        text: fs.readFileSync(
-          path.join(__dirname, 'draggable-points-overlay.md'),
-          'utf-8'
-        )
-      }),
-
-      r(CodeSnippet, {
-        language: 'html',
-        text: '<MapGL\n' +
-          '  width={' + this.state.map.width + '}\n' +
-          '  height={' + this.state.map.height + '}\n' +
-          '  latitude={' + d3.round(this.state.map.latitude, 3) + '}\n' +
-          '  longitude={' + d3.round(this.state.map.longitude, 3) + '}\n' +
-          '  zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
-          '  mapStyle={mapStyle}>\n\n' +
-          '    <DraggablePoints \n' +
-          '      {...viewport}\n' +
-          '      points={points} />\n\n' +
-          '</MapGL>'
-      }),
-
-      r(Markdown, {
-        text: 'Where points is a list of points:'
-      }),
-
-      r(CodeSnippet, {
-        language: 'js',
-        text: 'var points = [\n' +
-          '  {location:[-122.39508481737994, 37.79450507471435 ], id: 0},\n' +
-          '  {location:[-122.39750244137034, 37.79227619464379 ], id: 1},\n' +
-          '  {location:[-122.4013303460217,  37.789251178427776], id: 2},\n' +
-          '  ...\n' +
-          ']'
-      }),
 
       r(MapGL,
         assign({onChangeViewport: this._onChangeViewport}, this.state.map), [
@@ -151,7 +115,35 @@ module.exports = React.createClass({
               ]);
             }
           }))
-        ])
+        ]),
+
+      r(Markdown, {
+        text: fs.readFileSync(
+          path.join(__dirname, 'draggable-points-overlay.md'),
+          'utf-8'
+        )
+      }),
+
+      r(CodeSnippet, {
+        language: 'html',
+        text: '<MapGL {...viewport} mapStyle={mapStyle}>\n' +
+          '    <DraggablePoints {...viewport} points={points} />\n' +
+          '</MapGL>'
+      }),
+
+      r(Markdown, {
+        text: 'Where points is a list of points:'
+      }),
+
+      r(CodeSnippet, {
+        language: 'js',
+        text: 'var points = [\n' +
+          '  {location:[-122.39508481737994, 37.79450507471435 ], id: 0},\n' +
+          '  {location:[-122.39750244137034, 37.79227619464379 ], id: 1},\n' +
+          '  {location:[-122.4013303460217,  37.789251178427776], id: 2},\n' +
+          '  ...\n' +
+          ']'
+      })
     ]);
   }
 });

@@ -27,12 +27,10 @@ var fs = require('fs');
 var MapGL = require('react-map-gl');
 var d3 = require('d3');
 var path = require('path');
-
 var HeatmapOverlay = require('react-map-gl-heatmap-overlay');
-
 var stamenMapStyle = require('../../common/stamen-map-style');
 var CodeSnippet = require('../../common/code-snippet.react');
-var Markdown = require('../../common/markdown');
+var Markdown = require('../../common/markdown.react');
 
 module.exports = React.createClass({
   getInitialState: function getInitialState() {

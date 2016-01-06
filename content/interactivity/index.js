@@ -28,7 +28,7 @@ var assign = require('object-assign');
 var MapGL = require('react-map-gl');
 var path = require('path');
 
-var Markdown = require('../../common/markdown');
+var Markdown = require('../../common/markdown.react');
 var CodeSnippet = require('../../common/code-snippet.react');
 var stamenMapStyle = require('../../common/stamen-map-style');
 
@@ -57,7 +57,6 @@ module.exports = React.createClass({
           path.join(__dirname, 'interactivity.md'), 'utf-8'
         )
       }),
-
       r(CodeSnippet, {
         language: 'html',
         text: '<MapGL\n' +
@@ -68,16 +67,12 @@ module.exports = React.createClass({
           '  zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
           '  mapStyle={mapStyle} />'
       }),
-
       r(Markdown, {text: 'is equivalent to...'}),
-
       r(CodeSnippet, {
         language: 'html',
         text: '<MapGL {...viewport} mapStyle={mapStyle} />'
       }),
-
       r(Markdown, {text: 'assuming that...'}),
-
       r(CodeSnippet, {
         language: 'js',
         text: 'var viewport = {\n' +
@@ -88,10 +83,11 @@ module.exports = React.createClass({
           '  zoom: ' + d3.round(this.state.map.zoom, 3) + '\n' +
           '};'
       }),
-
       r(Markdown, {text: 'To support interactivity, pass a callback function ' +
         'as the `onChangeViewport` prop.'}),
-
+      r(MapGL,
+        assign({onChangeViewport: this._onChangeViewport}, this.state.map)
+      ),
       r(CodeSnippet, {
         language: 'html',
         text: 'render() {\n' +
@@ -102,10 +98,25 @@ module.exports = React.createClass({
         '  />;\n' +
         '}'
       }),
-
-      r(MapGL,
-        assign({onChangeViewport: this._onChangeViewport}, this.state.map)
-      )
+      r(Markdown, {text: 'Alternatively, to prevent the component from being ' +
+        ' interactive, don\'t pass it an `onChangeViewport()` callback.'}),
+      r(MapGL, assign({}, this.state.map, {height: 200})),
+      r(Markdown, {
+        text: 'The `viewport` object returned from `onChangeViewport()` also ' +
+          'includes two other important pieces of state. They\'re ' +
+          '`isDragging` and `startDragLngLat`. To support typical ' +
+          'interactive usecases, pass them back as props ' +
+          'to the <MapGL /> component. The component works this way to be ' +
+          'stateless.'
+      }),
+      r(Markdown, {
+        text: '## Complete example \n Here\'s a complete example ' +
+          'you can copy and paste into your own project.'
+      }),
+      r(CodeSnippet, {
+        language: 'html',
+        text: fs.readFileSync(path.join(__dirname, 'example.js'), 'utf-8')
+      })
     ]);
   }
 

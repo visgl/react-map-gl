@@ -21,56 +21,47 @@
 // THE SOFTWARE.
 
 var r = require('r-dom');
+var assign = require('object-assign');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var createHistory = require('history/lib/createHashHistory');
 var document = require('global/document');
-
-var history = createHistory({
-  queryKey: false
+var history = createHistory({queryKey: false});
+var routes = [
+  {
+    title: 'Getting Started',
+    component: require('./content/getting-started'),
+    path: '/'
+  }, {
+    title: 'Interactivity',
+    component: require('./content/interactivity')
+  }, {
+    title: 'Scatterplot',
+    component: require('./content/scatterplot')
+  }, {
+    title: 'Draggable Points',
+    component: require('./content/draggable-points')
+  }, {
+    title: 'Third Party Overlays',
+    component: require('./content/third-party-overlay')
+  }
+].map(function _map(content) {
+  var slug = content.title.toLowerCase().replace(/ /g, '-');
+  return assign({path: slug}, content);
 });
-
-var contents = {
-  'Getting Started': require('./content/getting-started'),
-  'Interactivity': require('./content/interactivity'),
-  'Scatterplot': require('./content/scatterplot'),
-  'Draggable Points': require('./content/draggable-points'),
-  'Third Party Overlays': require('./content/third-party-overlay')
-};
-
-var titles = Object.keys(contents);
-
 var Sidebar = React.createClass({
   render: function render() {
-    var items = [];
-    for (var i = 0; i < titles.length; i++) {
-      var title = titles[i];
-      items.push(
-        r.a({
-          href: '#' + title
-        }, title)
-      );
-      items.push(r.br());
-    }
-    return r.div(items);
+    return r.div(routes.map(function each(content) {
+      var title = content.title;
+      return r.a({style: {display: 'block'}, href: '#' + content.path}, title);
+    }));
   }
 });
 
-var routes = [{
-  path: '/',
-  component: contents['Getting Started']
-}];
-
-for (var i = 0; i < titles.length; i++) {
-  var title = titles[i];
-  routes.push({
-    path: title,
-    component: contents[title]
-  });
-}
-
 ReactDOM.render(r(Sidebar), document.getElementById('sidebar'));
-ReactDOM.render(r(Router, {routes: routes, history: history}),
-  document.getElementById('content'));
+ReactDOM.render(r(Router, {
+  routes: routes,
+  history: history
+}), document.getElementById('content'));

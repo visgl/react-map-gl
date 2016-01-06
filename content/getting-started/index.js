@@ -28,7 +28,7 @@ var assign = require('object-assign');
 var MapGL = require('react-map-gl');
 var path = require('path');
 
-var Markdown = require('../../common/markdown');
+var Markdown = require('../../common/markdown.react');
 var CodeSnippet = require('../../common/code-snippet.react');
 var stamenMapStyle = require('../../common/stamen-map-style');
 
@@ -52,12 +52,15 @@ module.exports = React.createClass({
 
   render: function render() {
     return r.div([
+      r.img({src: 'https://cloud.githubusercontent.com/assets/499192/' +
+        '11028165/49f41da2-86bc-11e5-85eb-9279621ef971.png',
+        width: 700
+      }),
       r(Markdown, {
         text: fs.readFileSync(
           path.join(__dirname, 'getting-started.md'), 'utf-8'
         )
       }),
-
       r(CodeSnippet, {
         language: 'html',
         text: '<MapGL\n' +
@@ -68,7 +71,6 @@ module.exports = React.createClass({
           '  zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
           '  mapStyle={mapStyle} />'
       }),
-
       r(MapGL,
         assign({onChangeViewport: this._onChangeViewport}, this.state.map)
       )

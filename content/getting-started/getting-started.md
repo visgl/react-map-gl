@@ -34,6 +34,7 @@ react-map-gl needs to be installed in a product that also requires react 0.14.x 
 
     npm install react
     npm install immutable
+    npm install r-dom
 
 And then install react-map-gl with:
 

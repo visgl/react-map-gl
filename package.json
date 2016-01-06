@@ -8,6 +8,7 @@
     "brfs": "^1.4.1",
     "browserify": "^12.0.1",
     "budo": "^6.1.0",
+    "canvas-composite-types": "^1.0.0",
     "d3": "^3.5.8",
     "highlight.js": "^8.8.0",
     "history": "^1.17.0",
