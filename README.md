@@ -9,6 +9,8 @@ APIs that haven't yet been exposed.
 
 ![react-map-gl-screenshots](https://cloud.githubusercontent.com/assets/499192/11028165/49f41da2-86bc-11e5-85eb-9279621ef971.png)
 
+See the interactive docs at: https://uber.github.io/react-map-gl
+
 ## Overview
 
 ### Installation
