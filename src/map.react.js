@@ -588,7 +588,8 @@ var MapGL = React.createClass({
     return r.div({
       style: assign({}, this.props.style, {
         width: this.props.width,
-        height: this.props.height
+        height: this.props.height,
+        position: 'relative'
       })
     }, content);
   }
