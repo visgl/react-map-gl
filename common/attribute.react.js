@@ -19,26 +19,49 @@
 // THE SOFTWARE.
 'use strict';
 
+var React = require('react');
 var r = require('r-dom');
-var path = require('path');
-var fs = require('fs');
-var CodeSnippet = require('./code-snippet.react');
-var Markdown = require('./markdown.react');
 
-function LngLatAccessor() {
-  return r.div([
-    r.h4('lngLatAccessor'),
-    r(Markdown, {
-      text: 'Use the `lngLatAccessor` prop to provide the location in a ' +
-        'custom format. It\'s called with each location as the first ' +
-        'argument. Here\'s the default `lngLatAccessor`.'
-    }),
-    r(CodeSnippet, {
-      language: 'js',
-      text: fs.readFileSync(path.join(__dirname, './lng-lat-accessor.js'),
-        'utf-8')
-    })
-  ]);
-}
+var Attribution = React.createClass({
 
-module.exports = LngLatAccessor;
+  displayName: 'Attribution',
+
+  render: function render() {
+    return r.div({
+      style: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: this.props.width,
+        height: this.props.height,
+        pointerEvents: 'none'
+      }
+    }, [
+      r.div({
+        style: {
+          position: 'absolute',
+          right: 4,
+          bottom: 4,
+          lineHeight: 'initial',
+          fontFamily: 'Helvetica',
+          fontSize: '0.7em',
+          background: 'white',
+          padding: 4,
+          pointerEvents: 'all'
+        }
+      }, [
+        'Map tiles by ',
+        r.a({href: 'http://stamen.com'}, 'Stamen'),
+        ' under ',
+        r.a({href: 'http://creativecommons.org/licenses/by/3.0'}, 'CC BY 3.0'),
+        '. Data by ',
+        r.a({href: 'http://openstreetmap.org'}, 'OpenStreetMap'),
+        ', under ',
+        r.a({href: 'http://www.openstreetmap.org/copyright'}, 'ODbL'),
+        '.'
+      ])
+    ]);
+  }
+});
+
+module.exports = Attribution;

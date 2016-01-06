@@ -1,5 +1,3 @@
-'use strict';
-
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,6 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+'use strict';
 
 var r = require('r-dom');
 var d3 = require('d3');
@@ -31,6 +30,7 @@ var path = require('path');
 var Markdown = require('../../common/markdown.react');
 var CodeSnippet = require('../../common/code-snippet.react');
 var stamenMapStyle = require('../../common/stamen-map-style');
+var Attribute = require('../../common/attribute.react');
 
 module.exports = React.createClass({
   getInitialState: function getInitialState() {
@@ -83,10 +83,12 @@ module.exports = React.createClass({
           '  zoom: ' + d3.round(this.state.map.zoom, 3) + '\n' +
           '};'
       }),
-      r(Markdown, {text: 'To support interactivity, pass a callback function ' +
-        'as the `onChangeViewport` prop.'}),
-      r(MapGL,
-        assign({onChangeViewport: this._onChangeViewport}, this.state.map)
+      r(Markdown, {text: 'To support panning and zooming, pass a callback ' +
+        'function as the `onChangeViewport` prop.'}),
+      r(MapGL, assign({onChangeViewport: this._onChangeViewport},
+        this.state.map), [
+          r(Attribute, this.state.map)
+        ]
       ),
       r(CodeSnippet, {
         language: 'html',
@@ -100,7 +102,9 @@ module.exports = React.createClass({
       }),
       r(Markdown, {text: 'Alternatively, to prevent the component from being ' +
         ' interactive, don\'t pass it an `onChangeViewport()` callback.'}),
-      r(MapGL, assign({}, this.state.map, {height: 200})),
+      r(MapGL, assign({}, this.state.map, {height: 200}), [
+        r(Attribute, assign({}, this.state.map, {height: 200}))
+      ]),
       r(Markdown, {
         text: 'The `viewport` object returned from `onChangeViewport()` also ' +
           'includes two other important pieces of state. They\'re ' +

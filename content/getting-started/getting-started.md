@@ -15,7 +15,7 @@ examples here don't use the paid vector tile API and instead use map tiles by
 [Stamen Design](http://stamen.com), under
 [CC BY 3.0](http://creativecommons.org/licenses/by/3.0) and data by
 [OpenStreetMap](http://openstreetmap.org),
-under [CC BY SA](http://creativecommons.org/licenses/by-sa/3.0).
+under [ODbL](http://www.openstreetmap.org/copyright).
 
 Two guiding principles this library tries to adhere to:
 
@@ -40,4 +40,4 @@ And then install react-map-gl with:
 
     npm install react-map-gl
 
-The below example is a quick preview of the API and how you could create a simple non-interactive map.
+Here's a preview of the API and how you could create a simple non-interactive map.

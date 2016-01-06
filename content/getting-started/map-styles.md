@@ -1,0 +1,3 @@
+#### mapStyle prop
+
+The `<MapGL>` component takes a `mapStyle` prop that describes how to style the underling map. It's the same format as the style object used by [Mapbox-GL](https://www.mapbox.com/mapbox-gl-style-spec/) except it must be deeply wrapped as an Immutable using [`ImmutableJS.fromJS()`](https://facebook.github.io/immutable-js/docs/#/fromJS). This allows the library to check if the style has changed and quickly update the style based on the difference from the previous. Reference the map style specification for more details at: https://www.mapbox.com/mapbox-gl-style-spec/.

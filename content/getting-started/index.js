@@ -1,5 +1,3 @@
-'use strict';
-
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,6 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+'use strict';
 
 var r = require('r-dom');
 var d3 = require('d3');
@@ -31,6 +30,10 @@ var path = require('path');
 var Markdown = require('../../common/markdown.react');
 var CodeSnippet = require('../../common/code-snippet.react');
 var stamenMapStyle = require('../../common/stamen-map-style');
+var Attribute = require('../../common/attribute.react');
+
+var MAP_STYLE_TEXT = fs.readFileSync(path.join(__dirname, 'map-styles.md'),
+  'utf-8');
 
 module.exports = React.createClass({
   getInitialState: function getInitialState() {
@@ -63,18 +66,22 @@ module.exports = React.createClass({
       }),
       r(CodeSnippet, {
         language: 'html',
-        text: '<MapGL\n' +
+        text: 'var MapGL = require(\'react-map-gl\');\n\n' +
+         '// later in your app...\n' +
+          '<MapGL\n' +
           '  width={' + this.state.map.width + '}\n' +
           '  height={' + this.state.map.height + '}\n' +
           '  latitude={' + d3.round(this.state.map.latitude, 3) + '}\n' +
           '  longitude={' + d3.round(this.state.map.longitude, 3) + '}\n' +
           '  zoom={' + d3.round(this.state.map.zoom, 3) + '}\n' +
-          '  mapStyle={mapStyle} />'
+          '  mapStyle={mapStyle} \n' +
+          ' />'
       }),
       r(MapGL,
-        assign({onChangeViewport: this._onChangeViewport}, this.state.map)
-      )
+        assign({onChangeViewport: this._onChangeViewport}, this.state.map),
+        r(Attribute, this.state.map)
+      ),
+      r(Markdown, {text: MAP_STYLE_TEXT})
     ]);
   }
-
 });

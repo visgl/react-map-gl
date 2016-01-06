@@ -1,5 +1,3 @@
-'use strict';
-
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,6 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+'use strict';
 
 var r = require('r-dom');
 var assign = require('object-assign');
@@ -44,8 +43,8 @@ var routes = [
     title: 'Draggable Points',
     component: require('./content/draggable-points')
   }, {
-    title: 'Third Party Overlays',
-    component: require('./content/third-party-overlay')
+    title: 'Custom Overlays',
+    component: require('./content/custom-overlay')
   }
 ].map(function _map(content) {
   var slug = content.title.toLowerCase().replace(/ /g, '-');

@@ -1,5 +1,3 @@
-'use strict';
-
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,6 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+'use strict';
 
 var assign = require('object-assign');
 var r = require('r-dom');
@@ -43,6 +42,7 @@ var stamenMapStyle = require('../../common/stamen-map-style');
 var CodeSnippet = require('../../common/code-snippet.react');
 var Markdown = require('../../common/markdown.react');
 var LngLatAccessor = require('../../common/lng-lat-accessor.react');
+var Attribute = require('../../common/attribute.react');
 
 function PropLabel(props) {
   var style = {width: 200, display: 'inline-block'};
@@ -71,10 +71,10 @@ module.exports = React.createClass({
       })),
       scatterPlotStyle: {
         compositeOperation: 'screen',
-        dotRadius: 2,
+        dotRadius: 4,
         globalOpacity: 1,
         renderWhileDragging: true,
-        dotFill: '#00B4E6'
+        dotFill: SAMPLE_COLORS[0]
       }
     };
   },
@@ -124,7 +124,8 @@ module.exports = React.createClass({
             compositeOperation: compositeOperation,
             dotFill: dotFill,
             renderWhileDragging: renderWhileDragging
-          }))
+          })),
+          r(Attribute, this.state.map)
         ]
       ),
       r.div([
