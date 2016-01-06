@@ -17,7 +17,7 @@ examples here don't use the paid vector tile API and instead use map tiles by
 [OpenStreetMap](http://openstreetmap.org),
 under [CC BY SA](http://creativecommons.org/licenses/by-sa/3.0).
 
-Two important guiding principles this library tries to adhere that might be unfamiliar to you:
+Two guiding principles this library tries to adhere to:
 
 ### Stateless
 

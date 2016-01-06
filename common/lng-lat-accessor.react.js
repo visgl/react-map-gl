@@ -30,10 +30,9 @@ function LngLatAccessor() {
   return r.div([
     r.h4('lngLatAccessor'),
     r(Markdown, {
-      text: 'Have location information in a different format? You can use ' +
-        'the `lngLatAccessor` prop to provide your own accessor. It will ' +
-        'be called with each location as the first argument. Here\'s the ' +
-        'default `lngLatAccessor`.'
+      text: 'Use the `lngLatAccessor` prop to provide the location in a ' +
+        'custom format. It\'s called with each location as the first ' +
+        'argument. Here\'s the default `lngLatAccessor`.'
     }),
     r(CodeSnippet, {
       language: 'js',
