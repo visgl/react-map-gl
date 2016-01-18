@@ -29,7 +29,6 @@
     "viewport-mercator-project": "^2.0.1"
   },
   "devDependencies": {
-    "bistre": "^1.0.1",
     "budo": "^8.0.0",
     "envify": "^3.4.0",
     "immutable": "^3.7.3",
