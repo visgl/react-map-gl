@@ -31,7 +31,6 @@ var CustomExample = require('./examples/custom.react');
 var GeodataCreator = require('./examples/geodata-creator.react');
 var ScatterplotExample = require('./examples/scatterplot.react');
 var RouteExample = require('./examples/route.react');
-var process = require('process');
 
 function getAccessToken() {
   var match = window.location.search.match(/access_token=([^&\/]*)/);

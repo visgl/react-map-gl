@@ -30,18 +30,18 @@
   },
   "devDependencies": {
     "bistre": "^1.0.1",
-    "budo": "^4.2.1",
+    "budo": "^8.0.0",
     "envify": "^3.4.0",
+    "immutable": "^3.7.3",
     "opn": "^3.0.2",
     "prova": "^2.1.2",
-    "react-dom": "0.14.x",
-    "uber-standard": "^5.1.0",
-    "immutable": "^3.7.3",
     "r-dom": "^2.1.0",
-    "react": "0.14.x"
+    "react": "0.14.x",
+    "react-dom": "0.14.x",
+    "uber-standard": "^5.1.0"
   },
   "scripts": {
-    "start": "budo ./example/main.js --live -- -t envify | bistre",
+    "start": "budo ./example/main.js --live -- -t envify",
     "lint": "uber-standard",
     "test": "npm run lint && prova -q -b -t envify -l chrome test/*",
     "precommit": "npm run lint -s",
