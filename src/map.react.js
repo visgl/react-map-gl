@@ -63,7 +63,7 @@ function updateSource(map, update) {
 
     if (newSource.type === "geojson") {
         var oldSource = map.getSource(update.id);
-        if (oldSource.type === "geojson") {
+        if (oldSource.setData != null) {
             oldSource.setData(newSource.data);
             return;
         }
