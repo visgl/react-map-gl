@@ -159,7 +159,13 @@ var MapGL = React.createClass({
       * Passed to Mapbox Map constructor which passes it to the canvas context.
       * This is unseful when you want to export the canvas as a PNG.
       */
-    preserveDrawingBuffer: React.PropTypes.bool
+    preserveDrawingBuffer: React.PropTypes.bool,
+
+    /**
+      * There are still known issues with style diffing. As a temporary stopgap,
+      * add the option to prevent style diffing.
+      */
+    preventStyleDiffing: React.PropTypes.bool
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -439,7 +445,11 @@ var MapGL = React.createClass({
     var mapStyle = this.state.mapStyle;
     if (mapStyle !== this.state.prevMapStyle) {
       if (mapStyle instanceof Immutable.Map) {
-        this._setDiffStyle(this.state.prevMapStyle, mapStyle);
+        if (this.props.preventStyleDiffing) {
+          this._getMap().setStyle(mapStyle.toJS());
+        } else {
+          this._setDiffStyle(this.state.prevMapStyle, mapStyle);
+        }
       } else {
         this._getMap().setStyle(mapStyle);
       }
