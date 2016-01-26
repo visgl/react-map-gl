@@ -31,6 +31,8 @@ var CustomExample = require('./examples/custom.react');
 var GeodataCreator = require('./examples/geodata-creator.react');
 var ScatterplotExample = require('./examples/scatterplot.react');
 var RouteExample = require('./examples/route.react');
+var StyleDiffingExample = require('./examples/style-diffing.react');
+var process = require('global/process');
 
 function getAccessToken() {
   var match = window.location.search.match(/access_token=([^&\/]*)/);
@@ -65,7 +67,8 @@ var App = React.createClass({
       r(ChoroplethExample, common),
       r(CustomExample, common),
       r(GeodataCreator, common),
-      r(NotInteractiveExample, common)
+      r(NotInteractiveExample, common),
+      r(StyleDiffingExample, common)
     ]);
   }
 });
