@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 'use strict';
 
-var browser = require('bowser').browser;
+var browser = require('bowser');
 
 var prefix =
   browser.webkit ? '-webkit-' :
