@@ -193,7 +193,7 @@ Accessors that were previously `latLngAccessor` are have been renamed to
 Rename the viewport prop `startDragLatLng` to `startDragLngLat`.
 
 The `project` function prop passed to overlays now expecteds an array of
-the form `[logitude, latitude]` instead of `[latitude, longitude]`.
+the form `[longitude, latitude]` instead of `[latitude, longitude]`.
 
 The `project` function prop now returns an array of `[pixelX, pixelY]` instead
 of an object of the form `{x:pixelX, y: pixelY}`.
