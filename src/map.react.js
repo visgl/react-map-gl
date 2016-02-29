@@ -58,6 +58,21 @@ function cloneTransform(original) {
   return transform;
 }
 
+function updateSource(map, update) {
+    var newSource = update.source.toJS();
+
+    if (newSource.type === "geojson") {
+        var oldSource = map.getSource(update.id);
+        if (oldSource.setData != null) {
+            oldSource.setData(newSource.data);
+            return;
+        }
+    }
+    
+    map.removeSource(update.id);
+    map.addSource(update.id, newSource);   
+}
+
 var MapGL = React.createClass({
 
   displayName: 'MapGL',
@@ -419,8 +434,7 @@ var MapGL = React.createClass({
         map.addSource(enter.id, enter.source.toJS());
       });
       sourcesDiff.update.forEach(function each(update) {
-        map.removeSource(update.id);
-        map.addSource(update.id, update.source.toJS());
+        updateSource(map, update);
       });
       sourcesDiff.exit.forEach(function each(exit) {
         map.removeSource(exit.id);
