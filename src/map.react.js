@@ -270,6 +270,12 @@ var MapGL = React.createClass({
     this._updateMapViewport();
   },
 
+  componentWillUnmount: function componentWillUnmount() {
+    if (this._map) {
+      this._map.remove();
+    }
+  },
+
   _updateMapViewport: function _updateMapViewport() {
     var state = this.state;
     if (state.latitude !== state.prevLatitude ||
