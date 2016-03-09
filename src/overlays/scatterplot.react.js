@@ -21,8 +21,8 @@
 
 var React = require('react');
 var window = require('global/window');
-var d3 = require('d3');
 var r = require('r-dom');
+var round = require('../utils.js').round;
 var Immutable = require('immutable');
 var COMPOSITE_TYPES = require('canvas-composite-types');
 var ViewportMercator = require('viewport-mercator-project');
@@ -86,7 +86,7 @@ var ScatterplotOverlay = React.createClass({
     ) {
       this.props.locations.forEach(function _forEach(location) {
         var pixel = mercator.project(this.props.lngLatAccessor(location));
-        var pixelRounded = [d3.round(pixel[0], 1), d3.round(pixel[1], 1)];
+        var pixelRounded = [round(pixel[0], 1), round(pixel[1], 1)];
         if (pixelRounded[0] + radius >= 0 &&
             pixelRounded[0] - radius < props.width &&
             pixelRounded[1] + radius >= 0 &&

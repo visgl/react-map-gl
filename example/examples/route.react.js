@@ -21,7 +21,9 @@
 
 var assign = require('object-assign');
 var React = require('react');
-var d3 = require('d3');
+var d3Color = require('d3-color');
+var d3Scale = require('d3-scale');
+var round = require('../../src/utils.js').round;
 var r = require('r-dom');
 var alphaify = require('alphaify');
 var window = require('global/window');
@@ -33,7 +35,7 @@ var CanvasOverlay = require('../../src/overlays/canvas.react');
 
 var ROUTES = require('./../data/routes-example.json');
 
-var color = d3.scale.category10();
+var color = d3Scale.scaleCategory10();
 
 var RouteOverlayExample = React.createClass({
   displayName: 'RouteOverlayExample',
@@ -85,7 +87,7 @@ var RouteOverlayExample = React.createClass({
   _redrawSVGOverlay: function _redrawSVGOverlay(opt) {
     var routes = ROUTES.map(function _map(route, index) {
       var points = route.coordinates.map(opt.project).map(function __map(p) {
-        return [d3.round(p[0], 1), d3.round(p[1], 1)];
+        return [round(p[0], 1), round(p[1], 1)];
       });
       return r.g({key: index}, this._renderRoute(points, index));
     }, this);
@@ -99,8 +101,8 @@ var RouteOverlayExample = React.createClass({
     ctx.clearRect(0, 0, width, height);
     ROUTES.map(function _map(route, index) {
       route.coordinates.map(opt.project).forEach(function _forEach(p, i) {
-        var point = [d3.round(p[0], 1), d3.round(p[1], 1)];
-        ctx.fillStyle = d3.rgb(color(index)).brighter(1).toString();
+        var point = [round(p[0], 1), round(p[1], 1)];
+        ctx.fillStyle = d3Color.rgb(color(index)).brighter(1).toString();
         ctx.beginPath();
         ctx.arc(point[0], point[1], 2, 0, Math.PI * 2);
         ctx.fill();

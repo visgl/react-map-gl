@@ -21,7 +21,8 @@
 
 var assign = require('object-assign');
 var React = require('react');
-var d3 = require('d3');
+var d3Array = require('d3-array');
+var d3Random = require('d3-random');
 var window = require('global/window');
 var alphaify = require('alphaify');
 var transform = require('svg-transform');
@@ -36,14 +37,14 @@ var SVGOverlay = require('../../src/overlays/svg.react');
 var location = require('./../data/cities.json')[0];
 
 var wiggle = (function _wiggle() {
-  var normal = d3.random.normal();
+  var normal = d3Random.randomNormal();
   return function __wiggle(scale) {
     return normal() * scale;
   };
 }());
 
 // Example data.
-var locations = Immutable.fromJS(d3.range(30).map(function _map() {
+var locations = Immutable.fromJS(d3Array.range(30).map(function _map() {
   return [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)];
 }));
 
