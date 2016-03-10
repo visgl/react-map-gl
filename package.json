@@ -16,7 +16,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "alphaify": "samhogg/alphaify#remove-d3@3",
+    "alphaify": "^2.0.0",
     "bowser": "^1.0.0",
     "canvas-composite-types": "^1.0.4",
     "d3-array": "^0.7.1",
