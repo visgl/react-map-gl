@@ -140,6 +140,13 @@ var MapGL = React.createClass({
       * mouse is over. This is the same response returned from `featuresAt`.
       */
     onHoverFeatures: React.PropTypes.func,
+    /**
+      * Defaults to TRUE
+      * Set to false to enable onHoverFeatures to be called regardless if
+      * there is an actual feature at x, y. This is useful to emulate
+      * "mouse-out" behaviors on features.
+      */
+    ignoreEmptyFeatures: React.PropTypes.bool,
 
     /**
       * Show attribution control or not.
@@ -174,7 +181,8 @@ var MapGL = React.createClass({
       onChangeViewport: null,
       mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
       preserveDrawingBuffer: false,
-      attributionControl: true
+      attributionControl: true,
+      ignoreEmptyFeatures: true
     };
   },
 
@@ -507,7 +515,7 @@ var MapGL = React.createClass({
       if (error) {
         throw error;
       }
-      if (!features.length) {
+      if (!features.length && this.props.ignoreEmptyFeatures) {
         return;
       }
       this.props.onHoverFeatures(features);
