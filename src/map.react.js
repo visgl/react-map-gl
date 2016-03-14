@@ -182,7 +182,7 @@ var MapGL = React.createClass({
       mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
       preserveDrawingBuffer: false,
       attributionControl: true,
-      ignoreEmptyFeatures: false
+      ignoreEmptyFeatures: true
     };
   },
 
