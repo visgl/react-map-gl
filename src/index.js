@@ -19,4 +19,16 @@
 // THE SOFTWARE.
 'use strict';
 
-module.exports = require('./map.react');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.MapGL = require('./map.react');
+exports.ScatterplotOverlay = require('./overlays/scatterplot.react');
+exports.SVGOverlay = require('./overlays/svg.react');
+exports.CanvasOverlay = require('./overlays/canvas.react');
+exports.HtmlOverlay = require('./overlays/html.react');
+exports.DraggableOverlay = require('./overlays/draggable-points.react');
+exports.ChoroplethOverlay = require('./overlays/choropleth.react');
+
+exports.default = require('./map.react');

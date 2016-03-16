@@ -25,8 +25,8 @@ var r = require('r-dom');
 var Immutable = require('immutable');
 var d3 = require('d3');
 
-var MapGL = require('../../src/index.js');
-var ScatterplotOverlay = require('../../src/overlays/scatterplot.react');
+var MapGL = require('../../').MapGL;
+var ScatterplotOverlay = require('../../').ScatterplotOverlay;
 
 // San Francisco
 var location = require('./../data/cities.json')[0];

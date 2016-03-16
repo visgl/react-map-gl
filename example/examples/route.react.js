@@ -27,9 +27,9 @@ var alphaify = require('alphaify');
 var window = require('global/window');
 var windowAlert = window.alert;
 
-var MapGL = require('../../src/index.js');
-var SVGOverlay = require('../../src/overlays/svg.react');
-var CanvasOverlay = require('../../src/overlays/canvas.react');
+var MapGL = require('../../').MapGL;
+var SVGOverlay = require('../../').SVGOverlay;
+var CanvasOverlay = require('../../').CanvasOverlay;
 
 var ROUTES = require('./../data/routes-example.json');
 

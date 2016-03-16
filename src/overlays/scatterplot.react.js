@@ -24,8 +24,36 @@ var window = require('global/window');
 var d3 = require('d3');
 var r = require('r-dom');
 var Immutable = require('immutable');
-var COMPOSITE_TYPES = require('canvas-composite-types');
 var ViewportMercator = require('viewport-mercator-project');
+
+var COMPOSITE_TYPES = [
+  'source-over',
+  'source-in',
+  'source-out',
+  'source-atop',
+  'destination-over',
+  'destination-in',
+  'destination-out',
+  'destination-atop',
+  'lighter',
+  'copy',
+  'xor',
+  'multiply',
+  'screen',
+  'overlay',
+  'darken',
+  'lighten',
+  'color-dodge',
+  'color-burn',
+  'hard-light',
+  'soft-light',
+  'difference',
+  'exclusion',
+  'hue',
+  'saturation',
+  'color',
+  'luminosity'
+];
 
 var ScatterplotOverlay = React.createClass({
 
