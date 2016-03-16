@@ -44,7 +44,7 @@
     "prepush": "npm run lint -s"
   },
   "files": [
-    "src"
+    "dist"
   ],
   "peerDependencies": {
     "immutable": "^3.7.6",
