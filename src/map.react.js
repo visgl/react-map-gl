@@ -179,7 +179,7 @@ var MapGL = React.createClass({
     return {
       mapStyle: 'mapbox://styles/mapbox/light-v8',
       onChangeViewport: null,
-      mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
+      mapboxApiAccessToken: config.MAPBOX_API_ACCESS_TOKEN,
       preserveDrawingBuffer: false,
       attributionControl: true,
       ignoreEmptyFeatures: true
