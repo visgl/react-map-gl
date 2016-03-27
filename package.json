@@ -1,7 +1,7 @@
 {
   "name": "react-map-gl",
   "description": "A React wrapper for MapboxGL-js and overlay API.",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "main": "dist/react-mapbox-gl.js",
   "keywords": [
     "mapbox",
@@ -18,6 +18,9 @@
   "devDependencies": {
     "bowser": "^1.0.0",
     "global": "^4.3.0",
+    "keymirror": "^0.1.1",
+    "mapbox-gl": "0.15.0",
+    "nop": "^1.0.0",
     "object-assign": "^4.0.1",
     "svg-transform": "0.0.3",
     "viewport-mercator-project": "^2.0.1",
