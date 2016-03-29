@@ -33,7 +33,7 @@
     "envify": "^3.4.0",
     "immutable": "^3.7.6",
     "opn": "^4.0.0",
-    "prova": "^2.1.2",
+    "prova": "git+https://github.com/nicolasroy/prova.git",
     "r-dom": "^2.1.0",
     "react": "0.14.x",
     "react-dom": "0.14.x",
