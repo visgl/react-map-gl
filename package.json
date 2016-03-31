@@ -22,7 +22,7 @@
     "d3": "^3.5.16",
     "global": "^4.3.0",
     "keymirror": "^0.1.1",
-    "mapbox-gl": "0.15.0",
+    "mapbox-gl": "0.16.0",
     "nop": "^1.0.0",
     "object-assign": "^4.0.1",
     "svg-transform": "0.0.3",
