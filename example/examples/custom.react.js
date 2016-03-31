@@ -28,9 +28,9 @@ var transform = require('svg-transform');
 var Immutable = require('immutable');
 var r = require('r-dom');
 
-var MapGL = require('../../src/index.js');
-var CanvasOverlay = require('../../src/overlays/canvas.react');
-var SVGOverlay = require('../../src/overlays/svg.react');
+var MapGL = require('../../').MapGL;
+var CanvasOverlay = require('../../').CanvasOverlay;
+var SVGOverlay = require('../../').SVGOverlay;
 
 // San Francisco
 var location = require('./../data/cities.json')[0];

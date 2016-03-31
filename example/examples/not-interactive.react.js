@@ -23,7 +23,7 @@ var assign = require('object-assign');
 var React = require('react');
 var r = require('r-dom');
 
-var MapGL = require('../../src/index.js');
+var MapGL = require('../../').MapGL;
 
 // San Francisco
 var location = require('./../data/cities.json')[0];

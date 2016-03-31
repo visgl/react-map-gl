@@ -25,7 +25,7 @@ var Immutable = require('immutable');
 var r = require('r-dom');
 var transform = require('svg-transform');
 var document = require('global/document');
-var nop = require('nop');
+var noop = require('../noop');
 var config = require('../config');
 var mouse = require('../utils').relativeMousePosition;
 var ViewportMercator = require('viewport-mercator-project');
@@ -57,9 +57,9 @@ var DraggablePointsOverlay = React.createClass({
       lngLatAccessor: function lngLatAccessor(point) {
         return point.get('location').toArray();
       },
-      onAddPoint: nop,
-      onUpdatePoint: nop,
-      renderPoint: nop,
+      onAddPoint: noop,
+      onUpdatePoint: noop,
+      renderPoint: noop,
       isDragging: false
     };
   },

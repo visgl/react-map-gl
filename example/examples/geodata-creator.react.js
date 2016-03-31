@@ -25,9 +25,9 @@ var r = require('r-dom');
 var Immutable = require('immutable');
 var alphaify = require('alphaify');
 
-var MapGL = require('../../src/index.js');
-var DraggableOverlay = require('../../src/overlays/draggable-points.react');
-var SVGOverlay = require('../../src/overlays/svg.react');
+var MapGL = require('../../').MapGL;
+var DraggableOverlay = require('../../').DraggableOverlay;
+var SVGOverlay = require('../../').SVGOverlay;
 
 // A mock example path.
 var initialPoints = [

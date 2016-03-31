@@ -24,8 +24,8 @@ var React = require('react');
 var r = require('r-dom');
 var Immutable = require('immutable');
 
-var MapGL = require('../../src/index.js');
-var ChoroplethOverlay = require('../../src/overlays/choropleth.react');
+var MapGL = require('../../').MapGL;
+var ChoroplethOverlay = require('../../').ChoroplethOverlay;
 
 // San Francisco
 var location = require('./../data/cities.json')[0];

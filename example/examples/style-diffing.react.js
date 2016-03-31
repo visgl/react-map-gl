@@ -23,7 +23,7 @@ var assign = require('object-assign');
 var React = require('react');
 var r = require('r-dom');
 var Immutable = require('immutable');
-var MapGL = require('../../src/index.js');
+var MapGL = require('../../').MapGL;
 var window = require('global/window');
 
 // San Francisco
