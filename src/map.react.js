@@ -509,17 +509,11 @@ var MapGL = React.createClass({
     if (!this.props.onHoverFeatures) {
       return;
     }
-    map.featuresAt([pos.x, pos.y], {
-      radius: 1
-    }, function callback(error, features) {
-      if (error) {
-        throw error;
-      }
-      if (!features.length && this.props.ignoreEmptyFeatures) {
-        return;
-      }
-      this.props.onHoverFeatures(features);
-    }.bind(this));
+    var features = map.queryRenderedFeatures([pos.x, pos.y]);
+    if (!features.length && this.props.ignoreEmptyFeatures) {
+      return;
+    }
+    this.props.onHoverFeatures(features);
   },
 
   _onMouseUp: function _onMouseUp(opt) {
@@ -540,17 +534,13 @@ var MapGL = React.createClass({
     var pos = opt.pos;
 
     // Radius enables point features, like marker symbols, to be clicked.
-    map.featuresAt([pos.x, pos.y], {
-      radius: 15
-    }, function callback(error, features) {
-      if (error) {
-        throw error;
-      }
-      if (!features.length) {
-        return;
-      }
-      this.props.onClickFeatures(features);
-    }.bind(this));
+    var size = 5;
+    var bbox = [[pos.x - size, pos.y - size], [pos.x + size, pos.y + size]];
+    var features = map.queryRenderedFeatures(bbox);
+    if (!features.length && this.props.ignoreEmptyFeatures) {
+      return;
+    }
+    this.props.onClickFeatures(features);
   },
 
   _onZoom: function _onZoom(opt) {
