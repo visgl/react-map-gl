@@ -534,7 +534,7 @@ var MapGL = React.createClass({
     var pos = opt.pos;
 
     // Radius enables point features, like marker symbols, to be clicked.
-    var size = 5;
+    var size = 15;
     var bbox = [[pos.x - size, pos.y - size], [pos.x + size, pos.y + size]];
     var features = map.queryRenderedFeatures(bbox);
     if (!features.length && this.props.ignoreEmptyFeatures) {
