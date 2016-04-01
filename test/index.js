@@ -2,7 +2,7 @@
 
 var document = require('global/document');
 var MapGL = require('../src/index');
-var test = require('tape');
+var test = require('tape-catch');
 var React = require('react');
 var r = require('r-dom');
 var process = require('global/process');
