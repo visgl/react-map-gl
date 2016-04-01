@@ -48,12 +48,14 @@ function buildStyle(opts) {
         id: 'geojson-polygon-fill',
         source: 'my-geojson-polygon-source',
         type: 'fill',
-        paint: {'fill-color': opts.fill, 'fill-opacity': 0.4}
+        paint: {'fill-color': opts.fill, 'fill-opacity': 0.4},
+        interactive: true
       }, {
         id: 'geojson-polygon-stroke',
         source: 'my-geojson-polygon-source',
         type: 'line',
-        paint: {'line-color': opts.stroke, 'line-width': 4}
+        paint: {'line-color': opts.stroke, 'line-width': 4},
+        interactive: false
       }
     ]
   });
@@ -110,12 +112,17 @@ var StyleDiffingExample = React.createClass({
     });
   },
 
+  _onClickFeatures: function _onClickFeatures(features) {
+    window.console.log(features);
+  },
+
   render: function render() {
     var viewport = assign({
       mapStyle: this.state.mapStyle
     }, this.state.viewport, this.props);
     return r(MapGL, assign({}, viewport, {
       onChangeViewport: this._onChangeViewport,
+      onClickFeatures: this._onClickFeatures,
       // setting to `true` should cause the map to flicker because all sources
       // and layers need to be reloaded without diffing enabled.
       preventStyleDiffing: false
