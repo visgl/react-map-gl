@@ -17,47 +17,45 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
+import d3 from 'd3';
+import window from 'global/window';
+import alphaify from 'alphaify';
+import transform from 'svg-transform';
+import Immutable from 'immutable';
 
-var assign = require('object-assign');
-var React = require('react');
-var d3 = require('d3');
-var window = require('global/window');
-var alphaify = require('alphaify');
-var transform = require('svg-transform');
-var Immutable = require('immutable');
-var r = require('r-dom');
+import React, {PropTypes, Component} from 'react';
+import autobind from 'autobind-decorator';
 
-var MapGL = require('../../src/index.js');
-var CanvasOverlay = require('../../src/overlays/canvas.react');
-var SVGOverlay = require('../../src/overlays/svg.react');
+import MapGL from '../../src/index.js';
+import CanvasOverlay from '../../src/overlays/canvas.react';
+import SVGOverlay from '../../src/overlays/svg.react';
 
 // San Francisco
-var location = require('./../data/cities.json')[0];
+import CITIES from './../data/cities.json';
+const location = CITIES[0];
 
-var wiggle = (function _wiggle() {
-  var normal = d3.random.normal();
+const wiggle = (function _wiggle() {
+  const normal = d3.random.normal();
   return function __wiggle(scale) {
     return normal() * scale;
   };
 }());
 
 // Example data.
-var locations = Immutable.fromJS(d3.range(30).map(function _map() {
-  return [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)];
-}));
+const locations = Immutable.fromJS(d3.range(30).map(
+  () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
+));
 
-var OverlayExample = React.createClass({
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-  displayName: 'OverlayExample',
+export default class OverlayExample extends Component {
 
-  PropTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
-  },
-
-  getInitialState: function getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       viewport: {
         latitude: location.latitude,
         longitude: location.longitude,
@@ -66,85 +64,97 @@ var OverlayExample = React.createClass({
         isDragging: false
       }
     };
-  },
+  }
 
-  _onChangeViewport: function _onChangeViewport(viewport) {
+  @autobind
+  _onChangeViewport(viewport) {
     if (this.props.onChangeViewport) {
       return this.props.onChangeViewport(viewport);
     }
-    this.setState({viewport: viewport});
-  },
-
-  _renderOverlays: function _renderOverlays(viewport) {
-    return [
-      r(CanvasOverlay, assign({}, viewport, {
-        redraw: function _redrawCanvas(opt) {
-          var p1 = opt.project([location.longitude, location.latitude]);
-          opt.ctx.clearRect(0, 0, opt.width, opt.height);
-          opt.ctx.strokeStyle = alphaify('#1FBAD6', 0.4);
-          opt.ctx.lineWidth = 2;
-          locations.forEach(function forEach(loc, index) {
-            opt.ctx.beginPath();
-            var p2 = opt.project(loc.toArray());
-            opt.ctx.moveTo(p1[0], p1[1]);
-            opt.ctx.lineTo(p2[0], p2[1]);
-            opt.ctx.stroke();
-            opt.ctx.beginPath();
-            opt.ctx.fillStyle = alphaify('#1FBAD6', 0.4);
-            opt.ctx.arc(p2[0], p2[1], 6, 0, 2 * Math.PI);
-            opt.ctx.fill();
-            opt.ctx.beginPath();
-            opt.ctx.fillStyle = '#FFFFFF';
-            opt.ctx.textAlign = 'center';
-            opt.ctx.fillText(index, p2[0], p2[1] + 4);
-          });
-        }
-      })),
-      // We use invisible SVG elements to support interactivity.
-      r(SVGOverlay, assign({}, viewport, {
-        redraw: function _redrwaSVGOverlay(opt) {
-          var p1 = opt.project([location.longitude, location.latitude]);
-          var style = {
-            // transparent but still clickable.
-            fill: 'rgba(0, 0, 0, 0)'
-          };
-          return r.g({
-            style: {
-              pointerEvents: 'all',
-              cursor: 'pointer'
-            }
-          }, [r.circle({
-            style: assign({}, style, {stroke: alphaify('#1FBAD6', 0.8)}),
-            r: 10,
-            onClick: function onClick() {
-              var windowAlert = window.alert;
-              windowAlert('center');
-            },
-            transform: transform([{translate: p1}]),
-            key: 0
-          })].concat(locations.map(function _map(loc, index) {
-            return r.circle({
-              style: style,
-              r: 6,
-              onClick: function onClick() {
-                var windowAlert = window.alert;
-                windowAlert('dot ' + index);
-              },
-              transform: transform([{translate: opt.project(loc.toArray())}]),
-              key: index + 1
-            });
-          }, this)));
-        }.bind(this)
-      }))
-    ];
-  },
-
-  render: function render() {
-    var viewport = assign({}, this.state.viewport, this.props);
-    return r(MapGL, assign({}, viewport, {
-      onChangeViewport: this._onChangeViewport
-    }), this._renderOverlays(viewport));
+    this.setState({viewport});
   }
-});
 
-module.exports = OverlayExample;
+  @autobind
+  _redrawCanvasOverlay(opt) {
+    const p1 = opt.project([location.longitude, location.latitude]);
+    opt.ctx.clearRect(0, 0, opt.width, opt.height);
+    opt.ctx.strokeStyle = alphaify('#1FBAD6', 0.4);
+    opt.ctx.lineWidth = 2;
+    locations.forEach((loc, index) => {
+      opt.ctx.beginPath();
+      const p2 = opt.project(loc.toArray());
+      opt.ctx.moveTo(p1[0], p1[1]);
+      opt.ctx.lineTo(p2[0], p2[1]);
+      opt.ctx.stroke();
+      opt.ctx.beginPath();
+      opt.ctx.fillStyle = alphaify('#1FBAD6', 0.4);
+      opt.ctx.arc(p2[0], p2[1], 6, 0, 2 * Math.PI);
+      opt.ctx.fill();
+      opt.ctx.beginPath();
+      opt.ctx.fillStyle = '#FFFFFF';
+      opt.ctx.textAlign = 'center';
+      opt.ctx.fillText(index, p2[0], p2[1] + 4);
+    });
+  }
+
+  @autobind
+  _redrawSVGOverlay(opt) {
+    const p1 = opt.project([location.longitude, location.latitude]);
+    /* We use invisible SVG elements to support interactivity. */
+    const style = {
+      // transparent but still clickable.
+      fill: 'rgba(0, 0, 0, 0)'
+    };
+    return (
+      <g style={ {
+        pointerEvents: 'all',
+        cursor: 'pointer'
+      } }>
+        <circle
+          key={ 0 }
+          style={ {...style, stroke: alphaify('#1FBAD6', 0.8)} }
+          r={ 10 }
+          transform={ transform([{translate: p1}]) }
+          onClick={ () => {
+            const windowAlert = window.alert;
+            windowAlert('center');
+          } }/>
+        {
+          locations.map((loc, index) =>
+            <circle
+              key={ index + 1 }
+              style={ style }
+              r={ 6 }
+              transform={ transform([{translate: opt.project(loc.toArray())}]) }
+              onClick={ () => {
+                const windowAlert = window.alert;
+                windowAlert(`dot ${index}`);
+              } }/>
+          )
+        }
+      </g>
+    );
+  }
+
+  render() {
+    const viewport = {...this.state.viewport, ...this.props};
+    return (
+      <MapGL
+        { ...viewport }
+        onChangeViewport={ this._onChangeViewport }>
+
+        <CanvasOverlay
+          { ...viewport }
+          redraw={ this._redrawCanvasOverlay }/>
+
+        <SVGOverlay
+          { ...viewport }
+          redraw={ this._redrawSVGOverlay }/>
+
+      </MapGL>
+    );
+  }
+}
+
+OverlayExample.propTypes = PROP_TYPES;
+

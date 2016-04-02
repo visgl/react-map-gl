@@ -17,22 +17,20 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var React = require('react');
-var MapboxGL = require('mapbox-gl');
-var Point = MapboxGL.Point;
-var document = require('global/document');
-var window = require('global/window');
-var r = require('r-dom');
-var noop = require('./noop');
+import React, {PropTypes, Component} from 'react';
+import autobind from 'autobind-decorator';
+import {Point} from 'mapbox-gl';
+import document from 'global/document';
+import window from 'global/window';
+import noop from './noop';
 
-var ua = typeof window.navigator !== 'undefined' ?
+const ua = typeof window.navigator !== 'undefined' ?
   window.navigator.userAgent.toLowerCase() : '';
-var firefox = ua.indexOf('firefox') !== -1;
+const firefox = ua.indexOf('firefox') !== -1;
 
 function mousePos(el, event) {
-  var rect = el.getBoundingClientRect();
+  const rect = el.getBoundingClientRect();
   event = event.touches ? event.touches[0] : event;
   return new Point(
     event.clientX - rect.left - el.clientLeft,
@@ -45,75 +43,77 @@ function mousePos(el, event) {
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
 /* eslint-enable max-len */
 
-var MapInteractions = React.createClass({
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  onMouseDown: PropTypes.func,
+  onMouseDrag: PropTypes.func,
+  onMouseUp: PropTypes.func,
+  onZoom: PropTypes.func,
+  onZoomEnd: PropTypes.func
+};
 
-  displayName: 'MapInteractions',
+const DEFAULT_PROPS = {
+  onMouseDown: noop,
+  onMouseDrag: noop,
+  onMouseUp: noop,
+  onZoom: noop,
+  onZoomEnd: noop
+};
 
-  PropTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    onMouseDown: React.PropTypes.func,
-    onMouseDrag: React.PropTypes.func,
-    onMouseUp: React.PropTypes.func,
-    onZoom: React.PropTypes.func,
-    onZoomEnd: React.PropTypes.func
-  },
+export default class MapInteractions extends Component {
 
-  getDefaultProps: function getDefaultProps() {
-    return {
-      onMouseDown: noop,
-      onMouseDrag: noop,
-      onMouseUp: noop,
-      onZoom: noop,
-      onZoomEnd: noop
-    };
-  },
-
-  getInitialState: function getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       startPos: null,
       pos: null,
       mouseWheelPos: null
     };
-  },
+  }
 
-  _getMousePos: function _getMousePos(event) {
-    var el = this.refs.container;
+  _getMousePos(event) {
+    const el = this.refs.container;
     return mousePos(el, event);
-  },
+  }
 
-  _onMouseDown: function _onMouseDown(event) {
-    var pos = this._getMousePos(event);
-    this.setState({startPos: pos, pos: pos});
-    this.props.onMouseDown({pos: pos});
+  @autobind
+  _onMouseDown(event) {
+    const pos = this._getMousePos(event);
+    this.setState({startPos: pos, pos});
+    this.props.onMouseDown({pos});
     document.addEventListener('mousemove', this._onMouseDrag, false);
     document.addEventListener('mouseup', this._onMouseUp, false);
-  },
+  }
 
-  _onMouseDrag: function _onMouseDrag(event) {
-    var pos = this._getMousePos(event);
-    this.setState({pos: pos});
-    this.props.onMouseDrag({pos: pos});
-  },
+  @autobind
+  _onMouseDrag(event) {
+    const pos = this._getMousePos(event);
+    this.setState({pos});
+    this.props.onMouseDrag({pos});
+  }
 
-  _onMouseUp: function _onMouseUp(event) {
+  @autobind
+  _onMouseUp(event) {
     document.removeEventListener('mousemove', this._onMouseDrag, false);
     document.removeEventListener('mouseup', this._onMouseUp, false);
-    var pos = this._getMousePos(event);
-    this.setState({pos: pos});
-    this.props.onMouseUp({pos: pos});
-  },
+    const pos = this._getMousePos(event);
+    this.setState({pos});
+    this.props.onMouseUp({pos});
+  }
 
-  _onMouseMove: function _onMouseMove(event) {
-    var pos = this._getMousePos(event);
-    this.props.onMouseMove({pos: pos});
-  },
+  @autobind
+  _onMouseMove(event) {
+    const pos = this._getMousePos(event);
+    this.props.onMouseMove({pos});
+  }
 
   /* eslint-disable complexity, max-statements */
-  _onWheel: function _onWheel(event) {
+  @autobind
+  _onWheel(event) {
     event.stopPropagation();
     event.preventDefault();
-    var value = event.deltaY;
+    let value = event.deltaY;
     // Firefox doubles the values on retina screens...
     if (firefox && event.deltaMode === window.WheelEvent.DOM_DELTA_PIXEL) {
       value /= window.devicePixelRatio;
@@ -122,15 +122,15 @@ var MapInteractions = React.createClass({
       value *= 40;
     }
 
-    var type = this.state.mouseWheelType;
-    var timeout = this.state.mouseWheelTimeout;
-    var lastValue = this.state.mouseWheelLastValue;
-    var time = this.state.mouseWheelTime;
+    let type = this.state.mouseWheelType;
+    let timeout = this.state.mouseWheelTimeout;
+    let lastValue = this.state.mouseWheelLastValue;
+    let time = this.state.mouseWheelTime;
 
-    var now = (window.performance || Date).now();
-    var timeDelta = now - (time || 0);
+    const now = (window.performance || Date).now();
+    const timeDelta = now - (time || 0);
 
-    var pos = this._getMousePos(event);
+    const pos = this._getMousePos(event);
     time = now;
 
     if (value !== 0 && value % 4.000244140625 === 0) {
@@ -149,7 +149,7 @@ var MapInteractions = React.createClass({
       // Start a timeout in case this was a singular event, and delay it by up
       // to 40ms.
       timeout = window.setTimeout(function setTimeout() {
-        var _type = 'wheel';
+        const _type = 'wheel';
         this._zoom(-this.state.mouseWheelLastValue, this.state.mouseWheelPos);
         this.setState({mouseWheelType: _type});
       }.bind(this), 40);
@@ -187,36 +187,42 @@ var MapInteractions = React.createClass({
       mouseWheelTimeout: timeout,
       mouseWheelLastValue: lastValue
     });
-  },
+  }
   /* eslint-enable complexity, max-statements */
 
-  _zoom: function _zoom(delta, pos) {
+  _zoom(delta, pos) {
 
     // Scale by sigmoid of scroll wheel delta.
-    var scale = 2 / (1 + Math.exp(-Math.abs(delta / 100)));
+    let scale = 2 / (1 + Math.exp(-Math.abs(delta / 100)));
     if (delta < 0 && scale !== 0) {
       scale = 1 / scale;
     }
-    this.props.onZoom({pos: pos, scale: scale});
+    this.props.onZoom({pos, scale});
     window.clearTimeout(this._zoomEndTimeout);
     this._zoomEndTimeout = window.setTimeout(function _setTimeout() {
       this.props.onZoomEnd();
     }.bind(this), 200);
-  },
-
-  render: function render() {
-    return r.div({
-      ref: 'container',
-      onMouseMove: this._onMouseMove,
-      onMouseDown: this._onMouseDown,
-      onWheel: this._onWheel,
-      style: {
-        width: this.props.width,
-        height: this.props.height,
-        position: 'relative'
-      }
-    }, this.props.children);
   }
-});
 
-module.exports = MapInteractions;
+  render() {
+    return (
+      <div
+        ref="container"
+        onMouseMove={ this._onMouseMove }
+        onMouseDown={ this._onMouseDown }
+        onWheel={ this._onWheel }
+        style={ {
+          width: this.props.width,
+          height: this.props.height,
+          position: 'relative'
+        } }>
+
+        { this.props.children }
+
+      </div>
+    );
+  }
+}
+
+MapInteractions.propTypes = PROP_TYPES;
+MapInteractions.defaultProps = DEFAULT_PROPS;

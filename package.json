@@ -2,7 +2,7 @@
   "name": "react-map-gl",
   "description": "A React wrapper for MapboxGL-js and overlay API.",
   "version": "0.6.8",
-  "main": "src/index.js",
+  "main": "index.js",
   "keywords": [
     "mapbox",
     "mapbox-gl",
@@ -23,39 +23,49 @@
     "global": "^4.3.0",
     "keymirror": "^0.1.1",
     "mapbox-gl": "0.16.0",
-    "nop": "^1.0.0",
-    "object-assign": "^4.0.1",
     "svg-transform": "0.0.3",
     "viewport-mercator-project": "^2.0.1"
   },
   "devDependencies": {
+    "autobind-decorator": "^1.3.3",
+    "babel-cli": "6.5.1",
+    "babel-core": "6.5.1",
+    "babel-eslint": "^5.0.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-2": "^6.5.0",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
     "budo": "^8.0.4",
     "envify": "^3.4.0",
+    "eslint": "^1.10.3",
+    "eslint-plugin-react": "^4.2.3",
     "immutable": "^3.7.6",
     "opn": "^4.0.0",
     "prova": "git+https://github.com/nicolasroy/prova.git#c8bed19db3c1c94fae1dab9a7b29fbfd332c95a2",
-    "r-dom": "^2.1.0",
     "react": "0.14.x",
     "react-dom": "0.14.x",
-    "uber-standard": "^5.1.0"
+    "tape-catch": "^1.0.4"
   },
   "scripts": {
-    "start": "budo ./example/main.js --live -- -t envify",
-    "lint": "uber-standard",
-    "test": "npm run lint && prova -q -b -t envify -l chrome test/*",
+    "build": "babel src -d dist --copy-files",
+    "start": "budo ./example/main.js --live --open --port 3000 -- -t babelify -t envify",
+    "lint": "eslint src",
+    "test": "npm run lint && prova -q -b -t babelify -l chrome test/*",
     "precommit": "npm run lint -s",
-    "prepush": "npm run lint -s"
+    "prepush": "npm run lint -s",
+    "prepublish": "npm run build"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
     "immutable": "^3.7.6",
-    "r-dom": "^2.1.0",
     "react": "0.14.x"
   },
   "engines": {
     "node": "0.10.x",
-    "npm": "2.x"
+    "npm": "3.x"
   }
 }

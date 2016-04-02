@@ -1,4 +1,4 @@
-'use strict';
+require('babel-core/register');
 
 var document = require('global/document');
 var test = require('prova');
@@ -6,6 +6,7 @@ var MapGL = require('../src/index');
 var React = require('react');
 var r = require('r-dom');
 var process = require('global/process');
+
 /* eslint-disable no-process-env */
 // This will get converted to a string by envify
 var mapboxApiAccessToken = process.env.MapboxAccessToken;

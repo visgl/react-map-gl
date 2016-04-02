@@ -17,34 +17,33 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var assign = require('object-assign');
-var React = require('react');
-var d3 = require('d3');
-var r = require('r-dom');
-var alphaify = require('alphaify');
-var window = require('global/window');
-var windowAlert = window.alert;
+import alphaify from 'alphaify';
+import window from 'global/window';
+const windowAlert = window.alert;
 
-var MapGL = require('../../src/index.js');
-var SVGOverlay = require('../../src/overlays/svg.react');
-var CanvasOverlay = require('../../src/overlays/canvas.react');
+import React, {PropTypes, Component} from 'react';
+import autobind from 'autobind-decorator';
+import d3 from 'd3';
 
-var ROUTES = require('./../data/routes-example.json');
+import MapGL from '../../src/index.js';
+import SVGOverlay from '../../src/overlays/svg.react';
+import CanvasOverlay from '../../src/overlays/canvas.react';
 
-var color = d3.scale.category10();
+import ROUTES from './../data/routes-example.json';
 
-var RouteOverlayExample = React.createClass({
-  displayName: 'RouteOverlayExample',
+const color = d3.scale.category10();
 
-  propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
-  },
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-  getInitialState: function getInitialState() {
-    return {
+export default class RouteOverlayExample extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
       viewport: {
         latitude: 37.7736092599127,
         longitude: -122.42312591099463,
@@ -53,70 +52,76 @@ var RouteOverlayExample = React.createClass({
         isDragging: false
       }
     };
-  },
+  }
 
-  _onChangeViewport: function _onChangeViewport(viewport) {
+  @autobind
+  _onChangeViewport(viewport) {
     if (this.props.onChangeViewport) {
       return this.props.onChangeViewport(viewport);
     }
-    this.setState({viewport: viewport});
-  },
+    this.setState({viewport});
+  }
 
-  _renderRoute: function _renderRoute(points, index) {
-    return r.g({style: {pointerEvents: 'click', cursor: 'pointer'}}, [
-      r.g({
-        style: {pointerEvents: 'visibleStroke'},
-        onClick: function onClick() {
-          windowAlert('route ' + index);
-        }
-      }, [
-        r.path({
-          d: 'M' + points.join('L'),
-          style: {
-            fill: 'none',
-            stroke: alphaify(color(index), 0.7),
-            strokeWidth: 6
-          }
+  _renderRoute(points, index) {
+    return (
+      <g style={ {pointerEvents: 'click', cursor: 'pointer'} }>
+        <g
+          style={ {pointerEvents: 'visibleStroke'} }
+          onClick={ () => windowAlert(`route ${index}`) }>
+          <path
+            style={ {
+              fill: 'none',
+              stroke: alphaify(color(index), 0.7),
+              strokeWidth: 6
+            } }
+            d={ `M${points.join('L')}` }/>
+        </g>
+      </g>
+    );
+  }
+
+  @autobind
+  _redrawSVGOverlay({project}) {
+    return (
+      <g>
+      {
+        ROUTES.map((route, index) => {
+          const points = route.coordinates.map(project).map(
+            p => [d3.round(p[0], 1), d3.round(p[1], 1)]
+          );
+          return <g key={ index }>{ this._renderRoute(points, index) }</g>;
         })
-      ])
-    ]);
-  },
+      }
+      </g>
+    );
+  }
 
-  _redrawSVGOverlay: function _redrawSVGOverlay(opt) {
-    var routes = ROUTES.map(function _map(route, index) {
-      var points = route.coordinates.map(opt.project).map(function __map(p) {
-        return [d3.round(p[0], 1), d3.round(p[1], 1)];
-      });
-      return r.g({key: index}, this._renderRoute(points, index));
-    }, this);
-    return r.g(routes);
-  },
-
-  _redrawCanvasOverlay: function _redrawCanvasOverlay(opt) {
-    var ctx = opt.ctx;
-    var width = opt.width;
-    var height = opt.height;
+  @autobind
+  _redrawCanvasOverlay({ctx, width, height, project}) {
     ctx.clearRect(0, 0, width, height);
-    ROUTES.map(function _map(route, index) {
-      route.coordinates.map(opt.project).forEach(function _forEach(p, i) {
-        var point = [d3.round(p[0], 1), d3.round(p[1], 1)];
+    ROUTES.map((route, index) =>
+      route.coordinates.map(project).forEach((p, i) => {
+        const point = [d3.round(p[0], 1), d3.round(p[1], 1)];
         ctx.fillStyle = d3.rgb(color(index)).brighter(1).toString();
         ctx.beginPath();
         ctx.arc(point[0], point[1], 2, 0, Math.PI * 2);
         ctx.fill();
-      });
-    });
-  },
-
-  render: function render() {
-    var viewport = assign({}, this.state.viewport, this.props);
-    return r(MapGL, assign({}, viewport, {
-      onChangeViewport: this._onChangeViewport
-    }), [
-      r(SVGOverlay, assign({redraw: this._redrawSVGOverlay}, viewport)),
-      r(CanvasOverlay, assign({redraw: this._redrawCanvasOverlay}, viewport))
-    ]);
+      })
+    );
   }
-});
 
-module.exports = RouteOverlayExample;
+  render() {
+    const viewport = {
+      ...this.state.viewport,
+      ...this.props
+    };
+    return (
+      <MapGL { ...viewport } onChangeViewport={ this._onChangeViewport }>
+        <SVGOverlay { ...viewport } redraw={ this._redrawSVGOverlay }/>,
+        <CanvasOverlay { ...viewport } redraw={ this._redrawCanvasOverlay }/>
+      </MapGL>
+    );
+  }
+}
+
+RouteOverlayExample.propTypes = PROP_TYPES;

@@ -17,28 +17,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var document = require('global/document');
-var ReactDOM = require('react-dom');
-var React = require('react');
-var r = require('r-dom');
-var window = require('global/window');
+import document from 'global/document';
+import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
+import window from 'global/window';
 
-var NotInteractiveExample = require('./examples/not-interactive.react');
-var ChoroplethExample = require('./examples/choropleth.react');
-var CustomExample = require('./examples/custom.react');
-var GeodataCreator = require('./examples/geodata-creator.react');
-var ScatterplotExample = require('./examples/scatterplot.react');
-var RouteExample = require('./examples/route.react');
-var StyleDiffingExample = require('./examples/style-diffing.react');
-var process = require('global/process');
+import NotInteractiveExample from './examples/not-interactive.react';
+import ChoroplethExample from './examples/choropleth.react';
+import CustomExample from './examples/custom.react';
+import GeodataCreator from './examples/geodata-creator.react';
+import ScatterplotExample from './examples/scatterplot.react';
+import RouteExample from './examples/route.react';
+import StyleDiffingExample from './examples/style-diffing.react';
 
 function getAccessToken() {
-  var match = window.location.search.match(/access_token=([^&\/]*)/);
-  var accessToken = match && match[1];
+  const match = window.location.search.match(/access_token=([^&\/]*)/);
+  let accessToken = match && match[1];
   if (!accessToken) {
     /* eslint-disable no-process-env */
+    /* global process */
     accessToken = process.env.MapboxAccessToken;
     /* eslint-enable no-process-env */
   }
@@ -50,29 +48,29 @@ function getAccessToken() {
   return accessToken;
 }
 
-var App = React.createClass({
+export default class App extends Component {
 
-  displayName: 'App',
-
-  render: function render() {
-    var common = {
+  render() {
+    const common = {
       width: 400,
       height: 400,
       style: {float: 'left'},
       mapboxApiAccessToken: getAccessToken()
     };
-    return r.div([
-      r(RouteExample, common),
-      r(ScatterplotExample, common),
-      r(ChoroplethExample, common),
-      r(CustomExample, common),
-      r(GeodataCreator, common),
-      r(NotInteractiveExample, common),
-      r(StyleDiffingExample, common)
-    ]);
+    return (
+      <div>
+        <RouteExample { ...common }/>
+        <ScatterplotExample { ...common }/>
+        <ChoroplethExample { ...common }/>
+        <CustomExample { ...common }/>
+        <GeodataCreator { ...common }/>
+        <NotInteractiveExample { ...common }/>
+        <StyleDiffingExample { ...common }/>
+      </div>
+    );
   }
-});
+}
 
-var reactContainer = document.createElement('div');
+const reactContainer = document.createElement('div');
 document.body.appendChild(reactContainer);
-ReactDOM.render(r(App), reactContainer);
+ReactDOM.render(<App/>, reactContainer);

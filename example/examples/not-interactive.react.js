@@ -17,43 +17,41 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var assign = require('object-assign');
-var React = require('react');
-var r = require('r-dom');
+import React, {PropTypes, Component} from 'react';
 
-var MapGL = require('../../src/index.js');
+import MapGL from '../../src/index.js';
 
 // San Francisco
-var location = require('./../data/cities.json')[0];
-var _zipcodesSF = require('./../data/feature-example-sf.json');
+import ZIPCODES_SF from './../data/feature-example-sf.json';
+import CITIES from './../data/cities.json';
+const location = CITIES[0];
 
-_zipcodesSF.features.forEach(function _forEach(feature) {
+for (const feature of ZIPCODES_SF.features) {
   feature.properties.value = Math.random() * 1000;
-});
+}
 
-var NotInteractiveExample = React.createClass({
-  displayName: 'NotInteractiveExample',
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-  PropTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
-  },
+export default class NotInteractiveExample extends Component {
 
-  getInitialState: function getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       viewport: {
         latitude: location.latitude,
         longitude: location.longitude,
         zoom: 11
       }
     };
-  },
-
-  render: function render() {
-    return r(MapGL, assign({}, this.state.viewport, this.props));
   }
-});
 
-module.exports = NotInteractiveExample;
+  render() {
+    return <MapGL { ...this.state.viewport } { ...this.props }/>;
+  }
+}
+
+NotInteractiveExample.propTypes = PROP_TYPES;
