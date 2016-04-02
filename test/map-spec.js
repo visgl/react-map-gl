@@ -7,7 +7,7 @@ import MapGL from '../src';
 
 /* eslint-disable no-process-env */
 // This will get converted to a string by envify
-var mapboxApiAccessToken = process.env.MapboxAccessToken;
+const mapboxApiAccessToken = process.env.MapboxAccessToken;
 /* eslint-enable no-process-env */
 
 /* eslint-disable func-names, no-shadow */
@@ -23,7 +23,7 @@ test('MapGL', function(t) {
         zoom={ 14 }
         mapboxApiAccessToken={ mapboxApiAccessToken }/>
     );
-    var reactContainer = document.createElement('div');
+    const reactContainer = document.createElement('div');
     document.body.appendChild(reactContainer);
     ReactDOM.render(map, reactContainer);
     t.ok(true);

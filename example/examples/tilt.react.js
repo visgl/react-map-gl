@@ -63,7 +63,7 @@ const PROP_TYPES = {
   height: PropTypes.number.isRequired
 };
 
-export default class StyleDiffingExample extends Component {
+export default class TiltExample extends Component {
 
   constructor(props) {
     super(props);
@@ -72,6 +72,8 @@ export default class StyleDiffingExample extends Component {
         latitude: location.latitude,
         longitude: location.longitude,
         zoom: 11,
+        bearing: 180,
+        pitch: 60,
         startDragLngLat: null,
         isDragging: false
       },
@@ -99,13 +101,7 @@ export default class StyleDiffingExample extends Component {
       return this.props.onChangeViewport(opt);
     }
     this.setState({
-      viewport: {
-        latitude: opt.latitude,
-        longitude: opt.longitude,
-        zoom: opt.zoom,
-        startDragLngLat: opt.startDragLngLat,
-        isDragging: opt.isDragging
-      }
+      viewport: opt
     });
   }
 
@@ -116,7 +112,7 @@ export default class StyleDiffingExample extends Component {
 
   render() {
     const viewport = {
-      mapStyle: this.state.mapStyle,
+      // mapStyle: this.state.mapStyle,
       ...this.state.viewport,
       ...this.props
     };
@@ -125,6 +121,7 @@ export default class StyleDiffingExample extends Component {
         { ...viewport }
         onChangeViewport={ this._onChangeViewport }
         onClickFeatures={ this._onClickFeatures }
+        perspectiveEnabled={ true }
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
         preventStyleDiffing={ false }/>
@@ -132,5 +129,5 @@ export default class StyleDiffingExample extends Component {
   }
 }
 
-StyleDiffingExample.propTypes = PROP_TYPES;
+TiltExample.propTypes = PROP_TYPES;
 

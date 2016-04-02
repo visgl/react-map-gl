@@ -17,6 +17,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-module.exports = require('./map.react');
+import MapGL from './map.react';
+import fitBounds from './fit-bounds';
+import * as overlays from './overlays';
+
+module.exports = MapGL;
+module.exports.fitBounds = fitBounds;
+Object.assign(module.exports, overlays);
