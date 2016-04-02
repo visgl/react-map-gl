@@ -17,36 +17,34 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
+import Immutable from 'immutable';
 
-var assign = require('object-assign');
-var React = require('react');
-var r = require('r-dom');
-var Immutable = require('immutable');
-
-var MapGL = require('../../src/index.js');
-var ChoroplethOverlay = require('../../src/overlays/choropleth.react');
+import React, {PropTypes, Component} from 'react';
+import autobind from 'autobind-decorator';
+import MapGL from '../../src/index.js';
+import ChoroplethOverlay from '../../src/overlays/choropleth.react';
 
 // San Francisco
-var location = require('./../data/cities.json')[0];
-var _zipcodesSF = require('./../data/feature-example-sf.json');
+import ZIPCODES_SF from './../data/feature-example-sf.json';
+import CITIES from './../data/cities.json';
+const location = CITIES[0];
 
-_zipcodesSF.features.forEach(function _forEach(feature) {
+for (const feature of ZIPCODES_SF.features) {
   feature.properties.value = Math.random() * 1000;
-});
+}
 
-var ZIPCODES_SF = Immutable.fromJS(_zipcodesSF);
+const ZIPCODES = Immutable.fromJS(ZIPCODES_SF);
 
-var ChoroplethOverlayExample = React.createClass({
-  displayName: 'ChoroplethOverlayExample',
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-  PropTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
-  },
+export default class ChoroplethOverlayExample extends Component {
 
-  getInitialState: function getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       viewport: {
         latitude: location.latitude,
         longitude: location.longitude,
@@ -55,29 +53,34 @@ var ChoroplethOverlayExample = React.createClass({
         isDragging: false
       }
     };
-  },
+  }
 
-  _onChangeViewport: function _onChangeViewport(viewport) {
+  @autobind
+  _onChangeViewport(viewport) {
     if (this.props.onChangeViewport) {
       return this.props.onChangeViewport(viewport);
     }
-    this.setState({viewport: viewport});
-  },
-
-  render: function render() {
-    var mapProps = assign({}, this.state.viewport, this.props, {
-      onChangeViewport: this._onChangeViewport
-    });
-    return r(MapGL, mapProps, [
-      r(ChoroplethOverlay, assign({}, mapProps, {
-        globalOpacity: 0.8,
-        colorDomain: [0, 500, 1000],
-        colorRange: ['#31a354', '#addd8e', '#f7fcb9'],
-        renderWhileDragging: false,
-        features: ZIPCODES_SF.get('features')
-      }))
-    ]);
+    this.setState({viewport});
   }
-});
 
-module.exports = ChoroplethOverlayExample;
+  render() {
+    const mapProps = {
+      ...this.state.viewport,
+      ...this.props,
+      onChangeViewport: this._onChangeViewport
+    };
+    return (
+      <MapGL { ...mapProps}>
+        <ChoroplethOverlay
+          { ...mapProps }
+          globalOpacity={ 0.8 }
+          colorDomain={ [0, 500, 1000] }
+          colorRange={ ['#31a354', '#addd8e', '#f7fcb9'] }
+          renderWhileDragging={ false }
+          features={ ZIPCODES.get('features') }/>
+      </MapGL>
+    );
+  }
+}
+
+ChoroplethOverlayExample.propTypes = PROP_TYPES;

@@ -17,41 +17,40 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var assign = require('object-assign');
-var React = require('react');
-var r = require('r-dom');
-var Immutable = require('immutable');
-var d3 = require('d3');
+import Immutable from 'immutable';
+import d3 from 'd3';
 
-var MapGL = require('../../src/index.js');
-var ScatterplotOverlay = require('../../src/overlays/scatterplot.react');
+import React, {PropTypes, Component} from 'react';
+import autobind from 'autobind-decorator';
+
+import MapGL from '../../src/index.js';
+import ScatterplotOverlay from '../../src/overlays/scatterplot.react';
 
 // San Francisco
-var location = require('./../data/cities.json')[0];
+import CITIES from './../data/cities.json';
+const location = CITIES[0];
 
-var normal = d3.random.normal();
+const normal = d3.random.normal();
 function wiggle(scale) {
   return normal() * scale;
 }
 
 // Example data.
-var locations = Immutable.fromJS(d3.range(4000).map(function _map() {
-  return [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)];
-}));
+const locations = Immutable.fromJS(d3.range(4000).map(
+  () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
+));
 
-var ScatterplotOverlayExample = React.createClass({
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-  displayName: 'ScatterplotOverlayExample',
+export default class ScatterplotOverlayExample extends Component {
 
-  PropTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
-  },
-
-  getInitialState: function getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       viewport: {
         latitude: location.latitude,
         longitude: location.longitude,
@@ -60,9 +59,10 @@ var ScatterplotOverlayExample = React.createClass({
         isDragging: false
       }
     };
-  },
+  }
 
-  _onChangeViewport: function _onChangeViewport(opt) {
+  @autobind
+  _onChangeViewport(opt) {
     if (this.props.onChangeViewport) {
       return this.props.onChangeViewport(opt);
     }
@@ -75,21 +75,25 @@ var ScatterplotOverlayExample = React.createClass({
         isDragging: opt.isDragging
       }
     });
-  },
-
-  render: function render() {
-    var viewport = assign({}, this.state.viewport, this.props);
-    return r(MapGL, assign({}, viewport, {
-      onChangeViewport: this._onChangeViewport
-    }), [
-      r(ScatterplotOverlay, assign({}, viewport, {
-        locations: locations,
-        dotRadius: 2,
-        globalOpacity: 1,
-        compositeOperation: 'screen'
-      }))
-    ]);
   }
-});
 
-module.exports = ScatterplotOverlayExample;
+  render() {
+    const viewport = {...this.state.viewport, ...this.props};
+    return (
+      <MapGL
+        { ...viewport }
+        onChangeViewport={ this._onChangeViewport }>
+
+        <ScatterplotOverlay
+          { ...viewport }
+          locations={ locations }
+          dotRadius={ 2 }
+          globalOpacity={ 1 }
+          compositeOperation="screen"/>
+
+      </MapGL>
+    );
+  }
+}
+
+ScatterplotOverlayExample.propTypes = PROP_TYPES;

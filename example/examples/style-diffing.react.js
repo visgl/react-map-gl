@@ -17,30 +17,27 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var assign = require('object-assign');
-var React = require('react');
-var r = require('r-dom');
-var Immutable = require('immutable');
-var MapGL = require('../../src/index.js');
-var window = require('global/window');
+import Immutable from 'immutable';
+import window from 'global/window';
+
+import React, {PropTypes, Component} from 'react';
+import autobind from 'autobind-decorator';
+import MapGL from '../../src/index.js';
 
 // San Francisco
-var location = require('./../data/cities.json')[0];
+import SF_FEATURE from './../data/feature-example-sf.json';
+import CITIES from './../data/cities.json';
+const location = CITIES[0];
 
-function buildStyle(opts) {
-  opts = assign({
-    fill: 'red',
-    stroke: 'blue'
-  }, opts);
+function buildStyle({fill = 'red', stroke = 'blue'}) {
   return Immutable.fromJS({
     version: 8,
     name: 'Example raster tile source',
     sources: {
       'my-geojson-polygon-source': {
         type: 'geojson',
-        data: require('./../data/feature-example-sf.json')
+        data: SF_FEATURE
       }
     },
     layers: [
@@ -48,30 +45,29 @@ function buildStyle(opts) {
         id: 'geojson-polygon-fill',
         source: 'my-geojson-polygon-source',
         type: 'fill',
-        paint: {'fill-color': opts.fill, 'fill-opacity': 0.4},
+        paint: {'fill-color': fill, 'fill-opacity': 0.4},
         interactive: true
       }, {
         id: 'geojson-polygon-stroke',
         source: 'my-geojson-polygon-source',
         type: 'line',
-        paint: {'line-color': opts.stroke, 'line-width': 4},
+        paint: {'line-color': stroke, 'line-width': 4},
         interactive: false
       }
     ]
   });
 }
 
-var StyleDiffingExample = React.createClass({
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-  displayName: 'StyleDiffingExample',
+export default class StyleDiffingExample extends Component {
 
-  PropTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
-  },
-
-  getInitialState: function getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       viewport: {
         latitude: location.latitude,
         longitude: location.longitude,
@@ -81,11 +77,11 @@ var StyleDiffingExample = React.createClass({
       },
       mapStyle: buildStyle({stroke: '#FF00FF', fill: 'green'})
     };
-  },
+  }
 
-  componentDidMount: function componentDidMount() {
-    var i = 0;
-    var colors = ['red', 'green', 'blue'];
+  componentDidMount() {
+    const colors = ['red', 'green', 'blue'];
+    let i = 0;
     window.setInterval(function interval() {
       this.setState({
         mapStyle: buildStyle({
@@ -95,9 +91,10 @@ var StyleDiffingExample = React.createClass({
       });
       i = i + 1;
     }.bind(this), 2000);
-  },
+  }
 
-  _onChangeViewport: function _onChangeViewport(opt) {
+  @autobind
+  _onChangeViewport(opt) {
     if (this.props.onChangeViewport) {
       return this.props.onChangeViewport(opt);
     }
@@ -110,24 +107,30 @@ var StyleDiffingExample = React.createClass({
         isDragging: opt.isDragging
       }
     });
-  },
-
-  _onClickFeatures: function _onClickFeatures(features) {
-    window.console.log(features);
-  },
-
-  render: function render() {
-    var viewport = assign({
-      mapStyle: this.state.mapStyle
-    }, this.state.viewport, this.props);
-    return r(MapGL, assign({}, viewport, {
-      onChangeViewport: this._onChangeViewport,
-      onClickFeatures: this._onClickFeatures,
-      // setting to `true` should cause the map to flicker because all sources
-      // and layers need to be reloaded without diffing enabled.
-      preventStyleDiffing: false
-    }));
   }
-});
 
-module.exports = StyleDiffingExample;
+  @autobind
+  _onClickFeatures(features) {
+    window.console.log(features);
+  }
+
+  render() {
+    const viewport = {
+      mapStyle: this.state.mapStyle,
+      ...this.state.viewport,
+      ...this.props
+    };
+    return (
+      <MapGL
+        { ...viewport }
+        onChangeViewport={ this._onChangeViewport }
+        onClickFeatures={ this._onClickFeatures }
+        // setting to `true` should cause the map to flicker because all sources
+        // and layers need to be reloaded without diffing enabled.
+        preventStyleDiffing={ false }/>
+    );
+  }
+}
+
+StyleDiffingExample.propTypes = PROP_TYPES;
+

@@ -17,20 +17,19 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var assign = require('object-assign');
-var React = require('react');
-var r = require('r-dom');
-var Immutable = require('immutable');
-var alphaify = require('alphaify');
+import Immutable from 'immutable';
+import alphaify from 'alphaify';
 
-var MapGL = require('../../src/index.js');
-var DraggableOverlay = require('../../src/overlays/draggable-points.react');
-var SVGOverlay = require('../../src/overlays/svg.react');
+import React, {PropTypes, Component} from 'react';
+import autobind from 'autobind-decorator';
+
+import MapGL from '../../src/index.js';
+import DraggableOverlay from '../../src/overlays/draggable-points.react';
+import SVGOverlay from '../../src/overlays/svg.react';
 
 // A mock example path.
-var initialPoints = [
+const initialPoints = [
   {location: [-122.39508481737994, 37.79450507471435], id: 0},
   {location: [-122.39750244137034, 37.79227619464379], id: 1},
   {location: [-122.4013303460217, 37.789251178427776], id: 2},
@@ -45,19 +44,18 @@ var initialPoints = [
   {location: [-122.41916032295062, 37.79920142331301], id: 11}
 ];
 
-var ids = initialPoints[initialPoints.length - 1].id;
+let ids = initialPoints[initialPoints.length - 1].id;
 
-var GeodataCreator = React.createClass({
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-  displayName: 'GeodataCreatorExample',
+export default class GeodataCreator extends Component {
 
-  PropTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
-  },
-
-  getInitialState: function getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       viewport: {
         longitude: -122.40677,
         latitude: 37.78949,
@@ -67,80 +65,84 @@ var GeodataCreator = React.createClass({
       },
       points: Immutable.fromJS(initialPoints)
     };
-  },
+  }
 
-  _onChangeViewport: function _onChangeViewport(viewport) {
+  @autobind
+  _onChangeViewport(viewport) {
     if (this.props.onChangeViewport) {
       return this.props.onChangeViewport(viewport);
     }
-    this.setState({viewport: viewport});
-  },
+    this.setState({viewport});
+  }
 
-  _onAddPoint: function _onAddPoint(location) {
-    var points = this.state.points.push(new Immutable.Map({
+  @autobind
+  _onAddPoint(location) {
+    const points = this.state.points.push(new Immutable.Map({
       location: new Immutable.List(location),
       id: ++ids
     }));
-    this.setState({points: points});
-  },
-
-  _onUpdatePoint: function _onUpdatePoint(opt) {
-    var index = this.state.points.findIndex(function filter(p) {
-      return p.get('id') === opt.key;
-    });
-    var point = this.state.points.get(index);
-    point = point.set('location', new Immutable.List(opt.location));
-    var points = this.state.points.set(index, point);
-    this.setState({points: points});
-  },
-
-  _renderOverlays: function _renderOverlays(viewport) {
-    return [
-      r(SVGOverlay, assign({}, viewport, {
-        redraw: function _redraw(opt) {
-          if (!this.state.points.size) {
-            return null;
-          }
-          var d = 'M' + this.state.points.map(function _map(point) {
-            return opt.project(point.get('location').toArray());
-          }).join('L');
-          return r.path({
-            style: {stroke: '#1FBAD6', strokeWidth: 2, fill: 'none'},
-            d: d
-          });
-        }.bind(this)
-      })),
-      r(DraggableOverlay, assign({}, viewport, {
-        points: this.state.points,
-        onAddPoint: this._onAddPoint,
-        onUpdatePoint: this._onUpdatePoint,
-        renderPoint: function renderPoint(point, pixel) {
-          return r.g({}, [
-            r.circle({
-              r: 10,
-              style: {
-                fill: alphaify('#1FBAD6', 0.5),
-                pointerEvents: 'all'
-              }
-            }),
-            r.text({
-              style: {fill: 'white', textAnchor: 'middle'},
-              y: 5
-            }, point.get('id'))
-          ]);
-        }
-      }))
-    ];
-  },
-
-  render: function render() {
-    var viewport = assign({}, this.state.viewport, this.props);
-    return r.div([
-      r(MapGL, assign({}, viewport, {
-        onChangeViewport: this._onChangeViewport
-      }), [this._renderOverlays(viewport)])
-    ]);
+    this.setState({points});
   }
-});
 
-module.exports = GeodataCreator;
+  @autobind
+  _onUpdatePoint(opt) {
+    const index = this.state.points.findIndex(p => p.get('id') === opt.key);
+    let point = this.state.points.get(index);
+    point = point.set('location', new Immutable.List(opt.location));
+    const points = this.state.points.set(index, point);
+    this.setState({points});
+  }
+
+  @autobind _redrawSVGOverlay(opt) {
+    if (!this.state.points.size) {
+      return null;
+    }
+    const pointString = this.state.points.map(
+      point => opt.project(point.get('location').toArray())
+    ).join('L');
+
+    return (
+      <path
+        style={ {stroke: '#1FBAD6', strokeWidth: 2, fill: 'none'} }
+        d={ `M${pointString}` }/>
+    );
+  }
+
+  _renderOverlays(viewport) {
+    return [
+      <SVGOverlay key="svg-overlay" { ...viewport }
+        redraw={ this._redrawSVGOverlay }/>,
+
+      <DraggableOverlay key="draggable-overlay" { ...viewport }
+        points={ this.state.points }
+        onAddPoint={ this._onAddPoint }
+        onUpdatePoint={ this._onUpdatePoint }
+        renderPoint={
+          (point, pixel) => (
+            <g>
+              <circle
+                style={ {fill: alphaify('#1FBAD6', 0.5), pointerEvents: 'all'} }
+                r={ 10 }/>
+              <text
+                style={ {fill: 'white', textAnchor: 'middle'} }
+                y={ 5 }>
+               { point.get('id') }
+              </text>
+            </g>
+          )
+        }/>
+    ];
+  }
+
+  render() {
+    const viewport = {...this.state.viewport, ...this.props};
+    return (
+      <MapGL { ...viewport }
+        onChangeViewport={ this._onChangeViewport }>
+       { this._renderOverlays(viewport) }
+      </MapGL>
+    );
+  }
+}
+
+GeodataCreator.propTypes = PROP_TYPES;

@@ -17,120 +17,131 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var assign = require('object-assign');
-var React = require('react');
-var Immutable = require('immutable');
-var r = require('r-dom');
-var transform = require('svg-transform');
-var document = require('global/document');
-var nop = require('nop');
-var config = require('../config');
-var mouse = require('../utils').relativeMousePosition;
-var ViewportMercator = require('viewport-mercator-project');
+import React, {PropTypes, Component} from 'react';
+import autobind from 'autobind-decorator';
 
-var DraggablePointsOverlay = React.createClass({
+import Immutable from 'immutable';
 
-  displayName: 'DraggablePointsOverlay',
+import transform from 'svg-transform';
+import document from 'global/document';
+import noop from '../noop';
+import config from '../config';
+import {relativeMousePosition as mouse} from '../utils';
+import ViewportMercator from 'viewport-mercator-project';
 
-  propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    latitude: React.PropTypes.number.isRequired,
-    longitude: React.PropTypes.number.isRequired,
-    zoom: React.PropTypes.number.isRequired,
-    points: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    isDragging: React.PropTypes.bool.isRequired,
-    keyAccessor: React.PropTypes.func.isRequired,
-    lngLatAccessor: React.PropTypes.func.isRequired,
-    onAddPoint: React.PropTypes.func.isRequired,
-    onUpdatePoint: React.PropTypes.func.isRequired,
-    renderPoint: React.PropTypes.func.isRequired
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+  zoom: PropTypes.number.isRequired,
+  points: PropTypes.instanceOf(Immutable.List).isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  keyAccessor: PropTypes.func.isRequired,
+  lngLatAccessor: PropTypes.func.isRequired,
+  onAddPoint: PropTypes.func.isRequired,
+  onUpdatePoint: PropTypes.func.isRequired,
+  renderPoint: PropTypes.func.isRequired
+};
+
+const DEFAULT_PROPS = {
+  keyAccessor(point) {
+    return point.get('id');
   },
-
-  getDefaultProps: function getDefaultProps() {
-    return {
-      keyAccessor: function keyAccessor(point) {
-        return point.get('id');
-      },
-      lngLatAccessor: function lngLatAccessor(point) {
-        return point.get('location').toArray();
-      },
-      onAddPoint: nop,
-      onUpdatePoint: nop,
-      renderPoint: nop,
-      isDragging: false
-    };
+  lngLatAccessor(point) {
+    return point.get('location').toArray();
   },
+  onAddPoint: noop,
+  onUpdatePoint: noop,
+  renderPoint: noop,
+  isDragging: false
+};
 
-  getInitialState: function _getInitialState() {
-    return {
+export default class DraggablePointsOverlay extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
       draggedPointKey: null
     };
-  },
+  }
 
-  _onDragStart: function _onDragStart(point, event) {
+  @autobind
+  _onDragStart(point, event) {
     event.stopPropagation();
     document.addEventListener('mousemove', this._onDrag, false);
     document.addEventListener('mouseup', this._onDragEnd, false);
     this.setState({draggedPointKey: this.props.keyAccessor(point)});
-  },
+  }
 
-  _onDrag: function _onDrag(event) {
+  @autobind
+  _onDrag(event) {
     event.stopPropagation();
-    var pixel = mouse(this.refs.container, event);
-    var mercator = ViewportMercator(this.props);
-    var lngLat = mercator.unproject(pixel);
-    var key = this.state.draggedPointKey;
-    this.props.onUpdatePoint({key: key, location: lngLat});
-  },
+    const pixel = mouse(this.refs.container, event);
+    const mercator = ViewportMercator(this.props);
+    const lngLat = mercator.unproject(pixel);
+    const key = this.state.draggedPointKey;
+    this.props.onUpdatePoint({key, location: lngLat});
+  }
 
-  _onDragEnd: function _onDragEnd(event) {
+  @autobind
+  _onDragEnd(event) {
     event.stopPropagation();
     document.removeEventListener('mousemove', this._onDrag, false);
     document.removeEventListener('mouseup', this._onDragEnd, false);
     this.setState({draggedPoint: null});
-  },
+  }
 
-  _addPoint: function _addPoint(event) {
+  @autobind
+  _addPoint(event) {
     event.stopPropagation();
     event.preventDefault();
-    var pixel = mouse(this.refs.container, event);
-    var mercator = ViewportMercator(this.props);
+    const pixel = mouse(this.refs.container, event);
+    const mercator = ViewportMercator(this.props);
     this.props.onAddPoint(mercator.unproject(pixel));
-  },
-
-  render: function render() {
-    var points = this.props.points;
-    var mercator = ViewportMercator(this.props);
-    return r.svg({
-      ref: 'container',
-      width: this.props.width,
-      height: this.props.height,
-      style: assign({
-        pointerEvents: 'all',
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        cursor: this.props.isDragging ?
-          config.CURSOR.GRABBING : config.CURSOR.GRAB
-      }, this.props.style),
-      onContextMenu: this._addPoint
-    }, [
-      r.g({style: {cursor: 'pointer'}}, points.map(function _map(point, index) {
-        var pixel = mercator.project(this.props.lngLatAccessor(point));
-        return r.g({
-          key: index,
-          transform: transform([{translate: pixel}]),
-          onMouseDown: this._onDragStart.bind(this, point),
-          style: {
-            pointerEvents: 'all'
-          }
-        }, this.props.renderPoint.call(this, point, pixel));
-      }, this))
-    ]);
   }
-});
 
-module.exports = DraggablePointsOverlay;
+  render() {
+    const {points, width, height, isDragging, style} = this.props;
+    const mercator = ViewportMercator(this.props);
+    return (
+      <svg
+        ref="container"
+        width={ width }
+        height={ height }
+        style={ {
+          pointerEvents: 'all',
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          cursor: isDragging ? config.CURSOR.GRABBING : config.CURSOR.GRAB,
+          ...style
+        } }
+        onContextMenu={ this._addPoint }>
+
+        <g style={ {cursor: 'pointer'} }>
+        {
+          points.map((point, index) => {
+            const pixel = mercator.project(this.props.lngLatAccessor(point));
+            return (
+              <g
+                key={ index }
+                style={ {pointerEvents: 'all'} }
+                transform={ transform([{translate: pixel}]) }
+                onMouseDown={ this._onDragStart.bind(this, point) }>
+                {
+                  this.props.renderPoint.call(this, point, pixel)
+                }
+              </g>
+            );
+          })
+        }
+        </g>
+      </svg>
+    );
+  }
+}
+
+DraggablePointsOverlay.propTypes = PROP_TYPES;
+DraggablePointsOverlay.defaultProps = DEFAULT_PROPS;

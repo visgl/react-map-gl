@@ -17,15 +17,10 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-function relativeMousePosition(container, event) {
-  var rect = container.getBoundingClientRect();
-  var x = event.clientX - rect.left - container.clientLeft;
-  var y = event.clientY - rect.top - container.clientTop;
+export function relativeMousePosition(container, event) {
+  const rect = container.getBoundingClientRect();
+  const x = event.clientX - rect.left - container.clientLeft;
+  const y = event.clientY - rect.top - container.clientTop;
   return [x, y];
 }
-
-module.exports = {
-  relativeMousePosition: relativeMousePosition
-};

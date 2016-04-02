@@ -17,69 +17,66 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var React = require('react');
-var ViewportMercator = require('viewport-mercator-project');
-var window = require('global/window');
-var r = require('r-dom');
+import React, {PropTypes, Component} from 'react';
+import ViewportMercator from 'viewport-mercator-project';
+import window from 'global/window';
 
-var CanvasOverlay = React.createClass({
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+  zoom: PropTypes.number.isRequired,
+  redraw: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired
+};
 
-  displayName: 'CanvasOverlay',
+export default class CanvasOverlay extends Component {
 
-  propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    latitude: React.PropTypes.number.isRequired,
-    longitude: React.PropTypes.number.isRequired,
-    zoom: React.PropTypes.number.isRequired,
-    redraw: React.PropTypes.func.isRequired,
-    isDragging: React.PropTypes.bool.isRequired
-  },
-
-  componentDidMount: function componentDidMount() {
+  componentDidMount() {
     this._redraw();
-  },
+  }
 
-  componentDidUpdate: function componentDidUpdate() {
+  componentDidUpdate() {
     this._redraw();
-  },
+  }
 
-  _redraw: function _redraw() {
-    var pixelRatio = window.devicePixelRatio || 1;
-    var canvas = this.refs.overlay;
-    var ctx = canvas.getContext('2d');
+  _redraw() {
+    const pixelRatio = window.devicePixelRatio || 1;
+    const canvas = this.refs.overlay;
+    const ctx = canvas.getContext('2d');
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
-    var mercator = ViewportMercator(this.props);
+    const mercator = ViewportMercator(this.props);
     this.props.redraw({
       width: this.props.width,
       height: this.props.height,
-      ctx: ctx,
+      ctx,
       project: mercator.project,
       unproject: mercator.unproject,
       isDragging: this.props.isDragging
     });
     ctx.restore();
-  },
-
-  render: function render() {
-    var pixelRatio = window.devicePixelRatio || 1;
-    return r.canvas({
-      ref: 'overlay',
-      width: this.props.width * pixelRatio,
-      height: this.props.height * pixelRatio,
-      style: {
-        width: this.props.width + 'px',
-        height: this.props.height + 'px',
-        position: 'absolute',
-        pointerEvents: 'none',
-        left: 0,
-        top: 0
-      }
-    });
   }
-});
 
-module.exports = CanvasOverlay;
+  render() {
+    const pixelRatio = window.devicePixelRatio || 1;
+    return (
+      <canvas
+        ref="overlay"
+        width={ this.props.width * pixelRatio }
+        height={ this.props.height * pixelRatio }
+        style={ {
+          width: `${this.props.width}px`,
+          height: `${this.props.height}px`,
+          position: 'absolute',
+          pointerEvents: 'none',
+          left: 0,
+          top: 0
+        } }/>
+    );
+  }
+}
+
+CanvasOverlay.propTypes = PROP_TYPES;
