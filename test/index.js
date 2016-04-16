@@ -28,4 +28,22 @@ test('MapGL', function(t) {
     t.end();
   });
 });
+
+test('Changes contain bounds', function(t) {
+  var map = r(MapGL, {
+    width: 500,
+    height: 500,
+    longitude: -122,
+    latitude: 37,
+    zoom: 14,
+    mapboxApiAccessToken: mapboxApiAccessToken,
+    onChangeViewport: function onChange(changes) {
+      t.equal(typeof changes.bounds, 'object');
+      t.equal(typeof changes.bounds._sw.lat, 'number');
+      t.end();
+    }
+  });
+  var mapComponent = React.render(map, document.body);
+  mapComponent._onChangeViewport();
+});
 /* eslint-enable func-names */

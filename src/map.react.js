@@ -244,7 +244,8 @@ var MapGL = React.createClass({
       longitude: center.lng,
       zoom: map.getZoom(),
       isDragging: this.props.isDragging,
-      startDragLngLat: this.state.startDragLngLat
+      startDragLngLat: this.state.startDragLngLat,
+      bounds: map.getBounds()
     }, _changes);
     changes.longitude = mod(changes.longitude + 180, 360) - 180;
     this.props.onChangeViewport(changes);
