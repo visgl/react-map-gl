@@ -18,4 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-export {default as default} from './map.react';
+import {default as MapGL} from './map.react';
+
+// Export as ES5 module
+module.exports = MapGL;
