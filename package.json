@@ -52,7 +52,7 @@
     "build": "babel src -d dist --copy-files",
     "start": "budo ./example/main.js --live --open --port 3000 -- -t babelify -t envify",
     "lint": "eslint src",
-    "test": "npm run lint && prova -q -b -t babelify -l chrome test/*",
+    "test": "npm run lint && prova -q -b -t babelify,envify -l chrome test/*",
     "precommit": "npm run lint -s",
     "prepush": "npm run lint -s",
     "prepublish": "npm run build"

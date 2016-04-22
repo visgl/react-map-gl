@@ -148,7 +148,6 @@ export default class MapGL extends Component {
     const mapStyle = this.props.mapStyle instanceof Immutable.Map ?
       this.props.mapStyle.toJS() :
       this.props.mapStyle;
-
     const map = new mapboxgl.Map({
       container: this.refs.mapboxMap,
       center: [this.state.longitude, this.state.latitude],

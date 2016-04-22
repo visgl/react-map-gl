@@ -1,6 +1,7 @@
 import document from 'global/document';
 /* global process */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import test from 'tape-catch';
 import MapGL from '../src';
 
@@ -22,7 +23,9 @@ test('MapGL', function(t) {
         zoom={ 14 }
         mapboxApiAccessToken={ mapboxApiAccessToken }/>
     );
-    React.render(map, document.body);
+    const reactContainer = document.createElement('div');
+    document.body.appendChild(reactContainer);
+    ReactDOM.render(map, reactContainer);
     t.ok(true);
     t.end();
   });

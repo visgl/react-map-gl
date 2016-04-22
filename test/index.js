@@ -4,6 +4,7 @@ var document = require('global/document');
 var test = require('prova');
 var MapGL = require('../src/index');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var r = require('r-dom');
 var process = require('global/process');
 
@@ -24,7 +25,9 @@ test('MapGL', function(t) {
       zoom: 14,
       mapboxApiAccessToken: mapboxApiAccessToken
     });
-    React.render(map, document.body);
+    var reactContainer = document.createElement('div');
+    document.body.appendChild(reactContainer);
+    ReactDOM.render(map, reactContainer);
     t.ok(true);
     t.end();
   });
