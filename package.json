@@ -24,6 +24,7 @@
     "keymirror": "^0.1.1",
     "mapbox-gl": "0.16.0",
     "svg-transform": "0.0.3",
+    "tap-browser-color": "^0.1.2",
     "viewport-mercator-project": "^2.0.1"
   },
   "devDependencies": {
@@ -37,22 +38,23 @@
     "babel-preset-stage-2": "^6.5.0",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
-    "budo": "^8.0.4",
+    "budo": "^8.2.1",
     "envify": "^3.4.0",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^4.2.3",
     "immutable": "^3.7.6",
     "opn": "^4.0.0",
-    "prova": "git+https://github.com/nicolasroy/prova.git#c8bed19db3c1c94fae1dab9a7b29fbfd332c95a2",
+    "r-dom": "^2.2.0",
     "react": "0.14.x",
     "react-dom": "0.14.x",
+    "tape": "^4.5.1",
     "tape-catch": "^1.0.4"
   },
   "scripts": {
     "build": "babel src -d dist --copy-files",
     "start": "budo ./example/main.js --live --open --port 3000 -- -t babelify -t envify",
     "lint": "eslint src",
-    "test": "npm run lint && prova -q -b -t babelify,envify -l chrome test/*",
+    "test": "budo test/index.js --dir test --open --port 3001 -- -t babelify -t envify",
     "precommit": "npm run lint -s",
     "prepush": "npm run lint -s",
     "prepublish": "npm run build"

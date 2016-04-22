@@ -1,8 +1,8 @@
-require('babel-core/register');
+require('tap-browser-color')();
 
 var document = require('global/document');
-var test = require('prova');
-var MapGL = require('../src/index');
+var test = require('tape');
+var MapGL = require('../dist/index');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var r = require('r-dom');
