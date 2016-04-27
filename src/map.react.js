@@ -123,7 +123,17 @@ const PROP_TYPES = {
     * There are still known issues with style diffing. As a temporary stopgap,
     * add the option to prevent style diffing.
     */
-  preventStyleDiffing: PropTypes.bool
+  preventStyleDiffing: PropTypes.bool,
+
+  /**
+    * Specify the bearing of the viewport
+    */
+  bearing: React.PropTypes.number,
+
+  /**
+    * Specify the pitch of the viewport
+    */
+  pitch: React.PropTypes.number
 };
 
 const DEFAULT_PROPS = {
@@ -132,7 +142,9 @@ const DEFAULT_PROPS = {
   mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
   preserveDrawingBuffer: false,
   attributionControl: true,
-  ignoreEmptyFeatures: true
+  ignoreEmptyFeatures: true,
+  bearing: 0,
+  pitch: 0
 };
 
 export default class MapGL extends Component {
@@ -250,8 +262,8 @@ export default class MapGL extends Component {
       this._getMap().jumpTo({
         center: [state.longitude, state.latitude],
         zoom: state.zoom,
-        bearing: 0,
-        pitch: 0
+        bearing: this.props.bearing || 0,
+        pitch: this.props.pitch || 0
       });
     }
     if (state.width !== state.prevWidth || state.height !== state.prevHeight) {
