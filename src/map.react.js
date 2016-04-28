@@ -20,16 +20,18 @@
 import assert from 'assert';
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
+import pureRender from 'pure-render-decorator';
 import d3 from 'd3';
 import Immutable from 'immutable';
-import mapboxgl, {LngLatBounds, Point} from 'mapbox-gl';
+import mapboxgl, {Point} from 'mapbox-gl';
+
+import config from './config';
+import MapInteractions from './map-interactions.react';
+import diffStyles from './diff-styles';
 
 // NOTE: Transform is not a public API so we should be careful to always lock
 // down mapbox-gl to a specific major, minor, and patch version.
 import Transform from 'mapbox-gl/js/geo/transform';
-
-import config from './config';
-import MapInteractions from './map-interactions.react';
 
 const PROP_TYPES = {
   /**
@@ -126,6 +128,11 @@ const PROP_TYPES = {
   preventStyleDiffing: PropTypes.bool,
 
   /**
+    * Enables perspective control event handling (Command-rotate)
+    */
+  perspectiveEnabled: PropTypes.bool,
+
+  /**
     * Specify the bearing of the viewport
     */
   bearing: React.PropTypes.number,
@@ -133,7 +140,14 @@ const PROP_TYPES = {
   /**
     * Specify the pitch of the viewport
     */
-  pitch: React.PropTypes.number
+  pitch: React.PropTypes.number,
+
+  /**
+    * Specify the altitude of the viewport camera
+    * Unit: map heights, default 1.5
+    * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
+    */
+  altitude: React.PropTypes.number
 };
 
 const DEFAULT_PROPS = {
@@ -144,16 +158,22 @@ const DEFAULT_PROPS = {
   attributionControl: true,
   ignoreEmptyFeatures: true,
   bearing: 0,
-  pitch: 0
+  pitch: 0,
+  altitude: 1.5
 };
 
+@pureRender
 export default class MapGL extends Component {
 
   constructor(props) {
     super(props);
-    const defaultState = {};
-    const stateChanges = this._updateStateFromProps(defaultState, this.props);
-    this.state = {...defaultState, ...stateChanges};
+    this.state = {
+      isDragging: false,
+      startDragLngLat: null,
+      startBearing: null,
+      startPitch: null
+    };
+    mapboxgl.accessToken = props.mapboxApiAccessToken;
   }
 
   componentDidMount() {
@@ -162,48 +182,28 @@ export default class MapGL extends Component {
       this.props.mapStyle;
     const map = new mapboxgl.Map({
       container: this.refs.mapboxMap,
-      center: [this.state.longitude, this.state.latitude],
-      zoom: this.state.zoom,
+      center: [this.props.longitude, this.props.latitude],
+      zoom: this.props.zoom,
+      pitch: this.props.pitch,
+      bearing: this.props.bearing,
       style: mapStyle,
       interactive: false,
       preserveDrawingBuffer: this.props.preserveDrawingBuffer
-      // ,
+      // TODO?
       // attributionControl: this.props.attributionControl
     });
 
     d3.select(map.getCanvas()).style('outline', 'none');
 
     this._map = map;
-    this._updateMapViewport();
+    this._updateMapViewport({}, this.props);
   }
 
   // New props are comin' round the corner!
   componentWillReceiveProps(newProps) {
-    const stateChanges = this._updateStateFromProps(this.state, newProps);
-    this.setState(stateChanges);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    let allTheSame = Object.keys(nextProps).reduce((all, prop) => {
-      const same = nextProps[prop] === this.props[prop];
-      return all && same;
-    }, true);
-
-    if (!allTheSame) {
-      return true;
-    }
-
-    allTheSame = Object.keys(nextState).reduce((all, prop) => {
-      const same = nextState[prop] === this.state[prop];
-      return all && same;
-    }, true);
-
-    return !allTheSame;
-  }
-
-  componentDidUpdate() {
-    this._updateMapViewport();
-    this._updateMapStyle();
+    this._updateStateFromProps(this.props, newProps);
+    this._updateMapViewport(this.props, newProps);
+    this._updateMapStyle(this.props, newProps);
   }
 
   componentWillUnmount() {
@@ -213,7 +213,8 @@ export default class MapGL extends Component {
   }
 
   _cursor() {
-    const isInteractive = this.props.onChangeViewport ||
+    const isInteractive =
+      this.props.onChangeViewport ||
       this.props.onClickFeature ||
       this.props.onHoverFeatures;
     if (isInteractive) {
@@ -223,133 +224,56 @@ export default class MapGL extends Component {
     return 'inherit';
   }
 
-  // Use props to create an object of state changes.
-  _updateStateFromProps(state, props) {
-
-    mapboxgl.accessToken = props.mapboxApiAccessToken;
-
-    const stateChanges = {
-      latitude: props.latitude,
-      longitude: props.longitude,
-      zoom: props.zoom,
-      width: props.width,
-      height: props.height,
-      mapStyle: props.mapStyle,
-      startDragLngLat: props.startDragLngLat && props.startDragLngLat.slice(),
-
-      prevLatitude: state.latitude,
-      prevLongitude: state.longitude,
-      prevZoom: state.zoom,
-      prevWidth: state.width,
-      prevHeight: state.height,
-      prevMapStyle: state.mapStyle
-    };
-
-    return stateChanges;
-  }
-
   _getMap() {
     return this._map;
   }
 
-  _updateMapViewport() {
-    const state = this.state;
-    if (state.latitude !== state.prevLatitude ||
-      state.longitude !== state.prevLongitude ||
-      state.zoom !== state.prevZoom
-    ) {
-      this._getMap().jumpTo({
-        center: [state.longitude, state.latitude],
-        zoom: state.zoom,
-        bearing: this.props.bearing || 0,
-        pitch: this.props.pitch || 0
+  _updateStateFromProps(oldProps, newProps) {
+    mapboxgl.accessToken = newProps.mapboxApiAccessToken;
+    const {startDragLngLat} = newProps;
+    this.setState({
+      startDragLngLat: startDragLngLat && startDragLngLat.slice()
+    });
+  }
+
+  _updateMapViewport(oldProps, newProps) {
+
+    const viewportChanged =
+      newProps.latitude !== oldProps.latitude ||
+      newProps.longitude !== oldProps.longitude ||
+      newProps.zoom !== oldProps.zoom ||
+      newProps.pitch !== oldProps.pitch ||
+      newProps.zoom !== oldProps.bearing ||
+      newProps.altitude !== oldProps.altitude;
+
+    const sizeChanged =
+      newProps.width !== oldProps.width ||
+      newProps.height !== oldProps.height;
+
+    const map = this._getMap();
+
+    if (viewportChanged) {
+      // TODO - jumpTo doesn't handle altitude, might require modifying
+      // map.transform directly
+      map.jumpTo({
+        center: [newProps.longitude, newProps.latitude],
+        zoom: newProps.zoom,
+        bearing: newProps.bearing,
+        pitch: newProps.pitch
       });
     }
-    if (state.width !== state.prevWidth || state.height !== state.prevHeight) {
-      this._resizeMap();
+
+    if (sizeChanged) {
+      map.resize();
     }
+
+    this._copyMapProjectionMatrix();
   }
 
-  _resizeMap() {
+  _copyMapProjectionMatrix() {
     const map = this._getMap();
-    map.resize();
-  }
-
-  /* eslint-disable max-statements */
-  _diffSources(prevStyle, nextStyle) {
-    const prevSources = prevStyle.get('sources');
-    const nextSources = nextStyle.get('sources');
-    const enter = [];
-    const update = [];
-    const exit = [];
-    const prevIds = prevSources.keySeq().toArray();
-    const nextIds = nextSources.keySeq().toArray();
-    for (const id of prevIds) {
-      const nextSource = nextSources.get(id);
-      if (nextSource) {
-        if (!nextSource.equals(prevSources.get(id))) {
-          update.push({id, source: nextSources.get(id)});
-        }
-      } else {
-        exit.push({id, source: prevSources.get(id)});
-      }
-    }
-    for (const id of nextIds) {
-      const prevSource = prevSources.get(id);
-      if (!prevSource) {
-        enter.push({id, source: nextSources.get(id)});
-      }
-    }
-    return {enter, update, exit};
-  }
-  /* eslint-enable max-statements */
-
-  _diffLayers(prevStyle, nextStyle) {
-    const prevLayers = prevStyle.get('layers');
-    const nextLayers = nextStyle.get('layers');
-    const updates = [];
-    const exiting = [];
-    const prevMap = {};
-    const nextMap = {};
-    nextLayers.forEach((layer, index) => {
-      const id = layer.get('id');
-      const layerImBehind = nextLayers.get(index + 1);
-      nextMap[id] = {
-        layer,
-        id,
-        // The `id` of the layer before this one.
-        before: layerImBehind ? layerImBehind.get('id') : null,
-        enter: true
-      };
-    });
-    prevLayers.forEach((layer, index) => {
-      const id = layer.get('id');
-      const layerImBehind = prevLayers.get(index + 1);
-      prevMap[id] = {
-        layer,
-        id,
-        before: layerImBehind ? layerImBehind.get('id') : null
-      };
-      if (nextMap[id]) {
-        // Not a new layer.
-        nextMap[id].enter = false;
-      } else {
-        // This layer is being removed.
-        exiting.push(prevMap[id]);
-      }
-    });
-    for (const layer of nextLayers.reverse()) {
-      const id = layer.get('id');
-      if (
-        !prevMap[id] ||
-        !prevMap[id].layer.equals(nextMap[id].layer) ||
-        prevMap[id].before !== nextMap[id].before
-      ) {
-        // This layer is being changed.
-        updates.push(nextMap[id]);
-      }
-    }
-    return {updates, exiting};
+    // TODO - copy
+    this._projectionMatrix = map.transform.projMatrix;
   }
 
   // Individually update the maps source and layers that have changed if all
@@ -360,9 +284,7 @@ export default class MapGL extends Component {
     const prevKeysMap = prevStyle && styleKeysMap(prevStyle) || {};
     const nextKeysMap = styleKeysMap(nextStyle);
     function styleKeysMap(style) {
-      return style.map(() => {
-        return true;
-      }).delete('layers').delete('sources').toJS();
+      return style.map(() => true).delete('layers').delete('sources').toJS();
     }
     function propsOtherThanLayersOrSourcesDiffer() {
       const prevKeysList = Object.keys(prevKeysMap);
@@ -385,8 +307,7 @@ export default class MapGL extends Component {
       return;
     }
 
-    const sourcesDiff = this._diffSources(prevStyle, nextStyle);
-    const layersDiff = this._diffLayers(prevStyle, nextStyle);
+    const {sourcesDiff, layersDiff} = diffStyles(prevStyle, nextStyle);
 
     // TODO: It's rather difficult to determine style diffing in the presence
     // of refs. For now, if any style update has a ref, fallback to no diffing.
@@ -423,14 +344,15 @@ export default class MapGL extends Component {
     });
   }
 
-  _updateMapStyle() {
-    const mapStyle = this.state.mapStyle;
-    if (mapStyle !== this.state.prevMapStyle) {
+  _updateMapStyle(oldProps, newProps) {
+    const mapStyle = newProps.mapStyle;
+    const oldMapStyle = oldProps.mapStyle;
+    if (mapStyle !== oldMapStyle) {
       if (mapStyle instanceof Immutable.Map) {
         if (this.props.preventStyleDiffing) {
           this._getMap().setStyle(mapStyle.toJS());
         } else {
-          this._setDiffStyle(this.state.prevMapStyle, mapStyle);
+          this._setDiffStyle(oldMapStyle, mapStyle);
         }
       } else {
         this._getMap().setStyle(mapStyle);
@@ -438,46 +360,98 @@ export default class MapGL extends Component {
     }
   }
 
-  @autobind _onChangeViewport(changes) {
-    const map = this._getMap();
-    const center = map.getCenter();
-    changes = {
-      latitude: center.lat,
-      longitude: center.lng,
-      zoom: map.getZoom(),
-      isDragging: this.props.isDragging,
-      startDragLngLat: this.state.startDragLngLat,
-      ...changes
-    };
-    changes.longitude = mod(changes.longitude + 180, 360) - 180;
-    this.props.onChangeViewport(changes);
-  }
+  // Helper to call props.onChangeViewport
+  _callOnChangeViewport(transform, opts) {
+    this.props.onChangeViewport({
+      latitude: transform.center.lat,
+      longitude: mod(transform.center.lng + 180, 360) - 180,
+      zoom: transform.zoom,
+      pitch: transform.pitch,
+      bearing: mod(transform.bearing + 180, 360) - 180,
 
-  @autobind _onMouseDown(opt) {
-    const map = this._getMap();
-    const lngLat = unprojectFromTransform(map.transform, opt.pos);
-    this._onChangeViewport({
-      isDragging: true,
-      startDragLngLat: [lngLat.lng, lngLat.lat]
+      isDragging: this.props.isDragging,
+      startDragLngLat: this.props.startDragLngLat,
+      startBearing: this.props.startBearing,
+      startPitch: this.props.startPitch,
+
+      ...opts
     });
   }
 
-  @autobind _onMouseDrag(opt) {
+  @autobind _onMouseDown({pos}) {
+    const map = this._getMap();
+    const lngLat = unprojectFromTransform(map.transform, pos);
+    this._callOnChangeViewport(map.transform, {
+      isDragging: true,
+      startDragLngLat: [lngLat.lng, lngLat.lat],
+      startBearing: map.transform.bearing,
+      startPitch: map.transform.pitch
+    });
+  }
+
+  @autobind _onMouseDrag({pos}) {
     if (!this.props.onChangeViewport) {
       return;
     }
-    const p2 = opt.pos;
-    const map = this._getMap();
+
     // take the start lnglat and put it where the mouse is down.
-    const transform = cloneTransform(map.transform);
-    assert(this.state.startDragLngLat, '`startDragLngLat` prop is required ' +
+    assert(this.props.startDragLngLat, '`startDragLngLat` prop is required ' +
       'for mouse drag behavior to calculate where to position the map.');
-    transform.setLocationAtPoint(this.state.startDragLngLat, p2);
-    this._onChangeViewport({
-      latitude: transform.center.lat,
-      longitude: transform.center.lng,
-      zoom: transform.zoom,
+
+    const map = this._getMap();
+    const transform = cloneTransform(map.transform);
+    transform.setLocationAtPoint(this.props.startDragLngLat, pos);
+    this._callOnChangeViewport(transform, {
       isDragging: true
+    });
+  }
+
+  @autobind _onMouseRotate({pos, startPos}) {
+    if (!this.props.onChangeViewport || !this.props.perspectiveEnabled) {
+      return;
+    }
+
+    const {startBearing, startPitch} = this.props;
+    assert(typeof startBearing === 'number',
+      '`startBearing` prop is required for mouse rotate behavior');
+    assert(typeof startPitch === 'number',
+      '`startPitch` prop is required for mouse rotate behavior');
+
+    const map = this._getMap();
+
+    const xDelta = pos.x - startPos.x;
+    const bearing = startBearing + 180 * xDelta / this.props.width;
+
+    const MIN_PITCH_THRESHOLD = 20;
+    const MAX_PITCH = 75;
+    const ACCEL = 1.2;
+
+    let pitch = startPitch;
+    const yDelta = pos.y - startPos.y;
+    if (yDelta > 0) {
+      // Dragging downwards, gradually decrease pitch
+      if (Math.abs(this.props.height - startPos.y) > MIN_PITCH_THRESHOLD) {
+        const scale = yDelta / (this.props.height - startPos.y);
+        pitch = (1 - scale) * ACCEL * startPitch;
+      }
+    } else if (yDelta < 0) {
+      // Dragging upwards, gradually increase pitch
+      if (startPos.y > MIN_PITCH_THRESHOLD) {
+        // Move from 0 to 1 as we drag upwards
+        const yScale = 1 - pos.y / startPos.y;
+        // Gradually add until we hit max pitch
+        pitch = startPitch + yScale * (MAX_PITCH - startPitch);
+      }
+    }
+
+    console.debug(startPitch, pitch);
+
+    pitch = Math.max(Math.min(pitch, MAX_PITCH), 0);
+
+    this._callOnChangeViewport(map.transform, {
+      isDragging: true,
+      bearing,
+      pitch
     });
   }
 
@@ -496,13 +470,11 @@ export default class MapGL extends Component {
 
   @autobind _onMouseUp(opt) {
     const map = this._getMap();
-    const transform = cloneTransform(map.transform);
-
-    this._onChangeViewport({
-      latitude: transform.center.lat,
-      longitude: transform.center.lng,
-      zoom: transform.zoom,
-      isDragging: false
+    this._callOnChangeViewport(map.transform, {
+      isDragging: false,
+      startDragLngLat: null,
+      startBearing: null,
+      startPitch: null
     });
 
     if (!this.props.onClickFeatures) {
@@ -527,34 +499,29 @@ export default class MapGL extends Component {
     const around = unprojectFromTransform(transform, pos);
     transform.zoom = transform.scaleZoom(map.transform.scale * scale);
     transform.setLocationAtPoint(around, pos);
-    this._onChangeViewport({
-      latitude: transform.center.lat,
-      longitude: transform.center.lng,
-      zoom: transform.zoom,
+    this._callOnChangeViewport(transform, {
       isDragging: true
     });
   }
 
   @autobind _onZoomEnd() {
-    this._onChangeViewport({isDragging: false});
+    const map = this._getMap();
+    this._callOnChangeViewport(map.transform, {
+      isDragging: false
+    });
   }
 
   render() {
     const {props} = this;
-    const {className} = this.props;
+    const {
+      className
+    } = this.props;
     const style = {
       ...props.style,
       width: props.width,
       height: props.height,
       cursor: this._cursor()
     };
-
-    const transform = new Transform();
-    transform.width = props.width;
-    transform.height = props.height;
-    transform.zoom = this.props.zoom;
-    transform.center.lat = this.props.latitude;
-    transform.center.lng = this.props.longitude;
 
     let content = [
       <div key="map" ref="mapboxMap" style={ style } className={ className }/>,
@@ -569,6 +536,7 @@ export default class MapGL extends Component {
         <MapInteractions
           onMouseDown ={ this._onMouseDown }
           onMouseDrag ={ this._onMouseDrag }
+          onMouseRotate ={ this._onMouseRotate }
           onMouseUp ={ this._onMouseUp }
           onMouseMove ={ this._onMouseMove }
           onZoom ={ this._onZoom }
@@ -598,29 +566,6 @@ export default class MapGL extends Component {
   }
 }
 
-export function fitBounds(width, height, _bounds, options) {
-  const bounds = new LngLatBounds([_bounds[0].reverse(), _bounds[1].reverse()]);
-  options = options || {};
-  const padding = typeof options.padding === 'undefined' ? 0 : options.padding;
-  const offset = Point.convert([0, 0]);
-  const tr = new Transform();
-  tr.width = width;
-  tr.height = height;
-  const nw = tr.project(bounds.getNorthWest());
-  const se = tr.project(bounds.getSouthEast());
-  const size = se.sub(nw);
-  const scaleX = (tr.width - padding * 2 - Math.abs(offset.x) * 2) / size.x;
-  const scaleY = (tr.height - padding * 2 - Math.abs(offset.y) * 2) / size.y;
-
-  const center = tr.unproject(nw.add(se).div(2));
-  const zoom = tr.scaleZoom(tr.scale * Math.min(scaleX, scaleY));
-  return {
-    latitude: center.lat,
-    longitude: center.lng,
-    zoom
-  };
-}
-
 function mod(value, divisor) {
   const modulus = value % divisor;
   return modulus < 0 ? divisor + modulus : modulus;
@@ -640,6 +585,8 @@ function cloneTransform(original) {
   transform.angle = original.angle;
   transform.altitude = original.altitude;
   transform.pitch = original.pitch;
+  transform.bearing = original.bearing;
+  transform.altitude = original.altitude;
   return transform;
 }
 

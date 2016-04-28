@@ -30,6 +30,7 @@ import GeodataCreator from './examples/geodata-creator.react';
 import ScatterplotExample from './examples/scatterplot.react';
 import RouteExample from './examples/route.react';
 import StyleDiffingExample from './examples/style-diffing.react';
+import TiltExample from './examples/tilt.react';
 
 function getAccessToken() {
   const match = window.location.search.match(/access_token=([^&\/]*)/);
@@ -61,6 +62,7 @@ export default class App extends Component {
       <div>
         <RouteExample { ...common }/>
         <ScatterplotExample { ...common }/>
+        <TiltExample { ...common }/>
         <ChoroplethExample { ...common }/>
         <CustomExample { ...common }/>
         <GeodataCreator { ...common }/>
