@@ -236,46 +236,6 @@ export default class MapGL extends Component {
     });
   }
 
-  _updateMapViewport(oldProps, newProps) {
-
-    const viewportChanged =
-      newProps.latitude !== oldProps.latitude ||
-      newProps.longitude !== oldProps.longitude ||
-      newProps.zoom !== oldProps.zoom ||
-      newProps.pitch !== oldProps.pitch ||
-      newProps.zoom !== oldProps.bearing ||
-      newProps.altitude !== oldProps.altitude;
-
-    const sizeChanged =
-      newProps.width !== oldProps.width ||
-      newProps.height !== oldProps.height;
-
-    const map = this._getMap();
-
-    if (viewportChanged) {
-      // TODO - jumpTo doesn't handle altitude, might require modifying
-      // map.transform directly
-      map.jumpTo({
-        center: [newProps.longitude, newProps.latitude],
-        zoom: newProps.zoom,
-        bearing: newProps.bearing,
-        pitch: newProps.pitch
-      });
-    }
-
-    if (sizeChanged) {
-      map.resize();
-    }
-
-    this._copyMapProjectionMatrix();
-  }
-
-  _copyMapProjectionMatrix() {
-    const map = this._getMap();
-    // TODO - copy
-    this._projectionMatrix = map.transform.projMatrix;
-  }
-
   // Individually update the maps source and layers that have changed if all
   // other style props haven't changed. This prevents flicking of the map when
   // styles only change sources or layers.
@@ -360,7 +320,75 @@ export default class MapGL extends Component {
     }
   }
 
-  // Helper to call props.onChangeViewport
+  _updateMapViewport(oldProps, newProps) {
+
+    const viewportChanged =
+      newProps.latitude !== oldProps.latitude ||
+      newProps.longitude !== oldProps.longitude ||
+      newProps.zoom !== oldProps.zoom ||
+      newProps.pitch !== oldProps.pitch ||
+      newProps.zoom !== oldProps.bearing ||
+      newProps.altitude !== oldProps.altitude;
+
+    const sizeChanged =
+      newProps.width !== oldProps.width ||
+      newProps.height !== oldProps.height;
+
+    const map = this._getMap();
+
+    if (viewportChanged) {
+      map.jumpTo({
+        center: [newProps.longitude, newProps.latitude],
+        zoom: newProps.zoom,
+        bearing: newProps.bearing,
+        pitch: newProps.pitch
+      });
+
+      // TODO - jumpTo doesn't handle altitude
+      if (newProps.altitude !== oldProps.altitude) {
+        map.transform.altitude = newProps.altitude;
+      }
+    }
+
+    if (sizeChanged) {
+      map.resize();
+    }
+  }
+
+  _calculateNewPitchAndBearing({pos, startPos, startBearing, startPitch}) {
+    const xDelta = pos.x - startPos.x;
+    const bearing = startBearing + 180 * xDelta / this.props.width;
+
+    const MIN_PITCH_THRESHOLD = 20;
+    const MAX_PITCH = 75;
+    const ACCEL = 1.2;
+
+    let pitch = startPitch;
+    const yDelta = pos.y - startPos.y;
+    if (yDelta > 0) {
+      // Dragging downwards, gradually decrease pitch
+      if (Math.abs(this.props.height - startPos.y) > MIN_PITCH_THRESHOLD) {
+        const scale = yDelta / (this.props.height - startPos.y);
+        pitch = (1 - scale) * ACCEL * startPitch;
+      }
+    } else if (yDelta < 0) {
+      // Dragging upwards, gradually increase pitch
+      if (startPos.y > MIN_PITCH_THRESHOLD) {
+        // Move from 0 to 1 as we drag upwards
+        const yScale = 1 - pos.y / startPos.y;
+        // Gradually add until we hit max pitch
+        pitch = startPitch + yScale * (MAX_PITCH - startPitch);
+      }
+    }
+
+    // console.debug(startPitch, pitch);
+    return {
+      pitch: Math.max(Math.min(pitch, MAX_PITCH), 0),
+      bearing
+    };
+  }
+
+   // Helper to call props.onChangeViewport
   _callOnChangeViewport(transform, opts) {
     this.props.onChangeViewport({
       latitude: transform.center.lat,
@@ -373,6 +401,8 @@ export default class MapGL extends Component {
       startDragLngLat: this.props.startDragLngLat,
       startBearing: this.props.startBearing,
       startPitch: this.props.startPitch,
+
+      projectionMatrix: transform.projMatrix,
 
       ...opts
     });
@@ -419,34 +449,12 @@ export default class MapGL extends Component {
 
     const map = this._getMap();
 
-    const xDelta = pos.x - startPos.x;
-    const bearing = startBearing + 180 * xDelta / this.props.width;
-
-    const MIN_PITCH_THRESHOLD = 20;
-    const MAX_PITCH = 75;
-    const ACCEL = 1.2;
-
-    let pitch = startPitch;
-    const yDelta = pos.y - startPos.y;
-    if (yDelta > 0) {
-      // Dragging downwards, gradually decrease pitch
-      if (Math.abs(this.props.height - startPos.y) > MIN_PITCH_THRESHOLD) {
-        const scale = yDelta / (this.props.height - startPos.y);
-        pitch = (1 - scale) * ACCEL * startPitch;
-      }
-    } else if (yDelta < 0) {
-      // Dragging upwards, gradually increase pitch
-      if (startPos.y > MIN_PITCH_THRESHOLD) {
-        // Move from 0 to 1 as we drag upwards
-        const yScale = 1 - pos.y / startPos.y;
-        // Gradually add until we hit max pitch
-        pitch = startPitch + yScale * (MAX_PITCH - startPitch);
-      }
-    }
-
-    console.debug(startPitch, pitch);
-
-    pitch = Math.max(Math.min(pitch, MAX_PITCH), 0);
+    const {pitch, bearing} = this._calculateNewPitchAndBearing({
+      pos,
+      startPos,
+      startBearing,
+      startPitch
+    });
 
     this._callOnChangeViewport(map.transform, {
       isDragging: true,
@@ -512,19 +520,17 @@ export default class MapGL extends Component {
   }
 
   render() {
-    const {props} = this;
-    const {
-      className
-    } = this.props;
-    const style = {
-      ...props.style,
-      width: props.width,
-      height: props.height,
+    const {className, width, height, style} = this.props;
+    const mapStyle = {
+      ...style,
+      width,
+      height,
       cursor: this._cursor()
     };
 
     let content = [
-      <div key="map" ref="mapboxMap" style={ style } className={ className }/>,
+      <div key="map" ref="mapboxMap"
+        style={ mapStyle } className={ className }/>,
       <div key="overlays" className="overlays"
         style={ {position: 'absolute', left: 0, top: 0} }>
         { this.props.children }
