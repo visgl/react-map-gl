@@ -48,7 +48,9 @@ const PROP_TYPES = {
   height: PropTypes.number.isRequired,
   onMouseDown: PropTypes.func,
   onMouseDrag: PropTypes.func,
+  onMouseRotate: PropTypes.func,
   onMouseUp: PropTypes.func,
+  onMouseMove: PropTypes.func,
   onZoom: PropTypes.func,
   onZoomEnd: PropTypes.func
 };
@@ -56,7 +58,9 @@ const PROP_TYPES = {
 const DEFAULT_PROPS = {
   onMouseDown: noop,
   onMouseDrag: noop,
+  onMouseRotate: noop,
   onMouseUp: noop,
+  onMouseMove: noop,
   onZoom: noop,
   onZoomEnd: noop
 };
@@ -80,8 +84,13 @@ export default class MapInteractions extends Component {
   @autobind
   _onMouseDown(event) {
     const pos = this._getMousePos(event);
-    this.setState({startPos: pos, pos});
+    this.setState({
+      startPos: pos,
+      pos,
+      metaKey: Boolean(event.metaKey)
+    });
     this.props.onMouseDown({pos});
+    event.preventDefault();
     document.addEventListener('mousemove', this._onMouseDrag, false);
     document.addEventListener('mouseup', this._onMouseUp, false);
   }
@@ -90,7 +99,12 @@ export default class MapInteractions extends Component {
   _onMouseDrag(event) {
     const pos = this._getMousePos(event);
     this.setState({pos});
-    this.props.onMouseDrag({pos});
+    if (this.state.metaKey) {
+      const {startPos} = this.state;
+      this.props.onMouseRotate({pos, startPos});
+    } else {
+      this.props.onMouseDrag({pos});
+    }
   }
 
   @autobind
@@ -210,6 +224,7 @@ export default class MapInteractions extends Component {
         ref="container"
         onMouseMove={ this._onMouseMove }
         onMouseDown={ this._onMouseDown }
+        onContextMenu={ this._onMouseDown }
         onWheel={ this._onWheel }
         style={ {
           width: this.props.width,
