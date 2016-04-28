@@ -20,8 +20,10 @@
 
 import {default as MapGL} from './map.react';
 import fitBounds from './fit-bounds';
+import * as overlays from './overlays';
 
 MapGL.fitBounds = fitBounds;
+Object.assign(MapGL, overlays);
 
 // Export as ES5 module
 module.exports = MapGL;

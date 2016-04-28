@@ -90,7 +90,6 @@ export default class MapInteractions extends Component {
       metaKey: Boolean(event.metaKey)
     });
     this.props.onMouseDown({pos});
-    event.preventDefault();
     document.addEventListener('mousemove', this._onMouseDrag, false);
     document.addEventListener('mouseup', this._onMouseUp, false);
   }
