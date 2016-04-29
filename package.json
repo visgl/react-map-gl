@@ -61,7 +61,7 @@
     "prepublish": "npm run build"
   },
   "files": [
-    "src"
+    "src", "dist"
   ],
   "peerDependencies": {
     "immutable": "^3.7.6",
