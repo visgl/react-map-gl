@@ -23,7 +23,7 @@ import window from 'global/window';
 
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
-import MapGL from '../../src/index.js';
+import MapGL from '../../src/';
 
 // San Francisco
 import SF_FEATURE from './../data/feature-example-sf.json';

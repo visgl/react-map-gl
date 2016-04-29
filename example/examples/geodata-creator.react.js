@@ -24,7 +24,7 @@ import alphaify from 'alphaify';
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 
-import MapGL from '../../src/index.js';
+import MapGL from '../../src/';
 import DraggableOverlay from '../../src/overlays/draggable-points.react';
 import SVGOverlay from '../../src/overlays/svg.react';
 

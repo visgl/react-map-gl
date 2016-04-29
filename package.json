@@ -52,7 +52,7 @@
     "tape-catch": "^1.0.4"
   },
   "scripts": {
-    "build": "babel src -d dist --copy-files",
+    "build": "babel src -d dist --copy-files --source-maps inline",
     "start": "budo ./example/main.js --live --open --port 3000 -- -t babelify -t envify",
     "lint": "eslint src",
     "test": "budo test/index.js --dir test --open --port 3001 -- -t babelify -t envify",

@@ -18,12 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {default as MapGL} from './map.react';
-import fitBounds from './fit-bounds';
-import * as overlays from './overlays';
-
-MapGL.fitBounds = fitBounds;
-Object.assign(MapGL, overlays);
-
-// Export as ES5 module
-module.exports = MapGL;
+export {default as default} from './map.react';
+export {default as fitBounds} from './fit-bounds';
+export * from './overlays';

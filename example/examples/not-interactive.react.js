@@ -20,7 +20,7 @@
 
 import React, {PropTypes, Component} from 'react';
 
-import MapGL from '../../src/index.js';
+import MapGL from '../../src/';
 
 // San Francisco
 import ZIPCODES_SF from './../data/feature-example-sf.json';

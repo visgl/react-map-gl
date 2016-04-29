@@ -26,7 +26,7 @@ import Immutable from 'immutable';
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 
-import MapGL from '../../src/index.js';
+import MapGL from '../../src/';
 import CanvasOverlay from '../../src/overlays/canvas.react';
 import SVGOverlay from '../../src/overlays/svg.react';
 

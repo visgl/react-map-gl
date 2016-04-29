@@ -18,4 +18,5 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-module.exports = require('./dist/index');
+// Export as ES5 module
+module.exports = require('./dist');

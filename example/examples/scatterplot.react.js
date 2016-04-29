@@ -24,7 +24,7 @@ import d3 from 'd3';
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 
-import MapGL from '../../src/index.js';
+import MapGL from '../../src/';
 import ScatterplotOverlay from '../../src/overlays/scatterplot.react';
 
 // San Francisco

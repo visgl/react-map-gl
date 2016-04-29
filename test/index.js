@@ -2,7 +2,7 @@ require('tap-browser-color')();
 
 var document = require('global/document');
 var test = require('tape');
-var MapGL = require('../dist/index');
+var MapGL = require('../');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var r = require('r-dom');

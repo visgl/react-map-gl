@@ -33,6 +33,10 @@ import diffStyles from './diff-styles';
 // down mapbox-gl to a specific major, minor, and patch version.
 import Transform from 'mapbox-gl/js/geo/transform';
 
+const PITCH_MOUSE_THRESHOLD = 20;
+const MAX_PITCH = 85;
+const PITCH_ACCEL = 1.2;
+
 const PROP_TYPES = {
   /**
     * The latitude of the center of the map.
@@ -359,21 +363,17 @@ export default class MapGL extends Component {
     const xDelta = pos.x - startPos.x;
     const bearing = startBearing + 180 * xDelta / this.props.width;
 
-    const MIN_PITCH_THRESHOLD = 20;
-    const MAX_PITCH = 75;
-    const ACCEL = 1.2;
-
     let pitch = startPitch;
     const yDelta = pos.y - startPos.y;
     if (yDelta > 0) {
       // Dragging downwards, gradually decrease pitch
-      if (Math.abs(this.props.height - startPos.y) > MIN_PITCH_THRESHOLD) {
+      if (Math.abs(this.props.height - startPos.y) > PITCH_MOUSE_THRESHOLD) {
         const scale = yDelta / (this.props.height - startPos.y);
-        pitch = (1 - scale) * ACCEL * startPitch;
+        pitch = (1 - scale) * PITCH_ACCEL * startPitch;
       }
     } else if (yDelta < 0) {
       // Dragging upwards, gradually increase pitch
-      if (startPos.y > MIN_PITCH_THRESHOLD) {
+      if (startPos.y > PITCH_MOUSE_THRESHOLD) {
         // Move from 0 to 1 as we drag upwards
         const yScale = 1 - pos.y / startPos.y;
         // Gradually add until we hit max pitch
