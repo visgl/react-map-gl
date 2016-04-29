@@ -210,8 +210,8 @@ export default class MapGL extends Component {
     this._updateMapStyle(this.props, newProps);
     // Save width/height so that we can check them in componentDidUpdate
     this.setState({
-      prevWidth: newProps.width,
-      prevHeight: newProps.height
+      prevWidth: this.props.width,
+      prevHeight: this.props.height
     });
   }
 

@@ -21,6 +21,7 @@
 import document from 'global/document';
 import ReactDOM from 'react-dom';
 import React, {Component} from 'react';
+import autobind from 'autobind-decorator';
 import window from 'global/window';
 
 import NotInteractiveExample from './examples/not-interactive.react';
@@ -51,6 +52,16 @@ function getAccessToken() {
 
 export default class App extends Component {
 
+  constructor(props) {
+    super(props);
+    window.addEventListener('resize', this._onWindowResize);
+    this.state = {width: window.innerWidth};
+  }
+
+  @autobind _onWindowResize() {
+    this.setState({width: window.innerWidth});
+  }
+
   render() {
     const common = {
       width: 400,
@@ -60,9 +71,12 @@ export default class App extends Component {
     };
     return (
       <div>
+        <TiltExample
+          width={ this.state.width - 30 }
+          height={ 400 }
+          mapboxApiAccessToken={ getAccessToken() }/>
         <RouteExample { ...common }/>
         <ScatterplotExample { ...common }/>
-        <TiltExample { ...common }/>
         <ChoroplethExample { ...common }/>
         <CustomExample { ...common }/>
         <GeodataCreator { ...common }/>
