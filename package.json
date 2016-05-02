@@ -22,14 +22,14 @@
     "d3": "^3.5.16",
     "global": "^4.3.0",
     "keymirror": "^0.1.1",
-    "mapbox-gl": "0.16.0",
+    "mapbox-gl": "0.18.0",
     "nop": "^1.0.0",
     "object-assign": "^4.0.1",
     "svg-transform": "0.0.3",
     "viewport-mercator-project": "^2.0.1"
   },
   "devDependencies": {
-    "budo": "^8.0.4",
+    "budo": "^8.2.2",
     "envify": "^3.4.0",
     "immutable": "^3.7.6",
     "opn": "^4.0.0",

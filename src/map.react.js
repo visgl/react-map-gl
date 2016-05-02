@@ -428,30 +428,28 @@ var MapGL = React.createClass({
       return;
     }
 
-    map.batch(function batchStyleUpdates(batch) {
-      sourcesDiff.enter.forEach(function each(enter) {
-        batch.addSource(enter.id, enter.source.toJS());
-      });
-      sourcesDiff.update.forEach(function each(update) {
-        batch.removeSource(update.id);
-        batch.addSource(update.id, update.source.toJS());
-      });
-      sourcesDiff.exit.forEach(function each(exit) {
-        batch.removeSource(exit.id);
-      });
-      layersDiff.exiting.forEach(function forEach(exit) {
-        if (map.style.getLayer(exit.id)) {
-          batch.removeLayer(exit.id);
-        }
-      });
-      layersDiff.updates.forEach(function forEach(update) {
-        if (!update.enter) {
-          // This is an old layer that needs to be updated. Remove the old layer
-          // with the same id and add it back again.
-          batch.removeLayer(update.id);
-        }
-        batch.addLayer(update.layer.toJS(), update.before);
-      });
+    sourcesDiff.enter.forEach(function each(enter) {
+      map.addSource(enter.id, enter.source.toJS());
+    });
+    sourcesDiff.update.forEach(function each(update) {
+      map.removeSource(update.id);
+      map.addSource(update.id, update.source.toJS());
+    });
+    sourcesDiff.exit.forEach(function each(exit) {
+      map.removeSource(exit.id);
+    });
+    layersDiff.exiting.forEach(function forEach(exit) {
+      if (map.style.getLayer(exit.id)) {
+        map.removeLayer(exit.id);
+      }
+    });
+    layersDiff.updates.forEach(function forEach(update) {
+      if (!update.enter) {
+        // This is an old layer that needs to be updated. Remove the old layer
+        // with the same id and add it back again.
+        map.removeLayer(update.id);
+      }
+      map.addLayer(update.layer.toJS(), update.before);
     });
   },
 
@@ -470,9 +468,30 @@ var MapGL = React.createClass({
     }
   },
 
+  _isStyleDirty: false,
+  _styleDirtyTimer: null,
+  _checkCanUpdateStyle: function _checkCanUpdateStyle() {
+    if (this._getMap().loaded()) {
+      this._updateMapStyle();
+      this._isStyleDirty = false;
+      if (this._styleDirtyTimer) {
+        window.clearTimeout(this._styleDirtyTimer);
+        this._styleDirtyTimer = null;
+      }
+    } else {
+      this._isStyleDirty = true;
+      if (this._styleDirtyTimer) {
+        window.clearTimeout(this._styleDirtyTimer);
+        this._styleDirtyTimer = null;
+      }
+      this._styleDirtyTimer = window.setTimeout(function() {
+        this._checkCanUpdateStyle();
+      }.bind(this), 100);
+    }
+  },
   componentDidUpdate: function componentDidUpdate() {
     this._updateMapViewport();
-    this._updateMapStyle();
+    this._checkCanUpdateStyle();
   },
 
   _onMouseDown: function _onMouseDown(opt) {
