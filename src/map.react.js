@@ -468,9 +468,30 @@ var MapGL = React.createClass({
     }
   },
 
+  _isStyleDirty: false,
+  _styleDirtyTimer: null,
+  _checkCanUpdateStyle: function _checkCanUpdateStyle() {
+    if (this._getMap().loaded()) {
+      this._updateMapStyle();
+      this._isStyleDirty = false;
+      if (this._styleDirtyTimer) {
+        window.clearTimeout(this._styleDirtyTimer);
+        this._styleDirtyTimer = null;
+      }
+    } else {
+      this._isStyleDirty = true;
+      if (this._styleDirtyTimer) {
+        window.clearTimeout(this._styleDirtyTimer);
+        this._styleDirtyTimer = null;
+      }
+      this._styleDirtyTimer = window.setTimeout(function() {
+        this._checkCanUpdateStyle();
+      }.bind(this), 100);
+    }
+  },
   componentDidUpdate: function componentDidUpdate() {
     this._updateMapViewport();
-    this._updateMapStyle();
+    this._checkCanUpdateStyle();
   },
 
   _onMouseDown: function _onMouseDown(opt) {
