@@ -18,7 +18,6 @@
   "dependencies": {
     "alphaify": "^1.0.0",
     "bowser": "^1.0.0",
-    "budo": "^8.2.2",
     "canvas-composite-types": "^1.0.4",
     "d3": "^3.5.16",
     "global": "^4.3.0",
@@ -30,7 +29,7 @@
     "viewport-mercator-project": "^2.0.1"
   },
   "devDependencies": {
-    "budo": "^8.0.4",
+    "budo": "^8.2.2",
     "envify": "^3.4.0",
     "immutable": "^3.7.6",
     "opn": "^4.0.0",
