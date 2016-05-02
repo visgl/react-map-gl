@@ -428,30 +428,28 @@ var MapGL = React.createClass({
       return;
     }
 
-    map.batch(function batchStyleUpdates(batch) {
-      sourcesDiff.enter.forEach(function each(enter) {
-        batch.addSource(enter.id, enter.source.toJS());
-      });
-      sourcesDiff.update.forEach(function each(update) {
-        batch.removeSource(update.id);
-        batch.addSource(update.id, update.source.toJS());
-      });
-      sourcesDiff.exit.forEach(function each(exit) {
-        batch.removeSource(exit.id);
-      });
-      layersDiff.exiting.forEach(function forEach(exit) {
-        if (map.style.getLayer(exit.id)) {
-          batch.removeLayer(exit.id);
-        }
-      });
-      layersDiff.updates.forEach(function forEach(update) {
-        if (!update.enter) {
-          // This is an old layer that needs to be updated. Remove the old layer
-          // with the same id and add it back again.
-          batch.removeLayer(update.id);
-        }
-        batch.addLayer(update.layer.toJS(), update.before);
-      });
+    sourcesDiff.enter.forEach(function each(enter) {
+      map.addSource(enter.id, enter.source.toJS());
+    });
+    sourcesDiff.update.forEach(function each(update) {
+      map.removeSource(update.id);
+      map.addSource(update.id, update.source.toJS());
+    });
+    sourcesDiff.exit.forEach(function each(exit) {
+      map.removeSource(exit.id);
+    });
+    layersDiff.exiting.forEach(function forEach(exit) {
+      if (map.style.getLayer(exit.id)) {
+        map.removeLayer(exit.id);
+      }
+    });
+    layersDiff.updates.forEach(function forEach(update) {
+      if (!update.enter) {
+        // This is an old layer that needs to be updated. Remove the old layer
+        // with the same id and add it back again.
+        map.removeLayer(update.id);
+      }
+      map.addLayer(update.layer.toJS(), update.before);
     });
   },
 
