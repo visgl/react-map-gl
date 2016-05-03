@@ -210,21 +210,14 @@ export default class MapGL extends Component {
     this._updateMapStyle(this.props, newProps);
     // Save width/height so that we can check them in componentDidUpdate
     this.setState({
-      prevWidth: this.props.width,
-      prevHeight: this.props.height
+      width: this.props.width,
+      height: this.props.height
     });
   }
 
   componentDidUpdate() {
     // map.resize() reads size from DOM, we need to call after render
-    const sizeChanged =
-      this.props.width !== this.state.prevWidth ||
-      this.props.height !== this.state.prevHeight;
-
-    if (sizeChanged) {
-      const map = this._getMap();
-      map.resize();
-    }
+    this._updateMapSize(this.state, this.props);
   }
 
   componentWillUnmount() {
@@ -364,6 +357,17 @@ export default class MapGL extends Component {
       if (newProps.altitude !== oldProps.altitude) {
         map.transform.altitude = newProps.altitude;
       }
+    }
+  }
+
+  // Note: needs to be called after render (e.g. in componentDidUpdate)
+  _updateMapSize(oldProps, newProps) {
+    const sizeChanged =
+      oldProps.width !== newProps.width || oldProps.height !== newProps.height;
+
+    if (sizeChanged) {
+      const map = this._getMap();
+      map.resize();
     }
   }
 
