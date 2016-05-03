@@ -35,8 +35,8 @@
     "opn": "^4.0.0",
     "prova": "git+https://github.com/nicolasroy/prova.git#c8bed19db3c1c94fae1dab9a7b29fbfd332c95a2",
     "r-dom": "^2.1.0",
-    "react": "15.x.x",
-    "react-dom": "15.x.x",
+    "react": "15.x",
+    "react-dom": "15.x",
     "uber-standard": "^5.1.0"
   },
   "scripts": {
@@ -52,7 +52,7 @@
   "peerDependencies": {
     "immutable": "^3.7.6",
     "r-dom": "^2.1.0",
-    "react": "15.x.x"
+    "react": "0.14.x - 15.x"
   },
   "engines": {
     "node": "0.10.x",
