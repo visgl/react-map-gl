@@ -17,108 +17,110 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var React = require('react');
-var window = require('global/window');
-var d3 = require('d3');
-var r = require('r-dom');
-var Immutable = require('immutable');
-var COMPOSITE_TYPES = require('canvas-composite-types');
-var ViewportMercator = require('viewport-mercator-project');
+import React, {PropTypes, Component} from 'react';
+import window from 'global/window';
+import d3 from 'd3';
+import Immutable from 'immutable';
+import COMPOSITE_TYPES from 'canvas-composite-types';
+import ViewportMercator from 'viewport-mercator-project';
 
-var ScatterplotOverlay = React.createClass({
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+  zoom: PropTypes.number.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  locations: PropTypes.instanceOf(Immutable.List).isRequired,
+  lngLatAccessor: PropTypes.func.isRequired,
+  renderWhileDragging: PropTypes.bool,
+  globalOpacity: PropTypes.number.isRequired,
+  dotRadius: PropTypes.number.isRequired,
+  dotFill: PropTypes.string.isRequired,
+  compositeOperation: PropTypes.oneOf(COMPOSITE_TYPES).isRequired
+};
 
-  displayName: 'ScatterplotOverlay',
-
-  propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    latitude: React.PropTypes.number.isRequired,
-    longitude: React.PropTypes.number.isRequired,
-    zoom: React.PropTypes.number.isRequired,
-    isDragging: React.PropTypes.bool.isRequired,
-    locations: React.PropTypes.instanceOf(Immutable.List).isRequired,
-    lngLatAccessor: React.PropTypes.func.isRequired,
-    renderWhileDragging: React.PropTypes.bool,
-    globalOpacity: React.PropTypes.number.isRequired,
-    dotRadius: React.PropTypes.number.isRequired,
-    dotFill: React.PropTypes.string.isRequired,
-    compositeOperation: React.PropTypes.oneOf(COMPOSITE_TYPES).isRequired
+const DEFAULT_PROPS = {
+  lngLatAccessor(location) {
+    return [location.get(0), location.get(1)];
   },
+  renderWhileDragging: true,
+  dotRadius: 4,
+  dotFill: '#1FBAD6',
+  globalOpacity: 1,
+  // Same as browser default.
+  compositeOperation: 'source-over'
+};
 
-  getDefaultProps: function getDefaultProps() {
-    return {
-      lngLatAccessor: function lngLatAccessor(location) {
-        return [location.get(0), location.get(1)];
-      },
-      renderWhileDragging: true,
-      dotRadius: 4,
-      dotFill: '#1FBAD6',
-      globalOpacity: 1,
-      // Same as browser default.
-      compositeOperation: 'source-over'
-    };
-  },
+export default class ScatterplotOverlay extends Component {
 
-  componentDidMount: function componentDidMount() {
+  componentDidMount() {
     this._redraw();
-  },
+  }
 
-  componentDidUpdate: function componentDidUpdate() {
+  componentDidUpdate() {
     this._redraw();
-  },
+  }
 
-  _redraw: function _redraw() {
-    var pixelRatio = window.devicePixelRatio || 1;
-    var canvas = this.refs.overlay;
-    var ctx = canvas.getContext('2d');
-    var props = this.props;
-    var radius = this.props.dotRadius;
-    var fill = this.props.dotFill;
+  /* eslint-disable max-statements */
+  _redraw() {
+    const {
+      width, height, dotRadius, dotFill, compositeOperation,
+      renderWhileDragging, isDragging, locations, lngLatAccessor
+    } = this.props;
+
+    const mercator = ViewportMercator(this.props);
+    const pixelRatio = window.devicePixelRatio || 1;
+    const canvas = this.refs.overlay;
+    const ctx = canvas.getContext('2d');
+
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
-    ctx.clearRect(0, 0, props.width, props.height);
-    ctx.globalCompositeOperation = this.props.compositeOperation;
-    var mercator = ViewportMercator(this.props);
-    if ((this.props.renderWhileDragging || !this.props.isDragging) &&
-      this.props.locations
-    ) {
-      this.props.locations.forEach(function _forEach(location) {
-        var pixel = mercator.project(this.props.lngLatAccessor(location));
-        var pixelRounded = [d3.round(pixel[0], 1), d3.round(pixel[1], 1)];
-        if (pixelRounded[0] + radius >= 0 &&
-            pixelRounded[0] - radius < props.width &&
-            pixelRounded[1] + radius >= 0 &&
-            pixelRounded[1] - radius < props.height
+    ctx.clearRect(0, 0, width, height);
+    ctx.globalCompositeOperation = compositeOperation;
+
+    if ((renderWhileDragging || !isDragging) && locations) {
+      for (const location of locations) {
+        const pixel = mercator.project(lngLatAccessor(location));
+        const pixelRounded = [d3.round(pixel[0], 1), d3.round(pixel[1], 1)];
+        if (pixelRounded[0] + dotRadius >= 0 &&
+            pixelRounded[0] - dotRadius < width &&
+            pixelRounded[1] + dotRadius >= 0 &&
+            pixelRounded[1] - dotRadius < height
         ) {
-          ctx.fillStyle = fill;
+          ctx.fillStyle = dotFill;
           ctx.beginPath();
-          ctx.arc(pixelRounded[0], pixelRounded[1], radius, 0, Math.PI * 2);
+          ctx.arc(pixelRounded[0], pixelRounded[1], dotRadius, 0, Math.PI * 2);
           ctx.fill();
         }
-      }, this);
-    }
-    ctx.restore();
-  },
-
-  render: function render() {
-    var pixelRatio = window.devicePixelRatio || 1;
-    return r.canvas({
-      ref: 'overlay',
-      width: this.props.width * pixelRatio,
-      height: this.props.height * pixelRatio,
-      style: {
-        width: this.props.width + 'px',
-        height: this.props.height + 'px',
-        position: 'absolute',
-        pointerEvents: 'none',
-        opacity: this.props.globalOpacity,
-        left: 0,
-        top: 0
       }
-    });
-  }
-});
+    }
 
-module.exports = ScatterplotOverlay;
+    ctx.restore();
+  }
+  /* eslint-enable max-statements */
+
+  render() {
+    const {width, height, globalOpacity} = this.props;
+    const pixelRatio = window.devicePixelRatio || 1;
+    return (
+      <canvas
+        ref="overlay"
+        width={ width * pixelRatio }
+        height={ height * pixelRatio }
+        style={ {
+          width: `${width}px`,
+          height: `${height}px`,
+          position: 'absolute',
+          pointerEvents: 'none',
+          opacity: globalOpacity,
+          left: 0,
+          top: 0
+        } }/>
+    );
+  }
+}
+
+ScatterplotOverlay.propTypes = PROP_TYPES;
+ScatterplotOverlay.defaultProps = DEFAULT_PROPS;

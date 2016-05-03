@@ -1,11 +1,13 @@
-'use strict';
+require('tap-browser-color')();
 
 var document = require('global/document');
-var test = require('prova');
-var MapGL = require('../src/index');
+var test = require('tape');
+var MapGL = require('../');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var r = require('r-dom');
 var process = require('global/process');
+
 /* eslint-disable no-process-env */
 // This will get converted to a string by envify
 var mapboxApiAccessToken = process.env.MapboxAccessToken;
@@ -23,7 +25,9 @@ test('MapGL', function(t) {
       zoom: 14,
       mapboxApiAccessToken: mapboxApiAccessToken
     });
-    React.render(map, document.body);
+    var reactContainer = document.createElement('div');
+    document.body.appendChild(reactContainer);
+    ReactDOM.render(map, reactContainer);
     t.ok(true);
     t.end();
   });

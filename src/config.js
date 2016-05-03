@@ -17,22 +17,19 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var browser = require('bowser');
+import browser from 'bowser';
 
-var prefix =
+const PREFIX =
   browser.webkit ? '-webkit-' :
   browser.gecko ? '-moz-' :
   '';
 
-var config = {
+export default {
   DEFAULTS: {},
   MAPBOX_API_ACCESS_TOKEN: null,
   CURSOR: {
-    GRABBING: prefix + 'grabbing',
-    GRAB: prefix + 'grab'
+    GRABBING: `${PREFIX}grabbing`,
+    GRAB: `${PREFIX}grab`
   }
 };
-
-module.exports = config;

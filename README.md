@@ -22,11 +22,11 @@ npm install react-map-gl --save
 ### Usage
 
 ````js
-var MapGL = require('react-map-gl');
+import MapGL from 'react-map-gl';
 
 <MapGL width={400} height={400} latitude={37.7577} longitude={-122.4376}
   zoom={8} onChangeViewport={(viewport) => {
-    var {latitude, longitude, zoom} = viewport;
+    const {latitude, longitude, zoom} = viewport;
     // Optionally call `setState` and use the state to update the map.
   }}
 />
@@ -39,7 +39,7 @@ overlays, or create your own. Here's an example of using the build in
 ScatterplotOverlay.
 
 ````js
-var ScatterplotOverlay = require('react-map-gl/src/overlays/scatterplot.react');
+import ScatterplotOverlay from 'react-map-gl/src/overlays/scatterplot.react';
 // ...
 <MapGL {...viewport}>
   <ScatterplotOverlay
@@ -72,10 +72,10 @@ heatmaps.
 Example usage:
 
 ````js
-var HeatmapOverlay = require('react-map-gl-heatmap-overlay');
-var cities = require('example-cities');
+import HeatmapOverlay from 'react-map-gl-heatmap-overlay';
+import cities from 'example-cities';
 // ...
-    render: function render() {
+    render() {
       return <MapGL {...viewport}>
         return <HeatmapOverlay locations={cities} {...viewport}/>
       </MapGL>;
@@ -166,10 +166,10 @@ viewport using the [ViewportMercatorProject](github.com/uber-common/viewport-mer
 `<MapGL/>` component. example:
 
 ```js
-var ViewportMercator = require('viewport-mercator-project');
+import ViewportMercator from 'viewport-mercator-project';
 // ...
   render() {
-    var mercator = ViewportMercator(this.state.viewport);
+    const mercator = ViewportMercator(this.state.viewport);
     return <MapGL ...viewport>
       <Overlay1
         project={mercator.project}
@@ -210,8 +210,8 @@ to be more consistent with other overlays.
 This should be calculated instead using the [ViewportMercatorProject](github.com/uber-common/viewport-mercator-project) module instead.
 
 ```js
-var mercator = ViewportMercator(viewport);
-var bbox = [mercator.unproject([0, 0]), mercator.unproject([width, height])];
+const mercator = ViewportMercator(viewport);
+const bbox = [mercator.unproject([0, 0]), mercator.unproject([width, height])];
 ```
 
 ### Non-breaking changes
