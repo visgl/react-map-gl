@@ -23,7 +23,8 @@ var assign = require('object-assign');
 var React = require('react');
 var r = require('r-dom');
 var Immutable = require('immutable');
-var d3 = require('d3');
+var d3Array = require('d3-array');
+var d3Random = require('d3-random');
 
 var MapGL = require('../../src/index.js');
 var ScatterplotOverlay = require('../../src/overlays/scatterplot.react');
@@ -31,13 +32,13 @@ var ScatterplotOverlay = require('../../src/overlays/scatterplot.react');
 // San Francisco
 var location = require('./../data/cities.json')[0];
 
-var normal = d3.random.normal();
+var normal = d3Random.randomNormal();
 function wiggle(scale) {
   return normal() * scale;
 }
 
 // Example data.
-var locations = Immutable.fromJS(d3.range(4000).map(function _map() {
+var locations = Immutable.fromJS(d3Array.range(4000).map(function _map() {
   return [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)];
 }));
 

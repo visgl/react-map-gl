@@ -22,7 +22,8 @@
 var React = require('react');
 var ViewportMercator = require('viewport-mercator-project');
 var window = require('global/window');
-var d3 = require('d3');
+var d3Array = require('d3-array');
+var d3Scale = require('d3-scale');
 var r = require('r-dom');
 var Immutable = require('immutable');
 
@@ -86,8 +87,8 @@ var ChoroplethOverlay = React.createClass({
     }
 
     if (this.props.renderWhileDragging || !this.props.isDragging) {
-      var transform = d3.geo.transform({point: projectPoint});
-      var path = d3.geo.path().projection(transform).context(ctx);
+      // var transform = d3.geo.transform({point: projectPoint});
+      // var path = d3.geo.path().projection(transform).context(ctx);
       this._drawFeatures(ctx, path);
     }
     ctx.restore();
@@ -100,9 +101,9 @@ var ChoroplethOverlay = React.createClass({
       return;
     }
     if (!colorDomain) {
-      colorDomain = d3.extent(features.toArray(), this.props.valueAccessor);
+      colorDomain = d3Array.extent(features.toArray(), this.props.valueAccessor);
     }
-    var colorScale = d3.scale.linear()
+    var colorScale = d3Scale.scaleLinear()
       .domain(colorDomain)
       .range(this.props.colorRange)
       .clamp(true);

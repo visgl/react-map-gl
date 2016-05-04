@@ -22,7 +22,6 @@
 var assert = require('assert');
 var React = require('react');
 var r = require('r-dom');
-var d3 = require('d3');
 var assign = require('object-assign');
 var Immutable = require('immutable');
 var mapboxgl = require('mapbox-gl');
@@ -272,7 +271,7 @@ var MapGL = React.createClass({
       // attributionControl: this.props.attributionControl
     });
 
-    d3.select(map.getCanvas()).style('outline', 'none');
+    map.getCanvas().style.outline = 'none'
 
     this._map = map;
     this._updateMapViewport();
