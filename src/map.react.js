@@ -33,8 +33,9 @@ import diffStyles from './diff-styles';
 // down mapbox-gl to a specific major, minor, and patch version.
 import Transform from 'mapbox-gl/js/geo/transform';
 
+// Note: Max pitch is a hard coded value (not a named constant) in transform.js
+const MAX_PITCH = 60;
 const PITCH_MOUSE_THRESHOLD = 20;
-const MAX_PITCH = 85;
 const PITCH_ACCEL = 1.2;
 
 const PROP_TYPES = {
@@ -368,6 +369,7 @@ export default class MapGL extends Component {
     if (sizeChanged) {
       const map = this._getMap();
       map.resize();
+      this._callOnChangeViewport(map.transform);
     }
   }
 
@@ -401,7 +403,7 @@ export default class MapGL extends Component {
   }
 
    // Helper to call props.onChangeViewport
-  _callOnChangeViewport(transform, opts) {
+  _callOnChangeViewport(transform, opts = {}) {
     this.props.onChangeViewport({
       latitude: transform.center.lat,
       longitude: mod(transform.center.lng + 180, 360) - 180,
@@ -468,10 +470,12 @@ export default class MapGL extends Component {
       startPitch
     });
 
-    this._callOnChangeViewport(map.transform, {
-      isDragging: true,
-      bearing,
-      pitch
+    const transform = cloneTransform(map.transform);
+    transform.bearing = bearing;
+    transform.pitch = pitch;
+
+    this._callOnChangeViewport(transform, {
+      isDragging: true
     });
   }
 
