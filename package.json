@@ -1,7 +1,7 @@
 {
   "name": "react-map-gl",
   "description": "A React wrapper for MapboxGL-js and overlay API.",
-  "version": "1.0.0-beta-8",
+  "version": "1.0.0-beta-9",
   "main": "index.js",
   "keywords": [
     "mapbox",
@@ -44,12 +44,11 @@
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^4.2.3",
     "immutable": "^3.7.6",
-    "opn": "^4.0.0",
-    "r-dom": "^2.2.0",
-    "react": "0.14.x",
-    "react-dom": "0.14.x",
+    "react": "15.x",
+    "react-dom": "15.x",
     "tape": "^4.5.1",
-    "tape-catch": "^1.0.4"
+    "tape-catch": "^1.0.4",
+    "uber-standard": "^5.1.0"
   },
   "scripts": {
     "build": "babel src -d dist --copy-files --source-maps inline",
@@ -65,7 +64,7 @@
   ],
   "peerDependencies": {
     "immutable": "^3.7.6",
-    "react": "0.14.x"
+    "react": "0.14.x - 15.x"
   },
   "engines": {
     "node": "0.10.x",
