@@ -202,6 +202,7 @@ export default class MapGL extends Component {
 
     this._map = map;
     this._updateMapViewport({}, this.props);
+    this._callOnChangeViewport(this.map.transform);
   }
 
   // New props are comin' round the corner!
