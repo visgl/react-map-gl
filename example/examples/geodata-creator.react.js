@@ -24,9 +24,7 @@ import alphaify from 'alphaify';
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 
-import MapGL from '../../src/';
-import DraggableOverlay from '../../src/overlays/draggable-points.react';
-import SVGOverlay from '../../src/overlays/svg.react';
+import MapGL, {DraggablePointsOverlay, SVGOverlay} from '../../src';
 
 // A mock example path.
 const initialPoints = [
@@ -113,7 +111,7 @@ export default class GeodataCreator extends Component {
       <SVGOverlay key="svg-overlay" { ...viewport }
         redraw={ this._redrawSVGOverlay }/>,
 
-      <DraggableOverlay key="draggable-overlay" { ...viewport }
+      <DraggablePointsOverlay key="draggable-overlay" { ...viewport }
         points={ this.state.points }
         onAddPoint={ this._onAddPoint }
         onUpdatePoint={ this._onUpdatePoint }

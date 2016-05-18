@@ -26,9 +26,7 @@ import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 import d3 from 'd3';
 
-import MapGL from '../../src/';
-import SVGOverlay from '../../src/overlays/svg.react';
-import CanvasOverlay from '../../src/overlays/canvas.react';
+import MapGL, {SVGOverlay, CanvasOverlay} from '../../src';
 
 import ROUTES from './../data/routes-example.json';
 

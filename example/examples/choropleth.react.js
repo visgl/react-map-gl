@@ -21,8 +21,7 @@ import Immutable from 'immutable';
 
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
-import MapGL from '../../src/';
-import ChoroplethOverlay from '../../src/overlays/choropleth.react';
+import MapGL, {ChoroplethOverlay} from '../../src';
 
 // San Francisco
 import ZIPCODES_SF from './../data/feature-example-sf.json';

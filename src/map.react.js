@@ -256,7 +256,6 @@ export default class MapGL extends Component {
   // other style props haven't changed. This prevents flicking of the map when
   // styles only change sources or layers.
   _setDiffStyle(prevStyle, nextStyle) {
-    const map = this._getMap();
     const prevKeysMap = prevStyle && styleKeysMap(prevStyle) || {};
     const nextKeysMap = styleKeysMap(nextStyle);
     function styleKeysMap(style) {
@@ -278,6 +277,8 @@ export default class MapGL extends Component {
       return false;
     }
 
+    const map = this._getMap();
+
     if (!prevStyle || propsOtherThanLayersOrSourcesDiffer()) {
       map.setStyle(nextStyle.toJS());
       return;
@@ -293,31 +294,29 @@ export default class MapGL extends Component {
       return;
     }
 
-    map.batch(batch => {
-      for (const enter of sourcesDiff.enter) {
-        batch.addSource(enter.id, enter.source.toJS());
+    for (const enter of sourcesDiff.enter) {
+      map.addSource(enter.id, enter.source.toJS());
+    }
+    for (const update of sourcesDiff.update) {
+      map.removeSource(update.id);
+      map.addSource(update.id, update.source.toJS());
+    }
+    for (const exit of sourcesDiff.exit) {
+      map.removeSource(exit.id);
+    }
+    for (const exit of layersDiff.exiting) {
+      if (map.style.getLayer(exit.id)) {
+        map.removeLayer(exit.id);
       }
-      for (const update of sourcesDiff.update) {
-        batch.removeSource(update.id);
-        batch.addSource(update.id, update.source.toJS());
+    }
+    for (const update of layersDiff.updates) {
+      if (!update.enter) {
+        // This is an old layer that needs to be updated. Remove the old layer
+        // with the same id and add it back again.
+        map.removeLayer(update.id);
       }
-      for (const exit of sourcesDiff.exit) {
-        batch.removeSource(exit.id);
-      }
-      for (const exit of layersDiff.exiting) {
-        if (map.style.getLayer(exit.id)) {
-          batch.removeLayer(exit.id);
-        }
-      }
-      for (const update of layersDiff.updates) {
-        if (!update.enter) {
-          // This is an old layer that needs to be updated. Remove the old layer
-          // with the same id and add it back again.
-          batch.removeLayer(update.id);
-        }
-        batch.addLayer(update.layer.toJS(), update.before);
-      }
-    });
+      map.addLayer(update.layer.toJS(), update.before);
+    }
   }
 
   _updateMapStyle(oldProps, newProps) {
@@ -405,22 +404,24 @@ export default class MapGL extends Component {
 
    // Helper to call props.onChangeViewport
   _callOnChangeViewport(transform, opts = {}) {
-    this.props.onChangeViewport({
-      latitude: transform.center.lat,
-      longitude: mod(transform.center.lng + 180, 360) - 180,
-      zoom: transform.zoom,
-      pitch: transform.pitch,
-      bearing: mod(transform.bearing + 180, 360) - 180,
+    if (this.props.onChangeViewport) {
+      this.props.onChangeViewport({
+        latitude: transform.center.lat,
+        longitude: mod(transform.center.lng + 180, 360) - 180,
+        zoom: transform.zoom,
+        pitch: transform.pitch,
+        bearing: mod(transform.bearing + 180, 360) - 180,
 
-      isDragging: this.props.isDragging,
-      startDragLngLat: this.props.startDragLngLat,
-      startBearing: this.props.startBearing,
-      startPitch: this.props.startPitch,
+        isDragging: this.props.isDragging,
+        startDragLngLat: this.props.startDragLngLat,
+        startBearing: this.props.startBearing,
+        startPitch: this.props.startPitch,
 
-      projectionMatrix: transform.projMatrix,
+        projectionMatrix: transform.projMatrix,
 
-      ...opts
-    });
+        ...opts
+      });
+    }
   }
 
   @autobind _onMouseDown({pos}) {

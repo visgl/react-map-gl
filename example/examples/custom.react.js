@@ -26,9 +26,7 @@ import Immutable from 'immutable';
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 
-import MapGL from '../../src/';
-import CanvasOverlay from '../../src/overlays/canvas.react';
-import SVGOverlay from '../../src/overlays/svg.react';
+import MapGL, {CanvasOverlay, SVGOverlay} from '../../src';
 
 // San Francisco
 import CITIES from './../data/cities.json';
