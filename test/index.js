@@ -1,11 +1,9 @@
-require('tap-browser-color')();
-
-var document = require('global/document');
-var test = require('tape');
-var MapGL = require('../');
-var React = require('react');
-var ReactDOM = require('react-dom');
-var process = require('global/process');
+import document from 'global/document';
+/* global process */
+import React from 'react';
+import ReactDOM from 'react-dom';
+import test from 'tape-catch';
+import MapGL from '../src';
 
 /* eslint-disable no-process-env */
 // This will get converted to a string by envify
