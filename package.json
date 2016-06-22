@@ -49,6 +49,7 @@
     "react-dom": "15.x",
     "tape": "^4.5.1",
     "tape-catch": "^1.0.4",
+    "testron": "^1.2.0",
     "uber-standard": "^5.1.0"
   },
   "scripts": {
