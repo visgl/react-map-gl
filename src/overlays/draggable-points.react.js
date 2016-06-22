@@ -25,10 +25,17 @@ import Immutable from 'immutable';
 
 import transform from 'svg-transform';
 import document from 'global/document';
-import noop from '../noop';
 import config from '../config';
-import {relativeMousePosition as mouse} from '../utils';
 import ViewportMercator from 'viewport-mercator-project';
+
+function noop() {}
+
+function mouse(container, event) {
+  const rect = container.getBoundingClientRect();
+  const x = event.clientX - rect.left - container.clientLeft;
+  const y = event.clientY - rect.top - container.clientTop;
+  return [x, y];
+}
 
 const PROP_TYPES = {
   width: PropTypes.number.isRequired,

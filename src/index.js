@@ -19,9 +19,7 @@
 // THE SOFTWARE.
 
 import MapGL from './map.react';
-import fitBounds from './fit-bounds';
 import * as overlays from './overlays';
 
 module.exports = MapGL;
-module.exports.fitBounds = fitBounds;
 Object.assign(module.exports, overlays);

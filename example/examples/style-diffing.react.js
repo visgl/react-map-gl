@@ -79,7 +79,7 @@ export default class StyleDiffingExample extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const colors = ['red', 'green', 'blue'];
     let i = 0;
     window.setInterval(function interval() {

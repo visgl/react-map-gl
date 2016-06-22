@@ -23,7 +23,8 @@ import autobind from 'autobind-decorator';
 import {Point} from 'mapbox-gl';
 import document from 'global/document';
 import window from 'global/window';
-import noop from './noop';
+
+function noop() {}
 
 const ua = typeof window.navigator !== 'undefined' ?
   window.navigator.userAgent.toLowerCase() : '';

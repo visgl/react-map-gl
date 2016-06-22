@@ -255,6 +255,7 @@ export default class MapGL extends Component {
   // Individually update the maps source and layers that have changed if all
   // other style props haven't changed. This prevents flicking of the map when
   // styles only change sources or layers.
+  /* eslint-disable max-statements, complexity */
   _setDiffStyle(prevStyle, nextStyle) {
     const prevKeysMap = prevStyle && styleKeysMap(prevStyle) || {};
     const nextKeysMap = styleKeysMap(nextStyle);
@@ -318,6 +319,7 @@ export default class MapGL extends Component {
       map.addLayer(update.layer.toJS(), update.before);
     }
   }
+  /* eslint-enable max-statements, complexity */
 
   _updateMapStyle(oldProps, newProps) {
     const mapStyle = newProps.mapStyle;
@@ -416,8 +418,6 @@ export default class MapGL extends Component {
         startDragLngLat: this.props.startDragLngLat,
         startBearing: this.props.startBearing,
         startPitch: this.props.startPitch,
-
-        projectionMatrix: transform.projMatrix,
 
         ...opts
       });
