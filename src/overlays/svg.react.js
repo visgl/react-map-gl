@@ -17,48 +17,46 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
 
-var React = require('react');
-var r = require('r-dom');
-var assign = require('object-assign');
-var ViewportMercator = require('viewport-mercator-project');
+import React, {PropTypes, Component} from 'react';
+import ViewportMercator from 'viewport-mercator-project';
 
-var SVGOverlay = React.createClass({
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+  zoom: PropTypes.number.isRequired,
+  redraw: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired
+};
 
-  displayName: 'SVGOverlay',
-
-  propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    latitude: React.PropTypes.number.isRequired,
-    longitude: React.PropTypes.number.isRequired,
-    zoom: React.PropTypes.number.isRequired,
-    redraw: React.PropTypes.func.isRequired,
-    isDragging: React.PropTypes.bool.isRequired
-  },
-
-  render: function render() {
-    var style = assign({}, {
+export default class SVGOverlay extends Component {
+  render() {
+    const {width, height, isDragging} = this.props;
+    const style = {
       pointerEvents: 'none',
       position: 'absolute',
       left: 0,
-      top: 0
-    }, this.props.style);
-    var mercator = ViewportMercator(this.props);
-    return r.svg({
-      ref: 'overlay',
-      width: this.props.width,
-      height: this.props.height,
-      style: style
-    }, this.props.redraw({
-      width: this.props.width,
-      height: this.props.height,
-      project: mercator.project,
-      unproject: mercator.unproject,
-      isDragging: this.props.isDragging
-    }));
-  }
-});
+      top: 0,
+      ...this.props.style
+    };
+    const mercator = ViewportMercator(this.props);
+    const {project, unproject} = mercator;
 
-module.exports = SVGOverlay;
+    return (
+      <svg
+        ref="overlay"
+        width={ width }
+        height={ height }
+        style={ style }>
+
+        { this.props.redraw({width, height, project, unproject, isDragging}) }
+
+      </svg>
+    );
+  }
+}
+
+SVGOverlay.propTypes = PROP_TYPES;
+

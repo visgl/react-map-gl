@@ -19,33 +19,51 @@
 // THE SOFTWARE.
 
 import Immutable from 'immutable';
-import d3 from 'd3';
+import window from 'global/window';
 
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
-
-import MapGL, {ScatterplotOverlay} from '../../src';
+import MapGL from '../../src';
 
 // San Francisco
+import SF_FEATURE from './../data/feature-example-sf.json';
 import CITIES from './../data/cities.json';
 const location = CITIES[0];
 
-const normal = d3.random.normal();
-function wiggle(scale) {
-  return normal() * scale;
+function buildStyle({fill = 'red', stroke = 'blue'}) {
+  return Immutable.fromJS({
+    version: 8,
+    name: 'Example raster tile source',
+    sources: {
+      'my-geojson-polygon-source': {
+        type: 'geojson',
+        data: SF_FEATURE
+      }
+    },
+    layers: [
+      {
+        id: 'geojson-polygon-fill',
+        source: 'my-geojson-polygon-source',
+        type: 'fill',
+        paint: {'fill-color': fill, 'fill-opacity': 0.4},
+        interactive: true
+      }, {
+        id: 'geojson-polygon-stroke',
+        source: 'my-geojson-polygon-source',
+        type: 'line',
+        paint: {'line-color': stroke, 'line-width': 4},
+        interactive: false
+      }
+    ]
+  });
 }
-
-// Example data.
-const locations = Immutable.fromJS(d3.range(4000).map(
-  () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
-));
 
 const PROP_TYPES = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };
 
-export default class ScatterplotOverlayExample extends Component {
+export default class TiltExample extends Component {
 
   constructor(props) {
     super(props);
@@ -54,10 +72,27 @@ export default class ScatterplotOverlayExample extends Component {
         latitude: location.latitude,
         longitude: location.longitude,
         zoom: 11,
+        bearing: 180,
+        pitch: 60,
         startDragLngLat: null,
         isDragging: false
-      }
+      },
+      mapStyle: buildStyle({stroke: '#FF00FF', fill: 'green'})
     };
+  }
+
+  componentWillMount() {
+    const colors = ['red', 'green', 'blue'];
+    let i = 0;
+    window.setInterval(function interval() {
+      this.setState({
+        mapStyle: buildStyle({
+          stroke: colors[i % colors.length],
+          fill: colors[(i + 1) % colors.length]
+        })
+      });
+      i = i + 1;
+    }.bind(this), 2000);
   }
 
   @autobind
@@ -66,33 +101,33 @@ export default class ScatterplotOverlayExample extends Component {
       return this.props.onChangeViewport(opt);
     }
     this.setState({
-      viewport: {
-        latitude: opt.latitude,
-        longitude: opt.longitude,
-        zoom: opt.zoom,
-        startDragLngLat: opt.startDragLngLat,
-        isDragging: opt.isDragging
-      }
+      viewport: opt
     });
   }
 
+  @autobind
+  _onClickFeatures(features) {
+    window.console.log(features);
+  }
+
   render() {
-    const viewport = {...this.state.viewport, ...this.props};
+    const viewport = {
+      // mapStyle: this.state.mapStyle,
+      ...this.state.viewport,
+      ...this.props
+    };
     return (
       <MapGL
         { ...viewport }
-        onChangeViewport={ this._onChangeViewport }>
-
-        <ScatterplotOverlay
-          { ...viewport }
-          locations={ locations }
-          dotRadius={ 2 }
-          globalOpacity={ 1 }
-          compositeOperation="screen"/>
-
-      </MapGL>
+        onChangeViewport={ this._onChangeViewport }
+        onClickFeatures={ this._onClickFeatures }
+        perspectiveEnabled={ true }
+        // setting to `true` should cause the map to flicker because all sources
+        // and layers need to be reloaded without diffing enabled.
+        preventStyleDiffing={ false }/>
     );
   }
 }
 
-ScatterplotOverlayExample.propTypes = PROP_TYPES;
+TiltExample.propTypes = PROP_TYPES;
+
