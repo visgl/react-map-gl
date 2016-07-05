@@ -123,7 +123,7 @@ run the compiler to build the files again.
 
 ### Testing
 
-It's particularly difficult to write tests for this component beacuse it uses WebGL. There are some tests in `test/` but for the most part, as new features are added, we typically test drive them by running `npm run start` and play with the demos.
+It's particularly difficult to write tests for this component because it uses WebGL. There are some tests in `test/` but for the most part, as new features are added, we typically test drive them by running `npm run start` and play with the demos.
 
 # CHANGE LOG
 
