@@ -1,4 +1,4 @@
-@ Version 1.1.0
+# Version 1.1.1
 
 * Update mapbox-gl from v0.21.0 (from v0.20.0)
 
