@@ -424,6 +424,10 @@ export default class MapGL extends Component {
     }
   }
 
+  @autobind _onTouchStart({pos}) {
+    this._onMouseDown({pos});
+  }
+
   @autobind _onMouseDown({pos}) {
     const map = this._getMap();
     const lngLat = unprojectFromTransform(map.transform, pos);
@@ -433,6 +437,10 @@ export default class MapGL extends Component {
       startBearing: map.transform.bearing,
       startPitch: map.transform.pitch
     });
+  }
+
+  @autobind _onTouchDrag({pos}) {
+    this._onMouseDrag({pos});
   }
 
   @autobind _onMouseDrag({pos}) {
@@ -450,6 +458,10 @@ export default class MapGL extends Component {
     this._callOnChangeViewport(transform, {
       isDragging: true
     });
+  }
+
+  @autobind _onTouchRotate({pos, startPos}) {
+    this._onMouseRotate({pos, startPos});
   }
 
   @autobind _onMouseRotate({pos, startPos}) {
@@ -492,6 +504,10 @@ export default class MapGL extends Component {
       return;
     }
     this.props.onHoverFeatures(features);
+  }
+
+  @autobind _onTouchEnd(opt) {
+    this._onMouseUp(opt);
   }
 
   @autobind _onMouseUp(opt) {
@@ -563,6 +579,10 @@ export default class MapGL extends Component {
           onMouseRotate ={ this._onMouseRotate }
           onMouseUp ={ this._onMouseUp }
           onMouseMove ={ this._onMouseMove }
+          onTouchStart ={ this._onTouchStart }
+          onTouchDrag ={ this._onTouchDrag }
+          onTouchRotate ={ this._onTouchRotate }
+          onTouchEnd ={ this._onTouchEnd }
           onZoom ={ this._onZoom }
           onZoomEnd ={ this._onZoomEnd }
           width ={ this.props.width }

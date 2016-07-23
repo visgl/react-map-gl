@@ -64,6 +64,10 @@ const PROP_TYPES = {
   onMouseRotate: PropTypes.func,
   onMouseUp: PropTypes.func,
   onMouseMove: PropTypes.func,
+  onTouchStart: PropTypes.func,
+  onTouchDrag: PropTypes.func,
+  onTouchRotate: PropTypes.func,
+  onTouchEnd: PropTypes.func,
   onZoom: PropTypes.func,
   onZoomEnd: PropTypes.func
 };
@@ -74,6 +78,10 @@ const DEFAULT_PROPS = {
   onMouseRotate: noop,
   onMouseUp: noop,
   onMouseMove: noop,
+  onTouchStart: noop,
+  onTouchDrag: noop,
+  onTouchRotate: noop,
+  onTouchEnd: noop,
   onZoom: noop,
   onZoomEnd: noop
 };
@@ -122,7 +130,7 @@ export default class MapInteractions extends Component {
       pos,
       metaKey: Boolean(event.metaKey)
     });
-    this.props.onMouseDown({pos});
+    this.props.onTouchStart({pos});
     document.addEventListener('touchmove', this._onTouchDrag, false);
     document.addEventListener('touchend', this._onTouchEnd, false);
   }
@@ -145,9 +153,9 @@ export default class MapInteractions extends Component {
     this.setState({pos});
     if (this.state.metaKey) {
       const {startPos} = this.state;
-      this.props.onMouseRotate({pos, startPos});
+      this.props.onTouchRotate({pos, startPos});
     } else {
-      this.props.onMouseDrag({pos});
+      this.props.onTouchDrag({pos});
     }
     event.preventDefault();
   }
@@ -167,7 +175,7 @@ export default class MapInteractions extends Component {
     document.removeEventListener('touchend', this._onTouchEnd, false);
     const pos = this._getTouchPos(event);
     this.setState({pos});
-    this.props.onMouseUp({pos});
+    this.props.onTouchEnd({pos});
   }
 
   @autobind
