@@ -17,127 +17,122 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-'use strict';
+import React, {PropTypes, Component} from 'react';
+import ViewportMercator from 'viewport-mercator-project';
+import window from 'global/window';
+import d3 from 'd3';
+import Immutable from 'immutable';
 
-var React = require('react');
-var ViewportMercator = require('viewport-mercator-project');
-var window = require('global/window');
-var d3 = require('d3');
-var r = require('r-dom');
-var Immutable = require('immutable');
+const PROP_TYPES = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+  zoom: PropTypes.number.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  renderWhileDragging: PropTypes.bool.isRequired,
+  globalOpacity: PropTypes.number.isRequired,
+  /**
+    * An Immutable List of feature objects.
+    */
+  features: PropTypes.instanceOf(Immutable.List),
+  colorDomain: PropTypes.array,
+  colorRange: PropTypes.array.isRequired,
+  valueAccessor: PropTypes.func.isRequired
+};
 
-var ChoroplethOverlay = React.createClass({
+const DEFAULT_PROPS = {
+  renderWhileDragging: true,
+  globalOpacity: 1,
+  colorDomain: null,
+  colorRange: ['#FFFFFF', '#1FBAD6'],
+  valueAccessor(feature) {
+    return feature.get('properties').get('value');
+  }
+};
 
-  displayName: 'ChoroplethOverlay',
+export default class ChoroplethOverlay extends Component {
 
-  propTypes: {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    latitude: React.PropTypes.number.isRequired,
-    longitude: React.PropTypes.number.isRequired,
-    zoom: React.PropTypes.number.isRequired,
-    isDragging: React.PropTypes.bool.isRequired,
-    renderWhileDragging: React.PropTypes.bool.isRequired,
-    globalOpacity: React.PropTypes.number.isRequired,
-    /**
-      * An Immutable List of feature objects.
-      */
-    features: React.PropTypes.instanceOf(Immutable.List),
-    colorDomain: React.PropTypes.array,
-    colorRange: React.PropTypes.array.isRequired,
-    valueAccessor: React.PropTypes.func.isRequired
-  },
-
-  getDefaultProps: function getDefaultProps() {
-    return {
-      renderWhileDragging: true,
-      globalOpacity: 1,
-      colorDomain: null,
-      colorRange: ['#FFFFFF', '#1FBAD6'],
-      valueAccessor: function valueAccessor(feature) {
-        return feature.get('properties').get('value');
-      }
-    };
-  },
-
-  componentDidMount: function componentDidMount() {
+  componentDidMount() {
     this._redraw();
-  },
+  }
 
-  componentDidUpdate: function componentDidUpdate() {
+  componentDidUpdate() {
     this._redraw();
-  },
+  }
 
-  _redraw: function _redraw() {
-    var pixelRatio = window.devicePixelRatio;
-    var canvas = this.refs.overlay;
-    var ctx = canvas.getContext('2d');
-    var mercator = ViewportMercator(this.props);
+  _redraw() {
+    const pixelRatio = window.devicePixelRatio;
+    const canvas = this.refs.overlay;
+    const ctx = canvas.getContext('2d');
+    const mercator = ViewportMercator(this.props);
 
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
     ctx.clearRect(0, 0, this.props.width, this.props.height);
 
     function projectPoint(lon, lat) {
-      var point = mercator.project([lon, lat]);
+      const point = mercator.project([lon, lat]);
       /* eslint-disable no-invalid-this */
       this.stream.point(point[0], point[1]);
       /* eslint-enable no-invalid-this */
     }
 
     if (this.props.renderWhileDragging || !this.props.isDragging) {
-      var transform = d3.geo.transform({point: projectPoint});
-      var path = d3.geo.path().projection(transform).context(ctx);
+      const transform = d3.geo.transform({point: projectPoint});
+      const path = d3.geo.path().projection(transform).context(ctx);
       this._drawFeatures(ctx, path);
     }
     ctx.restore();
-  },
+  }
 
-  _drawFeatures: function _drawFeatures(ctx, path) {
-    var colorDomain = this.props.colorDomain;
-    var features = this.props.features;
+  _drawFeatures(ctx, path) {
+    const {features} = this.props;
     if (!features) {
       return;
     }
-    if (!colorDomain) {
-      colorDomain = d3.extent(features.toArray(), this.props.valueAccessor);
-    }
-    var colorScale = d3.scale.linear()
+    const colorDomain = this.props.colorDomain ||
+      d3.extent(features.toArray(), this.props.valueAccessor);
+
+    const colorScale = d3.scale.linear()
       .domain(colorDomain)
       .range(this.props.colorRange)
       .clamp(true);
-    features.forEach(function _forEach(feature) {
+
+    for (const feature of features) {
       ctx.beginPath();
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
       ctx.lineWidth = '1';
       ctx.fillStyle = colorScale(this.props.valueAccessor(feature));
-      var geometry = feature.get('geometry');
+      const geometry = feature.get('geometry');
       path({
         type: geometry.get('type'),
         coordinates: geometry.get('coordinates').toJS()
       });
       ctx.fill();
       ctx.stroke();
-    }, this);
-  },
-
-  render: function render() {
-    var pixelRatio = window.devicePixelRatio || 1;
-    return r.canvas({
-      ref: 'overlay',
-      width: this.props.width * pixelRatio,
-      height: this.props.height * pixelRatio,
-      style: {
-        width: this.props.width + 'px',
-        height: this.props.height + 'px',
-        position: 'absolute',
-        pointerEvents: 'none',
-        opacity: this.props.globalOpacity,
-        left: 0,
-        top: 0
-      }
-    });
+    }
   }
-});
 
-module.exports = ChoroplethOverlay;
+  render() {
+    const pixelRatio = window.devicePixelRatio || 1;
+    return (
+      <canvas
+        ref="overlay"
+        width={ this.props.width * pixelRatio }
+        height={ this.props.height * pixelRatio }
+        style={ {
+          width: `${this.props.width}px`,
+          height: `${this.props.height}px`,
+          position: 'absolute',
+          pointerEvents: 'none',
+          opacity: this.props.globalOpacity,
+          left: 0,
+          top: 0
+        } }/>
+    );
+  }
+}
+
+ChoroplethOverlay.propTypes = PROP_TYPES;
+ChoroplethOverlay.defaultProps = DEFAULT_PROPS;
