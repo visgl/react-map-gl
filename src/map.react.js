@@ -152,7 +152,13 @@ const PROP_TYPES = {
     * Unit: map heights, default 1.5
     * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
     */
-  altitude: React.PropTypes.number
+  altitude: React.PropTypes.number,
+
+  /**
+    * `onLoad` callback is fired on the first complete render,
+    * when all dependencies have been loaded
+    */
+  onLoad: PropTypes.func
 };
 
 const DEFAULT_PROPS = {
@@ -197,6 +203,10 @@ export default class MapGL extends Component {
       // TODO?
       // attributionControl: this.props.attributionControl
     });
+
+    if (this.props.onLoad) {
+      map.once('load', this.props.onLoad);
+    }
 
     d3.select(map.getCanvas()).style('outline', 'none');
 
