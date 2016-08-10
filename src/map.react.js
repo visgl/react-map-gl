@@ -121,6 +121,11 @@ const PROP_TYPES = {
   onClickFeatures: PropTypes.func,
 
   /**
+    * Radius to detect features around a clicked point. Defaults to 15.
+    */
+  clickRadius: PropTypes.number,
+
+  /**
     * Passed to Mapbox Map constructor which passes it to the canvas context.
     * This is unseful when you want to export the canvas as a PNG.
     */
@@ -164,7 +169,8 @@ const DEFAULT_PROPS = {
   ignoreEmptyFeatures: true,
   bearing: 0,
   pitch: 0,
-  altitude: 1.5
+  altitude: 1.5,
+  clickRadius: 15
 };
 
 @pureRender
@@ -510,7 +516,7 @@ export default class MapGL extends Component {
     const pos = opt.pos;
 
     // Radius enables point features, like marker symbols, to be clicked.
-    const size = 15;
+    const size = this.props.clickRadius;
     const bbox = [[pos.x - size, pos.y - size], [pos.x + size, pos.y + size]];
     const features = map.queryRenderedFeatures(bbox);
     if (!features.length && this.props.ignoreEmptyFeatures) {
