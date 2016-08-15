@@ -29,5 +29,25 @@ test('MapGL', function(t) {
     t.ok(true);
     t.end();
   });
+  t.test('Calls onLoad', function(t) {
+    t.ok(MapGL);
+    const map = (
+      <MapGL
+        width={ 500 }
+        height={ 500 }
+        longitude={ -122 }
+        latitude={ 37 }
+        zoom={ 14 }
+        onLoad={ () => {
+          t.ok(true);
+          t.end();
+        } }
+        mapboxApiAccessToken={ mapboxApiAccessToken }/>
+    );
+    const reactContainer = document.createElement('div');
+    document.body.appendChild(reactContainer);
+    ReactDOM.render(map, reactContainer);
+    t.ok(true);
+  });
 });
 /* eslint-enable func-names */
