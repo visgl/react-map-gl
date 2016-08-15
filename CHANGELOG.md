@@ -1,3 +1,11 @@
+# Version 1.3.0
+
+* Added `clickRadius` prop to allow for customization of hitbox around clicked point
+
+# Version 1.2.0
+
+* Add `fitBounds`
+
 # Version 1.1.1
 
 * Update mapbox-gl from v0.21.0 (from v0.20.0)
