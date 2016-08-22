@@ -18,10 +18,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import MapGL from './map.react';
-import * as overlays from './overlays';
-import fitBounds from './utils/fit-bounds';
+// NOTE: Transform is not a public API so we should be careful to always lock
+// down mapbox-gl to a specific major, minor, and patch version.
+import Transform from 'mapbox-gl/js/geo/transform';
+export {Transform as default};
 
-module.exports = MapGL;
-module.exports.fitBounds = fitBounds;
-Object.assign(module.exports, overlays);
+import {Point} from 'mapbox-gl';
+
+export function mod(value, divisor) {
+  const modulus = value % divisor;
+  return modulus < 0 ? divisor + modulus : modulus;
+}
+
+export function unprojectFromTransform(transform, point) {
+  return transform.pointLocation(Point.convert(point));
+}
+
+export function cloneTransform(original) {
+  const transform = new Transform(original._minZoom, original._maxZoom);
+  transform.latRange = original.latRange;
+  transform.width = original.width;
+  transform.height = original.height;
+  transform.zoom = original.zoom;
+  transform.center = original.center;
+  transform.angle = original.angle;
+  transform.altitude = original.altitude;
+  transform.pitch = original.pitch;
+  transform.bearing = original.bearing;
+  transform.altitude = original.altitude;
+  return transform;
+}

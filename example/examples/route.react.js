@@ -24,13 +24,19 @@ const windowAlert = window.alert;
 
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
-import d3 from 'd3';
+import {scaleOrdinal, schemeCategory10} from 'd3-scale';
+import {rgb} from 'd3-color';
 
 import MapGL, {SVGOverlay, CanvasOverlay} from '../../src';
 
 import ROUTES from './../data/routes-example.json';
 
-const color = d3.scale.category10();
+function round(x, n) {
+  const tenN = Math.pow(10, n);
+  return Math.round(x * tenN) / tenN;
+}
+
+const color = scaleOrdinal(schemeCategory10);
 
 const PROP_TYPES = {
   width: PropTypes.number.isRequired,
@@ -85,7 +91,7 @@ export default class RouteOverlayExample extends Component {
       {
         ROUTES.map((route, index) => {
           const points = route.coordinates.map(project).map(
-            p => [d3.round(p[0], 1), d3.round(p[1], 1)]
+            p => [round(p[0], 1), round(p[1], 1)]
           );
           return <g key={ index }>{ this._renderRoute(points, index) }</g>;
         })
@@ -99,8 +105,8 @@ export default class RouteOverlayExample extends Component {
     ctx.clearRect(0, 0, width, height);
     ROUTES.map((route, index) =>
       route.coordinates.map(project).forEach((p, i) => {
-        const point = [d3.round(p[0], 1), d3.round(p[1], 1)];
-        ctx.fillStyle = d3.rgb(color(index)).brighter(1).toString();
+        const point = [round(p[0], 1), round(p[1], 1)];
+        ctx.fillStyle = rgb(color(index)).brighter(1).toString();
         ctx.beginPath();
         ctx.arc(point[0], point[1], 2, 0, Math.PI * 2);
         ctx.fill();

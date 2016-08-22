@@ -20,7 +20,9 @@
 import React, {PropTypes, Component} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 import window from 'global/window';
-import d3 from 'd3';
+import {extent} from 'd3-array';
+import {scaleLinear} from 'd3-scale';
+import {geoPath, geoTransform} from 'd3-geo';
 import Immutable from 'immutable';
 
 const PROP_TYPES = {
@@ -79,8 +81,8 @@ export default class ChoroplethOverlay extends Component {
     }
 
     if (this.props.renderWhileDragging || !this.props.isDragging) {
-      const transform = d3.geo.transform({point: projectPoint});
-      const path = d3.geo.path().projection(transform).context(ctx);
+      const transform = geoTransform({point: projectPoint});
+      const path = geoPath().projection(transform).context(ctx);
       this._drawFeatures(ctx, path);
     }
     ctx.restore();
@@ -92,9 +94,9 @@ export default class ChoroplethOverlay extends Component {
       return;
     }
     const colorDomain = this.props.colorDomain ||
-      d3.extent(features.toArray(), this.props.valueAccessor);
+      extent(features.toArray(), this.props.valueAccessor);
 
-    const colorScale = d3.scale.linear()
+    const colorScale = scaleLinear()
       .domain(colorDomain)
       .range(this.props.colorRange)
       .clamp(true);

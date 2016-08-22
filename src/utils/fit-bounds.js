@@ -18,10 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import MapGL from './map.react';
-import * as overlays from './overlays';
-import fitBounds from './utils/fit-bounds';
+// NOTE: Transform is not a public API so we should be careful to always lock
+// down mapbox-gl to a specific major, minor, and patch version.
+import Transform from './transform';
+import {LngLatBounds, Point} from 'mapbox-gl';
 
-module.exports = MapGL;
-module.exports.fitBounds = fitBounds;
-Object.assign(module.exports, overlays);
+export default function fitBounds(width, height, _bounds, options) {
+  const bounds = new LngLatBounds([_bounds[0].reverse(), _bounds[1].reverse()]);
+  options = options || {};
+  const padding = typeof options.padding === 'undefined' ? 0 : options.padding;
+  const offset = Point.convert([0, 0]);
+  const tr = new Transform();
+  tr.width = width;
+  tr.height = height;
+  const nw = tr.project(bounds.getNorthWest());
+  const se = tr.project(bounds.getSouthEast());
+  const size = se.sub(nw);
+  const scaleX = (tr.width - padding * 2 - Math.abs(offset.x) * 2) / size.x;
+  const scaleY = (tr.height - padding * 2 - Math.abs(offset.y) * 2) / size.y;
+
+  const center = tr.unproject(nw.add(se).div(2));
+  const zoom = tr.scaleZoom(tr.scale * Math.min(scaleX, scaleY));
+  return {
+    latitude: center.lat,
+    longitude: center.lng,
+    zoom
+  };
+}
