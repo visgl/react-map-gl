@@ -21,7 +21,9 @@
 import MapGL from './map.react';
 import * as overlays from './overlays';
 import fitBounds from './utils/fit-bounds';
+import StatefulMapGL from './stateful-map.react';
 
 module.exports = MapGL;
+module.exports.StatefulMapGL = StatefulMapGL;
 module.exports.fitBounds = fitBounds;
 Object.assign(module.exports, overlays);
