@@ -19,6 +19,11 @@ See the interactive docs at: https://uber.github.io/react-map-gl
 npm install react-map-gl --save
 ```
 
+**Note on Bundling:** react-map-gl is extensively tested with `browserify`,
+however several users have reported issues when bundling their apps using
+`webpack`. For more information, see the issues, 
+e.g. https://github.com/uber/react-map-gl/issues/112.
+
 ### Usage
 
 ````js
@@ -189,6 +194,12 @@ Its difficult to write tests for this component beacuse it uses WebGL.
 There are some tests in `test/` but for the most part, as new features
 are added, we typically test drive them by running `npm run start` and
 play with the demos.
+
+### Contributing
+
+Contruibutions are welcome. While not necessary, it can be helpful to check with
+maintainers before opening your PR. Also, you will need to complete a short open
+source contribution form before your pull request can be accepted.
 
 # CHANGE LOG
 
