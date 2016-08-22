@@ -23,16 +23,29 @@
 import Transform from './transform';
 import {LngLatBounds, Point} from 'mapbox-gl';
 
-export default function fitBounds(width, height, _bounds, options) {
-  const bounds = new LngLatBounds([_bounds[0].reverse(), _bounds[1].reverse()]);
-  options = options || {};
-  const padding = typeof options.padding === 'undefined' ? 0 : options.padding;
+/**
+ * Returns map settings {latitude, longitude, zoom}
+ * that will contain the provided corners within the provided
+ * width.
+ * @param {Number} width - viewport width
+ * @param {Number} height - viewport height
+ * @param {Array} bounds - [[lat,lon], [lat,lon]]
+ * @param {Number} options.padding - viewport width
+ * @returns {Object} - latitude, longitude and zoom
+ */
+export default function fitBounds(width, height, bounds, {
+  padding = 0
+} = {}) {
+  const _bounds = new LngLatBounds([
+    bounds[0].reverse(),
+    bounds[1].reverse()
+  ]);
   const offset = Point.convert([0, 0]);
   const tr = new Transform();
   tr.width = width;
   tr.height = height;
-  const nw = tr.project(bounds.getNorthWest());
-  const se = tr.project(bounds.getSouthEast());
+  const nw = tr.project(_bounds.getNorthWest());
+  const se = tr.project(_bounds.getSouthEast());
   const size = se.sub(nw);
   const scaleX = (tr.width - padding * 2 - Math.abs(offset.x) * 2) / size.x;
   const scaleY = (tr.height - padding * 2 - Math.abs(offset.y) * 2) / size.y;

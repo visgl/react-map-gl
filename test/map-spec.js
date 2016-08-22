@@ -1,9 +1,10 @@
+import MapGL from '../src';
+
 import document from 'global/document';
 /* global process */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import test from 'tape-catch';
-import MapGL from '../src';
 
 /* eslint-disable no-process-env */
 // This will get converted to a string by envify
