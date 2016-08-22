@@ -17,21 +17,20 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import assert from 'assert';
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 import pureRender from 'pure-render-decorator';
-import d3 from 'd3';
+
+import mapboxgl from 'mapbox-gl';
+import {select} from 'd3-selection';
 import Immutable from 'immutable';
-import mapboxgl, {Point} from 'mapbox-gl';
+import assert from 'assert';
 
-import config from './config';
 import MapInteractions from './map-interactions.react';
-import diffStyles from './diff-styles';
+import config from './config';
 
-// NOTE: Transform is not a public API so we should be careful to always lock
-// down mapbox-gl to a specific major, minor, and patch version.
-import Transform from 'mapbox-gl/js/geo/transform';
+import diffStyles from './utils/diff-styles';
+import {mod, unprojectFromTransform, cloneTransform} from './utils/transform';
 
 // Note: Max pitch is a hard coded value (not a named constant) in transform.js
 const MAX_PITCH = 60;
@@ -66,8 +65,8 @@ const PROP_TYPES = {
   mapboxApiAccessToken: PropTypes.string,
   /**
     * `onChangeViewport` callback is fired when the user interacted with the
-    * map. The object passed to the callback containers `latitude`,
-    * `longitude` and `zoom` information.
+    * map. The object passed to the callback contains `latitude`,
+    * `longitude` and `zoom` and additional state information.
     */
   onChangeViewport: PropTypes.func,
   /**
@@ -204,7 +203,7 @@ export default class MapGL extends Component {
       // attributionControl: this.props.attributionControl
     });
 
-    d3.select(map.getCanvas()).style('outline', 'none');
+    select(map.getCanvas()).style('outline', 'none');
 
     this._map = map;
     this._updateMapViewport({}, this.props);
@@ -594,30 +593,6 @@ export default class MapGL extends Component {
       </div>
     );
   }
-}
-
-function mod(value, divisor) {
-  const modulus = value % divisor;
-  return modulus < 0 ? divisor + modulus : modulus;
-}
-
-function unprojectFromTransform(transform, point) {
-  return transform.pointLocation(Point.convert(point));
-}
-
-function cloneTransform(original) {
-  const transform = new Transform(original._minZoom, original._maxZoom);
-  transform.latRange = original.latRange;
-  transform.width = original.width;
-  transform.height = original.height;
-  transform.zoom = original.zoom;
-  transform.center = original.center;
-  transform.angle = original.angle;
-  transform.altitude = original.altitude;
-  transform.pitch = original.pitch;
-  transform.bearing = original.bearing;
-  transform.altitude = original.altitude;
-  return transform;
 }
 
 MapGL.propTypes = PROP_TYPES;

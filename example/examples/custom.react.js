@@ -17,7 +17,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import d3 from 'd3';
+import {randomNormal} from 'd3-random';
+import {range} from 'd3-array';
 import window from 'global/window';
 import alphaify from 'alphaify';
 import transform from 'svg-transform';
@@ -33,14 +34,14 @@ import CITIES from './../data/cities.json';
 const location = CITIES[0];
 
 const wiggle = (function _wiggle() {
-  const normal = d3.random.normal();
+  const normal = randomNormal();
   return function __wiggle(scale) {
     return normal() * scale;
   };
 }());
 
 // Example data.
-const locations = Immutable.fromJS(d3.range(30).map(
+const locations = Immutable.fromJS(range(30).map(
   () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
 ));
 

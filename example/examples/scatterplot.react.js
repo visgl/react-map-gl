@@ -19,7 +19,8 @@
 // THE SOFTWARE.
 
 import Immutable from 'immutable';
-import d3 from 'd3';
+import {randomNormal} from 'd3-random';
+import {range} from 'd3-array';
 
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
@@ -30,13 +31,13 @@ import MapGL, {ScatterplotOverlay} from '../../src';
 import CITIES from './../data/cities.json';
 const location = CITIES[0];
 
-const normal = d3.random.normal();
+const normal = randomNormal();
 function wiggle(scale) {
   return normal() * scale;
 }
 
 // Example data.
-const locations = Immutable.fromJS(d3.range(4000).map(
+const locations = Immutable.fromJS(range(4000).map(
   () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
 ));
 

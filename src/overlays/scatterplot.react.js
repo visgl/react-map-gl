@@ -20,10 +20,14 @@
 
 import React, {PropTypes, Component} from 'react';
 import window from 'global/window';
-import d3 from 'd3';
 import Immutable from 'immutable';
 import COMPOSITE_TYPES from 'canvas-composite-types';
 import ViewportMercator from 'viewport-mercator-project';
+
+function round(x, n) {
+  const tenN = Math.pow(10, n);
+  return Math.round(x * tenN) / tenN;
+}
 
 const PROP_TYPES = {
   width: PropTypes.number.isRequired,
@@ -83,7 +87,7 @@ export default class ScatterplotOverlay extends Component {
     if ((renderWhileDragging || !isDragging) && locations) {
       for (const location of locations) {
         const pixel = mercator.project(lngLatAccessor(location));
-        const pixelRounded = [d3.round(pixel[0], 1), d3.round(pixel[1], 1)];
+        const pixelRounded = [round(pixel[0], 1), round(pixel[1], 1)];
         if (pixelRounded[0] + dotRadius >= 0 &&
             pixelRounded[0] - dotRadius < width &&
             pixelRounded[1] + dotRadius >= 0 &&
