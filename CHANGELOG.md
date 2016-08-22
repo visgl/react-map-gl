@@ -1,3 +1,8 @@
+# Version 1.3.1
+
+* Upgraded d3 depdencies from v3 to v4 (separate modules). Should reduce code size.
+* Added basic test case for fitBounds.
+
 # Version 1.3.0
 
 * Added `clickRadius` prop to allow for customization of hitbox around clicked point
