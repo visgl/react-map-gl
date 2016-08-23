@@ -20,7 +20,6 @@
 import {randomNormal} from 'd3-random';
 import {range} from 'd3-array';
 import window from 'global/window';
-import alphaify from 'alphaify';
 import transform from 'svg-transform';
 import Immutable from 'immutable';
 
@@ -28,6 +27,7 @@ import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 
 import MapGL, {CanvasOverlay, SVGOverlay} from '../../src';
+import alphaify from '../../src/utils/alphaify';
 
 // San Francisco
 import CITIES from './../data/cities.json';
