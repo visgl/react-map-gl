@@ -16,7 +16,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "alphaify": "^1.0.0",
+    "alphaify": "^3.0.0",
     "autobind-decorator": "^1.3.3",
     "bowser": "^1.0.0",
     "canvas-composite-types": "^1.0.4",

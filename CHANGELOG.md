@@ -1,3 +1,12 @@
+# Version 1.4.1
+
+* Bumped `alphaify` dependency to avoid pulling in d3 v3 as sub-dependency
+* Added test case for `fitBounds`
+
+# Version 1.4.0
+
+* Bump d3 to v4, replaces monolithic d3 dependency with specific d3 submodules.
+
 # Version 1.3.0
 
 * Added `clickRadius` prop to allow for customization of hitbox around clicked point
