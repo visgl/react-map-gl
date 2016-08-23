@@ -19,12 +19,12 @@
 // THE SOFTWARE.
 
 import Immutable from 'immutable';
-import alphaify from 'alphaify';
 
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 
 import MapGL, {DraggablePointsOverlay, SVGOverlay} from '../../src';
+import alphaify from '../../src/utils/alphaify';
 
 // A mock example path.
 const initialPoints = [

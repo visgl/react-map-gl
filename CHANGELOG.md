@@ -1,3 +1,7 @@
+# Version 1.4.2
+
+* Remove alphaify dependency due to peerDependency issues
+
 # Version 1.4.1
 
 * Bumped `alphaify` dependency to avoid pulling in d3 v3 as sub-dependency

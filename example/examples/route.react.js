@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import alphaify from 'alphaify';
 import window from 'global/window';
 const windowAlert = window.alert;
 
@@ -28,6 +27,7 @@ import {scaleOrdinal, schemeCategory10} from 'd3-scale';
 import {rgb} from 'd3-color';
 
 import MapGL, {SVGOverlay, CanvasOverlay} from '../../src';
+import alphaify from '../../src/utils/alphaify';
 
 import ROUTES from './../data/routes-example.json';
 
