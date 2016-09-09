@@ -39,6 +39,18 @@ function mousePos(el, event) {
   );
 }
 
+function touchPos(el, event) {
+  const points = [];
+  const rect = el.getBoundingClientRect();
+  for (let i = 0; i < event.touches.length; i++) {
+    points.push(new Point(
+      event.touches[i].clientX - rect.left - el.clientLeft,
+      event.touches[i].clientY - rect.top - el.clientTop
+    ));
+  }
+  return points;
+}
+
 /* eslint-disable max-len */
 // Portions of the code below originally from:
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
@@ -52,6 +64,10 @@ const PROP_TYPES = {
   onMouseRotate: PropTypes.func,
   onMouseUp: PropTypes.func,
   onMouseMove: PropTypes.func,
+  onTouchStart: PropTypes.func,
+  onTouchDrag: PropTypes.func,
+  onTouchRotate: PropTypes.func,
+  onTouchEnd: PropTypes.func,
   onZoom: PropTypes.func,
   onZoomEnd: PropTypes.func
 };
@@ -62,6 +78,10 @@ const DEFAULT_PROPS = {
   onMouseRotate: noop,
   onMouseUp: noop,
   onMouseMove: noop,
+  onTouchStart: noop,
+  onTouchDrag: noop,
+  onTouchRotate: noop,
+  onTouchEnd: noop,
   onZoom: noop,
   onZoomEnd: noop
 };
@@ -82,6 +102,13 @@ export default class MapInteractions extends Component {
     return mousePos(el, event);
   }
 
+  _getTouchPos(event) {
+    const el = this.refs.container;
+    return touchPos(el, event).reduce((prev, curr, i, arr) => {
+      return prev.add(curr.div(arr.length));
+    }, new Point(0, 0));
+  }
+
   @autobind
   _onMouseDown(event) {
     const pos = this._getMousePos(event);
@@ -93,6 +120,19 @@ export default class MapInteractions extends Component {
     this.props.onMouseDown({pos});
     document.addEventListener('mousemove', this._onMouseDrag, false);
     document.addEventListener('mouseup', this._onMouseUp, false);
+  }
+
+  @autobind
+  _onTouchStart(event) {
+    const pos = this._getTouchPos(event);
+    this.setState({
+      startPos: pos,
+      pos,
+      metaKey: Boolean(event.metaKey)
+    });
+    this.props.onTouchStart({pos});
+    document.addEventListener('touchmove', this._onTouchDrag, false);
+    document.addEventListener('touchend', this._onTouchEnd, false);
   }
 
   @autobind
@@ -108,12 +148,34 @@ export default class MapInteractions extends Component {
   }
 
   @autobind
+  _onTouchDrag(event) {
+    const pos = this._getTouchPos(event);
+    this.setState({pos});
+    if (this.state.metaKey) {
+      const {startPos} = this.state;
+      this.props.onTouchRotate({pos, startPos});
+    } else {
+      this.props.onTouchDrag({pos});
+    }
+    event.preventDefault();
+  }
+
+  @autobind
   _onMouseUp(event) {
     document.removeEventListener('mousemove', this._onMouseDrag, false);
     document.removeEventListener('mouseup', this._onMouseUp, false);
     const pos = this._getMousePos(event);
     this.setState({pos});
     this.props.onMouseUp({pos});
+  }
+
+  @autobind
+  _onTouchEnd(event) {
+    document.removeEventListener('touchmove', this._onTouchDrag, false);
+    document.removeEventListener('touchend', this._onTouchEnd, false);
+    const pos = this._getTouchPos(event);
+    this.setState({pos});
+    this.props.onTouchEnd({pos});
   }
 
   @autobind
@@ -224,6 +286,7 @@ export default class MapInteractions extends Component {
         ref="container"
         onMouseMove={ this._onMouseMove }
         onMouseDown={ this._onMouseDown }
+        onTouchStart={ this._onTouchStart }
         onContextMenu={ this._onMouseDown }
         onWheel={ this._onWheel }
         style={ {
