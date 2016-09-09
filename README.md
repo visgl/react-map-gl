@@ -46,7 +46,7 @@ overlays, or create your own. Here's an example of using the build in
 ScatterplotOverlay.
 
 ````js
-import ScatterplotOverlay from 'react-map-gl/src/overlays/scatterplot.react';
+import {ScatterplotOverlay} from 'react-map-gl';
 // ...
 <MapGL {...viewport}>
   <ScatterplotOverlay
