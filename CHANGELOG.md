@@ -1,3 +1,7 @@
+# Version 1.5.0
+
+* Add touch support (Thanks @cammanderson)
+
 # Version 1.4.2
 
 * Remove alphaify dependency due to peerDependency issues
