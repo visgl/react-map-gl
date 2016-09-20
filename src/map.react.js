@@ -78,10 +78,6 @@ const PROP_TYPES = {
     */
   height: PropTypes.number.isRequired,
   /**
-    * Override the default cursor.
-    */
-  cursor: PropTypes.string,
-  /**
     * Is the component currently being dragged. This is used to show/hide the
     * drag cursor. Also used as an optimization in some overlays by preventing
     * rendering while dragging.
@@ -183,6 +179,7 @@ export default class MapGL extends Component {
     super(props);
     this.state = {
       isDragging: false,
+      isHovering: false,
       startDragLngLat: null,
       startBearing: null,
       startPitch: null
@@ -244,7 +241,8 @@ export default class MapGL extends Component {
       this.props.onHoverFeatures;
     if (isInteractive) {
       return this.props.isDragging ?
-        config.CURSOR.GRABBING : config.CURSOR.GRAB;
+        config.CURSOR.GRABBING :
+        (this.state.isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
     }
     return 'inherit';
   }
@@ -512,6 +510,7 @@ export default class MapGL extends Component {
     if (!features.length && this.props.ignoreEmptyFeatures) {
       return;
     }
+    this.setState({isHovering: features.length > 0});
     this.props.onHoverFeatures(features);
   }
 
@@ -568,7 +567,7 @@ export default class MapGL extends Component {
       ...style,
       width,
       height,
-      cursor: cursor || this._cursor()
+      cursor: this._cursor()
     };
 
     let content = [
