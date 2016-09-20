@@ -179,6 +179,7 @@ export default class MapGL extends Component {
     super(props);
     this.state = {
       isDragging: false,
+      isHovering: false,
       startDragLngLat: null,
       startBearing: null,
       startPitch: null
@@ -240,7 +241,8 @@ export default class MapGL extends Component {
       this.props.onHoverFeatures;
     if (isInteractive) {
       return this.props.isDragging ?
-        config.CURSOR.GRABBING : config.CURSOR.GRAB;
+        config.CURSOR.GRABBING :
+        (this.state.isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
     }
     return 'inherit';
   }
@@ -508,6 +510,7 @@ export default class MapGL extends Component {
     if (!features.length && this.props.ignoreEmptyFeatures) {
       return;
     }
+    this.setState({isHovering: features.length > 0});
     this.props.onHoverFeatures(features);
   }
 

@@ -21,7 +21,7 @@
 import browser from 'bowser';
 
 const PREFIX =
-  browser.webkit ? '-webkit-' :
+  browser.webkit || browser.blink ? '-webkit-' :
   browser.gecko ? '-moz-' :
   '';
 
@@ -30,6 +30,7 @@ export default {
   MAPBOX_API_ACCESS_TOKEN: null,
   CURSOR: {
     GRABBING: `${PREFIX}grabbing`,
-    GRAB: `${PREFIX}grab`
+    GRAB: `${PREFIX}grab`,
+    POINTER: 'pointer'
   }
 };
