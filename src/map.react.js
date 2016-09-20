@@ -32,6 +32,8 @@ import config from './config';
 import diffStyles from './utils/diff-styles';
 import {mod, unprojectFromTransform, cloneTransform} from './utils/transform';
 
+function noop() {}
+
 // Note: Max pitch is a hard coded value (not a named constant) in transform.js
 const MAX_PITCH = 60;
 const PITCH_MOUSE_THRESHOLD = 20;
@@ -63,11 +65,6 @@ const PROP_TYPES = {
     * when using Mapbox provided vector tiles and styles.
     */
   mapboxApiAccessToken: PropTypes.string,
-  /**
-    * `onUnsupported` callback is fired when the component is mounted
-    * but mapbox cannot be initialized.
-    */
-  onUnsupported: PropTypes.func,
   /**
     * `onChangeViewport` callback is fired when the user interacted with the
     * map. The object passed to the callback contains `latitude`,
@@ -180,6 +177,10 @@ const DEFAULT_PROPS = {
 @pureRender
 export default class MapGL extends Component {
 
+  static supported() {
+    return mapboxgl.supported();
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -190,16 +191,15 @@ export default class MapGL extends Component {
       startPitch: null
     };
     mapboxgl.accessToken = props.mapboxApiAccessToken;
+
+    if (!this.state.isSupported) {
+      this.componentDidMount = noop;
+      this.componentWillReceiveProps = noop;
+      this.componentDidUpdate = noop;
+    }
   }
 
   componentDidMount() {
-    if (!this.state.isSupported) {
-      if (this.props.onUnsupported) {
-        this.props.onUnsupported();
-      }
-      return;
-    }
-
     const mapStyle = this.props.mapStyle instanceof Immutable.Map ?
       this.props.mapStyle.toJS() :
       this.props.mapStyle;
@@ -225,10 +225,6 @@ export default class MapGL extends Component {
 
   // New props are comin' round the corner!
   componentWillReceiveProps(newProps) {
-    if (!this.state.isSupported) {
-      return;
-    }
-
     this._updateStateFromProps(this.props, newProps);
     this._updateMapViewport(this.props, newProps);
     this._updateMapStyle(this.props, newProps);
@@ -240,10 +236,6 @@ export default class MapGL extends Component {
   }
 
   componentDidUpdate() {
-    if (!this.state.isSupported) {
-      return;
-    }
-
     // map.resize() reads size from DOM, we need to call after render
     this._updateMapSize(this.state, this.props);
   }
