@@ -562,7 +562,7 @@ export default class MapGL extends Component {
   }
 
   render() {
-    const {className, width, height, cursor, style} = this.props;
+    const {className, width, height, style} = this.props;
     const mapStyle = {
       ...style,
       width,
