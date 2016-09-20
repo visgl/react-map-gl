@@ -64,6 +64,11 @@ const PROP_TYPES = {
     */
   mapboxApiAccessToken: PropTypes.string,
   /**
+    * `onUnsupported` callback is fired when the component is mounted
+    * but mapbox cannot be initialized.
+    */
+  onUnsupported: PropTypes.func,
+  /**
     * `onChangeViewport` callback is fired when the user interacted with the
     * map. The object passed to the callback contains `latitude`,
     * `longitude` and `zoom` and additional state information.
@@ -178,6 +183,7 @@ export default class MapGL extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isSupported: mapboxgl.supported(),
       isDragging: false,
       startDragLngLat: null,
       startBearing: null,
@@ -187,6 +193,13 @@ export default class MapGL extends Component {
   }
 
   componentDidMount() {
+    if (!this.state.isSupported) {
+      if (this.props.onUnsupported) {
+        this.props.onUnsupported();
+      }
+      return;
+    }
+
     const mapStyle = this.props.mapStyle instanceof Immutable.Map ?
       this.props.mapStyle.toJS() :
       this.props.mapStyle;
@@ -212,6 +225,10 @@ export default class MapGL extends Component {
 
   // New props are comin' round the corner!
   componentWillReceiveProps(newProps) {
+    if (!this.state.isSupported) {
+      return;
+    }
+
     this._updateStateFromProps(this.props, newProps);
     this._updateMapViewport(this.props, newProps);
     this._updateMapStyle(this.props, newProps);
@@ -223,6 +240,10 @@ export default class MapGL extends Component {
   }
 
   componentDidUpdate() {
+    if (!this.state.isSupported) {
+      return;
+    }
+
     // map.resize() reads size from DOM, we need to call after render
     this._updateMapSize(this.state, this.props);
   }
@@ -576,7 +597,7 @@ export default class MapGL extends Component {
       </div>
     ];
 
-    if (this.props.onChangeViewport) {
+    if (this.state.isSupported && this.props.onChangeViewport) {
       content = (
         <MapInteractions
           onMouseDown ={ this._onMouseDown }
