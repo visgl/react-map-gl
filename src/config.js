@@ -21,7 +21,7 @@
 import browser from 'bowser';
 
 const PREFIX =
-  browser.webkit ? '-webkit-' :
+  browser.webkit || browser.blink ? '-webkit-' :
   browser.gecko ? '-moz-' :
   '';
 

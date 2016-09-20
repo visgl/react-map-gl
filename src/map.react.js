@@ -78,6 +78,10 @@ const PROP_TYPES = {
     */
   height: PropTypes.number.isRequired,
   /**
+    * Override the default cursor.
+    */
+  cursor: PropTypes.string,
+  /**
     * Is the component currently being dragged. This is used to show/hide the
     * drag cursor. Also used as an optimization in some overlays by preventing
     * rendering while dragging.
@@ -559,12 +563,12 @@ export default class MapGL extends Component {
   }
 
   render() {
-    const {className, width, height, style} = this.props;
+    const {className, width, height, cursor, style} = this.props;
     const mapStyle = {
       ...style,
       width,
       height,
-      cursor: this._cursor()
+      cursor: cursor || this._cursor()
     };
 
     let content = [
