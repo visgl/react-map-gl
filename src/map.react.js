@@ -32,6 +32,8 @@ import config from './config';
 import diffStyles from './utils/diff-styles';
 import {mod, unprojectFromTransform, cloneTransform} from './utils/transform';
 
+function noop() {}
+
 // Note: Max pitch is a hard coded value (not a named constant) in transform.js
 const MAX_PITCH = 60;
 const PITCH_MOUSE_THRESHOLD = 20;
@@ -175,9 +177,14 @@ const DEFAULT_PROPS = {
 @pureRender
 export default class MapGL extends Component {
 
+  static supported() {
+    return mapboxgl.supported();
+  }
+
   constructor(props) {
     super(props);
     this.state = {
+      isSupported: mapboxgl.supported(),
       isDragging: false,
       isHovering: false,
       startDragLngLat: null,
@@ -185,6 +192,12 @@ export default class MapGL extends Component {
       startPitch: null
     };
     mapboxgl.accessToken = props.mapboxApiAccessToken;
+
+    if (!this.state.isSupported) {
+      this.componentDidMount = noop;
+      this.componentWillReceiveProps = noop;
+      this.componentDidUpdate = noop;
+    }
   }
 
   componentDidMount() {
@@ -579,7 +592,7 @@ export default class MapGL extends Component {
       </div>
     ];
 
-    if (this.props.onChangeViewport) {
+    if (this.state.isSupported && this.props.onChangeViewport) {
       content = (
         <MapInteractions
           onMouseDown ={ this._onMouseDown }
