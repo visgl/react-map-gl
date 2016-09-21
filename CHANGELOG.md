@@ -1,3 +1,7 @@
+# Version 1.6.1
+
+* Hotfix: GeoJSON style support issue with mapbox-gl 0.24.0
+
 # Version 1.6.0
 
 * Reduced flicker when updating GeoJSON sources in styles - (Thanks @tsemerad)
