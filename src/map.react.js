@@ -278,7 +278,7 @@ export default class MapGL extends Component {
       const oldSource = map.getSource(update.id);
       if (oldSource.type === 'geojson') {
         // update data if no other GeoJSONSource options were changed
-        const oldOpts = oldSource.workerOptions
+        const oldOpts = oldSource.workerOptions;
         if (
           (newSource.maxzoom === undefined ||
             newSource.maxzoom === oldOpts.geojsonVtOptions.maxZoom) &&
