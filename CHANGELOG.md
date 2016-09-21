@@ -1,3 +1,14 @@
+# Version 1.6.0
+
+* Reduced flicker when updating GeoJSON sources in styles - (Thanks @tsemerad)
+  Covers certain cases, for more info see #124)
+* `MapGL.unsupported()` - New function which calls mapbox-gl's unsupported().
+  Enables applications to detect unsupported browsers and avoid rendering
+  the react-map-gl, for graceful recovery or error handling.
+* Bumps mapbox-gl dependency to 0.24.0.
+* Cursor now changes to pointer over interactive features
+* Fix grab cursor in recent Chrome browsers
+
 # Version 1.5.0
 
 * Add touch support (Thanks @cammanderson)
