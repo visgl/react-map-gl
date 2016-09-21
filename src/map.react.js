@@ -272,6 +272,36 @@ export default class MapGL extends Component {
     });
   }
 
+  _updateSource(map, update) {
+    const newSource = update.source.toJS();
+    if (newSource.type === 'geojson') {
+      const oldSource = map.getSource(update.id);
+      if (oldSource instanceof mapboxgl.GeoJSONSource) {
+        // update data if no other GeoJSONSource options were changed
+        if (
+          (newSource.maxzoom === undefined ||
+            newSource.maxzoom === oldSource.geojsonVtOptions.maxZoom) &&
+          (newSource.buffer === undefined ||
+            newSource.buffer === oldSource.geojsonVtOptions.buffer) &&
+          (newSource.tolerance === undefined ||
+            newSource.tolerance === oldSource.geojsonVtOptions.tolerance) &&
+          (newSource.cluster === undefined ||
+            newSource.cluster === oldSource.cluster) &&
+          (newSource.clusterRadius === undefined ||
+            newSource.clusterRadius === oldSource.superclusterOptions.radius) &&
+          (newSource.clusterMaxZoom === undefined ||
+            newSource.clusterMaxZoom === oldSource.superclusterOptions.maxZoom)
+        ) {
+          oldSource.setData(newSource.data);
+          return;
+        }
+      }
+    }
+
+    map.removeSource(update.id);
+    map.addSource(update.id, newSource);
+  }
+
   // Individually update the maps source and layers that have changed if all
   // other style props haven't changed. This prevents flicking of the map when
   // styles only change sources or layers.
@@ -319,8 +349,7 @@ export default class MapGL extends Component {
       map.addSource(enter.id, enter.source.toJS());
     }
     for (const update of sourcesDiff.update) {
-      map.removeSource(update.id);
-      map.addSource(update.id, update.source.toJS());
+      this._updateSource(map, update);
     }
     for (const exit of sourcesDiff.exit) {
       map.removeSource(exit.id);
