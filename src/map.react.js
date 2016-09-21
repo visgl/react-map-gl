@@ -276,21 +276,22 @@ export default class MapGL extends Component {
     const newSource = update.source.toJS();
     if (newSource.type === 'geojson') {
       const oldSource = map.getSource(update.id);
-      if (oldSource instanceof mapboxgl.GeoJSONSource) {
+      if (oldSource.type === 'geojson') {
         // update data if no other GeoJSONSource options were changed
+        const oldOpts = oldSource.workerOptions
         if (
           (newSource.maxzoom === undefined ||
-            newSource.maxzoom === oldSource.geojsonVtOptions.maxZoom) &&
+            newSource.maxzoom === oldOpts.geojsonVtOptions.maxZoom) &&
           (newSource.buffer === undefined ||
-            newSource.buffer === oldSource.geojsonVtOptions.buffer) &&
+            newSource.buffer === oldOpts.geojsonVtOptions.buffer) &&
           (newSource.tolerance === undefined ||
-            newSource.tolerance === oldSource.geojsonVtOptions.tolerance) &&
+            newSource.tolerance === oldOpts.geojsonVtOptions.tolerance) &&
           (newSource.cluster === undefined ||
-            newSource.cluster === oldSource.cluster) &&
+            newSource.cluster === oldOpts.cluster) &&
           (newSource.clusterRadius === undefined ||
-            newSource.clusterRadius === oldSource.superclusterOptions.radius) &&
+            newSource.clusterRadius === oldOpts.superclusterOptions.radius) &&
           (newSource.clusterMaxZoom === undefined ||
-            newSource.clusterMaxZoom === oldSource.superclusterOptions.maxZoom)
+            newSource.clusterMaxZoom === oldOpts.superclusterOptions.maxZoom)
         ) {
           oldSource.setData(newSource.data);
           return;
