@@ -93,11 +93,16 @@ const PROP_TYPES = {
     */
   startDragLngLat: PropTypes.array,
   /**
-    * Called when a feature is hovered over. Features must set the
-    * `interactive` property to `true` for this to work properly. see the
-    * Mapbox example: https://www.mapbox.com/mapbox-gl-js/example/featuresat/
-    * The first argument of the callback will be the array of feature the
-    * mouse is over. This is the same response returned from `featuresAt`.
+    * Called when a feature is hovered over. Uses Mapbox's
+    * queryRenderedFeatures API to find features under the pointer:
+    * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
+    * To query only some of the layers, set the `interactive` property in the
+    * layer style to `true`. See Mapbox's style spec
+    * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
+    * If no interactive layers are found (e.g. using Mapbox's default styles),
+    * will fall back to query all layers.
+    * @callback
+    * @param {array} features - The array of features the mouse is over.
     */
   onHoverFeatures: PropTypes.func,
   /**
@@ -114,11 +119,14 @@ const PROP_TYPES = {
   attributionControl: PropTypes.bool,
 
   /**
-    * Called when a feature is clicked on. Features must set the
-    * `interactive` property to `true` for this to work properly. see the
-    * Mapbox example: https://www.mapbox.com/mapbox-gl-js/example/featuresat/
-    * The first argument of the callback will be the array of feature the
-    * mouse is over. This is the same response returned from `featuresAt`.
+    * Called when a feature is clicked on. Uses Mapbox's
+    * queryRenderedFeatures API to find features under the pointer:
+    * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
+    * To query only some of the layers, set the `interactive` property in the
+    * layer style to `true`. See Mapbox's style spec
+    * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
+    * If no interactive layers are found (e.g. using Mapbox's default styles),
+    * will fall back to query all layers.
     */
   onClickFeatures: PropTypes.func,
 
