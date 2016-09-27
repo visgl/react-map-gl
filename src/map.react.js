@@ -305,6 +305,8 @@ export default class MapGL extends Component {
     map.addSource(update.id, newSource);
   }
 
+  // Hover and click only query layers whose interactive property is true
+  // If no interactivity is specified, query all layers
   _updateQueryParams(mapStyle) {
     if (mapStyle instanceof Immutable.Map) {
       mapStyle = mapStyle.toJS();
