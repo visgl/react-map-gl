@@ -191,6 +191,7 @@ export default class MapGL extends Component {
       startBearing: null,
       startPitch: null
     };
+    this._queryParams = {};
     mapboxgl.accessToken = props.mapboxApiAccessToken;
 
     if (!this.state.isSupported) {
@@ -222,6 +223,7 @@ export default class MapGL extends Component {
     this._map = map;
     this._updateMapViewport({}, this.props);
     this._callOnChangeViewport(map.transform);
+    this._updateQueryParams(mapStyle);
   }
 
   // New props are comin' round the corner!
@@ -278,7 +280,7 @@ export default class MapGL extends Component {
       const oldSource = map.getSource(update.id);
       if (oldSource.type === 'geojson') {
         // update data if no other GeoJSONSource options were changed
-        const oldOpts = oldSource.workerOptions
+        const oldOpts = oldSource.workerOptions;
         if (
           (newSource.maxzoom === undefined ||
             newSource.maxzoom === oldOpts.geojsonVtOptions.maxZoom) &&
@@ -301,6 +303,16 @@ export default class MapGL extends Component {
 
     map.removeSource(update.id);
     map.addSource(update.id, newSource);
+  }
+
+  _updateQueryParams(mapStyle) {
+    if (mapStyle instanceof Immutable.Map) {
+      mapStyle = mapStyle.toJS();
+    }
+
+    this._queryParameters = Array.isArray(mapStyle.layers) ?
+      {layers: mapStyle.layers.filter(l => l.interactive).map(l => l.id)} :
+      {};
   }
 
   // Individually update the maps source and layers that have changed if all
@@ -384,6 +396,7 @@ export default class MapGL extends Component {
       } else {
         this._getMap().setStyle(mapStyle);
       }
+      this._updateQueryParams(mapStyle);
     }
   }
 
@@ -549,7 +562,8 @@ export default class MapGL extends Component {
     if (!this.props.onHoverFeatures) {
       return;
     }
-    const features = map.queryRenderedFeatures([pos.x, pos.y]);
+    const features = map.queryRenderedFeatures([pos.x, pos.y],
+      this._queryParameters);
     if (!features.length && this.props.ignoreEmptyFeatures) {
       return;
     }
@@ -579,7 +593,7 @@ export default class MapGL extends Component {
     // Radius enables point features, like marker symbols, to be clicked.
     const size = this.props.clickRadius;
     const bbox = [[pos.x - size, pos.y - size], [pos.x + size, pos.y + size]];
-    const features = map.queryRenderedFeatures(bbox);
+    const features = map.queryRenderedFeatures(bbox, this._queryParameters);
     if (!features.length && this.props.ignoreEmptyFeatures) {
       return;
     }
