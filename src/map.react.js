@@ -313,7 +313,7 @@ export default class MapGL extends Component {
     const interactiveLayerIds = Array.isArray(mapStyle.layers) ? mapStyle.layers
       .filter(l => l.interactive)
       .map(l => l.id) : [];
-    this._queryParameters = interactiveLayerIds.length === 0 ? {} :
+    this._queryParams = interactiveLayerIds.length === 0 ? {} :
       {layers: interactiveLayerIds};
   }
 
@@ -565,7 +565,7 @@ export default class MapGL extends Component {
       return;
     }
     const features = map.queryRenderedFeatures([pos.x, pos.y],
-      this._queryParameters);
+      this._queryParams);
     if (!features.length && this.props.ignoreEmptyFeatures) {
       return;
     }
@@ -595,7 +595,7 @@ export default class MapGL extends Component {
     // Radius enables point features, like marker symbols, to be clicked.
     const size = this.props.clickRadius;
     const bbox = [[pos.x - size, pos.y - size], [pos.x + size, pos.y + size]];
-    const features = map.queryRenderedFeatures(bbox, this._queryParameters);
+    const features = map.queryRenderedFeatures(bbox, this._queryParams);
     if (!features.length && this.props.ignoreEmptyFeatures) {
       return;
     }
