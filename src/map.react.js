@@ -310,9 +310,11 @@ export default class MapGL extends Component {
       mapStyle = mapStyle.toJS();
     }
 
-    this._queryParameters = Array.isArray(mapStyle.layers) ?
-      {layers: mapStyle.layers.filter(l => l.interactive).map(l => l.id)} :
-      {};
+    const interactiveLayerIds = Array.isArray(mapStyle.layers) ? mapStyle.layers
+      .filter(l => l.interactive)
+      .map(l => l.id) : [];
+    this._queryParameters = interactiveLayerIds.length === 0 ? {} :
+      {layers: interactiveLayerIds};
   }
 
   // Individually update the maps source and layers that have changed if all
