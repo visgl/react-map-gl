@@ -29,6 +29,7 @@ import assert from 'assert';
 import MapInteractions from './map-interactions.react';
 import config from './config';
 
+import {getInteractiveLayerIds} from './utils/style-utils';
 import diffStyles from './utils/diff-styles';
 import {mod, unprojectFromTransform, cloneTransform} from './utils/transform';
 
@@ -92,11 +93,16 @@ const PROP_TYPES = {
     */
   startDragLngLat: PropTypes.array,
   /**
-    * Called when a feature is hovered over. Features must set the
-    * `interactive` property to `true` for this to work properly. see the
-    * Mapbox example: https://www.mapbox.com/mapbox-gl-js/example/featuresat/
-    * The first argument of the callback will be the array of feature the
-    * mouse is over. This is the same response returned from `featuresAt`.
+    * Called when a feature is hovered over. Uses Mapbox's
+    * queryRenderedFeatures API to find features under the pointer:
+    * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
+    * To query only some of the layers, set the `interactive` property in the
+    * layer style to `true`. See Mapbox's style spec
+    * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
+    * If no interactive layers are found (e.g. using Mapbox's default styles),
+    * will fall back to query all layers.
+    * @callback
+    * @param {array} features - The array of features the mouse is over.
     */
   onHoverFeatures: PropTypes.func,
   /**
@@ -113,11 +119,14 @@ const PROP_TYPES = {
   attributionControl: PropTypes.bool,
 
   /**
-    * Called when a feature is clicked on. Features must set the
-    * `interactive` property to `true` for this to work properly. see the
-    * Mapbox example: https://www.mapbox.com/mapbox-gl-js/example/featuresat/
-    * The first argument of the callback will be the array of feature the
-    * mouse is over. This is the same response returned from `featuresAt`.
+    * Called when a feature is clicked on. Uses Mapbox's
+    * queryRenderedFeatures API to find features under the pointer:
+    * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
+    * To query only some of the layers, set the `interactive` property in the
+    * layer style to `true`. See Mapbox's style spec
+    * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
+    * If no interactive layers are found (e.g. using Mapbox's default styles),
+    * will fall back to query all layers.
     */
   onClickFeatures: PropTypes.func,
 
@@ -191,6 +200,7 @@ export default class MapGL extends Component {
       startBearing: null,
       startPitch: null
     };
+    this._queryParams = {};
     mapboxgl.accessToken = props.mapboxApiAccessToken;
 
     if (!this.state.isSupported) {
@@ -201,7 +211,7 @@ export default class MapGL extends Component {
   }
 
   componentDidMount() {
-    const mapStyle = this.props.mapStyle instanceof Immutable.Map ?
+    const mapStyle = Immutable.Map.isMap(this.props.mapStyle) ?
       this.props.mapStyle.toJS() :
       this.props.mapStyle;
     const map = new mapboxgl.Map({
@@ -222,6 +232,7 @@ export default class MapGL extends Component {
     this._map = map;
     this._updateMapViewport({}, this.props);
     this._callOnChangeViewport(map.transform);
+    this._updateQueryParams(mapStyle);
   }
 
   // New props are comin' round the corner!
@@ -278,7 +289,7 @@ export default class MapGL extends Component {
       const oldSource = map.getSource(update.id);
       if (oldSource.type === 'geojson') {
         // update data if no other GeoJSONSource options were changed
-        const oldOpts = oldSource.workerOptions
+        const oldOpts = oldSource.workerOptions;
         if (
           (newSource.maxzoom === undefined ||
             newSource.maxzoom === oldOpts.geojsonVtOptions.maxZoom) &&
@@ -301,6 +312,14 @@ export default class MapGL extends Component {
 
     map.removeSource(update.id);
     map.addSource(update.id, newSource);
+  }
+
+  // Hover and click only query layers whose interactive property is true
+  // If no interactivity is specified, query all layers
+  _updateQueryParams(mapStyle) {
+    const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
+    this._queryParams = interactiveLayerIds.length === 0 ? {} :
+      {layers: interactiveLayerIds};
   }
 
   // Individually update the maps source and layers that have changed if all
@@ -375,7 +394,7 @@ export default class MapGL extends Component {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
     if (mapStyle !== oldMapStyle) {
-      if (mapStyle instanceof Immutable.Map) {
+      if (Immutable.Map.isMap(mapStyle)) {
         if (this.props.preventStyleDiffing) {
           this._getMap().setStyle(mapStyle.toJS());
         } else {
@@ -384,6 +403,7 @@ export default class MapGL extends Component {
       } else {
         this._getMap().setStyle(mapStyle);
       }
+      this._updateQueryParams(mapStyle);
     }
   }
 
@@ -549,7 +569,8 @@ export default class MapGL extends Component {
     if (!this.props.onHoverFeatures) {
       return;
     }
-    const features = map.queryRenderedFeatures([pos.x, pos.y]);
+    const features = map.queryRenderedFeatures([pos.x, pos.y],
+      this._queryParams);
     if (!features.length && this.props.ignoreEmptyFeatures) {
       return;
     }
@@ -579,7 +600,7 @@ export default class MapGL extends Component {
     // Radius enables point features, like marker symbols, to be clicked.
     const size = this.props.clickRadius;
     const bbox = [[pos.x - size, pos.y - size], [pos.x + size, pos.y + size]];
-    const features = map.queryRenderedFeatures(bbox);
+    const features = map.queryRenderedFeatures(bbox, this._queryParams);
     if (!features.length && this.props.ignoreEmptyFeatures) {
       return;
     }
