@@ -29,6 +29,7 @@ import assert from 'assert';
 import MapInteractions from './map-interactions.react';
 import config from './config';
 
+import {getInteractiveLayerIds} from './utils/style-utils';
 import diffStyles from './utils/diff-styles';
 import {mod, unprojectFromTransform, cloneTransform} from './utils/transform';
 
@@ -202,7 +203,7 @@ export default class MapGL extends Component {
   }
 
   componentDidMount() {
-    const mapStyle = this.props.mapStyle instanceof Immutable.Map ?
+    const mapStyle = Immutable.Map.isMap(this.props.mapStyle) ?
       this.props.mapStyle.toJS() :
       this.props.mapStyle;
     const map = new mapboxgl.Map({
@@ -308,13 +309,7 @@ export default class MapGL extends Component {
   // Hover and click only query layers whose interactive property is true
   // If no interactivity is specified, query all layers
   _updateQueryParams(mapStyle) {
-    if (mapStyle instanceof Immutable.Map) {
-      mapStyle = mapStyle.toJS();
-    }
-
-    const interactiveLayerIds = Array.isArray(mapStyle.layers) ? mapStyle.layers
-      .filter(l => l.interactive)
-      .map(l => l.id) : [];
+    const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
     this._queryParams = interactiveLayerIds.length === 0 ? {} :
       {layers: interactiveLayerIds};
   }
@@ -391,7 +386,7 @@ export default class MapGL extends Component {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
     if (mapStyle !== oldMapStyle) {
-      if (mapStyle instanceof Immutable.Map) {
+      if (Immutable.Map.isMap(mapStyle)) {
         if (this.props.preventStyleDiffing) {
           this._getMap().setStyle(mapStyle.toJS());
         } else {
