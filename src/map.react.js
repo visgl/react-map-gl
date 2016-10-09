@@ -171,9 +171,9 @@ const PROP_TYPES = {
 
   /**
    * Disable the default scroll zoom behaviour
-   * Default true
+   * Default false
    */
-  scrollZoom: React.PropTypes.bool
+  scrollZoomDisabled: React.PropTypes.bool
 };
 
 const DEFAULT_PROPS = {
@@ -187,7 +187,7 @@ const DEFAULT_PROPS = {
   pitch: 0,
   altitude: 1.5,
   clickRadius: 15,
-  scrollZoom: true
+  scrollZoomDisabled: false
 };
 
 @pureRender
@@ -664,7 +664,7 @@ export default class MapGL extends Component {
           onTouchEnd ={ this._onTouchEnd }
           onZoom ={ this._onZoom }
           onZoomEnd ={ this._onZoomEnd }
-          scrollZoom ={ this.props.scrollZoom }
+          scrollZoomDisabled ={ this.props.scrollZoomDisabled }
           width ={ this.props.width }
           height ={ this.props.height }>
 
