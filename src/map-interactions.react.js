@@ -95,7 +95,7 @@ export default class MapInteractions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dragged: false,
+      didDrag: false,
       startPos: null,
       pos: null,
       mouseWheelPos: null
@@ -118,7 +118,7 @@ export default class MapInteractions extends Component {
   _onMouseDown(event) {
     const pos = this._getMousePos(event);
     this.setState({
-      dragged: false,
+      didDrag: false,
       startPos: pos,
       pos,
       metaKey: Boolean(event.metaKey)
@@ -132,7 +132,7 @@ export default class MapInteractions extends Component {
   _onTouchStart(event) {
     const pos = this._getTouchPos(event);
     this.setState({
-      dragged: false,
+      didDrag: false,
       startPos: pos,
       pos,
       metaKey: Boolean(event.metaKey)
@@ -145,7 +145,7 @@ export default class MapInteractions extends Component {
   @autobind
   _onMouseDrag(event) {
     const pos = this._getMousePos(event);
-    this.setState({pos, dragged: true});
+    this.setState({pos, didDrag: true});
     if (this.state.metaKey) {
       const {startPos} = this.state;
       this.props.onMouseRotate({pos, startPos});
@@ -157,7 +157,7 @@ export default class MapInteractions extends Component {
   @autobind
   _onTouchDrag(event) {
     const pos = this._getTouchPos(event);
-    this.setState({pos, dragged: true});
+    this.setState({pos, didDrag: true});
     if (this.state.metaKey) {
       const {startPos} = this.state;
       this.props.onTouchRotate({pos, startPos});
@@ -174,7 +174,7 @@ export default class MapInteractions extends Component {
     const pos = this._getMousePos(event);
     this.setState({pos});
     this.props.onMouseUp({pos});
-    if (!this.state.dragged) {
+    if (!this.state.didDrag) {
       this.props.onMouseClick({pos});
     }
   }
@@ -186,7 +186,7 @@ export default class MapInteractions extends Component {
     const pos = this._getTouchPos(event);
     this.setState({pos});
     this.props.onTouchEnd({pos});
-    if (!this.state.dragged) {
+    if (!this.state.didDrag) {
       this.props.onTouchTap({pos});
     }
   }
