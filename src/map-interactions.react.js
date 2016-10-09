@@ -193,7 +193,9 @@ export default class MapInteractions extends Component {
     event.preventDefault();
 
     // If we have disabled scroll zoom
-    if (this.props.scrollZoomDisabled === true) return;
+    if (this.props.scrollZoomDisabled === true) {
+      return;
+    }
 
     let value = event.deltaY;
     // Firefox doubles the values on retina screens...
