@@ -69,7 +69,8 @@ const PROP_TYPES = {
   onTouchRotate: PropTypes.func,
   onTouchEnd: PropTypes.func,
   onZoom: PropTypes.func,
-  onZoomEnd: PropTypes.func
+  onZoomEnd: PropTypes.func,
+  scrollZoom: PropTypes.bool
 };
 
 const DEFAULT_PROPS = {
@@ -83,7 +84,8 @@ const DEFAULT_PROPS = {
   onTouchRotate: noop,
   onTouchEnd: noop,
   onZoom: noop,
-  onZoomEnd: noop
+  onZoomEnd: noop,
+  scrollZoom: true
 };
 
 export default class MapInteractions extends Component {
@@ -189,6 +191,10 @@ export default class MapInteractions extends Component {
   _onWheel(event) {
     event.stopPropagation();
     event.preventDefault();
+
+    // If we have disabled scroll zoom
+    if (this.props.scrollZoom !== true) return;
+    
     let value = event.deltaY;
     // Firefox doubles the values on retina screens...
     if (firefox && event.deltaMode === window.WheelEvent.DOM_DELTA_PIXEL) {
