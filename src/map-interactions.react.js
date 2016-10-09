@@ -64,10 +64,12 @@ const PROP_TYPES = {
   onMouseRotate: PropTypes.func,
   onMouseUp: PropTypes.func,
   onMouseMove: PropTypes.func,
+  onMouseClick: PropTypes.func,
   onTouchStart: PropTypes.func,
   onTouchDrag: PropTypes.func,
   onTouchRotate: PropTypes.func,
   onTouchEnd: PropTypes.func,
+  onTouchTap: PropTypes.func,
   onZoom: PropTypes.func,
   onZoomEnd: PropTypes.func
 };
@@ -78,10 +80,12 @@ const DEFAULT_PROPS = {
   onMouseRotate: noop,
   onMouseUp: noop,
   onMouseMove: noop,
+  onMouseClick: noop,
   onTouchStart: noop,
   onTouchDrag: noop,
   onTouchRotate: noop,
   onTouchEnd: noop,
+  onTouchTap: noop,
   onZoom: noop,
   onZoomEnd: noop
 };
@@ -91,6 +95,7 @@ export default class MapInteractions extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      didDrag: false,
       startPos: null,
       pos: null,
       mouseWheelPos: null
@@ -113,6 +118,7 @@ export default class MapInteractions extends Component {
   _onMouseDown(event) {
     const pos = this._getMousePos(event);
     this.setState({
+      didDrag: false,
       startPos: pos,
       pos,
       metaKey: Boolean(event.metaKey)
@@ -126,6 +132,7 @@ export default class MapInteractions extends Component {
   _onTouchStart(event) {
     const pos = this._getTouchPos(event);
     this.setState({
+      didDrag: false,
       startPos: pos,
       pos,
       metaKey: Boolean(event.metaKey)
@@ -138,7 +145,7 @@ export default class MapInteractions extends Component {
   @autobind
   _onMouseDrag(event) {
     const pos = this._getMousePos(event);
-    this.setState({pos});
+    this.setState({pos, didDrag: true});
     if (this.state.metaKey) {
       const {startPos} = this.state;
       this.props.onMouseRotate({pos, startPos});
@@ -150,7 +157,7 @@ export default class MapInteractions extends Component {
   @autobind
   _onTouchDrag(event) {
     const pos = this._getTouchPos(event);
-    this.setState({pos});
+    this.setState({pos, didDrag: true});
     if (this.state.metaKey) {
       const {startPos} = this.state;
       this.props.onTouchRotate({pos, startPos});
@@ -167,6 +174,9 @@ export default class MapInteractions extends Component {
     const pos = this._getMousePos(event);
     this.setState({pos});
     this.props.onMouseUp({pos});
+    if (!this.state.didDrag) {
+      this.props.onMouseClick({pos});
+    }
   }
 
   @autobind
@@ -176,6 +186,9 @@ export default class MapInteractions extends Component {
     const pos = this._getTouchPos(event);
     this.setState({pos});
     this.props.onTouchEnd({pos});
+    if (!this.state.didDrag) {
+      this.props.onTouchTap({pos});
+    }
   }
 
   @autobind

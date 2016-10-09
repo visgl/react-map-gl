@@ -582,6 +582,10 @@ export default class MapGL extends Component {
     this._onMouseUp(opt);
   }
 
+  @autobind _onTouchTap(opt) {
+    this._onMouseClick(opt);
+  }
+
   @autobind _onMouseUp(opt) {
     const map = this._getMap();
     this._callOnChangeViewport(map.transform, {
@@ -590,11 +594,14 @@ export default class MapGL extends Component {
       startBearing: null,
       startPitch: null
     });
+  }
 
+  @autobind _onMouseClick(opt) {
     if (!this.props.onClickFeatures) {
       return;
     }
 
+    const map = this._getMap();
     const pos = opt.pos;
 
     // Radius enables point features, like marker symbols, to be clicked.
@@ -651,10 +658,12 @@ export default class MapGL extends Component {
           onMouseRotate ={ this._onMouseRotate }
           onMouseUp ={ this._onMouseUp }
           onMouseMove ={ this._onMouseMove }
+          onMouseClick = { this._onMouseClick }
           onTouchStart ={ this._onTouchStart }
           onTouchDrag ={ this._onTouchDrag }
           onTouchRotate ={ this._onTouchRotate }
           onTouchEnd ={ this._onTouchEnd }
+          onTouchTap = { this._onTouchTap }
           onZoom ={ this._onZoom }
           onZoomEnd ={ this._onZoomEnd }
           width ={ this.props.width }
