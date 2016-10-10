@@ -1,3 +1,11 @@
+# Version 1.7.0
+
+* Provide a way to control per-layer interactivity - onClickFeatures and
+  onHoverFeatures have the option to only query selected layers. Enabled by
+  setting the `interactive` property to `true` in layer styles. (#131)
+
+* Fix bug where onClickFeatures is fired after panning/rotating (#133)
+
 # Version 1.6.1
 
 * Hotfix: GeoJSON style support issue with mapbox-gl 0.24.0
@@ -6,7 +14,7 @@
 
 * Reduced flicker when updating GeoJSON sources in styles - (Thanks @tsemerad)
   Covers certain cases, for more info see #124)
-* `MapGL.unsupported()` - New function which calls mapbox-gl's unsupported().
+* `MapGL.supported()` - New function which calls mapbox-gl's `supported()`.
   Enables applications to detect unsupported browsers and avoid rendering
   the react-map-gl, for graceful recovery or error handling.
 * Bumps mapbox-gl dependency to 0.24.0.
