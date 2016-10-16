@@ -199,7 +199,7 @@ play with the demos.
 
 ### Contributing
 
-Contruibutions are welcome. While not necessary, it can be helpful to check with
+Contributions are welcome. While not necessary, it can be helpful to check with
 maintainers before opening your PR. Also, you will need to complete a short open
 source contribution form before your pull request can be accepted.
 
