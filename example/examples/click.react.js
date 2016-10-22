@@ -56,10 +56,15 @@ export default class ClickExample extends Component {
 
   @autobind
   _onClickFeatures(features) {
-      const placeNames = features
-        .filter(feature => feature.layer['source-layer'] === 'place_label')
-        .map(feature => feature.properties.name);
-      windowAlert(placeNames);
+    const placeNames = features
+      .filter(feature => feature.layer['source-layer'] === 'place_label')
+      .map(feature => feature.properties.name);
+    windowAlert(placeNames);
+  }
+
+  @autobind
+  _onClick(coordinates, pos) {
+    windowAlert(`${coordinates}\n${JSON.stringify(pos)}`);
   }
 
   render() {
@@ -70,7 +75,8 @@ export default class ClickExample extends Component {
     return (
       <MapGL { ...viewport }
           onChangeViewport={ this._onChangeViewport }
-          onClickFeatures={ this._onClickFeatures }/>
+          onClickFeatures={ this._onClickFeatures }
+          onClick={ this._onClick }/>
     );
   }
 }
