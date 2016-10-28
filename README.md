@@ -20,11 +20,10 @@ npm install react-map-gl --save
 ```
 
 **Note on Bundling:** react-map-gl is extensively tested with `browserify`,
-however several users have reported issues when bundling their apps using
-`webpack`. As a first step, please consult the
-[official mapbox webpack config](https://github.com/mapbox/mapbox-gl-js/blob/master/webpack.config.example.js).
-There is also some helpful information from  in the issues and a
-[request for help](https://github.com/uber/react-map-gl/issues/112).
+and `webpack` is not offically supported. Mapbox-gl-js has
+[dropped](https://github.com/mapbox/mapbox-gl-js/#using-mapbox-gl-js-with-other-module-systems)
+support for building using webpack and recommends the distribution build
+be used. Information for this configuration can be found in this [request for help](https://github.com/uber/react-map-gl/issues/112).
 
 ### Usage
 
