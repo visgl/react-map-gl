@@ -96,6 +96,7 @@ export default class MapInteractions extends Component {
     super(props);
     this.state = {
       didDrag: false,
+      isFunctionKeyPressed: false,
       startPos: null,
       pos: null,
       mouseWheelPos: null
@@ -114,6 +115,11 @@ export default class MapInteractions extends Component {
     }, new Point(0, 0));
   }
 
+  _isFunctionKeyPressed(event) {
+    return Boolean(event.metaKey || event.altKey ||
+      event.ctrlKey || event.shiftKey);
+  }
+
   @autobind
   _onMouseDown(event) {
     const pos = this._getMousePos(event);
@@ -121,7 +127,7 @@ export default class MapInteractions extends Component {
       didDrag: false,
       startPos: pos,
       pos,
-      metaKey: Boolean(event.metaKey)
+      isFunctionKeyPressed: this._isFunctionKeyPressed(event)
     });
     this.props.onMouseDown({pos});
     document.addEventListener('mousemove', this._onMouseDrag, false);
@@ -135,7 +141,7 @@ export default class MapInteractions extends Component {
       didDrag: false,
       startPos: pos,
       pos,
-      metaKey: Boolean(event.metaKey)
+      isFunctionKeyPressed: this._isFunctionKeyPressed(event)
     });
     this.props.onTouchStart({pos});
     document.addEventListener('touchmove', this._onTouchDrag, false);
@@ -146,7 +152,7 @@ export default class MapInteractions extends Component {
   _onMouseDrag(event) {
     const pos = this._getMousePos(event);
     this.setState({pos, didDrag: true});
-    if (this.state.metaKey) {
+    if (this.state.isFunctionKeyPressed) {
       const {startPos} = this.state;
       this.props.onMouseRotate({pos, startPos});
     } else {
@@ -158,7 +164,7 @@ export default class MapInteractions extends Component {
   _onTouchDrag(event) {
     const pos = this._getTouchPos(event);
     this.setState({pos, didDrag: true});
-    if (this.state.metaKey) {
+    if (this.state.isFunctionKeyPressed) {
       const {startPos} = this.state;
       this.props.onTouchRotate({pos, startPos});
     } else {

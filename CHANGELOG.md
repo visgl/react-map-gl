@@ -1,3 +1,7 @@
+# Version 1.7.1
+* Use any one of the function keys {command, shift, ctrl, alt} to enable the
+  perspective mode.
+
 # Version 1.7.0
 
 * Provide a way to control per-layer interactivity - onClickFeatures and

@@ -111,7 +111,7 @@ Perspective mode is exposed using the `pitch` and `bearing` props
 
 In addition, the `perspectiveEnabled` prop (default: `false`)
 will activate mouse handlers that allow the user to change `pitch` and
-`bearing` using the mouse while holding down the "command" key.
+`bearing` using the mouse while holding down any function key {command, shift, ctrl, alt}.
 
 If `perspectiveEnabled` is not set to `true` then the user will not be able to
 change the pitch and bearing, which means that the default props will show

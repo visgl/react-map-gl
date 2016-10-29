@@ -148,7 +148,7 @@ const PROP_TYPES = {
   preventStyleDiffing: PropTypes.bool,
 
   /**
-    * Enables perspective control event handling (Command-rotate)
+    * Enables perspective control event handling
     */
   perspectiveEnabled: PropTypes.bool,
 
