@@ -234,6 +234,21 @@ export default class MapGL extends Component {
     this._callOnChangeViewport(map.transform);
     this._updateQueryParams(mapStyle);
   }
+  
+  function updateSource(map, update) {
+     var newSource = update.source.toJS();
+ 
+     if (newSource.type === "geojson") {
+         var oldSource = map.getSource(update.id);
+         if (oldSource.setData != null) {
+             oldSource.setData(newSource.data);
+             return;
+         }
+     }
+     
+     map.removeSource(update.id);
+     map.addSource(update.id, newSource);   
+ }
 
   // New props are comin' round the corner!
   componentWillReceiveProps(newProps) {
