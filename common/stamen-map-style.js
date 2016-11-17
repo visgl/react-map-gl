@@ -29,7 +29,7 @@ module.exports = Immutable.Map({
       type: 'raster',
       tileSize: 256,
       scheme: 'xyz',
-      tiles: ['http://tile.stamen.com/toner/{z}/{x}/{y}.png']
+      tiles: ['//tile.stamen.com/toner/{z}/{x}/{y}.png']
     }
   },
   layers: [
