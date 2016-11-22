@@ -88,6 +88,15 @@ heatmaps.
 
 Example usage:
 
+For Webpack need install ```npm i glslify-loader raw-loader --save``` and add to webpack.config.js
+```
+{
+  test: /\.(glsl|frag|vert)$/,
+  include: path.resolve(__dirname, 'node_modules/webgl-heatmap'),
+  loader: 'raw!glslify'
+}
+```
+
 ````js
 import HeatmapOverlay from 'react-map-gl-heatmap-overlay';
 import cities from 'example-cities';
