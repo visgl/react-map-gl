@@ -19,12 +19,12 @@
 // THE SOFTWARE.
 
 import React, {PropTypes, Component} from 'react';
+import ViewportMercator from 'viewport-mercator-project';
 
 const PROP_TYPES = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   redraw: PropTypes.func.isRequired,
-  project: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired
   // TODO: style
 };
@@ -32,7 +32,7 @@ const PROP_TYPES = {
 export default class HTMLOverlay extends Component {
 
   render() {
-    const {width, height, project, isDragging} = this.props;
+    const {width, height, isDragging} = this.props;
     const style = {
       position: 'absolute',
       pointerEvents: 'none',
@@ -42,9 +42,12 @@ export default class HTMLOverlay extends Component {
       height,
       ...this.props.style
     };
+    const mercator = ViewportMercator(this.props);
+    const {project, unproject} = mercator;
+
     return (
       <div ref="overlay" style={ style }>
-        { this.props.redraw({width, height, project, isDragging}) }
+        { this.props.redraw({width, height, project, unproject, isDragging}) }
       </div>
     );
   }
