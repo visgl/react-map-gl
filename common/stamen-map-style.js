@@ -29,7 +29,7 @@ module.exports = Immutable.Map({
       type: 'raster',
       tileSize: 256,
       scheme: 'xyz',
-      tiles: ['//tile.stamen.com/toner/{z}/{x}/{y}.png']
+      tiles: ['https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png']
     }
   },
   layers: [
