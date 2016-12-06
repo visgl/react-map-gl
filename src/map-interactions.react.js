@@ -206,7 +206,6 @@ export default class MapInteractions extends Component {
   /* eslint-disable complexity, max-statements */
   @autobind
   _onWheel(event) {
-    event.stopPropagation();
     event.preventDefault();
     let value = event.deltaY;
     // Firefox doubles the values on retina screens...
