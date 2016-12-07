@@ -51,7 +51,7 @@ export default function fitBounds(width, height, bounds, {
   const scaleY = (tr.height - padding * 2 - Math.abs(offset.y) * 2) / size.y;
 
   const center = tr.unproject(nw.add(se).div(2));
-  const zoom = tr.scaleZoom(tr.scale * Math.min(scaleX, scaleY));
+  const zoom = tr.scaleZoom(tr.scale * Math.abs(Math.min(scaleX, scaleY)));
   return {
     latitude: center.lat,
     longitude: center.lng,
