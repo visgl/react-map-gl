@@ -174,7 +174,13 @@ const PROP_TYPES = {
     * Unit: map heights, default 1.5
     * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
     */
-  altitude: React.PropTypes.number
+  altitude: React.PropTypes.number,
+
+  /**
+   * Disable the default scroll zoom behaviour
+   * Default false
+   */
+  scrollZoomDisabled: React.PropTypes.bool
 };
 
 const DEFAULT_PROPS = {
@@ -187,7 +193,8 @@ const DEFAULT_PROPS = {
   bearing: 0,
   pitch: 0,
   altitude: 1.5,
-  clickRadius: 15
+  clickRadius: 15,
+  scrollZoomDisabled: false
 };
 
 @pureRender
@@ -680,6 +687,7 @@ export default class MapGL extends Component {
           onTouchTap = { this._onTouchTap }
           onZoom ={ this._onZoom }
           onZoomEnd ={ this._onZoomEnd }
+          scrollZoomDisabled ={ this.props.scrollZoomDisabled }
           width ={ this.props.width }
           height ={ this.props.height }>
 
