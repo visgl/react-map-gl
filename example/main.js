@@ -33,7 +33,6 @@ import RouteExample from './examples/route.react';
 import StyleDiffingExample from './examples/style-diffing.react';
 import TiltExample from './examples/tilt.react';
 import ClickExample from './examples/click.react';
-import CanvasExample from './examples/canvas.react';
 
 function getAccessToken() {
   const match = window.location.search.match(/access_token=([^&\/]*)/);
@@ -85,7 +84,7 @@ export default class App extends Component {
         <NotInteractiveExample { ...common }/>
         <StyleDiffingExample { ...common }/>
         <ClickExample {...common }/>
-        <StyleDiffingExample { ...common }/> */}
+        <StyleDiffingExample { ...common }/>
       </div>
     );
   }

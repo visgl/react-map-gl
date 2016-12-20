@@ -56,21 +56,16 @@ export default class ChoroplethOverlayExample extends Component {
 
   @autobind
   _onChangeViewport(viewport) {
-    if (this.props.onChangeViewport) {
-      this.props.onChangeViewport(viewport);
-      return;
-    }
     this.setState({viewport});
   }
 
   render() {
     const mapProps = {
       ...this.state.viewport,
-      ...this.props,
-      onChangeViewport: this._onChangeViewport
+      ...this.props
     };
     return (
-      <MapGL { ...mapProps}>
+      <MapGL { ...mapProps} onChangeViewport={this._onChangeViewport}>
         <ChoroplethOverlay
           { ...mapProps }
           globalOpacity={ 0.8 }

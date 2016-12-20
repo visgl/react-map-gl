@@ -67,9 +67,6 @@ export default class OverlayExample extends Component {
 
   @autobind
   _onChangeViewport(viewport) {
-    if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(viewport);
-    }
     this.setState({viewport});
   }
 
@@ -154,6 +151,3 @@ export default class OverlayExample extends Component {
     );
   }
 }
-
-OverlayExample.propTypes = PROP_TYPES;
-

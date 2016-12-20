@@ -97,12 +97,7 @@ export default class TiltExample extends Component {
 
   @autobind
   _onChangeViewport(opt) {
-    if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(opt);
-    }
-    this.setState({
-      viewport: opt
-    });
+    this.setState({viewport: opt});
   }
 
   @autobind

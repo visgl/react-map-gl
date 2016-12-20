@@ -269,12 +269,12 @@ export default class MapGL extends Component {
   }
 
   // External apps can access map this way
-  getMap() {
+  _getMap() {
     return this._map;
   }
 
   // Calculate a cursor style
-  _cursor() {
+  _getCursor() {
     const isInteractive =
       this.props.onChangeViewport ||
       this.props.onClickFeature ||
@@ -505,24 +505,24 @@ export default class MapGL extends Component {
     }
   }
 
-  @autobind _onTouchStart({pos}) {
-    this._onMouseDown({pos});
+  @autobind _onTouchStart(opts) {
+    this._onMouseDown(opts);
   }
 
-  @autobind _onTouchDrag({pos}) {
-    this._onMouseDrag({pos});
+  @autobind _onTouchDrag(opts) {
+    this._onMouseDrag(opts);
   }
 
-  @autobind _onTouchRotate({pos, startPos}) {
-    this._onMouseRotate({pos, startPos});
+  @autobind _onTouchRotate(opts) {
+    this._onMouseRotate(opts);
   }
 
-  @autobind _onTouchEnd(opt) {
-    this._onMouseUp(opt);
+  @autobind _onTouchEnd(opts) {
+    this._onMouseUp(opts);
   }
 
-  @autobind _onTouchTap(opt) {
-    this._onMouseClick(opt);
+  @autobind _onTouchTap(opts) {
+    this._onMouseClick(opts);
   }
 
   @autobind _onMouseDown({pos}) {
@@ -639,7 +639,7 @@ export default class MapGL extends Component {
       ...style,
       width,
       height,
-      cursor: this._cursor()
+      cursor: this._getCursor()
     };
 
     let content = [

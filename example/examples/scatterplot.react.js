@@ -62,19 +62,8 @@ export default class ScatterplotOverlayExample extends Component {
   }
 
   @autobind
-  _onChangeViewport(opt) {
-    if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(opt);
-    }
-    this.setState({
-      viewport: {
-        latitude: opt.latitude,
-        longitude: opt.longitude,
-        zoom: opt.zoom,
-        startDragLngLat: opt.startDragLngLat,
-        isDragging: opt.isDragging
-      }
-    });
+  _onChangeViewport(viewport) {
+    this.setState({viewport});
   }
 
   render() {

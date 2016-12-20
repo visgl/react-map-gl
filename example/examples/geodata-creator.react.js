@@ -67,10 +67,6 @@ export default class GeodataCreator extends Component {
 
   @autobind
   _onChangeViewport(viewport) {
-    if (this.props.onChangeViewport) {
-      this.props.onChangeViewport(viewport);
-      return;
-    }
     this.setState({viewport});
   }
 
@@ -125,7 +121,7 @@ export default class GeodataCreator extends Component {
               <text
                 style={ {fill: 'white', textAnchor: 'middle'} }
                 y={ 5 }>
-               { point.get('id') }
+                { point.get('id') }
               </text>
             </g>
           )
