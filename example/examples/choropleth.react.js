@@ -34,12 +34,12 @@ for (const feature of ZIPCODES_SF.features) {
 
 const ZIPCODES = Immutable.fromJS(ZIPCODES_SF);
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
 export default class ChoroplethOverlayExample extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -57,7 +57,8 @@ export default class ChoroplethOverlayExample extends Component {
   @autobind
   _onChangeViewport(viewport) {
     if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(viewport);
+      this.props.onChangeViewport(viewport);
+      return;
     }
     this.setState({viewport});
   }
@@ -81,5 +82,3 @@ export default class ChoroplethOverlayExample extends Component {
     );
   }
 }
-
-ChoroplethOverlayExample.propTypes = PROP_TYPES;

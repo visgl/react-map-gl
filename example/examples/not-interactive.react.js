@@ -31,12 +31,12 @@ for (const feature of ZIPCODES_SF.features) {
   feature.properties.value = Math.random() * 1000;
 }
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
 export default class NotInteractiveExample extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -53,5 +53,3 @@ export default class NotInteractiveExample extends Component {
     return <MapGL { ...this.state.viewport } { ...this.props }/>;
   }
 }
-
-NotInteractiveExample.propTypes = PROP_TYPES;

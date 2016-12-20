@@ -58,12 +58,12 @@ function buildStyle({fill = 'red', stroke = 'blue'}) {
   });
 }
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
 export default class TiltExample extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -128,6 +128,3 @@ export default class TiltExample extends Component {
     );
   }
 }
-
-TiltExample.propTypes = PROP_TYPES;
-

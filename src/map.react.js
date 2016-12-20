@@ -268,6 +268,11 @@ export default class MapGL extends Component {
     }
   }
 
+  // External apps can access map this way
+  getMap() {
+    return this._map;
+  }
+
   // Calculate a cursor style
   _cursor() {
     const isInteractive =

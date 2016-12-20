@@ -38,12 +38,12 @@ function round(x, n) {
 
 const color = scaleOrdinal(schemeCategory10);
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
 export default class RouteOverlayExample extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -127,5 +127,3 @@ export default class RouteOverlayExample extends Component {
     );
   }
 }
-
-RouteOverlayExample.propTypes = PROP_TYPES;
