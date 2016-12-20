@@ -38,12 +38,12 @@ function round(x, n) {
 
 const color = scaleOrdinal(schemeCategory10);
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
 export default class RouteOverlayExample extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -60,9 +60,6 @@ export default class RouteOverlayExample extends Component {
 
   @autobind
   _onChangeViewport(viewport) {
-    if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(viewport);
-    }
     this.setState({viewport});
   }
 
@@ -88,14 +85,14 @@ export default class RouteOverlayExample extends Component {
   _redrawSVGOverlay({project}) {
     return (
       <g>
-      {
-        ROUTES.map((route, index) => {
-          const points = route.coordinates.map(project).map(
-            p => [round(p[0], 1), round(p[1], 1)]
-          );
-          return <g key={ index }>{ this._renderRoute(points, index) }</g>;
-        })
-      }
+        {
+          ROUTES.map((route, index) => {
+            const points = route.coordinates.map(project).map(
+              p => [round(p[0], 1), round(p[1], 1)]
+            );
+            return <g key={ index }>{ this._renderRoute(points, index) }</g>;
+          })
+        }
       </g>
     );
   }
@@ -127,5 +124,3 @@ export default class RouteOverlayExample extends Component {
     );
   }
 }
-
-RouteOverlayExample.propTypes = PROP_TYPES;

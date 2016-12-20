@@ -21,15 +21,15 @@
 import React, {PropTypes, Component} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  redraw: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired
-  // TODO: style
-};
-
 export default class HTMLOverlay extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    redraw: PropTypes.func.isRequired,
+    isDragging: PropTypes.bool.isRequired
+    // TODO: style
+  };
 
   render() {
     const {width, height, isDragging} = this.props;
@@ -52,5 +52,3 @@ export default class HTMLOverlay extends Component {
     );
   }
 }
-
-HTMLOverlay.propTypes = PROP_TYPES;

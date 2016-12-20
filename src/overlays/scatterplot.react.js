@@ -29,35 +29,33 @@ function round(x, n) {
   return Math.round(x * tenN) / tenN;
 }
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  latitude: PropTypes.number.isRequired,
-  longitude: PropTypes.number.isRequired,
-  zoom: PropTypes.number.isRequired,
-  isDragging: PropTypes.bool.isRequired,
-  locations: PropTypes.instanceOf(Immutable.List).isRequired,
-  lngLatAccessor: PropTypes.func.isRequired,
-  renderWhileDragging: PropTypes.bool,
-  globalOpacity: PropTypes.number.isRequired,
-  dotRadius: PropTypes.number.isRequired,
-  dotFill: PropTypes.string.isRequired,
-  compositeOperation: PropTypes.oneOf(COMPOSITE_TYPES).isRequired
-};
-
-const DEFAULT_PROPS = {
-  lngLatAccessor(location) {
-    return [location.get(0), location.get(1)];
-  },
-  renderWhileDragging: true,
-  dotRadius: 4,
-  dotFill: '#1FBAD6',
-  globalOpacity: 1,
-  // Same as browser default.
-  compositeOperation: 'source-over'
-};
-
 export default class ScatterplotOverlay extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+    zoom: PropTypes.number.isRequired,
+    isDragging: PropTypes.bool.isRequired,
+    locations: PropTypes.instanceOf(Immutable.List).isRequired,
+    lngLatAccessor: PropTypes.func.isRequired,
+    renderWhileDragging: PropTypes.bool,
+    globalOpacity: PropTypes.number.isRequired,
+    dotRadius: PropTypes.number.isRequired,
+    dotFill: PropTypes.string.isRequired,
+    compositeOperation: PropTypes.oneOf(COMPOSITE_TYPES).isRequired
+  };
+
+  static defaultProps = {
+    lngLatAccessor: location => [location.get(0), location.get(1)],
+    renderWhileDragging: true,
+    dotRadius: 4,
+    dotFill: '#1FBAD6',
+    globalOpacity: 1,
+    // Same as browser default.
+    compositeOperation: 'source-over'
+  };
 
   componentDidMount() {
     this._redraw();
@@ -125,6 +123,3 @@ export default class ScatterplotOverlay extends Component {
     );
   }
 }
-
-ScatterplotOverlay.propTypes = PROP_TYPES;
-ScatterplotOverlay.defaultProps = DEFAULT_PROPS;

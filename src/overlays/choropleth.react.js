@@ -25,35 +25,34 @@ import {scaleLinear} from 'd3-scale';
 import {geoPath, geoTransform} from 'd3-geo';
 import Immutable from 'immutable';
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  latitude: PropTypes.number.isRequired,
-  longitude: PropTypes.number.isRequired,
-  zoom: PropTypes.number.isRequired,
-  isDragging: PropTypes.bool.isRequired,
-  renderWhileDragging: PropTypes.bool.isRequired,
-  globalOpacity: PropTypes.number.isRequired,
-  /**
-    * An Immutable List of feature objects.
-    */
-  features: PropTypes.instanceOf(Immutable.List),
-  colorDomain: PropTypes.array,
-  colorRange: PropTypes.array.isRequired,
-  valueAccessor: PropTypes.func.isRequired
-};
-
-const DEFAULT_PROPS = {
-  renderWhileDragging: true,
-  globalOpacity: 1,
-  colorDomain: null,
-  colorRange: ['#FFFFFF', '#1FBAD6'],
-  valueAccessor(feature) {
-    return feature.get('properties').get('value');
-  }
-};
-
 export default class ChoroplethOverlay extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+    zoom: PropTypes.number.isRequired,
+    isDragging: PropTypes.bool.isRequired,
+    renderWhileDragging: PropTypes.bool.isRequired,
+    globalOpacity: PropTypes.number.isRequired,
+    /**
+      * An Immutable List of feature objects.
+      */
+    features: PropTypes.instanceOf(Immutable.List),
+    /* eslint-disable react/forbid-prop-types */
+    colorDomain: PropTypes.array,
+    colorRange: PropTypes.array.isRequired,
+    valueAccessor: PropTypes.func.isRequired
+  };
+
+  static defaultProps = {
+    renderWhileDragging: true,
+    globalOpacity: 1,
+    colorDomain: null,
+    colorRange: ['#FFFFFF', '#1FBAD6'],
+    valueAccessor: feature => feature.get('properties').get('value')
+  };
 
   componentDidMount() {
     this._redraw();
@@ -135,6 +134,3 @@ export default class ChoroplethOverlay extends Component {
     );
   }
 }
-
-ChoroplethOverlay.propTypes = PROP_TYPES;
-ChoroplethOverlay.defaultProps = DEFAULT_PROPS;

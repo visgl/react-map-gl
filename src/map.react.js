@@ -21,7 +21,7 @@ import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 import pureRender from 'pure-render-decorator';
 
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, {Point} from 'mapbox-gl';
 import {select} from 'd3-selection';
 import Immutable from 'immutable';
 import assert from 'assert';
@@ -197,6 +197,9 @@ export default class MapGL extends Component {
     return mapboxgl.supported();
   }
 
+  static propTypes = PROP_TYPES;
+  static defaultProps = DEFAULT_PROPS;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -265,7 +268,13 @@ export default class MapGL extends Component {
     }
   }
 
-  _cursor() {
+  // External apps can access map this way
+  _getMap() {
+    return this._map;
+  }
+
+  // Calculate a cursor style
+  _getCursor() {
     const isInteractive =
       this.props.onChangeViewport ||
       this.props.onClickFeature ||
@@ -278,10 +287,6 @@ export default class MapGL extends Component {
     return 'inherit';
   }
 
-  _getMap() {
-    return this._map;
-  }
-
   _updateStateFromProps(oldProps, newProps) {
     mapboxgl.accessToken = newProps.mapboxApiAccessToken;
     const {startDragLngLat} = newProps;
@@ -290,6 +295,15 @@ export default class MapGL extends Component {
     });
   }
 
+  // Hover and click only query layers whose interactive property is true
+  // If no interactivity is specified, query all layers
+  _updateQueryParams(mapStyle) {
+    const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
+    this._queryParams = interactiveLayerIds.length === 0 ? {} :
+      {layers: interactiveLayerIds};
+  }
+
+  // Update a source in the map style
   _updateSource(map, update) {
     const newSource = update.source.toJS();
     if (newSource.type === 'geojson') {
@@ -321,14 +335,6 @@ export default class MapGL extends Component {
     map.addSource(update.id, newSource);
   }
 
-  // Hover and click only query layers whose interactive property is true
-  // If no interactivity is specified, query all layers
-  _updateQueryParams(mapStyle) {
-    const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
-    this._queryParams = interactiveLayerIds.length === 0 ? {} :
-      {layers: interactiveLayerIds};
-  }
-
   // Individually update the maps source and layers that have changed if all
   // other style props haven't changed. This prevents flicking of the map when
   // styles only change sources or layers.
@@ -355,7 +361,7 @@ export default class MapGL extends Component {
       return false;
     }
 
-    const map = this._getMap();
+    const map = this._map;
 
     if (!prevStyle || propsOtherThanLayersOrSourcesDiffer()) {
       map.setStyle(nextStyle.toJS());
@@ -403,12 +409,12 @@ export default class MapGL extends Component {
     if (mapStyle !== oldMapStyle) {
       if (Immutable.Map.isMap(mapStyle)) {
         if (this.props.preventStyleDiffing) {
-          this._getMap().setStyle(mapStyle.toJS());
+          this._map.setStyle(mapStyle.toJS());
         } else {
           this._setDiffStyle(oldMapStyle, mapStyle);
         }
       } else {
-        this._getMap().setStyle(mapStyle);
+        this._map.setStyle(mapStyle);
       }
       this._updateQueryParams(mapStyle);
     }
@@ -423,10 +429,8 @@ export default class MapGL extends Component {
       newProps.zoom !== oldProps.bearing ||
       newProps.altitude !== oldProps.altitude;
 
-    const map = this._getMap();
-
     if (viewportChanged) {
-      map.jumpTo({
+      this._map.jumpTo({
         center: [newProps.longitude, newProps.latitude],
         zoom: newProps.zoom,
         bearing: newProps.bearing,
@@ -435,7 +439,7 @@ export default class MapGL extends Component {
 
       // TODO - jumpTo doesn't handle altitude
       if (newProps.altitude !== oldProps.altitude) {
-        map.transform.altitude = newProps.altitude;
+        this._map.transform.altitude = newProps.altitude;
       }
     }
   }
@@ -446,29 +450,29 @@ export default class MapGL extends Component {
       oldProps.width !== newProps.width || oldProps.height !== newProps.height;
 
     if (sizeChanged) {
-      const map = this._getMap();
-      map.resize();
-      this._callOnChangeViewport(map.transform);
+      this._map.resize();
+      this._callOnChangeViewport(this._map.transform);
     }
   }
 
+  // Calculates a new pitch and bearing from a position (coming from an event)
   _calculateNewPitchAndBearing({pos, startPos, startBearing, startPitch}) {
-    const xDelta = pos.x - startPos.x;
+    const xDelta = pos[0] - startPos[0];
     const bearing = startBearing + 180 * xDelta / this.props.width;
 
     let pitch = startPitch;
-    const yDelta = pos.y - startPos.y;
+    const yDelta = pos[1] - startPos[1];
     if (yDelta > 0) {
       // Dragging downwards, gradually decrease pitch
-      if (Math.abs(this.props.height - startPos.y) > PITCH_MOUSE_THRESHOLD) {
-        const scale = yDelta / (this.props.height - startPos.y);
+      if (Math.abs(this.props.height - startPos[1]) > PITCH_MOUSE_THRESHOLD) {
+        const scale = yDelta / (this.props.height - startPos[1]);
         pitch = (1 - scale) * PITCH_ACCEL * startPitch;
       }
     } else if (yDelta < 0) {
       // Dragging upwards, gradually increase pitch
       if (startPos.y > PITCH_MOUSE_THRESHOLD) {
         // Move from 0 to 1 as we drag upwards
-        const yScale = 1 - pos.y / startPos.y;
+        const yScale = 1 - pos[1] / startPos[1];
         // Gradually add until we hit max pitch
         pitch = startPitch + yScale * (MAX_PITCH - startPitch);
       }
@@ -501,23 +505,35 @@ export default class MapGL extends Component {
     }
   }
 
-  @autobind _onTouchStart({pos}) {
-    this._onMouseDown({pos});
+  @autobind _onTouchStart(opts) {
+    this._onMouseDown(opts);
+  }
+
+  @autobind _onTouchDrag(opts) {
+    this._onMouseDrag(opts);
+  }
+
+  @autobind _onTouchRotate(opts) {
+    this._onMouseRotate(opts);
+  }
+
+  @autobind _onTouchEnd(opts) {
+    this._onMouseUp(opts);
+  }
+
+  @autobind _onTouchTap(opts) {
+    this._onMouseClick(opts);
   }
 
   @autobind _onMouseDown({pos}) {
-    const map = this._getMap();
-    const lngLat = unprojectFromTransform(map.transform, pos);
-    this._callOnChangeViewport(map.transform, {
+    const {transform} = this._map;
+    const lngLat = unprojectFromTransform(transform, new Point(...pos));
+    this._callOnChangeViewport(transform, {
       isDragging: true,
       startDragLngLat: [lngLat.lng, lngLat.lat],
-      startBearing: map.transform.bearing,
-      startPitch: map.transform.pitch
+      startBearing: transform.bearing,
+      startPitch: transform.pitch
     });
-  }
-
-  @autobind _onTouchDrag({pos}) {
-    this._onMouseDrag({pos});
   }
 
   @autobind _onMouseDrag({pos}) {
@@ -529,16 +545,9 @@ export default class MapGL extends Component {
     assert(this.props.startDragLngLat, '`startDragLngLat` prop is required ' +
       'for mouse drag behavior to calculate where to position the map.');
 
-    const map = this._getMap();
-    const transform = cloneTransform(map.transform);
-    transform.setLocationAtPoint(this.props.startDragLngLat, pos);
-    this._callOnChangeViewport(transform, {
-      isDragging: true
-    });
-  }
-
-  @autobind _onTouchRotate({pos, startPos}) {
-    this._onMouseRotate({pos, startPos});
+    const transform = cloneTransform(this._map.transform);
+    transform.setLocationAtPoint(this.props.startDragLngLat, new Point(...pos));
+    this._callOnChangeViewport(transform, {isDragging: true});
   }
 
   @autobind _onMouseRotate({pos, startPos}) {
@@ -552,8 +561,6 @@ export default class MapGL extends Component {
     assert(typeof startPitch === 'number',
       '`startPitch` prop is required for mouse rotate behavior');
 
-    const map = this._getMap();
-
     const {pitch, bearing} = this._calculateNewPitchAndBearing({
       pos,
       startPos,
@@ -561,23 +568,18 @@ export default class MapGL extends Component {
       startPitch
     });
 
-    const transform = cloneTransform(map.transform);
+    const transform = cloneTransform(this._map.transform);
     transform.bearing = bearing;
     transform.pitch = pitch;
 
-    this._callOnChangeViewport(transform, {
-      isDragging: true
-    });
+    this._callOnChangeViewport(transform, {isDragging: true});
   }
 
-  @autobind _onMouseMove(opt) {
-    const map = this._getMap();
-    const pos = opt.pos;
+  @autobind _onMouseMove({pos}) {
     if (!this.props.onHoverFeatures) {
       return;
     }
-    const features = map.queryRenderedFeatures([pos.x, pos.y],
-      this._queryParams);
+    const features = this._map.queryRenderedFeatures(new Point(...pos), this._queryParams);
     if (!features.length && this.props.ignoreEmptyFeatures) {
       return;
     }
@@ -585,17 +587,8 @@ export default class MapGL extends Component {
     this.props.onHoverFeatures(features);
   }
 
-  @autobind _onTouchEnd(opt) {
-    this._onMouseUp(opt);
-  }
-
-  @autobind _onTouchTap(opt) {
-    this._onMouseClick(opt);
-  }
-
   @autobind _onMouseUp(opt) {
-    const map = this._getMap();
-    this._callOnChangeViewport(map.transform, {
+    this._callOnChangeViewport(this._map.transform, {
       isDragging: false,
       startDragLngLat: null,
       startBearing: null,
@@ -603,24 +596,23 @@ export default class MapGL extends Component {
     });
   }
 
-  @autobind _onMouseClick(opt) {
+  @autobind _onMouseClick({pos}) {
     if (!this.props.onClickFeatures && !this.props.onClick) {
       return;
     }
 
-    const map = this._getMap();
-    const pos = opt.pos;
-
     if (this.props.onClick) {
-      const latLong = map.unproject(opt.pos);
-      this.props.onClick(latLong, pos);
+      const point = new Point(...pos);
+      const latLong = this._map.unproject(point);
+      // TODO - Do we really want to expose a mapbox "Point" in our interface?
+      this.props.onClick(latLong, point);
     }
 
     if (this.props.onClickFeatures) {
       // Radius enables point features, like marker symbols, to be clicked.
       const size = this.props.clickRadius;
-      const bbox = [[pos.x - size, pos.y - size], [pos.x + size, pos.y + size]];
-      const features = map.queryRenderedFeatures(bbox, this._queryParams);
+      const bbox = [[pos[0] - size, pos[1] - size], [pos[0] + size, pos[1] + size]];
+      const features = this._map.queryRenderedFeatures(bbox, this._queryParams);
       if (!features.length && this.props.ignoreEmptyFeatures) {
         return;
       }
@@ -629,21 +621,16 @@ export default class MapGL extends Component {
   }
 
   @autobind _onZoom({pos, scale}) {
-    const map = this._getMap();
-    const transform = cloneTransform(map.transform);
-    const around = unprojectFromTransform(transform, pos);
-    transform.zoom = transform.scaleZoom(map.transform.scale * scale);
-    transform.setLocationAtPoint(around, pos);
-    this._callOnChangeViewport(transform, {
-      isDragging: true
-    });
+    const point = new Point(...pos);
+    const transform = cloneTransform(this._map.transform);
+    const around = unprojectFromTransform(transform, point);
+    transform.zoom = transform.scaleZoom(this._map.transform.scale * scale);
+    transform.setLocationAtPoint(around, point);
+    this._callOnChangeViewport(transform, {isDragging: true});
   }
 
   @autobind _onZoomEnd() {
-    const map = this._getMap();
-    this._callOnChangeViewport(map.transform, {
-      isDragging: false
-    });
+    this._callOnChangeViewport(this._map.transform, {isDragging: false});
   }
 
   render() {
@@ -652,7 +639,7 @@ export default class MapGL extends Component {
       ...style,
       width,
       height,
-      cursor: this._cursor()
+      cursor: this._getCursor()
     };
 
     let content = [
@@ -704,6 +691,3 @@ export default class MapGL extends Component {
     );
   }
 }
-
-MapGL.propTypes = PROP_TYPES;
-MapGL.defaultProps = DEFAULT_PROPS;

@@ -21,17 +21,18 @@
 import React, {PropTypes, Component} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  latitude: PropTypes.number.isRequired,
-  longitude: PropTypes.number.isRequired,
-  zoom: PropTypes.number.isRequired,
-  redraw: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired
-};
-
 export default class SVGOverlay extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+    zoom: PropTypes.number.isRequired,
+    redraw: PropTypes.func.isRequired,
+    isDragging: PropTypes.bool.isRequired
+  };
+
   render() {
     const {width, height, isDragging} = this.props;
     const style = {
@@ -57,6 +58,3 @@ export default class SVGOverlay extends Component {
     );
   }
 }
-
-SVGOverlay.propTypes = PROP_TYPES;
-

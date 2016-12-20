@@ -84,6 +84,7 @@ export default class App extends Component {
         <NotInteractiveExample { ...common }/>
         <StyleDiffingExample { ...common }/>
         <ClickExample {...common }/>
+        <StyleDiffingExample { ...common }/>
       </div>
     );
   }

@@ -37,35 +37,31 @@ function mouse(container, event) {
   return [x, y];
 }
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  latitude: PropTypes.number.isRequired,
-  longitude: PropTypes.number.isRequired,
-  zoom: PropTypes.number.isRequired,
-  points: PropTypes.instanceOf(Immutable.List).isRequired,
-  isDragging: PropTypes.bool.isRequired,
-  keyAccessor: PropTypes.func.isRequired,
-  lngLatAccessor: PropTypes.func.isRequired,
-  onAddPoint: PropTypes.func.isRequired,
-  onUpdatePoint: PropTypes.func.isRequired,
-  renderPoint: PropTypes.func.isRequired
-};
-
-const DEFAULT_PROPS = {
-  keyAccessor(point) {
-    return point.get('id');
-  },
-  lngLatAccessor(point) {
-    return point.get('location').toArray();
-  },
-  onAddPoint: noop,
-  onUpdatePoint: noop,
-  renderPoint: noop,
-  isDragging: false
-};
-
 export default class DraggablePointsOverlay extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+    zoom: PropTypes.number.isRequired,
+    points: PropTypes.instanceOf(Immutable.List).isRequired,
+    isDragging: PropTypes.bool.isRequired,
+    keyAccessor: PropTypes.func.isRequired,
+    lngLatAccessor: PropTypes.func.isRequired,
+    onAddPoint: PropTypes.func.isRequired,
+    onUpdatePoint: PropTypes.func.isRequired,
+    renderPoint: PropTypes.func.isRequired
+  };
+
+  static defaultProps = {
+    keyAccessor: point => point.get('id'),
+    lngLatAccessor: point => point.get('location').toArray(),
+    onAddPoint: noop,
+    onUpdatePoint: noop,
+    renderPoint: noop,
+    isDragging: false
+  };
 
   constructor(props) {
     super(props);
@@ -128,27 +124,24 @@ export default class DraggablePointsOverlay extends Component {
         onContextMenu={ this._addPoint }>
 
         <g style={ {cursor: 'pointer'} }>
-        {
-          points.map((point, index) => {
-            const pixel = mercator.project(this.props.lngLatAccessor(point));
-            return (
-              <g
-                key={ index }
-                style={ {pointerEvents: 'all'} }
-                transform={ transform([{translate: pixel}]) }
-                onMouseDown={ this._onDragStart.bind(this, point) }>
-                {
-                  this.props.renderPoint.call(this, point, pixel)
-                }
-              </g>
-            );
-          })
-        }
+          {
+            points.map((point, index) => {
+              const pixel = mercator.project(this.props.lngLatAccessor(point));
+              return (
+                <g
+                  key={ index }
+                  style={ {pointerEvents: 'all'} }
+                  transform={ transform([{translate: pixel}]) }
+                  onMouseDown={ this._onDragStart.bind(this, point) }>
+                  {
+                    this.props.renderPoint.call(this, point, pixel)
+                  }
+                </g>
+              );
+            })
+          }
         </g>
       </svg>
     );
   }
 }
-
-DraggablePointsOverlay.propTypes = PROP_TYPES;
-DraggablePointsOverlay.defaultProps = DEFAULT_PROPS;
