@@ -45,12 +45,12 @@ const locations = Immutable.fromJS(range(30).map(
   () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
 ));
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
 export default class OverlayExample extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -67,9 +67,6 @@ export default class OverlayExample extends Component {
 
   @autobind
   _onChangeViewport(viewport) {
-    if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(viewport);
-    }
     this.setState({viewport});
   }
 
@@ -154,6 +151,3 @@ export default class OverlayExample extends Component {
     );
   }
 }
-
-OverlayExample.propTypes = PROP_TYPES;
-

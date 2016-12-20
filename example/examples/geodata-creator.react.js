@@ -44,12 +44,12 @@ const initialPoints = [
 
 let ids = initialPoints[initialPoints.length - 1].id;
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
 export default class GeodataCreator extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -67,9 +67,6 @@ export default class GeodataCreator extends Component {
 
   @autobind
   _onChangeViewport(viewport) {
-    if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(viewport);
-    }
     this.setState({viewport});
   }
 
@@ -124,7 +121,7 @@ export default class GeodataCreator extends Component {
               <text
                 style={ {fill: 'white', textAnchor: 'middle'} }
                 y={ 5 }>
-               { point.get('id') }
+                { point.get('id') }
               </text>
             </g>
           )
@@ -135,12 +132,9 @@ export default class GeodataCreator extends Component {
   render() {
     const viewport = {...this.state.viewport, ...this.props};
     return (
-      <MapGL { ...viewport }
-        onChangeViewport={ this._onChangeViewport }>
-       { this._renderOverlays(viewport) }
+      <MapGL { ...viewport } onChangeViewport={ this._onChangeViewport }>
+        { this._renderOverlays(viewport) }
       </MapGL>
     );
   }
 }
-
-GeodataCreator.propTypes = PROP_TYPES;

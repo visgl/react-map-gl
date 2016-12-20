@@ -26,12 +26,12 @@ import autobind from 'autobind-decorator';
 
 import MapGL from '../../src';
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
 export default class ClickExample extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -48,9 +48,6 @@ export default class ClickExample extends Component {
 
   @autobind
   _onChangeViewport(viewport) {
-    if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(viewport);
-    }
     this.setState({viewport});
   }
 
@@ -74,11 +71,9 @@ export default class ClickExample extends Component {
     };
     return (
       <MapGL { ...viewport }
-          onChangeViewport={ this._onChangeViewport }
-          onClickFeatures={ this._onClickFeatures }
-          onClick={ this._onClick }/>
+        onChangeViewport={ this._onChangeViewport }
+        onClickFeatures={ this._onClickFeatures }
+        onClick={ this._onClick }/>
     );
   }
 }
-
-ClickExample.propTypes = PROP_TYPES;

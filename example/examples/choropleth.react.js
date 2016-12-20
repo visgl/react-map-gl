@@ -34,12 +34,12 @@ for (const feature of ZIPCODES_SF.features) {
 
 const ZIPCODES = Immutable.fromJS(ZIPCODES_SF);
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
 export default class ChoroplethOverlayExample extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -56,20 +56,16 @@ export default class ChoroplethOverlayExample extends Component {
 
   @autobind
   _onChangeViewport(viewport) {
-    if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(viewport);
-    }
     this.setState({viewport});
   }
 
   render() {
     const mapProps = {
       ...this.state.viewport,
-      ...this.props,
-      onChangeViewport: this._onChangeViewport
+      ...this.props
     };
     return (
-      <MapGL { ...mapProps}>
+      <MapGL { ...mapProps} onChangeViewport={this._onChangeViewport}>
         <ChoroplethOverlay
           { ...mapProps }
           globalOpacity={ 0.8 }
@@ -81,5 +77,3 @@ export default class ChoroplethOverlayExample extends Component {
     );
   }
 }
-
-ChoroplethOverlayExample.propTypes = PROP_TYPES;

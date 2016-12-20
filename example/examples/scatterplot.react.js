@@ -41,12 +41,12 @@ const locations = Immutable.fromJS(range(4000).map(
   () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
 ));
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
 export default class ScatterplotOverlayExample extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -62,19 +62,8 @@ export default class ScatterplotOverlayExample extends Component {
   }
 
   @autobind
-  _onChangeViewport(opt) {
-    if (this.props.onChangeViewport) {
-      return this.props.onChangeViewport(opt);
-    }
-    this.setState({
-      viewport: {
-        latitude: opt.latitude,
-        longitude: opt.longitude,
-        zoom: opt.zoom,
-        startDragLngLat: opt.startDragLngLat,
-        isDragging: opt.isDragging
-      }
-    });
+  _onChangeViewport(viewport) {
+    this.setState({viewport});
   }
 
   render() {
@@ -95,5 +84,3 @@ export default class ScatterplotOverlayExample extends Component {
     );
   }
 }
-
-ScatterplotOverlayExample.propTypes = PROP_TYPES;

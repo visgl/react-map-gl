@@ -22,17 +22,17 @@ import React, {PropTypes, Component} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 import window from 'global/window';
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  latitude: PropTypes.number.isRequired,
-  longitude: PropTypes.number.isRequired,
-  zoom: PropTypes.number.isRequired,
-  redraw: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired
-};
-
 export default class CanvasOverlay extends Component {
+
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+    zoom: PropTypes.number.isRequired,
+    redraw: PropTypes.func.isRequired,
+    isDragging: PropTypes.bool.isRequired
+  };
 
   componentDidMount() {
     this._redraw();
@@ -78,5 +78,3 @@ export default class CanvasOverlay extends Component {
     );
   }
 }
-
-CanvasOverlay.propTypes = PROP_TYPES;

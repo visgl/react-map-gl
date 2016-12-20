@@ -18,9 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+// Portions of the code below originally from:
+// https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
-import {Point} from 'mapbox-gl';
 import document from 'global/document';
 import window from 'global/window';
 
@@ -30,67 +31,75 @@ const ua = typeof window.navigator !== 'undefined' ?
   window.navigator.userAgent.toLowerCase() : '';
 const firefox = ua.indexOf('firefox') !== -1;
 
-function mousePos(el, event) {
+// Extract a position from a mouse event
+function getMousePosition(el, event) {
   const rect = el.getBoundingClientRect();
   event = event.touches ? event.touches[0] : event;
-  return new Point(
+  return [
     event.clientX - rect.left - el.clientLeft,
     event.clientY - rect.top - el.clientTop
-  );
+  ];
 }
 
-function touchPos(el, event) {
+// Extract an array of touch positions from a touch event
+function getTouchPositions(el, event) {
   const points = [];
   const rect = el.getBoundingClientRect();
   for (let i = 0; i < event.touches.length; i++) {
-    points.push(new Point(
+    points.push([
       event.touches[i].clientX - rect.left - el.clientLeft,
       event.touches[i].clientY - rect.top - el.clientTop
-    ));
+    ]);
   }
   return points;
 }
 
-/* eslint-disable max-len */
-// Portions of the code below originally from:
-// https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
-/* eslint-enable max-len */
+// Return the centroid of an array of points
+function centroid(positions) {
+  const sum = positions.reduce(
+    (acc, elt) => [acc[0] + elt[0], acc[1] + elt[1]],
+    [0, 0]
+  );
+  return [sum[0] / positions.length, sum[1] / positions.length];
+}
 
-const PROP_TYPES = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  onMouseDown: PropTypes.func,
-  onMouseDrag: PropTypes.func,
-  onMouseRotate: PropTypes.func,
-  onMouseUp: PropTypes.func,
-  onMouseMove: PropTypes.func,
-  onMouseClick: PropTypes.func,
-  onTouchStart: PropTypes.func,
-  onTouchDrag: PropTypes.func,
-  onTouchRotate: PropTypes.func,
-  onTouchEnd: PropTypes.func,
-  onTouchTap: PropTypes.func,
-  onZoom: PropTypes.func,
-  onZoomEnd: PropTypes.func
-};
+export default class Interactions extends Component {
 
-const DEFAULT_PROPS = {
-  onMouseDown: noop,
-  onMouseDrag: noop,
-  onMouseRotate: noop,
-  onMouseUp: noop,
-  onMouseMove: noop,
-  onMouseClick: noop,
-  onTouchStart: noop,
-  onTouchDrag: noop,
-  onTouchRotate: noop,
-  onTouchEnd: noop,
-  onTouchTap: noop,
-  onZoom: noop,
-  onZoomEnd: noop
-};
+  static displayName = 'Interactions';
 
-export default class MapInteractions extends Component {
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    onMouseDown: PropTypes.func,
+    onMouseDrag: PropTypes.func,
+    onMouseRotate: PropTypes.func,
+    onMouseUp: PropTypes.func,
+    onMouseMove: PropTypes.func,
+    onMouseClick: PropTypes.func,
+    onTouchStart: PropTypes.func,
+    onTouchDrag: PropTypes.func,
+    onTouchRotate: PropTypes.func,
+    onTouchEnd: PropTypes.func,
+    onTouchTap: PropTypes.func,
+    onZoom: PropTypes.func,
+    onZoomEnd: PropTypes.func
+  };
+
+  static defaultProps = {
+    onMouseDown: noop,
+    onMouseDrag: noop,
+    onMouseRotate: noop,
+    onMouseUp: noop,
+    onMouseMove: noop,
+    onMouseClick: noop,
+    onTouchStart: noop,
+    onTouchDrag: noop,
+    onTouchRotate: noop,
+    onTouchEnd: noop,
+    onTouchTap: noop,
+    onZoom: noop,
+    onZoomEnd: noop
+  };
 
   constructor(props) {
     super(props);
@@ -105,14 +114,13 @@ export default class MapInteractions extends Component {
 
   _getMousePos(event) {
     const el = this.refs.container;
-    return mousePos(el, event);
+    return getMousePosition(el, event);
   }
 
   _getTouchPos(event) {
     const el = this.refs.container;
-    return touchPos(el, event).reduce((prev, curr, i, arr) => {
-      return prev.add(curr.div(arr.length));
-    }, new Point(0, 0));
+    const positions = getTouchPositions(el, event);
+    return centroid(positions);
   }
 
   _isFunctionKeyPressed(event) {
@@ -285,7 +293,6 @@ export default class MapInteractions extends Component {
   /* eslint-enable complexity, max-statements */
 
   _zoom(delta, pos) {
-
     // Scale by sigmoid of scroll wheel delta.
     let scale = 2 / (1 + Math.exp(-Math.abs(delta / 100)));
     if (delta < 0 && scale !== 0) {
@@ -319,6 +326,3 @@ export default class MapInteractions extends Component {
     );
   }
 }
-
-MapInteractions.propTypes = PROP_TYPES;
-MapInteractions.defaultProps = DEFAULT_PROPS;
