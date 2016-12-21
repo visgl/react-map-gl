@@ -20,8 +20,9 @@
 
 import React, {PropTypes, Component} from 'react';
 import MapGL from 'react-map-gl';
-import ZIPCODES_SF from './../data/feature-example-sf.json';
-import CITIES from './../data/cities.json';
+
+import ZIPCODES_SF from '../data/feature-example-sf.json';
+import CITIES from '../data/cities.json';
 
 const location = CITIES[0];
 

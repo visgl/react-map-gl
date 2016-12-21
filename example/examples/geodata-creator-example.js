@@ -20,10 +20,9 @@
 
 import React, {PropTypes, Component} from 'react';
 import MapGL, {DraggablePointsOverlay, SVGOverlay, autobind} from 'react-map-gl';
-
 import Immutable from 'immutable';
 
-import alphaify from './alphaify';
+import alphaify from '../alphaify';
 
 // A mock example path.
 const initialPoints = [

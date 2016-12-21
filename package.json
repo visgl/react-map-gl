@@ -25,14 +25,11 @@
     "d3-selection": "^1.0.2",
     "global": "^4.3.0",
     "mapbox-gl": "0.26.0",
-    "react-addons-shallow-compare": "^15.4.2",
-    "react-addons-test-utils": "^15.4.2",
-    "viewport-mercator-project": "^2.0.1"
+    "viewport-mercator-project": "3.0.0-rc2"
   },
   "devDependencies": {
     "buble": "^0.15.1",
     "buble-loader": "^0.4.0",
-    "electron-prebuilt": "^0.37.3",
     "eslint": "^3.0.0",
     "eslint-config-uber-es2015": "^3.0.0",
     "eslint-config-uber-jsx": "^3.0.0",
@@ -43,13 +40,13 @@
     "module-alias": "^2.0.0",
     "node-jsx": "^0.13.3",
     "react": "^15.4.0",
+    "react-addons-shallow-compare": "^15.4.2",
     "react-dom": "^15.4.0",
     "reify": "^0.4.4",
     "sinon": "^1.17.7",
     "tap-browser-color": "^0.1.2",
     "tape": "^4.5.1",
     "tape-catch": "^1.0.4",
-    "testron": "^1.2.0",
     "webpack": "^2.2.0-rc.3"
   },
   "peerDependencies": {

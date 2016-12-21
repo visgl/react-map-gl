@@ -20,11 +20,9 @@
 
 // Portions of the code below originally from:
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
-import React, {PropTypes, Component} from 'react';
-import shallowCompare from 'react-addons-shallow-compare';
-import autobind from '../utils/autobind';
-import document from 'global/document';
+
 import window from 'global/window';
+import document from 'global/document';
 
 function noop() {}
 
@@ -64,44 +62,27 @@ function centroid(positions) {
   return [sum[0] / positions.length, sum[1] / positions.length];
 }
 
-const propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  onMouseDown: PropTypes.func,
-  onMouseDrag: PropTypes.func,
-  onMouseRotate: PropTypes.func,
-  onMouseUp: PropTypes.func,
-  onMouseMove: PropTypes.func,
-  onMouseClick: PropTypes.func,
-  onTouchStart: PropTypes.func,
-  onTouchDrag: PropTypes.func,
-  onTouchRotate: PropTypes.func,
-  onTouchEnd: PropTypes.func,
-  onTouchTap: PropTypes.func,
-  onZoom: PropTypes.func,
-  onZoomEnd: PropTypes.func
-};
+export default class EventManager {
 
-const defaultProps = {
-  onMouseDown: noop,
-  onMouseDrag: noop,
-  onMouseRotate: noop,
-  onMouseUp: noop,
-  onMouseMove: noop,
-  onMouseClick: noop,
-  onTouchStart: noop,
-  onTouchDrag: noop,
-  onTouchRotate: noop,
-  onTouchEnd: noop,
-  onTouchTap: noop,
-  onZoom: noop,
-  onZoomEnd: noop
-};
+  constructor(canvas, {
+    onMouseDown = noop,
+    onMouseClick = noop,
+    onMouseRotate = noop,
+    onMouseDrag = noop,
+    onTouchStart = noop,
+    onTouchRotate = noop,
+    onTouchDrag = noop,
+    onTouchEnd = noop,
+    onTouchTap = noop,
+    onZoom = noop,
+    onZoomEnd = noop
+  } = {}) {
+    canvas.addEventListener('mousemove', this._onMouseMove);
+    canvas.addEventListener('mousedown', this._onMouseDown);
+    canvas.addEventListener('touchstart', this._onTouchStart);
+    canvas.addEventListener('contextmenu', this._onMouseDown);
+    canvas.addEventListener('mousewheel', this._onWheel);
 
-export default class Interactions extends Component {
-
-  constructor(props) {
-    super(props);
     this.state = {
       didDrag: false,
       isFunctionKeyPressed: false,
@@ -109,11 +90,23 @@ export default class Interactions extends Component {
       pos: null,
       mouseWheelPos: null
     };
-    autobind(this);
+
+    this.callbacks = {
+      onMouseDown,
+      onTouchStart,
+      onMouseRotate,
+      onMouseDrag,
+      onTouchRotate,
+      onTouchDrag,
+      onTouchEnd,
+      onTouchTap,
+      onZoom,
+      onZoomEnd
+    };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
+  setState(settings) {
+    Object.assign(this.state, settings);
   }
 
   _getMousePos(event) {
@@ -140,11 +133,10 @@ export default class Interactions extends Component {
       pos,
       isFunctionKeyPressed: this._isFunctionKeyPressed(event)
     });
-    this.props.onMouseDown({pos});
+    this.callbacks.onMouseDown({pos});
     document.addEventListener('mousemove', this._onMouseDrag, false);
     document.addEventListener('mouseup', this._onMouseUp, false);
   }
-
   _onTouchStart(event) {
     const pos = this._getTouchPos(event);
     this.setState({
@@ -153,7 +145,7 @@ export default class Interactions extends Component {
       pos,
       isFunctionKeyPressed: this._isFunctionKeyPressed(event)
     });
-    this.props.onTouchStart({pos});
+    this.callbacks.onTouchStart({pos});
     document.addEventListener('touchmove', this._onTouchDrag, false);
     document.addEventListener('touchend', this._onTouchEnd, false);
   }
@@ -161,11 +153,11 @@ export default class Interactions extends Component {
   _onMouseDrag(event) {
     const pos = this._getMousePos(event);
     this.setState({pos, didDrag: true});
+    const {startPos} = this.state;
     if (this.state.isFunctionKeyPressed) {
-      const {startPos} = this.state;
-      this.props.onMouseRotate({pos, startPos});
+      this.callbacks.onMouseRotate({pos, startPos});
     } else {
-      this.props.onMouseDrag({pos});
+      this.callbacks.onMouseDrag({pos, startPos});
     }
   }
 
@@ -174,9 +166,9 @@ export default class Interactions extends Component {
     this.setState({pos, didDrag: true});
     if (this.state.isFunctionKeyPressed) {
       const {startPos} = this.state;
-      this.props.onTouchRotate({pos, startPos});
+      this.callbacks.onTouchRotate({pos, startPos});
     } else {
-      this.props.onTouchDrag({pos});
+      this.callbacks.onTouchDrag({pos});
     }
     event.preventDefault();
   }
@@ -186,9 +178,9 @@ export default class Interactions extends Component {
     document.removeEventListener('mouseup', this._onMouseUp, false);
     const pos = this._getMousePos(event);
     this.setState({pos});
-    this.props.onMouseUp({pos});
+    this.callbacks.onMouseUp({pos});
     if (!this.state.didDrag) {
-      this.props.onMouseClick({pos});
+      this.callbacks.onMouseClick({pos});
     }
   }
 
@@ -197,15 +189,15 @@ export default class Interactions extends Component {
     document.removeEventListener('touchend', this._onTouchEnd, false);
     const pos = this._getTouchPos(event);
     this.setState({pos});
-    this.props.onTouchEnd({pos});
+    this.callbacks.onTouchEnd({pos});
     if (!this.state.didDrag) {
-      this.props.onTouchTap({pos});
+      this.callbacks.onTouchTap({pos});
     }
   }
 
   _onMouseMove(event) {
     const pos = this._getMousePos(event);
-    this.props.onMouseMove({pos});
+    this.callbacks.onMouseMove({pos});
   }
 
   /* eslint-disable complexity, max-statements */
@@ -243,7 +235,6 @@ export default class Interactions extends Component {
       // This is likely a new scroll action.
       type = null;
       lastValue = value;
-
       // Start a timeout in case this was a singular event, and delay it by up
       // to 40ms.
       timeout = window.setTimeout(function setTimeout() {
@@ -294,35 +285,11 @@ export default class Interactions extends Component {
     if (delta < 0 && scale !== 0) {
       scale = 1 / scale;
     }
-    this.props.onZoom({pos, scale});
+    this.callbacks.onZoom({pos, delta, scale});
     window.clearTimeout(this._zoomEndTimeout);
     this._zoomEndTimeout = window.setTimeout(function _setTimeout() {
-      this.props.onZoomEnd();
+      this.callbacks.onZoomEnd();
     }.bind(this), 200);
-  }
-
-  render() {
-    return (
-      <div
-        ref="container"
-        onMouseMove={ this._onMouseMove }
-        onMouseDown={ this._onMouseDown }
-        onTouchStart={ this._onTouchStart }
-        onContextMenu={ this._onMouseDown }
-        onWheel={ this._onWheel }
-        style={ {
-          width: this.props.width,
-          height: this.props.height,
-          position: 'relative'
-        } }>
-
-        { this.props.children }
-
-      </div>
-    );
   }
 }
 
-Interactions.displayName = 'Interactions';
-Interactions.propTypes = propTypes;
-Interactions.defaultProps = defaultProps;

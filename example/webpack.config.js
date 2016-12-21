@@ -6,12 +6,11 @@ module.exports = {
     app: resolve('./app.js')
   },
 
-  // output: {
-  //   filename: 'bundle.js',
-  //   path: resolve('./dist')
-  // },
-
   devtool: 'source-maps',
+
+  stats: {
+    warnings: false
+  },
 
   resolve: {
     alias: {

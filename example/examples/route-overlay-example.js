@@ -19,16 +19,16 @@
 // THE SOFTWARE.
 
 import React, {PropTypes, Component} from 'react';
+import MapGL, {SVGOverlay, CanvasOverlay, autobind} from 'react-map-gl';
+
 import {scaleOrdinal, schemeCategory10} from 'd3-scale';
 import {rgb} from 'd3-color';
-
-import MapGL, {SVGOverlay, CanvasOverlay, autobind} from '../../src';
-import alphaify from './alphaify';
-
 import window from 'global/window';
 const windowAlert = window.alert;
 
-import ROUTES from './../data/routes-example.json';
+import alphaify from '../alphaify';
+
+import ROUTES from '../data/routes-example.json';
 
 function round(x, n) {
   const tenN = Math.pow(10, n);

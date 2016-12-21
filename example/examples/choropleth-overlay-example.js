@@ -17,15 +17,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import Immutable from 'immutable';
-
 import React, {PropTypes, Component} from 'react';
 import MapGL, {autobind} from 'react-map-gl';
-import ChoroplethOverlay from './choropleth-overlay';
+import Immutable from 'immutable';
+
+import ChoroplethOverlay from '../choropleth-overlay';
 
 // San Francisco
-import ZIPCODES_SF from './../data/feature-example-sf.json';
-import CITIES from './../data/cities.json';
+import ZIPCODES_SF from '../data/feature-example-sf.json';
+import CITIES from '../data/cities.json';
+
 const location = CITIES[0];
 
 for (const feature of ZIPCODES_SF.features) {
