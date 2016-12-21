@@ -455,36 +455,6 @@ export default class MapGL extends Component {
     }
   }
 
-  // Calculates a new pitch and bearing from a position (coming from an event)
-  _calculateNewPitchAndBearing({pos, startPos, startBearing, startPitch}) {
-    const xDelta = pos[0] - startPos[0];
-    const bearing = startBearing + 180 * xDelta / this.props.width;
-
-    let pitch = startPitch;
-    const yDelta = pos[1] - startPos[1];
-    if (yDelta > 0) {
-      // Dragging downwards, gradually decrease pitch
-      if (Math.abs(this.props.height - startPos[1]) > PITCH_MOUSE_THRESHOLD) {
-        const scale = yDelta / (this.props.height - startPos[1]);
-        pitch = (1 - scale) * PITCH_ACCEL * startPitch;
-      }
-    } else if (yDelta < 0) {
-      // Dragging upwards, gradually increase pitch
-      if (startPos.y > PITCH_MOUSE_THRESHOLD) {
-        // Move from 0 to 1 as we drag upwards
-        const yScale = 1 - pos[1] / startPos[1];
-        // Gradually add until we hit max pitch
-        pitch = startPitch + yScale * (MAX_PITCH - startPitch);
-      }
-    }
-
-    // console.debug(startPitch, pitch);
-    return {
-      pitch: Math.max(Math.min(pitch, MAX_PITCH), 0),
-      bearing
-    };
-  }
-
    // Helper to call props.onChangeViewport
   _callOnChangeViewport(transform, opts = {}) {
     if (this.props.onChangeViewport) {
@@ -505,134 +475,6 @@ export default class MapGL extends Component {
     }
   }
 
-  @autobind _onTouchStart(opts) {
-    this._onMouseDown(opts);
-  }
-
-  @autobind _onTouchDrag(opts) {
-    this._onMouseDrag(opts);
-  }
-
-  @autobind _onTouchRotate(opts) {
-    this._onMouseRotate(opts);
-  }
-
-  @autobind _onTouchEnd(opts) {
-    this._onMouseUp(opts);
-  }
-
-  @autobind _onTouchTap(opts) {
-    this._onMouseClick(opts);
-  }
-
-  @autobind _onMouseDown({pos}) {
-    const {transform} = this._map;
-    const lngLat = unprojectFromTransform(transform, new Point(...pos));
-    this._callOnChangeViewport(transform, {
-      isDragging: true,
-      startDragLngLat: [lngLat.lng, lngLat.lat],
-      startBearing: transform.bearing,
-      startPitch: transform.pitch
-    });
-  }
-
-  @autobind _onMouseDrag({pos}) {
-    if (!this.props.onChangeViewport) {
-      return;
-    }
-
-    // take the start lnglat and put it where the mouse is down.
-    assert(this.props.startDragLngLat, '`startDragLngLat` prop is required ' +
-      'for mouse drag behavior to calculate where to position the map.');
-
-    const transform = cloneTransform(this._map.transform);
-    transform.setLocationAtPoint(this.props.startDragLngLat, new Point(...pos));
-    this._callOnChangeViewport(transform, {isDragging: true});
-  }
-
-  @autobind _onMouseRotate({pos, startPos}) {
-    if (!this.props.onChangeViewport || !this.props.perspectiveEnabled) {
-      return;
-    }
-
-    const {startBearing, startPitch} = this.props;
-    assert(typeof startBearing === 'number',
-      '`startBearing` prop is required for mouse rotate behavior');
-    assert(typeof startPitch === 'number',
-      '`startPitch` prop is required for mouse rotate behavior');
-
-    const {pitch, bearing} = this._calculateNewPitchAndBearing({
-      pos,
-      startPos,
-      startBearing,
-      startPitch
-    });
-
-    const transform = cloneTransform(this._map.transform);
-    transform.bearing = bearing;
-    transform.pitch = pitch;
-
-    this._callOnChangeViewport(transform, {isDragging: true});
-  }
-
-  @autobind _onMouseMove({pos}) {
-    if (!this.props.onHoverFeatures) {
-      return;
-    }
-    const features = this._map.queryRenderedFeatures(new Point(...pos), this._queryParams);
-    if (!features.length && this.props.ignoreEmptyFeatures) {
-      return;
-    }
-    this.setState({isHovering: features.length > 0});
-    this.props.onHoverFeatures(features);
-  }
-
-  @autobind _onMouseUp(opt) {
-    this._callOnChangeViewport(this._map.transform, {
-      isDragging: false,
-      startDragLngLat: null,
-      startBearing: null,
-      startPitch: null
-    });
-  }
-
-  @autobind _onMouseClick({pos}) {
-    if (!this.props.onClickFeatures && !this.props.onClick) {
-      return;
-    }
-
-    if (this.props.onClick) {
-      const point = new Point(...pos);
-      const latLong = this._map.unproject(point);
-      // TODO - Do we really want to expose a mapbox "Point" in our interface?
-      this.props.onClick(latLong, point);
-    }
-
-    if (this.props.onClickFeatures) {
-      // Radius enables point features, like marker symbols, to be clicked.
-      const size = this.props.clickRadius;
-      const bbox = [[pos[0] - size, pos[1] - size], [pos[0] + size, pos[1] + size]];
-      const features = this._map.queryRenderedFeatures(bbox, this._queryParams);
-      if (!features.length && this.props.ignoreEmptyFeatures) {
-        return;
-      }
-      this.props.onClickFeatures(features);
-    }
-  }
-
-  @autobind _onZoom({pos, scale}) {
-    const point = new Point(...pos);
-    const transform = cloneTransform(this._map.transform);
-    const around = unprojectFromTransform(transform, point);
-    transform.zoom = transform.scaleZoom(this._map.transform.scale * scale);
-    transform.setLocationAtPoint(around, point);
-    this._callOnChangeViewport(transform, {isDragging: true});
-  }
-
-  @autobind _onZoomEnd() {
-    this._callOnChangeViewport(this._map.transform, {isDragging: false});
-  }
-
   render() {
     const {className, width, height, style} = this.props;
     const mapStyle = {
@@ -642,50 +484,21 @@ export default class MapGL extends Component {
       cursor: this._getCursor()
     };
 
-    let content = [
-      <div key="map" ref="mapboxMap"
-        style={ mapStyle } className={ className }/>,
-      <div key="overlays" className="overlays"
-        style={ {position: 'absolute', left: 0, top: 0} }>
-        { this.props.children }
-      </div>
-    ];
-
-    if (this.state.isSupported && this.props.onChangeViewport) {
-      content = (
-        <MapInteractions
-          onMouseDown ={ this._onMouseDown }
-          onMouseDrag ={ this._onMouseDrag }
-          onMouseRotate ={ this._onMouseRotate }
-          onMouseUp ={ this._onMouseUp }
-          onMouseMove ={ this._onMouseMove }
-          onMouseClick = { this._onMouseClick }
-          onTouchStart ={ this._onTouchStart }
-          onTouchDrag ={ this._onTouchDrag }
-          onTouchRotate ={ this._onTouchRotate }
-          onTouchEnd ={ this._onTouchEnd }
-          onTouchTap = { this._onTouchTap }
-          onZoom ={ this._onZoom }
-          onZoomEnd ={ this._onZoomEnd }
-          width ={ this.props.width }
-          height ={ this.props.height }>
-
-          { content }
-
-        </MapInteractions>
-      );
-    }
-
     return (
       <div
-        style={ {
+        style={{
           ...this.props.style,
           width: this.props.width,
           height: this.props.height,
           position: 'relative'
-        } }>
+        }}>
 
-        { content }
+        <div key="map" ref="mapboxMap"
+          style={ mapStyle } className={ className }/>
+        <div key="overlays" className="overlays"
+          style={ {position: 'absolute', left: 0, top: 0} }>
+          { this.props.children }
+        </div>
 
       </div>
     );

@@ -63,9 +63,9 @@ function centroid(positions) {
   return [sum[0] / positions.length, sum[1] / positions.length];
 }
 
-export default class Interactions extends Component {
+export default class EventManager extends Component {
 
-  static displayName = 'Interactions';
+  static displayName = 'EventManager';
 
   static propTypes = {
     width: PropTypes.number.isRequired,
