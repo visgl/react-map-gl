@@ -1,4 +1,4 @@
-  // Copyright (c) 2015 Uber Technologies, Inc.
+// Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,78 +21,58 @@ import React, {PropTypes, Component} from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
 import autobind from '../utils/autobind';
 
+import {getInteractiveLayerIds} from '../utils/style-utils';
+import diffStyles from '../utils/diff-styles';
+import config from '../config';
+
 import mapboxgl, {Point} from 'mapbox-gl';
 import {select} from 'd3-selection';
 import Immutable from 'immutable';
-import assert from 'assert';
-import window from 'global/window';
-
-import MapInteractions from './map-interactions';
-import {getInteractiveLayerIds} from '../utils/style-utils';
-import diffStyles from '../utils/diff-styles';
-import {mod, unprojectFromTransform, cloneTransform} from '../utils/transform';
-import config from '../config';
 
 function noop() {}
 
-// Note: Max pitch is a hard coded value (not a named constant) in transform.js
-const MAX_PITCH = 60;
-const PITCH_MOUSE_THRESHOLD = 20;
-const PITCH_ACCEL = 1.2;
-
 const propTypes = {
-  /**
-    * The latitude of the center of the map.
-    */
-  latitude: PropTypes.number.isRequired,
-  /**
-    * The longitude of the center of the map.
-    */
-  longitude: PropTypes.number.isRequired,
-  /**
-    * The tile zoom level of the map.
-    */
-  zoom: PropTypes.number.isRequired,
-  /**
-    * The Mapbox style the component should use. Can either be a string url
-    * or a MapboxGL style Immutable.Map object.
-    */
+  /** Mapbox API access token for mapbox-gl-js. Required when using Mapbox vector tiles/styles. */
+  mapboxApiAccessToken: PropTypes.string,
+  /** Mapbox WebGL context creation option. Useful when you want to export the canvas as a PNG. */
+  preserveDrawingBuffer: PropTypes.bool,
+  /** Show attribution control or not. */
+  attributionControl: PropTypes.bool,
+
+  /** The Mapbox style. A string url or a MapboxGL style Immutable.Map object. */
   mapStyle: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.instanceOf(Immutable.Map)
   ]),
-  /**
-    * The Mapbox API access token to provide to mapbox-gl-js. This is required
-    * when using Mapbox provided vector tiles and styles.
-    */
-  mapboxApiAccessToken: PropTypes.string,
-  /**
-    * `onChangeViewport` callback is fired when the user interacted with the
-    * map. The object passed to the callback contains `latitude`,
-    * `longitude` and `zoom` and additional state information.
-    */
-  onChangeViewport: PropTypes.func,
-  /**
-    * The width of the map.
-    */
+  /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
+  preventStyleDiffing: PropTypes.bool,
+
+  /** The latitude of the center of the map. */
+  latitude: PropTypes.number.isRequired,
+  /** The longitude of the center of the map. */
+  longitude: PropTypes.number.isRequired,
+  /** The tile zoom level of the map. */
+  zoom: PropTypes.number.isRequired,
+  /** Specify the bearing of the viewport */
+  bearing: React.PropTypes.number,
+  /** Specify the pitch of the viewport */
+  pitch: React.PropTypes.number,
+  /** Altitude of the viewport camera. Default 1.5 "screen heights" */
+  // Note: Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
+  altitude: React.PropTypes.number,
+  /** The width of the map. */
   width: PropTypes.number.isRequired,
-  /**
-    * The height of the map.
-    */
+  /** The height of the map. */
   height: PropTypes.number.isRequired,
+
   /**
-    * Is the component currently being dragged. This is used to show/hide the
-    * drag cursor. Also used as an optimization in some overlays by preventing
-    * rendering while dragging.
-    */
-  isDragging: PropTypes.bool,
-  /**
-    * Required to calculate the mouse projection after the first click event
-    * during dragging. Where the map is depends on where you first clicked on
-    * the map.
-    */
-  startDragLngLat: PropTypes.array,
-  /**
+   * `onChangeViewport` callback is fired when the user interacted with the
+   * map. The object passed to the callback contains `latitude`,
+   * `longitude` and `zoom` and additional state information.
+   */
+  onChangeViewport: PropTypes.func,
+
+ /**
     * Called when a feature is hovered over. Uses Mapbox's
     * queryRenderedFeatures API to find features under the pointer:
     * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
@@ -106,25 +86,12 @@ const propTypes = {
     */
   onHoverFeatures: PropTypes.func,
   /**
-    * Defaults to TRUE
     * Set to false to enable onHoverFeatures to be called regardless if
     * there is an actual feature at x, y. This is useful to emulate
     * "mouse-out" behaviors on features.
+    * Defaults to TRUE
     */
   ignoreEmptyFeatures: PropTypes.bool,
-
-  /**
-    * Show attribution control or not.
-    */
-  attributionControl: PropTypes.bool,
-
-  /**
-   * Called when the map is clicked. The handler is called with the clicked
-   * coordinates (https://www.mapbox.com/mapbox-gl-js/api/#LngLat) and the
-   * screen coordinates (https://www.mapbox.com/mapbox-gl-js/api/#PointLike).
-   */
-  onClick: PropTypes.func,
-
   /**
     * Called when a feature is clicked on. Uses Mapbox's
     * queryRenderedFeatures API to find features under the pointer:
@@ -138,49 +105,20 @@ const propTypes = {
   onClickFeatures: PropTypes.func,
 
   /**
-    * Radius to detect features around a clicked point. Defaults to 15.
-    */
-  clickRadius: PropTypes.number,
+   * Called when the map is clicked. The handler is called with the clicked
+   * coordinates (https://www.mapbox.com/mapbox-gl-js/api/#LngLat) and the
+   * screen coordinates (https://www.mapbox.com/mapbox-gl-js/api/#PointLike).
+   */
+  onClick: PropTypes.func,
 
-  /**
-    * Passed to Mapbox Map constructor which passes it to the canvas context.
-    * This is unseful when you want to export the canvas as a PNG.
-    */
-  preserveDrawingBuffer: PropTypes.bool,
-
-  /**
-    * There are still known issues with style diffing. As a temporary stopgap,
-    * add the option to prevent style diffing.
-    */
-  preventStyleDiffing: PropTypes.bool,
-
-  /**
-    * Enables perspective control event handling
-    */
-  perspectiveEnabled: PropTypes.bool,
-
-  /**
-    * Specify the bearing of the viewport
-    */
-  bearing: React.PropTypes.number,
-
-  /**
-    * Specify the pitch of the viewport
-    */
-  pitch: React.PropTypes.number,
-
-  /**
-    * Specify the altitude of the viewport camera
-    * Unit: map heights, default 1.5
-    * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
-    */
-  altitude: React.PropTypes.number
+  /** Radius to detect features around a clicked point. Defaults to 15. */
+  clickRadius: PropTypes.number
 };
 
 const defaultProps = {
   mapStyle: 'mapbox://styles/mapbox/light-v8',
   onChangeViewport: null,
-  mapboxApiAccessToken: getAccessToken(),
+  mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
   preserveDrawingBuffer: false,
   attributionControl: true,
   ignoreEmptyFeatures: true,
@@ -190,35 +128,7 @@ const defaultProps = {
   clickRadius: 15
 };
 
-// Try to get access token from URL, env, local storage or config
-function getAccessToken() {
-  let accessToken = null;
-
-  if (window.location) {
-    const match = window.location.search.match(/access_token=([^&\/]*)/);
-    accessToken = match && match[1];
-  }
-
-  if (!accessToken) {
-    // Note: This depends on the bundler (e.g. webpack) inmporting environment correctly
-    accessToken =
-      process.env.MapboxAccessToken || process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
-  }
-
-  // Try to save and restore from local storage
-  // if (window.localStorage) {
-  //   if (accessToken) {
-  //     window.localStorage.accessToken = accessToken;
-  //   } else {
-  //     accessToken = window.localStorage.accessToken;
-  //   }
-  // }
-
-  return accessToken || config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN;
-}
-
-export default class MapGL extends Component {
-
+export default class StaticMap extends Component {
   static supported() {
     return mapboxgl.supported();
   }
@@ -241,7 +151,6 @@ export default class MapGL extends Component {
       this.componentWillReceiveProps = noop;
       this.componentDidUpdate = noop;
     }
-
     autobind(this);
   }
 
@@ -262,12 +171,11 @@ export default class MapGL extends Component {
       // attributionControl: this.props.attributionControl
     });
 
-    // TODO - can we drop d3-select dependency?
     select(map.getCanvas()).style('outline', 'none');
 
     this._map = map;
     this._updateMapViewport({}, this.props);
-    this._callOnChangeViewport(map.transform);
+    // this._callOnChangeViewport(map.transform);
     this._updateQueryParams(mapStyle);
   }
 
@@ -302,20 +210,6 @@ export default class MapGL extends Component {
   // External apps can access map this way
   _getMap() {
     return this._map;
-  }
-
-  // Calculate a cursor style
-  _getCursor() {
-    const isInteractive =
-      this.props.onChangeViewport ||
-      this.props.onClickFeature ||
-      this.props.onHoverFeatures;
-    if (isInteractive) {
-      return this.props.isDragging ?
-        config.CURSOR.GRABBING :
-        (this.state.isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
-    }
-    return 'inherit';
   }
 
   _updateStateFromProps(oldProps, newProps) {
@@ -482,168 +376,51 @@ export default class MapGL extends Component {
 
     if (sizeChanged) {
       this._map.resize();
-      this._callOnChangeViewport(this._map.transform);
+      // this._callOnChangeViewport(this._map.transform);
     }
   }
 
-  // Calculates a new pitch and bearing from a position (coming from an event)
-  _calculateNewPitchAndBearing({pos, startPos, startBearing, startPitch}) {
-    const xDelta = pos[0] - startPos[0];
-    const bearing = startBearing + 180 * xDelta / this.props.width;
-
-    let pitch = startPitch;
-    const yDelta = pos[1] - startPos[1];
-    if (yDelta > 0) {
-      // Dragging downwards, gradually decrease pitch
-      if (Math.abs(this.props.height - startPos[1]) > PITCH_MOUSE_THRESHOLD) {
-        const scale = yDelta / (this.props.height - startPos[1]);
-        pitch = (1 - scale) * PITCH_ACCEL * startPitch;
-      }
-    } else if (yDelta < 0) {
-      // Dragging upwards, gradually increase pitch
-      if (startPos.y > PITCH_MOUSE_THRESHOLD) {
-        // Move from 0 to 1 as we drag upwards
-        const yScale = 1 - pos[1] / startPos[1];
-        // Gradually add until we hit max pitch
-        pitch = startPitch + yScale * (MAX_PITCH - startPitch);
-      }
+  _getFeatures({pos, radius}) {
+    let features;
+    if (radius) {
+      // Radius enables point features, like marker symbols, to be clicked.
+      const size = radius;
+      const bbox = [[pos[0] - size, pos[1] - size], [pos[0] + size, pos[1] + size]];
+      features = this._map.queryRenderedFeatures(bbox, this._queryParams);
+    } else {
+      const point = new Point(...pos);
+      features = this._map.queryRenderedFeatures(point, this._queryParams);
     }
-
-    // console.debug(startPitch, pitch);
-    return {
-      pitch: Math.max(Math.min(pitch, MAX_PITCH), 0),
-      bearing
-    };
+    return features;
   }
 
-   // Helper to call props.onChangeViewport
-  _callOnChangeViewport(transform, opts = {}) {
-    if (this.props.onChangeViewport) {
-      this.props.onChangeViewport({
-        latitude: transform.center.lat,
-        longitude: mod(transform.center.lng + 180, 360) - 180,
-        zoom: transform.zoom,
-        pitch: transform.pitch,
-        bearing: mod(transform.bearing + 180, 360) - 180,
-
-        isDragging: this.props.isDragging,
-        startDragLngLat: this.props.startDragLngLat,
-        startBearing: this.props.startBearing,
-        startPitch: this.props.startPitch,
-
-        ...opts
-      });
-    }
-  }
-
-  _onTouchStart(opts) {
-    this._onMouseDown(opts);
-  }
-
-  _onTouchDrag(opts) {
-    this._onMouseDrag(opts);
-  }
-
-  _onTouchRotate(opts) {
-    this._onMouseRotate(opts);
-  }
-
-  _onTouchEnd(opts) {
-    this._onMouseUp(opts);
-  }
-
-  _onTouchTap(opts) {
-    this._onMouseClick(opts);
-  }
-
-  _onMouseDown({pos}) {
-    const {transform} = this._map;
-    const lngLat = unprojectFromTransform(transform, new Point(...pos));
-    this._callOnChangeViewport(transform, {
-      isDragging: true,
-      startDragLngLat: [lngLat.lng, lngLat.lat],
-      startBearing: transform.bearing,
-      startPitch: transform.pitch
-    });
-  }
-
-  _onMouseDrag({pos}) {
-    if (!this.props.onChangeViewport) {
-      return;
-    }
-
-    // take the start lnglat and put it where the mouse is down.
-    assert(this.props.startDragLngLat, '`startDragLngLat` prop is required ' +
-      'for mouse drag behavior to calculate where to position the map.');
-
-    const transform = cloneTransform(this._map.transform);
-    transform.setLocationAtPoint(this.props.startDragLngLat, new Point(...pos));
-    this._callOnChangeViewport(transform, {isDragging: true});
-  }
-
-  _onMouseRotate({pos, startPos}) {
-    if (!this.props.onChangeViewport || !this.props.perspectiveEnabled) {
-      return;
-    }
-
-    const {startBearing, startPitch} = this.props;
-    assert(typeof startBearing === 'number',
-      '`startBearing` prop is required for mouse rotate behavior');
-    assert(typeof startPitch === 'number',
-      '`startPitch` prop is required for mouse rotate behavior');
-
-    const {pitch, bearing} = this._calculateNewPitchAndBearing({
-      pos,
-      startPos,
-      startBearing,
-      startPitch
-    });
-
-    const transform = cloneTransform(this._map.transform);
-    transform.bearing = bearing;
-    transform.pitch = pitch;
-
-    this._callOnChangeViewport(transform, {isDragging: true});
-  }
+  // HOVER AND CLICK
 
   _onMouseMove({pos}) {
-    if (!this.props.onHoverFeatures) {
-      return;
+    if (this.props.onHover) {
+      const latLong = this.props.unproject(pos);
+      this.props.onHover(latLong, pos);
     }
-    const features = this._map.queryRenderedFeatures(new Point(...pos), this._queryParams);
-    if (!features.length && this.props.ignoreEmptyFeatures) {
-      return;
+    if (this.props.onHoverFeatures) {
+      const features = this._getFeatures({pos});
+      if (!features.length && this.props.ignoreEmptyFeatures) {
+        return;
+      }
+      this.setState({isHovering: features.length > 0});
+      this.props.onHoverFeatures(features);
     }
-    this.setState({isHovering: features.length > 0});
-    this.props.onHoverFeatures(features);
-  }
-
-  _onMouseUp(opt) {
-    this._callOnChangeViewport(this._map.transform, {
-      isDragging: false,
-      startDragLngLat: null,
-      startBearing: null,
-      startPitch: null
-    });
   }
 
   _onMouseClick({pos}) {
-    if (!this.props.onClickFeatures && !this.props.onClick) {
-      return;
-    }
-
     if (this.props.onClick) {
-      const point = new Point(...pos);
-      const latLong = this._map.unproject(point);
+      const latLong = this.props.unproject(pos);
       // TODO - Do we really want to expose a mapbox "Point" in our interface?
-      this.props.onClick(latLong, point);
+      // const point = new Point(...pos);
+      this.props.onClick(latLong, pos);
     }
 
     if (this.props.onClickFeatures) {
-      // Radius enables point features, like marker symbols, to be clicked.
-      const size = this.props.clickRadius;
-      const bbox = [[pos[0] - size, pos[1] - size], [pos[0] + size, pos[1] + size]];
-      const features = this._map.queryRenderedFeatures(bbox, this._queryParams);
+      const features = this._getFeatures({pos, radius: this.props.clickRadius});
       if (!features.length && this.props.ignoreEmptyFeatures) {
         return;
       }
@@ -651,65 +428,29 @@ export default class MapGL extends Component {
     }
   }
 
-  _onZoom({pos, scale}) {
-    const point = new Point(...pos);
-    const transform = cloneTransform(this._map.transform);
-    const around = unprojectFromTransform(transform, point);
-    transform.zoom = transform.scaleZoom(this._map.transform.scale * scale);
-    transform.setLocationAtPoint(around, point);
-    this._callOnChangeViewport(transform, {isDragging: true});
-  }
-
-  _onZoomEnd() {
-    this._callOnChangeViewport(this._map.transform, {isDragging: false});
-  }
-
   render() {
     const {className, width, height, style} = this.props;
-    const mapStyle = {...style, width, height, cursor: this._getCursor()};
 
-    let content = [
-      <div key="map" ref="mapboxMap" style={mapStyle} className={className}/>,
-      <div key="overlays" className="overlays" style={{position: 'absolute', left: 0, top: 0}}>
-        { this.props.children }
-      </div>
-    ];
+    const mapContainerStyle = {...style, width, height, position: 'relative'};
+    const mapStyle = {...style, width, height};
+    const overlayContainerStyle = {position: 'absolute', left: 0, top: 0};
 
-    if (this.state.isSupported && this.props.onChangeViewport) {
-      content = (
-        <MapInteractions
-          onMouseDown ={ this._onMouseDown }
-          onMouseDrag ={ this._onMouseDrag }
-          onMouseRotate ={ this._onMouseRotate }
-          onMouseUp ={ this._onMouseUp }
-          onMouseMove ={ this._onMouseMove }
-          onMouseClick = { this._onMouseClick }
-          onTouchStart ={ this._onTouchStart }
-          onTouchDrag ={ this._onTouchDrag }
-          onTouchRotate ={ this._onTouchRotate }
-          onTouchEnd ={ this._onTouchEnd }
-          onTouchTap = { this._onTouchTap }
-          onZoom ={ this._onZoom }
-          onZoomEnd ={ this._onZoomEnd }
-          width ={ this.props.width }
-          height ={ this.props.height }>
-
-          { content }
-
-        </MapInteractions>
-      );
-    }
-
+    // Note: a static map still handles clicks and hover events
     return (
-      <div style={ {...this.props.style, width, height, position: 'relative'} }>
+      <div style={mapContainerStyle}
+        onMouseMove={this._onMouseMove}
+        onMouseClick={this._onMouseClick}>
 
-        { content }
+        <div key="map" ref="mapboxMap" style={mapStyle} className={className}/>
+        <div key="overlays" className="overlays" style={overlayContainerStyle}>
+          { this.props.children }
+        </div>
 
       </div>
     );
   }
 }
 
-MapGL.displayName = 'MapGL';
-MapGL.propTypes = propTypes;
-MapGL.defaultProps = defaultProps;
+StaticMap.displayName = 'StaticMap';
+StaticMap.propTypes = propTypes;
+StaticMap.defaultProps = defaultProps;

@@ -26,7 +26,7 @@
     "global": "^4.3.0",
     "mapbox-gl": "0.26.0",
     "react-addons-shallow-compare": "^15.4.2",
-    "viewport-mercator-project": "^2.0.1"
+    "viewport-mercator-project": "3.0.0-rc2"
   },
   "devDependencies": {
     "buble": "^0.15.1",
