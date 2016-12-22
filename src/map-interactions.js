@@ -26,7 +26,7 @@ import config from './config';
 import {mod} from './utils/transform';
 import assert from 'assert';
 
-import ViewportMercatorProject from 'viewport-mercator-project';
+// import ViewportMercatorProject from 'viewport-mercator-project';
 
 // MAPBOX LIMITS
 const MAX_PITCH = 60;

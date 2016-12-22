@@ -5,7 +5,8 @@ import pureRender from 'pure-render-decorator';
 import MapInteractions from './map-interactions';
 import StaticMap from './static-map';
 
-import {mod, unprojectFromTransform, cloneTransform} from './utils/transform';
+import {mod, cloneTransform} from './utils/transform';
+// import {unprojectFromTransform} from './utils/transform';
 import mapboxgl, {Point} from 'mapbox-gl';
 
 @pureRender
@@ -48,7 +49,7 @@ export default class InteractiveMap extends Component {
     const map = this._getMap();
     const transform = cloneTransform(map.transform);
     const mapboxPoint = new Point(...pos);
-    const around = unprojectFromTransform(transform, mapboxPoint);
+    // const around = unprojectFromTransform(transform, mapboxPoint);
     transform.setLocationAtPoint(lngLat, mapboxPoint);
     return [
       mod(transform.center.lng + 180, 360) - 180,
