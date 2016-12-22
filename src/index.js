@@ -18,14 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import MapGL from './interactive-map';
+import InteractiveMap from './interactive-map';
 import StaticMap from './static-map';
-import EventManager from './event-manager';
-import MapInteractions from './map-interactions';
 import fitBounds from './utils/fit-bounds';
 
-module.exports = MapGL;
+module.exports = InteractiveMap;
+module.exports.InteractiveMap = InteractiveMap;
 module.exports.StaticMap = StaticMap;
+module.exports.fitBounds = fitBounds;
+
+// TODO - should these be exported or better keep them as internal?
+// If exported, should we document them?
+import EventManager from './event-manager';
+import MapInteractions from './map-interactions';
+
 module.exports.MapInteractions = MapInteractions;
 module.exports.EventManager = EventManager;
-module.exports.fitBounds = fitBounds;

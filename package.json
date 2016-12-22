@@ -29,7 +29,7 @@
     "mapbox-gl": "0.26.0",
     "pure-render-decorator": "^1.1.0",
     "svg-transform": "0.0.3",
-    "viewport-mercator-project": "^2.0.1"
+    "viewport-mercator-project": "3.0.0-rc1"
   },
   "devDependencies": {
     "babel-cli": "^6.7.0",

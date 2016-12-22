@@ -26,9 +26,13 @@ import config from './config';
 import {mod} from './utils/transform';
 import assert from 'assert';
 
-// TODO - expose as
-// Note: Max pitch is a hard coded value (not a named constant) in transform.js
+import ViewportMercatorProject from 'viewport-mercator-project';
+
+// MAPBOX LIMITS
 const MAX_PITCH = 60;
+const MAX_ZOOM = 40;
+
+// EVENT HANDLING PARAMETERS
 const PITCH_MOUSE_THRESHOLD = 20;
 const PITCH_ACCEL = 1.2;
 
@@ -36,6 +40,10 @@ const PITCH_ACCEL = 1.2;
 export default class MapInteractions extends Component {
 
   static propTypes = {
+    /** The width of the map */
+    width: PropTypes.number.isRequired,
+    /** The height of the map */
+    height: PropTypes.number.isRequired,
     /** The latitude of the center of the map. */
     latitude: PropTypes.number.isRequired,
     /** The longitude of the center of the map. */
@@ -52,6 +60,7 @@ export default class MapInteractions extends Component {
       * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
       */
     altitude: React.PropTypes.number,
+
     /** Enables perspective control event handling */
     perspectiveEnabled: PropTypes.bool,
     /**
@@ -60,10 +69,7 @@ export default class MapInteractions extends Component {
       * `longitude` and `zoom` and additional state information.
       */
     onChangeViewport: PropTypes.func,
-    /** The width of the map */
-    width: PropTypes.number.isRequired,
-    /** The height of the map */
-    height: PropTypes.number.isRequired,
+
     /**
       * Is the component currently being dragged. This is used to show/hide the
       * drag cursor. Also used as an optimization in some overlays by preventing
@@ -75,29 +81,15 @@ export default class MapInteractions extends Component {
       * during dragging. Where the map is depends on where you first clicked on
       * the map.
       */
-    startDragLngLat: PropTypes.array,
-    /**
-     * Called when the map is clicked. The handler is called with the clicked
-     * coordinates (https://www.mapbox.com/mapbox-gl-js/api/#LngLat) and the
-     * screen coordinates (https://www.mapbox.com/mapbox-gl-js/api/#PointLike).
-     */
-    onClick: PropTypes.func,
-    /**
-      * Called when a feature is clicked on. Uses Mapbox's
-      * queryRenderedFeatures API to find features under the pointer:
-      * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
-      * To query only some of the layers, set the `interactive` property in the
-      * layer style to `true`. See Mapbox's style spec
-      * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
-      * If no interactive layers are found (e.g. using Mapbox's default styles),
-      * will fall back to query all layers.
-      */
-    onClickFeatures: PropTypes.func,
+    startDragLngLat: PropTypes.arrayOf(PropTypes.number),
+    /** Bearing when current perspective drag operation started */
+    startBearing: PropTypes.number,
+    /** Pitch when current perspective drag operation started */
+    startPitch: PropTypes.number,
 
-    /** Radius to detect features around a clicked point. Defaults to 15. */
-    clickRadius: PropTypes.number,
-
-    unproject: PropTypes.func.isRequired
+    /* Hooks to get mapbox help with calculations. TODO - replace with Viewport */
+    unproject: PropTypes.func.isRequired,
+    getLngLatAtPoint: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -105,9 +97,17 @@ export default class MapInteractions extends Component {
     pitch: 0,
     altitude: 1.5,
     clickRadius: 15,
-    onChangeViewport: null
+    onChangeViewport: null,
+    maxZoom: MAX_ZOOM,
+    minZoom: 0,
+    maxPitch: MAX_PITCH,
+    minPitch: 0
   };
 
+  /**
+   * @classdesc
+   * A component that handles events and updates viewport parameters
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -119,7 +119,15 @@ export default class MapInteractions extends Component {
     };
   }
 
-  // Calculate a cursor style
+  // New props are comin' round the corner!
+  componentWillReceiveProps(newProps) {
+    const {startDragLngLat} = newProps;
+    this.setState({
+      startDragLngLat: startDragLngLat && startDragLngLat.slice()
+    });
+  }
+
+  // Calculate a cursor style to show that we are in "dragging state"
   _getCursor() {
     const isInteractive =
       this.props.onChangeViewport ||
@@ -133,46 +141,68 @@ export default class MapInteractions extends Component {
     return 'inherit';
   }
 
-  componentDidMount() {
-    // this._updateViewport(this.props);
-    // this._callOnChangeViewport(map.transform);
-  }
-
-  // New props are comin' round the corner!
-  componentWillReceiveProps(newProps) {
-    const {startDragLngLat} = newProps;
-    this.setState({
-      startDragLngLat: startDragLngLat && startDragLngLat.slice()
-    });
-  }
-
   _updateViewport(opts) {
-    return this.props.onChangeViewport({
+    let viewport = {
       latitude: this.props.latitude,
       longitude: this.props.longitude,
       zoom: this.props.zoom,
       bearing: this.props.bearing,
       pitch: this.props.pitch,
       altitude: this.props.altitude,
+      isDragging: this.props.isDragging,
+      startDragLngLat: this.props.startDragLngLat,
+      startBearing: this.props.startBearing,
+      startPitch: this.props.startPitch,
       ...opts
-    });
+    };
+
+    viewport = this._applyConstraints(viewport);
+
+    return this.props.onChangeViewport(viewport);
   }
 
-  // TODO
-  // Panning calculation is currently done using an undocumented mapbox function
-  // We should have a mapbox-independent implementation of panning
-  _calculateNewLngLat({pos, startPos, startDragLngLat}) {
-    const xDelta = pos[0] - startPos[0];
-    const yDelta = pos[1] - startPos[1];
+  // Apply any constraints (mathematical or defined by props) to viewport params
+  _applyConstraints(viewport) {
+    // Normalize degrees
+    viewport.longitude = mod(viewport.longitude + 180, 360) - 180;
+    viewport.bearing = mod(viewport.bearing + 180, 360) - 180;
 
-    return [xDelta, yDelta];
+    // Ensure zoom is within specified range
+    const {maxZoom, minZoom} = this.props;
+    viewport.zoom = viewport.zoom > maxZoom ? maxZoom : viewport.zoom;
+    viewport.zoom = viewport.zoom < minZoom ? minZoom : viewport.zoom;
+
+    // Ensure pitch is within specified range
+    const {maxPitch, minPitch} = this.props;
+    viewport.pitch = viewport.pitch > maxPitch ? maxPitch : viewport.pitch;
+    viewport.pitch = viewport.pitch < minPitch ? minPitch : viewport.pitch;
+
+    return viewport;
+  }
+
+  // Calculate a new lnglat based on pixel dragging position
+  // TODO - We should have a mapbox-independent implementation of panning
+  // Panning calculation is currently done using an undocumented mapbox function
+  _calculateNewLngLat({startDragLngLat, pos, startPos}) {
+    const [longitude, latitude] = this.props.getLngLatAtPoint({
+      lngLat: startDragLngLat,
+      pos
+    });
+
+    return [longitude, latitude];
+
+    // const mercator = ViewportMercatorProject({
+    //   ...this.props,
+    //   longitude: startDragLngLat[0],
+    //   latitude: startDragLngLat[1]
+    // });
+
+    // return mercator.unproject(pos);
   }
 
   // Calculates new zoom
   _calculateNewZoom({relativeScale}) {
-    const newZoom = this.props.zoom + Math.log2(relativeScale);
-    // TODO - check that zoom is within limits
-    return newZoom;
+    return this.props.zoom + Math.log2(relativeScale);
   }
 
   // Calculates a new pitch and bearing from a position (coming from an event)
@@ -240,13 +270,20 @@ export default class MapInteractions extends Component {
       return;
     }
 
+    const {startDragLngLat} = this.state;
+
     // take the start lnglat and put it where the mouse is down.
-    assert(this.props.startDragLngLat, '`startDragLngLat` prop is required ' +
+    assert(startDragLngLat, '`startDragLngLat` prop is required ' +
       'for mouse drag behavior to calculate where to position the map.');
 
+    const [longitude, latitude] = this._calculateNewLngLat({
+      startDragLngLat,
+      pos
+    });
+
     this._updateViewport({
-      location: this.props.startDragLngLat,
-      point: pos,
+      longitude,
+      latitude,
       isDragging: true
     });
   }
@@ -296,87 +333,39 @@ export default class MapInteractions extends Component {
     this._updateViewport({isDragging: false});
   }
 
-  // HOVER AND CLICK
-
-  @autobind _onMouseMove({pos}) {
-    if (this.props.onHover) {
-      const latLong = this.props.unproject(pos);
-      this.props.onHover(latLong, pos);
-    }
-
-    if (this.props.onHoverFeatures) {
-      const features = this.props.getFeatures({pos});
-      if (!features.length && this.props.ignoreEmptyFeatures) {
-        return;
-      }
-      this.setState({isHovering: features.length > 0});
-      this.props.onHoverFeatures(features);
-    }
-  }
-
-  @autobind _onMouseClick({pos}) {
-    if (this.props.onClick) {
-      const latLong = this.props.unproject(pos);
-      // TODO - Do we really want to expose a mapbox "Point" in our interface?
-      // const point = new Point(...pos);
-      this.props.onClick(latLong, pos);
-    }
-
-    if (this.props.onClickFeatures) {
-      const features = this.props.getFeatures({pos, radius: this.props.clickRadius});
-      if (!features.length && this.props.ignoreEmptyFeatures) {
-        return;
-      }
-      this.props.onClickFeatures(features);
-    }
-  }
+  // Note that mouse move and click are handled directly by static-map
+  // onMouseMove={this._onMouseMove}
+  // onMouseClick={this._onMouseClick}
 
   render() {
     const {className, width, height, style} = this.props;
-    const mapStyle = {
+    const mapEventLayerStyle = {
       ...style,
       width,
       height,
+      position: 'relative',
       cursor: this._getCursor()
     };
 
-    // let content = [];
-    // if (this.state.isSupported && this.props.onChangeViewport) {
-    //   content = (}
-
     return (
-      <div style={{
-        ...this.props.style,
-        width: this.props.width,
-        height: this.props.height,
-        position: 'relative',
-        cursor: this._getCursor()
-      }}>
+      <div className={className} style={mapEventLayerStyle}>
 
         <EventManager
+          width={this.props.width}
+          height={this.props.height}
           onMouseDown={this._onMouseDown}
           onMouseDrag={this._onMouseDrag}
           onMouseRotate={this._onMouseRotate}
           onMouseUp={this._onMouseUp}
-          onMouseMove={this._onMouseMove}
-          onMouseClick={this._onMouseClick}
           onTouchStart={this._onTouchStart}
           onTouchDrag={this._onTouchDrag}
           onTouchRotate={this._onTouchRotate}
           onTouchEnd={this._onTouchEnd}
           onTouchTap={this._onTouchTap}
           onZoom={this._onZoom}
-          onZoomEnd={this._onZoomEnd}
-          width={this.props.width}
-          height={this.props.height}>
+          onZoomEnd={this._onZoomEnd}>
 
-          <div key="map" ref="mapboxMap" style={mapStyle} className={className}/>
-
-          <div key="overlays" className="overlays" style={{position: 'absolute', left: 0, top: 0}}>
-
-            {this.props.children}
-
-          </div>
+          {this.props.children}
 
         </EventManager>
 

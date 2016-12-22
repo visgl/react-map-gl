@@ -19,8 +19,10 @@
 // THE SOFTWARE.
 import React, {PropTypes, Component} from 'react';
 import pureRender from 'pure-render-decorator';
+import autobind from 'autobind-decorator';
+import EventManager from './event-manager';
 
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, {Point} from 'mapbox-gl';
 import {select} from 'd3-selection';
 import Immutable from 'immutable';
 
@@ -379,29 +381,77 @@ export default class MapGL extends Component {
     }
   }
 
+  _getFeatures({pos, radius}) {
+    let features;
+    if (radius) {
+      // Radius enables point features, like marker symbols, to be clicked.
+      const size = radius;
+      const bbox = [[pos[0] - size, pos[1] - size], [pos[0] + size, pos[1] + size]];
+      features = this._map.queryRenderedFeatures(bbox, this._queryParams);
+    } else {
+      const point = new Point(...pos);
+      features = this._map.queryRenderedFeatures(point, this._queryParams);
+    }
+    return features;
+  }
+
+  // HOVER AND CLICK
+
+  @autobind _onMouseMove({pos}) {
+    if (this.props.onHover) {
+      const latLong = this.props.unproject(pos);
+      this.props.onHover(latLong, pos);
+    }
+    if (this.props.onHoverFeatures) {
+      const features = this._getFeatures({pos});
+      if (!features.length && this.props.ignoreEmptyFeatures) {
+        return;
+      }
+      this.setState({isHovering: features.length > 0});
+      this.props.onHoverFeatures(features);
+    }
+  }
+
+  @autobind _onMouseClick({pos}) {
+    if (this.props.onClick) {
+      const latLong = this.props.unproject(pos);
+      // TODO - Do we really want to expose a mapbox "Point" in our interface?
+      // const point = new Point(...pos);
+      this.props.onClick(latLong, pos);
+    }
+
+    if (this.props.onClickFeatures) {
+      const features = this._getFeatures({pos, radius: this.props.clickRadius});
+      if (!features.length && this.props.ignoreEmptyFeatures) {
+        return;
+      }
+      this.props.onClickFeatures(features);
+    }
+  }
+
   render() {
     const {className, width, height, style} = this.props;
-    const mapStyle = {
-      ...style,
-      width,
-      height
-    };
 
+    const mapContainerStyle = {...style, width, height, position: 'relative'};
+    const mapStyle = {...style, width, height};
+    const overlayContainerStyle = {position: 'absolute', left: 0, top: 0};
+
+    // Note: a static map still handles clicks and hover events
     return (
-      <div
-        style={{
-          ...this.props.style,
-          width: this.props.width,
-          height: this.props.height,
-          position: 'relative'
-        }}>
+      <div style={mapContainerStyle}>
 
-        <div key="map" ref="mapboxMap"
-          style={ mapStyle } className={ className }/>
-        <div key="overlays" className="overlays"
-          style={ {position: 'absolute', left: 0, top: 0} }>
-          { this.props.children }
-        </div>
+        <EventManager
+          width={this.props.width}
+          height={this.props.height}
+          onMouseMove={this._onMouseMove}
+          onMouseClick={this._onMouseClick}>
+
+          <div key="map" ref="mapboxMap" style={mapStyle} className={className}/>
+          <div key="overlays" className="overlays" style={overlayContainerStyle}>
+            { this.props.children }
+          </div>
+
+        </EventManager>
 
       </div>
     );

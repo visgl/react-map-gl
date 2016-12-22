@@ -160,11 +160,11 @@ export default class EventManager extends Component {
   _onMouseDrag(event) {
     const pos = this._getMousePos(event);
     this.setState({pos, didDrag: true});
+    const {startPos} = this.state;
     if (this.state.isFunctionKeyPressed) {
-      const {startPos} = this.state;
       this.props.onMouseRotate({pos, startPos});
     } else {
-      this.props.onMouseDrag({pos});
+      this.props.onMouseDrag({pos, startPos});
     }
   }
 

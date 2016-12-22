@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
 import autobind from 'autobind-decorator';
 import pureRender from 'pure-render-decorator';
 
@@ -24,6 +24,8 @@ export default class InteractiveMap extends Component {
     return this.refs.map._map;
   }
 
+  // Uses map to unproject a coordinate
+  // TODO - replace with Viewport
   @autobind
   _unproject(pos) {
     const {lng, lat} = this._unprojectToLatLng(pos);
@@ -38,86 +40,33 @@ export default class InteractiveMap extends Component {
     return latLong;
   }
 
+  // Uses map to get position for panning
+  // TODO - replace with Viewport
   @autobind
-  _getFeatures({pos, radius}) {
-    const map = this._getMap();
-    const point = new Point(...pos);
-    let features;
-    if (radius) {
-      // Radius enables point features, like marker symbols, to be clicked.
-      const size = radius;
-      const bbox = [[pos[0] - size, pos[1] - size], [pos[0] + size, pos[1] + size]];
-      features = map.queryRenderedFeatures(bbox, this._queryParams);
-    } else {
-      features = map.queryRenderedFeatures(point, this._queryParams);
-    }
-    return features;
-  }
-
-  @autobind
-  _updateViewport({
-    relativeZoom,
-    location,
-    point,
-    pitch,
-    bearing,
-    ...opts
-  }) {
+  _getLngLatAtPoint({lngLat, pos}) {
+    // assert(point);
     const map = this._getMap();
     const transform = cloneTransform(map.transform);
-    if (relativeZoom) {
-      transform.zoom = transform.scaleZoom(map.transform.scale * relativeZoom);
-    }
-    if (location) {
-      // assert(point);
-      const mapboxPoint = new Point(...point);
-      const around = unprojectFromTransform(transform, mapboxPoint);
-      transform.setLocationAtPoint(around, mapboxPoint);
-    }
-    if (bearing) {
-      transform.bearing = bearing;
-    }
-    if (pitch) {
-      transform.pitch = pitch;
-    }
-
-    this._callOnChangeViewport(transform, {
-      isDragging: true,
-      startDragLngLat: point ? this._unproject(point) : null,
-      startBearing: transform.bearing,
-      startPitch: transform.pitch,
-      ...opts
-    });
-  }
-
-   // Helper to call props.onChangeViewport
-  _callOnChangeViewport(transform, opts = {}) {
-    console.log(opts);
-    if (this.props.onChangeViewport) {
-      this.props.onChangeViewport({
-        latitude: transform.center.lat,
-        longitude: mod(transform.center.lng + 180, 360) - 180,
-        zoom: transform.zoom,
-        pitch: transform.pitch,
-        bearing: mod(transform.bearing + 180, 360) - 180,
-
-        isDragging: this.props.isDragging,
-        startDragLngLat: this.props.startDragLngLat,
-        startBearing: this.props.startBearing,
-        startPitch: this.props.startPitch,
-
-        ...opts
-      });
-    }
+    const mapboxPoint = new Point(...pos);
+    const around = unprojectFromTransform(transform, mapboxPoint);
+    transform.setLocationAtPoint(lngLat, mapboxPoint);
+    return [
+      mod(transform.center.lng + 180, 360) - 180,
+      transform.center.lat
+    ];
   }
 
   render() {
+    // TODO - do we still need this?
+    // let content = [];
+    // if (this.state.isSupported && this.props.onChangeViewport) {
+    //   content = (}
+
     return (
       <MapInteractions
         {...this.props}
         unproject={this._unproject}
-        onChangeViewport={this._updateViewport}
-        getFeatures={this._getFeatures}>
+        getLngLatAtPoint={this._getLngLatAtPoint}>
 
         <StaticMap ref="map" {...this.props}/>
 
