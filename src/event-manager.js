@@ -298,7 +298,7 @@ export default class EventManager extends Component {
     if (delta < 0 && scale !== 0) {
       scale = 1 / scale;
     }
-    this.props.onZoom({pos, scale});
+    this.props.onZoom({pos, delta, scale});
     window.clearTimeout(this._zoomEndTimeout);
     this._zoomEndTimeout = window.setTimeout(function _setTimeout() {
       this.props.onZoomEnd();

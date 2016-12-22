@@ -20,21 +20,20 @@
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 import pureRender from 'pure-render-decorator';
-
 import EventManager from './event-manager';
 
+import config from './config';
+import {mod} from './utils/transform';
 import assert from 'assert';
 
-
-function noop() {}
-
+// TODO - expose as
 // Note: Max pitch is a hard coded value (not a named constant) in transform.js
 const MAX_PITCH = 60;
 const PITCH_MOUSE_THRESHOLD = 20;
 const PITCH_ACCEL = 1.2;
 
 @pureRender
-export default class MercatorInteractions extends Component {
+export default class MapInteractions extends Component {
 
   static propTypes = {
     /** The latitude of the center of the map. */
@@ -96,7 +95,9 @@ export default class MercatorInteractions extends Component {
     onClickFeatures: PropTypes.func,
 
     /** Radius to detect features around a clicked point. Defaults to 15. */
-    clickRadius: PropTypes.number
+    clickRadius: PropTypes.number,
+
+    unproject: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -118,60 +119,70 @@ export default class MercatorInteractions extends Component {
     };
   }
 
+  // Calculate a cursor style
+  _getCursor() {
+    const isInteractive =
+      this.props.onChangeViewport ||
+      this.props.onClickFeature ||
+      this.props.onHoverFeatures;
+    if (isInteractive) {
+      return this.props.isDragging ?
+        config.CURSOR.GRABBING :
+        (this.state.isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
+    }
+    return 'inherit';
+  }
+
   componentDidMount() {
-    this._updateMapViewport({}, this.props);
-    this._callOnChangeViewport(map.transform);
+    // this._updateViewport(this.props);
+    // this._callOnChangeViewport(map.transform);
   }
 
   // New props are comin' round the corner!
   componentWillReceiveProps(newProps) {
-    this._updateStateFromProps(this.props, newProps);
-    this._updateMapViewport(this.props, newProps);
-    // Save width/height so that we can check them in componentDidUpdate
-    this.setState({
-      width: this.props.width,
-      height: this.props.height
-    });
-  }
-
-  _updateStateFromProps(oldProps, newProps) {
     const {startDragLngLat} = newProps;
     this.setState({
       startDragLngLat: startDragLngLat && startDragLngLat.slice()
     });
   }
 
-  _updateMapViewport(oldProps, newProps) {
-    const viewportChanged =
-      newProps.latitude !== oldProps.latitude ||
-      newProps.longitude !== oldProps.longitude ||
-      newProps.zoom !== oldProps.zoom ||
-      newProps.pitch !== oldProps.pitch ||
-      newProps.zoom !== oldProps.bearing ||
-      newProps.altitude !== oldProps.altitude;
+  _updateViewport(opts) {
+    return this.props.onChangeViewport({
+      latitude: this.props.latitude,
+      longitude: this.props.longitude,
+      zoom: this.props.zoom,
+      bearing: this.props.bearing,
+      pitch: this.props.pitch,
+      altitude: this.props.altitude,
+      ...opts
+    });
+  }
 
-    if (viewportChanged) {
-      this._map.jumpTo({
-        center: [newProps.longitude, newProps.latitude],
-        zoom: newProps.zoom,
-        bearing: newProps.bearing,
-        pitch: newProps.pitch
-      });
+  // TODO
+  // Panning calculation is currently done using an undocumented mapbox function
+  // We should have a mapbox-independent implementation of panning
+  _calculateNewLngLat({pos, startPos, startDragLngLat}) {
+    const xDelta = pos[0] - startPos[0];
+    const yDelta = pos[1] - startPos[1];
 
-      // TODO - jumpTo doesn't handle altitude
-      if (newProps.altitude !== oldProps.altitude) {
-        this._map.transform.altitude = newProps.altitude;
-      }
-    }
+    return [xDelta, yDelta];
+  }
+
+  // Calculates new zoom
+  _calculateNewZoom({relativeScale}) {
+    const newZoom = this.props.zoom + Math.log2(relativeScale);
+    // TODO - check that zoom is within limits
+    return newZoom;
   }
 
   // Calculates a new pitch and bearing from a position (coming from an event)
   _calculateNewPitchAndBearing({pos, startPos, startBearing, startPitch}) {
     const xDelta = pos[0] - startPos[0];
+    const yDelta = pos[1] - startPos[1];
+
     const bearing = startBearing + 180 * xDelta / this.props.width;
 
     let pitch = startPitch;
-    const yDelta = pos[1] - startPos[1];
     if (yDelta > 0) {
       // Dragging downwards, gradually decrease pitch
       if (Math.abs(this.props.height - startPos[1]) > PITCH_MOUSE_THRESHOLD) {
@@ -195,26 +206,6 @@ export default class MercatorInteractions extends Component {
     };
   }
 
-   // Helper to call props.onChangeViewport
-  _callOnChangeViewport(transform, opts = {}) {
-    if (this.props.onChangeViewport) {
-      this.props.onChangeViewport({
-        latitude: transform.center.lat,
-        longitude: mod(transform.center.lng + 180, 360) - 180,
-        zoom: transform.zoom,
-        pitch: transform.pitch,
-        bearing: mod(transform.bearing + 180, 360) - 180,
-
-        isDragging: this.props.isDragging,
-        startDragLngLat: this.props.startDragLngLat,
-        startBearing: this.props.startBearing,
-        startPitch: this.props.startPitch,
-
-        ...opts
-      });
-    }
-  }
-
   @autobind _onTouchStart(opts) {
     this._onMouseDown(opts);
   }
@@ -236,13 +227,11 @@ export default class MercatorInteractions extends Component {
   }
 
   @autobind _onMouseDown({pos}) {
-    const {transform} = this._map;
-    const lngLat = unprojectFromTransform(transform, new Point(...pos));
-    this._callOnChangeViewport(transform, {
+    this._updateViewport({
       isDragging: true,
-      startDragLngLat: [lngLat.lng, lngLat.lat],
-      startBearing: transform.bearing,
-      startPitch: transform.pitch
+      startDragLngLat: this.props.unproject(pos),
+      startBearing: this.props.bearing,
+      startPitch: this.props.pitch
     });
   }
 
@@ -255,9 +244,11 @@ export default class MercatorInteractions extends Component {
     assert(this.props.startDragLngLat, '`startDragLngLat` prop is required ' +
       'for mouse drag behavior to calculate where to position the map.');
 
-    const transform = cloneTransform(this._map.transform);
-    transform.setLocationAtPoint(this.props.startDragLngLat, new Point(...pos));
-    this._callOnChangeViewport(transform, {isDragging: true});
+    this._updateViewport({
+      location: this.props.startDragLngLat,
+      point: pos,
+      isDragging: true
+    });
   }
 
   @autobind _onMouseRotate({pos, startPos}) {
@@ -278,27 +269,15 @@ export default class MercatorInteractions extends Component {
       startPitch
     });
 
-    const transform = cloneTransform(this._map.transform);
-    transform.bearing = bearing;
-    transform.pitch = pitch;
-
-    this._callOnChangeViewport(transform, {isDragging: true});
-  }
-
-  @autobind _onMouseMove({pos}) {
-    if (!this.props.onHoverFeatures) {
-      return;
-    }
-    const features = this._map.queryRenderedFeatures(new Point(...pos), this._queryParams);
-    if (!features.length && this.props.ignoreEmptyFeatures) {
-      return;
-    }
-    this.setState({isHovering: features.length > 0});
-    this.props.onHoverFeatures(features);
+    this._updateViewport({
+      bearing,
+      pitch,
+      isDragging: true
+    });
   }
 
   @autobind _onMouseUp(opt) {
-    this._callOnChangeViewport(this._map.transform, {
+    this._updateViewport({
       isDragging: false,
       startDragLngLat: null,
       startBearing: null,
@@ -306,41 +285,50 @@ export default class MercatorInteractions extends Component {
     });
   }
 
-  @autobind _onMouseClick({pos}) {
-    if (!this.props.onClickFeatures && !this.props.onClick) {
-      return;
+  @autobind _onZoom({pos, scale}) {
+    this._updateViewport({
+      zoom: this._calculateNewZoom({relativeScale: scale}),
+      isDragging: true
+    });
+  }
+
+  @autobind _onZoomEnd() {
+    this._updateViewport({isDragging: false});
+  }
+
+  // HOVER AND CLICK
+
+  @autobind _onMouseMove({pos}) {
+    if (this.props.onHover) {
+      const latLong = this.props.unproject(pos);
+      this.props.onHover(latLong, pos);
     }
 
+    if (this.props.onHoverFeatures) {
+      const features = this.props.getFeatures({pos});
+      if (!features.length && this.props.ignoreEmptyFeatures) {
+        return;
+      }
+      this.setState({isHovering: features.length > 0});
+      this.props.onHoverFeatures(features);
+    }
+  }
+
+  @autobind _onMouseClick({pos}) {
     if (this.props.onClick) {
-      const point = new Point(...pos);
-      const latLong = this._map.unproject(point);
+      const latLong = this.props.unproject(pos);
       // TODO - Do we really want to expose a mapbox "Point" in our interface?
-      this.props.onClick(latLong, point);
+      // const point = new Point(...pos);
+      this.props.onClick(latLong, pos);
     }
 
     if (this.props.onClickFeatures) {
-      // Radius enables point features, like marker symbols, to be clicked.
-      const size = this.props.clickRadius;
-      const bbox = [[pos[0] - size, pos[1] - size], [pos[0] + size, pos[1] + size]];
-      const features = this._map.queryRenderedFeatures(bbox, this._queryParams);
+      const features = this.props.getFeatures({pos, radius: this.props.clickRadius});
       if (!features.length && this.props.ignoreEmptyFeatures) {
         return;
       }
       this.props.onClickFeatures(features);
     }
-  }
-
-  @autobind _onZoom({pos, scale}) {
-    const point = new Point(...pos);
-    const transform = cloneTransform(this._map.transform);
-    const around = unprojectFromTransform(transform, point);
-    transform.zoom = transform.scaleZoom(this._map.transform.scale * scale);
-    transform.setLocationAtPoint(around, point);
-    this._callOnChangeViewport(transform, {isDragging: true});
-  }
-
-  @autobind _onZoomEnd() {
-    this._callOnChangeViewport(this._map.transform, {isDragging: false});
   }
 
   render() {
@@ -352,50 +340,45 @@ export default class MercatorInteractions extends Component {
       cursor: this._getCursor()
     };
 
-    let content = [
-      <div key="map" ref="mapboxMap"
-        style={ mapStyle } className={ className }/>,
-      <div key="overlays" className="overlays"
-        style={ {position: 'absolute', left: 0, top: 0} }>
-        { this.props.children }
-      </div>
-    ];
-
-    if (this.state.isSupported && this.props.onChangeViewport) {
-      content = (
-        <EventManager
-          onMouseDown ={ this._onMouseDown }
-          onMouseDrag ={ this._onMouseDrag }
-          onMouseRotate ={ this._onMouseRotate }
-          onMouseUp ={ this._onMouseUp }
-          onMouseMove ={ this._onMouseMove }
-          onMouseClick = { this._onMouseClick }
-          onTouchStart ={ this._onTouchStart }
-          onTouchDrag ={ this._onTouchDrag }
-          onTouchRotate ={ this._onTouchRotate }
-          onTouchEnd ={ this._onTouchEnd }
-          onTouchTap = { this._onTouchTap }
-          onZoom ={ this._onZoom }
-          onZoomEnd ={ this._onZoomEnd }
-          width ={ this.props.width }
-          height ={ this.props.height }>
-
-          { content }
-
-        </EventManager>
-      );
-    }
+    // let content = [];
+    // if (this.state.isSupported && this.props.onChangeViewport) {
+    //   content = (}
 
     return (
-      <div
-        style={ {
-          ...this.props.style,
-          width: this.props.width,
-          height: this.props.height,
-          position: 'relative'
-        } }>
+      <div style={{
+        ...this.props.style,
+        width: this.props.width,
+        height: this.props.height,
+        position: 'relative',
+        cursor: this._getCursor()
+      }}>
 
-        { content }
+        <EventManager
+          onMouseDown={this._onMouseDown}
+          onMouseDrag={this._onMouseDrag}
+          onMouseRotate={this._onMouseRotate}
+          onMouseUp={this._onMouseUp}
+          onMouseMove={this._onMouseMove}
+          onMouseClick={this._onMouseClick}
+          onTouchStart={this._onTouchStart}
+          onTouchDrag={this._onTouchDrag}
+          onTouchRotate={this._onTouchRotate}
+          onTouchEnd={this._onTouchEnd}
+          onTouchTap={this._onTouchTap}
+          onZoom={this._onZoom}
+          onZoomEnd={this._onZoomEnd}
+          width={this.props.width}
+          height={this.props.height}>
+
+          <div key="map" ref="mapboxMap" style={mapStyle} className={className}/>
+
+          <div key="overlays" className="overlays" style={{position: 'absolute', left: 0, top: 0}}>
+
+            {this.props.children}
+
+          </div>
+
+        </EventManager>
 
       </div>
     );

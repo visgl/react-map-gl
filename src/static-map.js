@@ -18,81 +18,61 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
 import pureRender from 'pure-render-decorator';
 
-import mapboxgl, {Point} from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl';
 import {select} from 'd3-selection';
 import Immutable from 'immutable';
-import assert from 'assert';
 
-import MapInteractions from './map-interactions.react';
 import config from './config';
 
 import {getInteractiveLayerIds} from './utils/style-utils';
 import diffStyles from './utils/diff-styles';
-import {mod, unprojectFromTransform, cloneTransform} from './utils/transform';
 
 function noop() {}
 
-// Note: Max pitch is a hard coded value (not a named constant) in transform.js
-const MAX_PITCH = 60;
-const PITCH_MOUSE_THRESHOLD = 20;
-const PITCH_ACCEL = 1.2;
-
 const PROP_TYPES = {
-  /**
-    * The latitude of the center of the map.
-    */
-  latitude: PropTypes.number.isRequired,
-  /**
-    * The longitude of the center of the map.
-    */
-  longitude: PropTypes.number.isRequired,
-  /**
-    * The tile zoom level of the map.
-    */
-  zoom: PropTypes.number.isRequired,
-  /**
-    * The Mapbox style the component should use. Can either be a string url
-    * or a MapboxGL style Immutable.Map object.
-    */
+  /** Mapbox API access token for mapbox-gl-js. Required when using Mapbox vector tiles/styles. */
+  mapboxApiAccessToken: PropTypes.string,
+  /** Mapbox WebGL context creation option. Useful when you want to export the canvas as a PNG. */
+  preserveDrawingBuffer: PropTypes.bool,
+  /** Show attribution control or not. */
+  attributionControl: PropTypes.bool,
+
+  /** The Mapbox style. A string url or a MapboxGL style Immutable.Map object. */
   mapStyle: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.instanceOf(Immutable.Map)
   ]),
-  /**
-    * The Mapbox API access token to provide to mapbox-gl-js. This is required
-    * when using Mapbox provided vector tiles and styles.
-    */
-  mapboxApiAccessToken: PropTypes.string,
-  /**
-    * `onChangeViewport` callback is fired when the user interacted with the
-    * map. The object passed to the callback contains `latitude`,
-    * `longitude` and `zoom` and additional state information.
-    */
-  onChangeViewport: PropTypes.func,
-  /**
-    * The width of the map.
-    */
+  /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
+  preventStyleDiffing: PropTypes.bool,
+
+  /** The latitude of the center of the map. */
+  latitude: PropTypes.number.isRequired,
+  /** The longitude of the center of the map. */
+  longitude: PropTypes.number.isRequired,
+  /** The tile zoom level of the map. */
+  zoom: PropTypes.number.isRequired,
+  /** Specify the bearing of the viewport */
+  bearing: React.PropTypes.number,
+  /** Specify the pitch of the viewport */
+  pitch: React.PropTypes.number,
+  /** Altitude of the viewport camera. Default 1.5 "screen heights" */
+  // Note: Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
+  altitude: React.PropTypes.number,
+  /** The width of the map. */
   width: PropTypes.number.isRequired,
-  /**
-    * The height of the map.
-    */
+  /** The height of the map. */
   height: PropTypes.number.isRequired,
+
   /**
-    * Is the component currently being dragged. This is used to show/hide the
-    * drag cursor. Also used as an optimization in some overlays by preventing
-    * rendering while dragging.
-    */
-  isDragging: PropTypes.bool,
-  /**
-    * Required to calculate the mouse projection after the first click event
-    * during dragging. Where the map is depends on where you first clicked on
-    * the map.
-    */
-  startDragLngLat: PropTypes.array,
-  /**
+   * `onChangeViewport` callback is fired when the user interacted with the
+   * map. The object passed to the callback contains `latitude`,
+   * `longitude` and `zoom` and additional state information.
+   */
+  onChangeViewport: PropTypes.func,
+
+ /**
     * Called when a feature is hovered over. Uses Mapbox's
     * queryRenderedFeatures API to find features under the pointer:
     * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
@@ -106,25 +86,12 @@ const PROP_TYPES = {
     */
   onHoverFeatures: PropTypes.func,
   /**
-    * Defaults to TRUE
     * Set to false to enable onHoverFeatures to be called regardless if
     * there is an actual feature at x, y. This is useful to emulate
     * "mouse-out" behaviors on features.
+    * Defaults to TRUE
     */
   ignoreEmptyFeatures: PropTypes.bool,
-
-  /**
-    * Show attribution control or not.
-    */
-  attributionControl: PropTypes.bool,
-
-  /**
-   * Called when the map is clicked. The handler is called with the clicked
-   * coordinates (https://www.mapbox.com/mapbox-gl-js/api/#LngLat) and the
-   * screen coordinates (https://www.mapbox.com/mapbox-gl-js/api/#PointLike).
-   */
-  onClick: PropTypes.func,
-
   /**
     * Called when a feature is clicked on. Uses Mapbox's
     * queryRenderedFeatures API to find features under the pointer:
@@ -138,43 +105,14 @@ const PROP_TYPES = {
   onClickFeatures: PropTypes.func,
 
   /**
-    * Radius to detect features around a clicked point. Defaults to 15.
-    */
-  clickRadius: PropTypes.number,
+   * Called when the map is clicked. The handler is called with the clicked
+   * coordinates (https://www.mapbox.com/mapbox-gl-js/api/#LngLat) and the
+   * screen coordinates (https://www.mapbox.com/mapbox-gl-js/api/#PointLike).
+   */
+  onClick: PropTypes.func,
 
-  /**
-    * Passed to Mapbox Map constructor which passes it to the canvas context.
-    * This is unseful when you want to export the canvas as a PNG.
-    */
-  preserveDrawingBuffer: PropTypes.bool,
-
-  /**
-    * There are still known issues with style diffing. As a temporary stopgap,
-    * add the option to prevent style diffing.
-    */
-  preventStyleDiffing: PropTypes.bool,
-
-  /**
-    * Enables perspective control event handling
-    */
-  perspectiveEnabled: PropTypes.bool,
-
-  /**
-    * Specify the bearing of the viewport
-    */
-  bearing: React.PropTypes.number,
-
-  /**
-    * Specify the pitch of the viewport
-    */
-  pitch: React.PropTypes.number,
-
-  /**
-    * Specify the altitude of the viewport camera
-    * Unit: map heights, default 1.5
-    * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
-    */
-  altitude: React.PropTypes.number
+  /** Radius to detect features around a clicked point. Defaults to 15. */
+  clickRadius: PropTypes.number
 };
 
 const DEFAULT_PROPS = {
@@ -241,7 +179,7 @@ export default class MapGL extends Component {
 
     this._map = map;
     this._updateMapViewport({}, this.props);
-    this._callOnChangeViewport(map.transform);
+    // this._callOnChangeViewport(map.transform);
     this._updateQueryParams(mapStyle);
   }
 
@@ -271,20 +209,6 @@ export default class MapGL extends Component {
   // External apps can access map this way
   _getMap() {
     return this._map;
-  }
-
-  // Calculate a cursor style
-  _getCursor() {
-    const isInteractive =
-      this.props.onChangeViewport ||
-      this.props.onClickFeature ||
-      this.props.onHoverFeatures;
-    if (isInteractive) {
-      return this.props.isDragging ?
-        config.CURSOR.GRABBING :
-        (this.state.isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
-    }
-    return 'inherit';
   }
 
   _updateStateFromProps(oldProps, newProps) {
@@ -451,27 +375,7 @@ export default class MapGL extends Component {
 
     if (sizeChanged) {
       this._map.resize();
-      this._callOnChangeViewport(this._map.transform);
-    }
-  }
-
-   // Helper to call props.onChangeViewport
-  _callOnChangeViewport(transform, opts = {}) {
-    if (this.props.onChangeViewport) {
-      this.props.onChangeViewport({
-        latitude: transform.center.lat,
-        longitude: mod(transform.center.lng + 180, 360) - 180,
-        zoom: transform.zoom,
-        pitch: transform.pitch,
-        bearing: mod(transform.bearing + 180, 360) - 180,
-
-        isDragging: this.props.isDragging,
-        startDragLngLat: this.props.startDragLngLat,
-        startBearing: this.props.startBearing,
-        startPitch: this.props.startPitch,
-
-        ...opts
-      });
+      // this._callOnChangeViewport(this._map.transform);
     }
   }
 
@@ -480,8 +384,7 @@ export default class MapGL extends Component {
     const mapStyle = {
       ...style,
       width,
-      height,
-      cursor: this._getCursor()
+      height
     };
 
     return (
