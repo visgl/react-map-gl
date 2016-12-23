@@ -25,7 +25,8 @@ import {range} from 'd3-array';
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 
-import MapGL, {ScatterplotOverlay} from '../../src';
+import MapGL from '../../src';
+import {ScatterplotOverlay} from '../../src/overlays';
 
 // San Francisco
 import CITIES from './../data/cities.json';

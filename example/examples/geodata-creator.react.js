@@ -23,7 +23,8 @@ import Immutable from 'immutable';
 import React, {PropTypes, Component} from 'react';
 import autobind from 'autobind-decorator';
 
-import MapGL, {DraggablePointsOverlay, SVGOverlay} from '../../src';
+import MapGL from '../../src';
+import {DraggablePointsOverlay, SVGOverlay} from '../../src/overlays';
 import alphaify from '../../src/utils/alphaify';
 
 // A mock example path.

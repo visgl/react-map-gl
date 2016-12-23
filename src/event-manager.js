@@ -63,9 +63,9 @@ function centroid(positions) {
   return [sum[0] / positions.length, sum[1] / positions.length];
 }
 
-export default class Interactions extends Component {
+export default class EventManager extends Component {
 
-  static displayName = 'Interactions';
+  static displayName = 'EventManager';
 
   static propTypes = {
     width: PropTypes.number.isRequired,
@@ -160,11 +160,11 @@ export default class Interactions extends Component {
   _onMouseDrag(event) {
     const pos = this._getMousePos(event);
     this.setState({pos, didDrag: true});
+    const {startPos} = this.state;
     if (this.state.isFunctionKeyPressed) {
-      const {startPos} = this.state;
       this.props.onMouseRotate({pos, startPos});
     } else {
-      this.props.onMouseDrag({pos});
+      this.props.onMouseDrag({pos, startPos});
     }
   }
 
@@ -298,7 +298,7 @@ export default class Interactions extends Component {
     if (delta < 0 && scale !== 0) {
       scale = 1 / scale;
     }
-    this.props.onZoom({pos, scale});
+    this.props.onZoom({pos, delta, scale});
     window.clearTimeout(this._zoomEndTimeout);
     this._zoomEndTimeout = window.setTimeout(function _setTimeout() {
       this.props.onZoomEnd();

@@ -26,7 +26,8 @@ import autobind from 'autobind-decorator';
 import {scaleOrdinal, schemeCategory10} from 'd3-scale';
 import {rgb} from 'd3-color';
 
-import MapGL, {SVGOverlay, CanvasOverlay} from '../../src';
+import MapGL from '../../src';
+import {SVGOverlay, CanvasOverlay} from '../../src/overlays';
 import alphaify from '../../src/utils/alphaify';
 
 import ROUTES from './../data/routes-example.json';

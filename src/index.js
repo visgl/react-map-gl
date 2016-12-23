@@ -18,10 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import MapGL from './map.react';
-import * as overlays from './overlays';
+import InteractiveMap from './interactive-map';
+import StaticMap from './static-map';
 import fitBounds from './utils/fit-bounds';
 
-module.exports = MapGL;
+module.exports = InteractiveMap;
+module.exports.InteractiveMap = InteractiveMap;
+module.exports.StaticMap = StaticMap;
 module.exports.fitBounds = fitBounds;
-Object.assign(module.exports, overlays);
+
+// TODO - should these be exported or better keep them as internal?
+// If exported, should we document them?
+import EventManager from './event-manager';
+import MapControls from './map-controls';
+
+module.exports.MapControls = MapControls;
+module.exports.EventManager = EventManager;
