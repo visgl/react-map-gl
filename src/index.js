@@ -30,7 +30,7 @@ module.exports.fitBounds = fitBounds;
 // TODO - should these be exported or better keep them as internal?
 // If exported, should we document them?
 import EventManager from './event-manager';
-import MapInteractions from './map-interactions';
+import MapControls from './map-controls';
 
-module.exports.MapInteractions = MapInteractions;
+module.exports.MapControls = MapControls;
 module.exports.EventManager = EventManager;

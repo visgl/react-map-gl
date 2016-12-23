@@ -20,6 +20,3 @@
 
 // Export as ES5 module
 module.exports = require('./dist');
-// Add overlays to default export
-// TODO - remove in next major version (require import 'react-map-gl/overlays')
-Object.assign(module.exports, require('./dist/overlays'));

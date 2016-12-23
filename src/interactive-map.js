@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import autobind from 'autobind-decorator';
 import pureRender from 'pure-render-decorator';
 
-import MapInteractions from './map-interactions';
 import StaticMap from './static-map';
+import MapControls from './map-controls';
 
 import {mod, cloneTransform} from './utils/transform';
 // import {unprojectFromTransform} from './utils/transform';
@@ -64,14 +64,14 @@ export default class InteractiveMap extends Component {
     //   content = (}
 
     return (
-      <MapInteractions
+      <MapControls
         {...this.props}
         unproject={this._unproject}
         getLngLatAtPoint={this._getLngLatAtPoint}>
 
         <StaticMap ref="map" {...this.props}/>
 
-      </MapInteractions>
+      </MapControls>
     );
   }
 }

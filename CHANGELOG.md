@@ -1,3 +1,32 @@
+# Version 2.0.0-beta1
+
+## Overlays no longer imported by default
+
+* Overlays are no longer included in the default export. To import overlays,
+  use `import {SVGOverlay, ...} from 'react-map-gl/overlays'`. This change
+  prevents unneeded code and dependencies from being bundled into your app
+  if you do not use overlays.
+
+# Event Handling Refactor
+
+* Event handling (Pan/Zoom/Tilt) has been significantly refactored, and is
+  now handled by a separate component (`MapControls`).
+* A new `StaticMap` component is the actual `mapbox-gl` wrapper. It only
+  handles click and hover events.
+* The separation of event handling from the map component opens up some
+  interesting use cases, including creating apps that can modify viewports
+  beyond mapbox' rendering limits and using the `MapControls` with
+  non-mapbox maps.
+
+# Compatibility with v1
+
+* A new `InteractiveMap` is provided, that uses the `MapControls` component
+  to add pan/zoom/title to `StaticMap`. `InteractiveMap` closely resembles
+  the original `MapGL` component from version 1 and is the default export
+  of `react-map-gl` in v2. `react-map-gl` should thus be API compatible with
+  v1 in most cases, although there might be subtle differences in how events
+  are handled.
+
 # Version 1.7.2
 * Use any one of the function keys {command, shift, ctrl, alt} to enable the
   perspective mode.

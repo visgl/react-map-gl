@@ -26,7 +26,8 @@ import config from './config';
 import {mod} from './utils/transform';
 import assert from 'assert';
 
-// import ViewportMercatorProject from 'viewport-mercator-project';
+import ViewportMercatorProject from 'viewport-mercator-project';
+// import {WebMercatorViewport} from 'viewport-mercator-project';
 
 // MAPBOX LIMITS
 const MAX_PITCH = 60;
@@ -37,7 +38,7 @@ const PITCH_MOUSE_THRESHOLD = 20;
 const PITCH_ACCEL = 1.2;
 
 @pureRender
-export default class MapInteractions extends Component {
+export default class MapControls extends Component {
 
   static propTypes = {
     /** The width of the map */
@@ -158,6 +159,15 @@ export default class MapInteractions extends Component {
 
     viewport = this._applyConstraints(viewport);
 
+    if (viewport.startDragLngLat) {
+      const dragViewport = ViewportMercatorProject({
+        ...this.props,
+        longitude: viewport.startDragLngLat[0],
+        latitude: viewport.startDragLngLat[1]
+      });
+      this.setState({dragViewport});
+    }
+
     return this.props.onChangeViewport(viewport);
   }
 
@@ -184,20 +194,8 @@ export default class MapInteractions extends Component {
   // TODO - We should have a mapbox-independent implementation of panning
   // Panning calculation is currently done using an undocumented mapbox function
   _calculateNewLngLat({startDragLngLat, pos, startPos}) {
-    const [longitude, latitude] = this.props.getLngLatAtPoint({
-      lngLat: startDragLngLat,
-      pos
-    });
-
-    return [longitude, latitude];
-
-    // const mercator = ViewportMercatorProject({
-    //   ...this.props,
-    //   longitude: startDragLngLat[0],
-    //   latitude: startDragLngLat[1]
-    // });
-
-    // return mercator.unproject(pos);
+    return this.props.getLngLatAtPoint({lngLat: startDragLngLat, pos});
+    // return this.state.dragViewport.unproject(pos);
   }
 
   // Calculates new zoom
