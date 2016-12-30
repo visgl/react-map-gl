@@ -45,13 +45,24 @@ function getMousePosition(el, event) {
 function getTouchPositions(el, event) {
   const points = [];
   const rect = el.getBoundingClientRect();
-  for (let i = 0; i < event.touches.length; i++) {
+  const touches = getTouches(event);
+  for (let i = 0; i < touches.length; i++) {
     points.push([
-      event.touches[i].clientX - rect.left - el.clientLeft,
-      event.touches[i].clientY - rect.top - el.clientTop
+      touches[i].clientX - rect.left - el.clientLeft,
+      touches[i].clientY - rect.top - el.clientTop
     ]);
   }
   return points;
+}
+
+// Get relevant touches from event depending on event type (for `touchend` and
+// `touchcancel` the property `changedTouches` contains the relevant coordinates)
+function getTouches(event) {
+  const type = event.type;
+  if (type === 'touchend' || type === 'touchcancel') {
+    return event.changedTouches;
+  }
+  return event.touches;
 }
 
 // Return the centroid of an array of points
