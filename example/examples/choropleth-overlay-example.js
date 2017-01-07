@@ -17,37 +17,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
 import Immutable from 'immutable';
-import {randomNormal} from 'd3-random';
-import {range} from 'd3-array';
 
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
-
-import MapGL, {ScatterplotOverlay} from '../../src';
+import MapGL, {ChoroplethOverlay, autobind} from 'react-map-gl';
+import ChoroplethOverlay from './choropleth-overlay';
 
 // San Francisco
+import ZIPCODES_SF from './../data/feature-example-sf.json';
 import CITIES from './../data/cities.json';
 const location = CITIES[0];
 
-const normal = randomNormal();
-function wiggle(scale) {
-  return normal() * scale;
+for (const feature of ZIPCODES_SF.features) {
+  feature.properties.value = Math.random() * 1000;
 }
 
-// Example data.
-const locations = Immutable.fromJS(range(4000).map(
-  () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
-));
+const ZIPCODES = Immutable.fromJS(ZIPCODES_SF);
 
-export default class ScatterplotOverlayExample extends Component {
+const propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  };
-
+export default class ChoroplethOverlayExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,28 +51,30 @@ export default class ScatterplotOverlayExample extends Component {
         isDragging: false
       }
     };
+    autobind(this);
   }
 
-  @autobind
   _onChangeViewport(viewport) {
     this.setState({viewport});
   }
 
   render() {
-    const viewport = {...this.state.viewport, ...this.props};
+    const mapProps = {
+      ...this.state.viewport,
+      ...this.props
+    };
     return (
-      <MapGL
-        { ...viewport }
-        onChangeViewport={ this._onChangeViewport }>
-
-        <ScatterplotOverlay
-          { ...viewport }
-          locations={ locations }
-          dotRadius={ 2 }
-          globalOpacity={ 1 }
-          compositeOperation="screen"/>
-
+      <MapGL { ...mapProps} onChangeViewport={this._onChangeViewport}>
+        <ChoroplethOverlay
+          { ...mapProps }
+          globalOpacity={ 0.8 }
+          colorDomain={ [0, 500, 1000] }
+          colorRange={ ['#31a354', '#addd8e', '#f7fcb9'] }
+          renderWhileDragging={ false }
+          features={ ZIPCODES.get('features') }/>
       </MapGL>
     );
   }
 }
+
+ChoroplethOverlayExample.propTypes = propTypes;

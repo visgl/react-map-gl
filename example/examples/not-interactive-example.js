@@ -19,42 +19,37 @@
 // THE SOFTWARE.
 
 import React, {PropTypes, Component} from 'react';
-import ViewportMercator from 'viewport-mercator-project';
+import MapGL from 'react-map-gl';
+import ZIPCODES_SF from './../data/feature-example-sf.json';
+import CITIES from './../data/cities.json';
 
-export default class SVGOverlay extends Component {
+const location = CITIES[0];
 
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    latitude: PropTypes.number.isRequired,
-    longitude: PropTypes.number.isRequired,
-    zoom: PropTypes.number.isRequired,
-    redraw: PropTypes.func.isRequired,
-    isDragging: PropTypes.bool.isRequired
-  };
+for (const feature of ZIPCODES_SF.features) {
+  feature.properties.value = Math.random() * 1000;
+}
+
+const propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
+
+export default class NotInteractiveExample extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      viewport: {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: 11
+      }
+    };
+  }
 
   render() {
-    const {width, height, isDragging} = this.props;
-    const style = {
-      pointerEvents: 'none',
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      ...this.props.style
-    };
-    const mercator = ViewportMercator(this.props);
-    const {project, unproject} = mercator;
-
-    return (
-      <svg
-        ref="overlay"
-        width={ width }
-        height={ height }
-        style={ style }>
-
-        { this.props.redraw({width, height, project, unproject, isDragging}) }
-
-      </svg>
-    );
+    return <MapGL { ...this.state.viewport } { ...this.props }/>;
   }
 }
+
+NotInteractiveExample.propTypes = propTypes;

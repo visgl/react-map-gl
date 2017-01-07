@@ -1,3 +1,10 @@
+# Version 2.0.0
+
+* Minimizes number of dependencies.
+* New precompilation and bundling for smaller module.
+* `ChoroplethOverlay` no longer exported, moved to examples folder.
+  This eliminates a number of dependencies from react-map-gl.
+
 # Version 1.7.2
 * Use any one of the function keys {command, shift, ctrl, alt} to enable the
   perspective mode.
