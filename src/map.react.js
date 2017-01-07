@@ -162,19 +162,26 @@ const PROP_TYPES = {
   /**
     * Specify the bearing of the viewport
     */
-  bearing: React.PropTypes.number,
+  bearing: PropTypes.number,
 
   /**
     * Specify the pitch of the viewport
     */
-  pitch: React.PropTypes.number,
+  pitch: PropTypes.number,
 
   /**
     * Specify the altitude of the viewport camera
     * Unit: map heights, default 1.5
     * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
     */
-  altitude: React.PropTypes.number
+  altitude: PropTypes.number,
+
+  /**
+    * The load callback is called when all dependencies have been loaded and
+    * the map is ready.
+    */
+  onLoad: PropTypes.func
+
 };
 
 const DEFAULT_PROPS = {
@@ -224,6 +231,7 @@ export default class MapGL extends Component {
     const mapStyle = Immutable.Map.isMap(this.props.mapStyle) ?
       this.props.mapStyle.toJS() :
       this.props.mapStyle;
+
     const map = new mapboxgl.Map({
       container: this.refs.mapboxMap,
       center: [this.props.longitude, this.props.latitude],
@@ -236,6 +244,10 @@ export default class MapGL extends Component {
       // TODO?
       // attributionControl: this.props.attributionControl
     });
+
+    if (this.props.onLoad) {
+      map.once('load', () => this.props.onLoad());
+    }
 
     select(map.getCanvas()).style('outline', 'none');
 
