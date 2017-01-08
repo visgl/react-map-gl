@@ -98,7 +98,7 @@ const PROP_TYPES = {
     * during dragging. Where the map is depends on where you first clicked on
     * the map.
     */
-  startDragLngLat: PropTypes.object,
+  startDragLngLat: PropTypes.array,
   /**
     * Called when a feature is hovered over. Uses Mapbox's
     * queryRenderedFeatures API to find features under the pointer:
@@ -550,7 +550,7 @@ export default class MapGL extends Component {
     const {lng, lat} = unprojectFromTransform(transform, new Point(...pos));
     this._callOnChangeViewport(transform, {
       isDragging: true,
-      startDragLngLat: {lng, lat},
+      startDragLngLat: [lng, lat],
       startBearing: transform.bearing,
       startPitch: transform.pitch
     });
@@ -566,7 +566,8 @@ export default class MapGL extends Component {
       'for mouse drag behavior to calculate where to position the map.');
 
     const transform = cloneTransform(this._map.transform);
-    transform.setLocationAtPoint(this.props.startDragLngLat, new Point(...pos));
+    const [lng, lat] = this.props.startDragLngLat;
+    transform.setLocationAtPoint({lng, lat}, new Point(...pos));
     this._callOnChangeViewport(transform, {isDragging: true});
   }
 
