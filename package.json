@@ -31,13 +31,11 @@
     "pure-render-decorator": "^1.1.0",
     "svg-transform": "0.0.3",
     "react-addons-shallow-compare": "^15.4.2",
-    "react-addons-test-utils": "^15.4.2",
     "viewport-mercator-project": "^2.0.1"
   },
   "devDependencies": {
     "buble": "^0.15.1",
     "buble-loader": "^0.4.0",
-    "electron-prebuilt": "^0.37.3",
     "eslint": "^3.0.0",
     "eslint-config-uber-es2015": "^3.0.0",
     "eslint-config-uber-jsx": "^3.0.0",
@@ -47,7 +45,9 @@
     "jsdom": "^9.9.1",
     "module-alias": "^2.0.0",
     "node-jsx": "^0.13.3",
+    "pre-commit": "^1.2.2",
     "react": "^15.4.0",
+    "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.0",
     "reify": "^0.4.4",
     "sinon": "^1.17.7",
@@ -57,7 +57,6 @@
     "tap-browser-color": "^0.1.2",
     "testron": "^1.2.0",
     "webpack": "^2.2.0-rc.3"
-  },
   },
   "scripts-old": {
     "build": "babel src -d dist --copy-files --source-maps inline",
@@ -75,14 +74,14 @@
     "react": "0.14.x - 15.x"
   },
   "scripts": {
-    "start": "(cd example && yarn && npm start)",
-    "build": "rm -fr dist dist-test && buble src -o dist --no modules --y dangerousForOf --objectAssign && buble test -o dist-test --no modules --y dangerousForOf --objectAssign && webpack -d",
+    "start": "(cd examples/main && yarn && npm start)",
+    "build": "rm -fr dist && buble src -o dist --no modules --y dangerousForOf --objectAssign && webpack -d",
     "lint": "eslint src example test",
     "test": "npm run lint && npm run test-node",
-    "test-node": "npm run build && node dist-test/node.js",
-    "precommit": "npm run lint -s",
-    "publish-prod": "npm run build && npm run test-fast && npm publish",
-    "publish-beta": "npm run build && npm run test-fast && npm publish --tag beta"
+    "test-node": "npm run build && node test/node.js",
+    "test-browser": "npm run build && echo 'To be restored'",
+    "publish-prod": "npm run build && npm run test && npm publish",
+    "publish-beta": "npm run build && npm run test && npm publish --tag beta"
   },
   "engines": {
     "node": ">= 4",

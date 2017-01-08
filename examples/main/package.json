@@ -1,9 +1,8 @@
 {
-  "name": "deckgl-hello-world-webpack",
+  "description": "Main example for react-map-gl",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.js --progress --hot --port 3001 --open",
-    "build": "webpack"
+    "start": "webpack-dev-server --progress --hot --port 3001 --open"
   },
   "dependencies": {
     "d3-array": "^1.0.1",
@@ -12,19 +11,14 @@
     "d3-geo": "^1.2.4",
     "d3-random": "^1.0.2",
     "d3-scale": "^1.0.3",
-    "d3-selection": "^1.0.2",
     "immutable": "^3.8.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-map-gl": "^1.7.2"
   },
   "devDependencies": {
-    "brfs": "^1.4.3",
     "buble-loader": "^0.4.0",
-    "json-loader": "^0.5.4",
-    "transform-loader": "^0.2.3",
     "webpack": "^2.2.0-rc.3",
-    "webpack-dev-server": "^2.2.0-rc.0",
-    "webworkify-webpack-dropin": "^1.1.9"
+    "webpack-dev-server": "^2.2.0-rc.0"
   }
 }
