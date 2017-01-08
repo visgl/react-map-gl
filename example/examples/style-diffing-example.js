@@ -18,12 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import React, {PropTypes, Component} from 'react';
+import MapGL, {autobind} from 'react-map-gl';
+
 import Immutable from 'immutable';
 import window from 'global/window';
-
-import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
-import MapGL from '../../src';
 
 // San Francisco
 import SF_FEATURE from './../data/feature-example-sf.json';
@@ -58,13 +57,12 @@ function buildStyle({fill = 'red', stroke = 'blue'}) {
   });
 }
 
-export default class TiltExample extends Component {
+const propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  };
-
+export default class StyleDiffingExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,13 +70,12 @@ export default class TiltExample extends Component {
         latitude: location.latitude,
         longitude: location.longitude,
         zoom: 11,
-        bearing: 180,
-        pitch: 60,
         startDragLngLat: null,
         isDragging: false
       },
       mapStyle: buildStyle({stroke: '#FF00FF', fill: 'green'})
     };
+    autobind(this);
   }
 
   componentWillMount() {
@@ -95,19 +92,17 @@ export default class TiltExample extends Component {
     }.bind(this), 2000);
   }
 
-  @autobind
-  _onChangeViewport(opt) {
-    this.setState({viewport: opt});
+  _onChangeViewport(viewport) {
+    this.setState({viewport});
   }
 
-  @autobind
   _onClickFeatures(features) {
     window.console.log(features);
   }
 
   render() {
     const viewport = {
-      // mapStyle: this.state.mapStyle,
+      mapStyle: this.state.mapStyle,
       ...this.state.viewport,
       ...this.props
     };
@@ -116,10 +111,11 @@ export default class TiltExample extends Component {
         { ...viewport }
         onChangeViewport={ this._onChangeViewport }
         onClickFeatures={ this._onClickFeatures }
-        perspectiveEnabled={ true }
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
         preventStyleDiffing={ false }/>
     );
   }
 }
+
+StyleDiffingExample.propTypes = propTypes;

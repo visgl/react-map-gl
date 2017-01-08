@@ -20,17 +20,14 @@
 import {randomNormal} from 'd3-random';
 import {range} from 'd3-array';
 import window from 'global/window';
-import transform from 'svg-transform';
 import Immutable from 'immutable';
 
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
-
-import MapGL, {CanvasOverlay, SVGOverlay} from '../../src';
-import alphaify from '../../src/utils/alphaify';
+import MapGL, {CanvasOverlay, SVGOverlay, autobind} from '../../src';
+import alphaify from './alphaify';
 
 // San Francisco
-import CITIES from './../data/cities.json';
+import CITIES from '../data/cities.json';
 const location = CITIES[0];
 
 const wiggle = (function _wiggle() {
@@ -45,13 +42,24 @@ const locations = Immutable.fromJS(range(30).map(
   () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
 ));
 
-export default class OverlayExample extends Component {
+const propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  };
+// Makes working with SVG transforms a little nicer
+function svgTransform(props) {
+  const transform = [];
+  if (Array.isArray(props)) {
+    props.forEach(prop => {
+      const key = Object.keys(prop)[0];
+      transform.push(`${key}(${prop[key]})`);
+    });
+  }
+  return transform.join(' ');
+}
 
+export default class CustomOverlayExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,14 +71,13 @@ export default class OverlayExample extends Component {
         isDragging: false
       }
     };
+    autobind(this);
   }
 
-  @autobind
   _onChangeViewport(viewport) {
     this.setState({viewport});
   }
 
-  @autobind
   _redrawCanvasOverlay(opt) {
     const p1 = opt.project([location.longitude, location.latitude]);
     opt.ctx.clearRect(0, 0, opt.width, opt.height);
@@ -93,7 +100,6 @@ export default class OverlayExample extends Component {
     });
   }
 
-  @autobind
   _redrawSVGOverlay(opt) {
     const p1 = opt.project([location.longitude, location.latitude]);
     /* We use invisible SVG elements to support interactivity. */
@@ -110,7 +116,7 @@ export default class OverlayExample extends Component {
           key={ 0 }
           style={ {...style, stroke: alphaify('#1FBAD6', 0.8)} }
           r={ 10 }
-          transform={ transform([{translate: p1}]) }
+          transform={ svgTransform([{translate: p1}]) }
           onClick={ () => {
             const windowAlert = window.alert;
             windowAlert('center');
@@ -121,7 +127,7 @@ export default class OverlayExample extends Component {
               key={ index + 1 }
               style={ style }
               r={ 6 }
-              transform={ transform([{translate: opt.project(loc.toArray())}]) }
+              transform={ svgTransform([{translate: opt.project(loc.toArray())}]) }
               onClick={ () => {
                 const windowAlert = window.alert;
                 windowAlert(`dot ${index}`);
@@ -135,19 +141,12 @@ export default class OverlayExample extends Component {
   render() {
     const viewport = {...this.state.viewport, ...this.props};
     return (
-      <MapGL
-        { ...viewport }
-        onChangeViewport={ this._onChangeViewport }>
-
-        <CanvasOverlay
-          { ...viewport }
-          redraw={ this._redrawCanvasOverlay }/>
-
-        <SVGOverlay
-          { ...viewport }
-          redraw={ this._redrawSVGOverlay }/>
-
+      <MapGL { ...viewport } onChangeViewport={ this._onChangeViewport }>
+        <CanvasOverlay { ...viewport } redraw={ this._redrawCanvasOverlay }/>
+        <SVGOverlay { ...viewport } redraw={ this._redrawSVGOverlay }/>
       </MapGL>
     );
   }
 }
+
+CustomOverlayExample.propTypes = propTypes;

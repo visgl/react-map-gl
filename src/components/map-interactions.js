@@ -21,7 +21,8 @@
 // Portions of the code below originally from:
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
+import autobind from '../utils/autobind';
+import shallowCompare from 'react-addons-shallow-compare';
 import document from 'global/document';
 import window from 'global/window';
 
@@ -74,43 +75,41 @@ function centroid(positions) {
   return [sum[0] / positions.length, sum[1] / positions.length];
 }
 
+const propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  onMouseDown: PropTypes.func,
+  onMouseDrag: PropTypes.func,
+  onMouseRotate: PropTypes.func,
+  onMouseUp: PropTypes.func,
+  onMouseMove: PropTypes.func,
+  onMouseClick: PropTypes.func,
+  onTouchStart: PropTypes.func,
+  onTouchDrag: PropTypes.func,
+  onTouchRotate: PropTypes.func,
+  onTouchEnd: PropTypes.func,
+  onTouchTap: PropTypes.func,
+  onZoom: PropTypes.func,
+  onZoomEnd: PropTypes.func
+};
+
+const defaultProps = {
+  onMouseDown: noop,
+  onMouseDrag: noop,
+  onMouseRotate: noop,
+  onMouseUp: noop,
+  onMouseMove: noop,
+  onMouseClick: noop,
+  onTouchStart: noop,
+  onTouchDrag: noop,
+  onTouchRotate: noop,
+  onTouchEnd: noop,
+  onTouchTap: noop,
+  onZoom: noop,
+  onZoomEnd: noop
+};
+
 export default class Interactions extends Component {
-
-  static displayName = 'Interactions';
-
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    onMouseDown: PropTypes.func,
-    onMouseDrag: PropTypes.func,
-    onMouseRotate: PropTypes.func,
-    onMouseUp: PropTypes.func,
-    onMouseMove: PropTypes.func,
-    onMouseClick: PropTypes.func,
-    onTouchStart: PropTypes.func,
-    onTouchDrag: PropTypes.func,
-    onTouchRotate: PropTypes.func,
-    onTouchEnd: PropTypes.func,
-    onTouchTap: PropTypes.func,
-    onZoom: PropTypes.func,
-    onZoomEnd: PropTypes.func
-  };
-
-  static defaultProps = {
-    onMouseDown: noop,
-    onMouseDrag: noop,
-    onMouseRotate: noop,
-    onMouseUp: noop,
-    onMouseMove: noop,
-    onMouseClick: noop,
-    onTouchStart: noop,
-    onTouchDrag: noop,
-    onTouchRotate: noop,
-    onTouchEnd: noop,
-    onTouchTap: noop,
-    onZoom: noop,
-    onZoomEnd: noop
-  };
 
   constructor(props) {
     super(props);
@@ -121,6 +120,11 @@ export default class Interactions extends Component {
       pos: null,
       mouseWheelPos: null
     };
+    autobind(this);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
   }
 
   _getMousePos(event) {
@@ -139,7 +143,6 @@ export default class Interactions extends Component {
       event.ctrlKey || event.shiftKey);
   }
 
-  @autobind
   _onMouseDown(event) {
     const pos = this._getMousePos(event);
     this.setState({
@@ -153,7 +156,6 @@ export default class Interactions extends Component {
     document.addEventListener('mouseup', this._onMouseUp, false);
   }
 
-  @autobind
   _onTouchStart(event) {
     const pos = this._getTouchPos(event);
     this.setState({
@@ -167,7 +169,6 @@ export default class Interactions extends Component {
     document.addEventListener('touchend', this._onTouchEnd, false);
   }
 
-  @autobind
   _onMouseDrag(event) {
     const pos = this._getMousePos(event);
     this.setState({pos, didDrag: true});
@@ -179,7 +180,6 @@ export default class Interactions extends Component {
     }
   }
 
-  @autobind
   _onTouchDrag(event) {
     const pos = this._getTouchPos(event);
     this.setState({pos, didDrag: true});
@@ -192,7 +192,6 @@ export default class Interactions extends Component {
     event.preventDefault();
   }
 
-  @autobind
   _onMouseUp(event) {
     document.removeEventListener('mousemove', this._onMouseDrag, false);
     document.removeEventListener('mouseup', this._onMouseUp, false);
@@ -204,7 +203,6 @@ export default class Interactions extends Component {
     }
   }
 
-  @autobind
   _onTouchEnd(event) {
     document.removeEventListener('touchmove', this._onTouchDrag, false);
     document.removeEventListener('touchend', this._onTouchEnd, false);
@@ -216,14 +214,12 @@ export default class Interactions extends Component {
     }
   }
 
-  @autobind
   _onMouseMove(event) {
     const pos = this._getMousePos(event);
     this.props.onMouseMove({pos});
   }
 
   /* eslint-disable complexity, max-statements */
-  @autobind
   _onWheel(event) {
     event.preventDefault();
     let value = event.deltaY;
@@ -337,3 +333,7 @@ export default class Interactions extends Component {
     );
   }
 }
+
+Interactions.displayName = 'Interactions';
+Interactions.propTypes = propTypes;
+Interactions.defaultProps = defaultProps;

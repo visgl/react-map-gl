@@ -19,4 +19,9 @@
 // THE SOFTWARE.
 
 // Export as ES5 module
-module.exports = require('./dist');
+module.exports = require('./dist/lib-bundle');
+
+// module.exports = MapGL;
+// module.exports.fitBounds = fitBounds;
+// module.exports.autobind = autobind;
+// Object.assign(module.exports, overlays);
