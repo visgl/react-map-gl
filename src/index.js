@@ -18,7 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-export {default as default, default as MapGL} from './map.react';
+export {default as default} from './components/map';
+
+export {default as MapGL} from './components/map';
 export {default as fitBounds} from './utils/fit-bounds';
 export {default as autobind} from './utils/autobind';
 
@@ -27,8 +29,3 @@ export {default as DraggablePointsOverlay} from './overlays/draggable-points-ove
 export {default as HTMLOverlay} from './overlays/html-overlay';
 export {default as ScatterplotOverlay} from './overlays/scatterplot-overlay';
 export {default as SVGOverlay} from './overlays/svg-overlay';
-
-// module.exports = MapGL;
-// module.exports.fitBounds = fitBounds;
-// module.exports.autobind = autobind;
-// Object.assign(module.exports, overlays);

@@ -21,7 +21,7 @@
 // Portions of the code below originally from:
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
 import React, {PropTypes, Component} from 'react';
-import autobind from './utils/autobind';
+import autobind from '../utils/autobind';
 import shallowCompare from 'react-addons-shallow-compare';
 import document from 'global/document';
 import window from 'global/window';

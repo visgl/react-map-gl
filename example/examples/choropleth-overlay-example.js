@@ -20,7 +20,7 @@
 import Immutable from 'immutable';
 
 import React, {PropTypes, Component} from 'react';
-import MapGL, {ChoroplethOverlay, autobind} from 'react-map-gl';
+import MapGL, {autobind} from 'react-map-gl';
 import ChoroplethOverlay from './choropleth-overlay';
 
 // San Francisco

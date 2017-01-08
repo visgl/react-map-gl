@@ -4,13 +4,14 @@ const webpack = require('webpack');
 module.exports = {
   // Bundle the transpiled code in dist
   entry: {
-    library: resolve('./dist/index.js')
+    lib: resolve('./dist/index.js'),
+    test: resolve('./test/index.js')
   },
 
   // Generate a bundle in dist folder
   output: {
     path: resolve('./dist'),
-    filename: 'bundle.js',
+    filename: '[name]-bundle.js',
     library: 'react-map-gl',
     libraryTarget: 'umd'
   },
@@ -20,7 +21,35 @@ module.exports = {
     /^[a-z\-0-9]+$/
   ],
 
+  stats: {
+    warnings: false
+  },
+
   // devtool: 'source-maps'
+  resolve: {
+    alias: {
+      'react-map-gl': resolve('./dist'),
+      'react-map-gl/test': resolve('./dist-test')
+    }
+  },
+
+  module: {
+    rules: [
+      {
+        // Compile ES2015 using buble
+        test: /\.js$/,
+        loader: 'buble-loader',
+        include: [/src/, /test/],
+        options: {
+          objectAssign: 'Object.assign',
+          transforms: {
+            dangerousForOf: true,
+            modules: false
+          }
+        }
+      }
+    ]
+  },
 
   plugins: [
     new webpack.optimize.UglifyJsPlugin({

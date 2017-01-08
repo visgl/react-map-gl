@@ -18,20 +18,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import React, {PropTypes, Component} from 'react';
-import autobind from './utils/autobind';
 import shallowCompare from 'react-addons-shallow-compare';
+import autobind from '../utils/autobind';
 
 import mapboxgl, {Point} from 'mapbox-gl';
 import {select} from 'd3-selection';
 import Immutable from 'immutable';
 import assert from 'assert';
 
-import MapInteractions from './map-interactions.react';
-import config from './config';
+import MapInteractions from './map-interactions';
+import config from '../config';
 
-import {getInteractiveLayerIds} from './utils/style-utils';
-import diffStyles from './utils/diff-styles';
-import {mod, unprojectFromTransform, cloneTransform} from './utils/transform';
+import {getInteractiveLayerIds} from '../utils/style-utils';
+import diffStyles from '../utils/diff-styles';
+import {mod, unprojectFromTransform, cloneTransform} from '../utils/transform';
 
 function noop() {}
 
