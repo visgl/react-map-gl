@@ -54,6 +54,13 @@ const propTypes = {
     */
   zoom: PropTypes.number.isRequired,
   /**
+    * The maximum tile zoom level of the map. Defaults to 20.
+    * Increasing this will allow you to zoom further into the map but should
+    * only be used if you know what you are doing past zoom 20. The default
+    * map styles won't render anything useful past 20.
+    */
+  maxZoom: PropTypes.number,
+  /**
     * The Mapbox style the component should use. Can either be a string url
     * or a MapboxGL style Immutable.Map object.
     */
@@ -162,23 +169,30 @@ const propTypes = {
   /**
     * Specify the bearing of the viewport
     */
-  bearing: React.PropTypes.number,
+  bearing: PropTypes.number,
 
   /**
     * Specify the pitch of the viewport
     */
-  pitch: React.PropTypes.number,
+  pitch: PropTypes.number,
 
   /**
     * Specify the altitude of the viewport camera
     * Unit: map heights, default 1.5
     * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
     */
-  altitude: React.PropTypes.number
+  altitude: PropTypes.number,
+
+  /**
+    * The load callback is called when all dependencies have been loaded and
+    * the map is ready.
+    */
+  onLoad: PropTypes.func
+
 };
 
 const defaultProps = {
-  mapStyle: 'mapbox://styles/mapbox/light-v8',
+  mapStyle: 'mapbox://styles/mapbox/light-v9',
   onChangeViewport: null,
   mapboxApiAccessToken: getAccessToken(),
   preserveDrawingBuffer: false,
@@ -187,7 +201,8 @@ const defaultProps = {
   bearing: 0,
   pitch: 0,
   altitude: 1.5,
-  clickRadius: 15
+  clickRadius: 15,
+  maxZoom: 20
 };
 
 // Try to get access token from URL, env, local storage or config
@@ -249,20 +264,24 @@ export default class MapGL extends Component {
     const mapStyle = Immutable.Map.isMap(this.props.mapStyle) ?
       this.props.mapStyle.toJS() :
       this.props.mapStyle;
+
     const map = new mapboxgl.Map({
       container: this.refs.mapboxMap,
       center: [this.props.longitude, this.props.latitude],
       zoom: this.props.zoom,
+      maxZoom: this.props.maxZoom,
       pitch: this.props.pitch,
       bearing: this.props.bearing,
       style: mapStyle,
       interactive: false,
       preserveDrawingBuffer: this.props.preserveDrawingBuffer
-      // TODO?
-      // attributionControl: this.props.attributionControl
     });
 
-    // TODO - can we drop d3-select dependency?
+    if (this.props.onLoad) {
+      map.once('load', () => this.props.onLoad());
+    }
+
+    // TODO - can we drop d3-select dependency? Seems like overkill for this
     select(map.getCanvas()).style('outline', 'none');
 
     this._map = map;
@@ -320,9 +339,8 @@ export default class MapGL extends Component {
 
   _updateStateFromProps(oldProps, newProps) {
     mapboxgl.accessToken = newProps.mapboxApiAccessToken;
-    const {startDragLngLat} = newProps;
     this.setState({
-      startDragLngLat: startDragLngLat && startDragLngLat.slice()
+      startDragLngLat: newProps.startDragLngLat
     });
   }
 
@@ -558,10 +576,10 @@ export default class MapGL extends Component {
 
   _onMouseDown({pos}) {
     const {transform} = this._map;
-    const lngLat = unprojectFromTransform(transform, new Point(...pos));
+    const {lng, lat} = unprojectFromTransform(transform, new Point(...pos));
     this._callOnChangeViewport(transform, {
       isDragging: true,
-      startDragLngLat: [lngLat.lng, lngLat.lat],
+      startDragLngLat: [lng, lat],
       startBearing: transform.bearing,
       startPitch: transform.pitch
     });
@@ -577,7 +595,8 @@ export default class MapGL extends Component {
       'for mouse drag behavior to calculate where to position the map.');
 
     const transform = cloneTransform(this._map.transform);
-    transform.setLocationAtPoint(this.props.startDragLngLat, new Point(...pos));
+    const [lng, lat] = this.props.startDragLngLat;
+    transform.setLocationAtPoint({lng, lat}, new Point(...pos));
     this._callOnChangeViewport(transform, {isDragging: true});
   }
 
