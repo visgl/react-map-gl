@@ -29,7 +29,7 @@ module.exports = {
   resolve: {
     alias: {
       'react-map-gl': resolve('./dist'),
-      'react-map-gl/test': resolve('./dist-test')
+      'react-map-gl/test': resolve('./test')
     }
   },
 

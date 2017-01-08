@@ -22,7 +22,7 @@ import React, {PropTypes, Component} from 'react';
 import {scaleOrdinal, schemeCategory10} from 'd3-scale';
 import {rgb} from 'd3-color';
 
-import MapGL, {SVGOverlay, CanvasOverlay, autobind} from '../../src';
+import MapGL, {SVGOverlay, CanvasOverlay, autobind} from 'react-map-gl';
 import alphaify from './alphaify';
 
 import window from 'global/window';
