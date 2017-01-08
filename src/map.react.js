@@ -54,6 +54,13 @@ const PROP_TYPES = {
     */
   zoom: PropTypes.number.isRequired,
   /**
+    * The maximum tile zoom level of the map. Defaults to 20.
+    * Increasing this will allow you to zoom further into the map but should
+    * only be used if you know what you are doing past zoom 20. The default
+    * map styles won't render anything useful past 20.
+    */
+  maxZoom: PropTypes.number,
+  /**
     * The Mapbox style the component should use. Can either be a string url
     * or a MapboxGL style Immutable.Map object.
     */
@@ -185,7 +192,7 @@ const PROP_TYPES = {
 };
 
 const DEFAULT_PROPS = {
-  mapStyle: 'mapbox://styles/mapbox/light-v8',
+  mapStyle: 'mapbox://styles/mapbox/light-v9',
   onChangeViewport: null,
   mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
   preserveDrawingBuffer: false,
@@ -194,7 +201,8 @@ const DEFAULT_PROPS = {
   bearing: 0,
   pitch: 0,
   altitude: 1.5,
-  clickRadius: 15
+  clickRadius: 15,
+  maxZoom: 20
 };
 
 @pureRender
@@ -236,6 +244,7 @@ export default class MapGL extends Component {
       container: this.refs.mapboxMap,
       center: [this.props.longitude, this.props.latitude],
       zoom: this.props.zoom,
+      maxZoom: this.props.maxZoom,
       pitch: this.props.pitch,
       bearing: this.props.bearing,
       style: mapStyle,
@@ -301,9 +310,8 @@ export default class MapGL extends Component {
 
   _updateStateFromProps(oldProps, newProps) {
     mapboxgl.accessToken = newProps.mapboxApiAccessToken;
-    const {startDragLngLat} = newProps;
     this.setState({
-      startDragLngLat: startDragLngLat && startDragLngLat.slice()
+      startDragLngLat: newProps.startDragLngLat
     });
   }
 
@@ -539,10 +547,10 @@ export default class MapGL extends Component {
 
   @autobind _onMouseDown({pos}) {
     const {transform} = this._map;
-    const lngLat = unprojectFromTransform(transform, new Point(...pos));
+    const {lng, lat} = unprojectFromTransform(transform, new Point(...pos));
     this._callOnChangeViewport(transform, {
       isDragging: true,
-      startDragLngLat: [lngLat.lng, lngLat.lat],
+      startDragLngLat: [lng, lat],
       startBearing: transform.bearing,
       startPitch: transform.pitch
     });
@@ -558,7 +566,8 @@ export default class MapGL extends Component {
       'for mouse drag behavior to calculate where to position the map.');
 
     const transform = cloneTransform(this._map.transform);
-    transform.setLocationAtPoint(this.props.startDragLngLat, new Point(...pos));
+    const [lng, lat] = this.props.startDragLngLat;
+    transform.setLocationAtPoint({lng, lat}, new Point(...pos));
     this._callOnChangeViewport(transform, {isDragging: true});
   }
 
