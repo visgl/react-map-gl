@@ -18,13 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import React, {PropTypes, Component} from 'react';
+import MapGL, {DraggablePointsOverlay, SVGOverlay, autobind} from 'react-map-gl';
+
 import Immutable from 'immutable';
 
-import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
-
-import MapGL, {DraggablePointsOverlay, SVGOverlay} from '../../src';
-import alphaify from '../../src/utils/alphaify';
+import alphaify from './alphaify';
 
 // A mock example path.
 const initialPoints = [
@@ -44,13 +43,7 @@ const initialPoints = [
 
 let ids = initialPoints[initialPoints.length - 1].id;
 
-export default class GeodataCreator extends Component {
-
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  };
-
+export default class GeodataCreatorExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,14 +56,13 @@ export default class GeodataCreator extends Component {
       },
       points: Immutable.fromJS(initialPoints)
     };
+    autobind(this);
   }
 
-  @autobind
   _onChangeViewport(viewport) {
     this.setState({viewport});
   }
 
-  @autobind
   _onAddPoint(location) {
     const points = this.state.points.push(new Immutable.Map({
       location: new Immutable.List(location),
@@ -79,7 +71,6 @@ export default class GeodataCreator extends Component {
     this.setState({points});
   }
 
-  @autobind
   _onUpdatePoint(opt) {
     const index = this.state.points.findIndex(p => p.get('id') === opt.key);
     let point = this.state.points.get(index);
@@ -88,7 +79,7 @@ export default class GeodataCreator extends Component {
     this.setState({points});
   }
 
-  @autobind _redrawSVGOverlay(opt) {
+  _redrawSVGOverlay(opt) {
     if (!this.state.points.size) {
       return null;
     }
@@ -138,3 +129,8 @@ export default class GeodataCreator extends Component {
     );
   }
 }
+
+GeodataCreatorExample.propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};

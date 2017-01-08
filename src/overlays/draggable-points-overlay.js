@@ -19,16 +19,27 @@
 // THE SOFTWARE.
 
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
-
-import Immutable from 'immutable';
-
-import transform from 'svg-transform';
-import document from 'global/document';
+import autobind from '../utils/autobind';
 import config from '../config';
+
 import ViewportMercator from 'viewport-mercator-project';
 
+import Immutable from 'immutable';
+import document from 'global/document';
+
 function noop() {}
+
+// Makes working with SVG transforms a little nicer
+function svgTransform(props) {
+  const transform = [];
+  if (Array.isArray(props)) {
+    props.forEach(prop => {
+      const key = Object.keys(prop)[0];
+      transform.push(`${key}(${prop[key]})`);
+    });
+  }
+  return transform.join(' ');
+}
 
 function mouse(container, event) {
   const rect = container.getBoundingClientRect();
@@ -37,40 +48,40 @@ function mouse(container, event) {
   return [x, y];
 }
 
+const propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+  zoom: PropTypes.number.isRequired,
+  points: PropTypes.instanceOf(Immutable.List).isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  keyAccessor: PropTypes.func.isRequired,
+  lngLatAccessor: PropTypes.func.isRequired,
+  onAddPoint: PropTypes.func.isRequired,
+  onUpdatePoint: PropTypes.func.isRequired,
+  renderPoint: PropTypes.func.isRequired
+};
+
+const defaultProps = {
+  keyAccessor: point => point.get('id'),
+  lngLatAccessor: point => point.get('location').toArray(),
+  onAddPoint: noop,
+  onUpdatePoint: noop,
+  renderPoint: noop,
+  isDragging: false
+};
+
 export default class DraggablePointsOverlay extends Component {
-
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    latitude: PropTypes.number.isRequired,
-    longitude: PropTypes.number.isRequired,
-    zoom: PropTypes.number.isRequired,
-    points: PropTypes.instanceOf(Immutable.List).isRequired,
-    isDragging: PropTypes.bool.isRequired,
-    keyAccessor: PropTypes.func.isRequired,
-    lngLatAccessor: PropTypes.func.isRequired,
-    onAddPoint: PropTypes.func.isRequired,
-    onUpdatePoint: PropTypes.func.isRequired,
-    renderPoint: PropTypes.func.isRequired
-  };
-
-  static defaultProps = {
-    keyAccessor: point => point.get('id'),
-    lngLatAccessor: point => point.get('location').toArray(),
-    onAddPoint: noop,
-    onUpdatePoint: noop,
-    renderPoint: noop,
-    isDragging: false
-  };
 
   constructor(props) {
     super(props);
     this.state = {
       draggedPointKey: null
     };
+    autobind(this);
   }
 
-  @autobind
   _onDragStart(point, event) {
     event.stopPropagation();
     document.addEventListener('mousemove', this._onDrag, false);
@@ -78,7 +89,6 @@ export default class DraggablePointsOverlay extends Component {
     this.setState({draggedPointKey: this.props.keyAccessor(point)});
   }
 
-  @autobind
   _onDrag(event) {
     event.stopPropagation();
     const pixel = mouse(this.refs.container, event);
@@ -88,7 +98,6 @@ export default class DraggablePointsOverlay extends Component {
     this.props.onUpdatePoint({key, location: lngLat});
   }
 
-  @autobind
   _onDragEnd(event) {
     event.stopPropagation();
     document.removeEventListener('mousemove', this._onDrag, false);
@@ -96,7 +105,6 @@ export default class DraggablePointsOverlay extends Component {
     this.setState({draggedPointKey: null});
   }
 
-  @autobind
   _addPoint(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -131,7 +139,7 @@ export default class DraggablePointsOverlay extends Component {
                 <g
                   key={ index }
                   style={ {pointerEvents: 'all'} }
-                  transform={ transform([{translate: pixel}]) }
+                  transform={ svgTransform([{translate: pixel}]) }
                   onMouseDown={ this._onDragStart.bind(this, point) }>
                   {
                     this.props.renderPoint.call(this, point, pixel)
@@ -145,3 +153,6 @@ export default class DraggablePointsOverlay extends Component {
     );
   }
 }
+
+DraggablePointsOverlay.propTypes = propTypes;
+DraggablePointsOverlay.defaultProps = defaultProps;

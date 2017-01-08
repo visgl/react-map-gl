@@ -1,3 +1,17 @@
+# Version 3.0.0-alpha.1
+
+* NEW: Supports "tree-shaking" in Webpack2 and Rollup - adds new package.json
+  `module` field that points to files with preserved ES6 import/exports.
+* NEW: Significant reduction in number of npm dependencies.
+
+* BREAKING: The `ChoroplethOverlay` React component is no longer part of the
+  exported library. It has been moved to examples folder, applications that
+  still need it can copy it from there instead of importing it directly.
+  Removing `ChoroplethOverlay` eliminated a number of big D3 dependencies from
+  react-map-gl, which seemed like the right tradeoff since most users are using
+  mapbox styles or deck.gl layers for Choropleths.
+
+
 ## Version 2.0.2 (Feb 09, 2017)
 
 #### Minor Fixes

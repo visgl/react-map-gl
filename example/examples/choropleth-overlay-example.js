@@ -17,63 +17,64 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-import window from 'global/window';
-const windowAlert = window.alert;
+import Immutable from 'immutable';
 
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
+import MapGL, {autobind} from 'react-map-gl';
+import ChoroplethOverlay from './choropleth-overlay';
 
-import MapGL from '../../src';
+// San Francisco
+import ZIPCODES_SF from './../data/feature-example-sf.json';
+import CITIES from './../data/cities.json';
+const location = CITIES[0];
 
-export default class ClickExample extends Component {
+for (const feature of ZIPCODES_SF.features) {
+  feature.properties.value = Math.random() * 1000;
+}
 
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  };
+const ZIPCODES = Immutable.fromJS(ZIPCODES_SF);
 
+const propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
+
+export default class ChoroplethOverlayExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
       viewport: {
-        latitude: 37.7736092599127,
-        longitude: -122.42312591099463,
-        zoom: 12.011557070552028,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: 11,
         startDragLngLat: null,
         isDragging: false
       }
     };
+    autobind(this);
   }
 
-  @autobind
   _onChangeViewport(viewport) {
     this.setState({viewport});
   }
 
-  @autobind
-  _onClickFeatures(features) {
-    const placeNames = features
-      .filter(feature => feature.layer['source-layer'] === 'place_label')
-      .map(feature => feature.properties.name);
-    windowAlert(placeNames);
-  }
-
-  @autobind
-  _onClick(coordinates, pos) {
-    windowAlert(`${coordinates}\n${JSON.stringify(pos)}`);
-  }
-
   render() {
-    const viewport = {
+    const mapProps = {
       ...this.state.viewport,
       ...this.props
     };
     return (
-      <MapGL { ...viewport }
-        onChangeViewport={ this._onChangeViewport }
-        onClickFeatures={ this._onClickFeatures }
-        onClick={ this._onClick }/>
+      <MapGL { ...mapProps} onChangeViewport={this._onChangeViewport}>
+        <ChoroplethOverlay
+          { ...mapProps }
+          globalOpacity={ 0.8 }
+          colorDomain={ [0, 500, 1000] }
+          colorRange={ ['#31a354', '#addd8e', '#f7fcb9'] }
+          renderWhileDragging={ false }
+          features={ ZIPCODES.get('features') }/>
+      </MapGL>
     );
   }
 }
+
+ChoroplethOverlayExample.propTypes = propTypes;
