@@ -1,6 +1,5 @@
-export {default as CanvasOverlay} from './canvas.react';
-export {default as ChoroplethOverlay} from './choropleth.react';
-export {default as DraggablePointsOverlay} from './draggable-points.react';
-export {default as HTMLOverlay} from './html.react';
-export {default as ScatterplotOverlay} from './scatterplot.react';
-export {default as SVGOverlay} from './svg.react';
+export {default as CanvasOverlay} from './canvas-overlay';
+export {default as DraggablePointsOverlay} from './draggable-points-overlay';
+export {default as HTMLOverlay} from './html-overlay';
+export {default as ScatterplotOverlay} from './scatterplot-overlay';
+export {default as SVGOverlay} from './svg-overlay';

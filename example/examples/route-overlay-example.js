@@ -18,16 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import window from 'global/window';
-const windowAlert = window.alert;
-
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
 import {scaleOrdinal, schemeCategory10} from 'd3-scale';
 import {rgb} from 'd3-color';
 
-import MapGL, {SVGOverlay, CanvasOverlay} from '../../src';
-import alphaify from '../../src/utils/alphaify';
+import MapGL, {SVGOverlay, CanvasOverlay, autobind} from '../../src';
+import alphaify from './alphaify';
+
+import window from 'global/window';
+const windowAlert = window.alert;
 
 import ROUTES from './../data/routes-example.json';
 
@@ -39,12 +38,6 @@ function round(x, n) {
 const color = scaleOrdinal(schemeCategory10);
 
 export default class RouteOverlayExample extends Component {
-
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -56,9 +49,9 @@ export default class RouteOverlayExample extends Component {
         isDragging: false
       }
     };
+    autobind(this);
   }
 
-  @autobind
   _onChangeViewport(viewport) {
     this.setState({viewport});
   }
@@ -81,7 +74,6 @@ export default class RouteOverlayExample extends Component {
     );
   }
 
-  @autobind
   _redrawSVGOverlay({project}) {
     return (
       <g>
@@ -97,7 +89,6 @@ export default class RouteOverlayExample extends Component {
     );
   }
 
-  @autobind
   _redrawCanvasOverlay({ctx, width, height, project}) {
     ctx.clearRect(0, 0, width, height);
     ROUTES.map((route, index) =>
@@ -124,3 +115,8 @@ export default class RouteOverlayExample extends Component {
     );
   }
 }
+
+RouteOverlayExample.propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};

@@ -1,6 +1,6 @@
 dist/
+
 node_modules
 coverage
-dist
-.DS_Store
 npm-debug.log
+.DS_Store
