@@ -25,13 +25,13 @@ import mapboxgl, {Point} from 'mapbox-gl';
 import {select} from 'd3-selection';
 import Immutable from 'immutable';
 import assert from 'assert';
+import window from 'global/window';
 
 import MapInteractions from './map-interactions';
-import config from '../config';
-
 import {getInteractiveLayerIds} from '../utils/style-utils';
 import diffStyles from '../utils/diff-styles';
 import {mod, unprojectFromTransform, cloneTransform} from '../utils/transform';
+import config from '../config';
 
 function noop() {}
 
@@ -194,7 +194,7 @@ const propTypes = {
 const defaultProps = {
   mapStyle: 'mapbox://styles/mapbox/light-v9',
   onChangeViewport: null,
-  mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
+  mapboxApiAccessToken: getAccessToken(),
   preserveDrawingBuffer: false,
   attributionControl: true,
   ignoreEmptyFeatures: true,
@@ -204,6 +204,33 @@ const defaultProps = {
   clickRadius: 15,
   maxZoom: 20
 };
+
+// Try to get access token from URL, env, local storage or config
+function getAccessToken() {
+  let accessToken = null;
+
+  if (window.location) {
+    const match = window.location.search.match(/access_token=([^&\/]*)/);
+    accessToken = match && match[1];
+  }
+
+  if (!accessToken) {
+    // Note: This depends on the bundler (e.g. webpack) inmporting environment correctly
+    accessToken =
+      process.env.MapboxAccessToken || process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
+  }
+
+  // Try to save and restore from local storage
+  // if (window.localStorage) {
+  //   if (accessToken) {
+  //     window.localStorage.accessToken = accessToken;
+  //   } else {
+  //     accessToken = window.localStorage.accessToken;
+  //   }
+  // }
+
+  return accessToken || config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN;
+}
 
 export default class MapGL extends Component {
 
@@ -656,18 +683,11 @@ export default class MapGL extends Component {
 
   render() {
     const {className, width, height, style} = this.props;
-    const mapStyle = {
-      ...style,
-      width,
-      height,
-      cursor: this._getCursor()
-    };
+    const mapStyle = {...style, width, height, cursor: this._getCursor()};
 
     let content = [
-      <div key="map" ref="mapboxMap"
-        style={ mapStyle } className={ className }/>,
-      <div key="overlays" className="overlays"
-        style={ {position: 'absolute', left: 0, top: 0} }>
+      <div key="map" ref="mapboxMap" style={mapStyle} className={className}/>,
+      <div key="overlays" className="overlays" style={{position: 'absolute', left: 0, top: 0}}>
         { this.props.children }
       </div>
     ];
@@ -698,13 +718,7 @@ export default class MapGL extends Component {
     }
 
     return (
-      <div
-        style={ {
-          ...this.props.style,
-          width: this.props.width,
-          height: this.props.height,
-          position: 'relative'
-        } }>
+      <div style={ {...this.props.style, width, height, position: 'relative'} }>
 
         { content }
 
