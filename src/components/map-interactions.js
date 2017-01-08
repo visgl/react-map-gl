@@ -20,9 +20,9 @@
 
 // Portions of the code below originally from:
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
-import React, {PropTypes, Component} from 'react';
-import autobind from '../utils/autobind';
+import {PropTypes, Component, createElement} from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
+import autobind from '../utils/autobind';
 import document from 'global/document';
 import window from 'global/window';
 
@@ -110,7 +110,6 @@ const defaultProps = {
 };
 
 export default class Interactions extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -313,24 +312,17 @@ export default class Interactions extends Component {
   }
 
   render() {
-    return (
-      <div
-        ref="container"
-        onMouseMove={ this._onMouseMove }
-        onMouseDown={ this._onMouseDown }
-        onTouchStart={ this._onTouchStart }
-        onContextMenu={ this._onMouseDown }
-        onWheel={ this._onWheel }
-        style={ {
-          width: this.props.width,
-          height: this.props.height,
-          position: 'relative'
-        } }>
+    const {width, height} = this.props;
 
-        { this.props.children }
-
-      </div>
-    );
+    return createElement('div', {
+      ref: 'container',
+      onMouseMove: this._onMouseMove,
+      onMouseDown: this._onMouseDown,
+      onTouchStart: this._onTouchStart,
+      onContextMenu: this._onMouseDown,
+      onWheel: this._onWheel,
+      style: {width, height, position: 'relative'}
+    }, ...this.props.children);
   }
 }
 

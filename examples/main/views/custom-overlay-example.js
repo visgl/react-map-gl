@@ -23,7 +23,7 @@ import window from 'global/window';
 import Immutable from 'immutable';
 
 import React, {PropTypes, Component} from 'react';
-import MapGL, {CanvasOverlay, SVGOverlay, autobind} from '../../src';
+import MapGL, {CanvasOverlay, SVGOverlay, autobind} from 'react-map-gl';
 import alphaify from './alphaify';
 
 // San Francisco
