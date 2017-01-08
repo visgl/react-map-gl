@@ -18,35 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Immutable from 'immutable';
-import {randomNormal} from 'd3-random';
-import {range} from 'd3-array';
-
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
-
-import MapGL, {ScatterplotOverlay} from '../../src';
-
-// San Francisco
+import MapGL from 'react-map-gl';
+import ZIPCODES_SF from './../data/feature-example-sf.json';
 import CITIES from './../data/cities.json';
+
 const location = CITIES[0];
 
-const normal = randomNormal();
-function wiggle(scale) {
-  return normal() * scale;
+for (const feature of ZIPCODES_SF.features) {
+  feature.properties.value = Math.random() * 1000;
 }
 
-// Example data.
-const locations = Immutable.fromJS(range(4000).map(
-  () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
-));
+const propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
+};
 
-export default class ScatterplotOverlayExample extends Component {
-
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
-  };
+export default class NotInteractiveExample extends Component {
 
   constructor(props) {
     super(props);
@@ -54,33 +42,14 @@ export default class ScatterplotOverlayExample extends Component {
       viewport: {
         latitude: location.latitude,
         longitude: location.longitude,
-        zoom: 11,
-        startDragLngLat: null,
-        isDragging: false
+        zoom: 11
       }
     };
   }
 
-  @autobind
-  _onChangeViewport(viewport) {
-    this.setState({viewport});
-  }
-
   render() {
-    const viewport = {...this.state.viewport, ...this.props};
-    return (
-      <MapGL
-        { ...viewport }
-        onChangeViewport={ this._onChangeViewport }>
-
-        <ScatterplotOverlay
-          { ...viewport }
-          locations={ locations }
-          dotRadius={ 2 }
-          globalOpacity={ 1 }
-          compositeOperation="screen"/>
-
-      </MapGL>
-    );
+    return <MapGL { ...this.state.viewport } { ...this.props }/>;
   }
 }
+
+NotInteractiveExample.propTypes = propTypes;

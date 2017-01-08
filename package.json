@@ -1,8 +1,7 @@
 {
   "name": "react-map-gl",
   "description": "A React wrapper for MapboxGL-js and overlay API.",
-  "version": "2.0.2",
-  "main": "index.js",
+  "version": "2.0.0-alpha.1",
   "keywords": [
     "mapbox",
     "mapbox-gl",
@@ -15,15 +14,15 @@
     "url": "https://github.com/uber/react-map-gl.git"
   },
   "license": "MIT",
+  "main": "index.js",
+  "module": "dist/index.js",
+  "files": [
+    "src",
+    "dist",
+    "postinstall.js"
+  ],
   "dependencies": {
-    "autobind-decorator": "^1.3.3",
     "bowser": "^1.2.0",
-    "canvas-composite-types": "^1.0.4",
-    "d3-array": "^1.0.1",
-    "d3-color": "^1.0.1",
-    "d3-format": "^1.0.2",
-    "d3-geo": "^1.2.4",
-    "d3-scale": "^1.0.3",
     "d3-selection": "^1.0.2",
     "flow-remove-types": "^1.1.2",
     "glob": "^7.1.1",
@@ -31,36 +30,36 @@
     "mapbox-gl": "0.32.1",
     "pure-render-decorator": "^1.1.0",
     "svg-transform": "0.0.3",
+    "react-addons-shallow-compare": "^15.4.2",
+    "react-addons-test-utils": "^15.4.2",
     "viewport-mercator-project": "^2.0.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-core": "^6.18.0",
-    "babel-eslint": "^6.0.0",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-react": "^6.16.0",
-    "babel-preset-stage-2": "^6.18.0",
-    "babelify": "^7.2.0",
-    "browserify": "^13.0.0",
-    "budo": "^8.2.2",
-    "d3-random": "^1.0.1",
-    "disc": "^1.3.2",
+    "buble": "^0.15.1",
+    "buble-loader": "^0.4.0",
     "electron-prebuilt": "^0.37.3",
-    "envify": "^3.4.0",
     "eslint": "^3.0.0",
     "eslint-config-uber-es2015": "^3.0.0",
     "eslint-config-uber-jsx": "^3.0.0",
     "eslint-plugin-react": "~6.7.0",
+    "gl": "^4.0.2",
     "immutable": "^3.7.6",
-    "react": "15.x",
-    "react-dom": "15.x",
+    "jsdom": "^9.9.1",
+    "module-alias": "^2.0.0",
+    "node-jsx": "^0.13.3",
+    "react": "^15.4.0",
+    "react-dom": "^15.4.0",
+    "reify": "^0.4.4",
+    "sinon": "^1.17.7",
+    "tap-browser-color": "^0.1.2",
     "tape": "^4.5.1",
     "tape-catch": "^1.0.4",
     "tap-browser-color": "^0.1.2",
-    "testron": "^1.2.0"
+    "testron": "^1.2.0",
+    "webpack": "^2.2.0-rc.3"
   },
-  "scripts": {
+  },
+  "scripts-old": {
     "build": "babel src -d dist --copy-files --source-maps inline",
     "start": "budo ./example/main.js --live --open --port 9966 -- -t babelify -t envify",
     "lint": "eslint src example test",
@@ -71,14 +70,19 @@
     "postinstall": "node postinstall.js",
     "profile-disc": "browserify src/index.js --full-paths -t babelify | discify --open"
   },
-  "files": [
-    "src",
-    "dist",
-    "postinstall.js"
-  ],
   "peerDependencies": {
     "immutable": "^3.7.6",
     "react": "0.14.x - 15.x"
+  },
+  "scripts": {
+    "start": "(cd example && yarn && npm start)",
+    "build": "rm -fr dist dist-test && buble src -o dist --no modules --y dangerousForOf --objectAssign && buble test -o dist-test --no modules --y dangerousForOf --objectAssign && webpack -d",
+    "lint": "eslint src example test",
+    "test": "npm run lint && npm run test-node",
+    "test-node": "npm run build && node dist-test/node.js",
+    "precommit": "npm run lint -s",
+    "publish-prod": "npm run build && npm run test-fast && npm publish",
+    "publish-beta": "npm run build && npm run test-fast && npm publish --tag beta"
   },
   "engines": {
     "node": ">= 4",

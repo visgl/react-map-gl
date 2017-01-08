@@ -1,7 +1,7 @@
 import test from 'tape-catch';
-import {getInteractiveLayerIds} from '../../src/utils/style-utils';
 import Immutable from 'immutable';
 import deepEqual from 'deep-equal';
+import {getInteractiveLayerIds} from 'react-map-gl/utils/style-utils';
 
 const TEST_STYLE_STRING = 'mapbox://styles/mapbox/streets-v9';
 const TEST_STYLE_JS = {

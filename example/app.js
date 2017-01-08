@@ -21,18 +21,18 @@
 import document from 'global/document';
 import ReactDOM from 'react-dom';
 import React, {Component} from 'react';
-import autobind from 'autobind-decorator';
 import window from 'global/window';
 
-import NotInteractiveExample from './examples/not-interactive.react';
-import ChoroplethExample from './examples/choropleth.react';
-import CustomExample from './examples/custom.react';
-import GeodataCreator from './examples/geodata-creator.react';
-import ScatterplotExample from './examples/scatterplot.react';
-import RouteExample from './examples/route.react';
-import StyleDiffingExample from './examples/style-diffing.react';
-import TiltExample from './examples/tilt.react';
-import ClickExample from './examples/click.react';
+import {autobind} from 'react-map-gl';
+import NotInteractiveExample from './examples/not-interactive-example';
+import ChoroplethOverlayExample from './examples/choropleth-overlay-example';
+import CustomOverlayExample from './examples/custom-overlay-example';
+import GeodataCreator from './examples/geodata-creator-example';
+import ScatterplotOverlayExample from './examples/scatterplot-overlay-example';
+import RouteOverlayExample from './examples/route-overlay-example';
+import StyleDiffingExample from './examples/style-diffing-example';
+import TiltExample from './examples/tilt-example';
+import ClickExample from './examples/click-example';
 
 function getAccessToken() {
   const match = window.location.search.match(/access_token=([^&\/]*)/);
@@ -52,14 +52,14 @@ function getAccessToken() {
 }
 
 export default class App extends Component {
-
   constructor(props) {
     super(props);
     window.addEventListener('resize', this._onWindowResize);
     this.state = {width: window.innerWidth};
+    autobind(this);
   }
 
-  @autobind _onWindowResize() {
+  _onWindowResize() {
     this.setState({width: window.innerWidth});
   }
 
@@ -76,10 +76,10 @@ export default class App extends Component {
           width={ this.state.width - 30 }
           height={ 400 }
           mapboxApiAccessToken={ getAccessToken() }/>
-        <RouteExample { ...common }/>
-        <ScatterplotExample { ...common }/>
-        <ChoroplethExample { ...common }/>
-        <CustomExample { ...common }/>
+        <RouteOverlayExample { ...common }/>
+        <ScatterplotOverlayExample { ...common }/>
+        <ChoroplethOverlayExample { ...common }/>
+        <CustomOverlayExample { ...common }/>
         <GeodataCreator { ...common }/>
         <NotInteractiveExample { ...common }/>
         <StyleDiffingExample { ...common }/>
