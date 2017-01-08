@@ -192,18 +192,28 @@ const defaultProps = {
 
 // Try to get access token from URL, env, local storage or config
 function getAccessToken() {
-  const match = window.location.search.match(/access_token=([^&\/]*)/);
-  let accessToken = match && match[1];
+  let accessToken = null;
+
+  if (window.location) {
+    const match = window.location.search.match(/access_token=([^&\/]*)/);
+    accessToken = match && match[1];
+  }
+
   if (!accessToken) {
     // Note: This depends on the bundler (e.g. webpack) inmporting environment correctly
     accessToken =
       process.env.MapboxAccessToken || process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
   }
-  if (accessToken) {
-    window.localStorage.accessToken = accessToken;
-  } else {
-    accessToken = window.localStorage.accessToken;
-  }
+
+  // Try to save and restore from local storage
+  // if (window.localStorage) {
+  //   if (accessToken) {
+  //     window.localStorage.accessToken = accessToken;
+  //   } else {
+  //     accessToken = window.localStorage.accessToken;
+  //   }
+  // }
+
   return accessToken || config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN;
 }
 

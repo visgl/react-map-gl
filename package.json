@@ -40,6 +40,7 @@
     "jsdom": "^9.9.1",
     "module-alias": "^2.0.0",
     "node-jsx": "^0.13.3",
+    "pre-commit": "^1.2.2",
     "react": "^15.4.0",
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.0",
@@ -61,9 +62,8 @@
     "test": "npm run lint && npm run test-node",
     "test-node": "npm run build && node test/node.js",
     "test-browser": "npm run build && echo 'To be restored'",
-    "precommit": "npm run lint -s",
-    "publish-prod": "npm run build && npm run test-fast && npm publish",
-    "publish-beta": "npm run build && npm run test-fast && npm publish --tag beta"
+    "publish-prod": "npm run build && npm run test && npm publish",
+    "publish-beta": "npm run build && npm run test && npm publish --tag beta"
   },
   "engines": {
     "node": "6.x",
