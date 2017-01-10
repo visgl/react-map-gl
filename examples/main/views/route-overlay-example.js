@@ -28,7 +28,7 @@ import alphaify from './alphaify';
 import window from 'global/window';
 const windowAlert = window.alert;
 
-import ROUTES from './../data/routes-example.json';
+import ROUTES from '../data/routes-example.json';
 
 function round(x, n) {
   const tenN = Math.pow(10, n);
