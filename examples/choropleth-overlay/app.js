@@ -18,38 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
-import MapGL from 'react-map-gl';
-import ZIPCODES_SF from '../data/feature-example-sf.json';
-import CITIES from '../data/cities.json';
+import document from 'global/document';
+import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
+import window from 'global/window';
 
-const location = CITIES[0];
+import ChoroplethOverlayExample from './choropleth-overlay-example';
 
-for (const feature of ZIPCODES_SF.features) {
-  feature.properties.value = Math.random() * 1000;
-}
-
-const propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
-};
-
-export default class NotInteractiveExample extends Component {
-
+export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      viewport: {
-        latitude: location.latitude,
-        longitude: location.longitude,
-        zoom: 11
-      }
-    };
+    this.state = {width: window.innerWidth, height: window.innerHeight};
+    window.addEventListener('resize',
+      () => this.setState({width: window.innerWidth, height: window.innerHeight}));
   }
 
   render() {
-    return <MapGL { ...this.state.viewport } { ...this.props }/>;
+    const {width, height} = this.state;
+    const props = {width, height, style: {float: 'left'}};
+    return (
+      <ChoroplethOverlayExample {...props}/>
+    );
   }
 }
 
-NotInteractiveExample.propTypes = propTypes;
+ReactDOM.render(<App/>, document.body.appendChild(document.createElement('div')));
