@@ -28,12 +28,18 @@ test('MapGL', t => {
   t.test('named export', t => {
     t.ok(MapGL, 'MapGL is defined');
 
+    function onLoad(...args) {
+      t.equal(args.length, 0, 'onLoad does not expose the map object.');
+      t.end();
+    }
+
     const map = createElement(MapGL, {
       width: 500,
       height: 500,
       longitude: -122,
       latitude: 37,
-      zoom: 14
+      zoom: 14,
+      onLoad
     });
 
     const renderer = ReactTestUtils.createRenderer();

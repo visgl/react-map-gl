@@ -24,7 +24,7 @@
     "bowser": "^1.2.0",
     "d3-selection": "^1.0.2",
     "global": "^4.3.0",
-    "mapbox-gl": "0.26.0",
+    "mapbox-gl": "0.29.0",
     "react-addons-shallow-compare": "^15.4.2",
     "viewport-mercator-project": "^2.0.1"
   },
@@ -39,7 +39,6 @@
     "immutable": "^3.7.6",
     "jsdom": "^9.9.1",
     "module-alias": "^2.0.0",
-    "node-jsx": "^0.13.3",
     "pre-commit": "^1.2.2",
     "react": "^15.4.0",
     "react-addons-test-utils": "^15.4.2",
