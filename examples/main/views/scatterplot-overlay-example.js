@@ -26,7 +26,7 @@ import {randomNormal} from 'd3-random';
 import {range} from 'd3-array';
 
 // San Francisco
-import CITIES from './../data/cities.json';
+import CITIES from '../data/cities.json';
 const location = CITIES[0];
 
 const normal = randomNormal();
