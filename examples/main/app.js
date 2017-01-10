@@ -18,14 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import document from 'global/document';
 import ReactDOM from 'react-dom';
 import React, {Component} from 'react';
 import window from 'global/window';
+import document from 'global/document';
 
-import {autobind} from 'react-map-gl';
 import NotInteractiveExample from './views/not-interactive-example';
-import ChoroplethOverlayExample from './views/choropleth-overlay-example';
 import CustomOverlayExample from './views/custom-overlay-example';
 import GeodataCreator from './views/geodata-creator-example';
 import ScatterplotOverlayExample from './views/scatterplot-overlay-example';
@@ -37,28 +35,17 @@ import ClickExample from './views/click-example';
 export default class App extends Component {
   constructor(props) {
     super(props);
-    window.addEventListener('resize', this._onWindowResize);
     this.state = {width: window.innerWidth};
-    autobind(this);
-  }
-
-  _onWindowResize() {
-    this.setState({width: window.innerWidth});
+    window.addEventListener('resize', () => this.setState({width: window.innerWidth}));
   }
 
   render() {
-    const common = {
-      width: 400,
-      height: 400,
-      style: {float: 'left'}
-      // mapboxApiAccessToken: getAccessToken()
-    };
+    const common = {width: 400, height: 400, style: {float: 'left'}};
     return (
       <div>
         <TiltExample {...common} width={ this.state.width - 30 }/>
         <RouteOverlayExample {...common}/>
         <ScatterplotOverlayExample {...common}/>
-        <ChoroplethOverlayExample {...common}/>
         <CustomOverlayExample {...common}/>
         <GeodataCreator {...common}/>
         <NotInteractiveExample {...common}/>

@@ -24,8 +24,9 @@ import MapGL, {autobind} from 'react-map-gl';
 import ChoroplethOverlay from './choropleth-overlay';
 
 // San Francisco
-import ZIPCODES_SF from './../data/feature-example-sf.json';
-import CITIES from './../data/cities.json';
+import ZIPCODES_SF from './data/feature-example-sf.json';
+import CITIES from './data/cities.json';
+
 const location = CITIES[0];
 
 for (const feature of ZIPCODES_SF.features) {
