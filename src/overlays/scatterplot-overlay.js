@@ -19,43 +19,43 @@
 // THE SOFTWARE.
 
 import React, {PropTypes, Component} from 'react';
-import window from 'global/window';
-import Immutable from 'immutable';
-import COMPOSITE_TYPES from 'canvas-composite-types';
 import ViewportMercator from 'viewport-mercator-project';
+
+import Immutable from 'immutable';
+import window from 'global/window';
 
 function round(x, n) {
   const tenN = Math.pow(10, n);
   return Math.round(x * tenN) / tenN;
 }
 
+const propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
+  zoom: PropTypes.number.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  locations: PropTypes.instanceOf(Immutable.List).isRequired,
+  lngLatAccessor: PropTypes.func,
+  renderWhileDragging: PropTypes.bool,
+  globalOpacity: PropTypes.number,
+  dotRadius: PropTypes.number,
+  dotFill: PropTypes.string,
+  compositeOperation: PropTypes.string
+};
+
+const defaultProps = {
+  lngLatAccessor: location => [location.get(0), location.get(1)],
+  renderWhileDragging: true,
+  dotRadius: 4,
+  dotFill: '#1FBAD6',
+  globalOpacity: 1,
+  // Same as browser default.
+  compositeOperation: 'source-over'
+};
+
 export default class ScatterplotOverlay extends Component {
-
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    latitude: PropTypes.number.isRequired,
-    longitude: PropTypes.number.isRequired,
-    zoom: PropTypes.number.isRequired,
-    isDragging: PropTypes.bool.isRequired,
-    locations: PropTypes.instanceOf(Immutable.List).isRequired,
-    lngLatAccessor: PropTypes.func.isRequired,
-    renderWhileDragging: PropTypes.bool,
-    globalOpacity: PropTypes.number.isRequired,
-    dotRadius: PropTypes.number.isRequired,
-    dotFill: PropTypes.string.isRequired,
-    compositeOperation: PropTypes.oneOf(COMPOSITE_TYPES).isRequired
-  };
-
-  static defaultProps = {
-    lngLatAccessor: location => [location.get(0), location.get(1)],
-    renderWhileDragging: true,
-    dotRadius: 4,
-    dotFill: '#1FBAD6',
-    globalOpacity: 1,
-    // Same as browser default.
-    compositeOperation: 'source-over'
-  };
 
   componentDidMount() {
     this._redraw();
@@ -123,3 +123,6 @@ export default class ScatterplotOverlay extends Component {
     );
   }
 }
+
+ScatterplotOverlay.propTypes = propTypes;
+ScatterplotOverlay.defaultProps = defaultProps;

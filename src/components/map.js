@@ -18,20 +18,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import React, {PropTypes, Component} from 'react';
-import autobind from 'autobind-decorator';
-import pureRender from 'pure-render-decorator';
+import shallowCompare from 'react-addons-shallow-compare';
+import autobind from '../utils/autobind';
 
 import mapboxgl, {Point} from 'mapbox-gl';
 import {select} from 'd3-selection';
 import Immutable from 'immutable';
 import assert from 'assert';
+import window from 'global/window';
 
-import MapInteractions from './map-interactions.react';
-import config from './config';
-
-import {getInteractiveLayerIds} from './utils/style-utils';
-import diffStyles from './utils/diff-styles';
-import {mod, unprojectFromTransform, cloneTransform} from './utils/transform';
+import MapInteractions from './map-interactions';
+import {getInteractiveLayerIds} from '../utils/style-utils';
+import diffStyles from '../utils/diff-styles';
+import {mod, unprojectFromTransform, cloneTransform} from '../utils/transform';
+import config from '../config';
 
 function noop() {}
 
@@ -40,7 +40,7 @@ const MAX_PITCH = 60;
 const PITCH_MOUSE_THRESHOLD = 20;
 const PITCH_ACCEL = 1.2;
 
-const PROP_TYPES = {
+const propTypes = {
   /**
     * The latitude of the center of the map.
     */
@@ -191,10 +191,10 @@ const PROP_TYPES = {
 
 };
 
-const DEFAULT_PROPS = {
+const defaultProps = {
   mapStyle: 'mapbox://styles/mapbox/light-v9',
   onChangeViewport: null,
-  mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
+  mapboxApiAccessToken: getAccessToken(),
   preserveDrawingBuffer: false,
   attributionControl: true,
   ignoreEmptyFeatures: true,
@@ -205,15 +205,38 @@ const DEFAULT_PROPS = {
   maxZoom: 20
 };
 
-@pureRender
+// Try to get access token from URL, env, local storage or config
+function getAccessToken() {
+  let accessToken = null;
+
+  if (window.location) {
+    const match = window.location.search.match(/access_token=([^&\/]*)/);
+    accessToken = match && match[1];
+  }
+
+  if (!accessToken) {
+    // Note: This depends on the bundler (e.g. webpack) inmporting environment correctly
+    accessToken =
+      process.env.MapboxAccessToken || process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
+  }
+
+  // Try to save and restore from local storage
+  // if (window.localStorage) {
+  //   if (accessToken) {
+  //     window.localStorage.accessToken = accessToken;
+  //   } else {
+  //     accessToken = window.localStorage.accessToken;
+  //   }
+  // }
+
+  return accessToken || config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN;
+}
+
 export default class MapGL extends Component {
 
   static supported() {
     return mapboxgl.supported();
   }
-
-  static propTypes = PROP_TYPES;
-  static defaultProps = DEFAULT_PROPS;
 
   constructor(props) {
     super(props);
@@ -233,6 +256,8 @@ export default class MapGL extends Component {
       this.componentWillReceiveProps = noop;
       this.componentDidUpdate = noop;
     }
+
+    autobind(this);
   }
 
   componentDidMount() {
@@ -250,14 +275,13 @@ export default class MapGL extends Component {
       style: mapStyle,
       interactive: false,
       preserveDrawingBuffer: this.props.preserveDrawingBuffer
-      // TODO?
-      // attributionControl: this.props.attributionControl
     });
 
     if (this.props.onLoad) {
       map.once('load', () => this.props.onLoad());
     }
 
+    // TODO - can we drop d3-select dependency? Seems like overkill for this
     select(map.getCanvas()).style('outline', 'none');
 
     this._map = map;
@@ -276,6 +300,11 @@ export default class MapGL extends Component {
       width: this.props.width,
       height: this.props.height
     });
+  }
+
+  // Pure render
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
   }
 
   componentDidUpdate() {
@@ -525,27 +554,27 @@ export default class MapGL extends Component {
     }
   }
 
-  @autobind _onTouchStart(opts) {
+  _onTouchStart(opts) {
     this._onMouseDown(opts);
   }
 
-  @autobind _onTouchDrag(opts) {
+  _onTouchDrag(opts) {
     this._onMouseDrag(opts);
   }
 
-  @autobind _onTouchRotate(opts) {
+  _onTouchRotate(opts) {
     this._onMouseRotate(opts);
   }
 
-  @autobind _onTouchEnd(opts) {
+  _onTouchEnd(opts) {
     this._onMouseUp(opts);
   }
 
-  @autobind _onTouchTap(opts) {
+  _onTouchTap(opts) {
     this._onMouseClick(opts);
   }
 
-  @autobind _onMouseDown({pos}) {
+  _onMouseDown({pos}) {
     const {transform} = this._map;
     const {lng, lat} = unprojectFromTransform(transform, new Point(...pos));
     this._callOnChangeViewport(transform, {
@@ -556,7 +585,7 @@ export default class MapGL extends Component {
     });
   }
 
-  @autobind _onMouseDrag({pos}) {
+  _onMouseDrag({pos}) {
     if (!this.props.onChangeViewport) {
       return;
     }
@@ -571,7 +600,7 @@ export default class MapGL extends Component {
     this._callOnChangeViewport(transform, {isDragging: true});
   }
 
-  @autobind _onMouseRotate({pos, startPos}) {
+  _onMouseRotate({pos, startPos}) {
     if (!this.props.onChangeViewport || !this.props.perspectiveEnabled) {
       return;
     }
@@ -596,7 +625,7 @@ export default class MapGL extends Component {
     this._callOnChangeViewport(transform, {isDragging: true});
   }
 
-  @autobind _onMouseMove({pos}) {
+  _onMouseMove({pos}) {
     if (!this.props.onHoverFeatures) {
       return;
     }
@@ -608,7 +637,7 @@ export default class MapGL extends Component {
     this.props.onHoverFeatures(features);
   }
 
-  @autobind _onMouseUp(opt) {
+  _onMouseUp(opt) {
     this._callOnChangeViewport(this._map.transform, {
       isDragging: false,
       startDragLngLat: null,
@@ -617,7 +646,7 @@ export default class MapGL extends Component {
     });
   }
 
-  @autobind _onMouseClick({pos}) {
+  _onMouseClick({pos}) {
     if (!this.props.onClickFeatures && !this.props.onClick) {
       return;
     }
@@ -641,7 +670,7 @@ export default class MapGL extends Component {
     }
   }
 
-  @autobind _onZoom({pos, scale}) {
+  _onZoom({pos, scale}) {
     const point = new Point(...pos);
     const transform = cloneTransform(this._map.transform);
     const around = unprojectFromTransform(transform, point);
@@ -650,24 +679,17 @@ export default class MapGL extends Component {
     this._callOnChangeViewport(transform, {isDragging: true});
   }
 
-  @autobind _onZoomEnd() {
+  _onZoomEnd() {
     this._callOnChangeViewport(this._map.transform, {isDragging: false});
   }
 
   render() {
     const {className, width, height, style} = this.props;
-    const mapStyle = {
-      ...style,
-      width,
-      height,
-      cursor: this._getCursor()
-    };
+    const mapStyle = {...style, width, height, cursor: this._getCursor()};
 
     let content = [
-      <div key="map" ref="mapboxMap"
-        style={ mapStyle } className={ className }/>,
-      <div key="overlays" className="overlays"
-        style={ {position: 'absolute', left: 0, top: 0} }>
+      <div key="map" ref="mapboxMap" style={mapStyle} className={className}/>,
+      <div key="overlays" className="overlays" style={{position: 'absolute', left: 0, top: 0}}>
         { this.props.children }
       </div>
     ];
@@ -698,13 +720,7 @@ export default class MapGL extends Component {
     }
 
     return (
-      <div
-        style={ {
-          ...this.props.style,
-          width: this.props.width,
-          height: this.props.height,
-          position: 'relative'
-        } }>
+      <div style={ {...this.props.style, width, height, position: 'relative'} }>
 
         { content }
 
@@ -712,3 +728,7 @@ export default class MapGL extends Component {
     );
   }
 }
+
+MapGL.displayName = 'MapGL';
+MapGL.propTypes = propTypes;
+MapGL.defaultProps = defaultProps;

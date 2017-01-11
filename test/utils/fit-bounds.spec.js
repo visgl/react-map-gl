@@ -1,5 +1,5 @@
 import test from 'tape-catch';
-import {fitBounds} from '../src';
+import {fitBounds} from 'react-map-gl';
 
 const FITBOUNDS_TEST_CASES = [
   {

@@ -21,40 +21,35 @@
 import React, {PropTypes, Component} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 
-export default class SVGOverlay extends Component {
+const propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  redraw: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired
+  // TODO: style
+};
 
-  static propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    latitude: PropTypes.number.isRequired,
-    longitude: PropTypes.number.isRequired,
-    zoom: PropTypes.number.isRequired,
-    redraw: PropTypes.func.isRequired,
-    isDragging: PropTypes.bool.isRequired
-  };
-
+export default class HTMLOverlay extends Component {
   render() {
     const {width, height, isDragging} = this.props;
     const style = {
-      pointerEvents: 'none',
       position: 'absolute',
+      pointerEvents: 'none',
       left: 0,
       top: 0,
+      width,
+      height,
       ...this.props.style
     };
     const mercator = ViewportMercator(this.props);
     const {project, unproject} = mercator;
 
     return (
-      <svg
-        ref="overlay"
-        width={ width }
-        height={ height }
-        style={ style }>
-
+      <div ref="overlay" style={ style }>
         { this.props.redraw({width, height, project, unproject, isDragging}) }
-
-      </svg>
+      </div>
     );
   }
 }
+
+HTMLOverlay.propTypes = propTypes;

@@ -18,10 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import MapGL from './map.react';
-import * as overlays from './overlays';
-import fitBounds from './utils/fit-bounds';
+export {default as default} from './components/map';
 
-module.exports = MapGL;
-module.exports.fitBounds = fitBounds;
-Object.assign(module.exports, overlays);
+export {default as MapGL} from './components/map';
+export {default as fitBounds} from './utils/fit-bounds';
+export {default as autobind} from './utils/autobind';
+
+export {default as CanvasOverlay} from './overlays/canvas-overlay';
+export {default as DraggablePointsOverlay} from './overlays/draggable-points-overlay';
+export {default as HTMLOverlay} from './overlays/html-overlay';
+export {default as ScatterplotOverlay} from './overlays/scatterplot-overlay';
+export {default as SVGOverlay} from './overlays/svg-overlay';
