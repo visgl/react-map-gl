@@ -56,7 +56,7 @@ react-map-gl provides an overlay API so you can use the built-in visualization
 overlays, or create your own.
 
 ```js
-import {ScatterplotOverlay} from 'react-map-gl';
+import {ScatterplotOverlay} from 'react-map-gl/overlays';
 
 <MapGL {...viewport}>
   <ScatterplotOverlay
@@ -69,19 +69,25 @@ import {ScatterplotOverlay} from 'react-map-gl';
 ```
 
 Built-in overlays are: `ChoroplethOverlay`, `ScatterplotOverlay`, `DraggablePointsOverlay`,
-`SVGOverlay` and `CanvasOverlay`.
+`SVGOverlay` and `CanvasOverlay`. They are imported using
+```
+import {SVGOverlay, ...} from 'react-map-gl/overlays';
+```
+Remarks:
+* **These overlays are currently not tested with perspective mode, although
+  they should in theory be compatible with perspective enabled viewports in
+  [viewport-mercator-project](https://github.com/uber-common/viewport-mercator-project)**
+* In v1, overlays were exported directly from 'react-map-gl'.
 
-**These overlays are currently not compatible with perspective mode.**
-
-### deck.gl
+### deck.gl Layers
 
 [deck.gl](https://github.com/uber/deck.gl) is a companion module to
 `react-map-gl` that provide a number of classic data visualization overlays
 (scatterplots, choropleths etc) implemented in WebGL. These overlays are
-suitable for large or dynamic data sets, or for use in perspective mode
+suitable for large and/or dynamic data sets, or for use in perspective mode
 applications.
 
-### Third-party
+### Third-party Overlays
 
 Third party overlays can also be created. For example, the
 [heatmap-overlay](https://github.com/vicapow/react-map-gl-heatmap-overlay) uses

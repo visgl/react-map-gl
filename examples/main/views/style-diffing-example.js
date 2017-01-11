@@ -20,13 +20,13 @@
 
 import React, {PropTypes, Component} from 'react';
 import MapGL, {autobind} from 'react-map-gl';
-
 import Immutable from 'immutable';
 import window from 'global/window';
 
 // San Francisco
 import SF_FEATURE from '../data/feature-example-sf.json';
 import CITIES from '../data/cities.json';
+
 const location = CITIES[0];
 
 function buildStyle({fill = 'red', stroke = 'blue'}) {

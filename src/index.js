@@ -18,12 +18,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+// React Components
 export {default as default} from './components/map';
-
 export {default as MapGL} from './components/map';
+export {default as InteractiveMap} from './components/interactive-map';
+export {default as StaticMap} from './components/static-map';
+export {default as MapControls} from './components/map-controls';
+
+// TODO - should these be exported or better keep them as internal?
+// If exported, should we document them?
+export {default as EventManager} from './utils/event-manager';
+
+// Utilities
 export {default as fitBounds} from './utils/fit-bounds';
 export {default as autobind} from './utils/autobind';
 
+// Overlays
 export {default as CanvasOverlay} from './overlays/canvas-overlay';
 export {default as DraggablePointsOverlay} from './overlays/draggable-points-overlay';
 export {default as HTMLOverlay} from './overlays/html-overlay';
