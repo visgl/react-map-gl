@@ -20,7 +20,6 @@
 
 import React, {PropTypes, Component} from 'react';
 import MapGL, {autobind} from 'react-map-gl';
-
 import Immutable from 'immutable';
 import window from 'global/window';
 
