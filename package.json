@@ -31,7 +31,7 @@
     "pure-render-decorator": "^1.1.0",
     "svg-transform": "0.0.3",
     "react-addons-shallow-compare": "^15.4.2",
-    "viewport-mercator-project": "^2.0.1"
+    "viewport-mercator-project": "3.0.0-rc2"
   },
   "devDependencies": {
     "buble": "^0.15.1",
