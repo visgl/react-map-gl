@@ -93,7 +93,7 @@ export default class DraggablePointsOverlay extends Component {
     event.stopPropagation();
     document.removeEventListener('mousemove', this._onDrag, false);
     document.removeEventListener('mouseup', this._onDragEnd, false);
-    this.setState({draggedPoint: null});
+    this.setState({draggedPointKey: null});
   }
 
   @autobind
