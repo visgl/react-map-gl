@@ -25,6 +25,7 @@
     "d3-geo": "^1.2.4",
     "d3-scale": "^1.0.3",
     "d3-selection": "^1.0.2",
+    "flow-remove-types": "^1.1.2",
     "global": "^4.3.0",
     "mapbox-gl": "0.29.0",
     "pure-render-decorator": "^1.1.0",
@@ -66,6 +67,7 @@
     "precommit": "npm run lint -s",
     "prepush": "npm run lint -s",
     "prepublish": "npm run build",
+    "postinstall": "if [ -d '../mapbox-gl' ]; then flow-remove-types ../mapbox-gl/js/**/*.js --out-dir . > /dev/null; fi",
     "profile-disc": "browserify src/index.js --full-paths -t babelify | discify --open"
   },
   "files": [
