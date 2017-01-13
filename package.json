@@ -46,6 +46,7 @@
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.0",
     "reify": "^0.4.4",
+    "remove-flow-types-loader": "^1.0.0",
     "sinon": "^1.17.7",
     "tap-browser-color": "^0.1.2",
     "tape": "^4.5.1",
@@ -59,6 +60,7 @@
   "scripts": {
     "start": "(cd examples/main && yarn && npm start)",
     "build": "rm -fr dist && buble src -o dist --no modules --y dangerousForOf --objectAssign && webpack -d",
+    "postinstall": "if [ -d '../mapbox-gl' ]; then flow-remove-types ../mapbox-gl/js/**/*.js --out-dir . > /dev/null; fi",
     "lint": "eslint src example test",
     "test": "npm run lint && npm run test-node",
     "test-node": "npm run build && node test/node.js",
