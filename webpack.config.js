@@ -4,8 +4,7 @@ const webpack = require('webpack');
 module.exports = {
   // Bundle the transpiled code in dist
   entry: {
-    lib: resolve('./dist/index.js'),
-    test: resolve('./test/index.js')
+    lib: resolve('./src/index.js')
   },
 
   // Generate a bundle in dist folder
@@ -21,11 +20,6 @@ module.exports = {
     /^[a-z\-0-9]+$/
   ],
 
-  stats: {
-    warnings: false
-  },
-
-  // devtool: 'source-maps'
   resolve: {
     alias: {
       'react-map-gl': resolve('./dist'),
@@ -35,6 +29,12 @@ module.exports = {
 
   module: {
     rules: [
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        loader: 'remove-flow-types-loader',
+        include: [/node_modules\/mapbox-gl\/js/]
+      },
       {
         // Compile ES2015 using buble
         test: /\.js$/,
@@ -58,28 +58,4 @@ module.exports = {
       }
     })
   ]
-  /*
-  plugins: [
-    new webpack.optimize.AggressiveMergingPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: false,
-      compress: {
-        sequences: true,
-        dead_code: true,
-        conditionals: true,
-        booleans: true,
-        unused: true,
-        if_return: true,
-        join_vars: true,
-        drop_console: true
-      },
-      mangle: {
-        except: ['$super', '$', 'exports', 'require']
-      },
-      output: {
-        comments: false
-      }
-    })
-  ]
-  */
 };
