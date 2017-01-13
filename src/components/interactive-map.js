@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {Component, createElement} from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
 import autobind from '../utils/autobind';
 
@@ -66,14 +66,12 @@ export default class InteractiveMap extends Component {
     //   content = (}
 
     return (
-      <MapControls
-        {...this.props}
-        unproject={this._unproject}
-        getLngLatAtPoint={this._getLngLatAtPoint}>
-
-        <StaticMap ref="map" {...this.props}/>
-
-      </MapControls>
+      createElement(MapControls, Object.assign({}, this.props, {
+        unproject: this._unproject,
+        getLngLatAtPoint: this._getLngLatAtPoint
+      }), [
+        createElement(StaticMap, Object.assign({}, this.props, {ref: 'map'}))
+      ])
     );
   }
 }

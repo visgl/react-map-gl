@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "buble-loader": "^0.4.0",
+    "remove-flow-types-loader": "^1.0.0",
     "webpack": "^2.2.0-rc.3",
     "webpack-dev-server": "^2.2.0-rc.0"
   }
