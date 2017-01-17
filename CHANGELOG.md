@@ -1,3 +1,34 @@
+## Version 2.0.0 (Jan 17, 2017)
+
+#### Reasons for the major version bump
+
+- We updated to `mapbox-gl` 0.31.0 which introduced flow types as well as having
+  a hard dependency on Node >= v4. We now assume that you are on Node >= v4
+  and npm >= v3.
+- We want >= v2.0.0 of `react-map-gl` to continue tracking `mapbox-gl` updates
+  as closely as possible. This means minor / patch updates will be published
+  more frequently.
+- This also marks the start of more aggressive development on `react-map-gl`
+  and we will start rolling out bigger updates in the coming months.
+
+#### New Features & Updates
+
+- Bump `mapbox-gl` to v0.31.0
+- Add `maxZoom` prop and defaults to `20`
+- Add `onLoad` event handler
+- Add `onClick` prop handler (#140)
+
+#### Fixes
+
+- Ensure fitBounds doesn't return NaN zoom value (#159)
+- Use 'changedTouches' for 'touchend' / 'touchcancel' events (#164)
+- Typo fix in draggable-points overlay (#178)
+- Remove mapbox-gl's `Point` dependency from map-interactions. (#161)
+
+### Miscellaneous
+
+- Added more info about usage with Webpack in README
+
 # Version 1.7.2
 * Use any one of the function keys {command, shift, ctrl, alt} to enable the
   perspective mode.
