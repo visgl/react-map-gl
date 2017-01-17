@@ -4,7 +4,7 @@ const webpack = require('webpack');
 module.exports = {
   // Bundle the transpiled code in dist
   entry: {
-    lib: resolve('./dist/index.js'),
+    lib: resolve('./src/index.js'),
     test: resolve('./test/index.js')
   },
 
