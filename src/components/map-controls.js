@@ -169,7 +169,7 @@ export default class MapControls extends Component {
   }
 
   _updateViewport(opts) {
-    let viewport = {
+    let viewport = Object.assign({
       latitude: this.props.latitude,
       longitude: this.props.longitude,
       zoom: this.props.zoom,
@@ -179,18 +179,16 @@ export default class MapControls extends Component {
       isDragging: this.props.isDragging,
       startDragLngLat: this.props.startDragLngLat,
       startBearing: this.props.startBearing,
-      startPitch: this.props.startPitch,
-      ...opts
-    };
+      startPitch: this.props.startPitch
+    }, opts);
 
     viewport = this._applyConstraints(viewport);
 
     if (viewport.startDragLngLat) {
-      const dragViewport = ViewportMercatorProject({
-        ...this.props,
+      const dragViewport = ViewportMercatorProject(Object.assign({}, this.props, {
         longitude: viewport.startDragLngLat[0],
         latitude: viewport.startDragLngLat[1]
-      });
+      }));
       this.setState({dragViewport});
     }
 
@@ -359,17 +357,18 @@ export default class MapControls extends Component {
 
   render() {
     const {className, width, height, style} = this.props;
-    const mapEventLayerStyle = {
-      ...style,
+    const mapEventLayerStyle = Object.assign({}, style, {
       width,
       height,
       position: 'relative',
       cursor: this._getCursor()
-    };
+    });
 
-    return (
-      <div ref="canvas" className={className} style={mapEventLayerStyle}/>
-    );
+    return React.createElement('div', {
+      ref: 'canvas',
+      className,
+      style: mapEventLayerStyle
+    });
   }
 }
 

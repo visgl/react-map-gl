@@ -20,6 +20,16 @@
     "src",
     "dist"
   ],
+  "scripts": {
+    "start": "(cd examples/main && yarn && npm start)",
+    "build": "rm -fr dist && buble src -o dist --no modules --y dangerousForOf --objectAssign && webpack -d",
+    "lint": "eslint src example test",
+    "test": "npm run lint && npm run build && node test/node.js",
+    "test-browser": "webpack-dev-server --config webpack.config.test-browser.js --progress --hot --open",
+    "publish-prod": "npm run build && npm run test && npm publish",
+    "publish-beta": "npm run build && npm run test && npm publish --tag beta",
+    "postinstall": "(flow-remove-types node_modules/mapbox-gl/js/**/*.js --out-dir . >/dev/null 2>&1) || (flow-remove-types ../mapbox-gl/js/**/*.js --out-dir . >/dev/null 2>&1) || true"
+  },
   "dependencies": {
     "bowser": "^1.2.0",
     "d3-selection": "^1.0.2",
@@ -36,7 +46,7 @@
     "eslint-config-uber-es2015": "^3.0.0",
     "eslint-config-uber-jsx": "^3.0.0",
     "eslint-plugin-react": "~6.7.0",
-    "gl": "^4.0.2",
+    "gl": "^4.0.3",
     "immutable": "^3.7.6",
     "jsdom": "^9.9.1",
     "module-alias": "^2.0.0",
@@ -51,22 +61,12 @@
     "tap-browser-color": "^0.1.2",
     "tape": "^4.5.1",
     "tape-catch": "^1.0.4",
-    "webpack": "^2.2.0-rc.3"
+    "webpack": "^2.2.0-rc.3",
+    "webpack-dev-server": "^2.2.0-rc.0"
   },
   "peerDependencies": {
     "immutable": "^3.7.6",
     "react": "0.14.x - 15.x"
-  },
-  "scripts": {
-    "start": "(cd examples/main && yarn && npm start)",
-    "build": "rm -fr dist && buble src -o dist --no modules --y dangerousForOf --objectAssign && webpack -d",
-    "postinstall": "if [ -d '../mapbox-gl' ]; then flow-remove-types ../mapbox-gl/js/**/*.js --out-dir . > /dev/null; fi",
-    "lint": "eslint src example test",
-    "test": "npm run lint && npm run test-node",
-    "test-node": "npm run build && node test/node.js",
-    "test-browser": "npm run build && echo 'To be restored'",
-    "publish-prod": "npm run build && npm run test && npm publish",
-    "publish-beta": "npm run build && npm run test && npm publish --tag beta"
   },
   "engines": {
     "node": "6.x",
