@@ -490,7 +490,7 @@ export default class MapGL extends Component {
       }
     } else if (yDelta < 0) {
       // Dragging upwards, gradually increase pitch
-      if (startPos.y > PITCH_MOUSE_THRESHOLD) {
+      if (startPos[1] > PITCH_MOUSE_THRESHOLD) {
         // Move from 0 to 1 as we drag upwards
         const yScale = 1 - pos[1] / startPos[1];
         // Gradually add until we hit max pitch
