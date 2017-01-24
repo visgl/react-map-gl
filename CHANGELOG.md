@@ -1,3 +1,10 @@
+## Version 2.0.1 (Jan 24, 2017)
+
+#### Minor Fixes
+
+- Fixed calculation of map pitch during interaction
+- Changed `postinstall` script
+
 ## Version 2.0.0 (Jan 17, 2017)
 
 #### Reasons for the major version bump
