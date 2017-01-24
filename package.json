@@ -67,7 +67,7 @@
     "precommit": "npm run lint -s",
     "prepush": "npm run lint -s",
     "prepublish": "npm run build",
-    "postinstall": "if [ -d '../mapbox-gl' ]; then flow-remove-types ../mapbox-gl/js/**/*.js --out-dir . > /dev/null; fi",
+    "postinstall": "(flow-remove-types node_modules/mapbox-gl/js/**/*.js --out-dir . >/dev/null 2>&1) || (flow-remove-types ../mapbox-gl/js/**/*.js --out-dir . >/dev/null 2>&1) || true",
     "profile-disc": "browserify src/index.js --full-paths -t babelify | discify --open"
   },
   "files": [
