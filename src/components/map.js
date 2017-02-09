@@ -22,7 +22,6 @@ import shallowCompare from 'react-addons-shallow-compare';
 import autobind from '../utils/autobind';
 
 import mapboxgl, {Point} from 'mapbox-gl';
-import {select} from 'd3-selection';
 import Immutable from 'immutable';
 import assert from 'assert';
 import window from 'global/window';
@@ -279,8 +278,11 @@ export default class MapGL extends Component {
       // attributionControl: this.props.attributionControl
     });
 
-    // TODO - can we drop d3-select dependency?
-    select(map.getCanvas()).style('outline', 'none');
+    // Disable outline style
+    const canvas = map.getCanvas();
+    if (canvas) {
+      canvas.style.outline = 'none';
+    }
 
     this._map = map;
     this._updateMapViewport({}, this.props);

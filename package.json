@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "bowser": "^1.2.0",
-    "d3-selection": "^1.0.2",
     "flow-remove-types": "^1.1.2",
     "glob": "^7.1.1",
     "global": "^4.3.0",
