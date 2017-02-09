@@ -26,7 +26,6 @@ import diffStyles from '../utils/diff-styles';
 import config from '../config';
 
 import mapboxgl, {Point} from 'mapbox-gl';
-import {select} from 'd3-selection';
 import Immutable from 'immutable';
 
 function noop() {}
@@ -171,7 +170,11 @@ export default class StaticMap extends Component {
       // attributionControl: this.props.attributionControl
     });
 
-    select(map.getCanvas()).style('outline', 'none');
+    // Disable outline style
+    const canvas = map.getCanvas();
+    if (canvas) {
+      canvas.style.outline = 'none';
+    }
 
     this._map = map;
     this._updateMapViewport({}, this.props);
