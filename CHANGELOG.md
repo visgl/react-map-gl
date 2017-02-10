@@ -1,3 +1,10 @@
+## Version 2.0.2 (Feb 09, 2017)
+
+#### Minor Fixes
+
+- Changed `postinstall` script again to use postinstall.js to run
+  flow-remove-types. This attempts to resolve cross-platform issues. (#192)
+
 ## Version 2.0.1 (Jan 24, 2017)
 
 #### Minor Fixes
