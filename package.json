@@ -26,6 +26,7 @@
     "d3-scale": "^1.0.3",
     "d3-selection": "^1.0.2",
     "flow-remove-types": "^1.1.2",
+    "glob": "^7.1.1",
     "global": "^4.3.0",
     "mapbox-gl": "0.32.1",
     "pure-render-decorator": "^1.1.0",
@@ -67,12 +68,13 @@
     "precommit": "npm run lint -s",
     "prepush": "npm run lint -s",
     "prepublish": "npm run build",
-    "postinstall": "(flow-remove-types node_modules/mapbox-gl/js/**/*.js --out-dir . >/dev/null 2>&1) || (flow-remove-types ../mapbox-gl/js/**/*.js --out-dir . >/dev/null 2>&1) || true",
+    "postinstall": "node postinstall.js",
     "profile-disc": "browserify src/index.js --full-paths -t babelify | discify --open"
   },
   "files": [
     "src",
-    "dist"
+    "dist",
+    "postinstall.js"
   ],
   "peerDependencies": {
     "immutable": "^3.7.6",
