@@ -5,8 +5,7 @@ require('reify');
 const path = require('path');
 const moduleAlias = require('module-alias');
 
-// Load from dist: Components use JSX so we still need a minimal transpile to run tests
-moduleAlias.addAlias('react-map-gl', path.resolve('./dist'));
+moduleAlias.addAlias('react-map-gl', path.resolve('./src'));
 
 // Run the tests
 require('./index');

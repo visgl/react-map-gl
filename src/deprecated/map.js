@@ -17,14 +17,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {PropTypes, Component} from 'react';
-import shallowCompare from 'react-addons-shallow-compare';
+import React, {PropTypes, PureComponent} from 'react';
 import autobind from '../utils/autobind';
+import {getAccessToken} from '../utils/access-token';
 
 import mapboxgl, {Point} from 'mapbox-gl';
 import Immutable from 'immutable';
 import assert from 'assert';
-import window from 'global/window';
 
 import MapInteractions from './map-interactions';
 import {getInteractiveLayerIds} from '../utils/style-utils';
@@ -186,8 +185,13 @@ const propTypes = {
     * The load callback is called when all dependencies have been loaded and
     * the map is ready.
     */
-  onLoad: PropTypes.func
+  onLoad: PropTypes.func,
 
+  /**
+    * True means key must be pressed to rotate instead of pan
+    * false to means key must be pressed to pan
+    */
+  pressKeyToRotate: PropTypes.bool
 };
 
 const defaultProps = {
@@ -201,37 +205,11 @@ const defaultProps = {
   pitch: 0,
   altitude: 1.5,
   clickRadius: 15,
-  maxZoom: 20
+  maxZoom: 20,
+  pressKeyToRotate: true
 };
 
-// Try to get access token from URL, env, local storage or config
-function getAccessToken() {
-  let accessToken = null;
-
-  if (window.location) {
-    const match = window.location.search.match(/access_token=([^&\/]*)/);
-    accessToken = match && match[1];
-  }
-
-  if (!accessToken) {
-    // Note: This depends on the bundler (e.g. webpack) inmporting environment correctly
-    accessToken =
-      process.env.MapboxAccessToken || process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
-  }
-
-  // Try to save and restore from local storage
-  // if (window.localStorage) {
-  //   if (accessToken) {
-  //     window.localStorage.accessToken = accessToken;
-  //   } else {
-  //     accessToken = window.localStorage.accessToken;
-  //   }
-  // }
-
-  return accessToken || config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN;
-}
-
-export default class MapGL extends Component {
+export default class Map extends PureComponent {
 
   static supported() {
     return mapboxgl.supported();
@@ -300,11 +278,6 @@ export default class MapGL extends Component {
       width: this.props.width,
       height: this.props.height
     });
-  }
-
-  // Pure render
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
   }
 
   componentDidUpdate() {
@@ -527,7 +500,6 @@ export default class MapGL extends Component {
       }
     }
 
-    // console.debug(startPitch, pitch);
     return {
       pitch: Math.max(Math.min(pitch, MAX_PITCH), 0),
       bearing
@@ -697,6 +669,7 @@ export default class MapGL extends Component {
     if (this.state.isSupported && this.props.onChangeViewport) {
       content = (
         <MapInteractions
+          pressKeyToRotate={ this.props.pressKeyToRotate }
           onMouseDown ={ this._onMouseDown }
           onMouseDrag ={ this._onMouseDrag }
           onMouseRotate ={ this._onMouseRotate }
@@ -729,6 +702,6 @@ export default class MapGL extends Component {
   }
 }
 
-MapGL.displayName = 'MapGL';
-MapGL.propTypes = propTypes;
-MapGL.defaultProps = defaultProps;
+Map.displayName = 'Map';
+Map.propTypes = propTypes;
+Map.defaultProps = defaultProps;

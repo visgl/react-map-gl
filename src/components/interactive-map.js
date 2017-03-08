@@ -1,15 +1,26 @@
-import {Component, createElement} from 'react';
-import shallowCompare from 'react-addons-shallow-compare';
+import {PureComponent, PropTypes, createElement} from 'react';
 import autobind from '../utils/autobind';
 
 import StaticMap from './static-map';
 import MapControls from './map-controls';
 
-import {mod, cloneTransform} from '../utils/transform';
-// import {unprojectFromTransform} from './utils/transform';
-import mapboxgl, {Point} from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl';
+import {LngLat, Point} from 'mapbox-gl';
+// import {mod, cloneTransform} from '../utils/transform';
+const mod = 0;
+const cloneTransform = 0;
 
-export default class InteractiveMap extends Component {
+const propTypes = {
+  displayConstraints: PropTypes.object.isRequired
+};
+
+const defaultProps = {
+  displayConstraints: {
+    maxPitch: 60
+  }
+};
+
+export default class InteractiveMap extends PureComponent {
 
   static supported() {
     return mapboxgl.supported();
@@ -17,61 +28,80 @@ export default class InteractiveMap extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {viewport: {}};
     autobind(this);
   }
 
-  // Pure render
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
-  }
-
+  // TODO - Remove once Viewport alternative is good enough
   _getMap() {
-    return this.refs.map._map;
-  }
-
-  // Uses map to unproject a coordinate
-  // TODO - replace with Viewport
-  _unproject(pos) {
-    const {lng, lat} = this._unprojectToLatLng(pos);
-    return [lng, lat];
-  }
-
-  _unprojectToLatLng(pos) {
-    const map = this._getMap();
-    const point = new Point(...pos);
-    const latLong = map.unproject(point);
-    return latLong;
+    return this._map._map;
   }
 
   // Uses map to get position for panning
-  // TODO - replace with Viewport
+  // TODO - Remove once Viewport alternative is good enough
   _getLngLatAtPoint({lngLat, pos}) {
     // assert(point);
     const map = this._getMap();
     const transform = cloneTransform(map.transform);
+    const mapboxLngLat = new LngLat(...lngLat);
     const mapboxPoint = new Point(...pos);
     // const around = unprojectFromTransform(transform, mapboxPoint);
-    transform.setLocationAtPoint(lngLat, mapboxPoint);
-    return [
+    transform.setLocationAtPoint(mapboxLngLat, mapboxPoint);
+    const lngLatResult = [
       mod(transform.center.lng + 180, 360) - 180,
       transform.center.lat
     ];
+    return lngLatResult;
+  }
+
+  // Checks a displayConstraints object to see if the map should be displayed
+  checkDisplayConstraints(props) {
+    const capitalize = s => s[0].toUpperCase() + s.slice(1);
+
+    const {displayConstraints} = props;
+    for (const propName in props) {
+      const capitalizedPropName = capitalize(propName);
+      const minPropName = `min${capitalizedPropName}`;
+      const maxPropName = `max${capitalizedPropName}`;
+
+      if (minPropName in displayConstraints && props[propName] < displayConstraints[minPropName]) {
+        return false;
+      }
+      if (maxPropName in displayConstraints && props[propName] > displayConstraints[maxPropName]) {
+        return false;
+      }
+    }
+    return true;
   }
 
   render() {
-    // TODO - do we still need this?
-    // let content = [];
-    // if (this.state.isSupported && this.props.onChangeViewport) {
-    //   content = (}
+    const mapVisible = this.checkDisplayConstraints(this.props);
+    const visibility = mapVisible ? 'visible' : 'hidden';
 
     return (
       createElement(MapControls, Object.assign({}, this.props, {
-        unproject: this._unproject,
-        getLngLatAtPoint: this._getLngLatAtPoint
+        key: 'map-controls',
+        style: {position: 'relative'}
+        // getLngLatAtPoint: this._getLngLatAtPoint
       }), [
-        createElement(StaticMap, Object.assign({}, this.props, {ref: 'map'}))
+        createElement(StaticMap, Object.assign({}, this.props, {
+          key: 'map-static',
+          style: {visibility, position: 'absolute', left: 0, top: 0},
+          ref: map => {
+            this._map = map;
+          },
+          children: mapVisible && this.props.children
+        })),
+        createElement('div', {
+          key: 'map-children',
+          style: {position: 'absolute', left: 0, top: 0}
+        },
+          !mapVisible && this.props.children
+        )
       ])
     );
   }
 }
+
+InteractiveMap.displayName = 'InteractiveMap';
+InteractiveMap.propTypes = propTypes;
+InteractiveMap.defaultProps = defaultProps;

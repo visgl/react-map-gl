@@ -23,6 +23,7 @@
 
 import window from 'global/window';
 import document from 'global/document';
+import autobind from '../utils/autobind';
 
 function noop() {}
 
@@ -65,8 +66,10 @@ function centroid(positions) {
 export default class EventManager {
 
   constructor(canvas, {
-    onMouseDown = noop,
+    onMouseMove = noop,
     onMouseClick = noop,
+    onMouseDown = noop,
+    onMouseUp = noop,
     onMouseRotate = noop,
     onMouseDrag = noop,
     onTouchStart = noop,
@@ -75,13 +78,16 @@ export default class EventManager {
     onTouchEnd = noop,
     onTouchTap = noop,
     onZoom = noop,
-    onZoomEnd = noop
+    onZoomEnd = noop,
+    mapTouchToMouse = true
   } = {}) {
-    canvas.addEventListener('mousemove', this._onMouseMove);
-    canvas.addEventListener('mousedown', this._onMouseDown);
-    canvas.addEventListener('touchstart', this._onTouchStart);
-    canvas.addEventListener('contextmenu', this._onMouseDown);
-    canvas.addEventListener('mousewheel', this._onWheel);
+    onTouchStart = onTouchStart || (mapTouchToMouse && onMouseDown);
+    onTouchDrag = onTouchDrag || (mapTouchToMouse && onMouseDrag);
+    onTouchRotate = onTouchRotate || (mapTouchToMouse && onMouseRotate);
+    onTouchEnd = onTouchEnd || (mapTouchToMouse && onMouseUp);
+    onTouchTap = onTouchTap || (mapTouchToMouse && onMouseClick);
+
+    this._canvas = canvas;
 
     this.state = {
       didDrag: false,
@@ -92,7 +98,10 @@ export default class EventManager {
     };
 
     this.callbacks = {
+      onMouseMove,
+      onMouseClick,
       onMouseDown,
+      onMouseUp,
       onTouchStart,
       onMouseRotate,
       onMouseDrag,
@@ -103,6 +112,19 @@ export default class EventManager {
       onZoom,
       onZoomEnd
     };
+
+    autobind(this);
+    this._addEventListeners();
+  }
+
+  // Register any outstanding event listeners
+  _addEventListeners() {
+    this._canvas.addEventListener('mousemove', this._onMouseMove);
+    this._canvas.addEventListener('mousedown', this._onMouseDown);
+    this._canvas.addEventListener('mouseup', this._onMouseUp);
+    this._canvas.addEventListener('touchstart', this._onTouchStart);
+    this._canvas.addEventListener('contextmenu', this._onMouseDown);
+    this._canvas.addEventListener('mousewheel', this._onWheel);
   }
 
   setState(settings) {
@@ -110,12 +132,12 @@ export default class EventManager {
   }
 
   _getMousePos(event) {
-    const el = this.refs.container;
+    const el = this._canvas;
     return getMousePosition(el, event);
   }
 
   _getTouchPos(event) {
-    const el = this.refs.container;
+    const el = this._canvas;
     const positions = getTouchPositions(el, event);
     return centroid(positions);
   }

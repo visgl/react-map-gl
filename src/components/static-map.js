@@ -17,13 +17,12 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {PropTypes, Component} from 'react';
-import shallowCompare from 'react-addons-shallow-compare';
+import React, {PropTypes, PureComponent, createElement} from 'react';
 import autobind from '../utils/autobind';
 
+import {getAccessToken} from '../utils/access-token';
 import {getInteractiveLayerIds} from '../utils/style-utils';
 import diffStyles from '../utils/diff-styles';
-import config from '../config';
 
 import mapboxgl, {Point} from 'mapbox-gl';
 import Immutable from 'immutable';
@@ -117,7 +116,7 @@ const propTypes = {
 const defaultProps = {
   mapStyle: 'mapbox://styles/mapbox/light-v8',
   onChangeViewport: null,
-  mapboxApiAccessToken: config.DEFAULTS.MAPBOX_API_ACCESS_TOKEN,
+  mapboxApiAccessToken: getAccessToken(),
   preserveDrawingBuffer: false,
   attributionControl: true,
   ignoreEmptyFeatures: true,
@@ -127,7 +126,7 @@ const defaultProps = {
   clickRadius: 15
 };
 
-export default class StaticMap extends Component {
+export default class StaticMap extends PureComponent {
   static supported() {
     return mapboxgl.supported();
   }
@@ -166,8 +165,6 @@ export default class StaticMap extends Component {
       style: mapStyle,
       interactive: false,
       preserveDrawingBuffer: this.props.preserveDrawingBuffer
-      // TODO?
-      // attributionControl: this.props.attributionControl
     });
 
     // Disable outline style
@@ -182,7 +179,6 @@ export default class StaticMap extends Component {
     this._updateQueryParams(mapStyle);
   }
 
-  // New props are comin' round the corner!
   componentWillReceiveProps(newProps) {
     this._updateStateFromProps(this.props, newProps);
     this._updateMapViewport(this.props, newProps);
@@ -194,13 +190,9 @@ export default class StaticMap extends Component {
     });
   }
 
-  // Pure render
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
-  }
-
   componentDidUpdate() {
-    // map.resize() reads size from DOM, we need to call after render
+    // Since Mapbox's map.resize() reads size from DOM
+    // we must wait to read size until after render (i.e. here in "didUpdate")
     this._updateMapSize(this.state, this.props);
   }
 
@@ -414,7 +406,9 @@ export default class StaticMap extends Component {
     }
   }
 
-  _onMouseClick({pos}) {
+  _onMouseClick(event) {
+    const pos = [event.clientX, event.clientY];
+
     if (this.props.onClick) {
       const latLong = this.props.unproject(pos);
       // TODO - Do we really want to expose a mapbox "Point" in our interface?
@@ -433,23 +427,32 @@ export default class StaticMap extends Component {
 
   render() {
     const {className, width, height, style} = this.props;
-
-    const mapContainerStyle = {...style, width, height, position: 'relative'};
-    const mapStyle = {...style, width, height};
+    const mapContainerStyle = Object.assign({}, style, {width, height, position: 'relative'});
+    const mapStyle = Object.assign({}, style, {width, height});
     const overlayContainerStyle = {position: 'absolute', left: 0, top: 0};
 
     // Note: a static map still handles clicks and hover events
     return (
-      <div style={mapContainerStyle}
-        onMouseMove={this._onMouseMove}
-        onMouseClick={this._onMouseClick}>
-
-        <div key="map" ref="mapboxMap" style={mapStyle} className={className}/>
-        <div key="overlays" className="overlays" style={overlayContainerStyle}>
-          { this.props.children }
-        </div>
-
-      </div>
+      createElement('div', {
+        key: 'map-container',
+        style: mapContainerStyle,
+        onMouseMove: this._onMouseMove,
+        onClick: this._onMouseClick,
+        children: [
+          createElement('div', {
+            key: 'map-mapbox',
+            ref: 'mapboxMap',
+            style: mapStyle,
+            className
+          }),
+          createElement('div', {
+            key: 'map-overlays',
+            className: 'overlays',
+            style: overlayContainerStyle,
+            children: this.props.children
+          })
+        ]
+      })
     );
   }
 }

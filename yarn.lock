@@ -6,6 +6,10 @@
   version "0.0.1"
   resolved "https://unpm.uberinternal.com/@mapbox%2fgl-matrix/-/gl-matrix-0.0.1.tgz#e5126aab4d64c36b81c7a97d0ae0dddde5773d2b"
 
+"@mapbox/unitbezier@^0.0.0":
+  version "0.0.0"
+  resolved "https://unpm.uberinternal.com/@mapbox%2funitbezier/-/unitbezier-0.0.0.tgz#15651bd553a67b8581fb398810c98ad86a34524e"
+
 "JSV@>= 4.0.x":
   version "4.0.2"
   resolved "https://unpm.uberinternal.com/JSV/-/JSV-4.0.2.tgz#d077f6825571f82132f9dffaed587b4029feff57"
@@ -221,7 +225,7 @@ assert@^1.1.1:
   dependencies:
     util "0.10.3"
 
-ast-types@0.9.4, ast-types@~0.9.0:
+ast-types@~0.9.0:
   version "0.9.4"
   resolved "https://unpm.uberinternal.com/ast-types/-/ast-types-0.9.4.tgz#410d1f81890aeb8e0a38621558ba5869ae53c91b"
 
@@ -247,10 +251,6 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://unpm.uberinternal.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-autobind-decorator@^1.3.3:
-  version "1.3.4"
-  resolved "https://unpm.uberinternal.com/autobind-decorator/-/autobind-decorator-1.3.4.tgz#b67560e6bbbb68a35c049c82d6351ea0e82d820d"
-
 aws-sign2@~0.6.0:
   version "0.6.0"
   resolved "https://unpm.uberinternal.com/aws-sign2/-/aws-sign2-0.6.0.tgz#14342dd38dbcc94d0e5b87d763cd63612c0e794f"
@@ -274,10 +274,6 @@ babylon@^6.15.0:
 balanced-match@^0.4.1:
   version "0.4.2"
   resolved "https://unpm.uberinternal.com/balanced-match/-/balanced-match-0.4.2.tgz#cb3f3e3c732dc0f01ee70b403f302e61d7709838"
-
-base62@^1.1.0:
-  version "1.1.2"
-  resolved "https://unpm.uberinternal.com/base62/-/base62-1.1.2.tgz#22ced6a49913565bc0b8d9a11563a465c084124c"
 
 base64-js@0.0.2:
   version "0.0.2"
@@ -627,25 +623,11 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^2.5.0, commander@^2.9.0:
+commander@^2.9.0:
   version "2.9.0"
   resolved "https://unpm.uberinternal.com/commander/-/commander-2.9.0.tgz#9c99094176e12240cb22d6c5146098400fe0f7d4"
   dependencies:
     graceful-readlink ">= 1.0.0"
-
-commoner@^0.10.1:
-  version "0.10.8"
-  resolved "https://unpm.uberinternal.com/commoner/-/commoner-0.10.8.tgz#34fc3672cd24393e8bb47e70caa0293811f4f2c5"
-  dependencies:
-    commander "^2.5.0"
-    detective "^4.3.1"
-    glob "^5.0.15"
-    graceful-fs "^4.1.2"
-    iconv-lite "^0.4.5"
-    mkdirp "^0.5.0"
-    private "^0.1.6"
-    q "^1.1.2"
-    recast "^0.11.17"
 
 compressible@~2.0.8:
   version "2.0.9"
@@ -861,7 +843,7 @@ define-properties@^1.1.2:
     foreach "^2.0.5"
     object-keys "^1.0.8"
 
-defined@^1.0.0, defined@~1.0.0:
+defined@~1.0.0:
   version "1.0.0"
   resolved "https://unpm.uberinternal.com/defined/-/defined-1.0.0.tgz#c98d9bcef75674188e110969151199e39b1fa693"
 
@@ -899,13 +881,6 @@ des.js@^1.0.0:
 destroy@~1.0.4:
   version "1.0.4"
   resolved "https://unpm.uberinternal.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
-
-detective@^4.3.1:
-  version "4.3.2"
-  resolved "https://unpm.uberinternal.com/detective/-/detective-4.3.2.tgz#77697e2e7947ac3fe7c8e26a6d6f115235afa91c"
-  dependencies:
-    acorn "^3.1.0"
-    defined "^1.0.0"
 
 diffie-hellman@^5.0.0:
   version "5.0.2"
@@ -1185,10 +1160,6 @@ espree@^3.4.0:
     acorn "4.0.4"
     acorn-jsx "^3.0.0"
 
-esprima-fb@^15001.1.0-dev-harmony-fb:
-  version "15001.1.0-dev-harmony-fb"
-  resolved "https://unpm.uberinternal.com/esprima-fb/-/esprima-fb-15001.1.0-dev-harmony-fb.tgz#30a947303c6b8d5e955bee2b99b1d233206a6901"
-
 esprima@^2.6.0, esprima@^2.7.1:
   version "2.7.3"
   resolved "https://unpm.uberinternal.com/esprima/-/esprima-2.7.3.tgz#96e3b70d5779f6ad49cd032673d1c312767ba581"
@@ -1200,10 +1171,6 @@ esprima@~1.0.2:
 esprima@~1.1.1:
   version "1.1.1"
   resolved "https://unpm.uberinternal.com/esprima/-/esprima-1.1.1.tgz#5b6f1547f4d102e670e140c509be6771d6aeb549"
-
-esprima@~3.1.0:
-  version "3.1.3"
-  resolved "https://unpm.uberinternal.com/esprima/-/esprima-3.1.3.tgz#fdca51cee6133895e3c88d535ce49dbff62a4633"
 
 espurify@^1.3.0, espurify@^1.6.0:
   version "1.6.0"
@@ -1265,9 +1232,9 @@ events@^1.0.0:
   version "1.1.1"
   resolved "https://unpm.uberinternal.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
 
-eventsource@~0.1.6:
+eventsource@0.1.6:
   version "0.1.6"
-  resolved "https://unpm.uberinternal.com/eventsource/-/eventsource-0.1.6.tgz#0acede849ed7dd1ccc32c811bb11b944d4f29232"
+  resolved "https://registry.yarnpkg.com/eventsource/-/eventsource-0.1.6.tgz#0acede849ed7dd1ccc32c811bb11b944d4f29232"
   dependencies:
     original ">=0.0.5"
 
@@ -1622,7 +1589,7 @@ github-from-package@0.0.0:
   version "0.0.0"
   resolved "https://unpm.uberinternal.com/github-from-package/-/github-from-package-0.0.0.tgz#97fb5d96bfde8973313f20e8288ef9a167fa64ce"
 
-gl-matrix@^2.3.2:
+gl-matrix@^2.3.1, gl-matrix@^2.3.2:
   version "2.3.2"
   resolved "https://unpm.uberinternal.com/gl-matrix/-/gl-matrix-2.3.2.tgz#aac808c74af7d5db05fe04cb60ca1a0fcb174d74"
 
@@ -1650,7 +1617,7 @@ glob-parent@^2.0.0:
   dependencies:
     is-glob "^2.0.0"
 
-"glob@3 || 4 || 5 || 6 || 7", glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@~7.1.1:
+"glob@3 || 4 || 5 || 6 || 7", glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@~7.1.1:
   version "7.1.1"
   resolved "https://unpm.uberinternal.com/glob/-/glob-7.1.1.tgz#805211df04faaf1c63a3600306cdf5ade50b2ec8"
   dependencies:
@@ -1661,17 +1628,7 @@ glob-parent@^2.0.0:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-glob@^5.0.15:
-  version "5.0.15"
-  resolved "https://unpm.uberinternal.com/glob/-/glob-5.0.15.tgz#1bc936b9e02f4a603fcc222ecf7633d30b8b93b1"
-  dependencies:
-    inflight "^1.0.4"
-    inherits "2"
-    minimatch "2 || 3"
-    once "^1.3.0"
-    path-is-absolute "^1.0.0"
-
-global@^4.3.0, global@~4.3.0:
+global@~4.3.0:
   version "4.3.1"
   resolved "https://unpm.uberinternal.com/global/-/global-4.3.1.tgz#5f757908c7cbabce54f386ae440e11e26b7916df"
   dependencies:
@@ -1802,9 +1759,9 @@ http-errors@~1.5.0, http-errors@~1.5.1:
     setprototypeof "1.0.2"
     statuses ">= 1.3.1 < 2"
 
-http-proxy-middleware@~0.17.1:
-  version "0.17.3"
-  resolved "https://unpm.uberinternal.com/http-proxy-middleware/-/http-proxy-middleware-0.17.3.tgz#940382147149b856084f5534752d5b5a8168cd1d"
+http-proxy-middleware@~0.17.4:
+  version "0.17.4"
+  resolved "https://registry.yarnpkg.com/http-proxy-middleware/-/http-proxy-middleware-0.17.4.tgz#642e8848851d66f09d4f124912846dbaeb41b833"
   dependencies:
     http-proxy "^1.16.2"
     is-glob "^3.1.0"
@@ -1841,7 +1798,7 @@ iconv-lite@0.4.13:
   version "0.4.13"
   resolved "https://unpm.uberinternal.com/iconv-lite/-/iconv-lite-0.4.13.tgz#1f88aba4ab0b1508e8312acc39345f36e992e2f2"
 
-iconv-lite@^0.4.13, iconv-lite@^0.4.5, iconv-lite@~0.4.13:
+iconv-lite@^0.4.13, iconv-lite@~0.4.13:
   version "0.4.15"
   resolved "https://unpm.uberinternal.com/iconv-lite/-/iconv-lite-0.4.15.tgz#fe265a218ac6a57cfe854927e9d04c19825eddeb"
 
@@ -1853,9 +1810,9 @@ ignore@^3.2.0:
   version "3.2.2"
   resolved "https://unpm.uberinternal.com/ignore/-/ignore-3.2.2.tgz#1c51e1ef53bab6ddc15db4d9ac4ec139eceb3410"
 
-immutable@^3.7.6:
+immutable@*:
   version "3.8.1"
-  resolved "https://unpm.uberinternal.com/immutable/-/immutable-3.8.1.tgz#200807f11ab0f72710ea485542de088075f68cd2"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.1.tgz#200807f11ab0f72710ea485542de088075f68cd2"
 
 imurmurhash@^0.1.4:
   version "0.1.4"
@@ -2109,9 +2066,9 @@ jsbn@~0.1.0:
   version "0.1.0"
   resolved "https://unpm.uberinternal.com/jsbn/-/jsbn-0.1.0.tgz#650987da0dd74f4ebf5a11377a2aa2d273e97dfd"
 
-jsdom@^9.9.1:
+jsdom@~9.9.1:
   version "9.9.1"
-  resolved "https://unpm.uberinternal.com/jsdom/-/jsdom-9.9.1.tgz#84f3972ad394ab963233af8725211bce4d01bfd5"
+  resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-9.9.1.tgz#84f3972ad394ab963233af8725211bce4d01bfd5"
   dependencies:
     abab "^1.0.0"
     acorn "^2.4.0"
@@ -2191,16 +2148,6 @@ jsprim@^1.2.2:
     extsprintf "1.0.2"
     json-schema "0.2.3"
     verror "1.3.6"
-
-jstransform@11:
-  version "11.0.3"
-  resolved "https://unpm.uberinternal.com/jstransform/-/jstransform-11.0.3.tgz#09a78993e0ae4d4ef4487f6155a91f6190cb4223"
-  dependencies:
-    base62 "^1.1.0"
-    commoner "^0.10.1"
-    esprima-fb "^15001.1.0-dev-harmony-fb"
-    object-assign "^2.0.0"
-    source-map "^0.4.2"
 
 jsx-ast-utils@^1.3.3:
   version "1.4.0"
@@ -2350,13 +2297,30 @@ magic-string@~0.19.0:
   dependencies:
     vlq "^0.2.1"
 
-"mapbox-gl-function@github:mapbox/mapbox-gl-function#4f829622413f336080d3c710244c251421c0ec30":
+mapbox-gl-function@mapbox/mapbox-gl-function#111a2b442be0689a65f5818dd2603c9b06962be0, mapbox-gl-function@mapbox/mapbox-gl-function#41c6724e2bbd7bd1eb5991451bbf118b7d02b525:
   version "1.3.0"
-  resolved "https://codeload.github.com/mapbox/mapbox-gl-function/tar.gz/4f829622413f336080d3c710244c251421c0ec30"
+  resolved "https://codeload.github.com/mapbox/mapbox-gl-function/tar.gz/111a2b442be0689a65f5818dd2603c9b06962be0"
 
-"mapbox-gl-style-spec@github:mapbox/mapbox-gl-style-spec#e85407a377510acb647161de6be6357ab4f606dd":
+mapbox-gl-shaders@mapbox/mapbox-gl-shaders#44b65f8090a74cbb0319664d010b8d8a8a1512b0:
+  version "1.0.0"
+  resolved "https://codeload.github.com/mapbox/mapbox-gl-shaders/tar.gz/44b65f8090a74cbb0319664d010b8d8a8a1512b0"
+  dependencies:
+    brfs "^1.4.0"
+
+mapbox-gl-style-spec@mapbox/mapbox-gl-style-spec#7d330d2abf1775abc95ab8b889089cf5ff579357:
   version "8.9.0"
-  resolved "https://codeload.github.com/mapbox/mapbox-gl-style-spec/tar.gz/e85407a377510acb647161de6be6357ab4f606dd"
+  resolved "https://codeload.github.com/mapbox/mapbox-gl-style-spec/tar.gz/7d330d2abf1775abc95ab8b889089cf5ff579357"
+  dependencies:
+    csscolorparser "~1.0.2"
+    jsonlint-lines-primitives "~1.6.0"
+    lodash.isequal "^3.0.4"
+    minimist "0.0.8"
+    rw "^0.1.4"
+    sort-object "^0.3.2"
+
+mapbox-gl-style-spec@mapbox/mapbox-gl-style-spec#d11f6d2775bf5b22534b3b2fb3410755b2473cdf:
+  version "8.11.0"
+  resolved "https://codeload.github.com/mapbox/mapbox-gl-style-spec/tar.gz/d11f6d2775bf5b22534b3b2fb3410755b2473cdf"
   dependencies:
     csscolorparser "~1.0.2"
     fast-stable-stringify "^0.1.1"
@@ -2370,11 +2334,43 @@ mapbox-gl-supported@^1.2.0:
   version "1.2.0"
   resolved "https://unpm.uberinternal.com/mapbox-gl-supported/-/mapbox-gl-supported-1.2.0.tgz#cbd34df894206cadda9a33c8d9a4609f26bb1989"
 
-mapbox-gl@0.31.0:
-  version "0.31.0"
-  resolved "https://unpm.uberinternal.com/mapbox-gl/-/mapbox-gl-0.31.0.tgz#897e1b1a06e2efa38887aa01a7fc2625574c7917"
+mapbox-gl@0.26.0:
+  version "0.26.0"
+  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-0.26.0.tgz#c667e8870ade4fb46f196fb4f9a675d2f3d70c3b"
+  dependencies:
+    csscolorparser "^1.0.2"
+    earcut "^2.0.3"
+    feature-filter "^2.2.0"
+    geojson-rewind "^0.1.0"
+    geojson-vt "^2.4.0"
+    gl-matrix "^2.3.1"
+    grid-index "^1.0.0"
+    mapbox-gl-function mapbox/mapbox-gl-function#111a2b442be0689a65f5818dd2603c9b06962be0
+    mapbox-gl-shaders mapbox/mapbox-gl-shaders#44b65f8090a74cbb0319664d010b8d8a8a1512b0
+    mapbox-gl-style-spec mapbox/mapbox-gl-style-spec#7d330d2abf1775abc95ab8b889089cf5ff579357
+    mapbox-gl-supported "^1.2.0"
+    package-json-versionify "^1.0.2"
+    pbf "^1.3.2"
+    pngjs "^2.2.0"
+    point-geometry "^0.0.0"
+    quickselect "^1.0.0"
+    request "^2.39.0"
+    shelf-pack "^1.0.0"
+    supercluster "^2.0.1"
+    tinyqueue "^1.1.0"
+    unassertify "^2.0.0"
+    unitbezier "^0.0.0"
+    vector-tile "^1.3.0"
+    vt-pbf "^2.0.2"
+    webworkify "^1.4.0"
+    whoots-js "^2.0.0"
+
+mapbox-gl@0.32.1:
+  version "0.32.1"
+  resolved "https://unpm.uberinternal.com/mapbox-gl/-/mapbox-gl-0.32.1.tgz#fb12d33dc97a96ef5d2ad4f0b7827ccc247a8ad2"
   dependencies:
     "@mapbox/gl-matrix" "^0.0.1"
+    "@mapbox/unitbezier" "^0.0.0"
     brfs "^1.4.0"
     bubleify "^0.5.1"
     csscolorparser "^1.0.2"
@@ -2383,8 +2379,8 @@ mapbox-gl@0.31.0:
     geojson-rewind "^0.1.0"
     geojson-vt "^2.4.0"
     grid-index "^1.0.0"
-    mapbox-gl-function mapbox/mapbox-gl-function#4f829622413f336080d3c710244c251421c0ec30
-    mapbox-gl-style-spec mapbox/mapbox-gl-style-spec#e85407a377510acb647161de6be6357ab4f606dd
+    mapbox-gl-function mapbox/mapbox-gl-function#41c6724e2bbd7bd1eb5991451bbf118b7d02b525
+    mapbox-gl-style-spec mapbox/mapbox-gl-style-spec#d11f6d2775bf5b22534b3b2fb3410755b2473cdf
     mapbox-gl-supported "^1.2.0"
     package-json-versionify "^1.0.2"
     pbf "^1.3.2"
@@ -2397,7 +2393,6 @@ mapbox-gl@0.31.0:
     tinyqueue "^1.1.0"
     unassertify "^2.0.0"
     unflowify "^1.0.0"
-    unitbezier "^0.0.0"
     vector-tile "^1.3.0"
     vt-pbf "^2.0.2"
     webworkify "^1.4.0"
@@ -2471,7 +2466,7 @@ minimalistic-assert@^1.0.0:
   version "1.0.0"
   resolved "https://unpm.uberinternal.com/minimalistic-assert/-/minimalistic-assert-1.0.0.tgz#702be2dda6b37f4836bcb3f5db56641b64a1d3d3"
 
-"minimatch@2 || 3", minimatch@3, minimatch@^3.0.0, minimatch@^3.0.2:
+minimatch@3, minimatch@^3.0.0, minimatch@^3.0.2:
   version "3.0.3"
   resolved "https://unpm.uberinternal.com/minimatch/-/minimatch-3.0.3.tgz#2a4e4090b96b2db06a9d7df01055a62a77c9b774"
   dependencies:
@@ -2557,12 +2552,6 @@ node-gyp@^3.0.3, node-gyp@^3.3.1:
     semver "2.x || 3.x || 4 || 5"
     tar "^2.0.0"
     which "1"
-
-node-jsx@^0.13.3:
-  version "0.13.3"
-  resolved "https://unpm.uberinternal.com/node-jsx/-/node-jsx-0.13.3.tgz#3d0568c10601c72f154e872d0e6b9cdf0a6dc4f8"
-  dependencies:
-    jstransform "11"
 
 node-libs-browser@^2.0.0:
   version "2.0.0"
@@ -2683,10 +2672,6 @@ number-is-nan@^1.0.0:
 oauth-sign@~0.8.1:
   version "0.8.2"
   resolved "https://unpm.uberinternal.com/oauth-sign/-/oauth-sign-0.8.2.tgz#46a6ab7f0aead8deae9ec0565780b7d4efeb9d43"
-
-object-assign@^2.0.0:
-  version "2.1.1"
-  resolved "https://unpm.uberinternal.com/object-assign/-/object-assign-2.1.1.tgz#43c36e5d569ff8e4816c4efa8be02d26967c18aa"
 
 object-assign@^4.0.1, object-assign@^4.1.0:
   version "4.1.1"
@@ -2964,10 +2949,6 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://unpm.uberinternal.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
-private@^0.1.6, private@~0.1.5:
-  version "0.1.6"
-  resolved "https://unpm.uberinternal.com/private/-/private-0.1.6.tgz#55c6a976d0f9bafb9924851350fe47b9b5fbb7c1"
-
 process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://unpm.uberinternal.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
@@ -3034,10 +3015,6 @@ punycode@^1.2.4, punycode@^1.4.1:
   version "1.4.1"
   resolved "https://unpm.uberinternal.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-q@^1.1.2:
-  version "1.4.1"
-  resolved "https://unpm.uberinternal.com/q/-/q-1.4.1.tgz#55705bcd93c5f3673530c2c2cbc0c2b3addc286e"
-
 qs@6.2.0:
   version "6.2.0"
   resolved "https://unpm.uberinternal.com/qs/-/qs-6.2.0.tgz#3b7848c03c2dece69a9522b0fae8c4126d745f3b"
@@ -3101,16 +3078,9 @@ rc@^1.0.3, rc@~1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~1.0.4"
 
-react-addons-shallow-compare@^15.4.2:
+react-addons-test-utils@^15.4.0:
   version "15.4.2"
-  resolved "https://unpm.uberinternal.com/react-addons-shallow-compare/-/react-addons-shallow-compare-15.4.2.tgz#027ffd9720e3a1e0b328dcd8fc62e214a0d174a5"
-  dependencies:
-    fbjs "^0.8.4"
-    object-assign "^4.1.0"
-
-react-addons-test-utils@^15.4.2:
-  version "15.4.2"
-  resolved "https://unpm.uberinternal.com/react-addons-test-utils/-/react-addons-test-utils-15.4.2.tgz#93bcaa718fcae7360d42e8fb1c09756cc36302a2"
+  resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.4.2.tgz#93bcaa718fcae7360d42e8fb1c09756cc36302a2"
   dependencies:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
@@ -3215,15 +3185,6 @@ readline2@^1.0.1:
     code-point-at "^1.0.0"
     is-fullwidth-code-point "^1.0.0"
     mute-stream "0.0.5"
-
-recast@^0.11.17:
-  version "0.11.20"
-  resolved "https://unpm.uberinternal.com/recast/-/recast-0.11.20.tgz#2cb9bec269c03b36d0598118a936cd0a293ca3f3"
-  dependencies:
-    ast-types "0.9.4"
-    esprima "~3.1.0"
-    private "~0.1.5"
-    source-map "~0.5.0"
 
 rechoir@^0.6.2:
   version "0.6.2"
@@ -3500,12 +3461,12 @@ sntp@1.x.x:
   dependencies:
     hoek "2.x.x"
 
-sockjs-client@1.1.1:
-  version "1.1.1"
-  resolved "https://unpm.uberinternal.com/sockjs-client/-/sockjs-client-1.1.1.tgz#284843e9a9784d7c474b1571b3240fca9dda4bb0"
+sockjs-client@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/sockjs-client/-/sockjs-client-1.1.2.tgz#f0212a8550e4c9468c8cceaeefd2e3493c033ad5"
   dependencies:
     debug "^2.2.0"
-    eventsource "~0.1.6"
+    eventsource "0.1.6"
     faye-websocket "~0.11.0"
     inherits "^2.0.1"
     json3 "^3.3.2"
@@ -3537,19 +3498,13 @@ source-list-map@~0.1.7:
   version "0.1.8"
   resolved "https://unpm.uberinternal.com/source-list-map/-/source-list-map-0.1.8.tgz#c550b2ab5427f6b3f21f5afead88c4f5587b2106"
 
-"source-map@>= 0.1.2", source-map@^0.5.3, source-map@~0.5.0, source-map@~0.5.1, source-map@~0.5.3:
+"source-map@>= 0.1.2", source-map@^0.5.3, source-map@~0.5.1, source-map@~0.5.3:
   version "0.5.6"
   resolved "https://unpm.uberinternal.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
 
 source-map@^0.1.34, source-map@~0.1.33:
   version "0.1.43"
   resolved "https://unpm.uberinternal.com/source-map/-/source-map-0.1.43.tgz#c24bc146ca517c1471f5dacbe2571b2b7f9e3346"
-  dependencies:
-    amdefine ">=0.0.4"
-
-source-map@^0.4.2:
-  version "0.4.4"
-  resolved "https://unpm.uberinternal.com/source-map/-/source-map-0.4.4.tgz#eba4f5da9c0dc999de68032d8b4f76173652036b"
   dependencies:
     amdefine ">=0.0.4"
 
@@ -3973,7 +3928,7 @@ unflowify@^1.0.0:
 
 unitbezier@^0.0.0:
   version "0.0.0"
-  resolved "https://unpm.uberinternal.com/unitbezier/-/unitbezier-0.0.0.tgz#33bf7f5d7284c5350bfc5c7f770fba7549c54a5e"
+  resolved "https://registry.yarnpkg.com/unitbezier/-/unitbezier-0.0.0.tgz#33bf7f5d7284c5350bfc5c7f770fba7549c54a5e"
 
 unpipe@~1.0.0:
   version "1.0.0"
@@ -4063,12 +4018,12 @@ verror@1.3.6:
   dependencies:
     extsprintf "1.0.2"
 
-viewport-mercator-project@3.0.0-rc2:
-  version "3.0.0-rc2"
-  resolved "https://unpm.uberinternal.com/viewport-mercator-project/-/viewport-mercator-project-3.0.0-rc2.tgz#761de5003370cb3eb4ffd5935bff0a3959019fe3"
+viewport-mercator-project@^4.0.0-alpha.3:
+  version "4.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/viewport-mercator-project/-/viewport-mercator-project-4.0.0-alpha.3.tgz#a2cd994e83d308a828391dfdf9337bf2545d4819"
   dependencies:
-    autobind-decorator "^1.3.3"
     gl-matrix "^2.3.2"
+    mapbox-gl "0.26.0"
 
 vlq@^0.2.1:
   version "0.2.1"
@@ -4115,9 +4070,9 @@ webpack-dev-middleware@^1.9.0:
     path-is-absolute "^1.0.0"
     range-parser "^1.0.3"
 
-webpack-dev-server@^2.2.0-rc.0:
-  version "2.3.0"
-  resolved "https://unpm.uberinternal.com/webpack-dev-server/-/webpack-dev-server-2.3.0.tgz#0437704bbd4d941a6e4c061eb3cc232ed7d06101"
+webpack-dev-server@^2.2.0:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-2.4.2.tgz#cf595d6b40878452b6d2ad7229056b686f8a16be"
   dependencies:
     ansi-html "0.0.7"
     chokidar "^1.6.0"
@@ -4125,12 +4080,12 @@ webpack-dev-server@^2.2.0-rc.0:
     connect-history-api-fallback "^1.3.0"
     express "^4.13.3"
     html-entities "^1.2.0"
-    http-proxy-middleware "~0.17.1"
+    http-proxy-middleware "~0.17.4"
     opn "4.0.2"
     portfinder "^1.0.9"
     serve-index "^1.7.2"
     sockjs "0.3.18"
-    sockjs-client "1.1.1"
+    sockjs-client "1.1.2"
     spdy "^3.4.1"
     strip-ansi "^3.0.0"
     supports-color "^3.1.1"
@@ -4144,7 +4099,7 @@ webpack-sources@^0.1.4:
     source-list-map "~0.1.7"
     source-map "~0.5.3"
 
-webpack@*, webpack@^2.2.0-rc.3:
+webpack@*, webpack@^2.2.0:
   version "2.2.1"
   resolved "https://unpm.uberinternal.com/webpack/-/webpack-2.2.1.tgz#7bb1d72ae2087dd1a4af526afec15eed17dda475"
   dependencies:
@@ -4178,6 +4133,14 @@ websocket-driver@>=0.5.1:
 websocket-extensions@>=0.1.1:
   version "0.1.1"
   resolved "https://unpm.uberinternal.com/websocket-extensions/-/websocket-extensions-0.1.1.tgz#76899499c184b6ef754377c2dbb0cd6cb55d29e7"
+
+webworkify-webpack-dropin@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/webworkify-webpack-dropin/-/webworkify-webpack-dropin-1.1.9.tgz#1d19b9817616319ee238a4537c6610f3df54f3ff"
+
+webworkify-webpack@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/webworkify-webpack/-/webworkify-webpack-2.0.4.tgz#39a12fb5f04b041121f4d78c60f550c440f18789"
 
 webworkify@^1.4.0:
   version "1.4.0"

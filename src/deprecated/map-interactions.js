@@ -20,8 +20,7 @@
 
 // Portions of the code below originally from:
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
-import {PropTypes, Component, createElement} from 'react';
-import shallowCompare from 'react-addons-shallow-compare';
+import {PropTypes, PureComponent, createElement} from 'react';
 import autobind from '../utils/autobind';
 import document from 'global/document';
 import window from 'global/window';
@@ -78,6 +77,8 @@ function centroid(positions) {
 const propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
+  pressKeyToRotate: PropTypes.bool, // True means key must be pressed to rotate instead of pan
+                                    // false to means key must be pressed to pan
   onMouseDown: PropTypes.func,
   onMouseDrag: PropTypes.func,
   onMouseRotate: PropTypes.func,
@@ -94,6 +95,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  pressKeyToRotate: true,
   onMouseDown: noop,
   onMouseDrag: noop,
   onMouseRotate: noop,
@@ -109,7 +111,7 @@ const defaultProps = {
   onZoomEnd: noop
 };
 
-export default class Interactions extends Component {
+export default class MapInteractions extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -122,17 +124,13 @@ export default class Interactions extends Component {
     autobind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
-  }
-
   _getMousePos(event) {
-    const el = this.refs.container;
+    const el = this.refs.interactionElement;
     return getMousePosition(el, event);
   }
 
   _getTouchPos(event) {
-    const el = this.refs.container;
+    const el = this.refs.interactionElement;
     const positions = getTouchPositions(el, event);
     return centroid(positions);
   }
@@ -171,7 +169,10 @@ export default class Interactions extends Component {
   _onMouseDrag(event) {
     const pos = this._getMousePos(event);
     this.setState({pos, didDrag: true});
-    if (this.state.isFunctionKeyPressed) {
+
+    const {isFunctionKeyPressed} = this.state;
+    const rotate = this.props.pressKeyToRotate ? isFunctionKeyPressed : !isFunctionKeyPressed;
+    if (rotate) {
       const {startPos} = this.state;
       this.props.onMouseRotate({pos, startPos});
     } else {
@@ -182,7 +183,10 @@ export default class Interactions extends Component {
   _onTouchDrag(event) {
     const pos = this._getTouchPos(event);
     this.setState({pos, didDrag: true});
-    if (this.state.isFunctionKeyPressed) {
+
+    const {isFunctionKeyPressed} = this.state;
+    const rotate = this.props.pressKeyToRotate ? isFunctionKeyPressed : !isFunctionKeyPressed;
+    if (rotate) {
       const {startPos} = this.state;
       this.props.onTouchRotate({pos, startPos});
     } else {
@@ -315,7 +319,7 @@ export default class Interactions extends Component {
     const {width, height} = this.props;
 
     return createElement('div', {
-      ref: 'container',
+      ref: 'interactionElement',
       onMouseMove: this._onMouseMove,
       onMouseDown: this._onMouseDown,
       onTouchStart: this._onTouchStart,
@@ -326,6 +330,6 @@ export default class Interactions extends Component {
   }
 }
 
-Interactions.displayName = 'Interactions';
-Interactions.propTypes = propTypes;
-Interactions.defaultProps = defaultProps;
+MapInteractions.displayName = 'MapInteractions';
+MapInteractions.propTypes = propTypes;
+MapInteractions.defaultProps = defaultProps;

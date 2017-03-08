@@ -1,7 +1,7 @@
 {
   "name": "react-map-gl",
   "description": "A React wrapper for MapboxGL-js and overlay API.",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "keywords": [
     "mapbox",
     "mapbox-gl",
@@ -14,33 +14,31 @@
     "url": "https://github.com/uber/react-map-gl.git"
   },
   "license": "MIT",
-  "main": "index.js",
-  "module": "dist/index.js",
+  "main": "dist/index.js",
+  "module": "dist-es6/index.js",
   "files": [
     "src",
     "dist",
     "postinstall.js"
   ],
   "scripts": {
-    "start": "(cd examples/main && yarn && npm start)",
-    "build": "rm -fr dist && buble src -o dist --no modules --y dangerousForOf --objectAssign && webpack -d",
+    "start": "(cd examples/custom-interactions && npm run start-local)",
+    "build": "npm run clean && npm run build-es6 && npm run build-es5",
+    "build-es6": "buble src -o dist-es6 --no modules --y dangerousForOf --objectAssign",
+    "build-es5": "webpack -d",
+    "clean": "rm -fr dist/* dist-es6/*",
     "lint": "eslint src example test",
-    "test": "npm run lint && npm run build && node test/node.js",
-    "test-browser": "webpack-dev-server --config webpack.config.test-browser.js --progress --hot --open",
+    "test": "npm run lint && node test/node.js",
+    "test-browser": "webpack-dev-server --env.browser --progress --hot --open",
     "publish-prod": "npm run build && npm run test && npm publish",
     "publish-beta": "npm run build && npm run test && npm publish --tag beta",
     "postinstall": "(flow-remove-types node_modules/mapbox-gl/js/**/*.js --out-dir . >/dev/null 2>&1) || (flow-remove-types ../mapbox-gl/js/**/*.js --out-dir . >/dev/null 2>&1) || true"
   },
   "dependencies": {
     "bowser": "^1.2.0",
-    "flow-remove-types": "^1.1.2",
-    "glob": "^7.1.1",
-    "global": "^4.3.0",
+    "immutable": "*",
     "mapbox-gl": "0.32.1",
-    "pure-render-decorator": "^1.1.0",
-    "svg-transform": "0.0.3",
-    "react-addons-shallow-compare": "^15.4.2",
-    "viewport-mercator-project": "3.0.0-rc2"
+    "viewport-mercator-project": "^4.0.0-alpha.3"
   },
   "devDependencies": {
     "buble": "^0.15.1",
@@ -49,14 +47,14 @@
     "eslint-config-uber-es2015": "^3.0.0",
     "eslint-config-uber-jsx": "^3.0.0",
     "eslint-plugin-react": "~6.7.0",
+    "flow-remove-types": "^1.1.2",
     "gl": "^4.0.3",
-    "immutable": "^3.7.6",
-    "jsdom": "^9.9.1",
+    "glob": "^7.1.1",
+    "jsdom": "~9.9.1",
     "module-alias": "^2.0.0",
-    "node-jsx": "^0.13.3",
     "pre-commit": "^1.2.2",
     "react": "^15.4.0",
-    "react-addons-test-utils": "^15.4.2",
+    "react-addons-test-utils": "^15.4.0",
     "react-dom": "^15.4.0",
     "reify": "^0.4.4",
     "remove-flow-types-loader": "^1.0.0",
@@ -64,25 +62,12 @@
     "tap-browser-color": "^0.1.2",
     "tape": "^4.5.1",
     "tape-catch": "^1.0.4",
-    "tap-browser-color": "^0.1.2",
-    "testron": "^1.2.0",
-    "webpack": "^2.2.0-rc.3",
-    "webpack-dev-server": "^2.2.0-rc.0"
-  },
-  "scripts-old": {
-    "build": "babel src -d dist --copy-files --source-maps inline",
-    "start": "budo ./example/main.js --live --open --port 9966 -- -t babelify -t envify",
-    "lint": "eslint src example test",
-    "test": "npm run lint && browserify -t babelify -t envify test/index.js | testron",
-    "precommit": "npm run lint -s",
-    "prepush": "npm run lint -s",
-    "prepublish": "npm run build",
-    "postinstall": "node postinstall.js",
-    "profile-disc": "browserify src/index.js --full-paths -t babelify | discify --open"
+    "webpack": "^2.2.0",
+    "webpack-dev-server": "^2.2.0",
+    "webworkify-webpack-dropin": "^1.1.9"
   },
   "peerDependencies": {
-    "immutable": "^3.7.6",
-    "react": "0.14.x - 15.x"
+    "react": "15.4.x"
   },
   "engines": {
     "node": ">= 4",
