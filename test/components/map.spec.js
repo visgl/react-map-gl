@@ -1,5 +1,5 @@
-// import MapGL from 'react-map-gl';
-import DefaultMapGL, {MapGL} from 'react-map-gl';
+// import InteractiveMap from 'react-map-gl';
+import MapGL, {InteractiveMap} from 'react-map-gl';
 import {createElement} from 'react';
 import ReactTestUtils from 'react-addons-test-utils';
 import test from 'tape-catch';
@@ -16,27 +16,27 @@ const defaultProps = {
   mapboxApiAccessToken
 };
 
-test('MapGL#default export', t => {
-  t.ok(DefaultMapGL, 'MapGL is defined');
-
-  const map = createElement(DefaultMapGL, defaultProps);
-  const result = ReactTestUtils.createRenderer().render(map);
-
-  t.equal(result.type, 'div', 'MapGL rendered a div');
-  t.end();
-});
-
-test('MapGL#named export', t => {
-  t.ok(MapGL, 'MapGL is defined');
+test('InteractiveMap#default export', t => {
+  t.ok(MapGL, 'InteractiveMap is defined');
 
   const map = createElement(MapGL, defaultProps);
   const result = ReactTestUtils.createRenderer().render(map);
 
-  t.equal(result.type, 'div', 'MapGL rendered a div');
+  t.equal(result.type, 'div', 'InteractiveMap rendered a div');
   t.end();
 });
 
-test('MapGL#call onLoad when provided', t => {
+test('InteractiveMap#named export', t => {
+  t.ok(InteractiveMap, 'InteractiveMap is defined');
+
+  const map = createElement(InteractiveMap, defaultProps);
+  const result = ReactTestUtils.createRenderer().render(map);
+
+  t.equal(result.type, 'div', 'InteractiveMap rendered a div');
+  t.end();
+});
+
+test('InteractiveMap#call onLoad when provided', t => {
   function onLoad(...args) {
     t.equal(args.length, 0, 'onLoad does not expose the map object.');
     t.end();
@@ -44,14 +44,14 @@ test('MapGL#call onLoad when provided', t => {
 
   const props = Object.assign({}, defaultProps, {onLoad});
 
-  const map = createElement(MapGL, props);
+  const map = createElement(InteractiveMap, props);
 
   const result = ReactTestUtils.createRenderer().render(map);
 
-  t.equal(result.type, 'div', 'MapGL rendered a div');
+  t.equal(result.type, 'div', 'InteractiveMap rendered a div');
 
-  if (!MapGL.supported()) {
-    t.ok('onLoad not called since MapGL.supported() false');
+  if (!InteractiveMap.supported()) {
+    t.ok('onLoad not called since InteractiveMap.supported() false');
     t.end();
   } else {
     /* global setTimeout */

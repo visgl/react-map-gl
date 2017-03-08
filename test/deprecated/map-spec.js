@@ -1,4 +1,4 @@
-import MapGL from '../src';
+import MapGL from 'react-map-gl';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

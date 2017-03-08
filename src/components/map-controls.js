@@ -17,24 +17,24 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {PropTypes, Component} from 'react';
-import shallowCompare from 'react-addons-shallow-compare';
+import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import React, {PropTypes, PureComponent} from 'react';
+import assert from 'assert';
+
 import autobind from '../utils/autobind';
+
+// MapControls uses non-react event manager to register events
 import EventManager from '../utils/event-manager';
 
 import config from '../config';
 import {mod} from '../utils/transform';
-import assert from 'assert';
-
-import ViewportMercatorProject from 'viewport-mercator-project';
-// import {WebMercatorViewport} from 'viewport-mercator-project';
 
 // MAPBOX LIMITS
 const MAX_PITCH = 60;
 const MAX_ZOOM = 40;
 
 // EVENT HANDLING PARAMETERS
-const PITCH_MOUSE_THRESHOLD = 20;
+const PITCH_MOUSE_THRESHOLD = 5;
 const PITCH_ACCEL = 1.2;
 
 const propTypes = {
@@ -58,6 +58,8 @@ const propTypes = {
     * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
     */
   altitude: React.PropTypes.number,
+
+  constraints: React.PropTypes.object,
 
   /** Enables perspective control event handling */
   perspectiveEnabled: PropTypes.bool,
@@ -86,8 +88,8 @@ const propTypes = {
   startPitch: PropTypes.number,
 
   /* Hooks to get mapbox help with calculations. TODO - replace with Viewport */
-  unproject: PropTypes.func.isRequired,
-  getLngLatAtPoint: PropTypes.func.isRequired
+  unproject: PropTypes.func,
+  getLngLatAtPoint: PropTypes.func
 };
 
 const defaultProps = {
@@ -96,16 +98,22 @@ const defaultProps = {
   altitude: 1.5,
   clickRadius: 15,
   onChangeViewport: null,
+
   maxZoom: MAX_ZOOM,
   minZoom: 0,
   maxPitch: MAX_PITCH,
-  minPitch: 0
+  minPitch: 0,
+
+  unproject: null,
+  getLngLatAtPoint: null
 };
 
-export default class MapControls extends Component {
+export default class MapControls extends PureComponent {
   /**
    * @classdesc
-   * A component that handles events and updates viewport parameters
+   * A component that monitors events and updates mercator style viewport parameters
+   * It can be used with our without a mapbox map
+   * (e.g. it could pan over a static map image)
    */
   constructor(props) {
     super(props);
@@ -123,11 +131,13 @@ export default class MapControls extends Component {
     // Register event handlers on the canvas using the EventManager helper class
     //
     // Note that mouse move and click are handled directly by static-map
+    // Corresponding to hover and click on map
     // onMouseMove={this._onMouseMove}
     // onMouseClick={this._onMouseClick}
 
-    this._eventManager = new EventManager(this.ref.canvas, {
+    this._eventManager = new EventManager(this.refs.canvas, {
       onMouseDown: this._onMouseDown,
+      // onMouseMove: is bound only after a mouse down is detected
       onMouseDrag: this._onMouseDrag,
       onMouseRotate: this._onMouseRotate,
       onMouseUp: this._onMouseUp,
@@ -137,7 +147,8 @@ export default class MapControls extends Component {
       onTouchEnd: this._onTouchEnd,
       onTouchTap: this._onTouchTap,
       onZoom: this._onZoom,
-      onZoomEnd: this._onZoomEnd
+      onZoomEnd: this._onZoomEnd,
+      mapTouchToMouse: true
     });
   }
 
@@ -145,13 +156,8 @@ export default class MapControls extends Component {
   componentWillReceiveProps(newProps) {
     const {startDragLngLat} = newProps;
     this.setState({
-      startDragLngLat: startDragLngLat && startDragLngLat.slice()
+      startDragLngLat: startDragLngLat && [...startDragLngLat]
     });
-  }
-
-  // Pure render
-  shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
   }
 
   // Calculate a cursor style to show that we are in "dragging state"
@@ -160,12 +166,17 @@ export default class MapControls extends Component {
       this.props.onChangeViewport ||
       this.props.onClickFeature ||
       this.props.onHoverFeatures;
-    if (isInteractive) {
-      return this.props.isDragging ?
-        config.CURSOR.GRABBING :
-        (this.state.isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
+
+    if (!isInteractive) {
+      return 'inherit';
     }
-    return 'inherit';
+    if (this.props.isDragging) {
+      return config.CURSOR.GRABBING;
+    }
+    if (this.state.isHovering) {
+      return config.CURSOR.POINTER;
+    }
+    return config.CURSOR.GRAB;
   }
 
   _updateViewport(opts) {
@@ -184,13 +195,13 @@ export default class MapControls extends Component {
 
     viewport = this._applyConstraints(viewport);
 
-    if (viewport.startDragLngLat) {
-      const dragViewport = ViewportMercatorProject(Object.assign({}, this.props, {
-        longitude: viewport.startDragLngLat[0],
-        latitude: viewport.startDragLngLat[1]
-      }));
-      this.setState({dragViewport});
-    }
+    // if (viewport.startDragLngLat) {
+    //   const dragViewport = new FlatMercatorViewport(Object.assign({}, this.props, {
+    //     longitude: viewport.startDragLngLat[0],
+    //     latitude: viewport.startDragLngLat[1]
+    //   }));
+    //   this.setState({dragViewport});
+    // }
 
     return this.props.onChangeViewport(viewport);
   }
@@ -208,18 +219,35 @@ export default class MapControls extends Component {
 
     // Ensure pitch is within specified range
     const {maxPitch, minPitch} = this.props;
+
     viewport.pitch = viewport.pitch > maxPitch ? maxPitch : viewport.pitch;
     viewport.pitch = viewport.pitch < minPitch ? minPitch : viewport.pitch;
 
     return viewport;
   }
 
+  _unproject(pos) {
+    const viewport = new PerspectiveMercatorViewport(Object.assign({}, this.props));
+    const lngLat = this.props.unproject ?
+      this.props.unproject(pos) :
+      viewport.unproject(pos, {topLeft: false});
+    return lngLat;
+  }
+
   // Calculate a new lnglat based on pixel dragging position
   // TODO - We should have a mapbox-independent implementation of panning
   // Panning calculation is currently done using an undocumented mapbox function
   _calculateNewLngLat({startDragLngLat, pos, startPos}) {
-    return this.props.getLngLatAtPoint({lngLat: startDragLngLat, pos});
-    // return this.state.dragViewport.unproject(pos);
+    const viewport = new PerspectiveMercatorViewport(Object.assign({}, this.props, {
+      longitude: startDragLngLat[0],
+      latitude: startDragLngLat[1]
+    }));
+
+    const lngLat = this.props.getLngLatAtPoint ?
+      this.props.getLngLatAtPoint({lngLat: startDragLngLat, pos}) :
+      viewport.getLocationAtPoint({lngLat: startDragLngLat, pos});
+
+    return lngLat;
   }
 
   // Calculates new zoom
@@ -229,6 +257,9 @@ export default class MapControls extends Component {
 
   // Calculates a new pitch and bearing from a position (coming from an event)
   _calculateNewPitchAndBearing({pos, startPos, startBearing, startPitch}) {
+    const {maxPitch} = this.props;
+    // TODO minPitch
+
     const xDelta = pos[0] - startPos[0];
     const yDelta = pos[1] - startPos[1];
 
@@ -243,17 +274,16 @@ export default class MapControls extends Component {
       }
     } else if (yDelta < 0) {
       // Dragging upwards, gradually increase pitch
-      if (startPos.y > PITCH_MOUSE_THRESHOLD) {
+      if (startPos[1] > PITCH_MOUSE_THRESHOLD) {
         // Move from 0 to 1 as we drag upwards
         const yScale = 1 - pos[1] / startPos[1];
         // Gradually add until we hit max pitch
-        pitch = startPitch + yScale * (MAX_PITCH - startPitch);
+        pitch = startPitch + yScale * (maxPitch - startPitch);
       }
     }
 
-    // console.debug(startPitch, pitch);
     return {
-      pitch: Math.max(Math.min(pitch, MAX_PITCH), 0),
+      pitch,
       bearing
     };
   }
@@ -281,7 +311,7 @@ export default class MapControls extends Component {
   _onMouseDown({pos}) {
     this._updateViewport({
       isDragging: true,
-      startDragLngLat: this.props.unproject(pos),
+      startDragLngLat: this._unproject(pos),
       startBearing: this.props.bearing,
       startPitch: this.props.pitch
     });
@@ -298,10 +328,7 @@ export default class MapControls extends Component {
     assert(startDragLngLat, '`startDragLngLat` prop is required ' +
       'for mouse drag behavior to calculate where to position the map.');
 
-    const [longitude, latitude] = this._calculateNewLngLat({
-      startDragLngLat,
-      pos
-    });
+    const [longitude, latitude] = this._calculateNewLngLat({startDragLngLat, pos});
 
     this._updateViewport({
       longitude,
@@ -357,6 +384,7 @@ export default class MapControls extends Component {
 
   render() {
     const {className, width, height, style} = this.props;
+
     const mapEventLayerStyle = Object.assign({}, style, {
       width,
       height,
@@ -366,12 +394,12 @@ export default class MapControls extends Component {
 
     return React.createElement('div', {
       ref: 'canvas',
-      className,
-      style: mapEventLayerStyle
-    });
+      style: mapEventLayerStyle,
+      className
+    }, this.props.children);
   }
 }
 
-MapControls.propTypes = propTypes;
+MapControls.displayName = 'MapControls';
 MapControls.propTypes = propTypes;
 MapControls.defaultProps = defaultProps;

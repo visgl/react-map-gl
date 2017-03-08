@@ -20,9 +20,9 @@
 
 // NOTE: Transform is not a public API so we should be careful to always lock
 // down mapbox-gl to a specific major, minor, and patch version.
-import Transform from './transform';
+// import Transform from './transform';
 import {LngLatBounds, Point} from 'mapbox-gl';
-
+class Transform {}
 /**
  * Returns map settings {latitude, longitude, zoom}
  * that will contain the provided corners within the provided
@@ -33,9 +33,7 @@ import {LngLatBounds, Point} from 'mapbox-gl';
  * @param {Number} options.padding - viewport width
  * @returns {Object} - latitude, longitude and zoom
  */
-export default function fitBounds(width, height, bounds, {
-  padding = 0
-} = {}) {
+export default function fitBounds(width, height, bounds, {padding = 0} = {}) {
   const _bounds = new LngLatBounds([
     bounds[0].reverse(),
     bounds[1].reverse()

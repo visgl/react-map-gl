@@ -1,7 +1,7 @@
 const {resolve} = require('path');
 const webpack = require('webpack');
 
-module.exports = {
+const BASE_CONFIG = {
   // Bundle the transpiled code in dist
   entry: {
     lib: resolve('./src/index.js')
@@ -10,7 +10,7 @@ module.exports = {
   // Generate a bundle in dist folder
   output: {
     path: resolve('./dist'),
-    filename: '[name]-bundle.js',
+    filename: 'index.js',
     library: 'react-map-gl',
     libraryTarget: 'umd'
   },
@@ -22,8 +22,7 @@ module.exports = {
 
   resolve: {
     alias: {
-      'react-map-gl': resolve('./dist'),
-      'react-map-gl/test': resolve('./test')
+      'react-map-gl': resolve('./dist')
     }
   },
 
@@ -58,4 +57,49 @@ module.exports = {
       }
     })
   ]
+};
+
+const BROWSER_CONFIG = Object.assign({}, BASE_CONFIG, {
+  devServer: {
+    stats: {
+      warnings: false
+    },
+    quiet: true
+  },
+
+  // Bundle the tests for running in the browser
+  entry: {
+    'test-browser': resolve('./test/browser.js')
+  },
+
+  // Generate a bundle in dist folder
+  output: {
+    path: resolve('./dist'),
+    filename: '[name]-bundle.js'
+  },
+
+  devtool: '#inline-source-maps',
+
+  resolve: {
+    alias: {
+      'react-map-gl': resolve('./src'),
+      webworkify: 'webworkify-webpack-dropin'
+    }
+  },
+
+  externals: [],
+
+  node: {
+    fs: 'empty'
+  },
+
+  plugins: []
+});
+
+module.exports = env => {
+  const config = BASE_CONFIG;
+  if (env && env.browser) {
+    return BROWSER_CONFIG;
+  }
+  return config;
 };

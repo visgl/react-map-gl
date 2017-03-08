@@ -19,14 +19,22 @@
 // THE SOFTWARE.
 
 import React, {PropTypes, Component} from 'react';
-import MapGL, {autobind} from 'react-map-gl';
+import autobind from 'react-autobind';
+import {InteractiveMap, ScatterplotOverlay} from 'react-map-gl';
+import DeckGL, {ArcLayer} from 'deck.gl';
 import Immutable from 'immutable';
 import window from 'global/window';
 
 // San Francisco
-import SF_FEATURE from '../data/feature-example-sf.json';
-import CITIES from '../data/cities.json';
+import SF_FEATURE from './data/feature-example-sf.json';
+import CITIES from './data/cities.json';
 const location = CITIES[0];
+
+// Example data.
+const locations = Immutable.fromJS(new Array(4000).fill(0).map(() => [
+  location.longitude + Math.random() * 0.01,
+  location.latitude + Math.random() * 0.01
+]));
 
 function buildStyle({fill = 'red', stroke = 'blue'}) {
   return Immutable.fromJS({
@@ -61,7 +69,7 @@ const propTypes = {
   height: PropTypes.number.isRequired
 };
 
-export default class TiltExample extends Component {
+export default class Example extends Component {
 
   constructor(props) {
     super(props);
@@ -103,19 +111,41 @@ export default class TiltExample extends Component {
   }
 
   render() {
-    // mapStyle: this.state.mapStyle,
+    const viewport = {
+      // mapStyle: this.state.mapStyle,
+      ...this.state.viewport,
+      ...this.props
+    };
     return (
-      <MapGL
-        { ...this.state.viewport }
-        { ...this.props }
+      <InteractiveMap
+        { ...viewport }
+        maxPitch={85}
         onChangeViewport={ this._onChangeViewport }
         onClickFeatures={ this._onClickFeatures }
         perspectiveEnabled={ true }
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
-        preventStyleDiffing={ false }/>
+        preventStyleDiffing={ false }>
+
+        <ScatterplotOverlay
+          { ...viewport }
+          locations={ locations }
+          dotRadius={ 2 }
+          globalOpacity={ 1 }
+          compositeOperation="screen"/>
+
+        <DeckGL {...viewport} layers={[
+          new ArcLayer({
+            data: [{sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.45669, 37.781]}],
+            strokeWidth: 4,
+            getSourceColor: x => [0, 0, 255],
+            getTargetColor: x => [0, 255, 0]
+          })
+        ]}/>
+
+      </InteractiveMap>
     );
   }
 }
 
-TiltExample.propTypes = propTypes;
+Example.propTypes = propTypes;

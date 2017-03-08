@@ -1,5 +1,5 @@
 {
-  "description": "Main example for react-map-gl",
+  "description": "Example for react-map-gl",
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --progress --hot --open",
@@ -10,8 +10,11 @@
     "d3-color": "^1.0.1",
     "d3-random": "^1.0.2",
     "d3-scale": "^1.0.3",
+    "deck.gl": "^4.0.0-rc.3",
     "immutable": "^3.8.1",
+    "luma.gl": "^3.0.0",
     "react": "^15.4.1",
+    "react-autobind": "^1.0.6",
     "react-dom": "^15.4.1",
     "react-map-gl": "^1.7.2"
   },
