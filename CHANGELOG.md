@@ -1,3 +1,6 @@
+# Version 1.7.3
+* Fix polyfill under IE11
+
 # Version 1.7.2
 * Use any one of the function keys {command, shift, ctrl, alt} to enable the
   perspective mode.
