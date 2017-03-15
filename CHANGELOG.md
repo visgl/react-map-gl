@@ -1,4 +1,4 @@
-# Version 1.7.3
+# Version 1.8.2
 * Fix polyfill under IE11
 
 # Version 1.7.2
