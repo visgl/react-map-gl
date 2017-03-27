@@ -1,3 +1,46 @@
+# Version 3.0.0-alpha.2
+
+* NEW: Allows map display to be disabled when pitch > 60.
+
+# Version 3.0.0-alpha.1
+
+* NEW: Supports "tree-shaking" in Webpack2 and Rollup - adds new package.json
+  `module` field that points to files with preserved ES6 import/exports.
+* NEW: Significant reduction in number of npm dependencies.
+
+* NEW: Setting the new `pressKeyToRotate` prop to `false` will make rotation
+  rather than pan the default operation, requiring a function key to be pressed
+  for pan.
+* BREAKING: The `ChoroplethOverlay` React component is no longer part of the
+  exported library. It has been moved to examples folder, applications that
+  still need it can copy it from there instead of importing it directly.
+  Removing `ChoroplethOverlay` eliminated a number of big D3 dependencies from
+  react-map-gl, which seemed like the right tradeoff since most users are using
+  mapbox styles or deck.gl layers for Choropleths.
+
+### Event Handling Refactor
+
+* Event handling (Pan/Zoom/Tilt) has been significantly refactored, and is
+  now handled by a separate component (`MapControls`).
+* A new `StaticMap` component is the actual `mapbox-gl` wrapper. It only
+  handles click and hover events.
+* The separation of event handling from the map component opens up some
+  interesting use cases, including creating apps that can modify viewports
+  beyond mapbox' rendering limits and using the `MapControls` with
+  non-mapbox maps.
+
+### Compatibility with v1
+
+* A new `InteractiveMap` is provided, that uses the `MapControls` component
+  to add pan/zoom/title to `StaticMap`. `InteractiveMap` closely resembles
+  the original `MapGL` component from version 1 and is the default export
+  of `react-map-gl` in v2. `react-map-gl` should thus be API compatible with
+  v1 in most cases, although there might be subtle differences in how events
+  are handled.
+
+
+
+
 ## Version 2.0.2 (Feb 09, 2017)
 
 #### Minor Fixes
@@ -43,14 +86,16 @@
 
 - Added more info about usage with Webpack in README
 
-# Version 1.7.2
+# Version 1.X Series Releases
+
+## Version 1.7.2
 * Use any one of the function keys {command, shift, ctrl, alt} to enable the
   perspective mode.
 
-# Version 1.7.1
+## Version 1.7.1
 * Bump Mapbox version to 0.26
 
-# Version 1.7.0
+## Version 1.7.0
 
 * Provide a way to control per-layer interactivity - onClickFeatures and
   onHoverFeatures have the option to only query selected layers. Enabled by
@@ -58,11 +103,11 @@
 
 * Fix bug where onClickFeatures is fired after panning/rotating (#133)
 
-# Version 1.6.1
+## Version 1.6.1
 
 * Hotfix: GeoJSON style support issue with mapbox-gl 0.24.0
 
-# Version 1.6.0
+## Version 1.6.0
 
 * Reduced flicker when updating GeoJSON sources in styles - (Thanks @tsemerad)
   Covers certain cases, for more info see #124)
@@ -73,38 +118,38 @@
 * Cursor now changes to pointer over interactive features
 * Fix grab cursor in recent Chrome browsers
 
-# Version 1.5.0
+## Version 1.5.0
 
 * Add touch support (Thanks @cammanderson)
 
-# Version 1.4.2
+## Version 1.4.2
 
 * Remove alphaify dependency due to peerDependency issues
 
-# Version 1.4.1
+## Version 1.4.1
 
 * Bumped `alphaify` dependency to avoid pulling in d3 v3 as sub-dependency
 * Added test case for `fitBounds`
 
-# Version 1.4.0
+## Version 1.4.0
 
 * Bump d3 to v4, replaces monolithic d3 dependency with specific d3 submodules.
 
-# Version 1.3.0
+## Version 1.3.0
 
 * Added `clickRadius` prop to allow for customization of hitbox around clicked point
 
-# Version 1.2.0
+## Version 1.2.0
 
 * Add `fitBounds`
 
-# Version 1.1.1
+## Version 1.1.1
 
 * Update mapbox-gl from v0.21.0 (from v0.20.0)
 
-# Version 1.0.0
+## Version 1.0.0
 
-## New Feature: Perspective Mode
+### New Feature: Perspective Mode
 
 * Now supports `bearing` and `pitch` properties, per mapbox-gl-js api
   documentation. These props default to 0 which means that maps will still
@@ -130,12 +175,12 @@ on props that include pitch and bearing will be provided separately.
 In the mean-time, `ViewportMercatorProject` still works
 for non-perspective maps.
 
-## Internal change: Transpiled ES6 code base
+### Internal change: Transpiled ES6 code base
 
 * The code base has been updated to ES6+ and is now transpiled back to ES5
   before being published on npm.
 
-## Breaking Change: Layer Imports
+### Breaking Change: Layer Imports
 
 * The map overlay components (HTMLOverlay, CanvasOverlay, SVGOverlay etc)
   previously had to be imported via their relative source paths (e.g.
@@ -154,7 +199,7 @@ var MapGL = require(`react-map-gl`);
 var SVGOverlay = MapGL.SVGOverlay;
 ```
 
-## Breaking Change: fitBounds has been removed
+### Breaking Change: fitBounds has been removed
 
 The previously exported `fitbounds` function will be made available
 as part of the separate package of utilities that handles coordinate

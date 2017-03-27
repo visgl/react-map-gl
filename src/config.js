@@ -27,7 +27,6 @@ const PREFIX =
 
 export default {
   DEFAULTS: {},
-  MAPBOX_API_ACCESS_TOKEN: null,
   CURSOR: {
     GRABBING: `${PREFIX}grabbing`,
     GRAB: `${PREFIX}grab`,

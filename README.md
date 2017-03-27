@@ -56,7 +56,7 @@ react-map-gl provides an overlay API so you can use the built-in visualization
 overlays, or create your own.
 
 ```js
-import {ScatterplotOverlay} from 'react-map-gl';
+import {ScatterplotOverlay} from 'react-map-gl/overlays';
 
 <MapGL {...viewport}>
   <ScatterplotOverlay
@@ -69,19 +69,25 @@ import {ScatterplotOverlay} from 'react-map-gl';
 ```
 
 Built-in overlays are: `ChoroplethOverlay`, `ScatterplotOverlay`, `DraggablePointsOverlay`,
-`SVGOverlay` and `CanvasOverlay`.
+`SVGOverlay` and `CanvasOverlay`. They are imported using
+```
+import {SVGOverlay, ...} from 'react-map-gl/overlays';
+```
+Remarks:
+* **These overlays are currently not tested with perspective mode, although
+  they should in theory be compatible with perspective enabled viewports in
+  [viewport-mercator-project](https://github.com/uber-common/viewport-mercator-project)**
+* In v1, overlays were exported directly from 'react-map-gl'.
 
-**These overlays are currently not compatible with perspective mode.**
-
-### deck.gl
+### deck.gl Layers
 
 [deck.gl](https://github.com/uber/deck.gl) is a companion module to
 `react-map-gl` that provide a number of classic data visualization overlays
 (scatterplots, choropleths etc) implemented in WebGL. These overlays are
-suitable for large or dynamic data sets, or for use in perspective mode
+suitable for large and/or dynamic data sets, or for use in perspective mode
 applications.
 
-### Third-party
+### Third-party Overlays
 
 Third party overlays can also be created. For example, the
 [heatmap-overlay](https://github.com/vicapow/react-map-gl-heatmap-overlay) uses
@@ -169,22 +175,46 @@ code yourself.
 
 ## Development
 
-Install project dependencies and start watching the examples:
+Install project dependencies and check that the tests run
+
+    npm install
+    npm test
+
+Note on yarn: `yarn` does not appear to be compatible with `mapbox-gl` v0.31,
+in terms of installing correct versions of dependencies needed to run
+test scripts in the folder.
+While this is likely to change, for now it is recommended it is recommended to
+use `npm install` in the root folder of `react-map-gl`. This restriction only
+applies when installing in the root folder; `yarn` is still supported and
+recommended when installing the examples in the `examples` folder.
+
+Then start the main example in `examples/main` by running the shortcut
 
     npm start
 
-You can now open your browser and navigate to `http://localhost:9966/?access_token=TOKEN`,
-where `TOKEN` is a valid Mapbox access token.
+This should open a new tab in your browser with the examples.
+To make the maps load, either:
+* add `?access_token=TOKEN` to the URL where `TOKEN` is a valid Mapbox access token, or
+* set the `MapboxAccessToken` environment variable before running `npm start`
 
 ## Testing
 
-Its difficult to write tests for this component because it uses WebGL.
-There are some tests in the [test folder](./test) but for the most part, as new
-features are added, we typically test drive them by running `npm start` and
-play with the demos.
+* Unit Tests - it is expected that any feature is accompanies by
+  standard unit tests in [test folder](./test).
+
+* Unit Tests in Node: Note that This component uses WebGL, but it still runs
+  under Node.js (using headless-gl and jsdom).
+  This is how the standard `npm test` script runs.
+
+* Unit Tests in Browser - It is also important to run unit tests in the browser,
+  via `npm run test-browser`.
+
+* Manual Testing - In addition, please test drive new and existing features
+  by running `npm start` and manually testing the demos.
 
 ## Contributing
 
-Contributions are welcome. While not necessary, it can be helpful to check with
-maintainers before opening your PR. Also, you will need to complete a short open
-source contribution form before your pull request can be accepted.
+Contributions are welcome. It can be helpful to check with maintainers before
+opening your PR, just open an issue and describe your proposal. Also, be aware
+that you will need to complete a short open source contribution form before your
+pull request can be accepted.
