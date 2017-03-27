@@ -24,8 +24,16 @@ import {getAccessToken} from '../utils/access-token';
 import {getInteractiveLayerIds} from '../utils/style-utils';
 import diffStyles from '../utils/diff-styles';
 
-import mapboxgl, {Point} from 'mapbox-gl';
 import Immutable from 'immutable';
+
+import isBrowser from '../utils/is-browser';
+
+let mapboxgl = null;
+let Point = null;
+if (isBrowser) {
+  mapboxgl = require('mapbox-gl');
+  ({Point} = mapboxgl);
+}
 
 function noop() {}
 
@@ -128,13 +136,13 @@ const defaultProps = {
 
 export default class StaticMap extends PureComponent {
   static supported() {
-    return mapboxgl.supported();
+    return mapboxgl && mapboxgl.supported();
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      isSupported: mapboxgl.supported(),
+      isSupported: mapboxgl && mapboxgl.supported(),
       isDragging: false,
       isHovering: false,
       startDragLngLat: null,
@@ -153,6 +161,10 @@ export default class StaticMap extends PureComponent {
   }
 
   componentDidMount() {
+    if (!mapboxgl) {
+      return;
+    }
+
     const mapStyle = Immutable.Map.isMap(this.props.mapStyle) ?
       this.props.mapStyle.toJS() :
       this.props.mapStyle;
@@ -180,6 +192,10 @@ export default class StaticMap extends PureComponent {
   }
 
   componentWillReceiveProps(newProps) {
+    if (!mapboxgl) {
+      return;
+    }
+
     this._updateStateFromProps(this.props, newProps);
     this._updateMapViewport(this.props, newProps);
     this._updateMapStyle(this.props, newProps);
@@ -191,12 +207,20 @@ export default class StaticMap extends PureComponent {
   }
 
   componentDidUpdate() {
+    if (!mapboxgl) {
+      return;
+    }
+
     // Since Mapbox's map.resize() reads size from DOM
     // we must wait to read size until after render (i.e. here in "didUpdate")
     this._updateMapSize(this.state, this.props);
   }
 
   componentWillUnmount() {
+    if (!mapboxgl) {
+      return;
+    }
+
     if (this._map) {
       this._map.remove();
     }

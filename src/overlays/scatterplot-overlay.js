@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import {PropTypes, Component, createElement} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 
 import Immutable from 'immutable';
@@ -107,11 +107,11 @@ export default class ScatterplotOverlay extends Component {
     const {width, height, globalOpacity} = this.props;
     const pixelRatio = window.devicePixelRatio || 1;
     return (
-      <canvas
-        ref="overlay"
-        width={ width * pixelRatio }
-        height={ height * pixelRatio }
-        style={ {
+      createElement('canvas', {
+        ref: 'overlay',
+        width: width * pixelRatio,
+        height: height * pixelRatio,
+        style: {
           width: `${width}px`,
           height: `${height}px`,
           position: 'absolute',
@@ -119,10 +119,12 @@ export default class ScatterplotOverlay extends Component {
           opacity: globalOpacity,
           left: 0,
           top: 0
-        } }/>
+        }
+      })
     );
   }
 }
 
+ScatterplotOverlay.displayName = 'ScatterplotOverlay';
 ScatterplotOverlay.propTypes = propTypes;
 ScatterplotOverlay.defaultProps = defaultProps;
