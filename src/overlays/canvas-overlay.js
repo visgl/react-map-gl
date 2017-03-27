@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import {PropTypes, Component, createElement} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 import window from 'global/window';
 
@@ -47,6 +47,7 @@ export default class CanvasOverlay extends Component {
     const ctx = canvas.getContext('2d');
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
+
     const mercator = ViewportMercator(this.props);
     this.props.redraw({
       width: this.props.width,
@@ -56,26 +57,29 @@ export default class CanvasOverlay extends Component {
       unproject: mercator.unproject,
       isDragging: this.props.isDragging
     });
+
     ctx.restore();
   }
 
   render() {
     const pixelRatio = window.devicePixelRatio || 1;
     return (
-      <canvas
-        ref="overlay"
-        width={ this.props.width * pixelRatio }
-        height={ this.props.height * pixelRatio }
-        style={ {
+      createElement('canvas', {
+        ref: 'overlay',
+        width: this.props.width * pixelRatio,
+        height: this.props.height * pixelRatio,
+        style: {
           width: `${this.props.width}px`,
           height: `${this.props.height}px`,
           position: 'absolute',
           pointerEvents: 'none',
           left: 0,
           top: 0
-        } }/>
+        }
+      })
     );
   }
 }
 
+CanvasOverlay.displayName = 'CanvasOverlay';
 CanvasOverlay.propTypes = propTypes;

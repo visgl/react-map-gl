@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import {PropTypes, Component, createElement} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 
 const propTypes = {
@@ -26,30 +26,33 @@ const propTypes = {
   height: PropTypes.number.isRequired,
   redraw: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired
-  // TODO: style
 };
 
 export default class HTMLOverlay extends Component {
   render() {
     const {width, height, isDragging} = this.props;
-    const style = {
+    const style = Object.assign({
       position: 'absolute',
       pointerEvents: 'none',
       left: 0,
       top: 0,
       width,
-      height,
-      ...this.props.style
-    };
+      height
+    }, this.props.style);
+
     const mercator = ViewportMercator(this.props);
     const {project, unproject} = mercator;
 
     return (
-      <div ref="overlay" style={ style }>
-        { this.props.redraw({width, height, project, unproject, isDragging}) }
-      </div>
+      createElement('div', {
+        ref: 'overlay',
+        style
+      },
+        this.props.redraw({width, height, project, unproject, isDragging})
+      )
     );
   }
 }
 
+HTMLOverlay.displayName = 'HTMLOverlay';
 HTMLOverlay.propTypes = propTypes;

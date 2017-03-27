@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import {PropTypes, Component, createElement} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 
 const propTypes = {
@@ -34,28 +34,26 @@ const propTypes = {
 export default class SVGOverlay extends Component {
   render() {
     const {width, height, isDragging} = this.props;
-    const style = {
+    const style = Object.assign({
       pointerEvents: 'none',
       position: 'absolute',
       left: 0,
-      top: 0,
-      ...this.props.style
-    };
+      top: 0
+    }, this.props.style);
     const mercator = ViewportMercator(this.props);
     const {project, unproject} = mercator;
 
     return (
-      <svg
-        ref="overlay"
-        width={ width }
-        height={ height }
-        style={ style }>
-
-        { this.props.redraw({width, height, project, unproject, isDragging}) }
-
-      </svg>
+      createElement('svg', {
+        ref: 'overlay',
+        width,
+        height, style
+      },
+        this.props.redraw({width, height, project, unproject, isDragging})
+      )
     );
   }
 }
 
+SVGOverlay.displayName = 'SVGOverlay';
 SVGOverlay.propTypes = propTypes;

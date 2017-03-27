@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import {PropTypes, Component, createElement} from 'react';
 import autobind from '../utils/autobind';
 import config from '../config';
 
@@ -117,42 +117,41 @@ export default class DraggablePointsOverlay extends Component {
     const {points, width, height, isDragging, style} = this.props;
     const mercator = ViewportMercator(this.props);
     return (
-      <svg
-        ref="container"
-        width={ width }
-        height={ height }
-        style={ {
+      createElement('svg', {
+        ref: 'container',
+        width,
+        height,
+        style: Object.assign({
           pointerEvents: 'all',
           position: 'absolute',
           left: 0,
           top: 0,
-          cursor: isDragging ? config.CURSOR.GRABBING : config.CURSOR.GRAB,
-          ...style
-        } }
-        onContextMenu={ this._addPoint }>
-
-        <g style={ {cursor: 'pointer'} }>
-          {
-            points.map((point, index) => {
-              const pixel = mercator.project(this.props.lngLatAccessor(point));
-              return (
-                <g
-                  key={ index }
-                  style={ {pointerEvents: 'all'} }
-                  transform={ svgTransform([{translate: pixel}]) }
-                  onMouseDown={ this._onDragStart.bind(this, point) }>
-                  {
-                    this.props.renderPoint.call(this, point, pixel)
-                  }
-                </g>
-              );
-            })
-          }
-        </g>
-      </svg>
+          cursor: isDragging ? config.CURSOR.GRABBING : config.CURSOR.GRAB
+        }, style),
+        onContextMenu: this._addPoint
+      }, [
+        createElement('g', {
+          style: {cursor: 'pointer'}
+        },
+          points.map((point, index) => {
+            const pixel = mercator.project(this.props.lngLatAccessor(point));
+            return (
+              createElement('g', {
+                key: index,
+                style: {pointerEvents: 'all'},
+                transform: svgTransform([{translate: pixel}]),
+                onMouseDown: this._onDragStart.bind(this, point)
+              },
+                this.props.renderPoint.call(this, point, pixel)
+              )
+            );
+          })
+        )
+      ])
     );
   }
 }
 
+DraggablePointsOverlay.displayName = 'DraggablePointsOverlay';
 DraggablePointsOverlay.propTypes = propTypes;
 DraggablePointsOverlay.defaultProps = defaultProps;

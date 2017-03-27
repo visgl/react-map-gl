@@ -27,8 +27,11 @@ import autobind from '../utils/autobind';
 import EventManager from '../utils/event-manager';
 
 import config from '../config';
-import {mod} from '../utils/transform';
 
+function mod(value, divisor) {
+  const modulus = value % divisor;
+  return modulus < 0 ? divisor + modulus : modulus;
+}
 // MAPBOX LIMITS
 const MAX_PITCH = 60;
 const MAX_ZOOM = 40;
