@@ -1,6 +1,8 @@
 dist/
+dist-es6/
+
 node_modules
 coverage
-dist
-.DS_Store
 npm-debug.log
+yarn-error.log
+.DS_Store
