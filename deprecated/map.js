@@ -509,7 +509,7 @@ export default class Map extends PureComponent {
    // Helper to call props.onChangeViewport
   _callOnChangeViewport(transform, opts = {}) {
     if (this.props.onChangeViewport) {
-      this.props.onChangeViewport({
+      this.props.onChangeViewport(Object.assign({
         latitude: transform.center.lat,
         longitude: mod(transform.center.lng + 180, 360) - 180,
         zoom: transform.zoom,
@@ -519,10 +519,8 @@ export default class Map extends PureComponent {
         isDragging: this.props.isDragging,
         startDragLngLat: this.props.startDragLngLat,
         startBearing: this.props.startBearing,
-        startPitch: this.props.startPitch,
-
-        ...opts
-      });
+        startPitch: this.props.startPitch
+      }, opts));
     }
   }
 
@@ -657,7 +655,9 @@ export default class Map extends PureComponent {
 
   render() {
     const {className, width, height, style} = this.props;
-    const mapStyle = {...style, width, height, cursor: this._getCursor()};
+    const mapStyle = Object.assign(style, {
+      width, height, cursor: this._getCursor()
+    });
 
     let content = [
       <div key="map" ref="mapboxMap" style={mapStyle} className={className}/>,

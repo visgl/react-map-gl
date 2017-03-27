@@ -1,8 +1,9 @@
-# Version 3.0.0-alpha.2
+# Version 3.0.0-alpha.4 - More transpile/export fixes
+# Version 3.0.0-alpha.3 - Transpile/export fixes
+# Version 3.0.0-alpha.3 - Remove JSX from overlays
+# Version 3.0.0-alpha.2 - Hide map when pitch > 60.
 
-* NEW: Allows map display to be disabled when pitch > 60.
-
-# Version 3.0.0-alpha.1
+# Version 3.0.0-alpha.1 - Major New Rlease
 
 * NEW: Supports "tree-shaking" in Webpack2 and Rollup - adds new package.json
   `module` field that points to files with preserved ES6 import/exports.
