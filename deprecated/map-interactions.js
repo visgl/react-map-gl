@@ -326,7 +326,7 @@ export default class MapInteractions extends PureComponent {
       onContextMenu: this._onMouseDown,
       onWheel: this._onWheel,
       style: {width, height, position: 'relative'}
-    }, ...this.props.children);
+    }, this.props.children);
   }
 }
 
