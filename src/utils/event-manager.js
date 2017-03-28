@@ -79,7 +79,8 @@ export default class EventManager {
     onTouchTap = noop,
     onZoom = noop,
     onZoomEnd = noop,
-    mapTouchToMouse = true
+    mapTouchToMouse = true,
+    pressKeyToRotate = false
   } = {}) {
     onTouchStart = onTouchStart || (mapTouchToMouse && onMouseDown);
     onTouchDrag = onTouchDrag || (mapTouchToMouse && onMouseDrag);
@@ -88,6 +89,9 @@ export default class EventManager {
     onTouchTap = onTouchTap || (mapTouchToMouse && onMouseClick);
 
     this._canvas = canvas;
+
+    // Public member can be changed by app
+    this.pressKeyToRotate = pressKeyToRotate;
 
     this.state = {
       didDrag: false,
@@ -159,6 +163,7 @@ export default class EventManager {
     document.addEventListener('mousemove', this._onMouseDrag, false);
     document.addEventListener('mouseup', this._onMouseUp, false);
   }
+
   _onTouchStart(event) {
     const pos = this._getTouchPos(event);
     this.setState({
@@ -176,7 +181,11 @@ export default class EventManager {
     const pos = this._getMousePos(event);
     this.setState({pos, didDrag: true});
     const {startPos} = this.state;
-    if (this.state.isFunctionKeyPressed) {
+
+    const {isFunctionKeyPressed} = this.state;
+    const rotate = this.pressKeyToRotate ? isFunctionKeyPressed : !isFunctionKeyPressed;
+
+    if (rotate) {
       this.callbacks.onMouseRotate({pos, startPos});
     } else {
       this.callbacks.onMouseDrag({pos, startPos});
@@ -186,7 +195,11 @@ export default class EventManager {
   _onTouchDrag(event) {
     const pos = this._getTouchPos(event);
     this.setState({pos, didDrag: true});
-    if (this.state.isFunctionKeyPressed) {
+
+    const {isFunctionKeyPressed} = this.state;
+    const rotate = this.pressKeyToRotate ? isFunctionKeyPressed : !isFunctionKeyPressed;
+
+    if (rotate) {
       const {startPos} = this.state;
       this.callbacks.onTouchRotate({pos, startPos});
     } else {

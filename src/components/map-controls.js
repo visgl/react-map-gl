@@ -92,7 +92,13 @@ const propTypes = {
 
   /* Hooks to get mapbox help with calculations. TODO - replace with Viewport */
   unproject: PropTypes.func,
-  getLngLatAtPoint: PropTypes.func
+  getLngLatAtPoint: PropTypes.func,
+
+  /**
+    * True means key must be pressed to rotate instead of pan
+    * false to means key must be pressed to pan
+    */
+  pressKeyToRotate: PropTypes.bool
 };
 
 const defaultProps = {
@@ -108,7 +114,9 @@ const defaultProps = {
   minPitch: 0,
 
   unproject: null,
-  getLngLatAtPoint: null
+  getLngLatAtPoint: null,
+
+  pressKeyToRotate: true
 };
 
 export default class MapControls extends PureComponent {
@@ -151,7 +159,8 @@ export default class MapControls extends PureComponent {
       onTouchTap: this._onTouchTap,
       onZoom: this._onZoom,
       onZoomEnd: this._onZoomEnd,
-      mapTouchToMouse: true
+      mapTouchToMouse: true,
+      pressKeyToRotate: this.props.pressKeyToRotate
     });
   }
 
