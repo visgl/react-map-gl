@@ -20,8 +20,6 @@
 
 import ReactDOM from 'react-dom';
 import React, {Component} from 'react';
-import window from 'global/window';
-import document from 'global/document';
 
 import View from './view';
 
@@ -42,4 +40,5 @@ export default class App extends Component {
   }
 }
 
+/* global document, window */
 ReactDOM.render(<App/>, document.body.appendChild(document.createElement('div')));

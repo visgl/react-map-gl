@@ -18,13 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+/* global window */
 import React, {PropTypes, Component} from 'react';
 import MapGL, {SVGOverlay, CanvasOverlay, autobind} from 'react-map-gl';
 
 import {scaleOrdinal, schemeCategory10} from 'd3-scale';
 import {rgb} from 'd3-color';
 
-import window from 'global/window';
 const windowAlert = window.alert;
 
 import alphaify from '../alphaify';
