@@ -24,8 +24,7 @@ import {scaleLinear} from 'd3-scale';
 import {geoPath, geoTransform} from 'd3-geo';
 import Immutable from 'immutable';
 
-import {window} from '../utils/globals'
-    ;
+import {window} from '../utils/globals';
 
 const propTypes = {
   width: PropTypes.number.isRequired,

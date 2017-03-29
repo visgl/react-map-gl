@@ -25,8 +25,7 @@ import config from '../config';
 import ViewportMercator from 'viewport-mercator-project';
 
 import Immutable from 'immutable';
-import {document} from '../utils/globals'
-    ;
+import {document} from '../utils/globals';
 
 function noop() {}
 

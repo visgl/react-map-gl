@@ -21,8 +21,7 @@ import {PropTypes, Component, createElement} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 
 import Immutable from 'immutable';
-import {window} from '../utils/globals'
-    ;
+import {window} from '../utils/globals';
 
 function round(x, n) {
   const tenN = Math.pow(10, n);
