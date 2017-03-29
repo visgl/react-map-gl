@@ -20,8 +20,8 @@
 
 import React, {PropTypes, Component} from 'react';
 import MapGL, {autobind} from 'react-map-gl';
+/* global window */
 
-import window from 'global/window';
 const windowAlert = window.alert;
 
 const propTypes = {

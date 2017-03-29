@@ -17,12 +17,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
 import {PropTypes, Component, createElement} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
 
 import Immutable from 'immutable';
-import window from 'global/window';
+import {window} from '../utils/globals';
 
 function round(x, n) {
   const tenN = Math.pow(10, n);

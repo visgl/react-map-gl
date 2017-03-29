@@ -23,7 +23,7 @@ import autobind from 'react-autobind';
 import {InteractiveMap, ScatterplotOverlay} from 'react-map-gl';
 import DeckGL, {ArcLayer} from 'deck.gl';
 import Immutable from 'immutable';
-import window from 'global/window';
+/* global window */
 
 // San Francisco
 import SF_FEATURE from './data/feature-example-sf.json';

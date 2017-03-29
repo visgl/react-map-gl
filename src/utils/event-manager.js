@@ -21,9 +21,8 @@
 // Portions of the code below originally from:
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
 
-import window from 'global/window';
-import document from 'global/document';
 import autobind from '../utils/autobind';
+import {window, document} from './globals';
 
 function noop() {}
 

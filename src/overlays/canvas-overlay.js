@@ -20,7 +20,7 @@
 
 import {PropTypes, Component, createElement} from 'react';
 import ViewportMercator from 'viewport-mercator-project';
-import window from 'global/window';
+import {window} from '../utils/globals';
 
 const propTypes = {
   width: PropTypes.number.isRequired,

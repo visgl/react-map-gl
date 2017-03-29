@@ -17,12 +17,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
+/* global window */
 import React, {PropTypes, Component} from 'react';
 import MapGL, {CanvasOverlay, SVGOverlay, autobind} from 'react-map-gl';
 
 import {randomNormal} from 'd3-random';
 import {range} from 'd3-array';
-import window from 'global/window';
 import Immutable from 'immutable';
 
 import alphaify from '../alphaify';
