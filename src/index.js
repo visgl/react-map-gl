@@ -30,6 +30,10 @@ export {default as MapGL} from './components/interactive-map';
 
 // Utilities
 // export {default as fitBounds} from './utils/fit-bounds';
+
+// TODO - should not be exposed
+export {default as autobind} from './utils/autobind';
+
 // TODO - should these be exported or better keep them as internal or separate module?
 // If exported, should we document them?
 // export {default as EventManager} from './utils/event-manager';

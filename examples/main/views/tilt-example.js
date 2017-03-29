@@ -18,10 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+/* window */
 import React, {PropTypes, Component} from 'react';
 import MapGL, {autobind} from 'react-map-gl';
 import Immutable from 'immutable';
-import window from 'global/window';
 
 // San Francisco
 import SF_FEATURE from '../data/feature-example-sf.json';

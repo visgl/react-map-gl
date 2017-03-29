@@ -22,8 +22,7 @@
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
 import {PropTypes, PureComponent, createElement} from 'react';
 import autobind from '../utils/autobind';
-import document from 'global/document';
-import window from 'global/window';
+import {document, window} from '../utils/globals';
 
 function noop() {}
 
