@@ -199,7 +199,7 @@ To make the maps load, either:
 
 ## Testing
 
-* Unit Tests - it is expected that any feature is accompanies by
+* Unit Tests - it is expected that any feature is accompanied by
   standard unit tests in [test folder](./test).
 
 * Unit Tests in Node: Note that This component uses WebGL, but it still runs
