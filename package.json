@@ -22,11 +22,10 @@
     "postinstall.js"
   ],
   "scripts": {
-    "start": "(cd examples/custom-interactions && npm run start-local)",
+    "start": "(cd examples/custom-interactions && (path-exists node_modules || npm i) && npm run start-local)",
     "build": "npm run clean && npm run build-es5 && npm run build-es6",
     "build-es5": "mkdir -p dist && babel src --out-dir dist --plugins=transform-es2015-modules-commonjs --source-maps inline",
     "build-es6": "mkdir -p dist-es6 && babel src --out-dir dist-es6 --source-maps inline",
-    "clean": "rm -fr dist/* dist-es6/*",
     "clean": "rm -fr dist/* dist-es6/*",
     "lint": "eslint src example test",
     "test": "npm run lint && node test/node.js",
@@ -56,6 +55,7 @@
     "glob": "^7.1.1",
     "jsdom": "~9.9.1",
     "module-alias": "^2.0.0",
+    "path-exists": "^3.0.0",
     "pre-commit": "^1.2.2",
     "react": "^15.4.0",
     "react-addons-test-utils": "^15.4.0",
