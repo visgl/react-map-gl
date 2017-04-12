@@ -38,7 +38,6 @@
     "bowser": "^1.2.0",
     "immutable": "*",
     "mapbox-gl": "0.32.1",
-    "path-exists": "^3.0.0",
     "viewport-mercator-project": "^4.0.0-alpha.5"
   },
   "devDependencies": {
@@ -56,6 +55,7 @@
     "glob": "^7.1.1",
     "jsdom": "~9.9.1",
     "module-alias": "^2.0.0",
+    "path-exists": "^3.0.0",
     "pre-commit": "^1.2.2",
     "react": "^15.4.0",
     "react-addons-test-utils": "^15.4.0",
