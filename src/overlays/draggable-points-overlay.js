@@ -18,7 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {PropTypes, Component, createElement} from 'react';
+import {Component, createElement} from 'react';
+import PropTypes from 'prop-types';
 import autobind from '../utils/autobind';
 import config from '../config';
 

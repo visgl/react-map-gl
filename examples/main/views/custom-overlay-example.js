@@ -19,7 +19,8 @@
 // THE SOFTWARE.
 
 /* global window */
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import MapGL, {CanvasOverlay, SVGOverlay, autobind} from 'react-map-gl';
 
 import {randomNormal} from 'd3-random';

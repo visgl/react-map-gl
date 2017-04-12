@@ -17,7 +17,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {PropTypes, Component, createElement} from 'react';
+import {Component, createElement} from 'react';
+import PropTypes from 'prop-types';
 import ViewportMercator from 'viewport-mercator-project';
 
 import Immutable from 'immutable';

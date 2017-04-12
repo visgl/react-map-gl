@@ -38,6 +38,7 @@
     "bowser": "^1.2.0",
     "immutable": "*",
     "mapbox-gl": "0.32.1",
+    "prop-types": "^15.5.7",
     "viewport-mercator-project": "^4.0.0-alpha.5"
   },
   "devDependencies": {
