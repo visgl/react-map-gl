@@ -1,4 +1,5 @@
-import {PureComponent, PropTypes, createElement} from 'react';
+import {PureComponent, createElement} from 'react';
+import PropTypes from 'prop-types';
 import autobind from '../utils/autobind';
 
 import StaticMap from './static-map';

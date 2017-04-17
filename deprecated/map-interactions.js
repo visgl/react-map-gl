@@ -20,7 +20,8 @@
 
 // Portions of the code below originally from:
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
-import {PropTypes, PureComponent, createElement} from 'react';
+import {PureComponent, createElement} from 'react';
+import PropTypes from 'prop-types';
 import autobind from '../utils/autobind';
 import {document, window} from '../utils/globals';
 
