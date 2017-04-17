@@ -19,7 +19,8 @@
 // THE SOFTWARE.
 
 /* global window */
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import MapGL, {SVGOverlay, CanvasOverlay, autobind} from 'react-map-gl';
 
 import {scaleOrdinal, schemeCategory10} from 'd3-scale';

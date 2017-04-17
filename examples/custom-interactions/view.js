@@ -18,7 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import autobind from 'react-autobind';
 import {InteractiveMap, ScatterplotOverlay} from 'react-map-gl';
 import DeckGL, {ArcLayer} from 'deck.gl';
