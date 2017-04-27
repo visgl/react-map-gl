@@ -91,10 +91,6 @@ const propTypes = {
   /** Pitch when current perspective drag operation started */
   startPitch: PropTypes.number,
 
-  /* Hooks to get mapbox help with calculations. TODO - replace with Viewport */
-  unproject: PropTypes.func,
-  getLngLatAtPoint: PropTypes.func,
-
   /**
     * True means key must be pressed to rotate instead of pan
     * false to means key must be pressed to pan
@@ -113,9 +109,6 @@ const defaultProps = {
   minZoom: 0,
   maxPitch: MAX_PITCH,
   minPitch: 0,
-
-  unproject: null,
-  getLngLatAtPoint: null,
 
   pressKeyToRotate: true
 };
@@ -241,23 +234,16 @@ export default class MapControls extends PureComponent {
 
   _unproject(pos) {
     const viewport = new PerspectiveMercatorViewport(this.props);
-    const lngLat = this.props.unproject ?
-      this.props.unproject(pos) :
-      viewport.unproject(pos, {topLeft: false});
-    return lngLat;
+    return viewport.unproject(pos, {topLeft: false});
   }
 
   // Calculate a new lnglat based on pixel dragging position
   // TODO - We should have a mapbox-independent implementation of panning
   // Panning calculation is currently done using an undocumented mapbox function
   _calculateNewLngLat({startDragLngLat, pos, startPos}) {
-    const viewport = new PerspectiveMercatorViewport(Object.assign({}, this.props));
+    const viewport = new PerspectiveMercatorViewport(this.props);
 
-    const lngLat = this.props.getLngLatAtPoint ?
-      this.props.getLngLatAtPoint({lngLat: startDragLngLat, pos}) :
-      viewport.getLocationAtPoint({lngLat: startDragLngLat, pos});
-
-    return lngLat;
+    return viewport.getLocationAtPoint({lngLat: startDragLngLat, pos});
   }
 
   // Calculates new zoom
@@ -279,8 +265,8 @@ export default class MapControls extends PureComponent {
     if (yDelta > 0) {
       // Dragging downwards, gradually decrease pitch
       if (Math.abs(this.props.height - startPos[1]) > PITCH_MOUSE_THRESHOLD) {
-        const scale = yDelta / (this.props.height - startPos[1]) * PITCH_ACCEL;
-        pitch = (1 - scale) * startPitch;
+        const scale = yDelta / (this.props.height - startPos[1]);
+        pitch = (1 - scale * PITCH_ACCEL) * startPitch;
       }
     } else if (yDelta < 0) {
       // Dragging upwards, gradually increase pitch
