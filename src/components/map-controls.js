@@ -97,8 +97,7 @@ export default class MapControls extends PureComponent {
       onTouchTap: this._onTouchTap,
       onWheel: this._onWheel,
       onWheelEnd: this._onWheelEnd,
-      mapTouchToMouse: true,
-      pressKeyToRotate: this.props.pressKeyToRotate
+      mapTouchToMouse: true
     });
   }
 
