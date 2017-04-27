@@ -240,7 +240,7 @@ export default class MapControls extends PureComponent {
   }
 
   _unproject(pos) {
-    const viewport = new PerspectiveMercatorViewport(Object.assign({}, this.props));
+    const viewport = new PerspectiveMercatorViewport(this.props);
     const lngLat = this.props.unproject ?
       this.props.unproject(pos) :
       viewport.unproject(pos, {topLeft: false});
@@ -251,10 +251,7 @@ export default class MapControls extends PureComponent {
   // TODO - We should have a mapbox-independent implementation of panning
   // Panning calculation is currently done using an undocumented mapbox function
   _calculateNewLngLat({startDragLngLat, pos, startPos}) {
-    const viewport = new PerspectiveMercatorViewport(Object.assign({}, this.props, {
-      longitude: startDragLngLat[0],
-      latitude: startDragLngLat[1]
-    }));
+    const viewport = new PerspectiveMercatorViewport(Object.assign({}, this.props));
 
     const lngLat = this.props.getLngLatAtPoint ?
       this.props.getLngLatAtPoint({lngLat: startDragLngLat, pos}) :
@@ -282,8 +279,8 @@ export default class MapControls extends PureComponent {
     if (yDelta > 0) {
       // Dragging downwards, gradually decrease pitch
       if (Math.abs(this.props.height - startPos[1]) > PITCH_MOUSE_THRESHOLD) {
-        const scale = yDelta / (this.props.height - startPos[1]);
-        pitch = (1 - scale) * PITCH_ACCEL * startPitch;
+        const scale = yDelta / (this.props.height - startPos[1]) * PITCH_ACCEL;
+        pitch = (1 - scale) * startPitch;
       }
     } else if (yDelta < 0) {
       // Dragging upwards, gradually increase pitch
@@ -385,8 +382,18 @@ export default class MapControls extends PureComponent {
   }
 
   _onZoom({pos, scale}) {
+    // Make sure we zoom around the current mouse position rather than map center
+    const aroundLngLat = this._unproject(pos);
+
+    const zoom = this._calculateNewZoom({relativeScale: scale});
+
+    const zoomedViewport = new PerspectiveMercatorViewport(Object.assign({}, this.props, {zoom}));
+    const [longitude, latitude] = zoomedViewport.getLocationAtPoint({lngLat: aroundLngLat, pos});
+
     this._updateViewport({
-      zoom: this._calculateNewZoom({relativeScale: scale}),
+      zoom,
+      longitude,
+      latitude,
       isDragging: true
     });
   }
