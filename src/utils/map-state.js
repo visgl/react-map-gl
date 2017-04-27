@@ -40,57 +40,48 @@ const propTypes = {
   minPitch: PropTypes.number,
 
   /**
-    * Required to calculate the mouse projection after the first click event
-    * during dragging. Where the map is depends on where you first clicked on
-    * the map.
+    * Required to calculate the mouse projection during panning.
+    * The point on map being grabbed when the operation first started.
     */
-  startDragLngLat: PropTypes.arrayOf(PropTypes.number),
-  /** Bearing when current perspective drag operation started */
+  startPanLngLat: PropTypes.arrayOf(PropTypes.number),
+  /**
+    * Required to calculate the mouse projection during zooming.
+    * Center of the zoom when the operation first started.
+    */
+  startZoomLngLat: PropTypes.arrayOf(PropTypes.number),
+  /** Bearing when current perspective rotate operation started */
   startBearing: PropTypes.number,
-  /** Pitch when current perspective drag operation started */
-  startPitch: PropTypes.number
+  /** Pitch when current perspective rotate operation started */
+  startPitch: PropTypes.number,
+  /** Zoom when current zoom operation started */
+  startZoom: PropTypes.number
 };
 
 export default class MapState {
 
   constructor({
-    /** The width of the map */
+    /** Mapbox viewport properties */
     width,
-    /** The height of the map */
     height,
-    /** The latitude of the center of the map. */
     latitude,
-    /** The longitude of the center of the map. */
     longitude,
-    /** The tile zoom level of the map. */
     zoom,
-    /** Specify the bearing of the viewport */
     bearing = 0,
-    /** Specify the pitch of the viewport */
     pitch = 0,
-    /**
-      * Specify the altitude of the viewport camera
-      * Unit: map heights, default 1.5
-      * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
-      */
     altitude = 1.5,
 
-    /** Constraints */
+    /** Viewport constraints */
     maxZoom = MAX_ZOOM,
     minZoom = 0,
     maxPitch = MAX_PITCH,
     minPitch = 0,
 
-    /**
-      * Required to calculate the mouse projection after the first click event
-      * during dragging. Where the map is depends on where you first clicked on
-      * the map.
-      */
-    startDragLngLat,
-    /** Bearing when current perspective drag operation started */
+    /** Interaction states */
+    startPanLngLat,
+    startZoomLngLat,
     startBearing,
-    /** Pitch when current perspective drag operation started */
-    startPitch
+    startPitch,
+    startZoom
   } = {}) {
     this.props = {
       width,
@@ -105,7 +96,7 @@ export default class MapState {
       minZoom,
       maxPitch,
       minPitch,
-      startDragLngLat,
+      startPanLngLat,
       startBearing,
       startPitch
     };
@@ -145,9 +136,9 @@ export default class MapState {
   }
 
   // Calculate a new lnglat based on pixel dragging position
-  _calculateNewLngLat({startDragLngLat, pos, startPos}) {
+  _calculateNewLngLat({startPanLngLat, pos}) {
     const viewport = new PerspectiveMercatorViewport(this.props);
-    return viewport.getLocationAtPoint({lngLat: startDragLngLat, pos});
+    return viewport.getLocationAtPoint({lngLat: startPanLngLat, pos});
   }
 
   // Calculates new zoom
@@ -175,20 +166,32 @@ export default class MapState {
     };
   }
 
+  /* Public API */
+
+  /**
+   * Start panning
+   * @param {[Number, Number]} pos - position on screen where the pointer grabs
+   */
   panStart({pos}) {
     return this._updateViewport({
-      startDragLngLat: this._unproject(pos)
+      startPanLngLat: this._unproject(pos)
     });
   }
 
+  /**
+   * Pan
+   * @param {[Number, Number]} pos - position on screen where the pointer is
+   * @param {[Number, Number], optional} startPos - where the pointer grabbed at
+   *   the start of the operation. Must be supplied of `panStart()` was not called
+   */
   pan({pos, startPos}) {
-    const startDragLngLat = this.props.startDragLngLat || this._unproject(startPos);
+    const startPanLngLat = this.props.startPanLngLat || this._unproject(startPos);
 
     // take the start lnglat and put it where the mouse is down.
-    assert(startDragLngLat, '`startDragLngLat` prop is required ' +
-      'for mouse drag behavior to calculate where to position the map.');
+    assert(startPanLngLat, '`startPanLngLat` prop is required ' +
+      'for mouse pan behavior to calculate where to position the map.');
 
-    const [longitude, latitude] = this._calculateNewLngLat({startDragLngLat, pos});
+    const [longitude, latitude] = this._calculateNewLngLat({startPanLngLat, pos});
 
     return this._updateViewport({
       longitude,
@@ -196,12 +199,20 @@ export default class MapState {
     });
   }
 
+  /**
+   * End panning
+   * Must call if `panStart()` was called
+   */
   panEnd() {
     return this._updateViewport({
-      startDragLngLat: null
+      startPanLngLat: null
     });
   }
 
+  /**
+   * Start rotating
+   * @param {[Number, Number]} pos - position on screen where the center is
+   */
   rotateStart({pos}) {
     return this._updateViewport({
       startBearing: this.props.bearing,
@@ -209,16 +220,26 @@ export default class MapState {
     });
   }
 
+  /**
+   * Rotate
+   * @param {Number} xDeltaScale - a number between [-1, 1] specifying the
+   *   change to bearing.
+   * @param {Number} yDeltaScale - a number between [-1, 1] specifying the
+   *   change to pitch. -1 sets to minPitch and 1 sets to maxPitch.
+   */
   rotate({xDeltaScale, yDeltaScale}) {
     assert(xDeltaScale >= -1 && xDeltaScale <= 1 &&
       yDeltaScale >= -1 && yDeltaScale <= 1,
       '`xDeltaScale` and `yDeltaScale` must be numbers between [-1, 1]');
 
-    const {startBearing, startPitch} = this.props;
-    assert(typeof startBearing === 'number',
-      '`startBearing` prop is required for mouse rotate behavior');
-    assert(typeof startPitch === 'number',
-      '`startPitch` prop is required for mouse rotate behavior');
+    let {startBearing, startPitch} = this.props;
+
+    if (!Number.isFinite(startBearing)) {
+      startBearing = this.props.bearing;
+    }
+    if (!Number.isFinite(startPitch)) {
+      startPitch = this.props.pitch;
+    }
 
     const {pitch, bearing} = this._calculateNewPitchAndBearing({
       xDeltaScale,
@@ -233,6 +254,10 @@ export default class MapState {
     });
   }
 
+  /**
+   * End rotating
+   * Must call if `rotateStart()` was called
+   */
   rotateEnd() {
     return this._updateViewport({
       startBearing: null,
@@ -240,20 +265,44 @@ export default class MapState {
     });
   }
 
-  zoomStart() {
-    return this;
+  /**
+   * Start zooming
+   * @param {[Number, Number]} pos - position on screen where the center is
+   */
+  zoomStart({pos}) {
+    return this._updateViewport({
+      startZoomLngLat: this._unproject(pos),
+      startZoom: this.props.zoom
+    });
   }
 
-  zoom({pos, scale}) {
+  /**
+   * Zoom
+   * @param {[Number, Number]} pos - position on screen where the current center is
+   * @param {[Number, Number]} startPos - the center position at
+   *   the start of the operation. Must be supplied of `zoomStart()` was not called
+   * @param {Number} scale - a number between [0, 1] specifying the accumulated
+   *   relative scale.
+   */
+  zoom({pos, startPos, scale}) {
     assert(scale > 0, '`scale` must be a positive number');
 
     // Make sure we zoom around the current mouse position rather than map center
-    const aroundLngLat = this._unproject(pos);
+    const startZoomLngLat = this.props.startZoomLngLat || this._unproject(startPos);
+    let {startZoom} = this.props;
 
-    const zoom = this._calculateNewZoom({scale});
+    if (!Number.isFinite(startZoom)) {
+      startZoom = this.props.zoom;
+    }
+
+    // take the start lnglat and put it where the mouse is down.
+    assert(startZoomLngLat, '`startZoomLngLat` prop is required ' +
+      'for zoom behavior to calculate where to position the map.');
+
+    const zoom = this._calculateNewZoom({scale, startZoom});
 
     const zoomedViewport = new PerspectiveMercatorViewport(Object.assign({}, this.props, {zoom}));
-    const [longitude, latitude] = zoomedViewport.getLocationAtPoint({lngLat: aroundLngLat, pos});
+    const [longitude, latitude] = zoomedViewport.getLocationAtPoint({lngLat: startZoomLngLat, pos});
 
     return this._updateViewport({
       zoom,
@@ -262,8 +311,15 @@ export default class MapState {
     });
   }
 
+  /**
+   * End zooming
+   * Must call if `zoomStart()` was called
+   */
   zoomEnd() {
-    return this;
+    return this._updateViewport({
+      startZoomLngLat: null,
+      startZoom: null
+    });
   }
 
 }

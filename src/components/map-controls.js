@@ -87,14 +87,9 @@ export default class MapControls extends PureComponent {
 
     this._eventManager = new EventManager(this.refs.canvas, {
       onMouseDown: this._onMouseDown,
-      // onMouseMove: is bound only after a mouse down is detected
       onMouseDrag: this._onMouseDrag,
       onMouseUp: this._onMouseUp,
-      onTouchStart: this._onTouchStart,
-      onTouchDrag: this._onTouchDrag,
       onTouchRotate: this._onTouchRotate,
-      onTouchEnd: this._onTouchEnd,
-      onTouchTap: this._onTouchTap,
       onWheel: this._onWheel,
       onWheelEnd: this._onWheelEnd,
       mapTouchToMouse: true
@@ -125,24 +120,8 @@ export default class MapControls extends PureComponent {
     return this.props.onChangeViewport(Object.assign({isDragging}, ...opts));
   }
 
-  _onTouchStart(opts) {
-    this._onMouseDown(opts);
-  }
-
-  _onTouchDrag(opts) {
-    this._onMouseDrag(opts);
-  }
-
   _onTouchRotate(opts) {
     this._onMouseRotate(opts);
-  }
-
-  _onTouchEnd(opts) {
-    this._onMouseUp(opts);
-  }
-
-  _onTouchTap(opts) {
-    this._onMouseClick(opts);
   }
 
   _onMouseDown({pos}) {
@@ -205,7 +184,7 @@ export default class MapControls extends PureComponent {
       scale = 1 / scale;
     }
 
-    const mapState = new MapState(this.props).zoom({pos, scale});
+    const mapState = new MapState(this.props).zoom({pos, startPos: pos, scale});
     this._updateViewport(mapState.props, {isDragging: true});
   }
 
