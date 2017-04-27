@@ -142,8 +142,12 @@ export default class MapState {
   }
 
   // Calculates new zoom
-  _calculateNewZoom({scale}) {
-    return this.props.zoom + Math.log2(scale);
+  _calculateNewZoom({scale, startZoom}) {
+    const {maxZoom, minZoom} = this.props;
+    let zoom = startZoom + Math.log2(scale);
+    zoom = zoom > maxZoom ? maxZoom : zoom;
+    zoom = zoom < minZoom ? minZoom : zoom;
+    return zoom;
   }
 
   // Calculates a new pitch and bearing from a position (coming from an event)
