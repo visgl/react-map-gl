@@ -39,7 +39,7 @@
     "immutable": "*",
     "mapbox-gl": "0.32.1",
     "prop-types": "^15.5.7",
-    "viewport-mercator-project": "^4.0.0-alpha.5"
+    "viewport-mercator-project": "^4.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",
