@@ -27,27 +27,7 @@ const BASE_CONFIG = {
   },
 
   module: {
-    rules: [
-      {
-        enforce: 'pre',
-        test: /\.js$/,
-        loader: 'remove-flow-types-loader',
-        include: [/node_modules\/mapbox-gl\/js/]
-      },
-      {
-        // Compile ES2015 using buble
-        test: /\.js$/,
-        loader: 'buble-loader',
-        include: [/src/, /test/],
-        options: {
-          objectAssign: 'Object.assign',
-          transforms: {
-            dangerousForOf: true,
-            modules: false
-          }
-        }
-      }
-    ]
+    rules: []
   },
 
   plugins: [
@@ -82,7 +62,10 @@ const BROWSER_CONFIG = Object.assign({}, BASE_CONFIG, {
 
   resolve: {
     alias: {
+      // Build tests against source rather than an installed version of react-map-gl
       'react-map-gl': resolve('./src'),
+      // Use mapbox prebuilt
+      'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js'),
       webworkify: 'webworkify-webpack-dropin'
     }
   },
