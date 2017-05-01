@@ -67,8 +67,8 @@
     "tap-browser-color": "^0.1.2",
     "tape": "^4.5.1",
     "tape-catch": "^1.0.4",
-    "webpack": "^2.2.0",
-    "webpack-dev-server": "^2.2.0",
+    "webpack": "^2.4.0",
+    "webpack-dev-server": "^2.4.0",
     "webworkify-webpack-dropin": "^1.1.9"
   },
   "peerDependencies": {
