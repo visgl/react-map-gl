@@ -2,6 +2,12 @@
 
 ## Version 3.0.0 (Alpha)
 
+### Version 3.0.0-alpha.6 - Bug fixes
+
+* FIX: Viewport jump at start of rotation with pitch
+* FIX: Viewport jump at start of pan with pitch
+* FIX: Zoom around mouse position
+
 ### Version 3.0.0-alpha.5 - Add `pressKeyToRotate` prop on `MapControls`
 ### Version 3.0.0-alpha.4 - More transpile/export fixes
 ### Version 3.0.0-alpha.3 - Transpile/export fixes
