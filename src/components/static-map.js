@@ -472,6 +472,7 @@ export default class StaticMap extends PureComponent {
           }),
           createElement('div', {
             key: 'map-overlays',
+            // Same as interactive map's overlay container
             className: 'overlays',
             style: overlayContainerStyle,
             children: this.props.children

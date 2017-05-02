@@ -90,14 +90,15 @@ export default class InteractiveMap extends PureComponent {
           ref: map => {
             this._map = map;
           },
-          children: mapVisible && this.props.children
+          children: null
         })),
         createElement('div', {
-          key: 'map-children',
-          style: {position: 'absolute', left: 0, top: 0}
-        },
-          !mapVisible && this.props.children
-        )
+          key: 'map-overlays',
+          // Same as static map's overlay container
+          className: 'overlays',
+          style: {position: 'absolute', left: 0, top: 0},
+          children: this.props.children
+        })
       ])
     );
   }
