@@ -2,6 +2,11 @@
 
 ## Version 3.0.0 (Alpha)
 
+### Version 3.0.0-alpha.7 - Bug fixes
+
+* FIX: Prop comparison bug in static map
+* FIX: Children get unmounted/re-mounted when the map is shown/hidden
+
 ### Version 3.0.0-alpha.6 - Bug fixes
 
 * FIX: Viewport jump at start of rotation with pitch
