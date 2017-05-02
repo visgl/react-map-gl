@@ -94,6 +94,7 @@ export default class InteractiveMap extends PureComponent {
         })),
         createElement('div', {
           key: 'map-overlays',
+          // Same as static map's overlay container
           className: 'overlays',
           style: {position: 'absolute', left: 0, top: 0},
           children: this.props.children
