@@ -2,6 +2,8 @@
 
 ## Version 3.0.0 (Alpha)
 
+### Version 3.0.0-alpha.8 - Fix server side rendering of InteractiveMap
+
 ### Version 3.0.0-alpha.7 - Bug fixes
 
 * FIX: Prop comparison bug in static map
