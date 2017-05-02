@@ -5,12 +5,6 @@ import autobind from '../utils/autobind';
 import StaticMap from './static-map';
 import MapControls from './map-controls';
 
-import mapboxgl from 'mapbox-gl';
-import {LngLat, Point} from 'mapbox-gl';
-// import {mod, cloneTransform} from '../utils/transform';
-const mod = 0;
-const cloneTransform = 0;
-
 const propTypes = {
   displayConstraints: PropTypes.object.isRequired
 };
@@ -24,7 +18,7 @@ const defaultProps = {
 export default class InteractiveMap extends PureComponent {
 
   static supported() {
-    return mapboxgl.supported();
+    return StaticMap.supported();
   }
 
   constructor(props) {
@@ -34,24 +28,7 @@ export default class InteractiveMap extends PureComponent {
 
   // TODO - Remove once Viewport alternative is good enough
   _getMap() {
-    return this._map._map;
-  }
-
-  // Uses map to get position for panning
-  // TODO - Remove once Viewport alternative is good enough
-  _getLngLatAtPoint({lngLat, pos}) {
-    // assert(point);
-    const map = this._getMap();
-    const transform = cloneTransform(map.transform);
-    const mapboxLngLat = new LngLat(...lngLat);
-    const mapboxPoint = new Point(...pos);
-    // const around = unprojectFromTransform(transform, mapboxPoint);
-    transform.setLocationAtPoint(mapboxLngLat, mapboxPoint);
-    const lngLatResult = [
-      mod(transform.center.lng + 180, 360) - 180,
-      transform.center.lat
-    ];
-    return lngLatResult;
+    return this._map._getMap();
   }
 
   // Checks a displayConstraints object to see if the map should be displayed
@@ -82,7 +59,6 @@ export default class InteractiveMap extends PureComponent {
       createElement(MapControls, Object.assign({}, this.props, {
         key: 'map-controls',
         style: {position: 'relative'}
-        // getLngLatAtPoint: this._getLngLatAtPoint
       }), [
         createElement(StaticMap, Object.assign({}, this.props, {
           key: 'map-static',
