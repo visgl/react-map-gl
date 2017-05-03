@@ -120,7 +120,6 @@ export default class Example extends Component {
     return (
       <InteractiveMap
         { ...viewport }
-        pressKeyToRotate={false}
         maxPitch={85}
         onChangeViewport={ this._onChangeViewport }
         onClickFeatures={ this._onClickFeatures }
