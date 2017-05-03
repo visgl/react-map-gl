@@ -22,11 +22,11 @@ import PropTypes from 'prop-types';
 
 import autobind from '../utils/autobind';
 
-// MapControls uses non-react event manager to register events
-import EventManager from '../utils/event-manager';
 import MapState from '../utils/map-state';
-
+import EventInput from '../utils/event-input';
 import config from '../config';
+
+import Hammer from 'hammerjs';
 
 // EVENT HANDLING PARAMETERS
 const PITCH_MOUSE_THRESHOLD = 5;
@@ -72,22 +72,49 @@ export default class MapControls extends PureComponent {
   }
 
   componentDidMount() {
-    // Register event handlers on the canvas using the EventManager helper class
-    //
-    // Note that mouse move and click are handled directly by static-map
-    // Corresponding to hover and click on map
-    // onMouseMove={this._onMouseMove}
-    // onMouseClick={this._onMouseClick}
+    // Register event handlers on the canvas using hammer.js
+    const {canvas} = this.refs;
 
-    this._eventManager = new EventManager(this.refs.canvas, {
-      onMouseDown: this._onMouseDown,
-      onMouseDrag: this._onMouseDrag,
-      onMouseUp: this._onMouseUp,
-      onTouchRotate: this._onTouchRotate,
-      onWheel: this._onWheel,
-      onWheelEnd: this._onWheelEnd,
-      mapTouchToMouse: true
-    });
+    this._eventManager = new Hammer.Manager(canvas, {
+      inputClass: EventInput,
+      recognizers: [
+        [Hammer.Pinch, {}],
+        [Hammer.Pan, {threshold: 10}],
+        [Hammer.Tap, {event: 'doubletap', taps: 2}]
+      ]
+    })
+    .on('panstart', this._onDragStart)
+    .on('pan', this._onDrag)
+    .on('panend', this._onDragEnd)
+    .on('pinchstart', this._onPinchStart)
+    .on('pinch', this._onPinch)
+    .on('pinchend', this._onPinchEnd)
+    .on('doubletap', this._onDoubleTap)
+    .on('wheel', this._onWheel);
+  }
+
+  componentWillUnmount() {
+    if (this._eventManager) {
+      // Must destroy because hammer adds event listeners to window
+      this._eventManager.destroy();
+    }
+  }
+
+  /* Event utils */
+
+  _getCenter(event) {
+    const {center, target} = event;
+    const rect = target.getBoundingClientRect();
+    return [
+      center.x - rect.left - target.clientLeft,
+      center.y - rect.top - target.clientTop
+    ];
+  }
+
+  _isFunctionKeyPressed(event) {
+    const {srcEvent} = event;
+    return Boolean(srcEvent.metaKey || srcEvent.altKey ||
+      srcEvent.ctrlKey || srcEvent.shiftKey);
   }
 
   // Calculate a cursor style to show that we are in "dragging state"
@@ -122,77 +149,96 @@ export default class MapControls extends PureComponent {
     ));
   }
 
-  _onTouchRotate(opts) {
-    this._onMouseRotate(opts);
-  }
-
-  _onMouseDown({pos}) {
+  _onDragStart(event) {
+    const pos = this._getCenter(event);
     const newMapState = this.props.mapState.panStart({pos}).rotateStart({pos});
     this._updateViewport(newMapState, {isDragging: true});
   }
 
-  _onMouseDrag({pos, startPos, modifier}) {
-    if (!this.props.onChangeViewport) {
-      return;
-    }
-
-    if (modifier) {
-      this._onMouseRotate({pos, startPos});
+  _onDrag(event) {
+    if (this._isFunctionKeyPressed(event)) {
+      this._onRotate(event);
     } else {
-      this._onMousePan({pos});
+      this._onPan(event);
     }
   }
 
-  _onMousePan({pos}) {
+  _onDragEnd(event) {
+    const newMapState = this.props.mapState.panEnd().rotateEnd();
+    this._updateViewport(newMapState, {isDragging: false});
+  }
+
+  _onPan(event) {
+    const pos = this._getCenter(event);
     const newMapState = this.props.mapState.pan({pos});
     this._updateViewport(newMapState);
   }
 
-  _onMouseRotate({pos, startPos}) {
-    if (!this.props.onChangeViewport || !this.props.perspectiveEnabled) {
+  _onRotate(event) {
+    if (!this.props.perspectiveEnabled) {
       return;
     }
 
-    const xDelta = pos[0] - startPos[0];
-    const yDelta = pos[1] - startPos[1];
+    const {deltaX, deltaY} = event;
+    const pos = this._getCenter(event);
+    const startPos = [pos[0] - deltaX, pos[1] - deltaY];
 
-    const xDeltaScale = xDelta / this.props.width;
+    const xDeltaScale = deltaX / this.props.width;
     let yDeltaScale = 0;
 
-    if (yDelta > 0) {
+    if (deltaY > 0) {
       if (Math.abs(this.props.height - startPos[1]) > PITCH_MOUSE_THRESHOLD) {
         // Move from 0 to -1 as we drag upwards
-        yDeltaScale = yDelta / (startPos[1] - this.props.height) * PITCH_ACCEL;
+        yDeltaScale = deltaY / (startPos[1] - this.props.height) * PITCH_ACCEL;
       }
-    } else if (yDelta < 0) {
+    } else if (deltaY < 0) {
       if (startPos[1] > PITCH_MOUSE_THRESHOLD) {
         // Move from 0 to 1 as we drag upwards
         yDeltaScale = 1 - pos[1] / startPos[1];
       }
     }
+    yDeltaScale = Math.min(1, Math.max(-1, yDeltaScale));
 
     const newMapState = this.props.mapState.rotate({xDeltaScale, yDeltaScale});
     this._updateViewport(newMapState);
   }
 
-  _onMouseUp() {
-    const newMapState = this.props.mapState.panEnd().rotateEnd();
-    this._updateViewport(newMapState, {isDragging: false});
-  }
-
-  _onWheel({pos, delta}) {
+  _onWheel(event) {
+    const pos = this._getCenter(event);
+    const {delta} = event;
     let scale = 2 / (1 + Math.exp(-Math.abs(delta * ZOOM_ACCEL)));
     if (delta < 0 && scale !== 0) {
       scale = 1 / scale;
     }
 
     const newMapState = this.props.mapState.zoom({pos, scale});
+    this._updateViewport(newMapState);
+  }
+
+  _onPinchStart(event) {
+    const pos = this._getCenter(event);
+    const newMapState = this.props.mapState.zoomStart({pos});
     this._updateViewport(newMapState, {isDragging: true});
   }
 
-  _onWheelEnd() {
+  _onPinch(event) {
+    const pos = this._getCenter(event);
+    const {scale} = event;
+    const newMapState = this.props.mapState.zoom({pos, scale});
+    this._updateViewport(newMapState);
+  }
+
+  _onPinchEnd(event) {
     const newMapState = this.props.mapState.zoomEnd();
     this._updateViewport(newMapState, {isDragging: false});
+  }
+
+  _onDoubleTap(event) {
+    const pos = this._getCenter(event);
+    const isZoomOut = this._isFunctionKeyPressed(event);
+
+    const newMapState = this.props.mapState.zoom({pos, scale: isZoomOut ? 0.5 : 2});
+    this._updateViewport(newMapState);
   }
 
   render() {
