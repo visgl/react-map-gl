@@ -4,6 +4,7 @@ import autobind from '../utils/autobind';
 
 import StaticMap from './static-map';
 import MapControls from './map-controls';
+import MapState from '../utils/map-state';
 
 const propTypes = {
   displayConstraints: PropTypes.object.isRequired
@@ -58,7 +59,8 @@ export default class InteractiveMap extends PureComponent {
     return (
       createElement(MapControls, Object.assign({}, this.props, {
         key: 'map-controls',
-        style: {position: 'relative'}
+        style: {position: 'relative'},
+        mapState: new MapState(this.props)
       }), [
         createElement(StaticMap, Object.assign({}, this.props, {
           key: 'map-static',
