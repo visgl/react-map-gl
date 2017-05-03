@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 // Portions of the code below originally from:
-// https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_wheel.js
+// https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
 
 import autobind from '../utils/autobind';
 import {window, document} from './globals';
@@ -69,23 +69,28 @@ export default class EventManager {
     onMouseClick = noop,
     onMouseDown = noop,
     onMouseUp = noop,
+    onMouseRotate = noop,
     onMouseDrag = noop,
     onTouchStart = noop,
     onTouchRotate = noop,
     onTouchDrag = noop,
     onTouchEnd = noop,
     onTouchTap = noop,
-    onWheel = noop,
-    onWheelEnd = noop,
-    mapTouchToMouse = true
+    onZoom = noop,
+    onZoomEnd = noop,
+    mapTouchToMouse = true,
+    pressKeyToRotate = false
   } = {}) {
     onTouchStart = onTouchStart || (mapTouchToMouse && onMouseDown);
     onTouchDrag = onTouchDrag || (mapTouchToMouse && onMouseDrag);
-    onTouchRotate = onTouchRotate;
+    onTouchRotate = onTouchRotate || (mapTouchToMouse && onMouseRotate);
     onTouchEnd = onTouchEnd || (mapTouchToMouse && onMouseUp);
     onTouchTap = onTouchTap || (mapTouchToMouse && onMouseClick);
 
     this._canvas = canvas;
+
+    // Public member can be changed by app
+    this.pressKeyToRotate = pressKeyToRotate;
 
     this.state = {
       didDrag: false,
@@ -101,13 +106,14 @@ export default class EventManager {
       onMouseDown,
       onMouseUp,
       onTouchStart,
+      onMouseRotate,
       onMouseDrag,
       onTouchRotate,
       onTouchDrag,
       onTouchEnd,
       onTouchTap,
-      onWheel,
-      onWheelEnd
+      onZoom,
+      onZoomEnd
     };
 
     autobind(this);
@@ -173,19 +179,31 @@ export default class EventManager {
   _onMouseDrag(event) {
     const pos = this._getMousePos(event);
     this.setState({pos, didDrag: true});
+    const {startPos} = this.state;
 
-    const {isFunctionKeyPressed, startPos} = this.state;
+    const {isFunctionKeyPressed} = this.state;
+    const rotate = this.pressKeyToRotate ? isFunctionKeyPressed : !isFunctionKeyPressed;
 
-    this.callbacks.onMouseDrag({pos, startPos, modifier: isFunctionKeyPressed});
+    if (rotate) {
+      this.callbacks.onMouseRotate({pos, startPos});
+    } else {
+      this.callbacks.onMouseDrag({pos, startPos});
+    }
   }
 
   _onTouchDrag(event) {
     const pos = this._getTouchPos(event);
     this.setState({pos, didDrag: true});
 
-    const {isFunctionKeyPressed, startPos} = this.state;
+    const {isFunctionKeyPressed} = this.state;
+    const rotate = this.pressKeyToRotate ? isFunctionKeyPressed : !isFunctionKeyPressed;
 
-    this.callbacks.onTouchDrag({pos, startPos, modifier: isFunctionKeyPressed});
+    if (rotate) {
+      const {startPos} = this.state;
+      this.callbacks.onTouchRotate({pos, startPos});
+    } else {
+      this.callbacks.onTouchDrag({pos});
+    }
     event.preventDefault();
   }
 
@@ -255,7 +273,7 @@ export default class EventManager {
       // to 40ms.
       timeout = window.setTimeout(function setTimeout() {
         const _type = 'wheel';
-        this._wheel(-this.state.mouseWheelLastValue, this.state.mouseWheelPos);
+        this._zoom(-this.state.mouseWheelLastValue, this.state.mouseWheelPos);
         this.setState({mouseWheelType: _type});
       }.bind(this), 40);
     } else if (!this._type) {
@@ -282,7 +300,7 @@ export default class EventManager {
     // Only fire the callback if we actually know what type of scrolling device
     // the user uses.
     if (type) {
-      this._wheel(-value, pos);
+      this._zoom(-value, pos);
     }
 
     this.setState({
@@ -295,16 +313,16 @@ export default class EventManager {
   }
   /* eslint-enable complexity, max-statements */
 
-  _wheel(delta, pos) {
+  _zoom(delta, pos) {
     // Scale by sigmoid of scroll wheel delta.
     let scale = 2 / (1 + Math.exp(-Math.abs(delta / 100)));
     if (delta < 0 && scale !== 0) {
       scale = 1 / scale;
     }
-    this.callbacks.onWheel({pos, delta, scale});
-    window.clearTimeout(this._wheelEndTimeout);
-    this._wheelEndTimeout = window.setTimeout(function _setTimeout() {
-      this.callbacks.onWheelEnd();
+    this.callbacks.onZoom({pos, delta, scale});
+    window.clearTimeout(this._zoomEndTimeout);
+    this._zoomEndTimeout = window.setTimeout(function _setTimeout() {
+      this.callbacks.onZoomEnd();
     }.bind(this), 200);
   }
 }
