@@ -67,7 +67,7 @@ export default class MapState {
     assert(Number.isFinite(latitude), '`latitude` must be supplied');
     assert(Number.isFinite(zoom), '`zoom` must be supplied');
 
-    this._props = this._applyConstraints({
+    this._state = this._applyConstraints({
       width,
       height,
       latitude,
@@ -91,7 +91,7 @@ export default class MapState {
   /* Public API */
 
   getViewportProps() {
-    return this._props;
+    return this._state;
   }
 
   /**
@@ -111,7 +111,7 @@ export default class MapState {
    *   the start of the operation. Must be supplied of `panStart()` was not called
    */
   pan({pos, startPos}) {
-    const startPanLngLat = this._props.startPanLngLat || this._unproject(startPos);
+    const startPanLngLat = this._state.startPanLngLat || this._unproject(startPos);
 
     // take the start lnglat and put it where the mouse is down.
     assert(startPanLngLat, '`startPanLngLat` prop is required ' +
@@ -141,8 +141,8 @@ export default class MapState {
    */
   rotateStart({pos}) {
     return this._getUpdatedMapState({
-      startBearing: this._props.bearing,
-      startPitch: this._props.pitch
+      startBearing: this._state.bearing,
+      startPitch: this._state.pitch
     });
   }
 
@@ -159,13 +159,13 @@ export default class MapState {
     assert(yDeltaScale >= -1 && yDeltaScale <= 1,
       '`yDeltaScale` must be a number between [-1, 1]');
 
-    let {startBearing, startPitch} = this._props;
+    let {startBearing, startPitch} = this._state;
 
     if (!Number.isFinite(startBearing)) {
-      startBearing = this._props.bearing;
+      startBearing = this._state.bearing;
     }
     if (!Number.isFinite(startPitch)) {
-      startPitch = this._props.pitch;
+      startPitch = this._state.pitch;
     }
 
     const {pitch, bearing} = this._calculateNewPitchAndBearing({
@@ -199,7 +199,7 @@ export default class MapState {
   zoomStart({pos}) {
     return this._getUpdatedMapState({
       startZoomLngLat: this._unproject(pos),
-      startZoom: this._props.zoom
+      startZoom: this._state.zoom
     });
   }
 
@@ -215,12 +215,12 @@ export default class MapState {
     assert(scale > 0, '`scale` must be a positive number');
 
     // Make sure we zoom around the current mouse position rather than map center
-    const startZoomLngLat = this._props.startZoomLngLat ||
+    const startZoomLngLat = this._state.startZoomLngLat ||
       this._unproject(startPos) || this._unproject(pos);
-    let {startZoom} = this._props;
+    let {startZoom} = this._state;
 
     if (!Number.isFinite(startZoom)) {
-      startZoom = this._props.zoom;
+      startZoom = this._state.zoom;
     }
 
     // take the start lnglat and put it where the mouse is down.
@@ -229,7 +229,7 @@ export default class MapState {
 
     const zoom = this._calculateNewZoom({scale, startZoom});
 
-    const zoomedViewport = new PerspectiveMercatorViewport(Object.assign({}, this._props, {zoom}));
+    const zoomedViewport = new PerspectiveMercatorViewport(Object.assign({}, this._state, {zoom}));
     const [longitude, latitude] = zoomedViewport.getLocationAtPoint({lngLat: startZoomLngLat, pos});
 
     return this._getUpdatedMapState({
@@ -253,11 +253,11 @@ export default class MapState {
   /* Private methods */
 
   _getUpdatedMapState(newProps) {
-    // Update _props
-    return new MapState(Object.assign({}, this._props, newProps));
+    // Update _state
+    return new MapState(Object.assign({}, this._state, newProps));
   }
 
-  // Apply any constraints (mathematical or defined by _props) to map state
+  // Apply any constraints (mathematical or defined by _state) to map state
   _applyConstraints(props) {
     // Normalize degrees
     props.longitude = mod(props.longitude + 180, 360) - 180;
@@ -278,19 +278,19 @@ export default class MapState {
   }
 
   _unproject(pos) {
-    const viewport = new PerspectiveMercatorViewport(this._props);
+    const viewport = new PerspectiveMercatorViewport(this._state);
     return pos && viewport.unproject(pos, {topLeft: false});
   }
 
   // Calculate a new lnglat based on pixel dragging position
   _calculateNewLngLat({startPanLngLat, pos}) {
-    const viewport = new PerspectiveMercatorViewport(this._props);
+    const viewport = new PerspectiveMercatorViewport(this._state);
     return viewport.getLocationAtPoint({lngLat: startPanLngLat, pos});
   }
 
   // Calculates new zoom
   _calculateNewZoom({scale, startZoom}) {
-    const {maxZoom, minZoom} = this._props;
+    const {maxZoom, minZoom} = this._state;
     let zoom = startZoom + Math.log2(scale);
     zoom = zoom > maxZoom ? maxZoom : zoom;
     zoom = zoom < minZoom ? minZoom : zoom;
@@ -299,7 +299,7 @@ export default class MapState {
 
   // Calculates a new pitch and bearing from a position (coming from an event)
   _calculateNewPitchAndBearing({xDeltaScale, yDeltaScale, startBearing, startPitch}) {
-    const {minPitch, maxPitch} = this._props;
+    const {minPitch, maxPitch} = this._state;
 
     const bearing = startBearing + 180 * xDeltaScale;
     let pitch = startPitch;
