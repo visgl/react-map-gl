@@ -118,7 +118,7 @@ export default class MapControls extends PureComponent {
     return this.props.onChangeViewport(Object.assign(
       {isDragging},
       mapState.getViewportProps(),
-      ...extraState
+      extraState
     ));
   }
 
