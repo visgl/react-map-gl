@@ -50,19 +50,12 @@ const propTypes = Object.assign({}, MapState.propTypes, {
     * rendering while dragging.
     */
   isHovering: PropTypes.bool,
-  isDragging: PropTypes.bool,
-
-  /**
-    * True means key must be pressed to rotate instead of pan
-    * false to means key must be pressed to pan
-    */
-  pressKeyToRotate: PropTypes.bool
+  isDragging: PropTypes.bool
 });
 
 const defaultProps = {
   perspectiveEnabled: false,
-  onChangeViewport: null,
-  pressKeyToRotate: true
+  onChangeViewport: null
 };
 
 export default class MapControls extends PureComponent {
@@ -134,7 +127,7 @@ export default class MapControls extends PureComponent {
       return;
     }
 
-    if (this.props.pressKeyToRotate === modifier) {
+    if (modifier) {
       this._onMouseRotate({pos, startPos});
     } else {
       this._onMousePan({pos});
