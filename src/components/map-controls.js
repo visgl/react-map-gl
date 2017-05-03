@@ -109,9 +109,17 @@ export default class MapControls extends PureComponent {
     return config.CURSOR.GRAB;
   }
 
-  _updateViewport(...opts) {
+  _updateViewport(mapState, extraState = {}) {
+    if (!this.props.onChangeViewport) {
+      return false;
+    }
+
     const {isDragging} = this.props;
-    return this.props.onChangeViewport(Object.assign({isDragging}, ...opts));
+    return this.props.onChangeViewport(Object.assign(
+      {isDragging},
+      mapState.getViewportProps(),
+      ...extraState
+    ));
   }
 
   _onTouchRotate(opts) {
@@ -120,7 +128,7 @@ export default class MapControls extends PureComponent {
 
   _onMouseDown({pos}) {
     const newMapState = this.props.mapState.panStart({pos}).rotateStart({pos});
-    this._updateViewport(newMapState.getViewportProps(), {isDragging: true});
+    this._updateViewport(newMapState, {isDragging: true});
   }
 
   _onMouseDrag({pos, startPos, modifier}) {
@@ -137,7 +145,7 @@ export default class MapControls extends PureComponent {
 
   _onMousePan({pos}) {
     const newMapState = this.props.mapState.pan({pos});
-    this._updateViewport(newMapState.getViewportProps());
+    this._updateViewport(newMapState);
   }
 
   _onMouseRotate({pos, startPos}) {
@@ -164,12 +172,12 @@ export default class MapControls extends PureComponent {
     }
 
     const newMapState = this.props.mapState.rotate({xDeltaScale, yDeltaScale});
-    this._updateViewport(newMapState.getViewportProps());
+    this._updateViewport(newMapState);
   }
 
   _onMouseUp() {
     const newMapState = this.props.mapState.panEnd().rotateEnd();
-    this._updateViewport(newMapState.getViewportProps(), {isDragging: false});
+    this._updateViewport(newMapState, {isDragging: false});
   }
 
   _onWheel({pos, delta}) {
@@ -179,12 +187,12 @@ export default class MapControls extends PureComponent {
     }
 
     const newMapState = this.props.mapState.zoom({pos, scale});
-    this._updateViewport(newMapState.getViewportProps(), {isDragging: true});
+    this._updateViewport(newMapState, {isDragging: true});
   }
 
   _onWheelEnd() {
     const newMapState = this.props.mapState.zoomEnd();
-    this._updateViewport(newMapState.getViewportProps(), {isDragging: false});
+    this._updateViewport(newMapState, {isDragging: false});
   }
 
   render() {
