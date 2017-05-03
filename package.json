@@ -72,7 +72,7 @@
     "webworkify-webpack-dropin": "^1.1.9"
   },
   "peerDependencies": {
-    "react": "15.4.x"
+    "react": ">=15.4.x"
   },
   "engines": {
     "node": ">= 4",
