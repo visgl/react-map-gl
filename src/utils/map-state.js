@@ -132,7 +132,7 @@ export default class MapState {
 
   _unproject(pos) {
     const viewport = new PerspectiveMercatorViewport(this.props);
-    return viewport.unproject(pos, {topLeft: false});
+    return pos && viewport.unproject(pos, {topLeft: false});
   }
 
   // Calculate a new lnglat based on pixel dragging position
@@ -232,9 +232,10 @@ export default class MapState {
    *   change to pitch. -1 sets to minPitch and 1 sets to maxPitch.
    */
   rotate({xDeltaScale, yDeltaScale}) {
-    assert(xDeltaScale >= -1 && xDeltaScale <= 1 &&
-      yDeltaScale >= -1 && yDeltaScale <= 1,
-      '`xDeltaScale` and `yDeltaScale` must be numbers between [-1, 1]');
+    assert(xDeltaScale >= -1 && xDeltaScale <= 1,
+      '`xDeltaScale` must be a number between [-1, 1]');
+    assert(yDeltaScale >= -1 && yDeltaScale <= 1,
+      '`yDeltaScale` must be a number between [-1, 1]');
 
     let {startBearing, startPitch} = this.props;
 
