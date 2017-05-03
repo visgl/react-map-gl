@@ -33,7 +33,8 @@ const PITCH_MOUSE_THRESHOLD = 5;
 const PITCH_ACCEL = 1.2;
 const ZOOM_ACCEL = 0.01;
 
-const propTypes = Object.assign({}, MapState.propTypes, {
+const propTypes = {
+  mapState: PropTypes.instanceOf(MapState).isRequired,
 
   /** Enables perspective control event handling */
   perspectiveEnabled: PropTypes.bool,
@@ -51,7 +52,7 @@ const propTypes = Object.assign({}, MapState.propTypes, {
     */
   isHovering: PropTypes.bool,
   isDragging: PropTypes.bool
-});
+};
 
 const defaultProps = {
   perspectiveEnabled: false,
@@ -108,9 +109,17 @@ export default class MapControls extends PureComponent {
     return config.CURSOR.GRAB;
   }
 
-  _updateViewport(...opts) {
+  _updateViewport(mapState, extraState = {}) {
+    if (!this.props.onChangeViewport) {
+      return false;
+    }
+
     const {isDragging} = this.props;
-    return this.props.onChangeViewport(Object.assign({isDragging}, ...opts));
+    return this.props.onChangeViewport(Object.assign(
+      {isDragging},
+      mapState.getViewportProps(),
+      extraState
+    ));
   }
 
   _onTouchRotate(opts) {
@@ -118,8 +127,8 @@ export default class MapControls extends PureComponent {
   }
 
   _onMouseDown({pos}) {
-    const mapState = new MapState(this.props).panStart({pos}).rotateStart({pos});
-    this._updateViewport(mapState.props, {isDragging: true});
+    const newMapState = this.props.mapState.panStart({pos}).rotateStart({pos});
+    this._updateViewport(newMapState, {isDragging: true});
   }
 
   _onMouseDrag({pos, startPos, modifier}) {
@@ -135,8 +144,8 @@ export default class MapControls extends PureComponent {
   }
 
   _onMousePan({pos}) {
-    const mapState = new MapState(this.props).pan({pos});
-    this._updateViewport(mapState.props);
+    const newMapState = this.props.mapState.pan({pos});
+    this._updateViewport(newMapState);
   }
 
   _onMouseRotate({pos, startPos}) {
@@ -162,13 +171,13 @@ export default class MapControls extends PureComponent {
       }
     }
 
-    const mapState = new MapState(this.props).rotate({xDeltaScale, yDeltaScale});
-    this._updateViewport(mapState.props);
+    const newMapState = this.props.mapState.rotate({xDeltaScale, yDeltaScale});
+    this._updateViewport(newMapState);
   }
 
   _onMouseUp() {
-    const mapState = new MapState(this.props).panEnd().rotateEnd();
-    this._updateViewport(mapState.props, {isDragging: false});
+    const newMapState = this.props.mapState.panEnd().rotateEnd();
+    this._updateViewport(newMapState, {isDragging: false});
   }
 
   _onWheel({pos, delta}) {
@@ -177,13 +186,13 @@ export default class MapControls extends PureComponent {
       scale = 1 / scale;
     }
 
-    const mapState = new MapState(this.props).zoom({pos, startPos: pos, scale});
-    this._updateViewport(mapState.props, {isDragging: true});
+    const newMapState = this.props.mapState.zoom({pos, scale});
+    this._updateViewport(newMapState, {isDragging: true});
   }
 
   _onWheelEnd() {
-    const mapState = new MapState(this.props).zoomEnd();
-    this._updateViewport(mapState.props, {isDragging: false});
+    const newMapState = this.props.mapState.zoomEnd();
+    this._updateViewport(newMapState, {isDragging: false});
   }
 
   render() {
