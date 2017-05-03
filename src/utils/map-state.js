@@ -6,7 +6,7 @@ function mod(value, divisor) {
   return modulus < 0 ? divisor + modulus : modulus;
 }
 
-const defaultProps = {
+const defaultState = {
   pitch: 0,
   bearing: 0,
   altitude: 1.5,
@@ -73,13 +73,13 @@ export default class MapState {
       latitude,
       longitude,
       zoom,
-      bearing: Number.isFinite(bearing) ? bearing : defaultProps.bearing,
-      pitch: Number.isFinite(pitch) ? pitch : defaultProps.pitch,
-      altitude: Number.isFinite(altitude) ? altitude : defaultProps.altitude,
-      maxZoom: Number.isFinite(maxZoom) ? maxZoom : defaultProps.maxZoom,
-      minZoom: Number.isFinite(minZoom) ? minZoom : defaultProps.minZoom,
-      maxPitch: Number.isFinite(maxPitch) ? maxPitch : defaultProps.maxPitch,
-      minPitch: Number.isFinite(minPitch) ? minPitch : defaultProps.minPitch,
+      bearing: Number.isFinite(bearing) ? bearing : defaultState.bearing,
+      pitch: Number.isFinite(pitch) ? pitch : defaultState.pitch,
+      altitude: Number.isFinite(altitude) ? altitude : defaultState.altitude,
+      maxZoom: Number.isFinite(maxZoom) ? maxZoom : defaultState.maxZoom,
+      minZoom: Number.isFinite(minZoom) ? minZoom : defaultState.minZoom,
+      maxPitch: Number.isFinite(maxPitch) ? maxPitch : defaultState.maxPitch,
+      minPitch: Number.isFinite(minPitch) ? minPitch : defaultState.minPitch,
       startPanLngLat,
       startZoomLngLat,
       startBearing,
