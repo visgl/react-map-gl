@@ -34,7 +34,7 @@ const PITCH_ACCEL = 1.2;
 const ZOOM_ACCEL = 0.01;
 
 const propTypes = {
-  mapState: PropTypes.instanceOf(MapState),
+  mapState: PropTypes.instanceOf(MapState).isRequired,
 
   /** Enables perspective control event handling */
   perspectiveEnabled: PropTypes.bool,
