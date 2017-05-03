@@ -28,6 +28,7 @@ import diffStyles from '../utils/diff-styles';
 import Immutable from 'immutable';
 
 import isBrowser from '../utils/is-browser';
+import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
 let mapboxgl = null;
 let Point = null;
@@ -135,6 +136,10 @@ const defaultProps = {
   clickRadius: 15
 };
 
+const childContextTypes = {
+  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport)
+};
+
 export default class StaticMap extends PureComponent {
   static supported() {
     return mapboxgl && mapboxgl.supported();
@@ -159,6 +164,12 @@ export default class StaticMap extends PureComponent {
       this.componentDidUpdate = noop;
     }
     autobind(this);
+  }
+
+  getChildContext() {
+    return {
+      viewport: new PerspectiveMercatorViewport(this.props)
+    };
   }
 
   componentDidMount() {
@@ -486,3 +497,4 @@ export default class StaticMap extends PureComponent {
 StaticMap.displayName = 'StaticMap';
 StaticMap.propTypes = propTypes;
 StaticMap.defaultProps = defaultProps;
+StaticMap.childContextTypes = childContextTypes;

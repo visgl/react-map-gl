@@ -5,16 +5,18 @@ import autobind from '../utils/autobind';
 import StaticMap from './static-map';
 import MapControls from './map-controls';
 import MapState from '../utils/map-state';
+import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
-const propTypes = {
+const propTypes = Object.assign({}, StaticMap.propTypes, {
   displayConstraints: PropTypes.object.isRequired
-};
+});
 
-const defaultProps = {
+const defaultProps = Object.assign({}, StaticMap.defaultProps, {
   displayConstraints: {
+    maxZoom: 20,
     maxPitch: 60
   }
-};
+});
 
 export default class InteractiveMap extends PureComponent {
 
@@ -25,6 +27,12 @@ export default class InteractiveMap extends PureComponent {
   constructor(props) {
     super(props);
     autobind(this);
+  }
+
+  getChildContext() {
+    return {
+      viewport: new PerspectiveMercatorViewport(this.props)
+    };
   }
 
   // TODO - Remove once Viewport alternative is good enough
@@ -85,3 +93,5 @@ export default class InteractiveMap extends PureComponent {
 InteractiveMap.displayName = 'InteractiveMap';
 InteractiveMap.propTypes = propTypes;
 InteractiveMap.defaultProps = defaultProps;
+InteractiveMap.childContextTypes = StaticMap.childContextTypes;
+

@@ -21,7 +21,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'react-autobind';
-import {InteractiveMap, ScatterplotOverlay} from 'react-map-gl';
+import {InteractiveMap, ScatterplotOverlay, Marker} from 'react-map-gl';
 import DeckGL, {ArcLayer} from 'deck.gl';
 import Immutable from 'immutable';
 /* global window */
@@ -36,6 +36,17 @@ const locations = Immutable.fromJS(new Array(4000).fill(0).map(() => [
   location.longitude + Math.random() * 0.01,
   location.latitude + Math.random() * 0.01
 ]));
+
+const MARKER_STYLE = {
+  fill: '#d00',
+  transform: 'translate(-50%,-100%)',
+  cursor: 'pointer'
+};
+
+const MARKER_ICON = `M45.4,39.7C45.4,39.7,45.4,39.7,45.4,39.7c2.8-4.1,4.4-8.9,4.4-14.2
+ C49.9,11.7,38.7,0.6,25,0.6S0.1,11.7,0.1,25.4c0,5,1.5,9.6,4,13.4c0.1,0.2,0.3,0.5,0.5,
+ 0.8c0.1,0.1,0.2,0.3,0.3,0.4 c0.6,0.8,1.1,1.5,1.8,2.2C13.1,49.8,25,61,25,61s11.9-11.2,
+ 18.3-18.7c0.6-0.7,1.2-1.4,1.8-2.2C45.2,39.9,45.3,39.8,45.4,39.7z`;
 
 function buildStyle({fill = 'red', stroke = 'blue'}) {
   return Immutable.fromJS({
@@ -111,6 +122,16 @@ export default class Example extends Component {
     window.console.log(features);
   }
 
+  _renderCityMarker(city, index) {
+    return (
+      <Marker key={index} longitude={city.longitude} latitude={city.latitude}>
+        <svg width='20px' viewBox='0 0 50 61' style={MARKER_STYLE}>
+          <path fill='#d00' d={MARKER_ICON}/>
+        </svg>
+      </Marker>
+    );
+  }
+
   render() {
     const viewport = {
       // mapStyle: this.state.mapStyle,
@@ -143,6 +164,8 @@ export default class Example extends Component {
             getTargetColor: x => [0, 255, 0]
           })
         ]}/>
+
+        { CITIES.map(this._renderCityMarker) }
 
       </InteractiveMap>
     );
