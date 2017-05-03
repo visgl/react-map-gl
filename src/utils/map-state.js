@@ -6,17 +6,21 @@ function mod(value, divisor) {
   return modulus < 0 ? divisor + modulus : modulus;
 }
 
+// MAPBOX LIMITS
+const MAX_PITCH = 60;
+const MAX_ZOOM = 20;
+
 const defaultState = {
   pitch: 0,
   bearing: 0,
   altitude: 1.5,
-
-  // MAPBOX LIMITS
-  maxZoom: 20,
+  maxZoom: MAX_ZOOM,
   minZoom: 0,
-  maxPitch: 60,
+  maxPitch: MAX_PITCH,
   minPitch: 0
 };
+
+const ensureFinite = (value, fallbackValue) => Number.isFinite(value) ? value : fallbackValue;
 
 export default class MapState {
 
@@ -73,13 +77,13 @@ export default class MapState {
       latitude,
       longitude,
       zoom,
-      bearing: Number.isFinite(bearing) ? bearing : defaultState.bearing,
-      pitch: Number.isFinite(pitch) ? pitch : defaultState.pitch,
-      altitude: Number.isFinite(altitude) ? altitude : defaultState.altitude,
-      maxZoom: Number.isFinite(maxZoom) ? maxZoom : defaultState.maxZoom,
-      minZoom: Number.isFinite(minZoom) ? minZoom : defaultState.minZoom,
-      maxPitch: Number.isFinite(maxPitch) ? maxPitch : defaultState.maxPitch,
-      minPitch: Number.isFinite(minPitch) ? minPitch : defaultState.minPitch,
+      bearing: ensureFinite(bearing, defaultState.bearing),
+      pitch: ensureFinite(pitch, defaultState.pitch),
+      altitude: ensureFinite(altitude, defaultState.altitude),
+      maxZoom: ensureFinite(maxZoom, defaultState.maxZoom),
+      minZoom: ensureFinite(minZoom, defaultState.minZoom),
+      maxPitch: ensureFinite(maxPitch, defaultState.maxPitch),
+      minPitch: ensureFinite(minPitch, defaultState.minPitch),
       startPanLngLat,
       startZoomLngLat,
       startBearing,
