@@ -1,11 +1,6 @@
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import assert from 'assert';
 
-function mod(value, divisor) {
-  const modulus = value % divisor;
-  return modulus < 0 ? divisor + modulus : modulus;
-}
-
 // MAPBOX LIMITS
 const MAX_PITCH = 60;
 const MAX_ZOOM = 20;
@@ -20,7 +15,15 @@ const defaultState = {
   minPitch: 0
 };
 
-const ensureFinite = (value, fallbackValue) => Number.isFinite(value) ? value : fallbackValue;
+/* Utils */
+function mod(value, divisor) {
+  const modulus = value % divisor;
+  return modulus < 0 ? divisor + modulus : modulus;
+}
+
+function ensureFinite(value, fallbackValue) {
+  return Number.isFinite(value) ? value : fallbackValue;
+}
 
 export default class MapState {
 
