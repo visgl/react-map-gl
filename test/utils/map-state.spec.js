@@ -34,13 +34,7 @@ const SAMPLE_VIEWPORTS = [
 ];
 
 // Discard precision errors for comparison
-function toLowPrecision(input, precision = 11) {
-  if (typeof input === 'number') {
-    input = Number(input.toPrecision(precision));
-  }
-  /* eslint-enable guard-for-in */
-  return input;
-}
+const toLowPrecision = (input, precision = 11) => Number(input.toPrecision(precision));
 
 // Compare two [lng, lat] locations, account for longitude wrapping
 function isSameLocation(lngLat1, lngLat2) {
@@ -51,38 +45,66 @@ function isSameLocation(lngLat1, lngLat2) {
   return ((lng1 - lng2) % 360) === 0 && lat1 === lat2;
 }
 
+test('MapState - Constructor', t => {
+  SAMPLE_VIEWPORTS.forEach(viewport => {
+    t.ok(new MapState(viewport), 'Constructed MapState instance');
+  });
+
+  // Normalize props
+  {
+    const mapState = new MapState(Object.assign({}, SAMPLE_VIEWPORTS[0], {longitude: -200}));
+    t.is(mapState.getViewportProps().longitude, 160, 'Normalized props');
+  }
+
+  // Missing required prop
+  try {
+    t.notOk(new MapState({width: 100, height: 100}), 'Should throw error for missing prop');
+  } catch (error) {
+    t.ok(/must be supplied/.test(error.message), 'Should throw error for missing prop');
+  }
+
+  t.end();
+});
+
 test('MapState - Pan', t => {
-  const POS = [300, 300];
-  const START_POS = [100, 100];
+  const POS_START = [100, 100];
+  const POS_IMTERMIDIATE = [200, 200];
+  const POS_END = [300, 300];
 
   SAMPLE_VIEWPORTS.forEach(viewport => {
     // one-off panning
-    const mapState1 = new MapState(viewport).pan({pos: POS, startPos: START_POS});
-    t.ok(toLowPrecision(mapState1.props.longitude) !== toLowPrecision(viewport.longitude) ||
-      toLowPrecision(mapState1.props.latitude) !== toLowPrecision(viewport.latitude),
+    const viewport1 = new MapState(viewport)
+      .pan({pos: POS_END, startPos: POS_START})
+      .getViewportProps();
+
+    t.ok(toLowPrecision(viewport1.longitude) !== toLowPrecision(viewport.longitude) ||
+      toLowPrecision(viewport1.latitude) !== toLowPrecision(viewport.latitude),
       'Map center has changed');
-    t.ok(mapState1.props.longitude < 180 &&
-      mapState1.props.longitude >= -180, 'Longitude is within bounds');
-    t.ok(mapState1.props.latitude <= 90 &&
-      mapState1.props.latitude >= -90, 'Latitude is within bounds');
+    t.ok(viewport1.longitude < 180 &&
+      viewport1.longitude >= -180, 'Longitude is within bounds');
+    t.ok(viewport1.latitude <= 90 &&
+      viewport1.latitude >= -90, 'Latitude is within bounds');
     t.ok(isSameLocation(
-      new PerspectiveMercatorViewport(viewport).unproject(START_POS),
-      new PerspectiveMercatorViewport(mapState1.props).unproject(POS)),
+      new PerspectiveMercatorViewport(viewport).unproject(POS_START),
+      new PerspectiveMercatorViewport(viewport1).unproject(POS_END)),
       'Location under the pointer remains the same');
 
     // chained panning
-    const mapState2 = new MapState(viewport)
-      .panStart({pos: START_POS})
-      .pan({pos: POS})
-      .panEnd();
-    t.ok(toLowPrecision(mapState1.props.longitude) === toLowPrecision(mapState2.props.longitude) &&
-      toLowPrecision(mapState1.props.latitude) === toLowPrecision(mapState2.props.latitude),
+    const viewport2 = new MapState(viewport)
+      .panStart({pos: POS_START})
+      .pan({pos: POS_IMTERMIDIATE})
+      .pan({pos: POS_END})
+      .panEnd()
+      .getViewportProps();
+
+    t.ok(toLowPrecision(viewport1.longitude) === toLowPrecision(viewport2.longitude) &&
+      toLowPrecision(viewport1.latitude) === toLowPrecision(viewport2.latitude),
       'Consistent result');
   });
 
   // insufficient arguments
   try {
-    new MapState(SAMPLE_VIEWPORTS[0]).pan({pos: POS});
+    new MapState(SAMPLE_VIEWPORTS[0]).pan({pos: POS_START});
     t.fail('Should throw error for missing argument');
   } catch (error) {
     t.ok(/startPanLngLat/.test(error.message), 'Should throw error for missing argument');
@@ -97,23 +119,29 @@ test('MapState - Rotate', t => {
 
   SAMPLE_VIEWPORTS.forEach(viewport => {
     // one-off rotating
-    const mapState1 = new MapState(viewport).rotate({xDeltaScale: X_DELTA, yDeltaScale: Y_DELTA});
-    t.ok(toLowPrecision(mapState1.props.bearing) !== toLowPrecision(viewport.bearing),
+    const viewport1 = new MapState(viewport)
+      .rotate({xDeltaScale: X_DELTA, yDeltaScale: Y_DELTA})
+      .getViewportProps();
+
+    t.ok(toLowPrecision(viewport1.bearing) !== toLowPrecision(viewport.bearing || 0),
       'Bearing has changed');
-    t.ok(toLowPrecision(mapState1.props.pitch) !== toLowPrecision(viewport.pitch),
+    t.ok(toLowPrecision(viewport1.pitch) !== toLowPrecision(viewport.pitch || 0),
       'Pitch has changed');
-    t.ok(mapState1.props.pitch <= mapState1.props.maxPitch &&
-      mapState1.props.pitch >= mapState1.props.minPitch, 'Pitch is within bounds');
-    t.ok(mapState1.props.bearing < 180 &&
-      mapState1.props.bearing >= -180, 'Bearing is within bounds');
+    t.ok(viewport1.pitch <= viewport1.maxPitch &&
+      viewport1.pitch >= viewport1.minPitch, 'Pitch is within bounds');
+    t.ok(viewport1.bearing < 180 &&
+      viewport1.bearing >= -180, 'Bearing is within bounds');
 
     // chained rotating
-    const mapState2 = new MapState(viewport)
+    const viewport2 = new MapState(viewport)
       .rotateStart({})
+      .rotate({xDeltaScale: 0, yDeltaScale: 0})
       .rotate({xDeltaScale: X_DELTA, yDeltaScale: Y_DELTA})
-      .rotateEnd();
-    t.ok(toLowPrecision(mapState1.props.pitch) === toLowPrecision(mapState2.props.pitch) &&
-      toLowPrecision(mapState1.props.bearing) === toLowPrecision(mapState2.props.bearing),
+      .rotateEnd()
+      .getViewportProps();
+
+    t.ok(toLowPrecision(viewport1.pitch) === toLowPrecision(viewport2.pitch) &&
+      toLowPrecision(viewport1.bearing) === toLowPrecision(viewport2.bearing),
       'Consistent result');
   });
 
@@ -137,44 +165,43 @@ test('MapState - Rotate', t => {
 });
 
 test('MapState - Zoom', t => {
-  const POS = [100, 100];
-  const START_POS = [200, 200];
+  const POS_START = [300, 300];
+  const POS_IMTERMIDIATE = [200, 200];
+  const POS_END = [100, 100];
   const SCALE = 2;
 
   SAMPLE_VIEWPORTS.forEach(viewport => {
     // one-off panning
-    const mapState1 = new MapState(viewport).zoom({pos: POS, startPos: START_POS, scale: SCALE});
-    t.ok(toLowPrecision(mapState1.props.zoom) !== toLowPrecision(viewport.zoom),
+    const viewport1 = new MapState(viewport)
+      .zoom({pos: POS_END, startPos: POS_START, scale: SCALE})
+      .getViewportProps();
+
+    t.ok(toLowPrecision(viewport1.zoom) !== toLowPrecision(viewport.zoom),
       'Zoom has changed');
-    t.ok(mapState1.props.zoom <= mapState1.props.maxZoom &&
-      mapState1.props.zoom >= mapState1.props.minZoom, 'Zoom is within bounds');
+    t.ok(viewport1.zoom <= viewport1.maxZoom &&
+      viewport1.zoom >= viewport1.minZoom, 'Zoom is within bounds');
     t.ok(isSameLocation(
-      new PerspectiveMercatorViewport(viewport).unproject(START_POS),
-      new PerspectiveMercatorViewport(mapState1.props).unproject(POS)),
+      new PerspectiveMercatorViewport(viewport).unproject(POS_START),
+      new PerspectiveMercatorViewport(viewport1).unproject(POS_END)),
       'Location under the pointer remains the same');
 
     // chained panning
-    const mapState2 = new MapState(viewport)
-      .zoomStart({pos: START_POS})
-      .zoom({pos: POS, scale: SCALE})
-      .zoomEnd();
-    t.ok(toLowPrecision(mapState1.props.longitude) === toLowPrecision(mapState2.props.longitude) &&
-      toLowPrecision(mapState1.props.latitude) === toLowPrecision(mapState2.props.latitude) &&
-      toLowPrecision(mapState1.props.zoom) === toLowPrecision(mapState2.props.zoom),
+    const viewport2 = new MapState(viewport)
+      .zoomStart({pos: POS_START})
+      .zoom({pos: POS_IMTERMIDIATE, scale: 1.5})
+      .zoom({pos: POS_END, scale: SCALE})
+      .zoomEnd()
+      .getViewportProps();
+
+    t.ok(toLowPrecision(viewport1.longitude) === toLowPrecision(viewport2.longitude) &&
+      toLowPrecision(viewport1.latitude) === toLowPrecision(viewport2.latitude) &&
+      toLowPrecision(viewport1.zoom) === toLowPrecision(viewport2.zoom),
       'Consistent result');
   });
 
-  // insufficient arguments
-  try {
-    new MapState(SAMPLE_VIEWPORTS[0]).zoom({pos: POS, scale: SCALE});
-    t.fail('Should throw error for missing argument');
-  } catch (error) {
-    t.ok(/startZoomLngLat/.test(error.message), 'Should throw error for missing argument');
-  }
-
   // argument out of bounds
   try {
-    new MapState(SAMPLE_VIEWPORTS[0]).zoom({pos: POS, startPos: START_POS, scale: -1});
+    new MapState(SAMPLE_VIEWPORTS[0]).zoom({pos: POS_END, scale: -1});
     t.fail('Should throw error with out of bounds argument');
   } catch (error) {
     t.ok(/scale/.test(error.message), 'Should throw error with out of bounds argument');
