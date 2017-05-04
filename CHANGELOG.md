@@ -2,6 +2,9 @@
 
 ## Version 3.0.0 (Alpha)
 
+[TBD]
+- Add Marker control
+
 ### Version 3.0.0-alpha.8 - Fix server side rendering of InteractiveMap
 
 ### Version 3.0.0-alpha.7 - Bug fixes

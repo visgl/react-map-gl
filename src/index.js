@@ -22,6 +22,7 @@
 export {default as InteractiveMap} from './components/interactive-map';
 export {default as StaticMap} from './components/static-map';
 export {default as MapControls} from './components/map-controls';
+export {default as Marker} from './components/marker';
 
 export {default as default} from './components/interactive-map';
 export {default as MapGL} from './components/interactive-map';
