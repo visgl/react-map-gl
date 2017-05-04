@@ -7,6 +7,8 @@ import CityPin from './components/city-pin';
 
 import CITIES from './data/cities.json';
 
+import './app.css';
+
 const token = process.env.MAPBOX_ACCESS_TOKEN || // eslint-disable-line
   'Set MAPBOX_ACCESS_TOKEN environment variable or put your token here.';
 
