@@ -465,7 +465,14 @@ export default class StaticMap extends PureComponent {
     const {className, width, height, style} = this.props;
     const mapContainerStyle = Object.assign({}, style, {width, height, position: 'relative'});
     const mapStyle = Object.assign({}, style, {width, height});
-    const overlayContainerStyle = {position: 'absolute', left: 0, top: 0};
+    const overlayContainerStyle = {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width,
+      height,
+      overflow: 'hidden'
+    };
 
     // Note: a static map still handles clicks and hover events
     return (

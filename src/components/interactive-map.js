@@ -61,8 +61,17 @@ export default class InteractiveMap extends PureComponent {
   }
 
   render() {
+    const {width, height} = this.props;
     const mapVisible = this.checkDisplayConstraints(this.props);
     const visibility = mapVisible ? 'visible' : 'hidden';
+    const overlayContainerStyle = {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width,
+      height,
+      overflow: 'hidden'
+    };
 
     return (
       createElement(MapControls, Object.assign({}, this.props, {
@@ -72,7 +81,7 @@ export default class InteractiveMap extends PureComponent {
       }), [
         createElement(StaticMap, Object.assign({}, this.props, {
           key: 'map-static',
-          style: {visibility, position: 'absolute', left: 0, top: 0},
+          style: {visibility},
           ref: map => {
             this._map = map;
           },
@@ -82,7 +91,7 @@ export default class InteractiveMap extends PureComponent {
           key: 'map-overlays',
           // Same as static map's overlay container
           className: 'overlays',
-          style: {position: 'absolute', left: 0, top: 0},
+          style: overlayContainerStyle,
           children: this.props.children
         })
       ])
