@@ -5,16 +5,18 @@ import autobind from '../utils/autobind';
 import StaticMap from './static-map';
 import MapControls from './map-controls';
 import MapState from '../utils/map-state';
+import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
-const propTypes = {
+const propTypes = Object.assign({}, StaticMap.propTypes, {
   displayConstraints: PropTypes.object.isRequired
-};
+});
 
-const defaultProps = {
+const defaultProps = Object.assign({}, StaticMap.defaultProps, {
   displayConstraints: {
+    maxZoom: 20,
     maxPitch: 60
   }
-};
+});
 
 export default class InteractiveMap extends PureComponent {
 
@@ -25,6 +27,12 @@ export default class InteractiveMap extends PureComponent {
   constructor(props) {
     super(props);
     autobind(this);
+  }
+
+  getChildContext() {
+    return {
+      viewport: new PerspectiveMercatorViewport(this.props)
+    };
   }
 
   // TODO - Remove once Viewport alternative is good enough
@@ -53,8 +61,17 @@ export default class InteractiveMap extends PureComponent {
   }
 
   render() {
+    const {width, height} = this.props;
     const mapVisible = this.checkDisplayConstraints(this.props);
     const visibility = mapVisible ? 'visible' : 'hidden';
+    const overlayContainerStyle = {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width,
+      height,
+      overflow: 'hidden'
+    };
 
     return (
       createElement(MapControls, Object.assign({}, this.props, {
@@ -64,7 +81,7 @@ export default class InteractiveMap extends PureComponent {
       }), [
         createElement(StaticMap, Object.assign({}, this.props, {
           key: 'map-static',
-          style: {visibility, position: 'absolute', left: 0, top: 0},
+          style: {visibility},
           ref: map => {
             this._map = map;
           },
@@ -74,7 +91,7 @@ export default class InteractiveMap extends PureComponent {
           key: 'map-overlays',
           // Same as static map's overlay container
           className: 'overlays',
-          style: {position: 'absolute', left: 0, top: 0},
+          style: overlayContainerStyle,
           children: this.props.children
         })
       ])
@@ -85,3 +102,5 @@ export default class InteractiveMap extends PureComponent {
 InteractiveMap.displayName = 'InteractiveMap';
 InteractiveMap.propTypes = propTypes;
 InteractiveMap.defaultProps = defaultProps;
+InteractiveMap.childContextTypes = StaticMap.childContextTypes;
+

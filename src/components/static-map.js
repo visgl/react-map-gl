@@ -28,6 +28,7 @@ import diffStyles from '../utils/diff-styles';
 import Immutable from 'immutable';
 
 import isBrowser from '../utils/is-browser';
+import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
 let mapboxgl = null;
 let Point = null;
@@ -135,6 +136,10 @@ const defaultProps = {
   clickRadius: 15
 };
 
+const childContextTypes = {
+  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport)
+};
+
 export default class StaticMap extends PureComponent {
   static supported() {
     return mapboxgl && mapboxgl.supported();
@@ -159,6 +164,12 @@ export default class StaticMap extends PureComponent {
       this.componentDidUpdate = noop;
     }
     autobind(this);
+  }
+
+  getChildContext() {
+    return {
+      viewport: new PerspectiveMercatorViewport(this.props)
+    };
   }
 
   componentDidMount() {
@@ -454,7 +465,14 @@ export default class StaticMap extends PureComponent {
     const {className, width, height, style} = this.props;
     const mapContainerStyle = Object.assign({}, style, {width, height, position: 'relative'});
     const mapStyle = Object.assign({}, style, {width, height});
-    const overlayContainerStyle = {position: 'absolute', left: 0, top: 0};
+    const overlayContainerStyle = {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width,
+      height,
+      overflow: 'hidden'
+    };
 
     // Note: a static map still handles clicks and hover events
     return (
@@ -486,3 +504,4 @@ export default class StaticMap extends PureComponent {
 StaticMap.displayName = 'StaticMap';
 StaticMap.propTypes = propTypes;
 StaticMap.defaultProps = defaultProps;
+StaticMap.childContextTypes = childContextTypes;
