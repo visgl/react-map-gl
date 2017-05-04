@@ -24,7 +24,13 @@ export const ANCHOR_POSITION = {
  * @returns {String} position - one of 'top', 'bottom',
     'left', 'right', 'top-left', 'top-right', 'bottom-left' , and  'bottom-right'
  */
-export function getDynamicPosition({x, y, width, height, selfWidth, selfHeight, anchor, padding}) {
+export function getDynamicPosition({
+  x, y,
+  width, height,
+  selfWidth, selfHeight,
+  anchor,
+  padding = 0
+}) {
   let {x: anchorX, y: anchorY} = ANCHOR_POSITION[anchor];
 
   let top = y - anchorY * selfHeight;
