@@ -32,6 +32,10 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
+      },
+      {
         // Compile ES2015 and JSX using buble
         test: /\.js$/,
         loader: 'buble-loader',

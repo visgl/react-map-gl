@@ -4,5 +4,6 @@ dist-es6/
 node_modules
 coverage
 npm-debug.log
+*/**/yarn.lock
 yarn-error.log
 .DS_Store

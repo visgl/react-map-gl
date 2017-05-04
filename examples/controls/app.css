@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  background: #000;
+}
+
+.city-pin {
+  cursor: pointer;
+  fill: #d00;
+  stroke: none;
+}
