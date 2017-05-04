@@ -38,15 +38,12 @@ const locations = Immutable.fromJS(new Array(4000).fill(0).map(() => [
 ]));
 
 const MARKER_STYLE = {
-  fill: '#d00',
-  transform: 'translate(-50%,-100%)',
   cursor: 'pointer'
 };
 
-const MARKER_ICON = `M45.4,39.7C45.4,39.7,45.4,39.7,45.4,39.7c2.8-4.1,4.4-8.9,4.4-14.2
- C49.9,11.7,38.7,0.6,25,0.6S0.1,11.7,0.1,25.4c0,5,1.5,9.6,4,13.4c0.1,0.2,0.3,0.5,0.5,
- 0.8c0.1,0.1,0.2,0.3,0.3,0.4 c0.6,0.8,1.1,1.5,1.8,2.2C13.1,49.8,25,61,25,61s11.9-11.2,
- 18.3-18.7c0.6-0.7,1.2-1.4,1.8-2.2C45.2,39.9,45.3,39.8,45.4,39.7z`;
+const MARKER_ICON = `M18.2,15.7L18.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S0,4.5,0,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
+  c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
+  C18.1,15.8,18.2,15.8,18.2,15.7z`;
 
 function buildStyle({fill = 'red', stroke = 'blue'}) {
   return Immutable.fromJS({
@@ -124,8 +121,10 @@ export default class Example extends Component {
 
   _renderCityMarker(city, index) {
     return (
-      <Marker key={index} longitude={city.longitude} latitude={city.latitude}>
-        <svg width='20px' viewBox='0 0 50 61' style={MARKER_STYLE}>
+      <Marker key={index}
+        longitude={city.longitude} latitude={city.latitude}
+        offsetLeft={-10} offsetTop={-24}>
+        <svg width={20} viewBox='0 0 20 24' style={MARKER_STYLE}>
           <path fill='#d00' d={MARKER_ICON}/>
         </svg>
       </Marker>

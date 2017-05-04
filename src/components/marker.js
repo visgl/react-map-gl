@@ -25,10 +25,16 @@ const propTypes = {
   // Longitude of the anchor point
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
-  latitude: PropTypes.number.isRequired
+  latitude: PropTypes.number.isRequired,
+  // Offset from the left
+  offsetLeft: PropTypes.number,
+  // Offset from the top
+  offsetTop: PropTypes.number
 };
 
 const defaultProps = {
+  offsetLeft: 0,
+  offsetTop: 0
 };
 
 const contextTypes = {
@@ -38,17 +44,18 @@ const contextTypes = {
 export default class Marker extends Component {
 
   render() {
-    const {longitude, latitude} = this.props;
+    const {longitude, latitude, offsetLeft, offsetTop} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);
+    const containerStyle = {
+      position: 'absolute',
+      left: x + offsetLeft,
+      top: y + offsetTop
+    };
 
     return createElement('div', {
       className: 'map-control-marker',
-      style: {
-        position: 'absolute',
-        left: x,
-        top: y
-      },
+      style: containerStyle,
       children: this.props.children
     });
   }
