@@ -1,0 +1,30 @@
+{
+  "name": "webpack-exhibit",
+  "version": "0.0.0",
+  "description": "A webpack/deck.gl exhibit",
+  "scripts": {
+    "start": "webpack-dev-server --progress --hot --open",
+    "start-local": "webpack-dev-server --env.local --progress --hot --open"
+  },
+  "author": "Balthazar Gronon <bgronon@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-map-gl": "^2.0.1"
+  },
+  "devDependencies": {
+    "buble-loader": "^0.4.0",
+    "remove-flow-types-loader": "^1.0.0",
+    "webpack": "^2.2.0-rc.3",
+    "webpack-dev-server": "^2.2.0-rc.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-2",
+      "react"
+    ]
+  }
+}
