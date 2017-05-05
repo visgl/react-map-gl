@@ -33,45 +33,54 @@ export function getDynamicPosition({
 }) {
   let {x: anchorX, y: anchorY} = ANCHOR_POSITION[anchor];
 
+  // anchorY: top - 0, center - 0.5, bottom - 1
   let top = y - anchorY * selfHeight;
   let bottom = top + selfHeight;
+  // If needed, adjust anchorY at 0.5 step between [0, 1]
   const yStep = 0.5;
 
   if (top < padding) {
+    // Top edge is outside, try move down
     while (top < padding && anchorY >= yStep) {
       anchorY -= yStep;
       top += yStep * selfHeight;
     }
   } else if (bottom > height - padding) {
+    // bottom edge is outside, try move up
     while (bottom > height - padding && anchorY <= 1 - yStep) {
       anchorY += yStep;
       bottom -= yStep * selfHeight;
     }
   }
 
+  // anchorX: left - 0, center - 0.5, right - 1
+  let left = x - anchorX * selfWidth;
+  let right = left + selfWidth;
+
+  // If needed, adjust anchorX at 0.5 step between [0, 1]
   let xStep = 0.5;
   if (anchorY === 0.5) {
-    // If y is centered, x cannot also be centered
+    // If y is centered, then x cannot also be centered
     anchorX = Math.floor(anchorX);
     xStep = 1;
   }
 
-  let left = x - anchorX * selfWidth;
-  let right = left + selfWidth;
-
   if (left < padding) {
+    // Left edge is outside, try move right
     while (left < padding && anchorX >= xStep) {
       anchorX -= xStep;
       left += xStep * selfWidth;
     }
   } else if (right > width - padding) {
+    // Right edge is outside, try move left
     while (right > width - padding && anchorX <= 1 - xStep) {
       anchorX += xStep;
       right -= xStep * selfWidth;
     }
   }
 
-  return Object.keys(ANCHOR_POSITION).find(positionType => {
+  // Find the name of the new anchor position
+  return Object.keys(ANCHOR_POSITION).find((positionType) => {
     const anchorPosition = ANCHOR_POSITION[positionType];
     return anchorPosition.x === anchorX && anchorPosition.y === anchorY;
   });
