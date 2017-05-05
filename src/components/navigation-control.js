@@ -35,7 +35,7 @@ export default class NavigationControl extends Component {
 
   _updateViewport(opts) {
     const {viewport} = this.context;
-    const mapState = new MapState({...viewport, ...opts});
+    const mapState = new MapState(Object.assign({}, viewport, opts));
     this.props.onChangeViewport(mapState.getViewportProps());
   }
 

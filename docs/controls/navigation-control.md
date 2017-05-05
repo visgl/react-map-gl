@@ -5,6 +5,9 @@ This is a React equivalent of Mapbox's [NavigationControl](https://www.mapbox.co
 ```js
 import ReactMap, {Marker} from 'react-map-gl';
 
+/* Needs Mapbox's stylesheet to work! */
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 export default MyMap = ({viewport, updateViewport}) => {
   return (
     <ReactMap {...viewport} onChangeViewport={updateViewport}>
