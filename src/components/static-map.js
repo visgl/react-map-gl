@@ -73,13 +73,6 @@ const propTypes = {
   /** The height of the map. */
   height: PropTypes.number.isRequired,
 
-  /**
-   * `onChangeViewport` callback is fired when the user interacted with the
-   * map. The object passed to the callback contains `latitude`,
-   * `longitude` and `zoom` and additional state information.
-   */
-  onChangeViewport: PropTypes.func,
-
  /**
     * Called when a feature is hovered over. Uses Mapbox's
     * queryRenderedFeatures API to find features under the pointer:
@@ -125,7 +118,6 @@ const propTypes = {
 
 const defaultProps = {
   mapStyle: 'mapbox://styles/mapbox/light-v8',
-  onChangeViewport: null,
   mapboxApiAccessToken: getAccessToken(),
   preserveDrawingBuffer: false,
   attributionControl: true,

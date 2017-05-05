@@ -2,16 +2,16 @@ import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import assert from 'assert';
 
 // MAPBOX LIMITS
-const MAX_PITCH = 60;
-const MAX_ZOOM = 20;
+export const MAPBOX_MAX_PITCH = 60;
+export const MAPBOX_MAX_ZOOM = 20;
 
 const defaultState = {
   pitch: 0,
   bearing: 0,
   altitude: 1.5,
-  maxZoom: MAX_ZOOM,
+  maxZoom: MAPBOX_MAX_ZOOM,
   minZoom: 0,
-  maxPitch: MAX_PITCH,
+  maxPitch: MAPBOX_MAX_PITCH,
   minPitch: 0
 };
 
