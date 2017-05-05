@@ -4,18 +4,61 @@ import autobind from '../utils/autobind';
 
 import StaticMap from './static-map';
 import MapControls from './map-controls';
-import MapState from '../utils/map-state';
+import MapState, {MAPBOX_MAX_PITCH, MAPBOX_MAX_ZOOM} from '../utils/map-state';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
-  displayConstraints: PropTypes.object.isRequired
+  // Additional props on top of StaticMap
+
+  /** Viewport constraints */
+  // Max zoom level
+  maxZoom: PropTypes.number,
+  // Min zoom level
+  minZoom: PropTypes.number,
+  // Max pitch in degrees
+  maxPitch: PropTypes.number,
+  // Min pitch in degrees
+  minPitch: PropTypes.number,
+
+  /** Interaction states, required to calculate change during transform
+   * These should be managed by the map controller and updated via the
+   * `onChangeViewport` callback
+   */
+  startPanLngLat: PropTypes.arrayOf(PropTypes.number),
+  startZoomLngLat: PropTypes.arrayOf(PropTypes.number),
+  startBearing: PropTypes.number,
+  startPitch: PropTypes.number,
+  startZoom: PropTypes.number,
+
+  /**
+   * `onChangeViewport` callback is fired when the user interacted with the
+   * map. The object passed to the callback contains viewport properties
+   * such as `longitude`, `latitude`, `zoom` and additional interaction
+   * state information.
+   */
+  onChangeViewport: PropTypes.func,
+
+  /** Advanced features */
+  // Contraints for displaying the map. If not met, then the map is hidden.
+  displayConstraints: PropTypes.object.isRequired,
+  // A React component class definition to replace the default map controls
+  ControllerClass: PropTypes.func
 });
 
 const defaultProps = Object.assign({}, StaticMap.defaultProps, {
+  onChangeViewport: null,
+
+  /** Viewport constraints */
+  maxZoom: MAPBOX_MAX_ZOOM,
+  minZoom: 0,
+  maxPitch: MAPBOX_MAX_PITCH,
+  minPitch: 0,
+
   displayConstraints: {
-    maxZoom: 20,
-    maxPitch: 60
-  }
+    maxZoom: MAPBOX_MAX_ZOOM,
+    maxPitch: MAPBOX_MAX_PITCH
+  },
+  ControllerClass: MapControls
 });
 
 export default class InteractiveMap extends PureComponent {
@@ -61,7 +104,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   render() {
-    const {width, height} = this.props;
+    const {width, height, ControllerClass} = this.props;
     const mapVisible = this.checkDisplayConstraints(this.props);
     const visibility = mapVisible ? 'visible' : 'hidden';
     const overlayContainerStyle = {
@@ -74,7 +117,7 @@ export default class InteractiveMap extends PureComponent {
     };
 
     return (
-      createElement(MapControls, Object.assign({}, this.props, {
+      createElement(ControllerClass, Object.assign({}, this.props, {
         key: 'map-controls',
         style: {position: 'relative'},
         mapState: new MapState(this.props)
