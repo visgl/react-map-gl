@@ -1,7 +1,7 @@
 /* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Marker, Popup} from 'react-map-gl';
+import MapGL, {Marker, Popup, NavigationControl} from 'react-map-gl';
 
 import CityPin from './components/city-pin';
 
@@ -101,6 +101,10 @@ class Root extends Component {
         { CITIES.map(this._renderCityMarker) }
 
         {this._renderPopup()}
+
+        <div className="nav">
+          <NavigationControl onChangeViewport={this._updateViewport} />
+        </div>
 
       </MapGL>
     );
