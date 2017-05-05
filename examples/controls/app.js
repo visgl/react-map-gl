@@ -1,13 +1,14 @@
 /* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Marker} from 'react-map-gl';
+import MapGL, {Marker, Popup} from 'react-map-gl';
 
 import CityPin from './components/city-pin';
 
 import CITIES from './data/cities.json';
 
 import './app.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const token = process.env.MAPBOX_ACCESS_TOKEN || // eslint-disable-line
   'Set MAPBOX_ACCESS_TOKEN environment variable or put your token here.';
@@ -26,14 +27,16 @@ class Root extends Component {
         longitude: -100,
         zoom: 4,
         bearing: 0,
-        pitch: 60,
+        pitch: 0,
       },
       width: 500,
       height: 500,
+      popupInfo: null
     };
 
     this._updateViewport = this._updateViewport.bind(this);
     this._resize = this._resize.bind(this);
+    this._renderCityMarker = this._renderCityMarker.bind(this);
   }
 
   componentDidMount() {
@@ -58,10 +61,25 @@ class Root extends Component {
 
   _renderCityMarker(city, index) {
     return (
-      <Marker key={index}
-        longitude={city.longitude} latitude={city.latitude} >
-        <CityPin size={20} />
+      <Marker key={`marker-${index}`}
+        longitude={city.longitude}
+        latitude={city.latitude} >
+        <CityPin size={20} onClick={() => this.setState({popupInfo: city})} />
       </Marker>
+    );
+  }
+
+  _renderPopup() {
+    const {popupInfo} = this.state;
+
+    return popupInfo && (
+      <Popup tipSize={5}
+        anchor="top"
+        longitude={popupInfo.longitude}
+        latitude={popupInfo.latitude}
+        onClose={() => this.setState({popupInfo: null})} >
+        {popupInfo.cityName}
+      </Popup>
     );
   }
 
@@ -81,6 +99,8 @@ class Root extends Component {
         height={height}>
 
         { CITIES.map(this._renderCityMarker) }
+
+        {this._renderPopup()}
 
       </MapGL>
     );

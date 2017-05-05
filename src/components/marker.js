@@ -54,7 +54,7 @@ export default class Marker extends Component {
     };
 
     return createElement('div', {
-      className: 'map-control-marker',
+      className: 'mapboxgl-marker',
       style: containerStyle,
       children: this.props.children
     });
