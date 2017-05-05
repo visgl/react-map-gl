@@ -22,13 +22,16 @@
 export {default as InteractiveMap} from './components/interactive-map';
 export {default as StaticMap} from './components/static-map';
 export {default as MapControls} from './components/map-controls';
-export {default as Marker} from './components/marker';
-export {default as Popup} from './components/popup';
 
 export {default as default} from './components/interactive-map';
 export {default as MapGL} from './components/interactive-map';
 
 // export {default as ClassicMap} from './deprecated/map';
+
+// React Controls
+export {default as Marker} from './components/marker';
+export {default as Popup} from './components/popup';
+export {default as NavigationControl} from './components/navigation-control';
 
 // Utilities
 // export {default as fitBounds} from './utils/fit-bounds';

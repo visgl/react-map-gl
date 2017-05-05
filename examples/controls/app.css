@@ -8,3 +8,10 @@ body {
   fill: #d00;
   stroke: none;
 }
+
+.nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+}

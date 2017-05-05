@@ -17,7 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {PureComponent, createElement} from 'react';
+import {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
 import autobind from '../utils/autobind';
 
@@ -62,12 +62,12 @@ const propTypes = {
   /** The tile zoom level of the map. */
   zoom: PropTypes.number.isRequired,
   /** Specify the bearing of the viewport */
-  bearing: React.PropTypes.number,
+  bearing: PropTypes.number,
   /** Specify the pitch of the viewport */
-  pitch: React.PropTypes.number,
+  pitch: PropTypes.number,
   /** Altitude of the viewport camera. Default 1.5 "screen heights" */
   // Note: Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
-  altitude: React.PropTypes.number,
+  altitude: PropTypes.number,
   /** The width of the map. */
   width: PropTypes.number.isRequired,
   /** The height of the map. */
@@ -188,6 +188,7 @@ export default class StaticMap extends PureComponent {
       bearing: this.props.bearing,
       style: mapStyle,
       interactive: false,
+      attributionControl: this.props.attributionControl,
       preserveDrawingBuffer: this.props.preserveDrawingBuffer
     });
 
