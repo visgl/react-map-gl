@@ -41,6 +41,13 @@ const contextTypes = {
   viewport: PropTypes.instanceOf(PerspectiveMercatorViewport)
 };
 
+/*
+ * PureComponent doesn't update when context changes.
+ * The only way is to implement our own shouldComponentUpdate here. Considering
+ * the parent component (StaticMap or InteractiveMap) is pure, and map re-render
+ * is almost always triggered by a viewport change, we almost definitely need to
+ * recalculate the marker's position when the parent re-renders.
+ */
 export default class Marker extends Component {
 
   render() {

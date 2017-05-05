@@ -22,6 +22,10 @@ const contextTypes = {
   viewport: PropTypes.instanceOf(PerspectiveMercatorViewport)
 };
 
+/*
+ * PureComponent doesn't update when context changes, so
+ * implementing our own shouldComponentUpdate here.
+ */
 export default class NavigationControl extends Component {
 
   constructor(props) {
