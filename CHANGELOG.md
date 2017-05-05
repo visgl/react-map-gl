@@ -2,6 +2,8 @@
 
 ## Version 3.0.0 (Alpha)
 
+### Version 3.0.0-alpha.10 - Add `ControllerClass` prop to `InteractiveMap`
+
 ### Version 3.0.0-alpha.9
 - NEW: Marker component
 - NEW: Popup component
