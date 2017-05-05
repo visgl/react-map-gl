@@ -2,8 +2,11 @@
 
 ## Version 3.0.0 (Alpha)
 
-[TBD]
-- Add Marker control
+### Version 3.0.0-alpha.9
+- NEW: Marker component
+- NEW: Popup component
+- FIX: `attributeControl` prop
+- NEW: NavigationControl component
 
 ### Version 3.0.0-alpha.8 - Fix server side rendering of InteractiveMap
 
