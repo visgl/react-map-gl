@@ -1,12 +1,7 @@
 {
-  "name": "browserify-exhibit",
-  "version": "0.0.0",
-  "description": "A browserify/react-map-gl exhibit",
   "scripts": {
-    "start": "budo app.js --open -- -t babelify"
+    "start": "budo app.js --open -- -t babelify -t envify"
   },
-  "author": "Balthazar Gronon <bgronon@gmail.com>",
-  "license": "MIT",
   "dependencies": {
     "immutable": "^3.8.1",
     "react": "^15.4.1",
@@ -18,7 +13,8 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-2": "^6.18.0",
     "babelify": "^7.3.0",
-    "budo": "^9.2.2"
+    "budo": "^9.2.2",
+    "envify": "^4.0.0"
   },
   "babel": {
     "presets": [

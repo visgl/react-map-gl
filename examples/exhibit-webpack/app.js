@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 
-const token = '';
+const token = process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
 
 if (!token) {
   throw new Error('Please specify a valid mapbox token');
