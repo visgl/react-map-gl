@@ -1,12 +1,7 @@
 {
-  "name": "webpack-exhibit",
-  "version": "0.0.0",
-  "description": "A webpack/deck.gl exhibit",
   "scripts": {
-    "start": "webpack-dev-server --config config.js --progress --hot --port 3000 --open"
+    "start": "webpack-dev-server --progress --hot --port 3000 --open"
   },
-  "author": "Balthazar Gronon <bgronon@gmail.com>",
-  "license": "MIT",
   "dependencies": {
     "immutable": "^3.8.1",
     "react": "^15.4.1",
@@ -19,10 +14,8 @@
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-2": "^6.18.0",
-    "brfs-babel": "^1.0.0",
-    "transform-loader": "^0.2.3",
-    "webpack": "^2.2.0",
-    "webpack-dev-server": "^1.16.2",
+    "webpack": "^2.4.0",
+    "webpack-dev-server": "^2.4.0",
     "webworkify-webpack-dropin": "^1.1.9"
   },
   "babel": {
