@@ -24,10 +24,10 @@
 
 * `browserify` - react-map-gl is extensively tested with `browserify` and works without configuration.
 
-* `webpack 1` - look at the [deck.gl exhibits](https://github.com/uber/deck.gl/tree/master/exhibits)
+* `webpack 1` - look at the [exhibit-webpack](https://github.com/uber/react-map-gl/tree/master/examples/exhibit-webpack)
 folder, demonstrating a working demo using `webpack`.
 
-* `webpack 2` - The dev branch in this repo is based on webpack 2, look at the webpack config file in the main example. 
+* `webpack 2` - The dev branch in this repo is based on webpack 2, look at the webpack config file in the main example.
 
 In general, for non-browserify based environments, make sure you have read the instructions on the
 [mapbox-gl-js README](https://github.com/mapbox/mapbox-gl-js#using-mapbox-gl-js-with-other-module-systems).
