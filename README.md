@@ -24,7 +24,7 @@
 
 * `browserify` - react-map-gl is extensively tested with `browserify` and works without configuration.
 
-* `webpack 1` - look at the [deck.gl examples](https://github.com/uber/deck.gl/tree/master/examples)
+* `webpack 1` - look at the [exhibit-webpack](https://github.com/uber/react-map-gl/tree/master/examples/exhibit-webpack)
 folder, demonstrating a working demo using `webpack`.
 
 * `webpack 2` - The dev branch in this repo is based on webpack 2, look at the webpack config file in the main example.
