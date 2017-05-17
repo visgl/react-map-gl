@@ -21,7 +21,6 @@
 // React Components
 export {default as InteractiveMap} from './components/interactive-map';
 export {default as StaticMap} from './components/static-map';
-export {default as MapControls} from './components/map-controls';
 
 export {default as default} from './components/interactive-map';
 export {default as MapGL} from './components/interactive-map';
@@ -35,6 +34,7 @@ export {default as NavigationControl} from './components/navigation-control';
 
 // Utilities
 // export {default as fitBounds} from './utils/fit-bounds';
+export {default as MapControls} from './utils/map-controls';
 
 // TODO - should not be exposed
 export {default as autobind} from './utils/autobind';

@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import autobind from '../utils/autobind';
 
 import StaticMap from './static-map';
-import MapControls from './map-controls';
 import MapState, {MAPBOX_MAX_PITCH, MAPBOX_MAX_ZOOM} from '../utils/map-state';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+
+import EventManager from '../utils/event-manager/event-manager';
+import MapControls from '../utils/map-controls';
+import config from '../config';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -38,15 +41,27 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
    */
   onChangeViewport: PropTypes.func,
 
+  /** Enables perspective control event handling */
+  perspectiveEnabled: PropTypes.bool,
+
+  /**
+    * Is the component currently being dragged. This is used to show/hide the
+    * drag cursor. Also used as an optimization in some overlays by preventing
+    * rendering while dragging.
+    */
+  isHovering: PropTypes.bool,
+  isDragging: PropTypes.bool,
+
   /** Advanced features */
   // Contraints for displaying the map. If not met, then the map is hidden.
   displayConstraints: PropTypes.object.isRequired,
   // A React component class definition to replace the default map controls
-  ControllerClass: PropTypes.func
+  mapControls: PropTypes.object
 });
 
 const defaultProps = Object.assign({}, StaticMap.defaultProps, {
   onChangeViewport: null,
+  perspectiveEnabled: false,
 
   /** Viewport constraints */
   maxZoom: MAPBOX_MAX_ZOOM,
@@ -58,7 +73,8 @@ const defaultProps = Object.assign({}, StaticMap.defaultProps, {
     maxZoom: MAPBOX_MAX_ZOOM,
     maxPitch: MAPBOX_MAX_PITCH
   },
-  ControllerClass: MapControls
+
+  mapControls: new MapControls()
 });
 
 export default class InteractiveMap extends PureComponent {
@@ -78,9 +94,55 @@ export default class InteractiveMap extends PureComponent {
     };
   }
 
+  componentDidMount() {
+    // Register event handlers
+    const {eventCanvas} = this.refs;
+    const {mapControls} = this.props;
+
+    this._eventManager = new EventManager(eventCanvas);
+
+    mapControls.events.forEach(event => this._eventManager.on(event, this._handleEvent));
+  }
+
+  componentWillUnmount() {
+    if (this._eventManager) {
+      // Must destroy because hammer adds event listeners to window
+      this._eventManager.destroy();
+    }
+  }
+
+  _handleEvent(event) {
+    const {mapControls} = this.props;
+    mapControls.setState({
+      ...this.props,
+      mapState: new MapState(this.props)
+    });
+
+    return mapControls.handle(event);
+  }
+
   // TODO - Remove once Viewport alternative is good enough
   _getMap() {
     return this._map._getMap();
+  }
+
+  // Calculate a cursor style to show that we are in "dragging state"
+  _getCursor() {
+    const isInteractive =
+      this.props.onChangeViewport ||
+      this.props.onClickFeature ||
+      this.props.onHoverFeatures;
+
+    if (!isInteractive) {
+      return 'inherit';
+    }
+    if (this.props.isDragging) {
+      return config.CURSOR.GRABBING;
+    }
+    if (this.props.isHovering) {
+      return config.CURSOR.POINTER;
+    }
+    return config.CURSOR.GRAB;
   }
 
   // Checks a displayConstraints object to see if the map should be displayed
@@ -104,7 +166,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   render() {
-    const {width, height, ControllerClass} = this.props;
+    const {width, height} = this.props;
     const mapVisible = this.checkDisplayConstraints(this.props);
     const visibility = mapVisible ? 'visible' : 'hidden';
     const overlayContainerStyle = {
@@ -116,12 +178,19 @@ export default class InteractiveMap extends PureComponent {
       overflow: 'hidden'
     };
 
+    const eventCanvasStyle = Object.assign({}, {
+      width,
+      height,
+      position: 'relative',
+      cursor: this._getCursor()
+    });
+
     return (
-      createElement(ControllerClass, Object.assign({}, this.props, {
+      createElement('div', {
         key: 'map-controls',
-        style: {position: 'relative'},
-        mapState: new MapState(this.props)
-      }), [
+        ref: 'eventCanvas',
+        style: eventCanvasStyle
+      }, [
         createElement(StaticMap, Object.assign({}, this.props, {
           key: 'map-static',
           style: {visibility},
