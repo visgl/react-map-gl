@@ -155,16 +155,16 @@ export default class MapState {
 
   /**
    * Rotate
-   * @param {Number} xDeltaScale - a number between [-1, 1] specifying the
+   * @param {Number} deltaScaleX - a number between [-1, 1] specifying the
    *   change to bearing.
-   * @param {Number} yDeltaScale - a number between [-1, 1] specifying the
+   * @param {Number} deltaScaleY - a number between [-1, 1] specifying the
    *   change to pitch. -1 sets to minPitch and 1 sets to maxPitch.
    */
-  rotate({xDeltaScale, yDeltaScale}) {
-    assert(xDeltaScale >= -1 && xDeltaScale <= 1,
-      '`xDeltaScale` must be a number between [-1, 1]');
-    assert(yDeltaScale >= -1 && yDeltaScale <= 1,
-      '`yDeltaScale` must be a number between [-1, 1]');
+  rotate({deltaScaleX, deltaScaleY}) {
+    assert(deltaScaleX >= -1 && deltaScaleX <= 1,
+      '`deltaScaleX` must be a number between [-1, 1]');
+    assert(deltaScaleY >= -1 && deltaScaleY <= 1,
+      '`deltaScaleY` must be a number between [-1, 1]');
 
     let {startBearing, startPitch} = this._state;
 
@@ -176,8 +176,8 @@ export default class MapState {
     }
 
     const {pitch, bearing} = this._calculateNewPitchAndBearing({
-      xDeltaScale,
-      yDeltaScale,
+      deltaScaleX,
+      deltaScaleY,
       startBearing,
       startPitch
     });
@@ -305,17 +305,17 @@ export default class MapState {
   }
 
   // Calculates a new pitch and bearing from a position (coming from an event)
-  _calculateNewPitchAndBearing({xDeltaScale, yDeltaScale, startBearing, startPitch}) {
+  _calculateNewPitchAndBearing({deltaScaleX, deltaScaleY, startBearing, startPitch}) {
     const {minPitch, maxPitch} = this._state;
 
-    const bearing = startBearing + 180 * xDeltaScale;
+    const bearing = startBearing + 180 * deltaScaleX;
     let pitch = startPitch;
-    if (yDeltaScale > 0) {
+    if (deltaScaleY > 0) {
       // Gradually increase pitch
-      pitch = startPitch + yDeltaScale * (maxPitch - startPitch);
-    } else if (yDeltaScale < 0) {
+      pitch = startPitch + deltaScaleY * (maxPitch - startPitch);
+    } else if (deltaScaleY < 0) {
       // Gradually decrease pitch
-      pitch = startPitch - yDeltaScale * (minPitch - startPitch);
+      pitch = startPitch - deltaScaleY * (minPitch - startPitch);
     }
 
     return {

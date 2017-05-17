@@ -12,6 +12,13 @@ const WHEEL_EVENTS = [
   'DOMMouseScroll'
 ];
 
+// Constants for normalizing input delta
+const WHEEL_DELTA_MAGIC_SCALER = 4.000244140625;
+const TRACKPAD_MAX_DELTA = 4;
+const TRACKPAD_MAX_DELTA_PER_TIME = 200;
+// Slow down zoom if shift key is held for more precise zooming
+const SHIFT_MULTIPLIER = 0.25;
+
 export default class WheelInput {
 
   constructor(element, callback) {
@@ -56,12 +63,12 @@ export default class WheelInput {
     const pos = {x: event.clientX, y: event.clientY};
     time = now;
 
-    if (value !== 0 && value % 4.000244140625 === 0) {
+    if (value !== 0 && value % WHEEL_DELTA_MAGIC_SCALER === 0) {
       // This one is definitely a mouse wheel event.
       type = 'wheel';
       // Normalize this value to match trackpad.
-      value = Math.floor(value / 4);
-    } else if (value !== 0 && Math.abs(value) < 4) {
+      value = Math.floor(value / WHEEL_DELTA_MAGIC_SCALER);
+    } else if (value !== 0 && Math.abs(value) < TRACKPAD_MAX_DELTA) {
       // This one is definitely a trackpad event because it is so small.
       type = 'trackpad';
     } else if (timeDelta > 400) {
@@ -80,7 +87,7 @@ export default class WheelInput {
       // yet.
       // If the delta per time is small, we assume it's a fast trackpad;
       // otherwise we switch into wheel mode.
-      type = Math.abs(timeDelta * value) < 200 ? 'trackpad' : 'wheel';
+      type = Math.abs(timeDelta * value) < TRACKPAD_MAX_DELTA_PER_TIME ? 'trackpad' : 'wheel';
 
       // Make sure our delayed event isn't fired again, because we accumulate
       // the previous event (which was less than 40ms ago) into this event.
@@ -91,9 +98,8 @@ export default class WheelInput {
       }
     }
 
-    // Slow down zoom if shift key is held for more precise zooming
     if (event.shiftKey && value) {
-      value = value / 4;
+      value = value * SHIFT_MULTIPLIER;
     }
 
     // Only fire the callback if we actually know what type of scrolling device

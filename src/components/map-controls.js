@@ -75,16 +75,16 @@ export default class MapControls extends PureComponent {
     const {canvas} = this.refs;
 
     this._eventManager = new EventManager(canvas)
-    .on({
-      panstart: this._onDragStart,
-      pan: this._onDrag,
-      panend: this._onDragEnd,
-      pinchstart: this._onPinchStart,
-      pinch: this._onPinch,
-      pinchend: this._onPinchEnd,
-      doubletap: this._onDoubleTap,
-      wheel: this._onWheel
-    });
+      .on({
+        panstart: this._onPanStart,
+        pan: this._onPan,
+        panend: this._onPanEnd,
+        pinchstart: this._onPinchStart,
+        pinch: this._onPinch,
+        pinchend: this._onPinchEnd,
+        doubletap: this._onDoubleTap,
+        wheel: this._onWheel
+      });
   }
 
   componentWillUnmount() {
@@ -95,7 +95,7 @@ export default class MapControls extends PureComponent {
   }
 
   /* Event utils */
-
+  // Event object: http://hammerjs.github.io/api/#event-object
   _getCenter(event) {
     const {center, target} = event;
     const rect = target.getBoundingClientRect();
@@ -143,63 +143,61 @@ export default class MapControls extends PureComponent {
     ));
   }
 
-  _onDragStart(event) {
+  _onPanStart(event) {
     const pos = this._getCenter(event);
     const newMapState = this.props.mapState.panStart({pos}).rotateStart({pos});
     this._updateViewport(newMapState, {isDragging: true});
   }
 
-  _onDrag(event) {
-    if (this._isFunctionKeyPressed(event)) {
-      this._onRotate(event);
-    } else {
-      this._onPan(event);
-    }
+  _onPan(event) {
+    return this._isFunctionKeyPressed(event) ? this._onRotateMap(event) : this._onPanMap(event);
   }
 
-  _onDragEnd(event) {
+  _onPanEnd(event) {
     const newMapState = this.props.mapState.panEnd().rotateEnd();
     this._updateViewport(newMapState, {isDragging: false});
   }
 
-  _onPan(event) {
+  _onPanMap(event) {
     const pos = this._getCenter(event);
     const newMapState = this.props.mapState.pan({pos});
     this._updateViewport(newMapState);
   }
 
-  _onRotate(event) {
+  _onRotateMap(event) {
     if (!this.props.perspectiveEnabled) {
       return;
     }
 
     const {deltaX, deltaY} = event;
-    const pos = this._getCenter(event);
-    const startPos = [pos[0] - deltaX, pos[1] - deltaY];
+    const [, centerY] = this._getCenter(event);
+    const startY = centerY - deltaY;
 
-    const xDeltaScale = deltaX / this.props.width;
-    let yDeltaScale = 0;
+    const deltaScaleX = deltaX / this.props.width;
+    let deltaScaleY = 0;
 
     if (deltaY > 0) {
-      if (Math.abs(this.props.height - startPos[1]) > PITCH_MOUSE_THRESHOLD) {
+      if (Math.abs(this.props.height - startY) > PITCH_MOUSE_THRESHOLD) {
         // Move from 0 to -1 as we drag upwards
-        yDeltaScale = deltaY / (startPos[1] - this.props.height) * PITCH_ACCEL;
+        deltaScaleY = deltaY / (startY - this.props.height) * PITCH_ACCEL;
       }
     } else if (deltaY < 0) {
-      if (startPos[1] > PITCH_MOUSE_THRESHOLD) {
+      if (startY > PITCH_MOUSE_THRESHOLD) {
         // Move from 0 to 1 as we drag upwards
-        yDeltaScale = 1 - pos[1] / startPos[1];
+        deltaScaleY = 1 - centerY / startY;
       }
     }
-    yDeltaScale = Math.min(1, Math.max(-1, yDeltaScale));
+    deltaScaleY = Math.min(1, Math.max(-1, deltaScaleY));
 
-    const newMapState = this.props.mapState.rotate({xDeltaScale, yDeltaScale});
+    const newMapState = this.props.mapState.rotate({deltaScaleX, deltaScaleY});
     this._updateViewport(newMapState);
   }
 
   _onWheel(event) {
     const pos = this._getCenter(event);
     const {delta} = event;
+
+    // Map wheel delta to relative scale
     let scale = 2 / (1 + Math.exp(-Math.abs(delta * ZOOM_ACCEL)));
     if (delta < 0 && scale !== 0) {
       scale = 1 / scale;

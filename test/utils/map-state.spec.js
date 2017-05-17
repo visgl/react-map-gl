@@ -120,7 +120,7 @@ test('MapState - Rotate', t => {
   SAMPLE_VIEWPORTS.forEach(viewport => {
     // one-off rotating
     const viewport1 = new MapState(viewport)
-      .rotate({xDeltaScale: X_DELTA, yDeltaScale: Y_DELTA})
+      .rotate({deltaScaleX: X_DELTA, deltaScaleY: Y_DELTA})
       .getViewportProps();
 
     t.ok(toLowPrecision(viewport1.bearing) !== toLowPrecision(viewport.bearing || 0),
@@ -135,8 +135,8 @@ test('MapState - Rotate', t => {
     // chained rotating
     const viewport2 = new MapState(viewport)
       .rotateStart({})
-      .rotate({xDeltaScale: 0, yDeltaScale: 0})
-      .rotate({xDeltaScale: X_DELTA, yDeltaScale: Y_DELTA})
+      .rotate({deltaScaleX: 0, deltaScaleY: 0})
+      .rotate({deltaScaleX: X_DELTA, deltaScaleY: Y_DELTA})
       .rotateEnd()
       .getViewportProps();
 
@@ -147,18 +147,18 @@ test('MapState - Rotate', t => {
 
   // argument out of bounds
   try {
-    new MapState(SAMPLE_VIEWPORTS[0]).rotate({xDeltaScale: 2, yDeltaScale: 0});
+    new MapState(SAMPLE_VIEWPORTS[0]).rotate({deltaScaleX: 2, deltaScaleY: 0});
     t.fail('Should throw error with out of bounds argument');
   } catch (error) {
-    t.ok(/xDeltaScale/.test(error.message), 'Should throw error with out of bounds argument');
+    t.ok(/deltaScaleX/.test(error.message), 'Should throw error with out of bounds argument');
   }
 
   // insufficient arguments
   try {
-    new MapState(SAMPLE_VIEWPORTS[0]).rotate({xDeltaScale: 0});
+    new MapState(SAMPLE_VIEWPORTS[0]).rotate({deltaScaleX: 0});
     t.fail('Should throw error for missing argument');
   } catch (error) {
-    t.ok(/yDeltaScale/.test(error.message), 'Should throw error for missing argument');
+    t.ok(/deltaScaleY/.test(error.message), 'Should throw error for missing argument');
   }
 
   t.end();

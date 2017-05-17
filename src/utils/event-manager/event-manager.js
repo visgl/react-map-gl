@@ -17,7 +17,9 @@ export default class EventManager {
 
     this._onBasicInput = this._onBasicInput.bind(this);
     this.manager = new Manager(element, {recognizers: RECOGNIZERS})
-    .on('hammer.input', this._onBasicInput);
+      .on('hammer.input', this._onBasicInput);
+
+    this.aliasedEventHandlers = {};
 
     // Handle mouse wheel events as well
     this.wheelInput = new WheelInput(element, event => {
@@ -45,9 +47,15 @@ export default class EventManager {
       }
 
       // Alias to a recognized gesture as necessary.
-      const gestureEventAlias = GESTURE_EVENT_ALIASES[event];
+      const eventAlias = GESTURE_EVENT_ALIASES[event];
+      if (eventAlias && !this.aliasedEventHandlers[event]) {
+        const aliasedEventHandler = this._wrapAliasedGestureHandler(event);
+        this.manager.on(eventAlias, aliasedEventHandler);
+        this.aliasedEventHandlers[event] = aliasedEventHandler;
+      }
+
       // Register event handler.
-      this.manager.on(gestureEventAlias || event, handler);
+      this.manager.on(event, handler);
     } else {
       // If `event` is a map, call `on()` for each entry.
       for (const eventName in event) {
@@ -63,10 +71,8 @@ export default class EventManager {
    */
   off(event, handler) {
     if (typeof event === 'string') {
-      // Clean up aliased gesture handler as necessary.
-      const gestureEventAlias = GESTURE_EVENT_ALIASES[event];
       // Deregister event handler.
-      this.manager.off(gestureEventAlias || event, handler);
+      this.manager.off(event, handler);
     } else {
       // If `event` is a map, call `off()` for each entry.
       for (const eventName in event) {
@@ -92,6 +98,10 @@ export default class EventManager {
         this.manager.emit(alias, emitEvent);
       });
     }
+  }
+
+  _wrapAliasedGestureHandler(eventAlias) {
+    return event => this.manager.emit(eventAlias, event);
   }
 
 }
