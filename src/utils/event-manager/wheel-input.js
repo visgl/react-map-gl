@@ -14,6 +14,7 @@ const WHEEL_EVENTS = [
 
 // Constants for normalizing input delta
 const WHEEL_DELTA_MAGIC_SCALER = 4.000244140625;
+const WHEEL_DELTA_PER_LINE = 40;
 const TRACKPAD_MAX_DELTA = 4;
 const TRACKPAD_MAX_DELTA_PER_TIME = 200;
 // Slow down zoom if shift key is held for more precise zooming
@@ -49,7 +50,7 @@ export default class WheelInput {
       value /= window.devicePixelRatio;
     }
     if (event.deltaMode === window.WheelEvent.DOM_DELTA_LINE) {
-      value *= 40;
+      value *= WHEEL_DELTA_PER_LINE;
     }
 
     let type = this._state.mouseWheelType;
