@@ -2,6 +2,10 @@
 
 ## Version 3.0.0 (Alpha)
 
+[TBD]
+- New event management system based on hammer.js
+- FIX: Touch interaction
+
 ### Version 3.0.0-alpha.10 - Add `ControllerClass` prop to `InteractiveMap`
 
 ### Version 3.0.0-alpha.9

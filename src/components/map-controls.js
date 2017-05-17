@@ -71,7 +71,7 @@ export default class MapControls extends PureComponent {
   }
 
   componentDidMount() {
-    // Register event handlers on the canvas using hammer.js
+    // Register event handlers
     const {canvas} = this.refs;
 
     this._eventManager = new EventManager(canvas)
