@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "bowser": "^1.2.0",
+    "hammerjs": "^2.0.8",
     "immutable": "*",
     "mapbox-gl": "0.32.1",
     "prop-types": "^15.5.7",
