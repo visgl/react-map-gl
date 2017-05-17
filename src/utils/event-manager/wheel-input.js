@@ -1,43 +1,40 @@
-import autobind from '../utils/autobind';
-import {window} from './globals';
-import Hammer from 'hammerjs';
-
+/* global window:false */
 const ua = typeof window.navigator !== 'undefined' ?
   window.navigator.userAgent.toLowerCase() : '';
 const firefox = ua.indexOf('firefox') !== -1;
 
-/**
- * A class that extends Hammer.Input to handle both pointer and wheel events
- * Hammer.js does not handle mouse wheel, so we need to add our own listener
- */
-export default class EventInput extends Hammer.PointerEventInput {
+const WHEEL_EVENTS = [
+  // Chrome, Safari
+  'wheel',
+  // IE
+  'mousewheel',
+  // legacy Firefox
+  'DOMMouseScroll'
+];
 
-  constructor(...opts) {
-    super(...opts);
+export default class WheelInput {
 
-    this.state = {
+  constructor(element, callback) {
+    this.element = element;
+    this.callback = callback;
+
+    this.handler = this.handler.bind(this);
+
+    WHEEL_EVENTS.forEach(eventName => element.addEventListener(eventName, this.handler));
+
+    this._state = {
       mouseWheelPos: null
     };
-
-    autobind(this);
-
-    // Add aditional event listeners
-    this.element.addEventListener('wheel', this._onWheel, false);
-    this.element.addEventListener('mousewheel', this._onWheel, false);
   }
 
   destroy() {
-    super.destroy();
-    this.element.removeEventListener('wheel', this._onWheel);
-    this.element.removeEventListener('mousewheel', this._onWheel);
-  }
-
-  setState(settings) {
-    Object.assign(this.state, settings);
+    const {element} = this;
+    WHEEL_EVENTS.forEach(eventName => element.removeEventListener(eventName, this.handler));
   }
 
   /* eslint-disable complexity, max-statements */
-  _onWheel(event) {
+  handler(event) {
+
     event.preventDefault();
     let value = event.deltaY;
     // Firefox doubles the values on retina screens...
@@ -48,10 +45,10 @@ export default class EventInput extends Hammer.PointerEventInput {
       value *= 40;
     }
 
-    let type = this.state.mouseWheelType;
-    let timeout = this.state.mouseWheelTimeout;
-    let lastValue = this.state.mouseWheelLastValue;
-    let time = this.state.mouseWheelTime;
+    let type = this._state.mouseWheelType;
+    let timeout = this._state.mouseWheelTimeout;
+    let lastValue = this._state.mouseWheelLastValue;
+    let time = this._state.mouseWheelTime;
 
     const now = (window.performance || Date).now();
     const timeDelta = now - (time || 0);
@@ -75,8 +72,8 @@ export default class EventInput extends Hammer.PointerEventInput {
       // to 40ms.
       timeout = window.setTimeout(function setTimeout() {
         const _type = 'wheel';
-        this._wheel(-this.state.mouseWheelLastValue, this.state.mouseWheelPos);
-        this.setState({mouseWheelType: _type});
+        this._wheel(event, -this._state.mouseWheelLastValue, this._state.mouseWheelPos);
+        this._setState({mouseWheelType: _type});
       }.bind(this), 40);
     } else if (!this._type) {
       // This is a repeating event, but we don't know the type of event just
@@ -102,10 +99,10 @@ export default class EventInput extends Hammer.PointerEventInput {
     // Only fire the callback if we actually know what type of scrolling device
     // the user uses.
     if (type) {
-      this._wheel(-value, pos);
+      this._wheel(event, -value, pos);
     }
 
-    this.setState({
+    this._setState({
       mouseWheelTime: time,
       mouseWheelPos: pos,
       mouseWheelType: type,
@@ -114,13 +111,16 @@ export default class EventInput extends Hammer.PointerEventInput {
     });
   }
 
-  /* eslint-enable complexity, max-statements */
-
-  _wheel(delta, pos) {
-    this.manager.emit('wheel', {
+  _wheel(srcEvent, delta, pos) {
+    this.callback({
       center: pos,
-      target: this.element,
-      delta
+      delta,
+      srcEvent,
+      target: this.element
     });
+  }
+
+  _setState(settings) {
+    Object.assign(this._state, settings);
   }
 }

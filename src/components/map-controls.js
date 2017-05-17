@@ -23,10 +23,9 @@ import PropTypes from 'prop-types';
 import autobind from '../utils/autobind';
 
 import MapState from '../utils/map-state';
-import EventInput from '../utils/event-input';
 import config from '../config';
 
-import Hammer from 'hammerjs';
+import EventManager from '../utils/event-manager/event-manager';
 
 // EVENT HANDLING PARAMETERS
 const PITCH_MOUSE_THRESHOLD = 5;
@@ -75,22 +74,17 @@ export default class MapControls extends PureComponent {
     // Register event handlers on the canvas using hammer.js
     const {canvas} = this.refs;
 
-    this._eventManager = new Hammer.Manager(canvas, {
-      inputClass: EventInput,
-      recognizers: [
-        [Hammer.Pinch, {}],
-        [Hammer.Pan, {threshold: 10}],
-        [Hammer.Tap, {event: 'doubletap', taps: 2}]
-      ]
-    })
-    .on('panstart', this._onDragStart)
-    .on('pan', this._onDrag)
-    .on('panend', this._onDragEnd)
-    .on('pinchstart', this._onPinchStart)
-    .on('pinch', this._onPinch)
-    .on('pinchend', this._onPinchEnd)
-    .on('doubletap', this._onDoubleTap)
-    .on('wheel', this._onWheel);
+    this._eventManager = new EventManager(canvas)
+    .on({
+      panstart: this._onDragStart,
+      pan: this._onDrag,
+      panend: this._onDragEnd,
+      pinchstart: this._onPinchStart,
+      pinch: this._onPinch,
+      pinchend: this._onPinchEnd,
+      doubletap: this._onDoubleTap,
+      wheel: this._onWheel
+    });
   }
 
   componentWillUnmount() {

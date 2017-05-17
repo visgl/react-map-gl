@@ -55,7 +55,6 @@ test('InteractiveMap#call onLoad when provided', t => {
     t.end();
   } else {
     t.end();
-    /* global setTimeout */
     // setTimeout(() => {
     //   t.fail('onLoad wasn\'t called');
     //   t.end();
