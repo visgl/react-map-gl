@@ -26,15 +26,15 @@ import View from './view';
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {width: window.innerWidth};
-    window.addEventListener('resize', () => this.setState({width: window.innerWidth}));
+    this.state = {width: window.innerWidth, height: window.innerHeight};
+    window.addEventListener('resize', () => this.setState({width: window.innerWidth, height: window.innerHeight}));
   }
 
   render() {
-    const common = {width: 400, height: 400, style: {float: 'left'}};
+    const common = {style: {float: 'left'}};
     return (
       <div>
-        <View {...common} width={ this.state.width - 30 }/>
+        <View {...common} {...this.state}/>
       </div>
     );
   }
