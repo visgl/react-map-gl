@@ -187,7 +187,13 @@ const PROP_TYPES = {
     * The load callback is called when all dependencies have been loaded and
     * the map is ready.
     */
-  onLoad: PropTypes.func
+  onLoad: PropTypes.func,
+
+  /**
+   * Prop to enable/disable scroll zoom.
+   * Defaults to true
+   */
+  scrollZoomEnabled: PropTypes.bool
 
 };
 
@@ -202,7 +208,8 @@ const DEFAULT_PROPS = {
   pitch: 0,
   altitude: 1.5,
   clickRadius: 15,
-  maxZoom: 20
+  maxZoom: 20,
+  scrollZoomEnabled: true
 };
 
 @pureRender
@@ -688,6 +695,7 @@ export default class MapGL extends Component {
           onTouchTap = { this._onTouchTap }
           onZoom ={ this._onZoom }
           onZoomEnd ={ this._onZoomEnd }
+          scrollZoomEnabled={this.props.scrollZoomEnabled}
           width ={ this.props.width }
           height ={ this.props.height }>
 
