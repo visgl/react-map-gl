@@ -55,8 +55,14 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   /** Advanced features */
   // Contraints for displaying the map. If not met, then the map is hidden.
   displayConstraints: PropTypes.object.isRequired,
-  // A React component class definition to replace the default map controls
-  mapControls: PropTypes.object
+  // A map control instance to replace the default map controls
+  // The object must expose one property: `events` as an array of subscribed
+  // event names; and two methods: `setState(state)` and `handle(event)`
+  mapControls: PropTypes.shape({
+    events: PropTypes.arrayOf(PropTypes.string),
+    setState: PropTypes.func,
+    handle: PropTypes.func
+  })
 });
 
 const defaultProps = Object.assign({}, StaticMap.defaultProps, {
