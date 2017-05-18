@@ -114,28 +114,35 @@ export default class MapControls {
   }
 
   /* Event handlers */
+  // Default handler for the `panstart` event.
   _onPanStart(event) {
     const pos = this.getCenter(event);
     const newMapState = this.mapState.panStart({pos}).rotateStart({pos});
-    this.updateViewport(newMapState, {isDragging: true});
+    return this.updateViewport(newMapState, {isDragging: true});
   }
 
+  // Default handler for the `pan` event.
   _onPan(event) {
-    return this.isFunctionKeyPressed(event) ? this._onRotateMap(event) : this._onPanMap(event);
+    return this.isFunctionKeyPressed(event) ? this._onPanRotate(event) : this._onPanMove(event);
   }
 
+  // Default handler for the `panend` event.
   _onPanEnd(event) {
     const newMapState = this.mapState.panEnd().rotateEnd();
-    this.updateViewport(newMapState, {isDragging: false});
+    return this.updateViewport(newMapState, {isDragging: false});
   }
 
-  _onPanMap(event) {
+  // Default handler for panning to move.
+  // Called by `_onPan` when panning without function key pressed.
+  _onPanMove(event) {
     const pos = this.getCenter(event);
     const newMapState = this.mapState.pan({pos});
-    this.updateViewport(newMapState);
+    return this.updateViewport(newMapState);
   }
 
-  _onRotateMap(event) {
+  // Default handler for panning to rotate.
+  // Called by `_onPan` when panning with function key pressed.
+  _onPanRotate(event) {
     if (!this.perspectiveEnabled) {
       return;
     }
@@ -162,9 +169,10 @@ export default class MapControls {
     deltaScaleY = Math.min(1, Math.max(-1, deltaScaleY));
 
     const newMapState = this.mapState.rotate({deltaScaleX, deltaScaleY});
-    this.updateViewport(newMapState);
+    return this.updateViewport(newMapState);
   }
 
+  // Default handler for the `wheel` event.
   _onWheel(event) {
     const pos = this.getCenter(event);
     const {delta} = event;
@@ -176,32 +184,36 @@ export default class MapControls {
     }
 
     const newMapState = this.mapState.zoom({pos, scale});
-    this.updateViewport(newMapState);
+    return this.updateViewport(newMapState);
   }
 
+  // Default handler for the `pinchstart` event.
   _onPinchStart(event) {
     const pos = this.getCenter(event);
     const newMapState = this.mapState.zoomStart({pos});
-    this.updateViewport(newMapState, {isDragging: true});
+    return this.updateViewport(newMapState, {isDragging: true});
   }
 
+  // Default handler for the `pinch` event.
   _onPinch(event) {
     const pos = this.getCenter(event);
     const {scale} = event;
     const newMapState = this.mapState.zoom({pos, scale});
-    this.updateViewport(newMapState);
+    return this.updateViewport(newMapState);
   }
 
+  // Default handler for the `pinchend` event.
   _onPinchEnd(event) {
     const newMapState = this.mapState.zoomEnd();
-    this.updateViewport(newMapState, {isDragging: false});
+    return this.updateViewport(newMapState, {isDragging: false});
   }
 
+  // Default handler for the `doubletap` event.
   _onDoubleTap(event) {
     const pos = this.getCenter(event);
     const isZoomOut = this.isFunctionKeyPressed(event);
 
     const newMapState = this.mapState.zoom({pos, scale: isZoomOut ? 0.5 : 2});
-    this.updateViewport(newMapState);
+    return this.updateViewport(newMapState);
   }
 }

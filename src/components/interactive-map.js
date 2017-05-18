@@ -119,6 +119,8 @@ export default class InteractiveMap extends PureComponent {
 
   _handleEvent(event) {
     const {mapControls} = this.props;
+    // MapControls only extracts the states that it recognizes.
+    // This allows custom map controls to add new states and callbacks.
     mapControls.setState({
       ...this.props,
       mapState: new MapState(this.props)
@@ -184,12 +186,12 @@ export default class InteractiveMap extends PureComponent {
       overflow: 'hidden'
     };
 
-    const eventCanvasStyle = Object.assign({}, {
+    const eventCanvasStyle = {
       width,
       height,
       position: 'relative',
       cursor: this._getCursor()
-    });
+    };
 
     return (
       createElement('div', {
