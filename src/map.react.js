@@ -61,6 +61,10 @@ const PROP_TYPES = {
     */
   maxZoom: PropTypes.number,
   /**
+    * The minimum tile zoom level of the map. Defaults to 0.
+    */
+  minZoom: PropTypes.number,
+  /**
     * The Mapbox style the component should use. Can either be a string url
     * or a MapboxGL style Immutable.Map object.
     */
@@ -209,6 +213,7 @@ const DEFAULT_PROPS = {
   altitude: 1.5,
   clickRadius: 15,
   maxZoom: 20,
+  minZoom: 0,
   scrollZoomEnabled: true
 };
 
@@ -252,6 +257,7 @@ export default class MapGL extends Component {
       center: [this.props.longitude, this.props.latitude],
       zoom: this.props.zoom,
       maxZoom: this.props.maxZoom,
+      minZoom: this.props.minZoom,
       pitch: this.props.pitch,
       bearing: this.props.bearing,
       style: mapStyle,
