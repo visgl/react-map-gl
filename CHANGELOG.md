@@ -1,3 +1,12 @@
+## Version 2.0.3 (May 18, 2017)
+
+#### New Props
+
+- Added `scrollZoomEnabled` prop to allow toggling of scroll to zoom behavior.
+  This is enabled by default (no change in existing functionality). (#246)
+- Added `minZoom` prop to allow specifying minimum zoom. This is passed directly
+  down to the `mapbox-gl` instance. (#247)
+
 ## Version 2.0.2 (Feb 09, 2017)
 
 #### Minor Fixes
