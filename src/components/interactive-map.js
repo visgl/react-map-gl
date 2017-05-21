@@ -123,7 +123,7 @@ export default class InteractiveMap extends PureComponent {
     // This allows custom map controls to add new states and callbacks.
     mapControls.setState(Object.assign({}, this.props, {
       mapState: new MapState(this.props)
-    });
+    }));
 
     return mapControls.handle(event);
   }
