@@ -121,8 +121,7 @@ export default class InteractiveMap extends PureComponent {
     const {mapControls} = this.props;
     // MapControls only extracts the states that it recognizes.
     // This allows custom map controls to add new states and callbacks.
-    mapControls.setState({
-      ...this.props,
+    mapControls.setState(Object.assign({}, this.props, {
       mapState: new MapState(this.props)
     });
 
