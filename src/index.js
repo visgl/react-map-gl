@@ -21,7 +21,6 @@
 // React Components
 export {default as InteractiveMap} from './components/interactive-map';
 export {default as StaticMap} from './components/static-map';
-export {default as MapControls} from './components/map-controls';
 
 export {default as default} from './components/interactive-map';
 export {default as MapGL} from './components/interactive-map';
@@ -49,3 +48,10 @@ export {default as DraggablePointsOverlay} from './overlays/draggable-points-ove
 export {default as HTMLOverlay} from './overlays/html-overlay';
 export {default as ScatterplotOverlay} from './overlays/scatterplot-overlay';
 export {default as SVGOverlay} from './overlays/svg-overlay';
+
+// Experimental Features (May change in minor version bumps, use at your own risk)
+import MapControls from './utils/map-controls';
+
+export const experimental = {
+  MapControls
+};
