@@ -6,7 +6,6 @@
 - New event management system based on hammer.js
 - FIX: Touch interaction
 - Remove `MapControls` React component
-- Remove `MapControls` ES6 class
 - Remove `ControllerClass` prop from `InteractiveMap`
 - Add `mapControls` prop to `InteractiveMap`
 

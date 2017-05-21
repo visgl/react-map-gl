@@ -144,7 +144,7 @@ export default class MapControls {
   // Called by `_onPan` when panning with function key pressed.
   _onPanRotate(event) {
     if (!this.perspectiveEnabled) {
-      return;
+      return false;
     }
 
     const {deltaX, deltaY} = event;

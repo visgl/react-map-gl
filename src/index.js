@@ -34,7 +34,6 @@ export {default as NavigationControl} from './components/navigation-control';
 
 // Utilities
 // export {default as fitBounds} from './utils/fit-bounds';
-export {default as MapControls} from './utils/map-controls';
 
 // TODO - should not be exposed
 export {default as autobind} from './utils/autobind';
@@ -49,3 +48,10 @@ export {default as DraggablePointsOverlay} from './overlays/draggable-points-ove
 export {default as HTMLOverlay} from './overlays/html-overlay';
 export {default as ScatterplotOverlay} from './overlays/scatterplot-overlay';
 export {default as SVGOverlay} from './overlays/svg-overlay';
+
+// Experimental Features (May change in minor version bumps, use at your own risk)
+import MapControls from './utils/map-controls';
+
+export const experimental = {
+  MapControls
+};
