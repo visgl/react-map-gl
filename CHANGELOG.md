@@ -5,6 +5,9 @@
 [TBD]
 - New event management system based on hammer.js
 - FIX: Touch interaction
+- Remove `MapControls` React component
+- Remove `ControllerClass` prop from `InteractiveMap`
+- Add `mapControls` prop to `InteractiveMap`
 
 ### Version 3.0.0-alpha.10 - Add `ControllerClass` prop to `InteractiveMap`
 
