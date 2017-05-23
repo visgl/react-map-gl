@@ -105,9 +105,12 @@ export default class InteractiveMap extends PureComponent {
     const {eventCanvas} = this.refs;
     const {mapControls} = this.props;
 
-    this._eventManager = new EventManager(eventCanvas);
+    const events = {};
+    mapControls.events.forEach(eventName => {
+      events[eventName] = this._handleEvent;
+    });
 
-    mapControls.events.forEach(event => this._eventManager.on(event, this._handleEvent));
+    this._eventManager = new EventManager(eventCanvas, {events});
   }
 
   componentWillUnmount() {
