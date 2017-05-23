@@ -54,7 +54,7 @@ export default class MapControls {
    */
   handle(event, options) {
     this.mapState = new MapState(Object.assign({}, options, this._state));
-    this._setOptions(options);
+    this.setOptions(options);
 
     switch (event.type) {
     case 'panstart':
@@ -120,7 +120,7 @@ export default class MapControls {
   /**
    * Extract interactivity options
    */
-  _setOptions({
+  setOptions({
     onChangeViewport,
     onChangeState,
     scrollZoomEnabled = true,

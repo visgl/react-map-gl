@@ -85,7 +85,8 @@ const defaultProps = {
   visible: true,
   bearing: 0,
   pitch: 0,
-  altitude: 1.5
+  altitude: 1.5,
+  onLoad: () => {}
 };
 
 const childContextTypes = {
@@ -99,18 +100,11 @@ export default class StaticMap extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isSupported: mapboxgl && mapboxgl.supported(),
-      isDragging: false,
-      isHovering: false,
-      startDragLngLat: null,
-      startBearing: null,
-      startPitch: null
-    };
+
     this._queryParams = {};
     mapboxgl.accessToken = props.mapboxApiAccessToken;
 
-    if (!this.state.isSupported) {
+    if (!StaticMap.supported()) {
       this.componentDidMount = noop;
       this.componentWillReceiveProps = noop;
       this.componentDidUpdate = noop;
@@ -149,6 +143,9 @@ export default class StaticMap extends PureComponent {
     if (canvas) {
       canvas.style.outline = 'none';
     }
+
+    // Listen to `load` event
+    map.on('load', this.props.onLoad);
 
     this._map = map;
     this._updateMapViewport({}, this.props);
@@ -201,25 +198,26 @@ export default class StaticMap extends PureComponent {
     * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
     * To query only some of the layers, set the `interactive` property in the
     * layer style to `true`.
+    * @param {[Number, Number]|[[Number, Number], [Number, Number]]} geometry -
+    *   Point or an array of two points defining the bounding box
+    * @param {Object} parameters - query options
     */
-  queryRenderedFeatures(geometry) {
-    this._map.queryRenderedFeatures(geometry, this._queryParams);
+  queryRenderedFeatures(geometry, parameters) {
+    const queryParams = parameters || this._queryParams;
+    if (queryParams.layers && queryParams.layers.length === 0) {
+      return [];
+    }
+    return this._map.queryRenderedFeatures(geometry, queryParams);
   }
 
   _updateStateFromProps(oldProps, newProps) {
     mapboxgl.accessToken = newProps.mapboxApiAccessToken;
-    const {startDragLngLat} = newProps;
-    this.setState({
-      startDragLngLat: startDragLngLat && startDragLngLat.slice()
-    });
   }
 
   // Hover and click only query layers whose interactive property is true
-  // If no interactivity is specified, query all layers
   _updateQueryParams(mapStyle) {
     const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
-    this._queryParams = interactiveLayerIds.length === 0 ? {} :
-      {layers: interactiveLayerIds};
+    this._queryParams = {layers: interactiveLayerIds};
   }
 
   // Update a source in the map style

@@ -32,21 +32,24 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   onChangeViewport: PropTypes.func,
 
   /** Enables control event handling */
+  // Scroll to zoom
   scrollZoomEnabled: PropTypes.bool,
+  // Drag to pan
   dragPanEnabled: PropTypes.bool,
+  // Drag to rotate
   dragRotateEnabled: PropTypes.bool,
+  // Double click to zoom
   doubleClickZoomEnabled: PropTypes.bool,
+  // Pinch to zoom / rotate
   touchZoomRotateEnabled: PropTypes.bool,
 
  /**
     * Called when a feature is hovered over. Uses Mapbox's
     * queryRenderedFeatures API to find features under the pointer:
     * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
-    * To query only some of the layers, set the `interactive` property in the
+    * To make a layer interactive, set the `interactive` property in the
     * layer style to `true`. See Mapbox's style spec
     * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
-    * If no interactive layers are found (e.g. using Mapbox's default styles),
-    * will fall back to query all layers.
     * @callback
     * @param {array} features - The array of features the mouse is over.
     */
@@ -55,15 +58,13 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
     * Called when a feature is clicked on. Uses Mapbox's
     * queryRenderedFeatures API to find features under the pointer:
     * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
-    * To query only some of the layers, set the `interactive` property in the
+    * To make a layer interactive, set the `interactive` property in the
     * layer style to `true`. See Mapbox's style spec
     * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
-    * If no interactive layers are found (e.g. using Mapbox's default styles),
-    * will fall back to query all layers.
     */
   onClick: PropTypes.func,
 
-  /** Radius to detect features around a clicked point. Defaults to 15. */
+  /** Radius to detect features around a clicked point. Defaults to 0. */
   clickRadius: PropTypes.number,
 
   /** Accessor that returns a cursor style to show interactive state */
@@ -78,7 +79,6 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   // event names; and two methods: `setState(state)` and `handle(event)`
   mapControls: PropTypes.shape({
     events: PropTypes.arrayOf(PropTypes.string),
-    setState: PropTypes.func,
     handle: PropTypes.func
   })
 });
@@ -94,7 +94,7 @@ const defaultProps = Object.assign({}, StaticMap.defaultProps, {
   doubleClickZoomEnabled: true,
   touchZoomRotateEnabled: true,
 
-  clickRadius: 15,
+  clickRadius: 0,
   getCursor: ({isDragging, isHovering}) => isDragging ? config.CURSOR.GRABBING :
     (isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB),
 
@@ -137,16 +137,18 @@ export default class InteractiveMap extends PureComponent {
   }
 
   componentDidMount() {
-    // Register event handlers
     const {eventCanvas} = this.refs;
     const {mapControls} = this.props;
 
+    // Register event handlers defined by map controls
     const events = {};
     mapControls.events.forEach(eventName => {
       events[eventName] = this._handleEvent;
     });
 
     const eventManager = new EventManager(eventCanvas, {events});
+
+    // Register event handlers for click and hover
     eventManager.on('mousemove', this._onMouseMove);
     eventManager.on('click', this._onMouseClick);
     this._eventManager = eventManager;
@@ -166,9 +168,12 @@ export default class InteractiveMap extends PureComponent {
     return this.props.mapControls.handle(event, controlOptions);
   }
 
-  // TODO - Remove once Viewport alternative is good enough
   getMap() {
     return this._map.getMap();
+  }
+
+  queryRenderedFeatures(geometry, options) {
+    return this._map.queryRenderedFeatures(geometry, options);
   }
 
   // Checks a visibilityConstraints object to see if the map should be displayed
@@ -213,20 +218,27 @@ export default class InteractiveMap extends PureComponent {
   }
 
   // HOVER AND CLICK
+  _getPos(event) {
+    const {srcEvent: {clientX, clientY}, target} = event;
+    const rect = target.getBoundingClientRect();
+    return [
+      clientX - rect.left - target.clientLeft,
+      clientY - rect.top - target.clientTop
+    ];
+  }
 
   _onMouseMove(event) {
-    const {center: {x, y}} = event;
     if (!this.state.isDragging) {
-      const pos = [x, y];
-      const viewport = new PerspectiveMercatorViewport(this.props);
+      const pos = this._getPos(event);
       const features = this._getFeatures({pos, radius: this.props.clickRadius});
 
-      const isHovering = features.length > 0;
+      const isHovering = features && features.length > 0;
       if (isHovering !== this.state.isHovering) {
         this.setState({isHovering});
       }
 
       if (this.props.onHover) {
+        const viewport = new PerspectiveMercatorViewport(this.props);
         event.lngLat = viewport.unproject(pos);
         event.features = features;
 
@@ -236,10 +248,8 @@ export default class InteractiveMap extends PureComponent {
   }
 
   _onMouseClick(event) {
-    const {center: {x, y}} = event;
-
     if (this.props.onClick) {
-      const pos = [x, y];
+      const pos = this._getPos(event);
       const viewport = new PerspectiveMercatorViewport(this.props);
       event.lngLat = viewport.unproject(pos);
       event.features = this._getFeatures({pos, radius: this.props.clickRadius});
@@ -279,4 +289,3 @@ InteractiveMap.displayName = 'InteractiveMap';
 InteractiveMap.propTypes = propTypes;
 InteractiveMap.defaultProps = defaultProps;
 InteractiveMap.childContextTypes = StaticMap.childContextTypes;
-
