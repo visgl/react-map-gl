@@ -80,9 +80,7 @@ export default class Example extends Component {
         longitude: location.longitude,
         zoom: 11,
         bearing: 180,
-        pitch: 60,
-        startDragLngLat: null,
-        isDragging: false
+        pitch: 60
       },
       mapStyle: buildStyle({stroke: '#FF00FF', fill: 'green'})
     };
@@ -107,8 +105,8 @@ export default class Example extends Component {
     this.setState({viewport: opt});
   }
 
-  _onClickFeatures(features) {
-    window.console.log(features);
+  _onClickFeatures(event) {
+    window.console.log(event.features);
   }
 
   render() {
@@ -122,8 +120,7 @@ export default class Example extends Component {
         { ...viewport }
         maxPitch={85}
         onChangeViewport={ this._onChangeViewport }
-        onClickFeatures={ this._onClickFeatures }
-        perspectiveEnabled={ true }
+        onClick={ this._onClickFeatures }
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
         preventStyleDiffing={ false }>
