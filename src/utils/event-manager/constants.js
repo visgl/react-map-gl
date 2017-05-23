@@ -15,7 +15,7 @@ import {
  * See `_onBasicInput()` for usage of these aliases.
  */
 /* eslint-disable */
-const BASIC_EVENT_CLASSES = {
+export const BASIC_EVENT_CLASSES = {
   down: ['pointerdown', 'touchstart', 'mousedown'],
   move: ['pointermove', 'touchmove',  'mousemove'],
   up:   ['pointerup',   'touchend',   'mouseup']
@@ -80,7 +80,7 @@ export const RECOGNIZERS = [
   [Swipe, {enable: false}],
   [Press, {enable: false}],
   [Tap, {event: 'doubletap', taps: 2, enable: false}],
-  [Tap, {enable: false}, null, 'doubletap']
+  [Tap, {enable: false}]
 ];
 
 /**
