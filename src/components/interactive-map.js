@@ -44,19 +44,25 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   touchZoomRotateEnabled: PropTypes.bool,
 
  /**
-    * Called when a feature is hovered over. Uses Mapbox's
-    * queryRenderedFeatures API to find features under the pointer:
+    * Called when the map is hovered over.
+    * @callback
+    * @param {Object} event - The mouse event.
+    * @param {[Number, Number]} event.lngLat - The coordinates of the pointer
+    * @param {Array} event.features - The features under the pointer, using Mapbox's
+    * queryRenderedFeatures API:
     * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
     * To make a layer interactive, set the `interactive` property in the
     * layer style to `true`. See Mapbox's style spec
     * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
-    * @callback
-    * @param {array} features - The array of features the mouse is over.
     */
   onHover: PropTypes.func,
   /**
-    * Called when a feature is clicked on. Uses Mapbox's
-    * queryRenderedFeatures API to find features under the pointer:
+    * Called when the map is clicked.
+    * @callback
+    * @param {Object} event - The mouse event.
+    * @param {[Number, Number]} event.lngLat - The coordinates of the pointer
+    * @param {Array} event.features - The features under the pointer, using Mapbox's
+    * queryRenderedFeatures API:
     * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
     * To make a layer interactive, set the `interactive` property in the
     * layer style to `true`. See Mapbox's style spec
