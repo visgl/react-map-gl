@@ -1,5 +1,5 @@
 function getDocUrl(filename) {
-  return `docs/${filename}`;
+  return `../../docs/${filename}`;
 }
 // function getCodeUrl(pathname) {
 //   return `https://github.com/uber/deck.gl/tree/master/${pathname}`;
@@ -13,7 +13,10 @@ function generatePath(tree, parentPath = '') {
     tree.forEach(branch => generatePath(branch, parentPath));
   }
   if (tree.name) {
-    tree.path = tree.name.match(/(GeoJson|3D|API|([A-Z]|^)[a-z'0-9]+|\d+)/g).join('-').toLowerCase().replace(/[^\w-]/g, '');
+    tree.path = tree.name.match(/(GeoJson|3D|API|([A-Z]|^)[a-z'0-9]+|\d+)/g)
+        .join('-')
+        .toLowerCase()
+        .replace(/[^\w-]/g, '');
   }
   if (tree.children) {
     generatePath(tree.children, `${parentPath}/${tree.path}`);
@@ -25,29 +28,25 @@ function generatePath(tree, parentPath = '') {
   return tree;
 }
 
-export const examplePages = generatePath([
-  {
-    name: 'Overview',
-    content: 'markdown/examples.md'
-  }
-]);
+const docPages = {
+  title: 'Documentation',
+  paths: generatePath([
+    {
+      name: 'Overview',
+      children: [
+        {
+          name: 'What\'s New',
+          content: getDocUrl('whats-new.md')
+        },
+        {
+          name: 'Upgrade From V3',
+          content: getDocUrl('upgrade-guide.md')
+        }
+      ]
+    }
+  ])
+};
 
-export const docPages = generatePath([
-  {
-    name: 'Overview',
-    children: [
-      {
-        name: 'Introduction',
-        content: getDocUrl('README.md')
-      },
-      {
-        name: 'What\'s New',
-        content: getDocUrl('whats-new.md')
-      },
-      {
-        name: 'Upgrade From V3',
-        content: getDocUrl('upgrade-guide.md')
-      }
-    ]
-  }
-]);
+export const Pages = [
+  docPages
+];
