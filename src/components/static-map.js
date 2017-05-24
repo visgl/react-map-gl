@@ -31,10 +31,8 @@ import isBrowser from '../utils/is-browser';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
 let mapboxgl = null;
-let Point = null;
 if (isBrowser) {
   mapboxgl = require('mapbox-gl');
-  ({Point} = mapboxgl);
 }
 
 function noop() {}
@@ -54,11 +52,17 @@ const propTypes = {
   ]),
   /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
   preventStyleDiffing: PropTypes.bool,
+  /** Whether the map is visible */
+  visible: PropTypes.bool,
 
-  /** The latitude of the center of the map. */
-  latitude: PropTypes.number.isRequired,
+  /** The width of the map. */
+  width: PropTypes.number.isRequired,
+  /** The height of the map. */
+  height: PropTypes.number.isRequired,
   /** The longitude of the center of the map. */
   longitude: PropTypes.number.isRequired,
+  /** The latitude of the center of the map. */
+  latitude: PropTypes.number.isRequired,
   /** The tile zoom level of the map. */
   zoom: PropTypes.number.isRequired,
   /** Specify the bearing of the viewport */
@@ -67,53 +71,7 @@ const propTypes = {
   pitch: PropTypes.number,
   /** Altitude of the viewport camera. Default 1.5 "screen heights" */
   // Note: Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
-  altitude: PropTypes.number,
-  /** The width of the map. */
-  width: PropTypes.number.isRequired,
-  /** The height of the map. */
-  height: PropTypes.number.isRequired,
-
- /**
-    * Called when a feature is hovered over. Uses Mapbox's
-    * queryRenderedFeatures API to find features under the pointer:
-    * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
-    * To query only some of the layers, set the `interactive` property in the
-    * layer style to `true`. See Mapbox's style spec
-    * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
-    * If no interactive layers are found (e.g. using Mapbox's default styles),
-    * will fall back to query all layers.
-    * @callback
-    * @param {array} features - The array of features the mouse is over.
-    */
-  onHoverFeatures: PropTypes.func,
-  /**
-    * Set to false to enable onHoverFeatures to be called regardless if
-    * there is an actual feature at x, y. This is useful to emulate
-    * "mouse-out" behaviors on features.
-    * Defaults to TRUE
-    */
-  ignoreEmptyFeatures: PropTypes.bool,
-  /**
-    * Called when a feature is clicked on. Uses Mapbox's
-    * queryRenderedFeatures API to find features under the pointer:
-    * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
-    * To query only some of the layers, set the `interactive` property in the
-    * layer style to `true`. See Mapbox's style spec
-    * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
-    * If no interactive layers are found (e.g. using Mapbox's default styles),
-    * will fall back to query all layers.
-    */
-  onClickFeatures: PropTypes.func,
-
-  /**
-   * Called when the map is clicked. The handler is called with the clicked
-   * coordinates (https://www.mapbox.com/mapbox-gl-js/api/#LngLat) and the
-   * screen coordinates (https://www.mapbox.com/mapbox-gl-js/api/#PointLike).
-   */
-  onClick: PropTypes.func,
-
-  /** Radius to detect features around a clicked point. Defaults to 15. */
-  clickRadius: PropTypes.number
+  altitude: PropTypes.number
 };
 
 const defaultProps = {
@@ -121,11 +79,11 @@ const defaultProps = {
   mapboxApiAccessToken: getAccessToken(),
   preserveDrawingBuffer: false,
   attributionControl: true,
-  ignoreEmptyFeatures: true,
+  preventStyleDiffing: false,
+  visible: true,
   bearing: 0,
   pitch: 0,
-  altitude: 1.5,
-  clickRadius: 15
+  altitude: 1.5
 };
 
 const childContextTypes = {
@@ -139,18 +97,11 @@ export default class StaticMap extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isSupported: mapboxgl && mapboxgl.supported(),
-      isDragging: false,
-      isHovering: false,
-      startDragLngLat: null,
-      startBearing: null,
-      startPitch: null
-    };
+
     this._queryParams = {};
     mapboxgl.accessToken = props.mapboxApiAccessToken;
 
-    if (!this.state.isSupported) {
+    if (!StaticMap.supported()) {
       this.componentDidMount = noop;
       this.componentWillReceiveProps = noop;
       this.componentDidUpdate = noop;
@@ -232,24 +183,35 @@ export default class StaticMap extends PureComponent {
   }
 
   // External apps can access map this way
-  _getMap() {
+  getMap() {
     return this._map;
+  }
+
+  /** Uses Mapbox's
+    * queryRenderedFeatures API to find features at point or in a bounding box.
+    * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
+    * To query only some of the layers, set the `interactive` property in the
+    * layer style to `true`.
+    * @param {[Number, Number]|[[Number, Number], [Number, Number]]} geometry -
+    *   Point or an array of two points defining the bounding box
+    * @param {Object} parameters - query options
+    */
+  queryRenderedFeatures(geometry, parameters) {
+    const queryParams = parameters || this._queryParams;
+    if (queryParams.layers && queryParams.layers.length === 0) {
+      return [];
+    }
+    return this._map.queryRenderedFeatures(geometry, queryParams);
   }
 
   _updateStateFromProps(oldProps, newProps) {
     mapboxgl.accessToken = newProps.mapboxApiAccessToken;
-    const {startDragLngLat} = newProps;
-    this.setState({
-      startDragLngLat: startDragLngLat && startDragLngLat.slice()
-    });
   }
 
   // Hover and click only query layers whose interactive property is true
-  // If no interactivity is specified, query all layers
   _updateQueryParams(mapStyle) {
     const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
-    this._queryParams = interactiveLayerIds.length === 0 ? {} :
-      {layers: interactiveLayerIds};
+    this._queryParams = {layers: interactiveLayerIds};
   }
 
   // Update a source in the map style
@@ -404,60 +366,14 @@ export default class StaticMap extends PureComponent {
     }
   }
 
-  _getFeatures({pos, radius}) {
-    let features;
-    if (radius) {
-      // Radius enables point features, like marker symbols, to be clicked.
-      const size = radius;
-      const bbox = [[pos[0] - size, pos[1] - size], [pos[0] + size, pos[1] + size]];
-      features = this._map.queryRenderedFeatures(bbox, this._queryParams);
-    } else {
-      const point = new Point(...pos);
-      features = this._map.queryRenderedFeatures(point, this._queryParams);
-    }
-    return features;
-  }
-
-  // HOVER AND CLICK
-
-  _onMouseMove({pos}) {
-    if (this.props.onHover) {
-      const latLong = this.props.unproject(pos);
-      this.props.onHover(latLong, pos);
-    }
-    if (this.props.onHoverFeatures) {
-      const features = this._getFeatures({pos});
-      if (!features.length && this.props.ignoreEmptyFeatures) {
-        return;
-      }
-      this.setState({isHovering: features.length > 0});
-      this.props.onHoverFeatures(features);
-    }
-  }
-
-  _onMouseClick(event) {
-    const pos = [event.clientX, event.clientY];
-
-    if (this.props.onClick) {
-      const latLong = this.props.unproject(pos);
-      // TODO - Do we really want to expose a mapbox "Point" in our interface?
-      // const point = new Point(...pos);
-      this.props.onClick(latLong, pos);
-    }
-
-    if (this.props.onClickFeatures) {
-      const features = this._getFeatures({pos, radius: this.props.clickRadius});
-      if (!features.length && this.props.ignoreEmptyFeatures) {
-        return;
-      }
-      this.props.onClickFeatures(features);
-    }
-  }
-
   render() {
-    const {className, width, height, style} = this.props;
+    const {className, width, height, style, visible} = this.props;
     const mapContainerStyle = Object.assign({}, style, {width, height, position: 'relative'});
-    const mapStyle = Object.assign({}, style, {width, height});
+    const mapStyle = Object.assign({}, style, {
+      width,
+      height,
+      visibility: visible ? 'visible' : 'hidden'
+    });
     const overlayContainerStyle = {
       position: 'absolute',
       left: 0,
@@ -472,8 +388,6 @@ export default class StaticMap extends PureComponent {
       createElement('div', {
         key: 'map-container',
         style: mapContainerStyle,
-        onMouseMove: this._onMouseMove,
-        onClick: this._onMouseClick,
         children: [
           createElement('div', {
             key: 'map-mapbox',

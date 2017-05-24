@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import MapState from '../utils/map-state';
+
 // EVENT HANDLING PARAMETERS
 const PITCH_MOUSE_THRESHOLD = 5;
 const PITCH_ACCEL = 1.2;
@@ -41,25 +43,19 @@ export default class MapControls {
    */
   constructor() {
     this.events = SUBSCRIBED_EVENTS;
-  }
-
-  /**
-   * Update the state of the control
-   * @param {MapState} state.mapState - current map state
-   * @param {Function} state.onChangeViewport - callback
-   */
-  setState({mapState, onChangeViewport, isDragging, perspectiveEnabled}) {
-    this.mapState = mapState;
-    this.onChangeViewport = onChangeViewport;
-    this.isDragging = isDragging;
-    this.perspectiveEnabled = perspectiveEnabled;
+    this._state = {
+      isDragging: false
+    };
   }
 
   /**
    * Callback for events
    * @param {hammer.Event} event
    */
-  handle(event) {
+  handleEvent(event, options) {
+    this.mapState = new MapState(Object.assign({}, options, this._state));
+    this.setOptions(options);
+
     switch (event.type) {
     case 'panstart':
       return this._onPanStart(event);
@@ -99,18 +95,47 @@ export default class MapControls {
       srcEvent.ctrlKey || srcEvent.shiftKey);
   }
 
+  setState(newState) {
+    Object.assign(this._state, newState);
+    if (this.onChangeState) {
+      this.onChangeState(this._state);
+    }
+  }
+
   /* Callback util */
   // formats map state and invokes callback function
-  updateViewport(mapState, extraState = {}) {
-    if (!this.onChangeViewport) {
-      return false;
+  updateViewport(newMapState, extraState = {}) {
+    const oldViewport = this.mapState.getViewportProps();
+    const newViewport = newMapState.getViewportProps();
+
+    if (this.onChangeViewport &&
+      Object.keys(newViewport).some(key => oldViewport[key] !== newViewport[key])) {
+      // Viewport has changed
+      this.onChangeViewport(newViewport);
     }
 
-    return this.onChangeViewport(Object.assign(
-      {isDragging: this.isDragging},
-      mapState.getViewportProps(),
-      extraState
-    ));
+    this.setState(Object.assign({}, newMapState.getInteractiveState(), extraState));
+  }
+
+  /**
+   * Extract interactivity options
+   */
+  setOptions({
+    onChangeViewport,
+    onChangeState,
+    scrollZoom = true,
+    dragPan = true,
+    dragRotate = true,
+    doubleClickZoom = true,
+    touchZoomRotate = true
+  }) {
+    this.onChangeViewport = onChangeViewport;
+    this.onChangeState = onChangeState;
+    this.scrollZoom = scrollZoom;
+    this.dragPan = dragPan;
+    this.dragRotate = dragRotate;
+    this.doubleClickZoom = doubleClickZoom;
+    this.touchZoomRotate = touchZoomRotate;
   }
 
   /* Event handlers */
@@ -135,6 +160,9 @@ export default class MapControls {
   // Default handler for panning to move.
   // Called by `_onPan` when panning without function key pressed.
   _onPanMove(event) {
+    if (!this.dragPan) {
+      return false;
+    }
     const pos = this.getCenter(event);
     const newMapState = this.mapState.pan({pos});
     return this.updateViewport(newMapState);
@@ -143,7 +171,7 @@ export default class MapControls {
   // Default handler for panning to rotate.
   // Called by `_onPan` when panning with function key pressed.
   _onPanRotate(event) {
-    if (!this.perspectiveEnabled) {
+    if (!this.dragRotate) {
       return false;
     }
 
@@ -174,6 +202,9 @@ export default class MapControls {
 
   // Default handler for the `wheel` event.
   _onWheel(event) {
+    if (!this.scrollZoom) {
+      return false;
+    }
     const pos = this.getCenter(event);
     const {delta} = event;
 
@@ -196,6 +227,9 @@ export default class MapControls {
 
   // Default handler for the `pinch` event.
   _onPinch(event) {
+    if (!this.touchZoomRotate) {
+      return false;
+    }
     const pos = this.getCenter(event);
     const {scale} = event;
     const newMapState = this.mapState.zoom({pos, scale});
@@ -210,6 +244,9 @@ export default class MapControls {
 
   // Default handler for the `doubletap` event.
   _onDoubleTap(event) {
+    if (!this.doubleClickZoom) {
+      return false;
+    }
     const pos = this.getCenter(event);
     const isZoomOut = this.isFunctionKeyPressed(event);
 
