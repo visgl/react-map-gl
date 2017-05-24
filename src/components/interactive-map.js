@@ -97,7 +97,7 @@ const getDefaultCursor = ({isDragging, isHovering}) => isDragging ?
   config.CURSOR.GRABBING :
   (isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
 
-const defaultProps = Object.assign({}, StaticMap.defaultProps, {
+const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
   onChangeViewport: null,
   onClick: null,
   onHover: null,
@@ -110,9 +110,6 @@ const defaultProps = Object.assign({}, StaticMap.defaultProps, {
 
   clickRadius: 0,
   getCursor: getDefaultCursor,
-
-  /** Viewport constraints */
-  ...MAPBOX_LIMITS,
 
   visibilityConstraints: MAPBOX_LIMITS,
 
