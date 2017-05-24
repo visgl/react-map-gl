@@ -2,17 +2,17 @@ import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import assert from 'assert';
 
 // MAPBOX LIMITS
-export const MAPBOX_MAX_PITCH = 60;
-export const MAPBOX_MAX_ZOOM = 20;
+export const MAPBOX_LIMITS = {
+  minZoom: 0,
+  maxZoom: 20,
+  minPitch: 0,
+  maxPitch: 60
+};
 
 const defaultState = {
   pitch: 0,
   bearing: 0,
-  altitude: 1.5,
-  maxZoom: MAPBOX_MAX_ZOOM,
-  minZoom: 0,
-  maxPitch: MAPBOX_MAX_PITCH,
-  minPitch: 0
+  altitude: 1.5
 };
 
 /* Utils */
@@ -83,10 +83,10 @@ export default class MapState {
       bearing: ensureFinite(bearing, defaultState.bearing),
       pitch: ensureFinite(pitch, defaultState.pitch),
       altitude: ensureFinite(altitude, defaultState.altitude),
-      maxZoom: ensureFinite(maxZoom, defaultState.maxZoom),
-      minZoom: ensureFinite(minZoom, defaultState.minZoom),
-      maxPitch: ensureFinite(maxPitch, defaultState.maxPitch),
-      minPitch: ensureFinite(minPitch, defaultState.minPitch)
+      maxZoom: ensureFinite(maxZoom, MAPBOX_LIMITS.maxZoom),
+      minZoom: ensureFinite(minZoom, MAPBOX_LIMITS.minZoom),
+      maxPitch: ensureFinite(maxPitch, MAPBOX_LIMITS.maxPitch),
+      minPitch: ensureFinite(minPitch, MAPBOX_LIMITS.minPitch)
     });
 
     this._interactiveState = {

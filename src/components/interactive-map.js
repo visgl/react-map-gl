@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import autobind from '../utils/autobind';
 
 import StaticMap from './static-map';
-import {MAPBOX_MAX_PITCH, MAPBOX_MAX_ZOOM} from '../utils/map-state';
+import {MAPBOX_LIMITS} from '../utils/map-state';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
 import EventManager from '../utils/event-manager/event-manager';
@@ -26,22 +26,21 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   /**
    * `onChangeViewport` callback is fired when the user interacted with the
    * map. The object passed to the callback contains viewport properties
-   * such as `longitude`, `latitude`, `zoom` and additional interaction
-   * state information.
+   * such as `longitude`, `latitude`, `zoom` etc.
    */
   onChangeViewport: PropTypes.func,
 
   /** Enables control event handling */
   // Scroll to zoom
-  scrollZoomEnabled: PropTypes.bool,
+  scrollZoom: PropTypes.bool,
   // Drag to pan
-  dragPanEnabled: PropTypes.bool,
+  dragPan: PropTypes.bool,
   // Drag to rotate
-  dragRotateEnabled: PropTypes.bool,
+  dragRotate: PropTypes.bool,
   // Double click to zoom
-  doubleClickZoomEnabled: PropTypes.bool,
+  doubleClickZoom: PropTypes.bool,
   // Pinch to zoom / rotate
-  touchZoomRotateEnabled: PropTypes.bool,
+  touchZoomRotate: PropTypes.bool,
 
  /**
     * Called when the map is hovered over.
@@ -79,44 +78,52 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   /** Advanced features */
   // Contraints for displaying the map. If not met, then the map is hidden.
   // Experimental! May be changed in minor version updates.
-  visibilityConstraints: PropTypes.object.isRequired,
+  visibilityConstraints: PropTypes.shape({
+    minZoom: PropTypes.number,
+    maxZoom: PropTypes.number,
+    minPitch: PropTypes.number,
+    maxPitch: PropTypes.number
+  }),
   // A map control instance to replace the default map controls
   // The object must expose one property: `events` as an array of subscribed
   // event names; and two methods: `setState(state)` and `handle(event)`
   mapControls: PropTypes.shape({
     events: PropTypes.arrayOf(PropTypes.string),
-    handle: PropTypes.func
+    handleEvent: PropTypes.func
   })
 });
+
+const getDefaultCursor = ({isDragging, isHovering}) => isDragging ?
+  config.CURSOR.GRABBING :
+  (isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
 
 const defaultProps = Object.assign({}, StaticMap.defaultProps, {
   onChangeViewport: null,
   onClick: null,
   onHover: null,
 
-  scrollZoomEnabled: true,
-  dragPanEnabled: true,
-  dragRotateEnabled: true,
-  doubleClickZoomEnabled: true,
-  touchZoomRotateEnabled: true,
+  scrollZoom: true,
+  dragPan: true,
+  dragRotate: true,
+  doubleClickZoom: true,
+  touchZoomRotate: true,
 
   clickRadius: 0,
-  getCursor: ({isDragging, isHovering}) => isDragging ? config.CURSOR.GRABBING :
-    (isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB),
+  getCursor: getDefaultCursor,
 
   /** Viewport constraints */
-  maxZoom: MAPBOX_MAX_ZOOM,
-  minZoom: 0,
-  maxPitch: MAPBOX_MAX_PITCH,
-  minPitch: 0,
+  ...MAPBOX_LIMITS,
 
-  visibilityConstraints: {
-    maxZoom: MAPBOX_MAX_ZOOM,
-    maxPitch: MAPBOX_MAX_PITCH
-  },
+  visibilityConstraints: MAPBOX_LIMITS,
 
   mapControls: new MapControls()
 });
+
+const LEGACY_PROPS = {
+  perspectiveEnabled: 'dragRotate',
+  onClickFeatures: 'onClick',
+  onHoverFeatures: 'onHover'
+};
 
 export default class InteractiveMap extends PureComponent {
 
@@ -134,6 +141,15 @@ export default class InteractiveMap extends PureComponent {
       // Whether the cursor is over a clickable feature
       isHovering: false
     };
+
+    // Check legacy prop and warn
+    Object.keys(LEGACY_PROPS).forEach(name => {
+      if (props[name] !== undefined) {
+        console.warn(  // eslint-disable-line
+          `react-map-gl: \`${name}\` prop is deprecated. Use \`${LEGACY_PROPS[name]}\` instead.`
+        );
+      }
+    });
   }
 
   getChildContext() {
@@ -154,7 +170,7 @@ export default class InteractiveMap extends PureComponent {
 
     const eventManager = new EventManager(eventCanvas, {events});
 
-    // Register event handlers for click and hover
+    // Register additional event handlers for click and hover
     eventManager.on('mousemove', this._onMouseMove);
     eventManager.on('click', this._onMouseClick);
     this._eventManager = eventManager;
@@ -168,10 +184,10 @@ export default class InteractiveMap extends PureComponent {
   }
 
   _handleEvent(event) {
-    const controlOptions = Object.assign({
+    const controlOptions = Object.assign({}, this.props, {
       onChangeState: this._onInteractiveStateChange
-    }, this.props);
-    return this.props.mapControls.handle(event, controlOptions);
+    });
+    return this.props.mapControls.handleEvent(event, controlOptions);
   }
 
   getMap() {

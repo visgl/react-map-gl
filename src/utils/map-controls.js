@@ -52,7 +52,7 @@ export default class MapControls {
    * Callback for events
    * @param {hammer.Event} event
    */
-  handle(event, options) {
+  handleEvent(event, options) {
     this.mapState = new MapState(Object.assign({}, options, this._state));
     this.setOptions(options);
 
@@ -123,19 +123,19 @@ export default class MapControls {
   setOptions({
     onChangeViewport,
     onChangeState,
-    scrollZoomEnabled = true,
-    dragPanEnabled = true,
-    dragRotateEnabled = true,
-    doubleClickZoomEnabled = true,
-    touchZoomRotateEnabled = true
+    scrollZoom = true,
+    dragPan = true,
+    dragRotate = true,
+    doubleClickZoom = true,
+    touchZoomRotate = true
   }) {
     this.onChangeViewport = onChangeViewport;
     this.onChangeState = onChangeState;
-    this.scrollZoomEnabled = scrollZoomEnabled;
-    this.dragPanEnabled = dragPanEnabled;
-    this.dragRotateEnabled = dragRotateEnabled;
-    this.doubleClickZoomEnabled = doubleClickZoomEnabled;
-    this.touchZoomRotateEnabled = touchZoomRotateEnabled;
+    this.scrollZoom = scrollZoom;
+    this.dragPan = dragPan;
+    this.dragRotate = dragRotate;
+    this.doubleClickZoom = doubleClickZoom;
+    this.touchZoomRotate = touchZoomRotate;
   }
 
   /* Event handlers */
@@ -160,7 +160,7 @@ export default class MapControls {
   // Default handler for panning to move.
   // Called by `_onPan` when panning without function key pressed.
   _onPanMove(event) {
-    if (!this.dragPanEnabled) {
+    if (!this.dragPan) {
       return false;
     }
     const pos = this.getCenter(event);
@@ -171,7 +171,7 @@ export default class MapControls {
   // Default handler for panning to rotate.
   // Called by `_onPan` when panning with function key pressed.
   _onPanRotate(event) {
-    if (!this.dragRotateEnabled) {
+    if (!this.dragRotate) {
       return false;
     }
 
@@ -202,7 +202,7 @@ export default class MapControls {
 
   // Default handler for the `wheel` event.
   _onWheel(event) {
-    if (!this.scrollZoomEnabled) {
+    if (!this.scrollZoom) {
       return false;
     }
     const pos = this.getCenter(event);
@@ -227,7 +227,7 @@ export default class MapControls {
 
   // Default handler for the `pinch` event.
   _onPinch(event) {
-    if (!this.touchZoomRotateEnabled) {
+    if (!this.touchZoomRotate) {
       return false;
     }
     const pos = this.getCenter(event);
@@ -244,7 +244,7 @@ export default class MapControls {
 
   // Default handler for the `doubletap` event.
   _onDoubleTap(event) {
-    if (!this.doubleClickZoomEnabled) {
+    if (!this.doubleClickZoom) {
       return false;
     }
     const pos = this.getCenter(event);

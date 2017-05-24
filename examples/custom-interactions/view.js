@@ -105,10 +105,6 @@ export default class Example extends Component {
     this.setState({viewport: opt});
   }
 
-  _onMapLoaded(event) {
-    window.console.log(event);
-  }
-
   _onClickFeatures(event) {
     window.console.log(event.features);
   }
@@ -124,7 +120,6 @@ export default class Example extends Component {
         { ...viewport }
         maxPitch={85}
         onChangeViewport={ this._onChangeViewport }
-        onLoad={ this._onMapLoaded }
         onClick={ this._onClickFeatures }
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
