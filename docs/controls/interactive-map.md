@@ -123,3 +123,7 @@ Parameters
   + `state.isDragging` - If the map is being dragged.
   + `state.isHovering` - If the pointer is over a clickable feature.
 
+
+## Methods
+
+Same methods as [StaticMap](/docs/controls/static-map.md).

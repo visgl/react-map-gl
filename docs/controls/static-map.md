@@ -81,6 +81,7 @@ Specify the pitch of the viewpor.
 
 Default: `0`
 
+
 ### altitude (number)
 
 Altitude of the viewport camera.
@@ -89,9 +90,27 @@ Note: Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
 
 Default: `1.5` (screen heights)
 
+
 ### visible (bool)
 
 Whether the map is visible. Unmounting and re-mounting a Mapbox instance is known to be costly.
 This option offers a way to hide a map using CSS style.
 
 Default: `true`
+
+
+## Methods
+
+### getMap
+
+Returns the Mapbox instance if initialized.
+
+
+### queryRenderedFeatures
+
+Use Mapbox's `queryRenderedFeatures` API to find features at point or in a bounding box. If the `parameters` argument is not specified, only queries the layers with the `interactive` property in the layer style.
+
+Parameters:
+- `geometry` ([Number, Number]|[[Number, Number], [Number, Number]]) - Point or an array of two points defining the bounding box. Coordinates in pixels.
+- `parameters` - Query options. For more details, see [Mapbox API documentation](https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures).
+

@@ -8,6 +8,16 @@
 - Remove `MapControls` React component
 - Remove `ControllerClass` prop from `InteractiveMap`
 - Add `mapControls` prop to `InteractiveMap`
+- Add `visibility` prop to `StaticMap` for showing/hiding the map
+- Rename `_getMap` method to `getMap`
+- Add `queryRenderedFeatures` method that exposes the MapboxGL API with the same name
+- Remove all interactivity related props from `StaticMap`
+- Remove intermediate state props from `InteractiveMap`: `startPanLngLat`, `startZoomLngLat`, `startBearing`, `startPitch`, `startZoom`.
+- `InteractiveMap` is now stateful (`isDragging` and `isHover`)
+- Rename `onClickFeatures` and `onHoverFeatures` to `onClick` and `onHover`. Remove `ignoreEmptyFeatures` prop. The callbacks are invoked with an event object with `features` and `lngLat` fields.
+- New `getCursor` prop of `InteractiveMap`: returns cursor style from the current map state
+- Rename `displayConstraints` to `visibilityConstraints`
+- Remove `perspectiveEnabled` prop. Add `scrollZoom`, `dragPan`, `dragRotate`, `doubleClickZoom`, `touchZoomRotate` props.
 
 ### Version 3.0.0-alpha.10 - Add `ControllerClass` prop to `InteractiveMap`
 
