@@ -9,6 +9,11 @@ module.exports = Object.assign(config, {
     './src/main'
   ],
 
+  devServer: {
+    port: 3000,
+    progress: true
+  },
+
   devtool: 'cheap-source-maps',
 
   plugins: config.plugins.concat([

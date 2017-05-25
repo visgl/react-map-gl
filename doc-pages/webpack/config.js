@@ -1,9 +1,6 @@
-const {resolve, join} = require('path');
+const {resolve} = require('path');
 const webpack = require('webpack');
-
-const rootDir = join(__dirname, '../..');
-const demoDir = join(__dirname, '..');
-const demoSources = join(demoDir, 'src');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Otherwise modules imported from outside this directory does not compile
 // Seems to be a Babel bug
@@ -14,12 +11,12 @@ const BABEL_CONFIG = {
     'react',
     'stage-0'
   ].map(function configMap(name) {
-    return require.resolve('babel-preset-' + name);
+    return require.resolve(`babel-preset-${name}`);
   }),
   plugins: [
     'transform-decorators-legacy'
   ].map(function configMap(name) {
-    return require.resolve('babel-plugin-' + name);
+    return require.resolve(`babel-plugin-${name}`);
   })
 };
 
@@ -41,11 +38,6 @@ module.exports = {
     }, {
       test: /\.(eot|svg|ttf|woff|woff2|gif|jpe?g|png)$/,
       loader: 'url-loader'
-    }, {
-      test: /\.glsl$/,
-      loader: 'raw-loader',
-      include: demoSources,
-      enforce: 'post'
     }],
 
     // Uglify seems to be incompatible with mapbox
@@ -54,10 +46,6 @@ module.exports = {
   },
 
   resolve: {
-    modules: [
-      resolve(rootDir, 'node_modules'),
-      resolve(demoDir, 'node_modules')
-    ],
     alias: {
       // used by Mapbox
       webworkify: 'webworkify-webpack-dropin',
@@ -72,8 +60,19 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin({
-      MAPBOX_ACCESS_TOKEN: `"${process.env.MAPBOX_ACCESS_TOKEN}"` // eslint-disable-line
-    })
+      // eslint-disable-next-line
+      MAPBOX_ACCESS_TOKEN: `"${process.env.MAPBOX_ACCESS_TOKEN}"`
+    }),
+    new CopyWebpackPlugin([
+      // This will copy the contents to the distribution bundle folder
+      {
+        from: '../docs',
+        to: 'docs'
+      },
+      {
+        from: './src/static'
+      }
+    ])
   ]
 
 };
