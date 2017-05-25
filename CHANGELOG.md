@@ -2,7 +2,7 @@
 
 ## Version 3.0.0 (Alpha)
 
-[TBD]
+### Version 3.0.0-alpha.11
 - New event management system based on hammer.js
 - FIX: Touch interaction
 - Remove `MapControls` React component
