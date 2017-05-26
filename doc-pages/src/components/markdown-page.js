@@ -41,7 +41,7 @@ const INJECTION_REG = /<!-- INJECT:"(.+)\" -->/g;
 /* Markdown renderer */
 marked.setOptions({
   // code highlight
-  highlight: code => {
+  highlight: (code) => {
     return require('highlight.js').highlightAuto(code).value;
   }
 });
