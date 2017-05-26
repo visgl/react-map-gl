@@ -18,16 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// NOTE: Transform is not a public API so we should be careful to always lock
-// down mapbox-gl to a specific major, minor, and patch version.
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
 /**
  * Returns map settings {latitude, longitude, zoom}
  * that will contain the provided corners within the provided
  * width.
- * @param {Number} width - viewport width
- * @param {Number} height - viewport height
+ * @param {Number} viewport.width - viewport width
+ * @param {Number} viewport.height - viewport height
  * @param {Array} bounds - [[lon, lat], [lon, lat]]
  * @param {Number} options.padding - The amount of padding in pixels to add to the given bounds.
  * @param {Array} options.offset - The center of the given bounds relative to the map's center,
@@ -35,9 +33,7 @@ import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
  * @returns {Object} - latitude, longitude and zoom
  */
 export default function fitBounds(
-  width,
-  height,
-  // bounds
+  viewportProps,
   bounds,
   // options
   {
@@ -45,6 +41,7 @@ export default function fitBounds(
     offset = [0, 0]
   } = {}
 ) {
+  const {width, height} = viewportProps;
   const [[west, south], [east, north]] = bounds;
 
   const viewport = new PerspectiveMercatorViewport({

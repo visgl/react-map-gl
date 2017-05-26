@@ -11,7 +11,7 @@ import {toLowPrecision} from '../test-utils';
  * https://www.mapbox.com/mapbox-gl-js/api/#map#fitbounds
  */
 /* eslint-disable */
-function mapboxFitBounds(width, height, bounds, options) {
+function mapboxFitBounds({width, height}, bounds, options) {
 
   options = Object.assign({
     padding: 0,
@@ -45,14 +45,12 @@ function mapboxFitBounds(width, height, bounds, options) {
 
 const FITBOUNDS_TEST_CASES = [
   {
-    width: 100,
-    height: 100,
+    viewport: {width: 100, height: 100},
     bounds: [[-73.9876, 40.7661], [-72.9876, 41.7661]],
     options: {}
   },
   {
-    width: 600,
-    height: 400,
+    viewport: {width: 600, height: 400},
     bounds: [[-23.407, 64.863], [-23.406, 64.874]],
     options: {padding: 20, offset: [0, -40]}
   }
@@ -60,8 +58,8 @@ const FITBOUNDS_TEST_CASES = [
 
 test('fitBounds', t => {
   for (const testCase of FITBOUNDS_TEST_CASES) {
-    const result = fitBounds(testCase.width, testCase.height, testCase.bounds);
-    const mapboxResult = mapboxFitBounds(testCase.width, testCase.height, testCase.bounds);
+    const result = fitBounds(testCase.viewport, testCase.bounds, testCase.options);
+    const mapboxResult = mapboxFitBounds(testCase.viewport, testCase.bounds, testCase.options);
 
     t.ok(Number.isFinite(result.longitude), 'get valid longitude');
     t.ok(Number.isFinite(result.latitude), 'get valid latitude');
