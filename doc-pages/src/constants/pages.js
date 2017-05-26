@@ -1,9 +1,6 @@
 function getDocUrl(filename) {
-  return `../../docs/${filename}`;
+  return `docs/${filename}`;
 }
-// function getCodeUrl(pathname) {
-//   return `https://github.com/uber/deck.gl/tree/master/${pathname}`;
-// }
 
 // mapping from file path in source to generated page url
 export const markdownFiles = {};
@@ -32,20 +29,64 @@ const docPages = {
   title: 'Documentation',
   paths: generatePath([
     {
-      name: 'Overview',
+      name: 'Get Started',
       children: [
         {
-          name: 'What\'s New',
-          content: getDocUrl('whats-new.md')
+          name: 'Introduction',
+          content: getDocUrl('get-started/README.md')
         },
         {
-          name: 'Upgrade From V3',
-          content: getDocUrl('upgrade-guide.md')
-        }
+          name: 'What\'s New',
+          content: getDocUrl('get-started/whats-new.md')
+        },
+        {
+          name: 'Upgrade Guide',
+          content: getDocUrl('get-started/upgrade-guide.md')
+        },
+        {
+          name: 'Interactivity',
+          content: getDocUrl('get-started/interactivity.md')
+        },
       ]
-    }
+    },
+    {
+      name: 'Controls',
+      children: [
+        {
+          name: 'Static Map',
+          content: getDocUrl('controls/static-map.md')
+        },
+        {
+          name: 'Interactive Map',
+          content: getDocUrl('controls/interactive-map.md')
+        },
+        {
+          name: 'Navigation Control',
+          content: getDocUrl('controls/navigation-control.md')
+        },
+        {
+          name: 'Popup',
+          content: getDocUrl('controls/Popup.md')
+        },
+        {
+          name: 'Marker',
+          content: getDocUrl('controls/Marker.md')
+        },
+      ]
+    },
+    {
+      name: 'Advanced',
+      children: [
+        {
+          name: 'Custom Map Controls',
+          content: getDocUrl('advanced/custom-map-controls.md')
+        },
+      ]
+    },
   ])
 };
+
+console.log(docPages);
 
 export const Pages = [
   docPages

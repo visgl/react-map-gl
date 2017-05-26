@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
 
-// import Map from './map';
 import InfoPanel from './info-panel';
 import MarkdownPage from './markdown-page';
 import {loadContent, updateMap} from '../actions/app-actions';
@@ -18,11 +17,6 @@ class Page extends Component {
       content: this._loadContent(props.route.content)
     };
   }
-
-  // componentDidMount() {
-  //   window.onresize = this._resizeMap;
-  //   this._resizeMap();
-  // }
 
   componentWillReceiveProps(nextProps) {
     const {route} = nextProps;
@@ -44,46 +38,18 @@ class Page extends Component {
     return content;
   }
 
-  // @autobind _resizeMap() {
-  //   const w = window.innerWidth;
-  //   const h = window.innerHeight;
-  //   this.props.updateMap({
-  //     width: w <= 768 ? w : w - 240,
-  //     height: h - 64
-  //   });
-  // }
-
-  // _setMapFocus(state) {
-  //   if (this.state.mapHasFocus !== state) {
-  //     this.setState({mapHasFocus: state});
-  //   }
-  // }
-  //
-  // @autobind _onMapFocus() {
-  //   this._setMapFocus(true);
-  // }
-  //
-  // @autobind _onMapBlur() {
-  //   this._setMapFocus(false);
-  // }
-
   @autobind _renderDemo(name, sourceLink) {
     const {mapHasFocus} = this.state;
 
     return (
       <div className="demo">
-        {/* <Map
-          demo={name}
-          onInteract={this._onMapFocus} /> */}
         <InfoPanel
           demo={name}
           hasFocus={!mapHasFocus}
           onInteract={this._onMapBlur} >
-
           {sourceLink && (<div className="source-link">
             <a href={sourceLink} target="_new">View Code ↗</a>
           </div>)}
-
         </InfoPanel>
       </div>
     );

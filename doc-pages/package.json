@@ -7,11 +7,10 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack/dev --progress --content-base ./src/static --port 3000 --open",
+    "start": "webpack-dev-server --config webpack/dev --open",
     "build-clean": "rm -rf ./dist && mkdir dist",
-    "build-static": "cp -r ./src/static/* dist && cd `git rev-parse --show-toplevel` && git checkout origin/blog -- blog && mv blog demo/dist/blog && cd -",
     "build-script": "webpack -p --config webpack/prod",
-    "build": "npm run build-clean && npm run build-static && npm run build-script",
+    "build": "npm run build-clean && npm run build-script",
     "lint": "eslint src --ignore-pattern workers"
   },
   "dependencies": {
@@ -45,6 +44,7 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
     "brfs-babel": "^1.0.0",
+    "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.1",
     "eslint": "^3.0.0",
     "eslint-config-uber-es2015": "^3.0.0",
@@ -78,23 +78,6 @@
           "react-hot-loader/babel"
         ]
       }
-    }
-  },
-  "eslintConfig": {
-    "parser": "babel-eslint",
-    "plugins": [
-      "react"
-    ],
-    "extends": [
-      "eslint-config-uber-jsx",
-      "eslint-config-uber-es2015"
-    ],
-    "rules": {
-      "guard-for-in": 0,
-      "camelcase": 0
-    },
-    "globals": {
-      "MAPBOX_ACCESS_TOKEN": false
     }
   }
 }
