@@ -7,11 +7,11 @@ const DEPRECATED_PROPS = [
 ];
 
 function getDeprecatedText(name) {
-  return `react-map-gl: '${name}' is deprecated and will be removed in a later version.`;
+  return `react-map-gl: \`${name}\` is deprecated and will be removed in a later version.`;
 }
 
 function getNewText(name) {
-  return `Use ${name} instead.`;
+  return `Use \`${name}\` instead.`;
 }
 
 /**
