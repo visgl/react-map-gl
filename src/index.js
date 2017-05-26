@@ -33,7 +33,7 @@ export {default as Popup} from './components/popup';
 export {default as NavigationControl} from './components/navigation-control';
 
 // Utilities
-// export {default as fitBounds} from './utils/fit-bounds';
+export {default as fitBounds} from './utils/fit-bounds';
 
 // TODO - should not be exposed
 export {default as autobind} from './utils/autobind';
