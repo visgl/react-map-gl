@@ -9,6 +9,7 @@ import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import EventManager from '../utils/event-manager/event-manager';
 import MapControls from '../utils/map-controls';
 import config from '../config';
+import depWarn from '../utils/dep-warn';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -24,11 +25,11 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   minPitch: PropTypes.number,
 
   /**
-   * `onChangeViewport` callback is fired when the user interacted with the
+   * `onViewportChange` callback is fired when the user interacted with the
    * map. The object passed to the callback contains viewport properties
    * such as `longitude`, `latitude`, `zoom` etc.
    */
-  onChangeViewport: PropTypes.func,
+  onViewportChange: PropTypes.func,
 
   /** Enables control event handling */
   // Scroll to zoom
@@ -98,7 +99,7 @@ const getDefaultCursor = ({isDragging, isHovering}) => isDragging ?
   (isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
 
 const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
-  onChangeViewport: null,
+  onViewportChange: null,
   onClick: null,
   onHover: null,
 
@@ -131,6 +132,8 @@ export default class InteractiveMap extends PureComponent {
   constructor(props) {
     super(props);
     autobind(this);
+    // Check for deprecated props
+    depWarn(props);
 
     this.state = {
       // Whether the cursor is down
@@ -182,7 +185,7 @@ export default class InteractiveMap extends PureComponent {
 
   _handleEvent(event) {
     const controlOptions = Object.assign({}, this.props, {
-      onChangeState: this._onInteractiveStateChange
+      onStateChange: this._onInteractiveStateChange
     });
     return this.props.mapControls.handleEvent(event, controlOptions);
   }

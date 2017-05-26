@@ -97,8 +97,8 @@ export default class MapControls {
 
   setState(newState) {
     Object.assign(this._state, newState);
-    if (this.onChangeState) {
-      this.onChangeState(this._state);
+    if (this.onStateChange) {
+      this.onStateChange(this._state);
     }
   }
 
@@ -108,10 +108,10 @@ export default class MapControls {
     const oldViewport = this.mapState.getViewportProps();
     const newViewport = newMapState.getViewportProps();
 
-    if (this.onChangeViewport &&
+    if (this.onViewportChange &&
       Object.keys(newViewport).some(key => oldViewport[key] !== newViewport[key])) {
       // Viewport has changed
-      this.onChangeViewport(newViewport);
+      this.onViewportChange(newViewport);
     }
 
     this.setState(Object.assign({}, newMapState.getInteractiveState(), extraState));
@@ -121,16 +121,19 @@ export default class MapControls {
    * Extract interactivity options
    */
   setOptions({
+    // TODO(deprecate): remove this when `onChangeViewport` gets deprecated
     onChangeViewport,
-    onChangeState,
+    onViewportChange,
+    onStateChange,
     scrollZoom = true,
     dragPan = true,
     dragRotate = true,
     doubleClickZoom = true,
     touchZoomRotate = true
   }) {
-    this.onChangeViewport = onChangeViewport;
-    this.onChangeState = onChangeState;
+    // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
+    this.onViewportChange = onViewportChange || onChangeViewport;
+    this.onStateChange = onStateChange;
     this.scrollZoom = scrollZoom;
     this.dragPan = dragPan;
     this.dragRotate = dragRotate;
