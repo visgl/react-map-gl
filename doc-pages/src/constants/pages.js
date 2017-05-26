@@ -36,6 +36,14 @@ const docPages = {
           content: getDocUrl('get-started/README.md')
         },
         {
+          name: 'What\'s New',
+          content: getDocUrl('get-started/whats-new.md')
+        },
+        {
+          name: 'Upgrade Guide',
+          content: getDocUrl('get-started/upgrade-guide.md')
+        },
+        {
           name: 'Interactivity',
           content: getDocUrl('get-started/interactivity.md')
         },
@@ -77,6 +85,8 @@ const docPages = {
     },
   ])
 };
+
+console.log(docPages);
 
 export const Pages = [
   docPages

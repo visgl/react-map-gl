@@ -15,7 +15,6 @@ export default class Header extends Component {
             <i className={`icon icon-${isMenuOpen ? 'close' : 'menu'}`} />
           </div>
           <div className="links">
-            <Link activeClassName="active" to="examples">Gallery</Link>
             <Link activeClassName="active" to="documentation">Documentation</Link>
           </div>
         </div>
