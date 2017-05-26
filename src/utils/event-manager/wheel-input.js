@@ -121,7 +121,7 @@ export default class WheelInput {
       center: position,
       delta,
       srcEvent,
-      target: this.element
+      target: srcEvent.target
     });
   }
 }

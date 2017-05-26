@@ -184,14 +184,6 @@ export default class InteractiveMap extends PureComponent {
     const controlOptions = Object.assign({}, this.props, {
       onChangeState: this._onInteractiveStateChange
     });
-    /*
-     * The map control needs `event.target` to calculate pointer positions
-     * relative to the map.
-     * If an overlay is interactive, when dragging over it, it becomes the
-     * `event.target`. Overwrite it with the event canvas here.
-     * The original target element is accessible in `event.srcEvent`.
-     */
-    event.target = this.refs.eventCanvas;
     return this.props.mapControls.handleEvent(event, controlOptions);
   }
 
@@ -246,12 +238,11 @@ export default class InteractiveMap extends PureComponent {
 
   // HOVER AND CLICK
   _getPos(event) {
-    const target = this.refs.eventCanvas;
-    const {srcEvent: {clientX, clientY}} = event;
-    const rect = target.getBoundingClientRect();
+    const {srcEvent: {clientX, clientY}, srcElement} = event;
+    const rect = srcElement.getBoundingClientRect();
     return [
-      clientX - rect.left - target.clientLeft,
-      clientY - rect.top - target.clientTop
+      clientX - rect.left - srcElement.clientLeft,
+      clientY - rect.top - srcElement.clientTop
     ];
   }
 
