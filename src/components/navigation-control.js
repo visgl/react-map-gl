@@ -13,9 +13,7 @@ const propTypes = {
     * map. The object passed to the callback contains `latitude`,
     * `longitude` and `zoom` and additional state information.
     */
-  onViewportChange: PropTypes.func.isRequired,
-  // TODO(deprecate): remove this when `onChangeViewport` gets deprecated
-  onChangeViewport: PropTypes.func
+  onViewportChange: PropTypes.func.isRequired
 };
 
 const defaultProps = {
