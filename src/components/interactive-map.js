@@ -117,12 +117,6 @@ const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
   mapControls: new MapControls()
 });
 
-const LEGACY_PROPS = {
-  perspectiveEnabled: 'dragRotate',
-  onClickFeatures: 'onClick',
-  onHoverFeatures: 'onHover'
-};
-
 export default class InteractiveMap extends PureComponent {
 
   static supported() {
@@ -141,15 +135,6 @@ export default class InteractiveMap extends PureComponent {
       // Whether the cursor is over a clickable feature
       isHovering: false
     };
-
-    // Check legacy prop and warn
-    Object.keys(LEGACY_PROPS).forEach(name => {
-      if (props[name] !== undefined) {
-        console.warn(  // eslint-disable-line
-          `react-map-gl: \`${name}\` prop is deprecated. Use \`${LEGACY_PROPS[name]}\` instead.`
-        );
-      }
-    });
   }
 
   getChildContext() {
