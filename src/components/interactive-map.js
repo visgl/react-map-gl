@@ -184,6 +184,7 @@ export default class InteractiveMap extends PureComponent {
     const controlOptions = Object.assign({}, this.props, {
       onChangeState: this._onInteractiveStateChange
     });
+    event.target = this.refs.eventCanvas;
     return this.props.mapControls.handleEvent(event, controlOptions);
   }
 
@@ -238,7 +239,8 @@ export default class InteractiveMap extends PureComponent {
 
   // HOVER AND CLICK
   _getPos(event) {
-    const {srcEvent: {clientX, clientY}, target} = event;
+    const target = this.refs.eventCanvas;
+    const {srcEvent: {clientX, clientY}} = event;
     const rect = target.getBoundingClientRect();
     return [
       clientX - rect.left - target.clientLeft,
