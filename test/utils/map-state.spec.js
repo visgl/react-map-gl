@@ -1,6 +1,7 @@
 import test from 'tape-catch';
 import MapState from '../../src/utils/map-state';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import {toLowPrecision, isSameLocation} from '../test-utils';
 
 const SAMPLE_VIEWPORTS = [
   // SF
@@ -32,18 +33,6 @@ const SAMPLE_VIEWPORTS = [
     maxPitch: 90
   }
 ];
-
-// Discard precision errors for comparison
-const toLowPrecision = (input, precision = 11) => Number(input.toPrecision(precision));
-
-// Compare two [lng, lat] locations, account for longitude wrapping
-function isSameLocation(lngLat1, lngLat2) {
-  const lng1 = toLowPrecision(lngLat1[0]);
-  const lat1 = toLowPrecision(lngLat1[1]);
-  const lng2 = toLowPrecision(lngLat2[0]);
-  const lat2 = toLowPrecision(lngLat2[1]);
-  return ((lng1 - lng2) % 360) === 0 && lat1 === lat2;
-}
 
 test('MapState - Constructor', t => {
   SAMPLE_VIEWPORTS.forEach(viewport => {

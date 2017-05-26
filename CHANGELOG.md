@@ -2,6 +2,9 @@
 
 ## Version 3.0.0 (Alpha)
 
+[TBD]
+- New: `fitBounds` util function
+
 ### Version 3.0.0-alpha.11
 - New event management system based on hammer.js
 - FIX: Touch interaction
