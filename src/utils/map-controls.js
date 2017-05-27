@@ -81,11 +81,11 @@ export default class MapControls {
   /* Event utils */
   // Event object: http://hammerjs.github.io/api/#event-object
   getCenter(event) {
-    const {center, target} = event;
-    const rect = target.getBoundingClientRect();
+    const {center, rootElement} = event;
+    const rect = rootElement.getBoundingClientRect();
     return [
-      center.x - rect.left - target.clientLeft,
-      center.y - rect.top - target.clientTop
+      center.x - rect.left - rootElement.clientLeft,
+      center.y - rect.top - rootElement.clientTop
     ];
   }
 

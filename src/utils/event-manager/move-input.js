@@ -26,7 +26,7 @@ export default class MoveInput {
   handler(event) {
     this.callback({
       srcEvent: event,
-      target: this.element
+      target: event.target
     });
   }
 }

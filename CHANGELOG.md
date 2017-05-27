@@ -4,6 +4,7 @@
 
 [TBD]
 - New: `fitBounds` util function
+- Fix: Map flickering when drag over popups
 
 ### Version 3.0.0-alpha.11
 - New event management system based on hammer.js
