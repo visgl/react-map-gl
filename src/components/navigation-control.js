@@ -5,17 +5,19 @@ import autobind from '../utils/autobind';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import MapState from '../utils/map-state';
 
+import deprecateWarn from '../utils/deprecate-warn';
+
 const propTypes = {
   /**
-    * `onChangeViewport` callback is fired when the user interacted with the
+    * `onViewportChange` callback is fired when the user interacted with the
     * map. The object passed to the callback contains `latitude`,
     * `longitude` and `zoom` and additional state information.
     */
-  onChangeViewport: PropTypes.func.isRequired
+  onViewportChange: PropTypes.func.isRequired
 };
 
 const defaultProps = {
-  onChangeViewport: () => {}
+  onViewportChange: () => {}
 };
 
 const contextTypes = {
@@ -31,6 +33,8 @@ export default class NavigationControl extends Component {
   constructor(props) {
     super(props);
     autobind(this);
+    // Check for deprecated props
+    deprecateWarn(props);
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -40,7 +44,9 @@ export default class NavigationControl extends Component {
   _updateViewport(opts) {
     const {viewport} = this.context;
     const mapState = new MapState(Object.assign({}, viewport, opts));
-    this.props.onChangeViewport(mapState.getViewportProps());
+    // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
+    const onViewportChange = this.props.onChangeViewport || this.props.onViewportChange;
+    onViewportChange(mapState.getViewportProps());
   }
 
   _onZoomIn() {

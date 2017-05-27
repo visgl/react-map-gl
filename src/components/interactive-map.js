@@ -9,6 +9,7 @@ import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import EventManager from '../utils/event-manager/event-manager';
 import MapControls from '../utils/map-controls';
 import config from '../config';
+import deprecateWarn from '../utils/deprecate-warn';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -24,11 +25,11 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   minPitch: PropTypes.number,
 
   /**
-   * `onChangeViewport` callback is fired when the user interacted with the
+   * `onViewportChange` callback is fired when the user interacted with the
    * map. The object passed to the callback contains viewport properties
    * such as `longitude`, `latitude`, `zoom` etc.
    */
-  onChangeViewport: PropTypes.func,
+  onViewportChange: PropTypes.func,
 
   /** Enables control event handling */
   // Scroll to zoom
@@ -98,7 +99,7 @@ const getDefaultCursor = ({isDragging, isHovering}) => isDragging ?
   (isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
 
 const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
-  onChangeViewport: null,
+  onViewportChange: null,
   onClick: null,
   onHover: null,
 
@@ -116,12 +117,6 @@ const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
   mapControls: new MapControls()
 });
 
-const LEGACY_PROPS = {
-  perspectiveEnabled: 'dragRotate',
-  onClickFeatures: 'onClick',
-  onHoverFeatures: 'onHover'
-};
-
 export default class InteractiveMap extends PureComponent {
 
   static supported() {
@@ -131,6 +126,8 @@ export default class InteractiveMap extends PureComponent {
   constructor(props) {
     super(props);
     autobind(this);
+    // Check for deprecated props
+    deprecateWarn(props);
 
     this.state = {
       // Whether the cursor is down
@@ -138,15 +135,6 @@ export default class InteractiveMap extends PureComponent {
       // Whether the cursor is over a clickable feature
       isHovering: false
     };
-
-    // Check legacy prop and warn
-    Object.keys(LEGACY_PROPS).forEach(name => {
-      if (props[name] !== undefined) {
-        console.warn(  // eslint-disable-line
-          `react-map-gl: \`${name}\` prop is deprecated. Use \`${LEGACY_PROPS[name]}\` instead.`
-        );
-      }
-    });
   }
 
   getChildContext() {
@@ -182,7 +170,7 @@ export default class InteractiveMap extends PureComponent {
 
   _handleEvent(event) {
     const controlOptions = Object.assign({}, this.props, {
-      onChangeState: this._onInteractiveStateChange
+      onStateChange: this._onInteractiveStateChange
     });
     return this.props.mapControls.handleEvent(event, controlOptions);
   }
