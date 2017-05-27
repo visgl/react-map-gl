@@ -5,7 +5,7 @@ import autobind from '../utils/autobind';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import MapState from '../utils/map-state';
 
-import depWarn from '../utils/dep-warn';
+import deprecateWarn from '../utils/deprecate-warn';
 
 const propTypes = {
   /**
@@ -34,7 +34,7 @@ export default class NavigationControl extends Component {
     super(props);
     autobind(this);
     // Check for deprecated props
-    depWarn(props);
+    deprecateWarn(props);
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {

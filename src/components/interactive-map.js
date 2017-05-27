@@ -9,7 +9,7 @@ import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import EventManager from '../utils/event-manager/event-manager';
 import MapControls from '../utils/map-controls';
 import config from '../config';
-import depWarn from '../utils/dep-warn';
+import deprecateWarn from '../utils/deprecate-warn';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -127,7 +127,7 @@ export default class InteractiveMap extends PureComponent {
     super(props);
     autobind(this);
     // Check for deprecated props
-    depWarn(props);
+    deprecateWarn(props);
 
     this.state = {
       // Whether the cursor is down
