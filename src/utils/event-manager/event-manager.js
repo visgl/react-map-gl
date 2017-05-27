@@ -139,7 +139,7 @@ export default class EventManager {
    */
   _onBasicInput(event) {
     // For calculating pointer position relative to the canvas
-    event.srcElement = this.element;
+    event.rootElement = this.element;
 
     const {srcEvent} = event;
     const eventAliases = BASIC_EVENT_ALIASES[srcEvent.type];
@@ -158,7 +158,7 @@ export default class EventManager {
    */
   _onOtherEvent(event) {
     // For calculating pointer position relative to the canvas
-    event.srcElement = this.element;
+    event.rootElement = this.element;
 
     const {srcEvent: {type}} = event;
     this.manager.emit(type, event);
