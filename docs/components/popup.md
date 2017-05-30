@@ -1,6 +1,7 @@
 # Popup Control
 
-This is a React equivalent of Mapbox's [Popup Control](https://www.mapbox.com/mapbox-gl-js/api/#popup)
+This is a React equivalent of Mapbox's [Popup Control](https://www.mapbox.com/mapbox-gl-js/api/#popup), which can be used to
+show tooltip popups with custom HTML content at specific locations on the map.
 
 ```js
 import {Component} from 'react';

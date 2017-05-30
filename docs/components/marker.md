@@ -1,6 +1,8 @@
 # Marker Control
 
-This is a React equivalent of Mapbox's [Marker Control](https://www.mapbox.com/mapbox-gl-js/api/#marker)
+This is a React equivalent of Mapbox's
+[Marker Control](https://www.mapbox.com/mapbox-gl-js/api/#marker), which can
+be used to render custom icons at specific locations on the map.
 
 ```js
 import {Component} from 'react';

@@ -1,6 +1,7 @@
 # Navigation Control
 
-This is a React equivalent of Mapbox's [NavigationControl](https://www.mapbox.com/mapbox-gl-js/api/#navigationcontrol):
+This is a React equivalent of Mapbox's [NavigationControl](https://www.mapbox.com/mapbox-gl-js/api/#navigationcontrol),
+which provides zoom buttons and a compass button.
 
 ```js
 import {Component} from 'react';

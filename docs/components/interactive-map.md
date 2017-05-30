@@ -1,7 +1,7 @@
 # InteractiveMap
 
-A stateful `React` component.
-This wraps `StaticMap` and provide additional built-in interactivity handling.
+This component renders `MapboxGL` and provides full interactivity support.
+It uses `StaticMap` underneath to render the final map component.
 This is the `default` exported component from `ReactMapGL`.
 
 ```js
