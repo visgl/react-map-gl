@@ -79,7 +79,9 @@ without issue.
 * `webpack 1` - look at the [deck.gl exhibits](https://github.com/uber/deck.gl/tree/master/exhibits)
 folder, demonstrating a working demo using `webpack`.
 
-* `webpack 2` - `ReactMapGL` is built using `webpack 2` and works without issue.
+* `webpack 2` - our `custom-interactions`
+[example](https://github.com/uber/react-map-gl/blob/master/examples/custom-interactions/webpack.config.js)
+uses `webpack 2` for configuration and can be used as a reference.
 
 In general, for non-browserify based environments, make sure you have read the instructions on the
 [MapboxGL README](https://github.com/mapbox/mapbox-gl-js#using-mapbox-gl-js-with-other-module-systems).
