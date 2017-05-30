@@ -23,4 +23,3 @@ export function isSameLocation(lngLat1, lngLat2) {
   const lat2 = toLowPrecision(lngLat2[1]);
   return ((lng1 - lng2) % 360) === 0 && lat1 === lat2;
 }
-
