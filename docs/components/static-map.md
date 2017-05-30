@@ -1,7 +1,8 @@
 # StaticMap
 
 The simplest `React` wrapper around `MapboxGL`. This is designed to be completely
-static and stateless and will just render a map based on passed in `props`.
+static, and should be used to render a map with no interactivity. For a component
+that supports full user interactivity, see [InteractiveMap](/docs/components/interactive-map.md).
 
 ```js
 import {Component} from 'react';
