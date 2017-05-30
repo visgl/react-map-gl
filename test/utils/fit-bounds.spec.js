@@ -1,5 +1,6 @@
 import test from 'tape-catch';
 import {fitBounds} from 'react-map-gl';
+import {toLowPrecision} from '../test-utils';
 
 const FITBOUNDS_TEST_CASES = [
   [
@@ -35,7 +36,11 @@ test('fitBounds', (t) => {
     t.ok(Number.isFinite(result.longitude), 'get valid longitude');
     t.ok(Number.isFinite(result.latitude), 'get valid latitude');
     t.ok(Number.isFinite(result.zoom), 'get valid zoom');
-    t.deepEqual(result, expected, 'valid viewport returned');
+    t.deepEqual(
+      toLowPrecision(result),
+      toLowPrecision(expected),
+      'valid viewport returned'
+    );
   }
   t.end();
 });
