@@ -18,3 +18,22 @@ be removed completely and you should start using the new `props` as soon as poss
 | `onHoverFeatures(<features>)` | `onHover(<event>)` |
 | `onClickFeatures(<features>)` | `onClick(<event>)` |
 | `perspectiveEnabled [default: false]` | `dragRotate [default: true]`  |
+
+##### `onChangeViewport | onViewportChange` viewport
+Previously, the `viewport` object passed to these callbacks **did not** include
+`width` and `height`. With `v3`, we now include these dimensions in the `viewport`
+object as well. Use cases that applied `viewport` object after specifying
+`width` and `height` will have to be careful:
+
+```js
+// Width and Height below will be overridden by what's in the `viewport` object
+<ReactMapGL width={500} height={400} {...viewport} />
+```
+
+**Please double check** your render code if you relied on this behavior. If you
+rely on manually specifying the width and height, swapping the order should work:
+
+```js
+// Width and Height below will override what's in `viewport`
+<ReactMapGL {...viewport} width={500} height={400} />
+```
