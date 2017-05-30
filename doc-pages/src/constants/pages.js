@@ -29,10 +29,10 @@ const docPages = {
   title: 'Documentation',
   paths: generatePath([
     {
-      name: 'Get Started',
+      name: 'Overview',
       children: [
         {
-          name: 'Introduction',
+          name: 'Get Started',
           content: getDocUrl('get-started/README.md')
         },
         {
@@ -43,36 +43,41 @@ const docPages = {
           name: 'Upgrade Guide',
           content: getDocUrl('get-started/upgrade-guide.md')
         },
+      ]
+    },
+    {
+      name: 'Components',
+      children: [
         {
-          name: 'Interactivity',
-          content: getDocUrl('get-started/interactivity.md')
+          name: 'Static Map',
+          content: getDocUrl('components/static-map.md')
+        },
+        {
+          name: 'Interactive Map',
+          content: getDocUrl('components/interactive-map.md')
+        },
+        {
+          name: 'Navigation Control',
+          content: getDocUrl('components/navigation-control.md')
+        },
+        {
+          name: 'Popup',
+          content: getDocUrl('components/popup.md')
+        },
+        {
+          name: 'Marker',
+          content: getDocUrl('components/marker.md')
         },
       ]
     },
     {
-      name: 'Controls',
+      name: 'Util Functions',
       children: [
         {
-          name: 'Static Map',
-          content: getDocUrl('controls/static-map.md')
+          name: 'Fit Bounds',
+          content: getDocUrl('utils/fit-bounds.md')
         },
-        {
-          name: 'Interactive Map',
-          content: getDocUrl('controls/interactive-map.md')
-        },
-        {
-          name: 'Navigation Control',
-          content: getDocUrl('controls/navigation-control.md')
-        },
-        {
-          name: 'Popup',
-          content: getDocUrl('controls/Popup.md')
-        },
-        {
-          name: 'Marker',
-          content: getDocUrl('controls/Marker.md')
-        },
-      ]
+      ],
     },
     {
       name: 'Advanced',
@@ -85,8 +90,6 @@ const docPages = {
     },
   ])
 };
-
-console.log(docPages);
 
 export const Pages = [
   docPages

@@ -1,6 +1,6 @@
 # fitBounds
 
-```
+```js
 import {fitBounds} from 'react-map-gl';
 
 const viewport = fitBounds(
@@ -14,23 +14,18 @@ const viewport = fitBounds(
 ```
 
 ## Parameters
-
-### viewport (object, required)
-
+##### viewport {Object} (required)
 - `viewport.width` (number, required) Width of the viewport
 - `viewport.height` (number, required) Height of the viewport
 
-### bounds ([[number, number], [number, number]], required)
-
+##### bounds {[[Number, Number], [Number, Number]]} (required)
 Bounding box defined by two opposite corners in `[lng, lat]` format.
 
-### options (object)
+##### options {Object}
+- `options.padding {Number} - default: 0`
+  The amount of padding in pixels to add to the given bounds.
+- `options.offset {[Number, Number]} - default: [0, 0]`
+  The center of the given bounds relative to the map's center, measured in pixels.
 
-- `options.padding` (number) The amount of padding in pixels to add to the given bounds.
-  Default `0`.
-- `options.offset` ([number, number]) The center of the given bounds relative to the map's center, measured in pixels.
-  Default `[0, 0]`.
-
-## Returns
-
+## Returns {Object}
 An object with viewport properties `longitude`, `latitude` and `zoom`.
