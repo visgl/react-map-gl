@@ -31,14 +31,13 @@
     "test": "npm run lint && node test/node.js",
     "test-browser": "webpack-dev-server --env.browser --progress --hot --open",
     "publish-prod": "npm run build && npm run test && npm publish",
-    "publish-beta": "npm run build && npm run test && npm publish --tag beta",
-    "postinstall": "(flow-remove-types node_modules/mapbox-gl/js/**/*.js --out-dir . >/dev/null 2>&1) || (flow-remove-types ../mapbox-gl/js/**/*.js --out-dir . >/dev/null 2>&1) || true"
+    "publish-beta": "npm run build && npm run test && npm publish --tag beta"
   },
   "dependencies": {
     "bowser": "^1.2.0",
     "hammerjs": "^2.0.8",
     "immutable": "*",
-    "mapbox-gl": "0.32.1",
+    "mapbox-gl": "0.37.0",
     "prop-types": "^15.5.7",
     "viewport-mercator-project": "^4.0.1"
   },
