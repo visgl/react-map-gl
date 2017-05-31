@@ -1,73 +1,87 @@
+<p align="right">
+  <a href="https://github.com/uber/deck.gl/blob/4.0-release/docs/README.md">
+    <img src="https://img.shields.io/badge/current-v3-brightgreen.svg?style=flat-square" />
+  </a>
+  <a href="https://github.com/uber/deck.gl/tree/2.0-release">
+    <img src="https://img.shields.io/badge/legacy-v2-green.svg?style=flat-square" />
+  </a>
+</p>
 
-# Getting Started
+# Introduction
 
-<div align="center">
-  <img width={700} src="https://cloud.githubusercontent.com/assets/4991911028165/49f41da2-86bc-11e5-85eb-9279621ef971.png" />
-</div>
-
-react-map-gl is a [React](http://facebook.github.io/react/)-friendly
-wrapper for [MapboxGL-js](https://www.mapbox.com/mapbox-gl-js/), a WebGL-powered
-vector and raster tile mapping library.
-
-MapboxGL-js provides impressive vector tile rendering capabilities
-that you can find out more about [here](https://www.mapbox.com/mapbox-gl-js/).
-Although the Mapbox
-[vector tile specification](https://www.mapbox.com/developers/vector-tiles/) is 
-[open source](https://github.com/mapbox/vector-tile-spec), there aren't yet very
-many free alternatives to Mapbox's paid 
-[vector tile API](https://www.mapbox.com/pricing/). Because of this, the
-examples here don't use the paid vector tile API and instead use map tiles by
-[Stamen Design](http://stamen.com), under
-[CC BY 3.0](http://creativecommons.org/licenses/by/3.0) and data by
-[OpenStreetMap](http://openstreetmap.org),
-under [ODbL](http://www.openstreetmap.org/copyright).
-
-Two guiding principles this library tries to adhere to:
-
-## Stateless
-
-One of the goals of the project is to provide a [stateless](https://facebook.github.io/react/docs/interactivity-and-dynamic-uis.html#what-components-should-have-state) API to the underlying map and overlay components. (Also see [Pure UI](http://rauchg.com/2015/pure-ui/) by [Guillermo Rauch](https://twitter.com/rauchg).)
-
-## Small modules
-
-[Small modules]() - Whenever possible, isolated, reusable code should exist in separate npm modules that [do one thing well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well). (Also see [Module Best Practices](https://github.com/mattdesl/module-best-practices) by [Matt DesLauriers](https://twitter.com/mattdesl).)
-
+`ReactMapGL` is a [React](http://facebook.github.io/react/)-friendly
+wrapper for [MapboxGL](https://www.mapbox.com/mapbox-gl-js/), a WebGL-powered
+vector and raster tile mapping library. On top of exposing as much of
+`MapboxGL` as possible, we also introduced our own event handling classes
+that aim to make working with external overlays, such as
+[Deck.GL](https://uber.github.io/deck.gl), much easier.
 
 # Installation
 
-react-map-gl needs to be installed in a product that also requires react 0.14.x and ImmutableJS 3.x. (These are referred to as its [peerDependencies](https://nodejs.org/en/blog/npm/peer-dependencies/)) so if you haven't already, you'll need to run the following in your project:
+`ReactMapGL` requires `node >= v4` and `react >= 15.4`.
 
-    npm install react
-    npm install immutable
-    npm install r-dom
-
-And then install react-map-gl with:
-
-    npm install react-map-gl
-
-Here's a preview of the API and how you could create a simple non-interactive map.
-
-```ks
-var MapGL = require(\'react-map-gl\');
-  // later in your app...
-  <MapGL
-    width this.state.map.width + '}
-    height this.state.map.height + '}
-    latitude d3.round(this.state.map.latitude, 3) + '}
-    longitude d3.round(this.state.map.longitude, 3) + '}
-    zoom d3.round(this.state.map.zoom, 3) + '}
-    mapStyle={mapStyle
-   />
+```sh
+npm install --save react-map-gl
+```
+or
+```sh
+yarn add react-map-gl
 ```
 
-TODO - live example
-```
-      r(MapGL,
-        assign({onChangeViewport: this._onChangeViewport}, this.state.map),
-        r(Attribute, this.state.map)
-      ),
+## Example
+
+```js
+import {Component} from 'react';
+import ReactMapGL from 'react-map-gl';
+
+class Map extends Component {
+  render() {
+    return (
+      <ReactMapGL
+        width={400}
+        height={400}
+        latitude={37.7577}
+        longitude={-122.4376}
+        zoom={8}
+        onViewportChange={(viewport) => {
+          const {latitude, longitude, zoom} = viewport;
+          // Optionally call `setState` and use the state to update the map.
+        }}
+      />
+    );
+  }
+}
 ```
 
-# mapStyle prop
+## Server Side Rendering
 
-The `<MapGL>` component takes a `mapStyle` prop that describes how to style the underling map. It's the same format as the style object used by [Mapbox-GL](https://www.mapbox.com/mapbox-gl-style-spec/) except it must be deeply wrapped as an Immutable using [`ImmutableJS.fromJS()`](https://facebook.github.io/immutable-js/docs/#/fromJS). This allows the library to check if the style has changed and quickly update the style based on the difference from the previous. Reference the map style specification for more details at: https://www.mapbox.com/mapbox-gl-style-spec/.
+`ReactMapGL` depends on `gl`, which may cause issues when running in a server
+environment without `gl` installed. You can either make sure that your system
+has `gl` installed or use the following work-around to ensure you only require
+`ReactMapGL` on the client.
+
+```js
+// is-browser is an npm package, but you can use any other solution to make sure
+// that you are in a browser environment.
+import isBrowser from 'is-browser';
+
+const ReactMapGL = 'div';
+if (isBrowser) {
+  ReactMapGL = require('react-map-gl').default;
+}
+```
+
+## Using with Browserify, Webpack, and other environments
+
+* `browserify` - `ReactMapGL` is extensively tested with `browserify` and works
+without issue.
+
+* `webpack 1` - look at the [deck.gl exhibits](https://github.com/uber/deck.gl/tree/master/exhibits)
+folder, demonstrating a working demo using `webpack`.
+
+* `webpack 2` - our `custom-interactions`
+[example](https://github.com/uber/react-map-gl/blob/master/examples/custom-interactions/webpack.config.js)
+uses `webpack 2` for configuration and can be used as a reference.
+
+In general, for non-browserify based environments, make sure you have read the instructions on the
+[MapboxGL README](https://github.com/mapbox/mapbox-gl-js#using-mapbox-gl-js-with-other-module-systems).
