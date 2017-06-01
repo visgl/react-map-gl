@@ -27,7 +27,6 @@ Here's an example of the third party [react-map-gl-heatmap-overlay](https://gith
    '</MapGL>'
 ```
 
-TODO - Link to live example -
 ```js
       r(MapGL,
         assign({onChangeViewport: this._onChangeViewport}, this.state.map), [
