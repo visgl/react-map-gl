@@ -1,4 +1,6 @@
-<h5 align="center">React friendly API wrapper around MapboxGL JS</h5>
+# Overview
+
+react-map-gl is a react friendly API wrapper around MapboxGL JS.
 
 ![screen](https://cloud.githubusercontent.com/assets/499192/11028165/49f41da2-86bc-11e5-85eb-9279621ef971.png)
 
