@@ -1,6 +1,6 @@
 # Upgrade Guide
 
-## v3
+## Upgrading to react-map-gl v3
 
 v3 is a major upgrade of react-map-gl. While we have tried to gently deprecated any changed or removed features, a few breaking changes could not be avoided.
 
@@ -38,7 +38,7 @@ We have started to deprecate a few React props. In all the cases below, the old 
 
 
 
-## v2
+## Upgrading to react-map-gl v2
 
 v2 is API compatible with v1, however if you are still using `v1` of react-map-gl, make sure that you first upgrade:
 * Your `node` version to `v4` or higher
@@ -47,7 +47,7 @@ v2 is API compatible with v1, however if you are still using `v1` of react-map-g
 Background: `mapbox-gl` 0.31.0 introduced a hard dependency on Node >= v4.
 
 
-## v1
+## Upgrading to react-map-gl v1
 
 (Upgrading from 0.6.x)
 

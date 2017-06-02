@@ -36,5 +36,5 @@ module.exports = {
 };
 
 // DELETE THIS LINE WHEN COPYING THIS EXAMPLE FOLDER OUTSIDE OF DECK.GL
-// It enables bundling against src in this repo rather than installed deck.gl module
+// It enables bundling against src in this repo rather than the installed version
 module.exports = require('../webpack.config.local')(module.exports);
