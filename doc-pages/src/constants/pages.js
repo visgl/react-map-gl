@@ -32,17 +32,38 @@ const docPages = {
       name: 'Overview',
       children: [
         {
+          name: 'Overview',
+          content: getDocUrl('README.md')
+        },
+        {
+          name: 'What\'s New',
+          content: getDocUrl('whats-new.md')
+        },
+        {
+          name: 'Upgrade Guide',
+          content: getDocUrl('upgrade-guide.md')
+        }
+      ]
+    },
+    {
+      name: 'Getting Started',
+      children: [
+        {
           name: 'Get Started',
           content: getDocUrl('get-started/README.md')
         },
         {
-          name: 'What\'s New',
-          content: getDocUrl('get-started/whats-new.md')
+          name: 'Using with Redux',
+          content: getDocUrl('get-started/using-with-redux.md')
         },
         {
-          name: 'Upgrade Guide',
-          content: getDocUrl('get-started/upgrade-guide.md')
+          name: 'Using with Isomorphic Rendering',
+          content: getDocUrl('get-started/using-with-isomorphic-rendering.md')
         },
+        {
+          name: 'About Mapbox Tokens',
+          content: getDocUrl('get-started/mapbox-tokens.md')
+        }
       ]
     },
     {
@@ -67,6 +88,23 @@ const docPages = {
         {
           name: 'Marker',
           content: getDocUrl('components/marker.md')
+        },
+      ]
+    },
+    {
+      name: 'Overlays',
+      children: [
+        {
+          name: 'SVGOverlay',
+          content: getDocUrl('overlays/svg-overlay.md')
+        },
+        {
+          name: 'CanvasOverlay',
+          content: getDocUrl('overlays/canvas-overlay.md')
+        },
+        {
+          name: 'HTMLOverlay',
+          content: getDocUrl('overlays/html-overlay.md')
         },
       ]
     },
