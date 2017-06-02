@@ -2,9 +2,11 @@
 
 ## Version 3.0.0 (Alpha)
 
-[TBD]
+### Version 3.0.0-alpha.12
+- Bump mapbox-gl to 0.37.0
 - New: `fitBounds` util function
 - Fix: Map flickering when drag over popups
+- BREAKING: `onChangeViewport` is now `onViewportChange`
 
 ### Version 3.0.0-alpha.11
 - New event management system based on hammer.js
