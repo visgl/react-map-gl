@@ -20,36 +20,30 @@ export default class Home extends Component {
           <div className="container soft-left texts">
             <div>
               <h2>
-                deck.gl is a WebGL-powered framework for visual exploratory
-                data analysis of large datasets.
+                react-map-gl makes using mapbox-gl in React applications easy.
               </h2>
               <hr className="short" />
 
               <h3>
-                <img src="images/icon-layers.svg" />
-                A Layered Approach to Data Visualization
+                <img src="images/icon-react.svg" />
+                React Integration
               </h3>
               <p>
-              deck.gl allows complex visualizations to be constructed by
-              composing existing layers, and makes it easy to package and
-              share new visulizations as reusable layers. We already offer
-              a <a href="#/documentation/layer-catalog">catalog of proven layers</a> and
-              we have many more in the works.
+              Integration on browser and Node.js, exposing the full power of mapbox-gl.
+              </p>
+
+              <h3>
+                <img src="images/icon-layers.svg" />
+                Component Library
+              </h3>
+              <p>
+              react-map-gl comes with additional React component that
+              synchronize with the map camera system.
               </p>
 
               <h3>
                 <img src="images/icon-high-precision.svg" />
-                High-Precision Computations in the GPU
-              </h3>
-              <p>
-              By emulating 64 bit floating point computations in the GPU,
-              deck.gl renders datasets with unparalleled accuracy and
-              performance.
-              </p>
-
-              <h3>
-                <img src="images/icon-react.svg" />
-                React and Mapbox GL Integrations
+                Perfect Companion to deck.gl
               </h3>
               <p>
               deck.gl is a great match with React, supporting
@@ -59,20 +53,10 @@ export default class Home extends Component {
               compelling 2D and 3D visualizations on top of your Mapbox
               based maps.
               </p>
+
             </div>
           </div>
 
-          <div className="container text-center buttons">
-            <a href="#/documentation/getting-started" className="btn">
-              Get Started <i className="icon icon-arrow-right" />
-            </a>
-            <a href="https://github.com/uber/react-map-gl" className="btn">
-              View on Github <i className="icon icon-github" />
-            </a>
-            <a href="#/examples" className="btn">
-              See examples <i className="icon icon-gallery" />
-            </a>
-          </div>
         </section>
 
         <hr />
