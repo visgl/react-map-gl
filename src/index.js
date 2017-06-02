@@ -18,40 +18,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// React Components
+// React Map Components
+export {default as default} from './components/interactive-map';
 export {default as InteractiveMap} from './components/interactive-map';
 export {default as StaticMap} from './components/static-map';
-
-export {default as default} from './components/interactive-map';
-export {default as MapGL} from './components/interactive-map';
-
-// export {default as ClassicMap} from './deprecated/map';
 
 // React Controls
 export {default as Marker} from './components/marker';
 export {default as Popup} from './components/popup';
 export {default as NavigationControl} from './components/navigation-control';
 
+// Overlays
+export {default as CanvasOverlay} from './overlays/canvas-overlay';
+export {default as HTMLOverlay} from './overlays/html-overlay';
+export {default as SVGOverlay} from './overlays/svg-overlay';
+
 // Utilities
 export {default as fitBounds} from './utils/fit-bounds';
 
-// TODO - should not be exposed
-export {default as autobind} from './utils/autobind';
-
-// TODO - should these be exported or better keep them as internal or separate module?
-// If exported, should we document them?
-// export {default as EventManager} from './utils/event-manager';
-
-// Overlays
-export {default as CanvasOverlay} from './overlays/canvas-overlay';
-export {default as DraggablePointsOverlay} from './overlays/draggable-points-overlay';
-export {default as HTMLOverlay} from './overlays/html-overlay';
-export {default as ScatterplotOverlay} from './overlays/scatterplot-overlay';
-export {default as SVGOverlay} from './overlays/svg-overlay';
-
 // Experimental Features (May change in minor version bumps, use at your own risk)
 import MapControls from './utils/map-controls';
+import EventManager from './utils/event-manager/event-manager';
+import autobind from './utils/autobind';
 
 export const experimental = {
-  MapControls
+  EventManager,
+  MapControls,
+  autobind
 };

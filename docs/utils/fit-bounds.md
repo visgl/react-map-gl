@@ -1,5 +1,7 @@
 # fitBounds
 
+## Usage
+
 ```js
 import {fitBounds} from 'react-map-gl';
 
@@ -14,6 +16,7 @@ const viewport = fitBounds(
 ```
 
 ## Parameters
+
 ##### viewport {Object} (required)
 - `viewport.width` (number, required) Width of the viewport
 - `viewport.height` (number, required) Height of the viewport
