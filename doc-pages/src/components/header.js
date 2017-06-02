@@ -15,7 +15,11 @@ export default class Header extends Component {
             <i className={`icon icon-${isMenuOpen ? 'close' : 'menu'}`} />
           </div>
           <div className="links">
+            <Link activeClassName="active" to="examples">Examples</Link>
             <Link activeClassName="active" to="documentation">Documentation</Link>
+            <a href="https://github.com/uber/react-map-gl" className="btn">
+              Github <i className="icon icon-github" />
+            </a>
           </div>
         </div>
       </header>
