@@ -1,13 +1,4 @@
-<p align="right">
-  <a href="https://github.com/uber/deck.gl/blob/4.0-release/docs/README.md">
-    <img src="https://img.shields.io/badge/current-v3-brightgreen.svg?style=flat-square" />
-  </a>
-  <a href="https://github.com/uber/deck.gl/tree/2.0-release">
-    <img src="https://img.shields.io/badge/legacy-v2-green.svg?style=flat-square" />
-  </a>
-</p>
-
-# Introduction
+# Get Started
 
 `ReactMapGL` is a [React](http://facebook.github.io/react/)-friendly
 wrapper for [MapboxGL](https://www.mapbox.com/mapbox-gl-js/), a WebGL-powered
