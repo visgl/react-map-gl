@@ -85,7 +85,8 @@ const defaultProps = {
   visible: true,
   bearing: 0,
   pitch: 0,
-  altitude: 1.5
+  altitude: 1.5,
+  onLoad: noop
 };
 
 const childContextTypes = {
@@ -144,9 +145,7 @@ export default class StaticMap extends PureComponent {
     }
 
     // Attach optional onLoad function
-    if (this.props.onLoad) {
-      map.once('load', () => this.props.onLoad());
-    }
+    map.once('load', () => this.props.onLoad());
 
     this._map = map;
     this._updateMapViewport({}, this.props);
