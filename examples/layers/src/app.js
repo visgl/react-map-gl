@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
+import StyleControls from './style-controls';
 
 const token = process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
 
@@ -12,10 +13,11 @@ if (!token) {
 class Root extends Component {
 
   state = {
+    mapStyle: '',
     viewport: {
-      latitude: 37.785164,
-      longitude: -122.41669,
-      zoom: 14,
+      latitude: 37.805,
+      longitude: -122.447,
+      zoom: 15.5,
       bearing: 0,
       pitch: 0,
       width: 500,
@@ -36,19 +38,23 @@ class Root extends Component {
         height: window.innerHeight
       }
     });
-  }
+  };
+
+  _onViewportChange = viewport => this.setState({viewport});
+
+  _onStyleChange = mapStyle => this.setState({mapStyle});
 
   render() {
 
-    const {viewport, width, height} = this.state;
+    const {viewport, mapStyle} = this.state;
 
     return (
       <MapGL
         {...viewport}
-        mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={v => this.setState({viewport: v})}
-        preventStyleDiffing={false}
+        mapStyle={mapStyle}
+        onViewportChange={this._onViewportChange}
         mapboxApiAccessToken={token} >
+        <StyleControls onChange={this._onStyleChange} />
       </MapGL>
     );
   }
