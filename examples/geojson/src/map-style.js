@@ -1,5 +1,5 @@
 import {fromJS} from 'immutable';
-import MAP_STYLE from '../../example-map-style.json';
+import MAP_STYLE from '../../map-style-basic-v8.json';
 
 export const pointLayer = fromJS({
   id: 'point',

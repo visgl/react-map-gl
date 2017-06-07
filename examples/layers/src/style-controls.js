@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {fromJS} from 'immutable';
-import MAP_STYLE from '../../example-map-style.json';
+import MAP_STYLE from '../../map-style-basic-v8.json';
 
 const defaultMapStyle = fromJS(MAP_STYLE);
 
@@ -43,7 +43,7 @@ export default class StyleControls extends PureComponent {
       color: {
         water: '#DBE2E6',
         parks: '#E6EAE9',
-        buildings: '#6b6b76',
+        buildings: '#c0c0c8',
         roads: '#ffffff',
         labels: '#78888a',
         background: '#EBF0F0'
