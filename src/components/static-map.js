@@ -145,7 +145,7 @@ export default class StaticMap extends PureComponent {
     }
 
     // Attach optional onLoad function
-    map.once('load', () => this.props.onLoad());
+    map.once('load', this.props.onLoad);
 
     this._map = map;
     this._updateMapViewport({}, this.props);
