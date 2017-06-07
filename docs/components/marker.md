@@ -6,7 +6,7 @@ be used to render custom icons at specific locations on the map.
 
 ```js
 import {Component} from 'react';
-import ReactMapGL, {Popup} from 'react-map-gl';
+import ReactMapGL, {Marker} from 'react-map-gl';
 
 class Map extends Component {
   render() {
