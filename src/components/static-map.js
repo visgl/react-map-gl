@@ -71,7 +71,9 @@ const propTypes = {
   pitch: PropTypes.number,
   /** Altitude of the viewport camera. Default 1.5 "screen heights" */
   // Note: Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
-  altitude: PropTypes.number
+  altitude: PropTypes.number,
+  /** The onLoad callback for the map */
+  onLoad: PropTypes.func
 };
 
 const defaultProps = {
@@ -83,7 +85,8 @@ const defaultProps = {
   visible: true,
   bearing: 0,
   pitch: 0,
-  altitude: 1.5
+  altitude: 1.5,
+  onLoad: noop
 };
 
 const childContextTypes = {
@@ -140,6 +143,9 @@ export default class StaticMap extends PureComponent {
     if (canvas) {
       canvas.style.outline = 'none';
     }
+
+    // Attach optional onLoad function
+    map.once('load', this.props.onLoad);
 
     this._map = map;
     this._updateMapViewport({}, this.props);
