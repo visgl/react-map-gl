@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 import StyleControls from './style-controls';
 
-const token = process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
+const token = process.env.MapboxAccessToken; // eslint-disable-line
 
 if (!token) {
   throw new Error('Please specify a valid mapbox token');

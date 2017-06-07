@@ -6,7 +6,7 @@ import ControlPanel from './control-panel';
 
 import bartStations from './bart-station.json';
 
-const token = process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
+const token = process.env.MapboxAccessToken; // eslint-disable-line
 
 if (!token) {
   throw new Error('Please specify a valid mapbox token');

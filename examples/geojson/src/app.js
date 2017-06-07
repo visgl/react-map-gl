@@ -7,7 +7,7 @@ import {defaultMapStyle, pointLayer} from './map-style.js';
 import {pointOnCircle} from './utils';
 import {fromJS} from 'immutable';
 
-const token = process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
+const token = process.env.MapboxAccessToken; // eslint-disable-line
 
 if (!token) {
   throw new Error('Please specify a valid mapbox token');

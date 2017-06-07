@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "webpack-dev-server --progress --hot --port 3000 --open",
-    "start-local": "NODE_ENV=development && webpack-dev-server --progress --hot --port 3000 --open"
+    "start-local": "webpack-dev-server --env.local --progress --hot --port 3000 --open"
   },
   "dependencies": {
     "immutable": "^3.8.1",

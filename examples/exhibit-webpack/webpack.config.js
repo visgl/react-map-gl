@@ -14,7 +14,7 @@ const config = {
 
   module: {
     rules: [{
-      // Compile ES2015 using buble
+      // Compile ES2015 using bable
       test: /\.js$/,
       loader: 'babel-loader',
       include: [resolve('.')],
@@ -31,9 +31,10 @@ const config = {
 
   // Optional: Enables reading mapbox token from environment variable
   plugins: [
-    new webpack.EnvironmentPlugin(['MAPBOX_ACCESS_TOKEN', 'MapboxAccessToken'])
+    new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]
 };
 
-module.exports = process.env.NODE_ENV === 'development' ?
-  require('../webpack.config.local')(config) : config;
+// Enables bundling against src in this repo rather than the installed version
+module.exports = env => env && env.local ?
+  require('../webpack.config.local')(config)(env) : config;

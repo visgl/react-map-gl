@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 
-const token = process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
+const token = process.env.MapboxAccessToken; // eslint-disable-line
 
 if (!token) {
   throw new Error('Please specify a valid mapbox token');
@@ -11,31 +11,19 @@ if (!token) {
 
 class Root extends Component {
 
-  state = {
-    viewport: {
-      latitude: 37.785164,
-      longitude: -122.41669,
-      zoom: 14,
-      bearing: 0,
-      pitch: 0,
-      width: 500,
-      height: 500
-    }
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this._resize);
-    this._resize();
-  }
-
-  _resize = () => {
-    this.setState({
+  constructor(props) {
+    super(props);
+    this.state = {
       viewport: {
-        ...this.state.viewport,
+        latitude: 37.785164,
+        longitude: -122.41669,
+        zoom: 14,
+        bearing: 0,
+        pitch: 0,
         width: window.innerWidth,
         height: window.innerHeight
       }
-    });
+    };
   }
 
   render() {
