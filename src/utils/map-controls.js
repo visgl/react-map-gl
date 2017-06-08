@@ -27,7 +27,7 @@ const ZOOM_ACCEL = 0.01;
 
 const SUBSCRIBED_EVENTS = [
   'panstart',
-  'pan',
+  'panmove',
   'panend',
   'pinchstart',
   'pinch',
@@ -59,7 +59,7 @@ export default class MapControls {
     switch (event.type) {
     case 'panstart':
       return this._onPanStart(event);
-    case 'pan':
+    case 'panmove':
       return this._onPan(event);
     case 'panend':
       return this._onPanEnd(event);
@@ -149,7 +149,7 @@ export default class MapControls {
     return this.updateViewport(newMapState, {isDragging: true});
   }
 
-  // Default handler for the `pan` event.
+  // Default handler for the `panmove` event.
   _onPan(event) {
     return this.isFunctionKeyPressed(event) ? this._onPanRotate(event) : this._onPanMove(event);
   }
