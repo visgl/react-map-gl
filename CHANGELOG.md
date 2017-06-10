@@ -2,6 +2,11 @@
 
 ## Version 3.0.0 (Alpha)
 
+### Version 3.0.0-alpha.13
+- New: Add new examples (#270)
+- Fix: Add `onLoad` callback to static map props and componentDidMount (#269)
+- Fix: Change `pan` event listener to move specific `panmove` (#272)
+
 ### Version 3.0.0-alpha.12
 - Bump mapbox-gl to 0.37.0
 - New: `fitBounds` util function
