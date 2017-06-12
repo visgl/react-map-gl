@@ -21,7 +21,7 @@
 /* global window */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapGL, {CanvasOverlay, SVGOverlay, autobind} from 'react-map-gl';
+import MapGL, {CanvasOverlay, SVGOverlay, experimental} from 'react-map-gl';
 
 import {randomNormal} from 'd3-random';
 import {range} from 'd3-array';
@@ -32,6 +32,7 @@ import alphaify from '../alphaify';
 // San Francisco
 import CITIES from '../data/cities.json';
 
+const autobind = experimental.autobind;
 const location = CITIES[0];
 
 const wiggle = (function _wiggle() {
@@ -70,15 +71,13 @@ export default class CustomOverlayExample extends Component {
       viewport: {
         latitude: location.latitude,
         longitude: location.longitude,
-        zoom: 12.4,
-        startDragLngLat: null,
-        isDragging: false
+        zoom: 12.4
       }
     };
     autobind(this);
   }
 
-  _onChangeViewport(viewport) {
+  _onViewportChange(viewport) {
     this.setState({viewport});
   }
 
@@ -145,7 +144,7 @@ export default class CustomOverlayExample extends Component {
   render() {
     const viewport = {...this.state.viewport, ...this.props};
     return (
-      <MapGL { ...viewport } onChangeViewport={ this._onChangeViewport }>
+      <MapGL { ...viewport } scrollZoom={false} onViewportChange={ this._onViewportChange }>
         <CanvasOverlay { ...viewport } redraw={ this._redrawCanvasOverlay }/>
         <SVGOverlay { ...viewport } redraw={ this._redrawSVGOverlay }/>
       </MapGL>

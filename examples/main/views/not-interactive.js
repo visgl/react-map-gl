@@ -20,58 +20,33 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapGL, {autobind} from 'react-map-gl';
-/* global window */
+import {StaticMap} from 'react-map-gl';
 
-const windowAlert = window.alert;
+import CITIES from '../data/cities.json';
+
+const location = CITIES[0];
 
 const propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };
 
-export default class ClickExample extends Component {
+export default class NotInteractiveExample extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
       viewport: {
-        latitude: 37.7736092599127,
-        longitude: -122.42312591099463,
-        zoom: 12.011557070552028,
-        startDragLngLat: null,
-        isDragging: false
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: 11
       }
     };
-    autobind(this);
-  }
-
-  _onChangeViewport(viewport) {
-    this.setState({viewport});
-  }
-
-  _onClickFeatures(features) {
-    const placeNames = features
-      .filter(feature => feature.layer['source-layer'] === 'place_label')
-      .map(feature => feature.properties.name);
-    windowAlert(placeNames);
-  }
-
-  _onClick(coordinates, pos) {
-    windowAlert(`${coordinates}\n${JSON.stringify(pos)}`);
   }
 
   render() {
-    const viewport = {
-      ...this.state.viewport,
-      ...this.props
-    };
-    return (
-      <MapGL { ...viewport }
-        onChangeViewport={ this._onChangeViewport }
-        onClickFeatures={ this._onClickFeatures }
-        onClick={ this._onClick }/>
-    );
+    return <StaticMap { ...this.state.viewport } { ...this.props }/>;
   }
 }
 
-ClickExample.propTypes = propTypes;
+NotInteractiveExample.propTypes = propTypes;

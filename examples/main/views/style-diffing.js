@@ -18,16 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* window */
+/* global window */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapGL, {autobind} from 'react-map-gl';
+import MapGL, {experimental} from 'react-map-gl';
 import Immutable from 'immutable';
 
 // San Francisco
 import SF_FEATURE from '../data/feature-example-sf.json';
 import CITIES from '../data/cities.json';
 
+const autobind = experimental.autobind;
 const location = CITIES[0];
 
 function buildStyle({fill = 'red', stroke = 'blue'}) {
@@ -70,9 +71,7 @@ export default class StyleDiffingExample extends Component {
       viewport: {
         latitude: location.latitude,
         longitude: location.longitude,
-        zoom: 11,
-        startDragLngLat: null,
-        isDragging: false
+        zoom: 11
       },
       mapStyle: buildStyle({stroke: '#FF00FF', fill: 'green'})
     };
@@ -93,11 +92,11 @@ export default class StyleDiffingExample extends Component {
     }.bind(this), 2000);
   }
 
-  _onChangeViewport(viewport) {
+  _onViewportChange(viewport) {
     this.setState({viewport});
   }
 
-  _onClickFeatures(features) {
+  _onClick({features}) {
     window.console.log(features);
   }
 
@@ -110,8 +109,9 @@ export default class StyleDiffingExample extends Component {
     return (
       <MapGL
         { ...viewport }
-        onChangeViewport={ this._onChangeViewport }
-        onClickFeatures={ this._onClickFeatures }
+        scrollZoom={false}
+        onViewportChange={ this._onViewportChange }
+        onClick={ this._onClick }
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
         preventStyleDiffing={ false }/>

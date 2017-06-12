@@ -21,12 +21,13 @@
 /* global window */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapGL, {SVGOverlay, CanvasOverlay, autobind} from 'react-map-gl';
+import MapGL, {SVGOverlay, CanvasOverlay, experimental} from 'react-map-gl';
 
 import {scaleOrdinal, schemeCategory10} from 'd3-scale';
 import {rgb} from 'd3-color';
 
 const windowAlert = window.alert;
+const autobind = experimental.autobind;
 
 import alphaify from '../alphaify';
 
@@ -46,15 +47,13 @@ export default class RouteOverlayExample extends Component {
       viewport: {
         latitude: 37.7736092599127,
         longitude: -122.42312591099463,
-        zoom: 12.011557070552028,
-        startDragLngLat: null,
-        isDragging: false
+        zoom: 12.011557070552028
       }
     };
     autobind(this);
   }
 
-  _onChangeViewport(viewport) {
+  _onViewportChange(viewport) {
     this.setState({viewport});
   }
 
@@ -110,7 +109,7 @@ export default class RouteOverlayExample extends Component {
       ...this.props
     };
     return (
-      <MapGL { ...viewport } onChangeViewport={ this._onChangeViewport }>
+      <MapGL { ...viewport } scrollZoom={false} onViewportChange={ this._onViewportChange }>
         <SVGOverlay { ...viewport } redraw={ this._redrawSVGOverlay }/>,
         <CanvasOverlay { ...viewport } redraw={ this._redrawCanvasOverlay }/>
       </MapGL>

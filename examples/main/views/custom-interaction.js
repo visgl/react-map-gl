@@ -18,11 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* window */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapGL, {autobind} from 'react-map-gl';
+import autobind from 'react-autobind';
+import {InteractiveMap} from 'react-map-gl';
+import DeckGL, {ArcLayer} from 'deck.gl';
 import Immutable from 'immutable';
+/* global window */
 
 // San Francisco
 import SF_FEATURE from '../data/feature-example-sf.json';
@@ -62,7 +64,7 @@ const propTypes = {
   height: PropTypes.number.isRequired
 };
 
-export default class TiltExample extends Component {
+export default class Example extends Component {
 
   constructor(props) {
     super(props);
@@ -72,9 +74,7 @@ export default class TiltExample extends Component {
         longitude: location.longitude,
         zoom: 11,
         bearing: 180,
-        pitch: 60,
-        startDragLngLat: null,
-        isDragging: false
+        pitch: 60
       },
       mapStyle: buildStyle({stroke: '#FF00FF', fill: 'green'})
     };
@@ -95,28 +95,42 @@ export default class TiltExample extends Component {
     }.bind(this), 2000);
   }
 
-  _onChangeViewport(opt) {
+  _onViewportChange(opt) {
     this.setState({viewport: opt});
   }
 
-  _onClickFeatures(features) {
-    window.console.log(features);
+  _onClickFeatures(event) {
+    window.console.log(event.features);
   }
 
   render() {
-    // mapStyle: this.state.mapStyle,
+    const viewport = {
+      // mapStyle: this.state.mapStyle,
+      ...this.state.viewport,
+      ...this.props
+    };
     return (
-      <MapGL
-        { ...this.state.viewport }
-        { ...this.props }
-        onChangeViewport={ this._onChangeViewport }
-        onClickFeatures={ this._onClickFeatures }
-        perspectiveEnabled={ true }
+      <InteractiveMap
+        { ...viewport }
+        maxPitch={85}
+        onViewportChange={ this._onViewportChange }
+        onClick={ this._onClickFeatures }
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
-        preventStyleDiffing={ false }/>
+        preventStyleDiffing={ false }>
+
+        <DeckGL {...viewport} layers={[
+          new ArcLayer({
+            data: [{sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.45669, 37.781]}],
+            strokeWidth: 4,
+            getSourceColor: x => [0, 0, 255],
+            getTargetColor: x => [0, 255, 0]
+          })
+        ]}/>
+
+      </InteractiveMap>
     );
   }
 }
 
-TiltExample.propTypes = propTypes;
+Example.propTypes = propTypes;
