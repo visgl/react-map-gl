@@ -64,7 +64,7 @@ export default class NavigationControl extends Component {
   _renderCompass() {
     const {bearing} = this.context.viewport;
     return createElement('span', {
-      className: 'arrow',
+      className: 'mapboxgl-ctrl-compass-arrow',
       style: {transform: `rotate(${bearing}deg)`}
     });
   }
