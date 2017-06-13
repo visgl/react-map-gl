@@ -22,37 +22,60 @@
 import ReactDOM from 'react-dom';
 import React, {Component} from 'react';
 
-import TiltExample from './views/tilt-example';
-import NotInteractiveExample from './views/not-interactive-example';
-import CustomOverlayExample from './views/custom-overlay-example';
-import GeodataCreator from './views/geodata-creator-example';
-import ScatterplotOverlayExample from './views/scatterplot-overlay-example';
-import RouteOverlayExample from './views/route-overlay-example';
-import StyleDiffingExample from './views/style-diffing-example';
-import ClickExample from './views/click-example';
+import MainExample from './views/main';
+import NotInteractiveExample from './views/not-interactive';
+import CustomOverlayExample from './views/custom-overlay';
+import RouteOverlayExample from './views/route-overlay';
+import StyleDiffingExample from './views/style-diffing';
+import ClickExample from './views/click';
 
 export default class App extends Component {
+
   constructor(props) {
     super(props);
-    this.state = {width: window.innerWidth};
-    window.addEventListener('resize', () => this.setState({width: window.innerWidth}));
+    this.state = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      showAllExamples: false
+    };
+    window.addEventListener('resize', () => this.setState({
+      width: window.innerWidth,
+      height: window.innerHeight
+    }));
   }
 
   render() {
-    const common = {width: 400, height: 400, style: {float: 'left'}};
+    const {showAllExamples, width} = this.state;
+    const common = {
+      width: Math.floor(width / 2) - 10,
+      height: 400,
+      style: {float: 'left'}
+    };
+    const customExample = {
+      ...common,
+      width: this.state.width
+    };
     return (
       <div>
-        <TiltExample {...common} width={this.state.width - 30}/>
-        <RouteOverlayExample {...common}/>
-        <ScatterplotOverlayExample {...common}/>
-        <CustomOverlayExample {...common}/>
-        <GeodataCreator {...common}/>
-        <NotInteractiveExample {...common}/>
-        <StyleDiffingExample {...common}/>
-        <ClickExample {...common }/>
+        <MainExample {...customExample} />
+        {!showAllExamples &&
+          <button onClick={() => {
+            this.setState({showAllExamples: true});
+          }}>
+            Show All Examples
+          </button>}
+        {showAllExamples &&
+          <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
+            <RouteOverlayExample {...common} />
+            <CustomOverlayExample {...common}/>
+            <NotInteractiveExample {...common}/>
+            <StyleDiffingExample {...common}/>
+            <ClickExample {...common }/>
+          </div>}
       </div>
     );
   }
+
 }
 
 ReactDOM.render(<App/>, document.body.appendChild(document.createElement('div')));

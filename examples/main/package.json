@@ -13,12 +13,11 @@
     "immutable": "^3.8.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-map-gl": "^1.7.2"
+    "react-map-gl": ">=3.0.0-alpha.13"
   },
   "devDependencies": {
     "buble-loader": "^0.4.0",
-    "remove-flow-types-loader": "^1.0.0",
-    "webpack": "^2.2.0-rc.3",
-    "webpack-dev-server": "^2.2.0-rc.0"
+    "webpack": "^2.4.0",
+    "webpack-dev-server": "^2.4.0"
   }
 }

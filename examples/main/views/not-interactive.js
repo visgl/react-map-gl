@@ -20,16 +20,11 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapGL from 'react-map-gl';
+import {StaticMap} from 'react-map-gl';
 
-import ZIPCODES_SF from '../data/feature-example-sf.json';
 import CITIES from '../data/cities.json';
 
 const location = CITIES[0];
-
-for (const feature of ZIPCODES_SF.features) {
-  feature.properties.value = Math.random() * 1000;
-}
 
 const propTypes = {
   width: PropTypes.number.isRequired,
@@ -50,7 +45,7 @@ export default class NotInteractiveExample extends Component {
   }
 
   render() {
-    return <MapGL { ...this.state.viewport } { ...this.props }/>;
+    return <StaticMap { ...this.state.viewport } { ...this.props }/>;
   }
 }
 

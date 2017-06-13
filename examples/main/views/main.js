@@ -20,58 +20,55 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapGL, {autobind} from 'react-map-gl';
-/* global window */
-
-const windowAlert = window.alert;
+import MapGL, {Marker} from 'react-map-gl';
+import bartStations from '../data/bart-station.json';
 
 const propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };
 
-export default class ClickExample extends Component {
+export default class MainExample extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
       viewport: {
-        latitude: 37.7736092599127,
-        longitude: -122.42312591099463,
-        zoom: 12.011557070552028,
-        startDragLngLat: null,
-        isDragging: false
+        latitude: 37.729,
+        longitude: -122.36,
+        zoom: 11,
+        bearing: 0,
+        pitch: 50
       }
     };
-    autobind(this);
+    this._onViewportChange = this._onViewportChange.bind(this);
   }
 
-  _onChangeViewport(viewport) {
+  _onViewportChange(viewport) {
     this.setState({viewport});
   }
 
-  _onClickFeatures(features) {
-    const placeNames = features
-      .filter(feature => feature.layer['source-layer'] === 'place_label')
-      .map(feature => feature.properties.name);
-    windowAlert(placeNames);
-  }
-
-  _onClick(coordinates, pos) {
-    windowAlert(`${coordinates}\n${JSON.stringify(pos)}`);
+  _renderMarker(station, i) {
+    const {name, coordinates} = station;
+    return (
+      <Marker key={i} longitude={coordinates[0]} latitude={coordinates[1]} >
+        <div className="station"><span>{name}</span></div>
+      </Marker>
+    );
   }
 
   render() {
-    const viewport = {
-      ...this.state.viewport,
-      ...this.props
-    };
+
+    const viewport = {...this.state.viewport, ...this.props};
+
     return (
-      <MapGL { ...viewport }
-        onChangeViewport={ this._onChangeViewport }
-        onClickFeatures={ this._onClickFeatures }
-        onClick={ this._onClick }/>
+      <MapGL
+        {...viewport}
+        onViewportChange={this._onViewportChange} >
+        { bartStations.map(this._renderMarker) }
+      </MapGL>
     );
   }
 }
 
-ClickExample.propTypes = propTypes;
+MainExample.propTypes = propTypes;
