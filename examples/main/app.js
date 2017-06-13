@@ -22,7 +22,7 @@
 import ReactDOM from 'react-dom';
 import React, {Component} from 'react';
 
-import PerspectiveExample from './views/perspective';
+import MainExample from './views/main';
 import NotInteractiveExample from './views/not-interactive';
 import CustomOverlayExample from './views/custom-overlay';
 import RouteOverlayExample from './views/route-overlay';
@@ -57,7 +57,7 @@ export default class App extends Component {
     };
     return (
       <div>
-        <PerspectiveExample {...customExample} />
+        <MainExample {...customExample} />
         {!showAllExamples &&
           <button onClick={() => {
             this.setState({showAllExamples: true});
