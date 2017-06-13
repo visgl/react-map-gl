@@ -1,13 +1,13 @@
 {
   "scripts": {
-    "start": "webpack-dev-server --progress --hot --port 3000 --open",
-    "start-local": "webpack-dev-server --env.local --progress --hot --port 3000 --open"
+    "start": "webpack-dev-server --progress --hot --open",
+    "start-local": "webpack-dev-server --env.local --progress --hot --open"
   },
   "dependencies": {
     "immutable": "^3.8.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-map-gl": "^3.0.0-alpha.12"
+    "react-map-gl": ">=3.0.0-alpha.12"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",

@@ -3,15 +3,11 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Marker, Popup, NavigationControl} from 'react-map-gl';
 
-import CityPin from './components/city-pin';
+import CityPin from './city-pin';
 
-import CITIES from './data/cities.json';
+import CITIES from './cities.json';
 
-import './app.css';
-import 'mapbox-gl/dist/mapbox-gl.css';
-
-const token = process.env.MAPBOX_ACCESS_TOKEN || // eslint-disable-line
-  'Set MAPBOX_ACCESS_TOKEN environment variable or put your token here.';
+const token = process.env.MapboxAccessToken; // eslint-disable-line
 
 if (!token) {
   throw new Error('Please specify a valid mapbox token');
@@ -28,15 +24,11 @@ class Root extends Component {
         zoom: 4,
         bearing: 0,
         pitch: 0,
+        width: 500,
+        height: 500
       },
-      width: 500,
-      height: 500,
       popupInfo: null
     };
-
-    this._updateViewport = this._updateViewport.bind(this);
-    this._resize = this._resize.bind(this);
-    this._renderCityMarker = this._renderCityMarker.bind(this);
   }
 
   componentDidMount() {
@@ -48,18 +40,21 @@ class Root extends Component {
     window.removeEventListener('resize', this._resize);
   }
 
-  _updateViewport(viewport) {
+  _updateViewport = (viewport) => {
     this.setState({viewport});
-  }
+  };
 
-  _resize() {
+  _resize = () => {
     this.setState({
-      width: window.innerWidth,
-      height: window.innerHeight
+      viewport: {
+        ...this.state.viewport,
+        width: window.innerWidth,
+        height: window.innerHeight
+      }
     });
-  }
+  };
 
-  _renderCityMarker(city, index) {
+  _renderCityMarker = (city, index) => {
     return (
       <Marker key={`marker-${index}`}
         longitude={city.longitude}
@@ -67,7 +62,7 @@ class Root extends Component {
         <CityPin size={20} onClick={() => this.setState({popupInfo: city})} />
       </Marker>
     );
-  }
+  };
 
   _renderPopup() {
     const {popupInfo} = this.state;
@@ -78,25 +73,21 @@ class Root extends Component {
         longitude={popupInfo.longitude}
         latitude={popupInfo.latitude}
         onClose={() => this.setState({popupInfo: null})} >
-        {popupInfo.cityName}
+        {popupInfo.city}, {popupInfo.state}
       </Popup>
     );
   }
 
   render() {
 
-    const {viewport, width, height} = this.state;
+    const {viewport} = this.state;
 
     return (
       <MapGL
         {...viewport}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onChangeViewport={this._updateViewport}
-        preventStyleDiffing={false}
-        mapboxApiAccessToken={token}
-        perspectiveEnabled
-        width={width}
-        height={height}>
+        mapboxApiAccessToken={token} >
 
         { CITIES.map(this._renderCityMarker) }
 
