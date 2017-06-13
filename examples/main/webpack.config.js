@@ -32,12 +32,6 @@ module.exports = {
   module: {
     rules: [
       {
-        enforce: 'pre',
-        test: /\.js$/,
-        loader: 'remove-flow-types-loader',
-        include: [/node_modules\/mapbox-gl\/js/]
-      },
-      {
         // Compile ES2015 and JSX using buble
         test: /\.js$/,
         loader: 'buble-loader',

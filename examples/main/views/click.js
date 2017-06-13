@@ -20,68 +20,52 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapGL, {ScatterplotOverlay, autobind} from 'react-map-gl';
+import {InteractiveMap} from 'react-map-gl';
+/* global window */
 
-import Immutable from 'immutable';
-import {randomNormal} from 'd3-random';
-import {range} from 'd3-array';
-
-// San Francisco
-import CITIES from '../data/cities.json';
-
-const location = CITIES[0];
-
-const normal = randomNormal();
-function wiggle(scale) {
-  return normal() * scale;
-}
-
-// Example data.
-const locations = Immutable.fromJS(range(4000).map(
-  () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
-));
+const windowAlert = window.alert;
 
 const propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired
 };
 
-export default class ScatterplotOverlayExample extends Component {
+export default class ClickExample extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
       viewport: {
-        latitude: location.latitude,
-        longitude: location.longitude,
-        zoom: 11,
-        startDragLngLat: null,
-        isDragging: false
+        latitude: 37.7736092599127,
+        longitude: -122.42312591099463,
+        zoom: 12.011557070552028
       }
     };
-    autobind(this);
+    this._onViewportChange = this._onViewportChange.bind(this);
+    this._onClick = this._onClick.bind(this);
   }
 
-  _onChangeViewport(viewport) {
+  _onViewportChange(viewport) {
     this.setState({viewport});
   }
 
+  _onClick({lngLat}) {
+    windowAlert(lngLat);
+  }
+
   render() {
-    const viewport = {...this.state.viewport, ...this.props};
+    const viewport = {
+      ...this.state.viewport,
+      ...this.props
+    };
     return (
-      <MapGL
-        { ...viewport }
-        onChangeViewport={ this._onChangeViewport }>
-
-        <ScatterplotOverlay
-          { ...viewport }
-          locations={ locations }
-          dotRadius={ 2 }
-          globalOpacity={ 1 }
-          compositeOperation="screen"/>
-
-      </MapGL>
+      <InteractiveMap
+        {...viewport}
+        scrollZoom={false}
+        onViewportChange={this._onViewportChange}
+        onClick={this._onClick} />
     );
   }
 }
 
-ScatterplotOverlayExample.propTypes = propTypes;
+ClickExample.propTypes = propTypes;
