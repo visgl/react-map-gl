@@ -20,8 +20,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import autobind from 'react-autobind';
-import {InteractiveMap} from 'react-map-gl';
+import MapGL from 'react-map-gl';
 import DeckGL, {ArcLayer} from 'deck.gl';
 import Immutable from 'immutable';
 /* global window */
@@ -64,7 +63,7 @@ const propTypes = {
   height: PropTypes.number.isRequired
 };
 
-export default class Example extends Component {
+export default class PerspectiveExample extends Component {
 
   constructor(props) {
     super(props);
@@ -78,7 +77,8 @@ export default class Example extends Component {
       },
       mapStyle: buildStyle({stroke: '#FF00FF', fill: 'green'})
     };
-    autobind(this);
+    this._onViewportChange = this._onViewportChange.bind(this);
+    this._onClickFeatures = this._onClickFeatures.bind(this);
   }
 
   componentWillMount() {
@@ -105,12 +105,11 @@ export default class Example extends Component {
 
   render() {
     const viewport = {
-      // mapStyle: this.state.mapStyle,
       ...this.state.viewport,
       ...this.props
     };
     return (
-      <InteractiveMap
+      <MapGL
         { ...viewport }
         maxPitch={85}
         onViewportChange={ this._onViewportChange }
@@ -128,9 +127,9 @@ export default class Example extends Component {
           })
         ]}/>
 
-      </InteractiveMap>
+      </MapGL>
     );
   }
 }
 
-Example.propTypes = propTypes;
+PerspectiveExample.propTypes = propTypes;

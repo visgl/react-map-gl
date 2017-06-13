@@ -21,14 +21,13 @@
 /* global window */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapGL, {experimental} from 'react-map-gl';
+import MapGL from 'react-map-gl';
 import Immutable from 'immutable';
 
 // San Francisco
 import SF_FEATURE from '../data/feature-example-sf.json';
 import CITIES from '../data/cities.json';
 
-const autobind = experimental.autobind;
 const location = CITIES[0];
 
 function buildStyle({fill = 'red', stroke = 'blue'}) {
@@ -75,7 +74,8 @@ export default class StyleDiffingExample extends Component {
       },
       mapStyle: buildStyle({stroke: '#FF00FF', fill: 'green'})
     };
-    autobind(this);
+    this._onViewportChange = this._onViewportChange.bind(this);
+    this._onClick = this._onClick.bind(this);
   }
 
   componentWillMount() {

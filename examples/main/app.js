@@ -22,7 +22,7 @@
 import ReactDOM from 'react-dom';
 import React, {Component} from 'react';
 
-import CustomInteraction from './views/custom-interaction';
+import PerspectiveExample from './views/perspective';
 import NotInteractiveExample from './views/not-interactive';
 import CustomOverlayExample from './views/custom-overlay';
 import RouteOverlayExample from './views/route-overlay';
@@ -57,7 +57,7 @@ export default class App extends Component {
     };
     return (
       <div>
-        <CustomInteraction {...customExample} />
+        <PerspectiveExample {...customExample} />
         {!showAllExamples &&
           <button onClick={() => {
             this.setState({showAllExamples: true});

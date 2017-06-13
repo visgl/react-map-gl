@@ -21,13 +21,12 @@
 /* global window */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapGL, {SVGOverlay, CanvasOverlay, experimental} from 'react-map-gl';
+import MapGL, {SVGOverlay, CanvasOverlay} from 'react-map-gl';
 
 import {scaleOrdinal, schemeCategory10} from 'd3-scale';
 import {rgb} from 'd3-color';
 
 const windowAlert = window.alert;
-const autobind = experimental.autobind;
 
 import alphaify from '../alphaify';
 
@@ -50,7 +49,9 @@ export default class RouteOverlayExample extends Component {
         zoom: 12.011557070552028
       }
     };
-    autobind(this);
+    this._onViewportChange = this._onViewportChange.bind(this);
+    this._redrawCanvasOverlay = this._redrawCanvasOverlay.bind(this);
+    this._redrawSVGOverlay = this._redrawSVGOverlay.bind(this);
   }
 
   _onViewportChange(viewport) {

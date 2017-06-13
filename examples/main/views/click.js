@@ -20,11 +20,10 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {InteractiveMap, experimental} from 'react-map-gl';
+import {InteractiveMap} from 'react-map-gl';
 /* global window */
 
 const windowAlert = window.alert;
-const autobind = experimental.autobind;
 
 const propTypes = {
   width: PropTypes.number.isRequired,
@@ -42,7 +41,8 @@ export default class ClickExample extends Component {
         zoom: 12.011557070552028
       }
     };
-    autobind(this);
+    this._onViewportChange = this._onViewportChange.bind(this);
+    this._onClick = this._onClick.bind(this);
   }
 
   _onViewportChange(viewport) {
