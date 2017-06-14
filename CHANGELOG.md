@@ -2,6 +2,9 @@
 
 ## Version 3.0.0 (Alpha)
 
+[TBD]
+- BREAKING: `fitBounds` is now accessed through the `PerspectiveMercatorViewport` class
+
 ### Version 3.0.0-alpha.13
 - New: Add new examples (#270)
 - Fix: Add `onLoad` callback to static map props and componentDidMount (#269)

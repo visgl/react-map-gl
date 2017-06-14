@@ -25,6 +25,28 @@ Please double check your render code if you relied on this behavior. If you rely
 Some less frequently used overlays (`DraggablePointsOverlay`, `ChoroplethOverlay`, `ScatterplotOverlay`), ... have been moved to examples. Most users have moved to map styles or deck.gl layers and removing these overlays reduces the size of the react-map-gl library for the majority of users that don't need them. If you still use them, simply copy the overlay source file(s) into your application.
 
 
+#### `fitBounds` util
+
+Previously, the library exports a `fitBounds` util that returns `{longitude, latitude, zoom}` of a flat viewport that fits around a given bounding box. The same goal can now be achieved by:
+
+```js
+import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+
+const viewport = new PerspectiveMercatorViewport({width: 600, height: 400}).fitBounds(
+  [[-73.9876, 40.7661], [-72.9876, 41.7661]],
+  {padding: 20, offset: [0, -40]}
+);
+// viewport: instance of PerspectiveMercatorViewport
+// {
+//   longitude: -23.406499999999973,
+//   latitude: 64.86850056273362,
+//   zoom: 12.89199533073045,
+//   pitch: 0,
+//   bearing: 0
+// }
+```
+
+
 ### Deprecations
 
 We have started to deprecate a few React props. In all the cases below, the old `props` will still work (you'll get a warning in the console), but they will likely be removed in the next major version of react-map-gl so you should start using the new `props` as soon as possible.
