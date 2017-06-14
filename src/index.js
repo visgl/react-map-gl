@@ -34,7 +34,6 @@ export {default as HTMLOverlay} from './overlays/html-overlay';
 export {default as SVGOverlay} from './overlays/svg-overlay';
 
 // Utilities
-export {default as fitBounds} from './utils/fit-bounds';
 
 // Experimental Features (May change in minor version bumps, use at your own risk)
 import MapControls from './utils/map-controls';
