@@ -64,6 +64,7 @@ const propTypes = {
 };
 
 export default class StyleDiffingExample extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -74,6 +75,7 @@ export default class StyleDiffingExample extends Component {
       },
       mapStyle: buildStyle({stroke: '#FF00FF', fill: 'green'})
     };
+    this._intervalId = null;
     this._onViewportChange = this._onViewportChange.bind(this);
     this._onClick = this._onClick.bind(this);
   }
@@ -81,7 +83,7 @@ export default class StyleDiffingExample extends Component {
   componentWillMount() {
     const colors = ['red', 'green', 'blue'];
     let i = 0;
-    window.setInterval(function interval() {
+    this._intervalId = window.setInterval(function interval() {
       this.setState({
         mapStyle: buildStyle({
           stroke: colors[i % colors.length],
@@ -90,6 +92,11 @@ export default class StyleDiffingExample extends Component {
       });
       i = i + 1;
     }.bind(this), 2000);
+  }
+
+  componentWillUnmount() {
+    window.clearInterval(this._intervalId);
+    this._intervalId = null;
   }
 
   _onViewportChange(viewport) {

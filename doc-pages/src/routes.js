@@ -7,6 +7,7 @@ import App from './components/app';
 import Home from './components/home';
 import Gallery from './components/gallery';
 import Page from './components/page';
+import Examples from './components/examples';
 
 import {Pages} from './constants/pages';
 
@@ -40,7 +41,7 @@ const renderRoute = (page, i) => {
 const renderRouteGroup = (path, pages) => {
   const defaultPage = getDefaultPath(pages);
   return (
-    <Route path={path} component={Gallery} pages={pages}>
+    <Route key={path} path={path} component={Gallery} pages={pages}>
       <IndexRedirect to={defaultPage} />
       {pages.map(renderRoute)}
       <Redirect from="*" to={defaultPage} />
@@ -53,6 +54,7 @@ export default () => (
   <Router history={appHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
+      <Route key="examples" path="/examples" component={Examples} />
       {
         Pages.map((page) =>
           renderRouteGroup(page.title, page.paths))
