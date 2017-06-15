@@ -20,17 +20,16 @@
 
 import {Component, createElement} from 'react';
 import PropTypes from 'prop-types';
-import ViewportMercator from 'viewport-mercator-project';
+import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import {window} from '../utils/globals';
 
 const propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  latitude: PropTypes.number.isRequired,
-  longitude: PropTypes.number.isRequired,
-  zoom: PropTypes.number.isRequired,
-  redraw: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired
+  redraw: PropTypes.func.isRequired
+};
+
+const contextTypes = {
+  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport),
+  isDragging: PropTypes.bool
 };
 
 export default class CanvasOverlay extends Component {
@@ -49,14 +48,14 @@ export default class CanvasOverlay extends Component {
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
 
-    const mercator = ViewportMercator(this.props);
+    const {viewport, isDragging} = this.context;
     this.props.redraw({
-      width: this.props.width,
-      height: this.props.height,
+      width: viewport.width,
+      height: viewport.height,
       ctx,
-      project: mercator.project,
-      unproject: mercator.unproject,
-      isDragging: this.props.isDragging
+      isDragging,
+      project: viewport.project.bind(viewport),
+      unproject: viewport.unproject.bind(viewport)
     });
 
     ctx.restore();
@@ -64,14 +63,16 @@ export default class CanvasOverlay extends Component {
 
   render() {
     const pixelRatio = window.devicePixelRatio || 1;
+    const {viewport: {width, height}} = this.context;
+
     return (
       createElement('canvas', {
         ref: 'overlay',
-        width: this.props.width * pixelRatio,
-        height: this.props.height * pixelRatio,
+        width: width * pixelRatio,
+        height: height * pixelRatio,
         style: {
-          width: `${this.props.width}px`,
-          height: `${this.props.height}px`,
+          width: `${width}px`,
+          height: `${height}px`,
           position: 'absolute',
           pointerEvents: 'none',
           left: 0,
@@ -84,3 +85,4 @@ export default class CanvasOverlay extends Component {
 
 CanvasOverlay.displayName = 'CanvasOverlay';
 CanvasOverlay.propTypes = propTypes;
+CanvasOverlay.contextTypes = contextTypes;

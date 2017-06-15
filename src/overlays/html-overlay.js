@@ -20,36 +20,42 @@
 
 import {Component, createElement} from 'react';
 import PropTypes from 'prop-types';
-import ViewportMercator from 'viewport-mercator-project';
+import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
 const propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
   redraw: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired
+  style: PropTypes.object
+};
+
+const contextTypes = {
+  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport),
+  isDragging: PropTypes.bool
 };
 
 export default class HTMLOverlay extends Component {
   render() {
-    const {width, height, isDragging} = this.props;
+    const {viewport, isDragging} = this.context;
     const style = Object.assign({
       position: 'absolute',
       pointerEvents: 'none',
       left: 0,
       top: 0,
-      width,
-      height
+      width: viewport.width,
+      height: viewport.height
     }, this.props.style);
-
-    const mercator = ViewportMercator(this.props);
-    const {project, unproject} = mercator;
 
     return (
       createElement('div', {
         ref: 'overlay',
         style
       },
-        this.props.redraw({width, height, project, unproject, isDragging})
+        this.props.redraw({
+          width: viewport.width,
+          height: viewport.height,
+          isDragging,
+          project: viewport.project.bind(viewport),
+          unproject: viewport.unproject.bind(viewport)
+        })
       )
     );
   }
@@ -57,3 +63,4 @@ export default class HTMLOverlay extends Component {
 
 HTMLOverlay.displayName = 'HTMLOverlay';
 HTMLOverlay.propTypes = propTypes;
+HTMLOverlay.contextTypes = contextTypes;

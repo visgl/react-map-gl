@@ -117,6 +117,11 @@ const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
   mapControls: new MapControls()
 });
 
+const childContextTypes = {
+  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport),
+  isDragging: PropTypes.bool
+};
+
 export default class InteractiveMap extends PureComponent {
 
   static supported() {
@@ -139,7 +144,8 @@ export default class InteractiveMap extends PureComponent {
 
   getChildContext() {
     return {
-      viewport: new PerspectiveMercatorViewport(this.props)
+      viewport: new PerspectiveMercatorViewport(this.props),
+      isDragging: this.state.isDragging
     };
   }
 
@@ -295,4 +301,4 @@ export default class InteractiveMap extends PureComponent {
 InteractiveMap.displayName = 'InteractiveMap';
 InteractiveMap.propTypes = propTypes;
 InteractiveMap.defaultProps = defaultProps;
-InteractiveMap.childContextTypes = StaticMap.childContextTypes;
+InteractiveMap.childContextTypes = childContextTypes;
