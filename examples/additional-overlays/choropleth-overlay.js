@@ -19,21 +19,13 @@
 // THE SOFTWARE.
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ViewportMercator from 'viewport-mercator-project';
 import {extent} from 'd3-array';
 import {scaleLinear} from 'd3-scale';
 import {geoPath, geoTransform} from 'd3-geo';
 import Immutable from 'immutable';
-
-import {window} from '../utils/globals';
+/* global window */
 
 const propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  latitude: PropTypes.number.isRequired,
-  longitude: PropTypes.number.isRequired,
-  zoom: PropTypes.number.isRequired,
-  isDragging: PropTypes.bool.isRequired,
   renderWhileDragging: PropTypes.bool.isRequired,
   globalOpacity: PropTypes.number.isRequired,
   /**
@@ -54,6 +46,11 @@ const defaultProps = {
   valueAccessor: feature => feature.get('properties').get('value')
 };
 
+const contextTypes = {
+  viewport: PropTypes.object,
+  isDragging: PropTypes.bool
+};
+
 export default class ChoroplethOverlay extends Component {
   componentDidMount() {
     this._redraw();
@@ -67,20 +64,20 @@ export default class ChoroplethOverlay extends Component {
     const pixelRatio = window.devicePixelRatio;
     const canvas = this.refs.overlay;
     const ctx = canvas.getContext('2d');
-    const mercator = ViewportMercator(this.props);
+    const {viewport, isDragging} = this.context;
 
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
-    ctx.clearRect(0, 0, this.props.width, this.props.height);
+    ctx.clearRect(0, 0, viewport.width, viewport.height);
 
     function projectPoint(lon, lat) {
-      const point = mercator.project([lon, lat]);
+      const point = viewport.project([lon, lat]);
       /* eslint-disable no-invalid-this */
       this.stream.point(point[0], point[1]);
       /* eslint-enable no-invalid-this */
     }
 
-    if (this.props.renderWhileDragging || !this.props.isDragging) {
+    if (this.props.renderWhileDragging || !isDragging) {
       const transform = geoTransform({point: projectPoint});
       const path = geoPath().projection(transform).context(ctx);
       this._drawFeatures(ctx, path);
@@ -117,15 +114,16 @@ export default class ChoroplethOverlay extends Component {
   }
 
   render() {
+    const {viewport: {width, height}} = this.context;
     const pixelRatio = window.devicePixelRatio || 1;
     return (
       <canvas
         ref="overlay"
-        width={ this.props.width * pixelRatio }
-        height={ this.props.height * pixelRatio }
+        width={ width * pixelRatio }
+        height={ height * pixelRatio }
         style={ {
-          width: `${this.props.width}px`,
-          height: `${this.props.height}px`,
+          width: `${width}px`,
+          height: `${height}px`,
           position: 'absolute',
           pointerEvents: 'none',
           opacity: this.props.globalOpacity,
@@ -138,3 +136,4 @@ export default class ChoroplethOverlay extends Component {
 
 ChoroplethOverlay.propTypes = propTypes;
 ChoroplethOverlay.defaultProps = defaultProps;
+ChoroplethOverlay.contextTypes = contextTypes;
