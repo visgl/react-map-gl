@@ -50,6 +50,8 @@ const propTypes = {
     PropTypes.string,
     PropTypes.instanceOf(Immutable.Map)
   ]),
+  /** Classes for the map style. */
+  classes: PropTypes.arrayOf(PropTypes.string),
   /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
   preventStyleDiffing: PropTypes.bool,
   /** Whether the map is visible */
@@ -78,6 +80,7 @@ const propTypes = {
 
 const defaultProps = {
   mapStyle: 'mapbox://styles/mapbox/light-v8',
+  classes: [],
   mapboxApiAccessToken: getAccessToken(),
   preserveDrawingBuffer: false,
   attributionControl: true,
@@ -128,6 +131,7 @@ export default class StaticMap extends PureComponent {
       this.props.mapStyle;
     const map = new mapboxgl.Map({
       container: this.refs.mapboxMap,
+      classes: this.props.classes,
       center: [this.props.longitude, this.props.latitude],
       zoom: this.props.zoom,
       pitch: this.props.pitch,
