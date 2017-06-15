@@ -4,26 +4,8 @@ This is an example overlay that draws a scatterplot over a map using canvas. Adj
 
 
 ```js
-const ScatterplotOverlay = require('./scatterplot-overlay`);
-```
+const ScatterplotOverlay = require('./scatterplot-overlay');
 
-```js
-r(MapGL,
-  assign({onChangeViewport: this._onChangeViewport}, this.state.map),
-  [
-    r(ScatterplotOverlay, {
-      locations: this.state.locations,
-      dotRadius: 10,
-      globalOpacity: 0.8,
-      compositeOperation: 'lighter',
-      dotFill: "blue",
-      renderWhileDragging: true
-    })
-  ]
-)
-```
-
-```jsx
 <MapGL {...viewport} mapStyle={mapStyle}>
     <ScatterplotOverlay
       locations={this.state.locations}

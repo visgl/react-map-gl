@@ -51,4 +51,4 @@ import cities from 'example-cities';
 Want to create and share your own overlay? Check the [examples/additional-overlays](https://github.com/uber/react-map-gl/tree/master/examples/additional-overlays) folder for examples.
 
 ## Remarks
-* In `react-map-gl` v1, overlays were exported directly from 'react-map-gl'. Additional v1 examples can be found in the [react-map-gl-example-overlay](https://github.com/vicapow/react-map-gl-example-overlay) project.
+* In `react-map-gl` v1, overlays were exported directly from 'react-map-gl'.

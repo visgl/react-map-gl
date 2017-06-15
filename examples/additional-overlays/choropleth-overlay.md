@@ -4,26 +4,8 @@ This is an example overlay that draws choropleths over a map using canvas. Adjus
 
 
 ```js
-const ChoroplethOverlay = require('./choropleth-overlay`);
-```
+const ChoroplethOverlay = require('./choropleth-overlay');
 
-```js
-r(MapGL,
-  assign({onChangeViewport: this._onChangeViewport}, this.state.map),
-  [
-    r(ChoroplethOverlay, {
-      features: this.state.features,
-      colorDomain: [0, 100],
-      colorRange: ['hsl(0.8, 1, 0.8)', 'hsl(0, 1, 1)'],
-      valueAccessor: f => f.properties.value,
-      globalOpacity: 0.8,
-      renderWhileDragging: true
-    })
-  ]
-)
-```
-
-```jsx
 <MapGL {...viewport} mapStyle={mapStyle}>
     <ChoroplethOverlay
       features={this.state.features}

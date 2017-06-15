@@ -2,24 +2,9 @@
 
 This is an example overlay that renders draggable points over a map.
 
-```js
+```jsx
 var DraggablePointsOverlay = require('./draggable-points-overlay');
-```
 
-```
-r(MapGL, this.state.map, [
-  r(DraggablePointsOverlay, {
-    points: this.state.draggablePoints,
-    onAddPoint: this._onAddPoint,
-    onUpdatePoint: this._onUpdatePoint,
-    renderPoint: function renderPoint(point) {
-      return r.circle({r: 10, style: {fill: 'red'}});
-    }
-  })
-])
-```
-
-```js
 <MapGL {...viewport} mapStyle={mapStyle}>
   <DraggablePointsOverlay
     points={this.state.draggablePoints}
