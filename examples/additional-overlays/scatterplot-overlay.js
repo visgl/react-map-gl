@@ -19,10 +19,9 @@
 // THE SOFTWARE.
 import {Component, createElement} from 'react';
 import PropTypes from 'prop-types';
-import ViewportMercator from 'viewport-mercator-project';
 
 import Immutable from 'immutable';
-import {window} from '../utils/globals';
+/* global window */
 
 function round(x, n) {
   const tenN = Math.pow(10, n);
@@ -30,12 +29,6 @@ function round(x, n) {
 }
 
 const propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  latitude: PropTypes.number.isRequired,
-  longitude: PropTypes.number.isRequired,
-  zoom: PropTypes.number.isRequired,
-  isDragging: PropTypes.bool.isRequired,
   locations: PropTypes.instanceOf(Immutable.List).isRequired,
   lngLatAccessor: PropTypes.func,
   renderWhileDragging: PropTypes.bool,
@@ -55,6 +48,11 @@ const defaultProps = {
   compositeOperation: 'source-over'
 };
 
+const contextTypes = {
+  viewport: PropTypes.object,
+  isDragging: PropTypes.bool
+};
+
 export default class ScatterplotOverlay extends Component {
 
   componentDidMount() {
@@ -67,29 +65,29 @@ export default class ScatterplotOverlay extends Component {
 
   /* eslint-disable max-statements */
   _redraw() {
+    const {viewport, isDragging} = this.context;
     const {
-      width, height, dotRadius, dotFill, compositeOperation,
-      renderWhileDragging, isDragging, locations, lngLatAccessor
+      dotRadius, dotFill, compositeOperation,
+      renderWhileDragging, locations, lngLatAccessor
     } = this.props;
 
-    const mercator = ViewportMercator(this.props);
     const pixelRatio = window.devicePixelRatio || 1;
     const canvas = this.refs.overlay;
     const ctx = canvas.getContext('2d');
 
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
-    ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, viewport.width, viewport.height);
     ctx.globalCompositeOperation = compositeOperation;
 
     if ((renderWhileDragging || !isDragging) && locations) {
       for (const location of locations) {
-        const pixel = mercator.project(lngLatAccessor(location));
+        const pixel = viewport.project(lngLatAccessor(location));
         const pixelRounded = [round(pixel[0], 1), round(pixel[1], 1)];
         if (pixelRounded[0] + dotRadius >= 0 &&
-            pixelRounded[0] - dotRadius < width &&
+            pixelRounded[0] - dotRadius < viewport.width &&
             pixelRounded[1] + dotRadius >= 0 &&
-            pixelRounded[1] - dotRadius < height
+            pixelRounded[1] - dotRadius < viewport.height
         ) {
           ctx.fillStyle = dotFill;
           ctx.beginPath();
@@ -104,7 +102,8 @@ export default class ScatterplotOverlay extends Component {
   /* eslint-enable max-statements */
 
   render() {
-    const {width, height, globalOpacity} = this.props;
+    const {viewport: {width, height}} = this.context;
+    const {globalOpacity} = this.props;
     const pixelRatio = window.devicePixelRatio || 1;
     return (
       createElement('canvas', {
@@ -128,3 +127,4 @@ export default class ScatterplotOverlay extends Component {
 ScatterplotOverlay.displayName = 'ScatterplotOverlay';
 ScatterplotOverlay.propTypes = propTypes;
 ScatterplotOverlay.defaultProps = defaultProps;
+ScatterplotOverlay.contextTypes = contextTypes;

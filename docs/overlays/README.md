@@ -8,15 +8,15 @@ Note that the built-in overlays are intended to provide basic functionality only
 ## Example
 
 ```js
-import {ScatterplotOverlay} from 'react-map-gl';
+import {SVGOverlay} from 'react-map-gl';
+
+function redraw({project}) {
+  const [cx, cy] = project([-122, 37]);
+  return <circle cx={cx} cy={cy} r={4} fill="blue" />;
+}
 
 <MapGL {...viewport}>
-  <ScatterplotOverlay
-    {...viewport}
-    locations={locations}
-    dotRadius={4}
-    globalOpacity={1}
-    compositeOperation="screen" />
+  <SVGOverlay redraw={redraw} />
 </MapGL>
 ```
 
@@ -30,7 +30,7 @@ import {SVGOverlay, HTMLOverlay, CanvasOverlay} from 'react-map-gl';
 
 ## Example Overlays
 
-There are a couple of additional overlays in the examples folder that can be copied into applications `ScatterplotOverlay`, `DraggablePointsOverlay`, `ChoroplethOverlay`.
+There are a couple of [additional overlays](https://github.com/uber/react-map-gl/tree/master/examples/additional-overlays) in the examples folder that can be copied into applications `ScatterplotOverlay`, `DraggablePointsOverlay`, `ChoroplethOverlay`.
 
 
 ### Third-party Overlays
@@ -48,13 +48,7 @@ import cities from 'example-cities';
 </MapGL>
 ```
 
-Want to create and share your own overlay? Fork the
-[react-map-gl-example-overlay](https://github.com/vicapow/react-map-gl-example-overlay)
-project to get started.
-
+Want to create and share your own overlay? Check the [examples/additional-overlays](https://github.com/uber/react-map-gl/tree/master/examples/additional-overlays) folder for examples.
 
 ## Remarks
-* **These overlays are currently not tested with perspective mode, although
-  they should in theory be compatible with perspective enabled viewports in
-  [viewport-mercator-project](https://github.com/uber-common/viewport-mercator-project)**
-* In v1, overlays were exported directly from 'react-map-gl'.
+* In `react-map-gl` v1, overlays were exported directly from 'react-map-gl'.

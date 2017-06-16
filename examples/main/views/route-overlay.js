@@ -111,8 +111,8 @@ export default class RouteOverlayExample extends Component {
     };
     return (
       <MapGL { ...viewport } scrollZoom={false} onViewportChange={ this._onViewportChange }>
-        <SVGOverlay { ...viewport } redraw={ this._redrawSVGOverlay }/>,
-        <CanvasOverlay { ...viewport } redraw={ this._redrawCanvasOverlay }/>
+        <SVGOverlay redraw={ this._redrawSVGOverlay }/>,
+        <CanvasOverlay redraw={ this._redrawCanvasOverlay }/>
       </MapGL>
     );
   }
