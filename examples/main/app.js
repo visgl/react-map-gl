@@ -18,8 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* global document, window */
-import ReactDOM from 'react-dom';
+/* global window */
 import React, {Component} from 'react';
 
 import MainExample from './views/main';
@@ -77,5 +76,3 @@ export default class App extends Component {
   }
 
 }
-
-ReactDOM.render(<App/>, document.body.appendChild(document.createElement('div')));
