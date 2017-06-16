@@ -5,7 +5,7 @@ const webpack = require('webpack');
 module.exports = {
   // Example entry point
   entry: {
-    app: resolve('./app.js')
+    app: resolve('./root.js')
   },
 
   // Silence excessive webpack dev server warnings

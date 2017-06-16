@@ -47,6 +47,9 @@ module.exports = {
 
   resolve: {
     alias: {
+      // Ensure only one copy of react
+      react: resolve('./node_modules/react'),
+      immutable: resolve('./node_modules/immutable'),
       // used by Mapbox
       webworkify: 'webworkify-webpack-dropin',
       // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
@@ -59,10 +62,7 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.DefinePlugin({
-      // eslint-disable-next-line
-      MAPBOX_ACCESS_TOKEN: `"${process.env.MAPBOX_ACCESS_TOKEN}"`
-    }),
+    new webpack.EnvironmentPlugin(['MAPBOX_ACCESS_TOKEN', 'MapboxAccessToken']),
     new CopyWebpackPlugin([
       // This will copy the contents to the distribution bundle folder
       {

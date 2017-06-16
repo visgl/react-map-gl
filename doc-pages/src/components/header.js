@@ -17,7 +17,10 @@ export default class Header extends Component {
           <div className="links">
             <Link activeClassName="active" to="examples">Examples</Link>
             <Link activeClassName="active" to="documentation">Documentation</Link>
-            <a href="https://github.com/uber/react-map-gl" className="btn">
+            <a
+              href="https://github.com/uber/react-map-gl"
+              target="_blank"
+              rel="noopener noreferrer">
               Github <i className="icon icon-github" />
             </a>
           </div>
