@@ -146,8 +146,8 @@ export default class CustomOverlayExample extends Component {
     const viewport = {...this.state.viewport, ...this.props};
     return (
       <MapGL { ...viewport } scrollZoom={false} onViewportChange={ this._onViewportChange }>
-        <CanvasOverlay { ...viewport } redraw={ this._redrawCanvasOverlay }/>
-        <SVGOverlay { ...viewport } redraw={ this._redrawSVGOverlay }/>
+        <CanvasOverlay redraw={ this._redrawCanvasOverlay }/>
+        <SVGOverlay redraw={ this._redrawSVGOverlay }/>
       </MapGL>
     );
   }

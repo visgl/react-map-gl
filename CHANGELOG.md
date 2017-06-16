@@ -4,6 +4,7 @@
 
 [TBD]
 - BREAKING: `fitBounds` is now accessed through the `PerspectiveMercatorViewport` class
+- New: `SVGOverlay` `CanvasOverlay` and `HTMLOverlay` supports perspective mode; no longer requires viewport props
 
 ### Version 3.0.0-alpha.13
 - New: Add new examples (#270)

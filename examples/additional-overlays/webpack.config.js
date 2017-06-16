@@ -1,60 +1,37 @@
 // NOTE: This is a Webpack 2 configuration file for react-map-gl
-const {resolve} = require('path');
+const resolve = require('path').resolve;
 const webpack = require('webpack');
 
-module.exports = {
-  // Example entry point
+const config = {
   entry: {
     app: resolve('./app.js')
   },
 
-  // Silence excessive webpack dev server warnings
-  devServer: {
-    stats: {
-      warnings: false
-    }
-  },
+  devtool: 'source-map',
 
-  devtool: 'source-maps',
+  module: {
+    rules: [{
+      // Compile ES2015 using bable
+      test: /\.js$/,
+      loader: 'babel-loader',
+      include: [resolve('.')],
+      exclude: [/node_modules/]
+    }]
+  },
 
   resolve: {
     alias: {
-      // Work against the latest base library in this repo
-      'react-map-gl': resolve('../..'),
-      // Ensure only one copy of react
-      react: resolve('./node_modules/react'),
-      // Per mapbox-gl-js README for non-browserify bundlers
+      // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
       'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
     }
   },
 
-  module: {
-    rules: [
-      {
-        enforce: 'pre',
-        test: /\.js$/,
-        loader: 'remove-flow-types-loader',
-        include: [/node_modules\/mapbox-gl\/js/]
-      },
-      {
-        // Compile ES2015 and JSX using buble
-        test: /\.js$/,
-        loader: 'buble-loader',
-        exclude: [/node_modules/],
-        options: {
-          objectAssign: 'Object.assign',
-          transforms: {
-            dangerousForOf: true,
-            modules: false
-          }
-        }
-      }
-    ]
-  },
-
-  // Allow setting mapbox token using environment variables
+  // Optional: Enables reading mapbox token from environment variable
   plugins: [
-    new webpack.EnvironmentPlugin(['MAPBOX_ACCESS_TOKEN', 'MapboxAccessToken']),
-    new webpack.LoaderOptionsPlugin({minimize: false, debug: true})
+    new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]
 };
+
+// Enables bundling against src in this repo rather than the installed version
+module.exports = env => env && env.local ?
+  require('../webpack.config.local')(config)(env) : config;

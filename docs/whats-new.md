@@ -10,7 +10,7 @@ Release date: End of Q2, 2017 (TBD)
 - **Documentation**: Significantly expanded and linked with our other geospatial frameworks.
 - **Examples**: Additional stand-alone examples to get you instantly started with new features.
 - **Latest mapbox-gl**: Bumps `mapbox-gl` to 0.37 and enables us to stay in sync with future versions.
-
+- **Improved overlay components**: Viewport props (`width` `height` `zoom` `longitude` and `latitude`) are no longer required if you render `SVGOverlay` `CanvasOverlay` or `HTMLOverlay` as a child of the map. Perspective mode is now supported in all overlays.
 
 ## Deprecations
 

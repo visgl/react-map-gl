@@ -17,51 +17,35 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-/* global document, window */
-import ReactDOM from 'react-dom';
 import React, {Component} from 'react';
-import MapGL from 'react-map-gl';
+import Immutable from 'immutable';
 
-import customOverlayExamples from './custom-overlay-examples';
+import ScatterplotOverlay from './scatterplot-overlay';
+import ChoroplethOverlay from './choropleth-overlay';
 
-const token = process.env.MapboxAccessToken; // eslint-disable-line
+// San Francisco
+import ZIPCODES_SF from './data/feature-example-sf.json';
+import CITIES from './data/cities.json';
 
-if (!token) {
-  throw new Error('Please specify a valid mapbox token');
-}
+const ZIPCODES = Immutable.fromJS(ZIPCODES_SF.features)
+  .map(f => f.setIn(['properties', 'value'], Math.random() * 1000));
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      viewport: {
-        latitude: 37.785164,
-        longitude: -122.41669,
-        zoom: 8,
-        bearing: 0,
-        pitch: 0,
-        width: window.innerWidth,
-        height: window.innerHeight
-      }
-    };
-  }
+const CITY_LOCATIONS = Immutable.fromJS(
+  CITIES.map(c => [c.longitude, c.latitude])
+);
 
-  render() {
-    const {viewport} = this.state;
-
-    return (
-      <MapGL
-        {...viewport}
-        mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={v => this.setState({viewport: v})}
-        mapboxApiAccessToken={token} >
-
-        {customOverlayExamples}
-
-      </MapGL>
-    );
-  }
-}
-
-ReactDOM.render(<App/>, document.body.appendChild(document.createElement('div')));
+export default [
+  (<ChoroplethOverlay key="choropleth"
+    globalOpacity={ 0.8 }
+    colorDomain={ [0, 500, 1000] }
+    colorRange={ ['#31a354', '#addd8e', '#f7fcb9'] }
+    renderWhileDragging={ false }
+    features={ ZIPCODES } />),
+  (<ScatterplotOverlay key="scatterplot"
+    locations={CITY_LOCATIONS}
+    dotRadius={10}
+    globalOpacity={0.8}
+    compositeOperation="lighter"
+    dotFill="#00a8fe"
+    renderWhileDragging={true} />)
+];
