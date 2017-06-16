@@ -81,12 +81,8 @@ export default class MapControls {
   /* Event utils */
   // Event object: http://hammerjs.github.io/api/#event-object
   getCenter(event) {
-    const {center, rootElement} = event;
-    const rect = rootElement.getBoundingClientRect();
-    return [
-      center.x - rect.left - rootElement.clientLeft,
-      center.y - rect.top - rootElement.clientTop
-    ];
+    const {offsetCenter: {x, y}} = event;
+    return [x, y];
   }
 
   isFunctionKeyPressed(event) {
@@ -208,6 +204,8 @@ export default class MapControls {
     if (!this.scrollZoom) {
       return false;
     }
+    event.srcEvent.preventDefault();
+
     const pos = this.getCenter(event);
     const {delta} = event;
 
