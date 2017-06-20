@@ -36,7 +36,7 @@
     "bowser": "^1.2.0",
     "hammerjs": "^2.0.8",
     "immutable": "*",
-    "mapbox-gl": "0.37.0",
+    "mapbox-gl": "0.38.0",
     "prop-types": "^15.5.7",
     "viewport-mercator-project": "^4.0.1"
   },
