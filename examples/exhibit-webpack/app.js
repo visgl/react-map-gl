@@ -28,7 +28,7 @@ class Root extends Component {
 
   render() {
 
-    const {viewport, width, height} = this.state;
+    const {viewport} = this.state;
 
     return (
       <MapGL
