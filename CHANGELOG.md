@@ -4,7 +4,14 @@
 
 [TBD]
 - BREAKING: `fitBounds` is now accessed through the `PerspectiveMercatorViewport` class
+- BREAKING: `react-map-gl` now requires **at least** Node `>=v6.4`
 - New: `SVGOverlay` `CanvasOverlay` and `HTMLOverlay` supports perspective mode; no longer requires viewport props
+
+### Version 3.0.0-alpha.14
+- BREAKING: Remove `fitBounds` util (#278)
+- Updated to `mapbox-gl-js` version `0.38.0` (#285)
+- Update overlays code and documentation (#282)
+- Fix: Compass arrow in navigation control (#277)
 
 ### Version 3.0.0-alpha.13
 - New: Add new examples (#270)
