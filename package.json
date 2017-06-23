@@ -1,7 +1,7 @@
 {
   "name": "react-map-gl",
   "description": "A React wrapper for MapboxGL-js and overlay API.",
-  "version": "3.0.0-alpha.13",
+  "version": "3.0.0-alpha.14",
   "keywords": [
     "mapbox",
     "mapbox-gl",
