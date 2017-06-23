@@ -2,7 +2,7 @@
 const {resolve} = require('path');
 const webpack = require('webpack');
 
-module.exports = {
+const config = {
   // Example entry point
   entry: {
     app: resolve('./root.js')
@@ -49,6 +49,6 @@ module.exports = {
   ]
 };
 
-// DELETE THIS LINE WHEN COPYING THIS EXAMPLE FOLDER OUTSIDE OF DECK.GL
-// It enables bundling against src in this repo rather than the installed version
-module.exports = require('../webpack.config.local')(module.exports);
+// Enables bundling against src in this repo rather than the installed version
+module.exports = (env) => env && env.local ?
+  require('../webpack.config.local')(config)(env) : config;
