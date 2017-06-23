@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import ReactDOM from 'react-dom';
+/* global window */
 import React, {Component} from 'react';
 
 import View from './view';
@@ -27,7 +27,12 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {width: window.innerWidth, height: window.innerHeight};
-    window.addEventListener('resize', () => this.setState({width: window.innerWidth, height: window.innerHeight}));
+    window.addEventListener('resize', () => {
+      this.setState({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    });
   }
 
   render() {
@@ -39,6 +44,3 @@ export default class App extends Component {
     );
   }
 }
-
-/* global document, window */
-ReactDOM.render(<App/>, document.body.appendChild(document.createElement('div')));

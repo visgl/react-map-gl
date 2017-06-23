@@ -13,7 +13,14 @@ if (!token) {
   throw new Error('Please specify a valid mapbox token');
 }
 
-class Root extends Component {
+const navStyle = {
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  padding: '10px'
+};
+
+export default class App extends Component {
 
   constructor(props) {
     super(props);
@@ -25,7 +32,7 @@ class Root extends Component {
         bearing: 0,
         pitch: 0,
         width: 500,
-        height: 500
+        height: 500,
       },
       popupInfo: null
     };
@@ -42,17 +49,17 @@ class Root extends Component {
 
   _updateViewport = (viewport) => {
     this.setState({viewport});
-  };
+  }
 
   _resize = () => {
     this.setState({
       viewport: {
         ...this.state.viewport,
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       }
     });
-  };
+  }
 
   _renderCityMarker = (city, index) => {
     return (
@@ -62,7 +69,7 @@ class Root extends Component {
         <CityPin size={20} onClick={() => this.setState({popupInfo: city})} />
       </Marker>
     );
-  };
+  }
 
   _renderPopup() {
     const {popupInfo} = this.state;
@@ -82,19 +89,24 @@ class Root extends Component {
 
     const {viewport} = this.state;
 
+    if (this.props.width && this.props.height) {
+      viewport.width = this.props.width;
+      viewport.height = this.props.height;
+    }
+
     return (
       <MapGL
         {...viewport}
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onChangeViewport={this._updateViewport}
+        onViewportChange={this._updateViewport}
         mapboxApiAccessToken={token} >
 
         { CITIES.map(this._renderCityMarker) }
 
         {this._renderPopup()}
 
-        <div className="nav">
-          <NavigationControl onChangeViewport={this._updateViewport} />
+        <div className="nav" style={navStyle}>
+          <NavigationControl onViewportChange={this._updateViewport} />
         </div>
 
       </MapGL>
@@ -102,8 +114,3 @@ class Root extends Component {
   }
 
 }
-
-const root = document.createElement('div');
-document.body.appendChild(root);
-
-render(<Root />, root);

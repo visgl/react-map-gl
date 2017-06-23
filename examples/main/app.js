@@ -18,61 +18,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* global window */
 import React, {Component} from 'react';
+import TOC from './constants/toc';
+import TableOfContents from './table-of-contents';
+import ExampleContainer from './example-container';
 
-import MainExample from './views/main';
-import NotInteractiveExample from './views/not-interactive';
-import CustomOverlayExample from './views/custom-overlay';
-import RouteOverlayExample from './views/route-overlay';
-import StyleDiffingExample from './views/style-diffing';
-import ClickExample from './views/click';
+import './stylesheets/main.scss';
+
+const DEFAULT_ACTIVE_ID = TOC[0].children[0].id;
+const DEFAULT_ACTIVE_COMPONENT = TOC[0].children[0].component;
 
 export default class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      showAllExamples: false
+      activeExampleId: DEFAULT_ACTIVE_ID,
+      exampleComponent: DEFAULT_ACTIVE_COMPONENT
     };
-    window.addEventListener('resize', () => this.setState({
-      width: window.innerWidth,
-      height: window.innerHeight
-    }));
+  }
+
+  _onTocChange(activeExampleId, exampleComponent) {
+    this.setState({activeExampleId, exampleComponent});
   }
 
   render() {
-    const {showAllExamples, width} = this.state;
-    const common = {
-      width: Math.floor(width / 2) - 10,
-      height: 400,
-      style: {float: 'left'}
-    };
-    const customExample = {
-      ...common,
-      width: this.state.width
+    const {disablePadding} = this.props;
+    const {activeExampleId, exampleComponent} = this.state;
+    const style = {
+      paddingTop: disablePadding ? 0 : null
     };
     return (
-      <div>
-        <MainExample {...customExample} />
-        {!showAllExamples &&
-          <button onClick={() => {
-            this.setState({showAllExamples: true});
-          }}>
-            Show All Examples
-          </button>}
-        {showAllExamples &&
-          <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
-            <RouteOverlayExample {...common} />
-            <CustomOverlayExample {...common}/>
-            <NotInteractiveExample {...common}/>
-            <StyleDiffingExample {...common}/>
-            <ClickExample {...common }/>
-          </div>}
+      <div className="gallery-wrapper flexbox--row" style={style}>
+        <div className="flexbox-item">
+          <TableOfContents
+            onChange={this._onTocChange.bind(this)}
+            activeId={activeExampleId} />
+        </div>
+        <ExampleContainer disablePadding={disablePadding} component={exampleComponent} />
       </div>
     );
   }
 
 }
+
+App.defaultProps = {
+  disablePadding: true
+};

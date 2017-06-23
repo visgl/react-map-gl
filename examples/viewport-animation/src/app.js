@@ -19,7 +19,7 @@ function animate() {
 }
 animate();
 
-class Root extends Component {
+export default class Root extends Component {
 
   state = {
     viewport: {
@@ -98,8 +98,3 @@ class Root extends Component {
   }
 
 }
-
-const root = document.createElement('div');
-document.body.appendChild(root);
-
-render(<Root />, root);

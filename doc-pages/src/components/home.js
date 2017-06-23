@@ -9,7 +9,7 @@ export default class Home extends Component {
         <section ref="banner" id="banner">
           <div className="container soft-left">
             <h1>react-map-gl</h1>
-            <p>A React port of MapboxGL JS</p>
+            <p>A React port of Mapbox GL JS</p>
             <a href="#/documentation/getting-started" className="btn">Get started</a>
           </div>
           <div ref="fps" className="fps" />
@@ -20,7 +20,7 @@ export default class Home extends Component {
           <div className="container soft-left texts">
             <div>
               <h2>
-                react-map-gl makes using mapbox-gl in React applications easy.
+                react-map-gl makes using Mapbox GL JS in React applications easy.
               </h2>
               <hr className="short" />
 

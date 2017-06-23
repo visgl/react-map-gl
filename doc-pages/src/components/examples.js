@@ -7,7 +7,7 @@ export default class Example extends Component {
 
   render() {
     return (
-      <ExampleApp />
+      <ExampleApp disablePadding={false} />
     );
   }
 

@@ -12,7 +12,7 @@ if (!token) {
   throw new Error('Please specify a valid mapbox token');
 }
 
-class Root extends Component {
+export default class App extends Component {
 
   state = {
     viewport: {
@@ -71,6 +71,11 @@ class Root extends Component {
 
     const {viewport, settings} = this.state;
 
+    if (this.props.width && this.props.height) {
+      viewport.width = this.props.width;
+      viewport.height = this.props.height;
+    }
+
     return (
       <MapGL
         {...viewport}
@@ -85,8 +90,3 @@ class Root extends Component {
   }
 
 }
-
-const root = document.createElement('div');
-document.body.appendChild(root);
-
-render(<Root />, root);
