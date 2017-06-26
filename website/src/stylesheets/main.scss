@@ -132,6 +132,7 @@ header {
       border-style: solid;
       border-width: 3px 0 0 0;
       border-color: transparent;
+      display: inline-flex;
     }
     a:hover {
       border-color: $white-40;
