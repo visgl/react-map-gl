@@ -6,13 +6,13 @@ export default class TableOfContents extends Component {
 
   _renderPage(page, i) {
     const {activeId, onChange} = this.props;
-    const {children, title, id, component} = page;
+    const {children, name, path, component} = page;
 
     if (children) {
       return (
         <div key={`page-${i}`}>
           <div className="list-header expanded" key={`group-header${i}`}>
-            {title}
+            {name}
           </div>
           <div className="subpages" style={{maxHeight: `${40 * children.length}px`}}>
             <ul key={`group-list${i}`} >
@@ -23,14 +23,14 @@ export default class TableOfContents extends Component {
       );
     }
 
-    const activeClass = activeId === id ? 'active' : '';
+    const activeClass = activeId === path ? 'active' : '';
 
     return (
       <li key={`page-${i}`}>
         <a
-          onClick={onChange.bind(null, id, component)}
+          onClick={onChange.bind(null, path, component)}
           className={`link ${activeClass}`}>
-          {title}
+          {name}
         </a>
       </li>
     );

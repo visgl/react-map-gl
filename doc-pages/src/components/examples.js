@@ -1,14 +1,47 @@
+/* global window */
 import React, {Component} from 'react';
-import ExampleApp from '../../../examples/main/app';
+import PropTypes from 'prop-types';
 
-// TODO(abm): This is made into a wrapper to improve later
+export default class Examples extends Component {
 
-export default class Example extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      viewport: {
+        width: window.innerWidth - 240,
+        height: window.innerHeight
+      }
+    };
+  }
+
+  componentDidMount() {
+    window.onresize = () => {
+      this.setState({
+        viewport: {
+          width: window.innerWidth - 240,
+          height: window.innerHeight
+        }
+      });
+    };
+  }
+
+  componentWillUnmount() {
+    window.onresize = null;
+  }
 
   render() {
+    const {viewport} = this.state;
+    const {route: {childComponent}} = this.props;
+    const ExampleComponent = childComponent;
     return (
-      <ExampleApp disablePadding={false} />
+      <div className="flexbox-item flexbox-item--fill">
+        <ExampleComponent {...viewport} />
+      </div>
     );
   }
 
 }
+
+Examples.contextTypes = {
+  router: PropTypes.object
+};

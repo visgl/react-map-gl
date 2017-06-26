@@ -25,19 +25,25 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
-    const {disablePadding} = props;
     this.state = {
       viewport: {
         width: window.innerWidth - 240,
-        height: window.innerHeight - (disablePadding ? 0 : 64)
+        height: window.innerHeight
       }
     };
-    window.addEventListener('resize', () => this.setState({
+  }
+
+  componentDidMount() {
+    window.onresize = () => this.setState({
       viewport: {
         width: window.innerWidth - 240,
-        height: window.innerHeight - (disablePadding ? 0 : 64)
+        height: window.innerHeight
       }
-    }));
+    });
+  }
+
+  componentWillUnmount() {
+    window.onresize = null;
   }
 
   render() {

@@ -14,66 +14,68 @@ import Layers from '../../layers/src/app';
 export const BASIC_EXAMPLES = 'basicExamples';
 export const STANDALONE_EXAMPLES = 'standalonExamples';
 
+export const DEFAULT_EXAMPLE = 'mainExample';
+
 // TOC
 export default [
   {
-    type: BASIC_EXAMPLES,
-    title: 'Basic Examples',
+    path: BASIC_EXAMPLES,
+    name: 'Basic Examples',
     children: [
       {
-        id: 'mainExample',
-        title: 'Main Example',
+        path: 'mainExample',
+        name: 'Main Example',
         component: MainExample
       },
       {
-        id: 'notInteractive',
-        title: 'Not Interactive',
+        path: 'notInteractive',
+        name: 'Not Interactive',
         component: NotInteractiveExample
       },
       {
-        id: 'customOverlay',
-        title: 'Custom Overlay',
+        path: 'customOverlay',
+        name: 'Custom Overlay',
         component: CustomOverlayExample
       },
       {
-        id: 'routeOverlay',
-        title: 'Route Overlay',
+        path: 'routeOverlay',
+        name: 'Route Overlay',
         component: RouteOverlayExample
       },
       {
-        id: 'styleDiffing',
-        title: 'Style Diffing',
+        path: 'styleDiffing',
+        name: 'Style Diffing',
         component: StyleDiffingExample
       },
       {
-        id: 'clickExample',
-        title: 'Click',
+        path: 'clickExample',
+        name: 'Click',
         component: ClickExample
       }
     ]
   },
   {
-    type: STANDALONE_EXAMPLES,
-    title: 'Advanced Examples',
+    path: STANDALONE_EXAMPLES,
+    name: 'Advanced Examples',
     children: [
       {
-        id: 'controlsExample',
-        title: 'Controls',
+        path: 'controlsExample',
+        name: 'Controls',
         component: Controls
       },
       {
-        id: 'geoJsonExample',
-        title: 'GeoJSON',
+        path: 'geoJsonExample',
+        name: 'GeoJSON',
         component: GeoJson
       },
       {
-        id: 'interactionExample',
-        title: 'Interaction',
+        path: 'interactionExample',
+        name: 'Interaction',
         component: Interaction
       },
       {
-        id: 'layersExample',
-        title: 'Layers',
+        path: 'layersExample',
+        name: 'Layers',
         component: Layers
       }
     ]

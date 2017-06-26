@@ -43,19 +43,15 @@ export default class App extends Component {
   }
 
   render() {
-    const {disablePadding} = this.props;
     const {activeExampleId, exampleComponent} = this.state;
-    const style = {
-      paddingTop: disablePadding ? 0 : null
-    };
     return (
-      <div className="gallery-wrapper flexbox--row" style={style}>
+      <div className="gallery-wrapper flexbox--row" style={{paddingTop: 0}}>
         <div className="flexbox-item">
           <TableOfContents
             onChange={this._onTocChange.bind(this)}
             activeId={activeExampleId} />
         </div>
-        <ExampleContainer disablePadding={disablePadding} component={exampleComponent} />
+        <ExampleContainer component={exampleComponent} />
       </div>
     );
   }
