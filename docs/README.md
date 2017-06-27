@@ -1,6 +1,7 @@
 # Overview
 
-react-map-gl is a react friendly API wrapper around MapboxGL JS.
+react-map-gl is a react friendly API wrapper around
+[Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js).
 
 ## Example
 

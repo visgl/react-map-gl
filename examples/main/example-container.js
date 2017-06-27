@@ -18,27 +18,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import ReactDOM from 'react-dom';
+/* global window */
 import React, {Component} from 'react';
 
-import View from './view';
-
 export default class App extends Component {
+
   constructor(props) {
     super(props);
-    this.state = {width: window.innerWidth, height: window.innerHeight};
-    window.addEventListener('resize', () => this.setState({width: window.innerWidth, height: window.innerHeight}));
+    this.state = {
+      viewport: {
+        width: window.innerWidth - 240,
+        height: window.innerHeight
+      }
+    };
+  }
+
+  componentDidMount() {
+    window.onresize = () => this.setState({
+      viewport: {
+        width: window.innerWidth - 240,
+        height: window.innerHeight
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    window.onresize = null;
   }
 
   render() {
-    const common = {style: {float: 'left'}};
+    const {viewport} = this.state;
+    const {component} = this.props;
+    const ExampleComponent = component;
     return (
-      <div>
-        <View {...common} {...this.state}/>
+      <div className="flexbox-item flexbox-item--fill">
+        <ExampleComponent widthOffset={240} {...viewport} />
       </div>
     );
   }
-}
 
-/* global document, window */
-ReactDOM.render(<App/>, document.body.appendChild(document.createElement('div')));
+}

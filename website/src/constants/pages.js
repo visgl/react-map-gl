@@ -1,3 +1,7 @@
+import ExamplesToc from '../../../examples/main/constants/toc';
+import ExamplesComponent from '../components/examples';
+import PagesComponent from '../components/page';
+
 function getDocUrl(filename) {
   return `docs/${filename}`;
 }
@@ -21,12 +25,18 @@ function generatePath(tree, parentPath = '') {
   if (typeof tree.content === 'string') {
     markdownFiles[tree.content] = `${parentPath}/${tree.path}`;
   }
-
   return tree;
 }
 
+const examplePages = {
+  title: 'Examples',
+  pageComponent: ExamplesComponent,
+  paths: generatePath(ExamplesToc)
+};
+
 const docPages = {
   title: 'Documentation',
+  pageComponent: PagesComponent,
   paths: generatePath([
     {
       name: 'Overview',
@@ -109,15 +119,6 @@ const docPages = {
       ]
     },
     {
-      name: 'Util Functions',
-      children: [
-        {
-          name: 'Fit Bounds',
-          content: getDocUrl('utils/fit-bounds.md')
-        },
-      ],
-    },
-    {
       name: 'Advanced',
       children: [
         {
@@ -130,5 +131,6 @@ const docPages = {
 };
 
 export const Pages = [
+  examplePages,
   docPages
 ];

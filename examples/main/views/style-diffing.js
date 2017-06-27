@@ -25,8 +25,8 @@ import MapGL from 'react-map-gl';
 import Immutable from 'immutable';
 
 // San Francisco
-import SF_FEATURE from '../data/feature-example-sf.json';
-import CITIES from '../data/cities.json';
+import SF_FEATURE from '../../data/feature-example-sf.json';
+import CITIES from '../../data/cities.json';
 
 const location = CITIES[0];
 

@@ -21,7 +21,7 @@ export default class Header extends Component {
               href="https://github.com/uber/react-map-gl"
               target="_blank"
               rel="noopener noreferrer">
-              Github <i className="icon icon-github" />
+              Github <i style={{marginLeft: 2}} className="icon icon-github" />
             </a>
           </div>
         </div>

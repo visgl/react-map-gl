@@ -7,7 +7,6 @@ import App from './components/app';
 import Home from './components/home';
 import Gallery from './components/gallery';
 import Page from './components/page';
-import Examples from './components/examples';
 
 import {Pages} from './constants/pages';
 
@@ -24,26 +23,34 @@ const getDefaultPath = pages => {
   return path.join('/');
 };
 
-const renderRoute = (page, i) => {
-  const {children, path, content} = page;
+const renderRoute = (pageComponent = Page, page, i) => {
+  const {children, path, content, component} = page;
   if (!children) {
-    return (<Route key={i} path={path} component={Page} content={content} />);
+    return (
+      <Route
+        key={i}
+        path={path}
+        childComponent={component}
+        component={pageComponent}
+        content={content}
+      />
+    );
   }
 
   return (
     <Route key={i} path={path} >
       <IndexRedirect to={getDefaultPath(children)} />
-      {children.map(renderRoute)}
+      {children.map(renderRoute.bind(null, pageComponent))}
     </Route>
   );
 };
 
-const renderRouteGroup = (path, pages) => {
+const renderRouteGroup = (path, pages, pageComponent) => {
   const defaultPage = getDefaultPath(pages);
   return (
     <Route key={path} path={path} component={Gallery} pages={pages}>
       <IndexRedirect to={defaultPage} />
-      {pages.map(renderRoute)}
+      {pages.map(renderRoute.bind(null, pageComponent))}
       <Redirect from="*" to={defaultPage} />
     </Route>
   );
@@ -54,10 +61,9 @@ export default () => (
   <Router history={appHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
-      <Route key="examples" path="/examples" component={Examples} />
       {
         Pages.map((page) =>
-          renderRouteGroup(page.title, page.paths))
+          renderRouteGroup(page.title, page.paths, page.pageComponent))
       }
       <Redirect from="*" to="/" />
     </Route>
