@@ -119,15 +119,6 @@ const docPages = {
       ]
     },
     {
-      name: 'Util Functions',
-      children: [
-        {
-          name: 'Fit Bounds',
-          content: getDocUrl('utils/fit-bounds.md')
-        },
-      ],
-    },
-    {
       name: 'Advanced',
       children: [
         {
