@@ -21,8 +21,8 @@ export default class App extends Component {
       zoom: 11,
       bearing: 0,
       pitch: 50,
-      width: 500,
-      height: 500
+      width: window.innerWidth,
+      height: window.innerHeight
     },
     settings: {
       dragPan: true,
@@ -43,11 +43,12 @@ export default class App extends Component {
   }
 
   _resize = () => {
+    const {widthOffset, heightOffset} = this.props;
     this.setState({
       viewport: {
         ...this.state.viewport,
-        width: window.innerWidth,
-        height: window.innerHeight
+        width: window.innerWidth - widthOffset,
+        height: window.innerHeight - heightOffset
       }
     });
   };
@@ -71,11 +72,6 @@ export default class App extends Component {
 
     const {viewport, settings} = this.state;
 
-    if (this.props.width && this.props.height) {
-      viewport.width = this.props.width;
-      viewport.height = this.props.height;
-    }
-
     return (
       <MapGL
         {...viewport}
@@ -90,3 +86,10 @@ export default class App extends Component {
   }
 
 }
+
+// Used to render properly in docs. Ignore these props or remove if you're
+// copying this as a starting point.
+App.defaultProps = {
+  widthOffset: 0,
+  heightOffset: 0
+};

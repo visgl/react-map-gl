@@ -1,5 +1,5 @@
 // Modules
-import MainExample from '../views/main';
+import MarkerExample from '../views/marker';
 import NotInteractiveExample from '../views/not-interactive';
 import CustomOverlayExample from '../views/custom-overlay';
 import RouteOverlayExample from '../views/route-overlay';
@@ -14,7 +14,7 @@ import Layers from '../../layers/src/app';
 export const BASIC_EXAMPLES = 'basicExamples';
 export const STANDALONE_EXAMPLES = 'standalonExamples';
 
-export const DEFAULT_EXAMPLE = 'mainExample';
+export const DEFAULT_EXAMPLE = 'markerExample';
 
 // TOC
 export default [
@@ -23,9 +23,9 @@ export default [
     name: 'Basic Examples',
     children: [
       {
-        path: 'mainExample',
-        name: 'Main Example',
-        component: MainExample
+        path: 'markerExample',
+        name: 'Marker Example',
+        component: MarkerExample
       },
       {
         path: 'notInteractive',

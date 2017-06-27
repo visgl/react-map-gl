@@ -52,7 +52,7 @@ export default class App extends Component {
     const ExampleComponent = component;
     return (
       <div className="flexbox-item flexbox-item--fill">
-        <ExampleComponent {...viewport} />
+        <ExampleComponent widthOffset={240} {...viewport} />
       </div>
     );
   }
