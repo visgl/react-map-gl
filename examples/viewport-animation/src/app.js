@@ -19,7 +19,7 @@ function animate() {
 }
 animate();
 
-class Root extends Component {
+export default class Root extends Component {
 
   state = {
     viewport: {
@@ -28,8 +28,21 @@ class Root extends Component {
       zoom: 4,
       bearing: 0,
       pitch: 0,
-      width: 500,
-      height: 500
+      width: this.props.width,
+      height: this.props.height
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.width !== this.state.viewport.width ||
+        nextProps.height !== this.state.viewport.height) {
+      this.setState({
+        viewport: {
+          ...this.state.viewport,
+          width: nextProps.width,
+          height: nextProps.height
+        }
+      });
     }
   }
 
@@ -56,8 +69,7 @@ class Root extends Component {
 
     new TWEEN.Tween(viewport)
       .to({
-        longitude,
-        latitude,
+        longitude, latitude,
         zoom: 11
       }, 3000)
       .easing(TWEEN.Easing.Cubic.InOut)
@@ -99,7 +111,7 @@ class Root extends Component {
 
 }
 
-const root = document.createElement('div');
-document.body.appendChild(root);
-
-render(<Root />, root);
+App.defaultProps = {
+  width: 500,
+  height: 500
+};

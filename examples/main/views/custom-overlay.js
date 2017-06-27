@@ -30,7 +30,7 @@ import Immutable from 'immutable';
 import alphaify from '../alphaify';
 
 // San Francisco
-import CITIES from '../data/cities.json';
+import CITIES from '../../data/cities.json';
 
 const location = CITIES[0];
 

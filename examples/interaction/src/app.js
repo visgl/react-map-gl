@@ -12,7 +12,7 @@ if (!token) {
   throw new Error('Please specify a valid mapbox token');
 }
 
-class Root extends Component {
+export default class App extends Component {
 
   state = {
     viewport: {
@@ -21,8 +21,8 @@ class Root extends Component {
       zoom: 11,
       bearing: 0,
       pitch: 50,
-      width: 500,
-      height: 500
+      width: window.innerWidth,
+      height: window.innerHeight
     },
     settings: {
       dragPan: true,
@@ -43,11 +43,12 @@ class Root extends Component {
   }
 
   _resize = () => {
+    const {widthOffset, heightOffset} = this.props;
     this.setState({
       viewport: {
         ...this.state.viewport,
-        width: window.innerWidth,
-        height: window.innerHeight
+        width: window.innerWidth - widthOffset,
+        height: window.innerHeight - heightOffset
       }
     });
   };
@@ -86,7 +87,9 @@ class Root extends Component {
 
 }
 
-const root = document.createElement('div');
-document.body.appendChild(root);
-
-render(<Root />, root);
+// Used to render properly in docs. Ignore these props or remove if you're
+// copying this as a starting point.
+App.defaultProps = {
+  widthOffset: 0,
+  heightOffset: 0
+};

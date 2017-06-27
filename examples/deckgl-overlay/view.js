@@ -21,9 +21,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import autobind from 'react-autobind';
-import {InteractiveMap, ScatterplotOverlay} from 'react-map-gl';
+import {InteractiveMap} from 'react-map-gl';
 import DeckGL, {ArcLayer} from 'deck.gl';
 import Immutable from 'immutable';
+
+import ScatterplotOverlay from '../additional-overlays/scatterplot-overlay';
 /* global window */
 
 // San Francisco

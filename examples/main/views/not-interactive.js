@@ -22,7 +22,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {StaticMap} from 'react-map-gl';
 
-import CITIES from '../data/cities.json';
+import CITIES from '../../data/cities.json';
 
 const location = CITIES[0];
 

@@ -14,6 +14,45 @@ $topbar-height: 64px;
 
 @import 'home';
 @import 'gallery';
+@import '../../node_modules/mapbox-gl/dist/mapbox-gl.css';
+
+.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+  width: 115px;
+};
+
+.control-panel {
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  padding: 12px 24px;
+  margin: 20px;
+  font-size: 13px;
+  line-height: 2;
+  color: #6b6b76;
+  text-transform: uppercase;
+}
+
+.control-panel label {
+  display: inline-block;
+  width: 100px;
+}
+
+.control-panel input {
+  margin-left: 20px;
+}
+
+.city-pin {
+  cursor: pointer;
+  fill: #d00;
+  stroke: none;
+}
+
+.nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+}
 
 body {
   font-family: ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif !important;
@@ -93,6 +132,7 @@ header {
       border-style: solid;
       border-width: 3px 0 0 0;
       border-color: transparent;
+      display: inline-flex;
     }
     a:hover {
       border-color: $white-40;

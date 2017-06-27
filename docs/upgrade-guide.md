@@ -4,6 +4,25 @@
 
 v3 is a major upgrade of react-map-gl. While we have tried to gently deprecated any changed or removed features, a few breaking changes could not be avoided.
 
+### Two Map Components
+
+v3 now exposes two React components: `StaticMap` and `InteractiveMap`.
+`InteractiveMap` is the default export.
+
+### StaticMap
+
+This is the React wrapper around `Mapbox GL JS` and takes in viewport properties
+such as `width`, `height`, `latitude`, `longitude`. Style diffing and updating
+logic also live here. See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/static-map.js)
+for more information.
+
+### InteractiveMap
+
+This is a wrapper on top of `StaticMap`. It takes all the props
+of `StaticMap` and additional ones such as `onViewportChange`, `scrollZoom`,
+`dragRotate`, etc. to control interactivity on the map.
+See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/interactive-map.js)
+for more information.
 
 ### Breaking Changes
 
@@ -19,15 +38,21 @@ Previously, the `viewport` object passed to these callbacks **did not** include 
 ```
 Please double check your render code if you relied on this behavior. If you rely on manually specifying the width and height, swapping the order should work:
 
-
 #### Some Overlays Moved to Examples
 
 Some less frequently used overlays (`DraggablePointsOverlay`, `ChoroplethOverlay`, `ScatterplotOverlay`), ... have been moved to examples. Most users have moved to map styles or deck.gl layers and removing these overlays reduces the size of the react-map-gl library for the majority of users that don't need them. If you still use them, simply copy the overlay source file(s) into your application.
 
+#### Overlays API Have Changed
+
+Overlays **MUST** now be rendered as children of the main `react-map-gl` component.
+We use React's `context` internally to pass through viewport props.
 
 #### `fitBounds` util
 
-Previously, the library exports a `fitBounds` util that returns `{longitude, latitude, zoom}` of a flat viewport that fits around a given bounding box. The same goal can now be achieved by:
+Previously, the library exports a `fitBounds` util that returns `{longitude, latitude, zoom}`
+of a flat viewport that fits around a given bounding box.
+This function has been moved to the `viewport-mercator-project` library.
+The same goal can now be achieved by:
 
 ```js
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
@@ -45,7 +70,6 @@ const viewport = new PerspectiveMercatorViewport({width: 600, height: 400}).fitB
 //   bearing: 0
 // }
 ```
-
 
 ### Deprecations
 

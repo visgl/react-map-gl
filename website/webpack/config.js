@@ -9,7 +9,7 @@ const BABEL_CONFIG = {
   presets: [
     'es2015',
     'react',
-    'stage-0'
+    'stage-2'
   ].map(function configMap(name) {
     return require.resolve(`babel-preset-${name}`);
   }),

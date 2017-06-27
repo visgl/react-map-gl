@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const config = {
   // Example entry point
   entry: {
-    app: resolve('./app.js')
+    app: resolve('./root.js')
   },
 
   // Silence excessive webpack dev server warnings

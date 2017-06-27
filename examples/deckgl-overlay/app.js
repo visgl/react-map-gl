@@ -18,46 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+/* global window */
 import React, {Component} from 'react';
-import TOC from './constants/toc';
-import TableOfContents from './table-of-contents';
-import ExampleContainer from './example-container';
 
-import './stylesheets/main.scss';
-
-const DEFAULT_ACTIVE_ID = TOC[0].children[0].path;
-const DEFAULT_ACTIVE_COMPONENT = TOC[0].children[0].component;
+import View from './view';
 
 export default class App extends Component {
-
   constructor(props) {
     super(props);
-    this.state = {
-      activeExampleId: DEFAULT_ACTIVE_ID,
-      exampleComponent: DEFAULT_ACTIVE_COMPONENT
-    };
-  }
-
-  _onTocChange(activeExampleId, exampleComponent) {
-    this.setState({activeExampleId, exampleComponent});
+    this.state = {width: window.innerWidth, height: window.innerHeight};
+    window.addEventListener('resize', () => {
+      this.setState({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    });
   }
 
   render() {
-    const {activeExampleId, exampleComponent} = this.state;
+    const common = {style: {float: 'left'}};
     return (
-      <div className="gallery-wrapper flexbox--row" style={{paddingTop: 0}}>
-        <div className="flexbox-item">
-          <TableOfContents
-            onChange={this._onTocChange.bind(this)}
-            activeId={activeExampleId} />
-        </div>
-        <ExampleContainer component={exampleComponent} />
+      <div>
+        <View {...common} {...this.state}/>
       </div>
     );
   }
-
 }
-
-App.defaultProps = {
-  disablePadding: true
-};

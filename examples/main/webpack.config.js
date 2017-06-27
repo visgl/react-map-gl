@@ -2,6 +2,19 @@
 const {resolve} = require('path');
 const webpack = require('webpack');
 
+// Otherwise modules imported from outside this directory does not compile
+// Seems to be a Babel bug
+// https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
+const BABEL_CONFIG = {
+  presets: [
+    'es2015',
+    'react',
+    'stage-2'
+  ].map(function configMap(name) {
+    return require.resolve(`babel-preset-${name}`);
+  })
+};
+
 const config = {
   // Example entry point
   entry: {
@@ -17,29 +30,29 @@ const config = {
 
   devtool: 'source-maps',
 
+  module: {
+    rules: [{
+      // Compile ES2015 using bable
+      test: /\.js$/,
+      exclude: [/node_modules/],
+      use: [{
+        loader: 'babel-loader',
+        options: BABEL_CONFIG
+      }]
+    }, {
+      test: /\.scss$/,
+      loaders: ['style-loader', 'css-loader', 'sass-loader', 'autoprefixer-loader']
+    }]
+  },
+
   resolve: {
     alias: {
+      // Ensure only one copy of react
+      react: resolve('./node_modules/react'),
+      immutable: resolve('./node_modules/immutable'),
       // Per mapbox-gl-js README for non-browserify bundlers
       'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
     }
-  },
-
-  module: {
-    rules: [
-      {
-        // Compile ES2015 and JSX using buble
-        test: /\.js$/,
-        loader: 'buble-loader',
-        exclude: [/node_modules/],
-        options: {
-          objectAssign: 'Object.assign',
-          transforms: {
-            dangerousForOf: true,
-            modules: false
-          }
-        }
-      }
-    ]
   },
 
   // Allow setting mapbox token using environment variables
