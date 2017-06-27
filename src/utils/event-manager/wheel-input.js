@@ -12,6 +12,7 @@ const WHEEL_EVENTS = [
   // legacy Firefox
   'DOMMouseScroll'
 ];
+const EVENT_TYPE = 'wheel';
 
 // Constants for normalizing input delta
 const WHEEL_DELTA_MAGIC_SCALER = 4.000244140625;
@@ -23,37 +24,56 @@ const SHIFT_MULTIPLIER = 0.25;
 
 export default class WheelInput {
 
-  constructor(element, callback) {
+  constructor(element, callback, options = {}) {
     this.element = element;
     this.callback = callback;
 
-    this.handler = this.handler.bind(this);
-
-    WHEEL_EVENTS.forEach(eventName => element.addEventListener(eventName, this.handler));
+    const events = WHEEL_EVENTS.concat(options.events || []);
+    this.options = Object.assign({enable: true}, options, {events});
 
     this.time = 0;
     this.wheelPosition = null;
     this.type = null;
     this.timeout = null;
     this.lastValue = 0;
+
+    this.handleEvent = this.handleEvent.bind(this);
+    this.options.events.forEach(event => element.addEventListener(event, this.handleEvent));
   }
 
   destroy() {
-    const {element} = this;
-    WHEEL_EVENTS.forEach(eventName => element.removeEventListener(eventName, this.handler));
+    this.options.events.forEach(event => this.element.removeEventListener(event, this.handleEvent));
+  }
+
+  set(options) {
+    Object.assign(this.options, options);
+  }
+
+  /**
+   * Enable this input (begin processing events)
+   * if the specified event type is among those handled by this input.
+   */
+  enableIfEventSupported(eventType) {
+    if (eventType === EVENT_TYPE) {
+      this.options.enable = true;
+    }
   }
 
   /* eslint-disable complexity, max-statements */
-  handler(event) {
-
-    event.preventDefault();
-    let value = event.deltaY;
-    // Firefox doubles the values on retina screens...
-    if (firefox && event.deltaMode === window.WheelEvent.DOM_DELTA_PIXEL) {
-      value /= window.devicePixelRatio;
+  handleEvent(event) {
+    if (!this.options.enable) {
+      return;
     }
-    if (event.deltaMode === window.WheelEvent.DOM_DELTA_LINE) {
-      value *= WHEEL_DELTA_PER_LINE;
+
+    let value = event.deltaY;
+    if (window.WheelEvent) {
+      // Firefox doubles the values on retina screens...
+      if (firefox && event.deltaMode === window.WheelEvent.DOM_DELTA_PIXEL) {
+        value /= window.devicePixelRatio;
+      }
+      if (event.deltaMode === window.WheelEvent.DOM_DELTA_LINE) {
+        value *= WHEEL_DELTA_PER_LINE;
+      }
     }
 
     let {
@@ -63,7 +83,7 @@ export default class WheelInput {
       time
     } = this;
 
-    const now = (window.performance || Date).now();
+    const now = ((window && window.performance) || Date).now();
     const timeDelta = now - (time || 0);
 
     this.wheelPosition = {
@@ -118,9 +138,11 @@ export default class WheelInput {
 
   _onWheel(srcEvent, delta, position) {
     this.callback({
+      type: EVENT_TYPE,
       center: position,
       delta,
       srcEvent,
+      pointerType: 'mouse',
       target: srcEvent.target
     });
   }

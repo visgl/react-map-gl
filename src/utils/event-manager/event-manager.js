@@ -1,21 +1,22 @@
 import WheelInput from './wheel-input';
 import MoveInput from './move-input';
-import isBrowser from '../is-browser';
+import {isBrowser} from '../is-browser';
 
 // Hammer.js directly references `document` and `window`,
 // which means that importing it in environments without
 // those objects throws errors. Therefore, instead of
 // directly `import`ing 'hammerjs' and './constants'
 // (which imports Hammer.js) we conditionally require it
-// depending on support for those globals.
+// depending on support for those globals, and provide mocks
+// for environments without `document`/`window`.
 function ManagerMock(m) {
-  const noop = () => {};
-  return {
-    on: noop,
-    off: noop,
-    destroy: noop,
-    emit: noop
-  };
+  const instance = {};
+  const chainedNoop = () => instance;
+  instance.on = chainedNoop;
+  instance.off = chainedNoop;
+  instance.destroy = chainedNoop;
+  instance.emit = chainedNoop;
+  return instance;
 }
 
 const Manager = isBrowser ? require('hammerjs').Manager : ManagerMock;
@@ -24,7 +25,11 @@ const {
   EVENT_RECOGNIZER_MAP,
   RECOGNIZERS,
   GESTURE_EVENT_ALIASES
-} = isBrowser ? require('./constants') : {};
+} = isBrowser ? require('./constants') : {
+  BASIC_EVENT_ALIASES: {},
+  EVENT_RECOGNIZER_MAP: {},
+  GESTURE_EVENT_ALIASES: {}
+};
 
 /**
  * Single API for subscribing to events about both
@@ -34,27 +39,25 @@ const {
  * @param {DOM Element} element         DOM element on which event handlers will be registered.
  * @param {Object} options              Options for instantiation
  * @param {Object} options.events       Map of {event name: handler} to register on init.
- * @param {Object} options.recognizers  Gesture recognizers from Hammer.js to register.
- *                                      Not yet implemented.
+ * @param {Object} options.recognizers  Gesture recognizers from Hammer.js to register,
+ *                                      as an Array in Hammer.Recognizer format.
+ *                                      (http://hammerjs.github.io/api/#hammermanager)
  */
 export default class EventManager {
-  constructor(element, options) {
-    // TODO: support overriding default RECOGNIZERS by passing
-    // recognizers / configs, keyed to event name.
-
+  constructor(element, options = {}) {
     this.element = element;
     this._onBasicInput = this._onBasicInput.bind(this);
-    this.manager = new Manager(element, {recognizers: RECOGNIZERS})
+    this.manager = new Manager(element, {recognizers: options.recognizers || RECOGNIZERS})
       .on('hammer.input', this._onBasicInput);
 
-    this.aliasedEventHandlers = {};
+    this.eventHandlers = [];
 
     // Handle events not handled by Hammer.js:
     // - mouse wheel
     // - pointer/touch/mouse move
     this._onOtherEvent = this._onOtherEvent.bind(this);
-    this.wheelInput = new WheelInput(element, this._onOtherEvent);
-    this.moveInput = new MoveInput(element, this._onOtherEvent);
+    this.wheelInput = new WheelInput(element, this._onOtherEvent, {enable: false});
+    this.moveInput = new MoveInput(element, this._onOtherEvent, {enable: false});
 
     // Register all passed events.
     const {events} = options;
@@ -63,6 +66,9 @@ export default class EventManager {
     }
   }
 
+  /**
+   * Tear down internal event management implementations.
+   */
   destroy() {
     this.wheelInput.destroy();
     this.moveInput.destroy();
@@ -76,29 +82,11 @@ export default class EventManager {
    */
   on(event, handler) {
     if (typeof event === 'string') {
-      // Special handling for gestural events.
-      const recognizerEvent = EVENT_RECOGNIZER_MAP[event];
-      if (recognizerEvent) {
-        // Enable recognizer for this event.
-        this.manager.get(recognizerEvent).set({enable: true});
-
-        // Alias to a recognized gesture as necessary.
-        const eventAlias = GESTURE_EVENT_ALIASES[event];
-        if (eventAlias && !this.aliasedEventHandlers[event]) {
-          const aliasedEventHandler = this._aliasEventHandler(event);
-          this.manager.on(eventAlias, aliasedEventHandler);
-          // TODO: multiple handlers for the same aliased event will override one another.
-          // This should be an array of aliased handlers instead.
-          this.aliasedEventHandlers[event] = aliasedEventHandler;
-        }
-      }
-
-      // Register event handler.
-      this.manager.on(event, handler);
+      this._addEventHandler(event, handler);
     } else {
       // If `event` is a map, call `on()` for each entry.
       for (const eventName in event) {
-        this.on(eventName, event[eventName]);
+        this._addEventHandler(eventName, event[eventName]);
       }
     }
   }
@@ -110,24 +98,84 @@ export default class EventManager {
    */
   off(event, handler) {
     if (typeof event === 'string') {
-      // Clean up aliased gesture handler as necessary.
-      const recognizerEvent = EVENT_RECOGNIZER_MAP[event];
-      if (recognizerEvent) {
-        const eventAlias = GESTURE_EVENT_ALIASES[event];
-        if (eventAlias && this.aliasedEventHandlers[event]) {
-          this.manager.off(eventAlias, this.aliasedEventHandlers[event]);
-          delete this.aliasedEventHandlers[event];
-        }
-      }
-
-      // Deregister event handler.
-      this.manager.off(event, handler);
+      this._removeEventHandler(event, handler);
     } else {
       // If `event` is a map, call `off()` for each entry.
       for (const eventName in event) {
-        this.off(eventName, event[eventName]);
+        this._removeEventHandler(eventName, event[eventName]);
       }
     }
+  }
+
+  /**
+   * Process the event registration for a single event + handler.
+   */
+  _addEventHandler(event, handler) {
+    // Special handling for gestural events.
+    const recognizerEvent = EVENT_RECOGNIZER_MAP[event];
+    if (recognizerEvent) {
+      // Enable recognizer for this event.
+      const recognizer = this.manager.get(recognizerEvent);
+      recognizer.set({enable: true});
+    }
+
+    this.wheelInput.enableIfEventSupported(event);
+    this.moveInput.enableIfEventSupported(event);
+
+    const wrappedHandler = this._wrapEventHandler(event, handler);
+    // Alias to a recognized gesture as necessary.
+    const eventAlias = GESTURE_EVENT_ALIASES[event] || event;
+
+    // Save wrapped handler
+    this.eventHandlers.push({event, eventAlias, handler, wrappedHandler});
+
+    this.manager.on(eventAlias, wrappedHandler);
+  }
+
+  /**
+   * Process the event deregistration for a single event + handler.
+   */
+  _removeEventHandler(event, handler) {
+    // Find saved handler if any.
+    for (let i = this.eventHandlers.length; i--;) {
+      const entry = this.eventHandlers[i];
+      if (entry.event === event && entry.handler === handler) {
+        // Deregister event handler.
+        this.manager.off(entry.eventAlias, entry.wrappedHandler);
+        // Delete saved handler
+        this.eventHandlers.splice(i, 1);
+      }
+    }
+  }
+
+  /**
+   * Returns an event handler that aliases events and add props before passing
+   * to the real handler.
+   */
+  _wrapEventHandler(type, handler) {
+    return event => {
+      const {element} = this;
+      const {srcEvent} = event;
+
+      const center = event.center || {
+        x: srcEvent.clientX,
+        y: srcEvent.clientY
+      };
+
+      // Calculate center relative to the root element
+      const rect = element.getBoundingClientRect();
+      const offsetCenter = {
+        x: center.x - rect.left - element.clientLeft,
+        y: center.y - rect.top - element.clientTop
+      };
+
+      handler(Object.assign({}, event, {
+        type,
+        center,
+        offsetCenter,
+        rootElement: element
+      }));
+    };
   }
 
   /**
@@ -138,17 +186,12 @@ export default class EventManager {
    * See constants.BASIC_EVENT_CLASSES basic event class definitions.
    */
   _onBasicInput(event) {
-    // For calculating pointer position relative to the canvas
-    event.rootElement = this.element;
-
     const {srcEvent} = event;
-    const eventAliases = BASIC_EVENT_ALIASES[srcEvent.type];
-    if (eventAliases) {
+    const alias = BASIC_EVENT_ALIASES[srcEvent.type];
+    if (alias) {
       // fire all events aliased to srcEvent.type
-      eventAliases.forEach(alias => {
-        const emitEvent = Object.assign({}, event, {type: alias});
-        this.manager.emit(alias, emitEvent);
-      });
+      const emitEvent = Object.assign({}, event, {type: alias});
+      this.manager.emit(alias, emitEvent);
     }
   }
 
@@ -157,19 +200,7 @@ export default class EventManager {
    * and pipe back out through same (Hammer) channel used by other events.
    */
   _onOtherEvent(event) {
-    // For calculating pointer position relative to the canvas
-    event.rootElement = this.element;
-
-    const {srcEvent: {type}} = event;
-    this.manager.emit(type, event);
+    this.manager.emit(event.type, event);
   }
 
-  /**
-   * Alias one event name to another,
-   * to support events supported by Hammer.js under a different name.
-   * See constants.GESTURE_EVENT_ALIASES.
-   */
-  _aliasEventHandler(eventAlias) {
-    return event => this.manager.emit(eventAlias, event);
-  }
 }

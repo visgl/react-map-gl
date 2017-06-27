@@ -1,4 +1,5 @@
-const MOVE_EVENTS = ['pointermove', 'touchmove', 'mousemove'];
+const MOUSE_EVENTS = ['mousedown', 'mousemove', 'mouseup'];
+const MOVE_EVENT_TYPES = ['mousemove', 'pointermove'];
 
 /**
  * Hammer.js swallows 'move' events (for pointer/touch/mouse)
@@ -10,23 +11,69 @@ const MOVE_EVENTS = ['pointermove', 'touchmove', 'mousemove'];
  */
 export default class MoveInput {
 
-  constructor(element, callback, events = MOVE_EVENTS) {
+  constructor(element, callback, options = {}) {
     this.element = element;
     this.callback = callback;
-    this.events = events;
+    this.pressed = false;
 
-    this.handler = this.handler.bind(this);
-    this.events.forEach(event => element.addEventListener(event, this.handler));
+    const events = MOUSE_EVENTS.concat(options.events || []);
+    this.options = Object.assign({enable: true}, options, {events});
+
+    this.handleEvent = this.handleEvent.bind(this);
+    this.options.events.forEach(event => element.addEventListener(event, this.handleEvent));
   }
 
   destroy() {
-    this.events.forEach(event => this.element.removeEventListener(event, this.handler));
+    this.options.events.forEach(event => this.element.removeEventListener(event, this.handleEvent));
   }
 
-  handler(event) {
-    this.callback({
-      srcEvent: event,
-      target: event.target
-    });
+  set(options) {
+    Object.assign(this.options, options);
+  }
+
+  /**
+   * Enable this input (begin processing events)
+   * if the specified event type is among those handled by this input.
+   */
+  enableIfEventSupported(eventType) {
+    if (MOVE_EVENT_TYPES.indexOf(eventType) >= 0) {
+      this.options.enable = true;
+    }
+  }
+
+  handleEvent(event) {
+    if (!this.options.enable) {
+      return;
+    }
+
+    switch (event.type) {
+    case 'mousedown':
+      if (event.button === 0) {
+        // Left button is down
+        this.pressed = true;
+      }
+      break;
+    case 'mousemove':
+      // Move events use `which` to track the button being pressed
+      if (event.which !== 1) {
+        // Left button is not down
+        this.pressed = false;
+      }
+      if (!this.pressed) {
+        // Drag events are emitted by hammer already
+        // we just need to emit the move event on hover
+        MOVE_EVENT_TYPES.forEach(type => this.callback({
+          type,
+          srcEvent: event,
+          pointerType: 'mouse',
+          target: event.target
+        }));
+      }
+      break;
+    case 'mouseup':
+      this.pressed = false;
+      break;
+    default:
+    }
   }
 }
