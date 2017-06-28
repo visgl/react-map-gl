@@ -12,6 +12,8 @@ if (!token) {
   throw new Error('Please specify a valid mapbox token');
 }
 
+import MARKER_STYLE from './marker-style';
+
 export default class App extends Component {
 
   state = {
@@ -42,13 +44,16 @@ export default class App extends Component {
     this._resize();
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._resize);
+  }
+
   _resize = () => {
-    const {widthOffset, heightOffset} = this.props;
     this.setState({
       viewport: {
         ...this.state.viewport,
-        width: window.innerWidth - widthOffset,
-        height: window.innerHeight - heightOffset
+        width: this.props.width || window.innerWidth,
+        height: this.props.height || window.innerHeight
       }
     });
   };
@@ -79,6 +84,7 @@ export default class App extends Component {
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
         mapboxApiAccessToken={token} >
+        <style>{MARKER_STYLE}</style>
         { bartStations.map(this._renderMarker) }
         <ControlPanel settings={settings} onChange={this._onSettingChange} />
       </MapGL>

@@ -3,9 +3,11 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Marker, Popup, NavigationControl} from 'react-map-gl';
 
+import ControlPanel from './control-panel';
 import CityPin from './city-pin';
+import CityInfo from './city-info';
 
-import CITIES from './cities.json';
+import CITIES from '../../data/cities.json';
 
 const token = process.env.MapboxAccessToken; // eslint-disable-line
 
@@ -16,7 +18,7 @@ if (!token) {
 const navStyle = {
   position: 'absolute',
   top: 0,
-  right: 0,
+  left: 0,
   padding: '10px'
 };
 
@@ -28,7 +30,7 @@ export default class App extends Component {
       viewport: {
         latitude: 37.785164,
         longitude: -100,
-        zoom: 4,
+        zoom: 3.5,
         bearing: 0,
         pitch: 0,
         width: window.innerWidth,
@@ -36,19 +38,6 @@ export default class App extends Component {
       },
       popupInfo: null
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.width !== this.state.viewport.width ||
-        nextProps.height !== this.state.viewport.height) {
-      this.setState({
-        viewport: {
-          ...this.state.viewport,
-          width: nextProps.width,
-          height: nextProps.height
-        }
-      });
-    }
   }
 
   componentDidMount() {
@@ -60,19 +49,18 @@ export default class App extends Component {
     window.removeEventListener('resize', this._resize);
   }
 
-  _updateViewport = (viewport) => {
-    this.setState({viewport});
-  }
-
   _resize = () => {
-    const {widthOffset, heightOffset} = this.props;
     this.setState({
       viewport: {
         ...this.state.viewport,
-        width: window.innerWidth - widthOffset,
-        height: window.innerHeight - heightOffset,
+        width: this.props.width || window.innerWidth,
+        height: this.props.height || window.innerHeight
       }
     });
+  };
+
+  _updateViewport = (viewport) => {
+    this.setState({viewport});
   }
 
   _renderCityMarker = (city, index) => {
@@ -94,7 +82,7 @@ export default class App extends Component {
         longitude={popupInfo.longitude}
         latitude={popupInfo.latitude}
         onClose={() => this.setState({popupInfo: null})} >
-        {popupInfo.city}, {popupInfo.state}
+        <CityInfo info={popupInfo} />
       </Popup>
     );
   }
@@ -117,6 +105,8 @@ export default class App extends Component {
         <div className="nav" style={navStyle}>
           <NavigationControl onViewportChange={this._updateViewport} />
         </div>
+
+        <ControlPanel />
 
       </MapGL>
     );

@@ -6,13 +6,12 @@ export default class Home extends Component {
     return (
       <div className="home-wrapper">
 
-        <section ref="banner" id="banner">
-          <div className="container soft-left">
+        <section id="banner" style={{backgroundImage: 'url(images/hero.jpg)'}}>
+          <div className="container soft">
             <h1>react-map-gl</h1>
             <p>A React port of Mapbox GL JS</p>
             <a href="#/documentation/getting-started" className="btn">Get started</a>
           </div>
-          <div ref="fps" className="fps" />
         </section>
 
         <section id="features">

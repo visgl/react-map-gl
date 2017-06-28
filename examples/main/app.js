@@ -25,8 +25,8 @@ import ExampleContainer from './example-container';
 
 import './stylesheets/main.scss';
 
-const DEFAULT_ACTIVE_ID = TOC[0].children[0].path;
-const DEFAULT_ACTIVE_COMPONENT = TOC[0].children[0].component;
+const DEFAULT_ACTIVE_ID = TOC[0].path;
+const DEFAULT_ACTIVE_COMPONENT = TOC[0].component;
 
 export default class App extends Component {
 

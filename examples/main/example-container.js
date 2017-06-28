@@ -33,7 +33,7 @@ export default class App extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     window.onresize = () => this.setState({
       viewport: {
         width: window.innerWidth - 240,
@@ -52,7 +52,7 @@ export default class App extends Component {
     const ExampleComponent = component;
     return (
       <div className="flexbox-item flexbox-item--fill">
-        <ExampleComponent widthOffset={240} {...viewport} />
+        <ExampleComponent {...viewport} />
       </div>
     );
   }
