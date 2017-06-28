@@ -1,6 +1,6 @@
 # Get Started
 
-`ReactMapGL` is a [React](http://facebook.github.io/react/)-friendly
+`react-map-gl` is a [React](http://facebook.github.io/react/)-friendly
 wrapper for [MapboxGL](https://www.mapbox.com/mapbox-gl-js/), a WebGL-powered
 vector and raster tile mapping library. On top of exposing as much of
 `MapboxGL` as possible, we also introduced our own event handling classes
@@ -9,7 +9,7 @@ that aim to make working with external overlays, such as
 
 # Installation
 
-`ReactMapGL` requires `node >= v4` and `react >= 15.4`.
+`react-map-gl` requires `node >= v4` and `react >= 15.4`.
 
 ```sh
 npm install --save react-map-gl
@@ -35,7 +35,7 @@ class Map extends Component {
         longitude={-122.4376}
         zoom={8}
         onViewportChange={(viewport) => {
-          const {latitude, longitude, zoom} = viewport;
+          const {width, height, latitude, longitude, zoom} = viewport;
           // Optionally call `setState` and use the state to update the map.
         }}
       />
@@ -46,25 +46,13 @@ class Map extends Component {
 
 ## Server Side Rendering
 
-`ReactMapGL` depends on `gl`, which may cause issues when running in a server
+`react-map-gl` depends on `gl`, which may cause issues when running in a server
 environment without `gl` installed. You can either make sure that your system
-has `gl` installed or use the following work-around to ensure you only require
-`ReactMapGL` on the client.
-
-```js
-// is-browser is an npm package, but you can use any other solution to make sure
-// that you are in a browser environment.
-import isBrowser from 'is-browser';
-
-const ReactMapGL = 'div';
-if (isBrowser) {
-  ReactMapGL = require('react-map-gl').default;
-}
-```
+has `gl` installed or make sure you only import `react-map-gl` on the client.
 
 ## Using with Browserify, Webpack, and other environments
 
-* `browserify` - `ReactMapGL` is extensively tested with `browserify` and works
+* `browserify` - `react-map-gl` is extensively tested with `browserify` and works
 without issue.
 
 * `webpack 1` - look at the [deck.gl exhibits](https://github.com/uber/deck.gl/tree/master/exhibits)

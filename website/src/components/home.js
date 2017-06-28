@@ -9,7 +9,7 @@ export default class Home extends Component {
         <section id="banner" style={{backgroundImage: 'url(images/hero.jpg)'}}>
           <div className="container soft">
             <h1>react-map-gl</h1>
-            <p>A React port of Mapbox GL JS</p>
+            <p>React components for Mapbox GL JS</p>
             <a href="#/documentation/getting-started" className="btn">Get started</a>
           </div>
         </section>
@@ -36,21 +36,22 @@ export default class Home extends Component {
                 Component Library
               </h3>
               <p>
-              react-map-gl comes with additional React component that
-              synchronize with the map camera system.
+              react-map-gl comes with additional React components that
+              synchronize with the map camera system. Use one of the supported
+              overlays to visualize data, or build your own.
               </p>
 
               <h3>
                 <img src="images/icon-high-precision.svg" />
-                Perfect Companion to deck.gl
+                Part of Uber Visualization's Framework Suite
               </h3>
               <p>
-              deck.gl is a great match with React, supporting
-              efficient WebGL rendering under the Reactive programming
-              paradigm. And when used with Mapbox GL it automatically
-              coordinates with the Mapbox camera system to provide
-              compelling 2D and 3D visualizations on top of your Mapbox
-              based maps.
+              Use together with e.g. <a
+                href="https://github.com/uber/react-map-gl"
+                target="_blank"
+                rel="noopener noreferrer">
+                deck.gl</a> to render performant and compelling 2D and 3D
+                WebGL visualizations on top of your Mapbox GL JS based maps.
               </p>
 
             </div>

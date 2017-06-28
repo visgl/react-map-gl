@@ -8,4 +8,3 @@ without any transformation.
 
 You can use the package [redux-map-gl](https://github.com/Willyham/redux-map-gl) to save writing this
 code yourself.
-
