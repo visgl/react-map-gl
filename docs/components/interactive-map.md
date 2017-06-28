@@ -18,7 +18,7 @@ class Map extends Component {
         longitude={-122.4376}
         zoom={8}
         onViewportChange={(viewport) => {
-          const {latitude, longitude, zoom} = viewport;
+          const {width, height, latitude, longitude, zoom} = viewport;
           // Optionally call `setState` and use the state to update the map.
         }}
       />

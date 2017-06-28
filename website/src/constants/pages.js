@@ -39,10 +39,10 @@ const docPages = {
   pageComponent: PagesComponent,
   paths: generatePath([
     {
-      name: 'Overview',
+      name: 'Introduction',
       children: [
         {
-          name: 'Overview',
+          name: 'Introduction',
           content: getDocUrl('README.md')
         },
         {
@@ -63,29 +63,34 @@ const docPages = {
           content: getDocUrl('get-started/README.md')
         },
         {
+          name: 'About Mapbox Tokens',
+          content: getDocUrl('get-started/mapbox-tokens.md')
+        },
+        {
           name: 'Using with Redux',
           content: getDocUrl('get-started/using-with-redux.md')
         },
-        {
-          name: 'Using with Isomorphic Rendering',
-          content: getDocUrl('get-started/using-with-isomorphic-rendering.md')
-        },
-        {
-          name: 'About Mapbox Tokens',
-          content: getDocUrl('get-started/mapbox-tokens.md')
-        }
       ]
     },
     {
-      name: 'Components',
+      name: 'API Reference',
       children: [
+        // NOTE: Keep this ordered Alphabetically
         {
-          name: 'Static Map',
-          content: getDocUrl('components/static-map.md')
+          name: 'CanvasOverlay',
+          content: getDocUrl('overlays/canvas-overlay.md')
+        },
+        {
+          name: 'HTMLOverlay',
+          content: getDocUrl('overlays/html-overlay.md')
         },
         {
           name: 'Interactive Map',
           content: getDocUrl('components/interactive-map.md')
+        },
+        {
+          name: 'Marker',
+          content: getDocUrl('components/marker.md')
         },
         {
           name: 'Navigation Control',
@@ -96,25 +101,12 @@ const docPages = {
           content: getDocUrl('components/popup.md')
         },
         {
-          name: 'Marker',
-          content: getDocUrl('components/marker.md')
+          name: 'Static Map',
+          content: getDocUrl('components/static-map.md')
         },
-      ]
-    },
-    {
-      name: 'Overlays',
-      children: [
         {
           name: 'SVGOverlay',
           content: getDocUrl('overlays/svg-overlay.md')
-        },
-        {
-          name: 'CanvasOverlay',
-          content: getDocUrl('overlays/canvas-overlay.md')
-        },
-        {
-          name: 'HTMLOverlay',
-          content: getDocUrl('overlays/html-overlay.md')
         },
       ]
     },

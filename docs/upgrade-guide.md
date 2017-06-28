@@ -4,26 +4,6 @@
 
 v3 is a major upgrade of react-map-gl. While we have tried to gently deprecated any changed or removed features, a few breaking changes could not be avoided.
 
-### Two Map Components
-
-v3 now exposes two React components: `StaticMap` and `InteractiveMap`.
-`InteractiveMap` is the default export.
-
-### StaticMap
-
-This is the React wrapper around `Mapbox GL JS` and takes in viewport properties
-such as `width`, `height`, `latitude`, `longitude`. Style diffing and updating
-logic also live here. See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/static-map.js)
-for more information.
-
-### InteractiveMap
-
-This is a wrapper on top of `StaticMap`. It takes all the props
-of `StaticMap` and additional ones such as `onViewportChange`, `scrollZoom`,
-`dragRotate`, etc. to control interactivity on the map.
-See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/interactive-map.js)
-for more information.
-
 ### Breaking Changes
 
 #### `onChangeViewport` / `onViewportChange` viewport
@@ -70,6 +50,27 @@ const viewport = new PerspectiveMercatorViewport({width: 600, height: 400}).fitB
 //   bearing: 0
 // }
 ```
+
+### Two Map Components
+
+v3 now exposes two React components: `StaticMap` and `InteractiveMap`.
+`InteractiveMap` is the default export, and designed to be as compatible as
+possible with the v2 default export.
+
+#### StaticMap
+
+This is the React wrapper around `Mapbox GL JS` and takes in viewport properties
+such as `width`, `height`, `latitude`, `longitude`. Style diffing and updating
+logic also live here. See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/static-map.js)
+for more information.
+
+#### InteractiveMap
+
+This is a wrapper on top of `StaticMap`. It takes all the props
+of `StaticMap` and additional ones such as `onViewportChange`, `scrollZoom`,
+`dragRotate`, etc. to control interactivity on the map.
+See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/interactive-map.js)
+for more information.
 
 ### Deprecations
 
