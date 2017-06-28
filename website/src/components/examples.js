@@ -10,26 +10,29 @@ export default class Examples extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewport: {
-        width: window.innerWidth - WIDTH_OFFSET,
-        height: window.innerHeight - HEIGHT_OFFSET
-      }
+      viewport: this._getSize()
     };
   }
 
   componentDidMount() {
     window.onresize = () => {
       this.setState({
-        viewport: {
-          width: window.innerWidth - WIDTH_OFFSET,
-          height: window.innerHeight - HEIGHT_OFFSET
-        }
+        viewport: this._getSize()
       });
     };
   }
 
   componentWillUnmount() {
     window.onresize = null;
+  }
+
+  _getSize() {
+    const {innerWidth, innerHeight} = window;
+
+    return {
+      width: innerWidth >= 576 ? innerWidth - WIDTH_OFFSET : innerWidth,
+      height: innerHeight - HEIGHT_OFFSET
+    };
   }
 
   render() {
@@ -39,8 +42,6 @@ export default class Examples extends Component {
     return (
       <div className="flexbox-item flexbox-item--fill">
         <ExampleComponent
-          widthOffset={WIDTH_OFFSET}
-          heightOffset={HEIGHT_OFFSET}
           {...viewport} />
       </div>
     );

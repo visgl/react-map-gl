@@ -12,6 +12,8 @@ if (!token) {
   throw new Error('Please specify a valid mapbox token');
 }
 
+import MARKER_STYLE from './marker-style';
+
 export default class App extends Component {
 
   state = {
@@ -21,8 +23,8 @@ export default class App extends Component {
       zoom: 11,
       bearing: 0,
       pitch: 50,
-      width: window.innerWidth,
-      height: window.innerHeight
+      width: 500,
+      height: 500
     },
     settings: {
       dragPan: true,
@@ -42,13 +44,16 @@ export default class App extends Component {
     this._resize();
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._resize);
+  }
+
   _resize = () => {
-    const {widthOffset, heightOffset} = this.props;
     this.setState({
       viewport: {
         ...this.state.viewport,
-        width: window.innerWidth - widthOffset,
-        height: window.innerHeight - heightOffset
+        width: this.props.width || window.innerWidth,
+        height: this.props.height || window.innerHeight
       }
     });
   };
@@ -79,6 +84,7 @@ export default class App extends Component {
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
         mapboxApiAccessToken={token} >
+        <style>{MARKER_STYLE}</style>
         { bartStations.map(this._renderMarker) }
         <ControlPanel settings={settings} onChange={this._onSettingChange} />
       </MapGL>
@@ -86,10 +92,3 @@ export default class App extends Component {
   }
 
 }
-
-// Used to render properly in docs. Ignore these props or remove if you're
-// copying this as a starting point.
-App.defaultProps = {
-  widthOffset: 0,
-  heightOffset: 0
-};

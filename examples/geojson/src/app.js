@@ -1,11 +1,13 @@
-/* global window */
+/* global window, fetch */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
+import ControlPanel from './control-panel';
 
-import {defaultMapStyle, pointLayer} from './map-style.js';
-import {pointOnCircle} from './utils';
+import {defaultMapStyle, dataLayer} from './map-style.js';
+import {updatePercentiles} from './utils';
 import {fromJS} from 'immutable';
+import {json as requestJson} from 'd3-request';
 
 const token = process.env.MapboxAccessToken; // eslint-disable-line
 
@@ -13,85 +15,116 @@ if (!token) {
   throw new Error('Please specify a valid mapbox token');
 }
 
-let animation = null;
-
 export default class App extends Component {
 
   state = {
     mapStyle: defaultMapStyle,
+    year: 2015,
+    data: null,
+    hoveredFeature: null,
     viewport: {
-      latitude: 0,
+      latitude: 40,
       longitude: -100,
       zoom: 3,
       bearing: 0,
       pitch: 0,
-      width: window.innerWidth,
-      height: window.innerHeight
+      width: 500,
+      height: 500
     }
   };
 
   componentDidMount() {
     window.addEventListener('resize', this._resize);
     this._resize();
-    animation = window.requestAnimationFrame(this._animatePoint);
+
+    requestJson('data/us-income.geojson', (error, response) => {
+      if (!error) {
+        this._loadData(response);
+      }
+    });
   }
 
   componentWillUnmount() {
-    window.cancelAnimationFrame(animation);
-  }
-
-  _animatePoint = () => {
-    this._updatePointData(pointOnCircle({center: [-100, 0], angle: Date.now() / 1000, radius: 20}));
-    animation = window.requestAnimationFrame(this._animatePoint);
-  }
-
-  _updatePointData = pointData => {
-    let {mapStyle} = this.state;
-    if (!mapStyle.hasIn(['source', 'point'])) {
-      mapStyle = mapStyle
-        // Add geojson source to map
-        .setIn(['sources', 'point'], fromJS({type: 'geojson'}))
-        // Add point layer to map
-        .set('layers', mapStyle.get('layers').push(pointLayer));
-    }
-    // Update data source
-    mapStyle = mapStyle.setIn(['sources', 'point', 'data'], pointData);
-
-    this.setState({mapStyle});
+    window.removeEventListener('resize', this._resize);
   }
 
   _resize = () => {
-    const {widthOffset, heightOffset} = this.props;
     this.setState({
       viewport: {
         ...this.state.viewport,
-        width: window.innerWidth - widthOffset,
-        height: window.innerHeight - heightOffset
+        width: this.props.width || window.innerWidth,
+        height: this.props.height || window.innerHeight
       }
     });
   };
 
+  _loadData = data => {
+
+    updatePercentiles(data, f => f.properties.income[this.state.year]);
+
+    const mapStyle = defaultMapStyle
+      // Add geojson source to map
+      .setIn(['sources', 'incomeByState'], fromJS({type: 'geojson', data}))
+      // Add point layer to map
+      .set('layers', defaultMapStyle.get('layers').push(dataLayer));
+
+    this.setState({data, mapStyle});
+  };
+
+  _updateSettings = (name, value) => {
+    if (name === 'year') {
+      this.setState({year: value});
+
+      const {data, mapStyle} = this.state;
+      if (data) {
+        updatePercentiles(data, f => f.properties.income[value]);
+        const newMapStyle = mapStyle.setIn(['sources', 'incomeByState', 'data'], fromJS(data));
+        this.setState({mapStyle: newMapStyle});
+      }
+    }
+  };
+
   _onViewportChange = viewport => this.setState({viewport});
+
+  _onHover = event => {
+    const {features, srcEvent: {offsetX, offsetY}} = event;
+    const hoveredFeature = features && features.find(f => f.layer.id === 'data');
+
+    this.setState({hoveredFeature, x: offsetX, y: offsetY});
+  };
+
+  _renderTooltip() {
+    const {hoveredFeature, year, x, y} = this.state;
+
+    return hoveredFeature && (
+      <div className="tooltip" style={{left: x, top: y}}>
+        <div>State: {hoveredFeature.properties.name}</div>
+        <div>Median Household Income: {hoveredFeature.properties.value}</div>
+        <div>Percentile: {hoveredFeature.properties.percentile / 8 * 100}</div>
+      </div>
+    );
+  }
 
   render() {
 
     const {viewport, mapStyle} = this.state;
 
     return (
-      <MapGL
-        {...viewport}
-        mapStyle={mapStyle}
-        onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={token} >
-      </MapGL>
+      <div>
+        <MapGL
+          {...viewport}
+          mapStyle={mapStyle}
+          onViewportChange={this._onViewportChange}
+          mapboxApiAccessToken={token}
+          onHover={this._onHover} >
+
+          {this._renderTooltip()}
+
+        </MapGL>
+
+        <ControlPanel settings={this.state} onChange={this._updateSettings} />
+      </div>
     );
   }
 
 }
-
-// Used to render properly in docs. Ignore these props or remove if you're
-// copying this as a starting point.
-App.defaultProps = {
-  widthOffset: 0,
-  heightOffset: 0
-};

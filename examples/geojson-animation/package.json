@@ -4,8 +4,6 @@
     "start-local": "webpack-dev-server --env.local --progress --hot --open"
   },
   "dependencies": {
-    "d3-request": "^1.0.5",
-    "d3-scale": "^1.0.6",
     "immutable": "^3.8.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",

@@ -1,4 +1,3 @@
-/* from deck.gl */
 
 .gallery-wrapper {
   position: fixed;;
@@ -106,6 +105,10 @@
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
   margin: 24px;
   padding: 12px 24px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  outline: none;
 
   hr {
     margin: 12px -24px;
@@ -129,8 +132,9 @@
       white-space: nowrap;
     }
     label {
+      text-transform: uppercase;
       display: inline-block;
-      width: 40%;
+      width: 50%;
       margin-right: 10%;
       color: $black-40;
       margin-bottom: 4px;
@@ -139,9 +143,12 @@
       font-size: 0.9em;
       display: inline-block;
       padding: 0 4px;
-      width: 50%;
+      width: 40%;
       height: 20px;
       line-height: 1.833;
+    }
+    input[type="checkbox"], input[type="radio"], input[type="color"] {
+      width: 20%;
     }
     input {
       border: solid 1px #ccc;
@@ -244,7 +251,7 @@ code {
     width: 100%;
     margin: 0;
   }
-  .options-panel:not(.focus) {
+  .options-panel:not(:focus) {
     cursor: pointer;
     >div > *, hr, .input {
       display: none;
@@ -267,41 +274,5 @@ code {
   }
   .markdown-body {
     padding: 40px 12px 96px;
-  }
-}
-
-.icon-demo {
-  position: relative;
-
-  &.clickable {
-    cursor: pointer;
-  }
-  .tooltip {
-    padding: 4px 12px;
-    max-width: 240px;
-    max-height: 320px;
-    box-sizing: content-box;
-    overflow-y: hidden;
-
-    h5 {
-      font-size: 1em;
-    }
-    p {
-      display: none;
-      text-indent: 4px;
-    }
-  }
-  .tooltip.interactive {
-    border: solid 4px transparent;
-    margin: -4px;
-    background: $white;
-    color: $black;
-    pointer-events: all;
-    width: 240px;
-    overflow-y: auto;
-
-    p {
-      display: block;
-    }
   }
 }

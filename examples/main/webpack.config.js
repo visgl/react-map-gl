@@ -25,7 +25,12 @@ const config = {
   devServer: {
     stats: {
       warnings: false
-    }
+    },
+
+    contentBase: [
+      __dirname,
+      resolve(__dirname, '../')
+    ]
   },
 
   devtool: 'source-maps',
