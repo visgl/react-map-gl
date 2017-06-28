@@ -2,9 +2,10 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
+import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import TWEEN from 'tween.js';
 
-import CITIES from './cities.json';
+import ControlPanel from './control-panel';
 
 const token = process.env.MapboxAccessToken; // eslint-disable-line
 
@@ -19,30 +20,17 @@ function animate() {
 }
 animate();
 
-export default class Root extends Component {
+export default class App extends Component {
 
   state = {
     viewport: {
-      latitude: 37.785164,
-      longitude: -100,
-      zoom: 4,
+      latitude: 37.7751,
+      longitude: -122.4193,
+      zoom: 11,
       bearing: 0,
       pitch: 0,
-      width: this.props.width,
-      height: this.props.height
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.width !== this.state.viewport.width ||
-        nextProps.height !== this.state.viewport.height) {
-      this.setState({
-        viewport: {
-          ...this.state.viewport,
-          width: nextProps.width,
-          height: nextProps.height
-        }
-      });
+      width: 500,
+      height: 500
     }
   }
 
@@ -51,12 +39,16 @@ export default class Root extends Component {
     this._resize();
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._resize);
+  }
+
   _resize = () => {
     this.setState({
       viewport: {
         ...this.state.viewport,
-        width: window.innerWidth,
-        height: window.innerHeight
+        width: this.props.width || window.innerWidth,
+        height: this.props.height || window.innerHeight
       }
     });
   };
@@ -79,15 +71,6 @@ export default class Root extends Component {
 
   _onViewportChange = viewport => this.setState({viewport});
 
-  _renderButton = (city, index) => {
-    return (
-      <div key={`btn-${index}`} className="btn"
-        onClick={() => this._easeTo(city)} >
-        {city.city}, {city.state}
-      </div>
-    );
-  };
-
   render() {
 
     const {viewport, settings} = this.state;
@@ -101,17 +84,9 @@ export default class Root extends Component {
           onViewportChange={this._onViewportChange}
           dragToRotate={false}
           mapboxApiAccessToken={token} />
-
-        <div className="control-panel">
-          { CITIES.map(this._renderButton) }
-        </div>
+        <ControlPanel onViewportChange={this._easeTo} />
       </div>
     );
   }
 
 }
-
-App.defaultProps = {
-  width: 500,
-  height: 500
-};

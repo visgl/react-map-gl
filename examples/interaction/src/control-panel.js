@@ -10,7 +10,7 @@ export default class ControlPanel extends PureComponent {
 
   _renderCheckbox(name, value) {
     return (
-      <div key={name}>
+      <div key={name} className="input">
         <label>{this._formatSettingName(name)}</label>
         <input type="checkbox" checked={value}
           onChange={evt => this.props.onChange(name, evt.target.checked)} />
@@ -20,7 +20,7 @@ export default class ControlPanel extends PureComponent {
 
   _renderNumericInput(name, value) {
     return (
-      <div key={name}>
+      <div key={name} className="input">
         <label>{this._formatSettingName(name)}</label>
         <input type="number" value={value}
           onChange={evt => this.props.onChange(name, Number(evt.target.value))} />
@@ -43,7 +43,14 @@ export default class ControlPanel extends PureComponent {
     const {settings} = this.props;
 
     return (
-      <div className="control-panel">
+      <div className="options-panel" tabIndex="0">
+        <h3>Limit Map Interaction</h3>
+        <p>Turn interactive features off/on.</p>
+        <div className="source-link">
+          <a href="https://github.com/uber/react-map-gl/tree/master/examples/interaction" target="_new">View Code ↗</a>
+        </div>
+        <hr />
+
         { Object.keys(settings).map(name => this._renderSetting(name, settings[name])) }
       </div>
     );

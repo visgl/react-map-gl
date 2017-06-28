@@ -91,7 +91,7 @@ export default class StyleControls extends PureComponent {
     const {visibility, color} = this.state;
 
     return (
-      <div key={name}>
+      <div key={name} className="input">
         <label>{name}</label>
         <input type="checkbox" checked={visibility[name]}
           onChange={this._onVisibilityChange.bind(this, name)} />
@@ -103,7 +103,13 @@ export default class StyleControls extends PureComponent {
 
   render() {
     return (
-      <div className="control-panel">
+      <div className="options-panel" tabIndex="0">
+        <h3>Dynamic Styling</h3>
+        <p>Dynamically show/hide map layers and change color with Immutable map style.</p>
+        <div className="source-link">
+          <a href="https://github.com/uber/react-map-gl/tree/master/examples/layers" target="_new">View Code ↗</a>
+        </div>
+        <hr />
         { categories.map(name => this._renderLayerControl(name)) }
       </div>
     );

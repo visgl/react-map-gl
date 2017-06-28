@@ -48,24 +48,30 @@
 }
 
 #banner {
+  height: 80vh;
   background: $black-20;
   color: $white;
   position: relative;
   @include venderPrefix(user-select, none);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 
-  > .fps > div {
-    position: absolute !important;
-    bottom: 24px !important;
-    right: 10px !important;
-    top: inherit !important;
-    left: inherit !important;
-  }
-  >.hero {
+  &:before {
+    content: ' ';
     position: absolute;
+    left: 0;
     top: 0;
+    right: 0;
+    bottom: 0;
+    @include linearGradientH(background, rgba(0,0,0,0.75), transparent, 0%, 60%);
+    display: block;
   }
+
   > .container {
     position: relative;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   p {
@@ -155,15 +161,20 @@
 @media screen and (max-width: 576px) {
   .home-wrapper {
     h1 {
-      font-size: 3.6em;
+      font-size: 3.2em;
     }
     h2 {
       font-size: 1.6em;
     }
   }
   #banner {
+    height: 100vh;
     p {
       font-size: 12px;
+    }
+
+    &:before {
+      @include linearGradientH(background, rgba(0,0,0,0.75), transparent);
     }
   }
   #features {

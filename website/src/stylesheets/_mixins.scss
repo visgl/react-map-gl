@@ -7,13 +7,13 @@
     #{$property_name}: linear-gradient(to bottom,  $top 0%,$bottom 100%); /* W3C */
 }
 
-@mixin linearGradientH($property_name, $left, $right){
+@mixin linearGradientH($property_name, $left, $right, $let_position: 0%, $right_position: 100%){
     #{$property_name}: $left; /* Old browsers */
-    #{$property_name}: -moz-linear-gradient(left,  $left 0%, $right 100%); /* FF3.6+ */
-    #{$property_name}: -webkit-linear-gradient(left,  $left 0%,$right 100%); /* Chrome10+,Safari5.1+ */
-    #{$property_name}: -o-linear-gradient(left,  $left 0%,$right 100%); /* Opera 11.10+ */
-    #{$property_name}: -ms-linear-gradient(left,  $left 0%,$right 100%); /* IE10+ */
-    #{$property_name}: linear-gradient(to right,  $left 0%,$right 100%); /* W3C */
+    #{$property_name}: -moz-linear-gradient(left,  $left $let_position, $right $right_position); /* FF3.6+ */
+    #{$property_name}: -webkit-linear-gradient(left,  $left $let_position,$right $right_position); /* Chrome10+,Safari5.1+ */
+    #{$property_name}: -o-linear-gradient(left,  $left $let_position,$right $right_position); /* Opera 11.10+ */
+    #{$property_name}: -ms-linear-gradient(left,  $left $let_position,$right $right_position); /* IE10+ */
+    #{$property_name}: linear-gradient(to right,  $left $let_position,$right $right_position); /* W3C */
 }
 
 @mixin venderPrefix($property_name, $value) {

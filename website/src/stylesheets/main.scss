@@ -16,44 +16,6 @@ $topbar-height: 64px;
 @import 'gallery';
 @import '../../node_modules/mapbox-gl/dist/mapbox-gl.css';
 
-.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
-  width: 115px;
-};
-
-.control-panel {
-  position: absolute;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  padding: 12px 24px;
-  margin: 20px;
-  font-size: 13px;
-  line-height: 2;
-  color: #6b6b76;
-  text-transform: uppercase;
-}
-
-.control-panel label {
-  display: inline-block;
-  width: 100px;
-}
-
-.control-panel input {
-  margin-left: 20px;
-}
-
-.city-pin {
-  cursor: pointer;
-  fill: #d00;
-  stroke: none;
-}
-
-.nav {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 10px;
-}
-
 body {
   font-family: ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif !important;
   font-size: 12px;
@@ -226,60 +188,6 @@ hr.short {
   background: $black;
   color: $white;
 }
-.thumb {
-  cursor: pointer;
-  position: relative;
-  width: 32%;
-  display: inline-block;
-  line-height: 0;
-
-  img {
-    transition: opacity 0.4s;
-  }
-  >div:before, >div:after {
-    display: block;
-    z-index: 1;
-    position: absolute;
-    transition: opacity 0.4s;
-    opacity: 0;
-    text-align: center;
-    pointer-events: none;
-    box-sizing: border-box;
-    line-height: 1.5;
-  }
-  >div:before {
-    content: attr(data-title);
-    font-size: 1.4em;
-    font-weight: 100;
-    width: 100%;
-    padding: 12%;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  >div:after {
-    font-size: 0.833em;
-    content: attr(data-name);
-    padding: 5%;
-    left: 0;
-    width: 80%;
-    height: 80%;
-    margin: 10%;
-    top: 0;
-    left: 0;
-    border: solid 2px;
-    @include linearGradientV(border-image, $primary, $secondary);
-    border-image-slice: 2;
-    box-sizing: border-box;
-  }
-  >div:hover img {
-    opacity: 0.2;
-  }
-  >div:hover:before, >div:hover:after {
-    opacity: 1;
-  }
-
-}
 
 .mapbox-tip {
   position: absolute;
@@ -287,26 +195,10 @@ hr.short {
   bottom: 24px;
   color: $white-40;
 }
-.mapboxgl-ctrl-attrib {
-  position: absolute;
-  bottom: 2px;
-  right: 4px;
-  z-index: 9;
-}
 .overlays {
   cursor: crosshair;
 }
 
-@media screen and (max-width: 1200px) {
-  .thumb {
-    width: 49%;
-  }
-}
-@media screen and (max-width: 800px) {
-  .thumb {
-    width: 100%;
-  }
-}
 @media screen and (max-width: 576px) {
   .container {
     padding: 0 12px;

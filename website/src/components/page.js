@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import autobind from 'autobind-decorator';
 
-import InfoPanel from './info-panel';
 import MarkdownPage from './markdown-page';
 import {loadContent, updateMap} from '../actions/app-actions';
 
@@ -38,23 +37,6 @@ class Page extends Component {
     return content;
   }
 
-  @autobind _renderDemo(name, sourceLink) {
-    const {mapHasFocus} = this.state;
-
-    return (
-      <div className="demo">
-        <InfoPanel
-          demo={name}
-          hasFocus={!mapHasFocus}
-          onInteract={this._onMapBlur} >
-          {sourceLink && (<div className="source-link">
-            <a href={sourceLink} target="_new">View Code ↗</a>
-          </div>)}
-        </InfoPanel>
-      </div>
-    );
-  }
-
   // replaces the current query string in react-router
   @autobind _updateQueryString(queryString) {
     const {location: {pathname, search}} = this.props;
@@ -77,8 +59,7 @@ class Page extends Component {
     } else if (typeof content === 'string') {
       child = (<MarkdownPage content={contents[content]}
         query={query}
-        updateQueryString={this._updateQueryString}
-        renderDemo={this._renderDemo} />);
+        updateQueryString={this._updateQueryString} />);
     }
 
     return <div className="page">{child}</div>;

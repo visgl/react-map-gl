@@ -70,6 +70,10 @@ module.exports = {
         to: 'docs'
       },
       {
+        from: '../examples/data',
+        to: 'data'
+      },
+      {
         from: './src/static'
       }
     ])

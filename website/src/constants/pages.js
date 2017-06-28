@@ -1,4 +1,4 @@
-import ExamplesToc from '../../../examples/main/constants/toc';
+import {standaloneExamples} from '../../../examples/main/constants/toc';
 import ExamplesComponent from '../components/examples';
 import PagesComponent from '../components/page';
 
@@ -14,7 +14,7 @@ function generatePath(tree, parentPath = '') {
     tree.forEach(branch => generatePath(branch, parentPath));
   }
   if (tree.name) {
-    tree.path = tree.name.match(/(GeoJson|3D|API|([A-Z]|^)[a-z'0-9]+|\d+)/g)
+    tree.path = tree.name.match(/(GeoJSON|3D|API|([A-Z]|^)[a-z'0-9]+|\d+)/g)
         .join('-')
         .toLowerCase()
         .replace(/[^\w-]/g, '');
@@ -31,7 +31,7 @@ function generatePath(tree, parentPath = '') {
 const examplePages = {
   title: 'Examples',
   pageComponent: ExamplesComponent,
-  paths: generatePath(ExamplesToc)
+  paths: generatePath(standaloneExamples)
 };
 
 const docPages = {

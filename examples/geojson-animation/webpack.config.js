@@ -10,13 +10,6 @@ const config = {
     app: resolve('./src/root.js')
   },
 
-  devServer: {
-    contentBase: [
-      __dirname,
-      resolve(__dirname, '../')
-    ]
-  },
-
   devtool: 'source-map',
 
   module: {

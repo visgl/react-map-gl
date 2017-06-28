@@ -192,8 +192,7 @@ export default class MarkdownPage extends PureComponent {
 }
 
 MarkdownPage.propTypes = {
-  content: PropTypes.string,
-  renderDemo: PropTypes.func.isRequired
+  content: PropTypes.string
 };
 
 MarkdownPage.defaultProps = {
