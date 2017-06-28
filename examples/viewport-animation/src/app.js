@@ -29,8 +29,8 @@ export default class App extends Component {
       zoom: 11,
       bearing: 0,
       pitch: 0,
-      width: this.props.width,
-      height: this.props.height
+      width: 500,
+      height: 500
     }
   }
 
@@ -90,8 +90,3 @@ export default class App extends Component {
   }
 
 }
-
-App.defaultProps = {
-  width: 500,
-  height: 500
-};

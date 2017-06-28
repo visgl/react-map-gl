@@ -20,8 +20,8 @@ export default class App extends Component {
       zoom: 15.5,
       bearing: 0,
       pitch: 0,
-      width: window.innerWidth,
-      height: window.innerHeight
+      width: 500,
+      height: 500
     }
   }
 
@@ -64,10 +64,3 @@ export default class App extends Component {
   }
 
 }
-
-// Used to render properly in docs. Ignore these props or remove if you're
-// copying this as a starting point.
-App.defaultProps = {
-  widthOffset: 0,
-  heightOffset: 0
-};

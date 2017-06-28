@@ -23,8 +23,8 @@ export default class App extends Component {
       zoom: 11,
       bearing: 0,
       pitch: 50,
-      width: window.innerWidth,
-      height: window.innerHeight
+      width: 500,
+      height: 500
     },
     settings: {
       dragPan: true,
@@ -92,10 +92,3 @@ export default class App extends Component {
   }
 
 }
-
-// Used to render properly in docs. Ignore these props or remove if you're
-// copying this as a starting point.
-App.defaultProps = {
-  widthOffset: 0,
-  heightOffset: 0
-};
