@@ -103,7 +103,7 @@ export default class StyleControls extends PureComponent {
 
   render() {
     return (
-      <div className="options-panel">
+      <div className="options-panel" tabIndex="0">
         <h3>Dynamic Styling</h3>
         <p>Dynamically show/hide map layers and change color with Immutable map style.</p>
         <div className="source-link">

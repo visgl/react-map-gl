@@ -18,7 +18,7 @@ export default class ControlPanel extends PureComponent {
 
   render() {
     return (
-      <div className="options-panel">
+      <div className="options-panel" tabIndex="0">
         <h3>Camera Transition</h3>
         <p>Smooth animate of the viewport.</p>
         <div className="source-link">

@@ -48,7 +48,6 @@
 }
 
 #banner {
-  margin-top: 64px;
   height: 80vh;
   background: $black-20;
   color: $white;
@@ -65,7 +64,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    @include linearGradientH(background, rgba(0,0,0,0.75), transparent, 0%, 50%);
+    @include linearGradientH(background, rgba(0,0,0,0.75), transparent, 0%, 60%);
     display: block;
   }
 
@@ -162,7 +161,7 @@
 @media screen and (max-width: 576px) {
   .home-wrapper {
     h1 {
-      font-size: 3.6em;
+      font-size: 3.2em;
     }
     h2 {
       font-size: 1.6em;
@@ -172,6 +171,10 @@
     height: 100vh;
     p {
       font-size: 12px;
+    }
+
+    &:before {
+      @include linearGradientH(background, rgba(0,0,0,0.75), transparent);
     }
   }
   #features {

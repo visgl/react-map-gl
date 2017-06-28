@@ -5,7 +5,7 @@ export default class ControlPanel extends PureComponent {
     const {settings} = this.props;
 
     return (
-      <div className="options-panel">
+      <div className="options-panel" tabIndex="0">
         <h3>Interactive GeoJSON</h3>
         <p>Map showing median household income by state in year <b>{settings.year}</b>.
         Hover over a state to see details.</p>

@@ -43,7 +43,7 @@ export default class ControlPanel extends PureComponent {
     const {settings} = this.props;
 
     return (
-      <div className="options-panel">
+      <div className="options-panel" tabIndex="0">
         <h3>Limit Map Interaction</h3>
         <p>Turn interactive features off/on.</p>
         <div className="source-link">
