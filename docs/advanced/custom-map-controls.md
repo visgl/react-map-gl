@@ -23,7 +23,7 @@ A simple example to disable mouse wheel:
 ```
 Then pass it to the map during render:
 ```jsx
-  <MapGL mapControls={new MyMapControls()} ... />
+  <ReactMapGL mapControls={new MyMapControls()} ... />
 ```
 
 

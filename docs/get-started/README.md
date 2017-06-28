@@ -9,7 +9,7 @@ that aim to make working with external overlays, such as
 
 # Installation
 
-`ReactMapGL` requires `node >= v4` and `react >= 15.4`.
+`ReactMapGL` requires `node >= v6.4.0` and `react >= 15.4`.
 
 ```sh
 npm install --save react-map-gl
@@ -35,7 +35,7 @@ class Map extends Component {
         longitude={-122.4376}
         zoom={8}
         onViewportChange={(viewport) => {
-          const {latitude, longitude, zoom} = viewport;
+          const {width, height, latitude, longitude, zoom} = viewport;
           // Optionally call `setState` and use the state to update the map.
         }}
       />
@@ -48,19 +48,7 @@ class Map extends Component {
 
 `ReactMapGL` depends on `gl`, which may cause issues when running in a server
 environment without `gl` installed. You can either make sure that your system
-has `gl` installed or use the following work-around to ensure you only require
-`ReactMapGL` on the client.
-
-```js
-// is-browser is an npm package, but you can use any other solution to make sure
-// that you are in a browser environment.
-import isBrowser from 'is-browser';
-
-const ReactMapGL = 'div';
-if (isBrowser) {
-  ReactMapGL = require('react-map-gl').default;
-}
-```
+has `gl` installed or make sure you only import `ReactMapGL` on the client.
 
 ## Using with Browserify, Webpack, and other environments
 

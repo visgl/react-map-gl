@@ -23,6 +23,12 @@ export default class Header extends Component {
               rel="noopener noreferrer">
               Github <i style={{marginLeft: 2}} className="icon icon-github" />
             </a>
+            <a
+              href="https://github.com/mapbox/mapbox-gl-js"
+              target="_blank"
+              rel="noopener noreferrer">
+              Mapbox GL JS <i style={{marginLeft: 2}} className="icon icon-github" />
+            </a>
           </div>
         </div>
       </header>

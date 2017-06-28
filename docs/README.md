@@ -1,21 +1,21 @@
-# Overview
+# Introduction
 
-react-map-gl is a react friendly API wrapper around
+react-map-gl is a suite of React components for
 [Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js).
 
 ## Example
 
 ```js
-import MapGL from 'react-map-gl';
+import ReactMapGL from 'react-map-gl';
 
-<MapGL
+<ReactMapGL
   width={400}
   height={400}
   latitude={37.7577}
   longitude={-122.4376}
   zoom={8}
-  onChangeViewport={viewport => {
-    const {latitude, longitude, zoom} = viewport;
+  onViewportChange={(viewport) => {
+    const {width, height, latitude, longitude, zoom} = viewport;
     // Optionally call `setState` and use the state to update the map.
   }}
 />
