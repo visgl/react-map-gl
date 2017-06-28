@@ -102,7 +102,9 @@ export default class StaticMap extends PureComponent {
     super(props);
 
     this._queryParams = {};
-    mapboxgl.accessToken = props.mapboxApiAccessToken;
+    if (mapboxgl) {
+      mapboxgl.accessToken = props.mapboxApiAccessToken;
+    }
 
     if (!StaticMap.supported()) {
       this.componentDidMount = noop;
@@ -211,7 +213,9 @@ export default class StaticMap extends PureComponent {
   }
 
   _updateStateFromProps(oldProps, newProps) {
-    mapboxgl.accessToken = newProps.mapboxApiAccessToken;
+    if (mapboxgl) {
+      mapboxgl.accessToken = newProps.mapboxApiAccessToken;
+    }
   }
 
   // Hover and click only query layers whose interactive property is true
