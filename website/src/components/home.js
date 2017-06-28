@@ -46,7 +46,7 @@ export default class Home extends Component {
                 Part of Uber Visualization's Framework Suite
               </h3>
               <p>
-              Use together with <a
+              Use together with e.g. <a
                 href="https://github.com/uber/react-map-gl"
                 target="_blank"
                 rel="noopener noreferrer">

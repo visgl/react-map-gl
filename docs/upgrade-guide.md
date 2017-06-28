@@ -54,7 +54,8 @@ const viewport = new PerspectiveMercatorViewport({width: 600, height: 400}).fitB
 ### Two Map Components
 
 v3 now exposes two React components: `StaticMap` and `InteractiveMap`.
-`InteractiveMap` is the default export.
+`InteractiveMap` is the default export, and designed to be as compatible as
+possible with the v2 default export.
 
 #### StaticMap
 

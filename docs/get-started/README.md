@@ -9,7 +9,7 @@ that aim to make working with external overlays, such as
 
 # Installation
 
-`ReactMapGL` requires `node >= v6.4.0` and `react >= 15.4`.
+`ReactMapGL` requires `node >= v4` and `react >= 15.4`.
 
 ```sh
 npm install --save react-map-gl

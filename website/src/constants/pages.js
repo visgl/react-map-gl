@@ -63,17 +63,13 @@ const docPages = {
           content: getDocUrl('get-started/README.md')
         },
         {
+          name: 'About Mapbox Tokens',
+          content: getDocUrl('get-started/mapbox-tokens.md')
+        },
+        {
           name: 'Using with Redux',
           content: getDocUrl('get-started/using-with-redux.md')
         },
-        {
-          name: 'Using with Isomorphic Rendering',
-          content: getDocUrl('get-started/using-with-isomorphic-rendering.md')
-        },
-        {
-          name: 'About Mapbox Tokens',
-          content: getDocUrl('get-started/mapbox-tokens.md')
-        }
       ]
     },
     {
