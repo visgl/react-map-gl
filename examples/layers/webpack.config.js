@@ -5,6 +5,10 @@
 const resolve = require('path').resolve;
 const webpack = require('webpack');
 
+// Otherwise modules imported from outside this directory does not compile.
+// Also needed if modules from this directory were imported elsewhere
+// Seems to be a Babel bug
+// https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
 const BABEL_CONFIG = {
   presets: [
     'es2015',
