@@ -262,7 +262,7 @@ hr.short {
   }
 
   &:hover {
-    background: rgba($black, 0.9);
+    background: $black;
     max-height: $topbar-height * 5;
   }
 }

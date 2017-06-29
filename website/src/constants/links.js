@@ -1,3 +1,4 @@
+// TODO/xiaoji move to a GitHub file?
 export const LIBRARIES = {
   'react-map-gl': '#',
   // 'react-map-gl': 'https://uber.github.io/react-map-gl',
