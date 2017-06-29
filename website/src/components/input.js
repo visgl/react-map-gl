@@ -1,9 +1,8 @@
 import React, {PureComponent} from 'react';
-import autobind from 'autobind-decorator';
 
 export default class GenericInput extends PureComponent {
 
-  @autobind _onChange(evt) {
+  _onChange = (evt) => {
     const {value, type} = evt.target;
     let newValue = value;
     if (type === 'checkbox') {
