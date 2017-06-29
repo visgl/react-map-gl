@@ -5,6 +5,16 @@
 const resolve = require('path').resolve;
 const webpack = require('webpack');
 
+const BABEL_CONFIG = {
+  presets: [
+    'es2015',
+    'react',
+    'stage-2'
+  ].map(function configMap(name) {
+    return require.resolve(`babel-preset-${name}`);
+  })
+};
+
 const config = {
   entry: {
     app: resolve('./src/root.js')
@@ -16,9 +26,12 @@ const config = {
     rules: [{
       // Compile ES2015 using bable
       test: /\.js$/,
-      loader: 'babel-loader',
       include: [resolve('.')],
-      exclude: [/node_modules/]
+      exclude: [/node_modules/],
+      use: [{
+        loader: 'babel-loader',
+        options: BABEL_CONFIG
+      }]
     }]
   },
 

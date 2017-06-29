@@ -1,7 +1,4 @@
 /* global document */
-import 'babel-polyfill';
-import 'babel-register';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';

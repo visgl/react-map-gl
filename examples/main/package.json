@@ -14,7 +14,8 @@
     "immutable": "^3.8.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-map-gl": ">=3.0.0-alpha.14"
+    "react-map-gl": ">=3.0.0-alpha.14",
+    "tween.js": "^16.6.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
@@ -29,12 +30,5 @@
     "style-loader": "^0.18.2",
     "webpack": "^2.4.0",
     "webpack-dev-server": "^2.4.0"
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "stage-2",
-      "react"
-    ]
   }
 }

@@ -46,10 +46,12 @@ module.exports = {
   },
 
   resolve: {
+    modules: [
+      // Always resolve module to this app's node_modules first
+      resolve('./node_modules'),
+      'node_modules'
+    ],
     alias: {
-      // Ensure only one copy of react
-      react: resolve('./node_modules/react'),
-      immutable: resolve('./node_modules/immutable'),
       // used by Mapbox
       webworkify: 'webworkify-webpack-dropin',
       // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
