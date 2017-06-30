@@ -3,9 +3,9 @@
 @import 'mixins';
 @import 'icon';
 
-$primary: #00ADE6;
-$secondary: #05E3D5;
-$black: #041725;
+$primary: #4DC19C;
+$secondary: #BEE4BF;
+$black: #267E63;
 $black-20: #213746;
 $black-40: #5A666D;
 $white: #EDEDED;
@@ -239,7 +239,7 @@ hr.short {
     position: absolute;
     top: 0;
     right: 12px;
-    color: $black-40;
+    color: $white-40;
   }
 
   .site-link {
