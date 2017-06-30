@@ -12,7 +12,7 @@
 
 <h1 align="center">react-map-gl | <a href="https://uber.github.io/react-map-gl">Docs</a></h1>
 
-<h5 align="center">React friendly API wrapper around MapboxGL JS</h5>
+<h5 align="center">React Components for Mapbox GL JS</h5>
 
 ![screen](https://cloud.githubusercontent.com/assets/499192/11028165/49f41da2-86bc-11e5-85eb-9279621ef971.png)
 
@@ -24,11 +24,11 @@
 
 * `browserify` - react-map-gl is extensively tested with `browserify` and works without configuration.
 
-* `webpack 2` - look at the [exhibit-webpack](https://github.com/uber/react-map-gl/tree/master/examples/exhibit-webpack)
-folder, demonstrating a working demo using `webpack`.
+* `webpack 2` - Most of the provided react-map-gl examples use webpack 2. For a minimal example, look at the [exhibit-webpack](https://github.com/uber/react-map-gl/tree/master/examples/exhibit-webpack) folder, demonstrating a working demo using `webpack 2`.
 
-In general, for non-browserify based environments, make sure you have read the instructions on the
-[mapbox-gl-js README](https://github.com/mapboxmapbox-gl-js#using-mapbox-gl-js-with-other-module-systems).
+* `create-react-app` - At this point configuration-free builds are not possible with webpack. You will need to eject your app (sorry) and add one line alias to your webpack config.
+
+For more information, please refer to the docs <a href="https://uber.github.io/react-map-gl">docs</a>.
 
 
 ## Example
@@ -43,49 +43,21 @@ import MapGL from 'react-map-gl';
   longitude={-122.4376}
   zoom={8}
   onChangeViewport={viewport => {
-    const {latitude, longitude, zoom} = viewport;
-    // Optionally call `setState` and use the state to update the map.
+    // Call `setState` and use the state to update the map.
   }}
 />
 ```
 
-## Components
-
-react-map-gl provides React-friendly components like `Marker`, `Popup` etc.
-
 
 ## Visualizing Geospatial Data
 
-The main point of using a map is usuallt to visualize geospatial data on top of it. react-map-gl provides several solutions
+The main point of using a map is usually to visualize geospatial data on top of it. react-map-gl provides several solutions
 
+* **Components** - react-map-gl provides React components like `Marker`, `Popup` etc that takes `longitude` and `latitude` props and will automatically follow the map.
 
-### deck.gl Layers
+* **Overlays** - react-map-gl provides a basic overlay API. Each overlay takes long/lat encoded data and displays it on top of the map. You can use one of the provided visualization overlays, or create your own.
 
-[deck.gl](https://github.com/uber/deck.gl) is a companion module to `react-map-gl` that provide a number of classic data visualization overlays (scatterplots, choropleths etc) implemented in WebGL. These overlays are suitable for very large and/or dynamic data sets, and for use in perspective mode
-applications.
-
-
-## Overlays
-
-react-map-gl provides a basic overlay API. You can use the built-in visualization overlays, or create your own.
-
-
-## Perspective Mode
-
-react-map-gl fully supports mapbox-gl perspective mode (pitch and bearing).
-
-In addition, for a set of high-performance geospatial data visualiation overlays that are 100% compatible with mapbox-gl perspective mode, look at [deck.gl](https://github.com/uber/deck.gl).
-
-
-## Transitions
-
-TBD
-
-
-## ImmutableJS
-
-The `mapStyle` property of the `MapGL` as well as several of the built in
-overlay properties must be provided as [ImmutableJS](https://facebook.github.io/immutable-js) objects. This allows the library to be fast since computing changes to props only involves checking if the immutable objects are the same instance.
+* **deck.gl Layers** - [deck.gl](https://github.com/uber/deck.gl) is a companion module to react-map-gl that provides high-performance geospatial data visualiation layers (`ScatterplotLayer`, `GeoJsonLayer`, `PointCloudLayer` etc) that are 3D enabled and 100% compatible with mapbox perspective mode. These layers are particularly suitable for very large and/or dynamic data sets.
 
 
 ## Development
@@ -95,22 +67,16 @@ Install project dependencies and check that the tests run
     npm install
     npm test
 
-Note on yarn: `yarn` does not appear to be compatible with `mapbox-gl` v0.31,
-in terms of installing correct versions of dependencies needed to run
-test scripts in the folder.
-While this is likely to change, for now it is recommended it is recommended to
-use `npm install` in the root folder of `react-map-gl`. This restriction only
-applies when installing in the root folder; `yarn` is still supported and
-recommended when installing the examples in the `examples` folder.
-
 Then start the main example in `examples/main` by running the shortcut
 
     npm start
 
 This should open a new tab in your browser with the examples.
+
 To make the maps load, either:
 * add `?access_token=TOKEN` to the URL where `TOKEN` is a valid Mapbox access token, or
 * set the `MapboxAccessToken` environment variable before running `npm start`
+
 
 ## Testing
 

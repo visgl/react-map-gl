@@ -1,7 +1,7 @@
 # Introduction
 
-react-map-gl is a suite of React components for
-[Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js).
+react-map-gl is a suite of [React](http://facebook.github.io/react/) components for
+[Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js), a WebGL-powered vector and raster tile mapping library. In addition to exposing `MapboxGL` functionality to React apps, react-map-gl also integrates seamlessly with [deck.gl](https://uber.github.io/deck.gl).
 
 ## Example
 

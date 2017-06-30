@@ -1,35 +1,44 @@
 # react-map-gl v3.0
 
-Release date: End of Q2, 2017 (TBD)
+Release date: Friday June 30, 2017
 
 ## Highlights
 
-- **Node Version Requirement** is now **>=v6.4.0**: This is introduced in [Mapbox GL JS v0.38.0](https://github.com/mapbox/mapbox-gl-js/releases/tag/v0.38.0)
-- **Event Handling**: New event handling architecture that enables full customization of event handling (experimental).
+- **Latest Mapbox GL JS**: Bumps `Mapbox GL JS` to [0.38](https://github.com/mapbox/mapbox-gl-js/releases).
 - **Multi-Touch Support**: Full support for multi-touch gestures such as pinch-to-zoom and rotate.
-- **Two Map Components**: `StaticMap` and `InteractiveMap` are now exported from
-the library, with the default being `InteractiveMap`.
-- **New Components**:  `Popup`, `Marker`, `NavigationControl` have been added to provide parity with `Mapbox GL JS`.
+- **New Components**: The `MapGL` component has been split into `StaticMap` and `InteractiveMap` (the default). Also, `Popup`, `Marker`, `NavigationControl` have been added to provide better React parity with the `Mapbox GL JS` API.
+- **Improved Overlay Components**: Supplying viewport props (`width` `height` `zoom` `longitude` and `latitude`) are no longer required if you render `SVGOverlay` `CanvasOverlay` or `HTMLOverlay` as a child of the map. Perspective mode is now supported in all overlays.
 - **New Props**: `maxPitch`, `minPitch`, `dragPan`, `doubleClickZoom`, `touchZoomRotate`,
 `scrollZoom` are now provided to allow granular control of map interactivity.
 - **Documentation**: Significantly expanded and linked with our other geospatial frameworks.
-- **Examples**: Additional stand-alone examples to get you instantly started with new features.
-- **Improved overlay components**: Vi ewport props (`width` `height` `zoom` `longitude` and `latitude`) are no longer required if you render `SVGOverlay` `CanvasOverlay` or `HTMLOverlay` as a child of the map. Perspective mode is now supported in all overlays.
-- **Latest Mapbox GL JS**: Bumps `Mapbox GL JS` to the [latest version](https://github.com/mapbox/mapbox-gl-js/releases) and enables us to stay in sync with future versions.
+- **Examples**: New stand-alone examples to get you started instantly with the new features.
+- **Event Handling**: New event handling architecture that enables full customization of event handling (experimental).
 
-## Deprecations
+## Components
+
+### InteractiveMap (New, MapGL replacement)
+
+This is a wrapper on top of `StaticMap`. It takes all the props of `StaticMap` and additional ones such as `onViewportChange`, `scrollZoom`, `dragRotate`, etc. to control interactivity on the map. See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/interactive-map.js) for more information.
+
+### StaticMap (New)
+
+This is the React wrapper around `Mapbox GL JS` and takes in viewport properties such as `width`, `height`, `latitude`, `longitude`. Style diffing and updating logic also live here. See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/static-map.js) for more information.
+
+### Overlays
+
+* Three overlays (`ScatterplotOverlay`, `DraggablePointsOverlay`, `ChoroplethOverlay`), have been moved out of the library and are now only provided as examples.
+
+## Property Changes
 
 - **Property Names** - some prop names have been modernized, the old ones will still work for now with a warning.
 - **Internal Properties** such as `isHovering`, `isDragging`, `startDragLngLat` have been removed.
 These were never meant to be useful publicly and have caused confusions in the past.
 
-## Breaking Changes
+## Utilities
 
-- **Overlay Support** - Three overlays (`ScatterplotOverlay`, `DraggablePointsOverlay`, `ChoroplethOverlay`), ... are now only provided as examples.
-- **fitBounds**: `fitBounds` has been moved to another repository, [viewport-mercator-project](https://github.com/uber-common/viewport-mercator-project).
-It is also rewritten to provide a better interface.
+* **fitBounds**: `fitBounds` has been moved to another repository and has been rewritten to provide a more logical interface.
 
-For more information, see `Upgrade Guide`.
+For more information, see the `Upgrade Guide`.
 
 
 # react-map-gl v2.0
@@ -41,10 +50,6 @@ Date: Jan 17, 2017
 - **new maxZoom prop** - Add `maxZoom` prop and defaults to `20`
 - **New onLoad prop** - Add `onLoad` event handler
 - **new onClick prop** - Add `onClick` prop handler (#140)
-
-## Breaking Changes
-
-- **Node version bump** `react-map-gl` now requires that you are on Node >= v4 and npm >= v3.
 
 
 # react-map-gl v1.0
