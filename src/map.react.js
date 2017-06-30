@@ -188,6 +188,21 @@ const PROP_TYPES = {
   altitude: PropTypes.number,
 
   /**
+   * enable zooming by touch events (pinch), defaults to false
+   */
+  touchZoom: PropTypes.bool,
+
+  /**
+   * enable map rotation by touch events, defaults to false
+   */
+  touchRotate: PropTypes.bool,
+
+  /**
+   * enable zooming in by double clicking, defaults to false
+   */
+  doubleClickZoom: PropTypes.bool,
+
+  /**
     * The load callback is called when all dependencies have been loaded and
     * the map is ready.
     */
@@ -212,6 +227,9 @@ const DEFAULT_PROPS = {
   pitch: 0,
   altitude: 1.5,
   clickRadius: 15,
+  touchZoom: false,
+  touchRotate: false,
+  doubleClickZoom: false,
   maxZoom: 20,
   minZoom: 0,
   scrollZoomEnabled: true
@@ -277,6 +295,7 @@ export default class MapGL extends Component {
     this._updateMapViewport({}, this.props);
     this._callOnChangeViewport(map.transform);
     this._updateQueryParams(mapStyle);
+    this._updateHandlers(this.props);
   }
 
   // New props are comin' round the corner!
@@ -284,6 +303,7 @@ export default class MapGL extends Component {
     this._updateStateFromProps(this.props, newProps);
     this._updateMapViewport(this.props, newProps);
     this._updateMapStyle(this.props, newProps);
+    this._updateHandlers(newProps);
     // Save width/height so that we can check them in componentDidUpdate
     this.setState({
       width: this.props.width,
@@ -334,6 +354,26 @@ export default class MapGL extends Component {
     const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
     this._queryParams = interactiveLayerIds.length === 0 ? {} :
       {layers: interactiveLayerIds};
+  }
+
+  _updateHandlers(props) {
+    const map = this._map;
+    const {touchZoom, touchRotate, doubleClickZoom} = props;
+    if (touchZoom) {
+      map.touchZoomRotate.enable();
+    } else {
+      map.touchZoomRotate.disable();
+    }
+    if (touchRotate) {
+      map.touchZoomRotate.enableRotation();
+    } else {
+      map.touchZoomRotate.disableRotation();
+    }
+    if (doubleClickZoom) {
+      map.doubleClickZoom.enable();
+    } else {
+      map.doubleClickZoom.disable();
+    }
   }
 
   // Update a source in the map style
