@@ -28,7 +28,7 @@
 folder, demonstrating a working demo using `webpack`.
 
 In general, for non-browserify based environments, make sure you have read the instructions on the
-[mapbox-gl-js README](https://github.com/mapboxmapbox-gl-js#using-mapbox-gl-js-with-other-module-systems).
+[mapbox-gl-js README](https://github.com/mapbox/mapbox-gl-js#using-mapbox-gl-js-with-other-module-systems).
 
 
 ## Example
