@@ -68,13 +68,6 @@ header {
     height: 100%;
     background: $black;
   }
-  .logo {
-    color: $white !important;
-    float: left;
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-  }
   .menu-toggle {
     font-size: 24px;
     color: $white;
@@ -229,4 +222,47 @@ hr.short {
     }
   }
 
+}
+
+.site-links {
+  position: fixed;
+  padding-left: 24px;
+  padding-right: 40px;
+  margin-left: -24px;
+  transition: all 300ms;
+  max-height: $topbar-height;
+  overflow: hidden;
+
+  &:after {
+    content: '▾';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 12px;
+    color: $black-40;
+  }
+
+  .site-link {
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    width: 100%;
+
+    a {
+      width: 100%;
+      color: $white;
+    }
+
+    &:nth-child(n+2) {
+      opacity: 0.5;
+    }
+    &:hover {
+      opacity: 1 !important;
+    }
+  }
+
+  &:hover {
+    background: $black;
+    max-height: $topbar-height * 5;
+  }
 }

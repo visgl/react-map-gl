@@ -1,7 +1,18 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 
+import {LIBRARIES} from '../constants/links';
+
 export default class Header extends Component {
+
+  _renderLinks() {
+    return (
+      <div className="site-links">
+        { Object.keys(LIBRARIES).map(name =>
+            <div className="site-link"><a href={LIBRARIES[name]}>{name}</a></div>) }
+      </div>
+    );
+  }
 
   render() {
     const {isMenuOpen, opacity, toggleMenu} = this.props;
@@ -10,7 +21,7 @@ export default class Header extends Component {
       <header className={ isMenuOpen ? 'open' : '' }>
         <div className="bg" style={{opacity}} />
         <div className="container stretch">
-          <a className="logo" href="#">react-map-gl</a>
+          { this._renderLinks() }
           <div className="menu-toggle" onClick={ () => toggleMenu(!isMenuOpen) }>
             <i className={`icon icon-${isMenuOpen ? 'close' : 'menu'}`} />
           </div>
