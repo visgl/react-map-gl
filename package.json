@@ -62,7 +62,7 @@
   },
   "scripts": {
     "build": "babel src -d dist --copy-files --source-maps inline",
-	"install": "npm run build",
+    "install": "npm run build",
     "start": "budo ./example/main.js --live --open --port 9966 -- -t babelify -t envify",
     "lint": "eslint src example test",
     "test": "npm run lint && browserify -t babelify -t envify test/index.js | testron",
@@ -86,12 +86,13 @@
     "npm": ">= 3"
   },
   "babel": {
-     "presets": [
-       "es2015",
-       "react",
-       "stage-2"
-     ],
-     "plugins": [
-       "transform-decorators-legacy"
-     ]
+    "presets": [
+      "es2015",
+      "react",
+      "stage-2"
+    ],
+    "plugins": [
+      "transform-decorators-legacy"
+    ]
+  }
 }
