@@ -1,76 +1,50 @@
 # Upgrade Guide
 
-## Upgrading to react-map-gl v3
+## Upgrading to v3
 
 v3 is a major upgrade of react-map-gl. While we have tried to gently deprecated any changed or removed features, a few breaking changes could not be avoided.
 
-### Breaking Changes
 
-#### `onChangeViewport` / `onViewportChange` viewport
+### Version Requirements
 
-Previously, the `viewport` object passed to these callbacks **did not** include `width` and `height`. With `v3`, we now include these dimensions in the `viewport` object as well. Use cases that applied `viewport` object after specifying `width` and `height` will have to be careful:
+- **Node Version Requirement** is now **>=v6.4.0**: This is introduced by [Mapbox GL JS v0.38.0](https://github.com/mapbox/mapbox-gl-js/releases/tag/v0.38.0)
+
+TBD - this is required to *build* react-map-gl - presumably using it is less demanding?
+
+
+### MapGL Component
+
+* **Two Map Components** - v3 now splits the Map component into two React components: `StaticMap` and `InteractiveMap`. `InteractiveMap` is the default export, and designed to be as compatible as possible with the v2 default component.
+
+
+#### `onChangeViewport` callback now includes `width` and `height`.
+
+The `viewport` parameter passed to the `onChangeViewport` callback now includes `width` and `height`. Application code that composed the `viewport` with `width` and `height` may have to be updated. Please double check your render code if you relied on this behavior.
 ```js
-// BAD: Width and Height below will be overridden by what's in the `viewport` object
+// BAD: 'width' and 'height' below will be overridden by what's in the 'viewport' object
 <ReactMapGL width={500} height={400} {...viewport} />
-
-// GOOD: Width and Height below will override what's in `viewport`
+// GOOD: 'width' and 'height' below will override the values in 'viewport'
 <ReactMapGL {...viewport} width={500} height={400} />
 ```
-Please double check your render code if you relied on this behavior. If you rely on manually specifying the width and height, swapping the order should work:
 
-#### Some Overlays Moved to Examples
+### Overlays
 
-Some less frequently used overlays (`DraggablePointsOverlay`, `ChoroplethOverlay`, `ScatterplotOverlay`), ... have been moved to examples. Most users have moved to map styles or deck.gl layers and removing these overlays reduces the size of the react-map-gl library for the majority of users that don't need them. If you still use them, simply copy the overlay source file(s) into your application.
+* **Some Overlays Moved to Examples** -  Some less frequently used overlays (`DraggablePointsOverlay`, `ChoroplethOverlay`, `ScatterplotOverlay`), have been moved to examples. Most users are now using mapbox styles or deck.gl layers and removing these overlays reduces the size of the react-map-gl library for the majority of users that don't need them. If you still use them, simply copy the overlay source file(s) into your application.
+* **Overlays must be Children of the Map** - Overlays **must** now be rendered as children of the main `react-map-gl` component to automatically sync with the map viewport.
 
-#### Overlays API Have Changed
+### `fitBounds` utility function
 
-Overlays **MUST** now be rendered as children of the main `react-map-gl` component.
-We use React's `context` internally to pass through viewport props.
-
-#### `fitBounds` util
-
-Previously, the library exports a `fitBounds` util that returns `{longitude, latitude, zoom}`
-of a flat viewport that fits around a given bounding box.
-This function has been moved to the `viewport-mercator-project` library.
-The same goal can now be achieved by:
-
+The `fitBounds` utility has been moved to the [viewport-mercator-project](https://github.com/uber-common/viewport-mercator-project) library. The function can now be called as follows:
 ```js
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
-
-const viewport = new PerspectiveMercatorViewport({width: 600, height: 400}).fitBounds(
+const viewport = new PerspectiveMercatorViewport({width: 600, height: 400});
+const bound = viewport.fitBounds(
   [[-73.9876, 40.7661], [-72.9876, 41.7661]],
   {padding: 20, offset: [0, -40]}
 );
-// viewport: instance of PerspectiveMercatorViewport
-// {
-//   longitude: -23.406499999999973,
-//   latitude: 64.86850056273362,
-//   zoom: 12.89199533073045,
-//   pitch: 0,
-//   bearing: 0
-// }
+// => bounds: instance of PerspectiveMercatorViewport
+// {longitude: -23.406499999999973, latitude: 64.86850056273362, zoom: 12.89199533073045}
 ```
-
-### Two Map Components
-
-v3 now exposes two React components: `StaticMap` and `InteractiveMap`.
-`InteractiveMap` is the default export, and designed to be as compatible as
-possible with the v2 default export.
-
-#### StaticMap
-
-This is the React wrapper around `Mapbox GL JS` and takes in viewport properties
-such as `width`, `height`, `latitude`, `longitude`. Style diffing and updating
-logic also live here. See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/static-map.js)
-for more information.
-
-#### InteractiveMap
-
-This is a wrapper on top of `StaticMap`. It takes all the props
-of `StaticMap` and additional ones such as `onViewportChange`, `scrollZoom`,
-`dragRotate`, etc. to control interactivity on the map.
-See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/interactive-map.js)
-for more information.
 
 ### Deprecations
 
@@ -85,7 +59,7 @@ We have started to deprecate a few React props. In all the cases below, the old 
 
 
 
-## Upgrading to react-map-gl v2
+## Upgrading to v2
 
 v2 is API compatible with v1, however if you are still using `v1` of react-map-gl, make sure that you first upgrade:
 * Your `node` version to `v4` or higher
@@ -94,7 +68,7 @@ v2 is API compatible with v1, however if you are still using `v1` of react-map-g
 Background: `mapbox-gl` 0.31.0 introduced a hard dependency on Node >= v4.
 
 
-## Upgrading to react-map-gl v1
+## Upgrading to v1
 
 (Upgrading from 0.6.x)
 
