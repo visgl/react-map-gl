@@ -6,10 +6,9 @@
   "dependencies": {
     "d3-request": "^1.0.5",
     "d3-scale": "^1.0.6",
-    "immutable": "^3.8.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-map-gl": ">=3.0.0-alpha.14"
+    "react-map-gl": ">=3.0.0-beta.1"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",
