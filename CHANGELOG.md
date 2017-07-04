@@ -1,17 +1,21 @@
 # CHANGELOG
 
-## Version 3.0.0 (Alpha)
+## Version 3.0.0 (Alpha releases)
 
-[TBD]
-- BREAKING: `fitBounds` is now accessed through the `PerspectiveMercatorViewport` class
-- BREAKING: `react-map-gl` now requires **at least** Node `>=v6.4` in development
-- New: `SVGOverlay` `CanvasOverlay` and `HTMLOverlay` supports perspective mode; no longer requires viewport props
+### Version 3.0.0-beta.1
+
+- WEBSITE: Polish docs
+- WEBSITE: Add links to other libraries
+- WEBSITE: babel config fix
 
 ### Version 3.0.0-alpha.15
 - update event manager (#283)
 - Fix: Event Manager update fixes an issue where `scrollZoom` disabled will also
 consume the scroll event preventing the page from scrolling.
 - Fix: breakage on node (#292)
+- BREAKING: `fitBounds` is now accessed through the `PerspectiveMercatorViewport` class
+- BREAKING: `react-map-gl` now requires **at least** Node `>=v6.4` in development
+- New: `SVGOverlay` `CanvasOverlay` and `HTMLOverlay` supports perspective mode; no longer requires viewport props
 
 ### Version 3.0.0-alpha.14
 - BREAKING: Remove `fitBounds` util (#278)
