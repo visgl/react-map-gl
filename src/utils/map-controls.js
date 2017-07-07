@@ -25,16 +25,12 @@ const PITCH_MOUSE_THRESHOLD = 5;
 const PITCH_ACCEL = 1.2;
 const ZOOM_ACCEL = 0.01;
 
-const SUBSCRIBED_EVENTS = [
-  'panstart',
-  'panmove',
-  'panend',
-  'pinchstart',
-  'pinch',
-  'pinchend',
-  'doubletap',
-  'wheel'
-];
+const EVENT_TYPES = {
+  wheel: ['wheel'],
+  pan: ['panstart', 'panmove', 'panend'],
+  pinch: ['pinchstart', 'pinchmove', 'pinchend'],
+  doubletap: ['doubletap']
+};
 
 export default class MapControls {
   /**
@@ -42,19 +38,19 @@ export default class MapControls {
    * A class that handles events and updates mercator style viewport parameters
    */
   constructor() {
-    this.events = SUBSCRIBED_EVENTS;
     this._state = {
       isDragging: false
     };
+    this._events = {};
+    this.handleEvent = this.handleEvent.bind(this);
   }
 
   /**
    * Callback for events
    * @param {hammer.Event} event
    */
-  handleEvent(event, options) {
-    this.mapState = new MapState(Object.assign({}, options, this._state));
-    this.setOptions(options);
+  handleEvent(event) {
+    this.mapState = new MapState(Object.assign({}, this.mapStateProps, this._state));
 
     switch (event.type) {
     case 'panstart':
@@ -116,25 +112,53 @@ export default class MapControls {
   /**
    * Extract interactivity options
    */
-  setOptions({
-    // TODO(deprecate): remove this when `onChangeViewport` gets deprecated
-    onChangeViewport,
-    onViewportChange,
-    onStateChange,
-    scrollZoom = true,
-    dragPan = true,
-    dragRotate = true,
-    doubleClickZoom = true,
-    touchZoomRotate = true
-  }) {
+  setOptions(options) {
+    const {
+      // TODO(deprecate): remove this when `onChangeViewport` gets deprecated
+      onChangeViewport,
+      onViewportChange,
+      onStateChange = this.onStateChange,
+      eventManager = this.eventManager,
+      scrollZoom = true,
+      dragPan = true,
+      dragRotate = true,
+      doubleClickZoom = true,
+      touchZoomRotate = true
+    } = options;
+
     // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
     this.onViewportChange = onViewportChange || onChangeViewport;
     this.onStateChange = onStateChange;
+    this.eventManager = eventManager;
+    this.mapStateProps = options;
+
+    // Register/unregister events
+    this.enableEvents(EVENT_TYPES.wheel, scrollZoom);
+    this.enableEvents(EVENT_TYPES.pan, dragPan || dragRotate);
+    this.enableEvents(EVENT_TYPES.pinch, touchZoomRotate);
+    this.enableEvents(EVENT_TYPES.doubletap, doubleClickZoom);
+
+    // Interaction toggles
     this.scrollZoom = scrollZoom;
     this.dragPan = dragPan;
     this.dragRotate = dragRotate;
     this.doubleClickZoom = doubleClickZoom;
     this.touchZoomRotate = touchZoomRotate;
+  }
+
+  enableEvents(eventNames, enabled) {
+    if (this.eventManager) {
+      eventNames.forEach(eventName => {
+        if (this._events[eventName] !== enabled) {
+          this._events[eventName] = enabled;
+          if (enabled) {
+            this.eventManager.on(eventName, this.handleEvent);
+          } else {
+            this.eventManager.off(eventName, this.handleEvent);
+          }
+        }
+      });
+    }
   }
 
   /* Event handlers */
@@ -204,7 +228,6 @@ export default class MapControls {
     if (!this.scrollZoom) {
       return false;
     }
-    event.srcEvent.preventDefault();
 
     const pos = this.getCenter(event);
     const {delta} = event;

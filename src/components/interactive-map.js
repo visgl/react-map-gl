@@ -112,9 +112,7 @@ const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
   clickRadius: 0,
   getCursor: getDefaultCursor,
 
-  visibilityConstraints: MAPBOX_LIMITS,
-
-  mapControls: new MapControls()
+  visibilityConstraints: MAPBOX_LIMITS
 });
 
 const childContextTypes = {
@@ -151,20 +149,24 @@ export default class InteractiveMap extends PureComponent {
 
   componentDidMount() {
     const {eventCanvas} = this.refs;
-    const {mapControls} = this.props;
+    const mapControls = this.props.mapControls || new MapControls();
 
-    // Register event handlers defined by map controls
-    const events = {};
-    mapControls.events.forEach(eventName => {
-      events[eventName] = this._handleEvent;
-    });
-
-    const eventManager = new EventManager(eventCanvas, {events});
+    const eventManager = new EventManager(eventCanvas);
 
     // Register additional event handlers for click and hover
     eventManager.on('mousemove', this._onMouseMove);
     eventManager.on('click', this._onMouseClick);
     this._eventManager = eventManager;
+
+    mapControls.setOptions(Object.assign({}, this.props, {
+      onStateChange: this._onInteractiveStateChange,
+      eventManager
+    }));
+    this._mapControls = mapControls;
+  }
+
+  componentWillUpdate(nextProps) {
+    this._mapControls.setOptions(nextProps);
   }
 
   componentWillUnmount() {
@@ -172,13 +174,6 @@ export default class InteractiveMap extends PureComponent {
       // Must destroy because hammer adds event listeners to window
       this._eventManager.destroy();
     }
-  }
-
-  _handleEvent(event) {
-    const controlOptions = Object.assign({}, this.props, {
-      onStateChange: this._onInteractiveStateChange
-    });
-    return this.props.mapControls.handleEvent(event, controlOptions);
   }
 
   getMap() {
