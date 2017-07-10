@@ -112,7 +112,9 @@ const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
   clickRadius: 0,
   getCursor: getDefaultCursor,
 
-  visibilityConstraints: MAPBOX_LIMITS
+  visibilityConstraints: MAPBOX_LIMITS,
+
+  mapControls: new MapControls()
 });
 
 const childContextTypes = {
@@ -149,7 +151,7 @@ export default class InteractiveMap extends PureComponent {
 
   componentDidMount() {
     const {eventCanvas} = this.refs;
-    const mapControls = this.props.mapControls || new MapControls();
+    const {mapControls} = this.props;
 
     const eventManager = new EventManager(eventCanvas);
 
@@ -162,11 +164,10 @@ export default class InteractiveMap extends PureComponent {
       onStateChange: this._onInteractiveStateChange,
       eventManager
     }));
-    this._mapControls = mapControls;
   }
 
   componentWillUpdate(nextProps) {
-    this._mapControls.setOptions(nextProps);
+    this.props.mapControls.setOptions(nextProps);
   }
 
   componentWillUnmount() {

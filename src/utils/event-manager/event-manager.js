@@ -110,13 +110,13 @@ export default class EventManager {
   /*
    * Enable/disable recognizer for the given event
    */
-  _enableRecognizer(name, enabled) {
+  _toggleRecognizer(name, enabled) {
     const recognizer = this.manager.get(name);
     if (recognizer) {
       recognizer.set({enable: enabled});
     }
-    this.wheelInput.enableIfEventSupported(name, enabled);
-    this.moveInput.enableIfEventSupported(name, enabled);
+    this.wheelInput.toggleIfEventSupported(name, enabled);
+    this.moveInput.toggleIfEventSupported(name, enabled);
   }
 
   /**
@@ -129,7 +129,7 @@ export default class EventManager {
     // Get recognizer for this event
     const recognizerName = EVENT_RECOGNIZER_MAP[eventAlias] || eventAlias;
     // Enable recognizer for this event.
-    this._enableRecognizer(recognizerName, true);
+    this._toggleRecognizer(recognizerName, true);
 
     // Save wrapped handler
     this.eventHandlers.push({event, eventAlias, recognizerName, handler, wrappedHandler});
@@ -165,7 +165,7 @@ export default class EventManager {
         entry => entry.recognizerName === recognizerName
       );
       if (!isRecognizerUsed) {
-        this._enableRecognizer(recognizerName, false);
+        this._toggleRecognizer(recognizerName, false);
       }
     }
   }

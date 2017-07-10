@@ -26,10 +26,10 @@ const PITCH_ACCEL = 1.2;
 const ZOOM_ACCEL = 0.01;
 
 const EVENT_TYPES = {
-  wheel: ['wheel'],
-  pan: ['panstart', 'panmove', 'panend'],
-  pinch: ['pinchstart', 'pinchmove', 'pinchend'],
-  doubletap: ['doubletap']
+  WHEEL: ['wheel'],
+  PAN: ['panstart', 'panmove', 'panend'],
+  PINCH: ['pinchstart', 'pinchmove', 'pinchend'],
+  DOUBLE_TAP: ['doubletap']
 };
 
 export default class MapControls {
@@ -41,7 +41,6 @@ export default class MapControls {
     this._state = {
       isDragging: false
     };
-    this._events = {};
     this.handleEvent = this.handleEvent.bind(this);
   }
 
@@ -129,14 +128,18 @@ export default class MapControls {
     // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
     this.onViewportChange = onViewportChange || onChangeViewport;
     this.onStateChange = onStateChange;
-    this.eventManager = eventManager;
     this.mapStateProps = options;
+    if (this.eventManager !== eventManager) {
+      // EventManager has changed
+      this.eventManager = eventManager;
+      this._events = {};
+    }
 
     // Register/unregister events
-    this.enableEvents(EVENT_TYPES.wheel, scrollZoom);
-    this.enableEvents(EVENT_TYPES.pan, dragPan || dragRotate);
-    this.enableEvents(EVENT_TYPES.pinch, touchZoomRotate);
-    this.enableEvents(EVENT_TYPES.doubletap, doubleClickZoom);
+    this.toggleEvents(EVENT_TYPES.WHEEL, scrollZoom);
+    this.toggleEvents(EVENT_TYPES.PAN, dragPan || dragRotate);
+    this.toggleEvents(EVENT_TYPES.PINCH, touchZoomRotate);
+    this.toggleEvents(EVENT_TYPES.DOUBLE_TAP, doubleClickZoom);
 
     // Interaction toggles
     this.scrollZoom = scrollZoom;
@@ -146,7 +149,7 @@ export default class MapControls {
     this.touchZoomRotate = touchZoomRotate;
   }
 
-  enableEvents(eventNames, enabled) {
+  toggleEvents(eventNames, enabled) {
     if (this.eventManager) {
       eventNames.forEach(eventName => {
         if (this._events[eventName] !== enabled) {

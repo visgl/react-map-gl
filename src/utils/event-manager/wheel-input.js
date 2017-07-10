@@ -53,7 +53,7 @@ export default class WheelInput {
    * Enable this input (begin processing events)
    * if the specified event type is among those handled by this input.
    */
-  enableIfEventSupported(eventType, enabled) {
+  toggleIfEventSupported(eventType, enabled) {
     if (eventType === EVENT_TYPE) {
       this.options.enable = enabled;
     }
