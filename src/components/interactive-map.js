@@ -112,9 +112,7 @@ const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
   clickRadius: 0,
   getCursor: getDefaultCursor,
 
-  visibilityConstraints: MAPBOX_LIMITS,
-
-  mapControls: new MapControls()
+  visibilityConstraints: MAPBOX_LIMITS
 });
 
 const childContextTypes = {
@@ -140,6 +138,10 @@ export default class InteractiveMap extends PureComponent {
       // Whether the cursor is over a clickable feature
       isHovering: false
     };
+
+    // If props.mapControls is not provided, fallback to default MapControls instance
+    // Cannot use defaultProps here because it needs to be per map instance
+    this._mapControls = props.mapControls || new MapControls();
   }
 
   getChildContext() {
@@ -151,7 +153,6 @@ export default class InteractiveMap extends PureComponent {
 
   componentDidMount() {
     const {eventCanvas} = this.refs;
-    const {mapControls} = this.props;
 
     const eventManager = new EventManager(eventCanvas);
 
@@ -160,14 +161,14 @@ export default class InteractiveMap extends PureComponent {
     eventManager.on('click', this._onMouseClick);
     this._eventManager = eventManager;
 
-    mapControls.setOptions(Object.assign({}, this.props, {
+    this._mapControls.setOptions(Object.assign({}, this.props, {
       onStateChange: this._onInteractiveStateChange,
       eventManager
     }));
   }
 
   componentWillUpdate(nextProps) {
-    this.props.mapControls.setOptions(nextProps);
+    this._mapControls.setOptions(nextProps);
   }
 
   componentWillUnmount() {
