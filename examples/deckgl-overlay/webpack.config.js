@@ -49,7 +49,7 @@ const config = {
 
   // Allow setting mapbox token using environment variables
   plugins: [
-    new webpack.EnvironmentPlugin(['MAPBOX_ACCESS_TOKEN', 'MapboxAccessToken']),
+    new webpack.EnvironmentPlugin(['MapboxAccessToken']),
     new webpack.LoaderOptionsPlugin({minimize: false, debug: true})
   ]
 };
