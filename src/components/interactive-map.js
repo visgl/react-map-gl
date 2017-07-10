@@ -152,7 +152,9 @@ export default class InteractiveMap extends PureComponent {
   }
 
   componentDidMount() {
-    const {eventCanvas} = this.refs;
+    const {eventCanvas, staticMap} = this.refs;
+
+    this._map = staticMap;
 
     const eventManager = new EventManager(eventCanvas);
 
@@ -286,9 +288,7 @@ export default class InteractiveMap extends PureComponent {
       },
         createElement(StaticMap, Object.assign({}, this.props, {
           visible: this.checkVisibilityConstraints(this.props),
-          ref: map => {
-            this._map = map;
-          }
+          ref: 'staticMap'
         }))
       )
     );
