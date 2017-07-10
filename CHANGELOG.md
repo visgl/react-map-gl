@@ -2,6 +2,10 @@
 
 ## Version 3.0.0 (Alpha releases)
 
+### Version 3.0.0-beta.2
+- Fix: scroll zoom with touch does not block page scrolling
+- Fix: feature lookup error when child components are rendered with error
+
 ### Version 3.0.0-beta.1
 
 - WEBSITE: Polish docs
