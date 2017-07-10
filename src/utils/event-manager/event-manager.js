@@ -107,27 +107,32 @@ export default class EventManager {
     }
   }
 
+  /*
+   * Enable/disable recognizer for the given event
+   */
+  _toggleRecognizer(name, enabled) {
+    const recognizer = this.manager.get(name);
+    if (recognizer) {
+      recognizer.set({enable: enabled});
+    }
+    this.wheelInput.toggleIfEventSupported(name, enabled);
+    this.moveInput.toggleIfEventSupported(name, enabled);
+  }
+
   /**
    * Process the event registration for a single event + handler.
    */
   _addEventHandler(event, handler) {
-    // Special handling for gestural events.
-    const recognizerEvent = EVENT_RECOGNIZER_MAP[event];
-    if (recognizerEvent) {
-      // Enable recognizer for this event.
-      const recognizer = this.manager.get(recognizerEvent);
-      recognizer.set({enable: true});
-    }
-
-    this.wheelInput.enableIfEventSupported(event);
-    this.moveInput.enableIfEventSupported(event);
-
     const wrappedHandler = this._wrapEventHandler(event, handler);
     // Alias to a recognized gesture as necessary.
     const eventAlias = GESTURE_EVENT_ALIASES[event] || event;
+    // Get recognizer for this event
+    const recognizerName = EVENT_RECOGNIZER_MAP[eventAlias] || eventAlias;
+    // Enable recognizer for this event.
+    this._toggleRecognizer(recognizerName, true);
 
     // Save wrapped handler
-    this.eventHandlers.push({event, eventAlias, handler, wrappedHandler});
+    this.eventHandlers.push({event, eventAlias, recognizerName, handler, wrappedHandler});
 
     this.manager.on(eventAlias, wrappedHandler);
   }
@@ -136,6 +141,8 @@ export default class EventManager {
    * Process the event deregistration for a single event + handler.
    */
   _removeEventHandler(event, handler) {
+    let success = false;
+
     // Find saved handler if any.
     for (let i = this.eventHandlers.length; i--;) {
       const entry = this.eventHandlers[i];
@@ -144,6 +151,21 @@ export default class EventManager {
         this.manager.off(entry.eventAlias, entry.wrappedHandler);
         // Delete saved handler
         this.eventHandlers.splice(i, 1);
+        success = true;
+      }
+    }
+
+    if (success) {
+      // Alias to a recognized gesture as necessary.
+      const eventAlias = GESTURE_EVENT_ALIASES[event] || event;
+      // Get recognizer for this event
+      const recognizerName = EVENT_RECOGNIZER_MAP[eventAlias] || eventAlias;
+      // Disable recognizer if no more handlers are attached to its events
+      const isRecognizerUsed = this.eventHandlers.find(
+        entry => entry.recognizerName === recognizerName
+      );
+      if (!isRecognizerUsed) {
+        this._toggleRecognizer(recognizerName, false);
       }
     }
   }
