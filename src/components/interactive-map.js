@@ -231,12 +231,8 @@ export default class InteractiveMap extends PureComponent {
 
   // HOVER AND CLICK
   _getPos(event) {
-    const {srcEvent: {clientX, clientY}, rootElement} = event;
-    const rect = rootElement.getBoundingClientRect();
-    return [
-      clientX - rect.left - rootElement.clientLeft,
-      clientY - rect.top - rootElement.clientTop
-    ];
+    const {offsetCenter: {x, y}} = event;
+    return [x, y];
   }
 
   _onMouseMove(event) {
