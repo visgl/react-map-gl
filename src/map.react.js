@@ -253,7 +253,7 @@ export default class MapGL extends Component {
       this.props.mapStyle;
 
     const map = new mapboxgl.Map({
-      container: this.refs.mapboxMap,
+      container: this.mapboxMap,
       center: [this.props.longitude, this.props.latitude],
       zoom: this.props.zoom,
       maxZoom: this.props.maxZoom,
@@ -677,7 +677,9 @@ export default class MapGL extends Component {
     };
 
     let content = [
-      <div key="map" ref="mapboxMap"
+      <div key="map" ref={mapboxMap => {
+        this.mapboxMap = mapboxMap;
+      }}
         style={ mapStyle } className={ className }/>,
       <div key="overlays" className="overlays"
         style={ {position: 'absolute', left: 0, top: 0} }>

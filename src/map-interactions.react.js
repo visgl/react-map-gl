@@ -126,12 +126,12 @@ export default class Interactions extends Component {
   }
 
   _getMousePos(event) {
-    const el = this.refs.container;
+    const el = this.container;
     return getMousePosition(el, event);
   }
 
   _getTouchPos(event) {
-    const el = this.refs.container;
+    const el = this.container;
     const positions = getTouchPositions(el, event);
     return centroid(positions);
   }
@@ -325,7 +325,9 @@ export default class Interactions extends Component {
   render() {
     return (
       <div
-        ref="container"
+        ref={container => {
+          this.container = container;
+        }}
         onMouseMove={ this._onMouseMove }
         onMouseDown={ this._onMouseDown }
         onTouchStart={ this._onTouchStart }

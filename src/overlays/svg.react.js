@@ -18,7 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import ViewportMercator from 'viewport-mercator-project';
 
 export default class SVGOverlay extends Component {
@@ -47,7 +48,9 @@ export default class SVGOverlay extends Component {
 
     return (
       <svg
-        ref="overlay"
+        ref={overlay => {
+          this.overlay = overlay;
+        }}
         width={ width }
         height={ height }
         style={ style }>

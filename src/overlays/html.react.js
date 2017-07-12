@@ -18,7 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import ViewportMercator from 'viewport-mercator-project';
 
 export default class HTMLOverlay extends Component {
@@ -46,7 +47,9 @@ export default class HTMLOverlay extends Component {
     const {project, unproject} = mercator;
 
     return (
-      <div ref="overlay" style={ style }>
+      <div ref={overlay => {
+        this.overlay = overlay;
+      }} style={ style }>
         { this.props.redraw({width, height, project, unproject, isDragging}) }
       </div>
     );

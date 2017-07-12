@@ -81,7 +81,7 @@ export default class DraggablePointsOverlay extends Component {
   @autobind
   _onDrag(event) {
     event.stopPropagation();
-    const pixel = mouse(this.refs.container, event);
+    const pixel = mouse(this.container, event);
     const mercator = ViewportMercator(this.props);
     const lngLat = mercator.unproject(pixel);
     const key = this.state.draggedPointKey;
@@ -100,7 +100,7 @@ export default class DraggablePointsOverlay extends Component {
   _addPoint(event) {
     event.stopPropagation();
     event.preventDefault();
-    const pixel = mouse(this.refs.container, event);
+    const pixel = mouse(this.container, event);
     const mercator = ViewportMercator(this.props);
     this.props.onAddPoint(mercator.unproject(pixel));
   }
@@ -110,7 +110,9 @@ export default class DraggablePointsOverlay extends Component {
     const mercator = ViewportMercator(this.props);
     return (
       <svg
-        ref="container"
+        ref={container => {
+          this.container = container;
+        }}
         width={ width }
         height={ height }
         style={ {

@@ -74,7 +74,7 @@ export default class ScatterplotOverlay extends Component {
 
     const mercator = ViewportMercator(this.props);
     const pixelRatio = window.devicePixelRatio || 1;
-    const canvas = this.refs.overlay;
+    const canvas = this.overlay;
     const ctx = canvas.getContext('2d');
 
     ctx.save();
@@ -108,7 +108,9 @@ export default class ScatterplotOverlay extends Component {
     const pixelRatio = window.devicePixelRatio || 1;
     return (
       <canvas
-        ref="overlay"
+        ref={overlay => {
+          this.overlay = overlay;
+        }}
         width={ width * pixelRatio }
         height={ height * pixelRatio }
         style={ {

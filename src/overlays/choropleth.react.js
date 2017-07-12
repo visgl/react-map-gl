@@ -17,7 +17,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import ViewportMercator from 'viewport-mercator-project';
 import window from 'global/window';
 import {extent} from 'd3-array';
@@ -64,7 +65,7 @@ export default class ChoroplethOverlay extends Component {
 
   _redraw() {
     const pixelRatio = window.devicePixelRatio;
-    const canvas = this.refs.overlay;
+    const canvas = this.overlay;
     const ctx = canvas.getContext('2d');
     const mercator = ViewportMercator(this.props);
 
@@ -119,7 +120,9 @@ export default class ChoroplethOverlay extends Component {
     const pixelRatio = window.devicePixelRatio || 1;
     return (
       <canvas
-        ref="overlay"
+        ref={overlay => {
+          this.overlay = overlay;
+        }}
         width={ this.props.width * pixelRatio }
         height={ this.props.height * pixelRatio }
         style={ {

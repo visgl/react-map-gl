@@ -18,7 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import ViewportMercator from 'viewport-mercator-project';
 import window from 'global/window';
 
@@ -44,7 +45,7 @@ export default class CanvasOverlay extends Component {
 
   _redraw() {
     const pixelRatio = window.devicePixelRatio || 1;
-    const canvas = this.refs.overlay;
+    const canvas = this.overlay;
     const ctx = canvas.getContext('2d');
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
@@ -64,7 +65,9 @@ export default class CanvasOverlay extends Component {
     const pixelRatio = window.devicePixelRatio || 1;
     return (
       <canvas
-        ref="overlay"
+        ref={overlay => {
+          this.overlay = overlay;
+        }}
         width={ this.props.width * pixelRatio }
         height={ this.props.height * pixelRatio }
         style={ {
