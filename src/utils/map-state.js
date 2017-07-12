@@ -7,6 +7,7 @@ export const MAPBOX_LIMITS = {
   maxZoom: 20,
   minPitch: 0,
   maxPitch: 60,
+  // defined by mapbox-gl
   maxLatitude: 85.05113,
   minLatitude: -85.05113
 };
@@ -302,14 +303,17 @@ export default class MapState {
     let shiftY = 0;
 
     if (bottomY - topY < height) {
+      // Map height must not be smaller than viewport height
       props.zoom += Math.log2(height / (bottomY - topY));
       const newRange = this._getLatitudeRange(props);
       [topY, bottomY] = newRange.latitudeRange;
       viewport = newRange.viewport;
     }
     if (topY > 0) {
+      // Compensate for white gap on top
       shiftY = topY;
     } else if (bottomY < height) {
+      // Compensate for white gap on bottom
       shiftY = bottomY - height;
     }
     if (shiftY) {
