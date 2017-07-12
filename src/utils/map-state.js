@@ -6,7 +6,10 @@ export const MAPBOX_LIMITS = {
   minZoom: 0,
   maxZoom: 20,
   minPitch: 0,
-  maxPitch: 60
+  maxPitch: 60,
+  // defined by mapbox-gl
+  maxLatitude: 85.05113,
+  minLatitude: -85.05113
 };
 
 const defaultState = {
@@ -55,6 +58,8 @@ export default class MapState {
     minZoom,
     maxPitch,
     minPitch,
+    maxLatitude,
+    minLatitude,
 
     /** Interaction states, required to calculate change during transform */
     /* The point on map being grabbed when the operation first started */
@@ -86,7 +91,9 @@ export default class MapState {
       maxZoom: ensureFinite(maxZoom, MAPBOX_LIMITS.maxZoom),
       minZoom: ensureFinite(minZoom, MAPBOX_LIMITS.minZoom),
       maxPitch: ensureFinite(maxPitch, MAPBOX_LIMITS.maxPitch),
-      minPitch: ensureFinite(minPitch, MAPBOX_LIMITS.minPitch)
+      minPitch: ensureFinite(minPitch, MAPBOX_LIMITS.minPitch),
+      maxLatitude: ensureFinite(maxLatitude, MAPBOX_LIMITS.maxLatitude),
+      minLatitude: ensureFinite(minLatitude, MAPBOX_LIMITS.minLatitude)
     });
 
     this._interactiveState = {
@@ -290,7 +297,45 @@ export default class MapState {
     props.pitch = pitch > maxPitch ? maxPitch : pitch;
     props.pitch = pitch < minPitch ? minPitch : pitch;
 
+    // Constrain zoom and shift center at low zoom levels
+    const {height} = props;
+    let {latitudeRange: [topY, bottomY], viewport} = this._getLatitudeRange(props);
+    let shiftY = 0;
+
+    if (bottomY - topY < height) {
+      // Map height must not be smaller than viewport height
+      props.zoom += Math.log2(height / (bottomY - topY));
+      const newRange = this._getLatitudeRange(props);
+      [topY, bottomY] = newRange.latitudeRange;
+      viewport = newRange.viewport;
+    }
+    if (topY > 0) {
+      // Compensate for white gap on top
+      shiftY = topY;
+    } else if (bottomY < height) {
+      // Compensate for white gap on bottom
+      shiftY = bottomY - height;
+    }
+    if (shiftY) {
+      props.latitude = viewport.unproject([props.width / 2, height / 2 + shiftY])[1];
+    }
+
     return props;
+  }
+
+  // Returns {viewport, latitudeRange: [topY, bottomY]} in non-perspective mode
+  _getLatitudeRange(props) {
+    const flatViewport = new PerspectiveMercatorViewport(Object.assign({}, props, {
+      pitch: 0,
+      bearing: 0
+    }));
+    return {
+      viewport: flatViewport,
+      latitudeRange: [
+        flatViewport.project([props.longitude, props.maxLatitude])[1],
+        flatViewport.project([props.longitude, props.minLatitude])[1]
+      ]
+    };
   }
 
   _unproject(pos) {
