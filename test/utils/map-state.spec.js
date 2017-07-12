@@ -17,8 +17,8 @@ const SAMPLE_VIEWPORTS = [
     width: 800,
     height: 600,
     longitude: -179,
-    latitude: 90,
-    zoom: 0,
+    latitude: 75,
+    zoom: 3,
     maxZoom: 0.5
   },
   // SF with rotation, custom pitch limit
@@ -51,6 +51,23 @@ test('MapState - Constructor', t => {
   } catch (error) {
     t.ok(/must be supplied/.test(error.message), 'Should throw error for missing prop');
   }
+
+  t.end();
+});
+
+test('MapState - Low zoom', t => {
+
+  const viewport = new MapState({
+    width: 800,
+    height: 600,
+    longitude: -179,
+    latitude: 80,
+    zoom: 0,
+    maxZoom: 0.5
+  }).getViewportProps();
+
+  t.ok(viewport.zoom > 0, 'Constrained zoom');
+  t.ok(Math.abs(viewport.latitude) < 1e-7, 'Centered map');
 
   t.end();
 });
