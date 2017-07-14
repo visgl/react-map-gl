@@ -69,6 +69,7 @@ export default class DraggablePointsOverlay extends Component {
     this.state = {
       draggedPointKey: null
     };
+    this._overlay = null;
   }
 
   @autobind
@@ -107,7 +108,7 @@ export default class DraggablePointsOverlay extends Component {
   }
 
   @autobind _overlayRefCallback(overlay) {
-    this.overlay = overlay;
+    this._overlay = overlay;
   }
 
   render() {

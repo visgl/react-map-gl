@@ -246,6 +246,7 @@ export default class MapGL extends Component {
       this.componentWillReceiveProps = noop;
       this.componentDidUpdate = noop;
     }
+    this._mapboxMap = null;
   }
 
   componentDidMount() {
@@ -254,7 +255,7 @@ export default class MapGL extends Component {
       this.props.mapStyle;
 
     const map = new mapboxgl.Map({
-      container: this.mapboxMap,
+      container: this._mapboxMap,
       center: [this.props.longitude, this.props.latitude],
       zoom: this.props.zoom,
       maxZoom: this.props.maxZoom,
@@ -669,7 +670,7 @@ export default class MapGL extends Component {
   }
 
   @autobind _mapboxMapRefCallback(mapboxMap) {
-    this.mapboxMap = mapboxMap;
+    this._mapboxMap = mapboxMap;
   }
 
   render() {

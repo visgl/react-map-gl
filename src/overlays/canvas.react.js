@@ -36,6 +36,11 @@ export default class CanvasOverlay extends Component {
     isDragging: PropTypes.bool.isRequired
   };
 
+  constructor() {
+    super();
+    this._overlay = null;
+  }
+
   componentDidMount() {
     this._redraw();
   }
@@ -46,7 +51,7 @@ export default class CanvasOverlay extends Component {
 
   _redraw() {
     const pixelRatio = window.devicePixelRatio || 1;
-    const canvas = this.overlay;
+    const canvas = this._overlay;
     const ctx = canvas.getContext('2d');
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
@@ -63,7 +68,7 @@ export default class CanvasOverlay extends Component {
   }
 
   @autobind _overlayRefCallback(overlay) {
-    this.overlay = overlay;
+    this._overlay = overlay;
   }
 
   render() {

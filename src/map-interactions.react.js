@@ -124,15 +124,16 @@ export default class Interactions extends Component {
       pos: null,
       mouseWheelPos: null
     };
+    this._container = null;
   }
 
   _getMousePos(event) {
-    const el = this.container;
+    const el = this._container;
     return getMousePosition(el, event);
   }
 
   _getTouchPos(event) {
-    const el = this.container;
+    const el = this._container;
     const positions = getTouchPositions(el, event);
     return centroid(positions);
   }
@@ -325,7 +326,7 @@ export default class Interactions extends Component {
 
   @autobind
   _containerRefCallback(container) {
-    this.container = container;
+    this._container = container;
   }
 
   render() {

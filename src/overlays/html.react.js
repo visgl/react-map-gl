@@ -33,8 +33,13 @@ export default class HTMLOverlay extends Component {
     // TODO: style
   };
 
+  constructor() {
+    super();
+    this._overlay = null;
+  }
+
   @autobind _overlayRefCallback(overlay) {
-    this.overlay = overlay;
+    this._overlay = overlay;
   }
 
   render() {

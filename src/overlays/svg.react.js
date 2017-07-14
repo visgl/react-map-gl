@@ -35,8 +35,13 @@ export default class SVGOverlay extends Component {
     isDragging: PropTypes.bool.isRequired
   };
 
+  constructor() {
+    super();
+    this._overlay = null;
+  }
+
   @autobind _overlayRefCallback(overlay) {
-    this.overlay = overlay;
+    this._overlay = overlay;
   }
 
   render() {

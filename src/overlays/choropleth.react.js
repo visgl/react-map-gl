@@ -56,6 +56,11 @@ export default class ChoroplethOverlay extends Component {
     valueAccessor: feature => feature.get('properties').get('value')
   };
 
+  constructor() {
+    super();
+    this._overlay = null;
+  }
+
   componentDidMount() {
     this._redraw();
   }
@@ -66,7 +71,7 @@ export default class ChoroplethOverlay extends Component {
 
   _redraw() {
     const pixelRatio = window.devicePixelRatio;
-    const canvas = this.overlay;
+    const canvas = this._overlay;
     const ctx = canvas.getContext('2d');
     const mercator = ViewportMercator(this.props);
 
@@ -118,7 +123,7 @@ export default class ChoroplethOverlay extends Component {
   }
 
   @autobind _overlayRefCallback(overlay) {
-    this.overlay = overlay;
+    this._overlay = overlay;
   }
 
   render() {
