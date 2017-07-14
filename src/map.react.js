@@ -668,6 +668,10 @@ export default class MapGL extends Component {
     this._callOnChangeViewport(this._map.transform, {isDragging: false});
   }
 
+  @autobind _mapboxMapRefCallback(mapboxMap) {
+    this.mapboxMap = mapboxMap;
+  }
+
   render() {
     const {className, width, height, style} = this.props;
     const mapStyle = {
@@ -678,9 +682,7 @@ export default class MapGL extends Component {
     };
 
     let content = [
-      <div key="map" ref={mapboxMap => {
-        this.mapboxMap = mapboxMap;
-      }}
+      <div key="map" ref={this._mapboxMapRefCallback}
         style={ mapStyle } className={ className }/>,
       <div key="overlays" className="overlays"
         style={ {position: 'absolute', left: 0, top: 0} }>

@@ -106,14 +106,16 @@ export default class DraggablePointsOverlay extends Component {
     this.props.onAddPoint(mercator.unproject(pixel));
   }
 
+  @autobind _overlayRefCallback(overlay) {
+    this.overlay = overlay;
+  }
+
   render() {
     const {points, width, height, isDragging, style} = this.props;
     const mercator = ViewportMercator(this.props);
     return (
       <svg
-        ref={container => {
-          this.container = container;
-        }}
+        ref={this._overlayRefCallback}
         width={ width }
         height={ height }
         style={ {

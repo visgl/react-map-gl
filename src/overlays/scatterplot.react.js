@@ -20,6 +20,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import autobind from 'autobind-decorator';
 import window from 'global/window';
 import Immutable from 'immutable';
 import COMPOSITE_TYPES from 'canvas-composite-types';
@@ -103,15 +104,16 @@ export default class ScatterplotOverlay extends Component {
     ctx.restore();
   }
   /* eslint-enable max-statements */
+  @autobind _overlayRefCallback(overlay) {
+    this.overlay = overlay;
+  }
 
   render() {
     const {width, height, globalOpacity} = this.props;
     const pixelRatio = window.devicePixelRatio || 1;
     return (
       <canvas
-        ref={overlay => {
-          this.overlay = overlay;
-        }}
+        ref={this._overlayRefCallback}
         width={ width * pixelRatio }
         height={ height * pixelRatio }
         style={ {

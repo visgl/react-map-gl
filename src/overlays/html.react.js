@@ -20,6 +20,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import autobind from 'autobind-decorator';
 import ViewportMercator from 'viewport-mercator-project';
 
 export default class HTMLOverlay extends Component {
@@ -31,6 +32,10 @@ export default class HTMLOverlay extends Component {
     isDragging: PropTypes.bool.isRequired
     // TODO: style
   };
+
+  @autobind _overlayRefCallback(overlay) {
+    this.overlay = overlay;
+  }
 
   render() {
     const {width, height, isDragging} = this.props;
@@ -47,9 +52,7 @@ export default class HTMLOverlay extends Component {
     const {project, unproject} = mercator;
 
     return (
-      <div ref={overlay => {
-        this.overlay = overlay;
-      }} style={ style }>
+      <div ref={this._overlayRefCallback} style={ style }>
         { this.props.redraw({width, height, project, unproject, isDragging}) }
       </div>
     );

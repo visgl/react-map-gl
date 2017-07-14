@@ -20,6 +20,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import autobind from 'autobind-decorator';
 import ViewportMercator from 'viewport-mercator-project';
 
 export default class SVGOverlay extends Component {
@@ -33,6 +34,10 @@ export default class SVGOverlay extends Component {
     redraw: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired
   };
+
+  @autobind _overlayRefCallback(overlay) {
+    this.overlay = overlay;
+  }
 
   render() {
     const {width, height, isDragging} = this.props;
@@ -48,9 +53,7 @@ export default class SVGOverlay extends Component {
 
     return (
       <svg
-        ref={overlay => {
-          this.overlay = overlay;
-        }}
+        ref={this._overlayRefCallback}
         width={ width }
         height={ height }
         style={ style }>

@@ -323,12 +323,15 @@ export default class Interactions extends Component {
     }.bind(this), 200);
   }
 
+  @autobind
+  _containerRefCallback(container) {
+    this.container = container;
+  }
+
   render() {
     return (
       <div
-        ref={container => {
-          this.container = container;
-        }}
+        ref={this._containerRefCallback}
         onMouseMove={ this._onMouseMove }
         onMouseDown={ this._onMouseDown }
         onTouchStart={ this._onTouchStart }

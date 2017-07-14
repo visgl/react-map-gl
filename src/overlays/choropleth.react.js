@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import autobind from 'autobind-decorator';
 import ViewportMercator from 'viewport-mercator-project';
 import window from 'global/window';
 import {extent} from 'd3-array';
@@ -116,13 +117,15 @@ export default class ChoroplethOverlay extends Component {
     }
   }
 
+  @autobind _overlayRefCallback(overlay) {
+    this.overlay = overlay;
+  }
+
   render() {
     const pixelRatio = window.devicePixelRatio || 1;
     return (
       <canvas
-        ref={overlay => {
-          this.overlay = overlay;
-        }}
+        ref={this._overlayRefCallback}
         width={ this.props.width * pixelRatio }
         height={ this.props.height * pixelRatio }
         style={ {
