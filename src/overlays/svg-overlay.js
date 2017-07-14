@@ -44,7 +44,6 @@ export default class SVGOverlay extends Component {
 
     return (
       createElement('svg', {
-        ref: 'overlay',
         width: viewport.width,
         height: viewport.height,
         style

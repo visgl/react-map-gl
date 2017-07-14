@@ -43,7 +43,7 @@ export default class CanvasOverlay extends Component {
 
   _redraw() {
     const pixelRatio = window.devicePixelRatio || 1;
-    const canvas = this.refs.overlay;
+    const canvas = this._canvas;
     const ctx = canvas.getContext('2d');
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
@@ -61,13 +61,17 @@ export default class CanvasOverlay extends Component {
     ctx.restore();
   }
 
+  _canvasLoaded(ref) {
+    this._canvas = ref;
+  }
+
   render() {
     const pixelRatio = window.devicePixelRatio || 1;
     const {viewport: {width, height}} = this.context;
 
     return (
       createElement('canvas', {
-        ref: 'overlay',
+        ref: this._canvasLoaded,
         width: width * pixelRatio,
         height: height * pixelRatio,
         style: {
