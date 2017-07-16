@@ -5,14 +5,15 @@ which provides zoom buttons and a compass button.
 
 ```js
 import {Component} from 'react';
-import ReactMapGL, {Popup} from 'react-map-gl';
+import ReactMapGL, {NavigationControl} from 'react-map-gl';
 
 class Map extends Component {
   render() {
+    const {viewport, updateViewport} = this.props;
     return (
-      <ReactMapGL {...viewport} onChangeViewport={updateViewport}>
+      <ReactMapGL {...viewport} onViewportChange={updateViewport}>
         <div style={{position: 'absolute', right: 0}}>
-          <NavigationControl onChangeViewport={updateViewport} />
+          <NavigationControl onViewportChange={updateViewport} />
         </div>
       </ReactMapGL>
     );
