@@ -1,3 +1,7 @@
+# Version 1.8.3
+* Pin `mapbox-gl` to [this commit](https://github.com/mapbox/mapbox-gl-js/commit/3470d0bf0b81440f0d04a9d9e825ee43e65f7638)
+  in order to prevent `npm-shrinkwrap.json` from being pulled in and used.
+
 # Version 1.8.2
 * Use [transform-runtime](https://babeljs.io/docs/plugins/transform-runtime/)
   to remove need for `babel-polyfill` (also fixes polyfill issue on IE11)
