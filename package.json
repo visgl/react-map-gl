@@ -26,7 +26,7 @@
     "d3-scale": "^1.0.3",
     "d3-selection": "^1.0.2",
     "global": "^4.3.0",
-    "mapbox-gl": "0.26.0",
+    "mapbox-gl": "git+ssh://git@github.com:mapbox/mapbox-gl-js.git#3470d0bf0b81440f0d04a9d9e825ee43e65f7638",
     "pure-render-decorator": "^1.1.0",
     "svg-transform": "0.0.3",
     "viewport-mercator-project": "^2.0.1"
