@@ -54,7 +54,7 @@ function getTouchPositions(el, event) {
   const touches = getTouches(event);
 
   // Fix scale for map affected by a CSS transform.
-  // See https://stackoverflogit w.com/a/26893663/3528533
+  // See https://stackoverflow.com/a/26893663/3528533
   const scaleX = rect.width / el.offsetWidth;
   const scaleY = rect.height / el.offsetHeight;
 
