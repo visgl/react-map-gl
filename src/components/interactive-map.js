@@ -152,11 +152,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   componentDidMount() {
-    const {eventCanvas, staticMap} = this.refs;
-
-    this._map = staticMap;
-
-    const eventManager = new EventManager(eventCanvas);
+    const eventManager = new EventManager(this._eventCanvas);
 
     // Register additional event handlers for click and hover
     eventManager.on('mousemove', this._onMouseMove);
@@ -266,6 +262,14 @@ export default class InteractiveMap extends PureComponent {
     }
   }
 
+  _eventCanvasLoaded(ref) {
+    this._eventCanvas = ref;
+  }
+
+  _staticMapLoaded(ref) {
+    this._map = ref;
+  }
+
   render() {
     const {width, height, getCursor} = this.props;
 
@@ -279,12 +283,12 @@ export default class InteractiveMap extends PureComponent {
     return (
       createElement('div', {
         key: 'map-controls',
-        ref: 'eventCanvas',
+        ref: this._eventCanvasLoaded,
         style: eventCanvasStyle
       },
         createElement(StaticMap, Object.assign({}, this.props, {
           visible: this.checkVisibilityConstraints(this.props),
-          ref: 'staticMap'
+          ref: this._staticMapLoaded
         }))
       )
     );

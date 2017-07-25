@@ -129,7 +129,7 @@ export default class StaticMap extends PureComponent {
       this.props.mapStyle.toJS() :
       this.props.mapStyle;
     const map = new mapboxgl.Map({
-      container: this.refs.mapboxMap,
+      container: this._mapboxMap,
       center: [this.props.longitude, this.props.latitude],
       zoom: this.props.zoom,
       pitch: this.props.pitch,
@@ -376,6 +376,10 @@ export default class StaticMap extends PureComponent {
     }
   }
 
+  _mapboxMapLoaded(ref) {
+    this._mapboxMap = ref;
+  }
+
   render() {
     const {className, width, height, style, visible} = this.props;
     const mapContainerStyle = Object.assign({}, style, {width, height, position: 'relative'});
@@ -401,7 +405,7 @@ export default class StaticMap extends PureComponent {
         children: [
           createElement('div', {
             key: 'map-mapbox',
-            ref: 'mapboxMap',
+            ref: this._mapboxMapLoaded,
             style: mapStyle,
             className
           }),

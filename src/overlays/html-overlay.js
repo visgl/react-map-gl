@@ -46,7 +46,6 @@ export default class HTMLOverlay extends Component {
 
     return (
       createElement('div', {
-        ref: 'overlay',
         style
       },
         this.props.redraw({
