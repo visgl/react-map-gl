@@ -18,7 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 
 import Immutable from 'immutable';
@@ -68,6 +69,7 @@ export default class DraggablePointsOverlay extends Component {
     this.state = {
       draggedPointKey: null
     };
+    this._overlay = null;
   }
 
   @autobind
@@ -81,7 +83,7 @@ export default class DraggablePointsOverlay extends Component {
   @autobind
   _onDrag(event) {
     event.stopPropagation();
-    const pixel = mouse(this.refs.container, event);
+    const pixel = mouse(this.container, event);
     const mercator = ViewportMercator(this.props);
     const lngLat = mercator.unproject(pixel);
     const key = this.state.draggedPointKey;
@@ -100,9 +102,13 @@ export default class DraggablePointsOverlay extends Component {
   _addPoint(event) {
     event.stopPropagation();
     event.preventDefault();
-    const pixel = mouse(this.refs.container, event);
+    const pixel = mouse(this.container, event);
     const mercator = ViewportMercator(this.props);
     this.props.onAddPoint(mercator.unproject(pixel));
+  }
+
+  @autobind _overlayRefCallback(overlay) {
+    this._overlay = overlay;
   }
 
   render() {
@@ -110,7 +116,7 @@ export default class DraggablePointsOverlay extends Component {
     const mercator = ViewportMercator(this.props);
     return (
       <svg
-        ref="container"
+        ref={this._overlayRefCallback}
         width={ width }
         height={ height }
         style={ {

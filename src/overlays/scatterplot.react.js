@@ -18,7 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import autobind from 'autobind-decorator';
 import window from 'global/window';
 import Immutable from 'immutable';
 import COMPOSITE_TYPES from 'canvas-composite-types';
@@ -57,6 +59,11 @@ export default class ScatterplotOverlay extends Component {
     compositeOperation: 'source-over'
   };
 
+  constructor() {
+    super();
+    this._overlay = null;
+  }
+
   componentDidMount() {
     this._redraw();
   }
@@ -74,7 +81,7 @@ export default class ScatterplotOverlay extends Component {
 
     const mercator = ViewportMercator(this.props);
     const pixelRatio = window.devicePixelRatio || 1;
-    const canvas = this.refs.overlay;
+    const canvas = this._overlay;
     const ctx = canvas.getContext('2d');
 
     ctx.save();
@@ -102,13 +109,16 @@ export default class ScatterplotOverlay extends Component {
     ctx.restore();
   }
   /* eslint-enable max-statements */
+  @autobind _overlayRefCallback(overlay) {
+    this._overlay = overlay;
+  }
 
   render() {
     const {width, height, globalOpacity} = this.props;
     const pixelRatio = window.devicePixelRatio || 1;
     return (
       <canvas
-        ref="overlay"
+        ref={this._overlayRefCallback}
         width={ width * pixelRatio }
         height={ height * pixelRatio }
         style={ {

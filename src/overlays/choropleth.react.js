@@ -17,7 +17,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import autobind from 'autobind-decorator';
 import ViewportMercator from 'viewport-mercator-project';
 import window from 'global/window';
 import {extent} from 'd3-array';
@@ -54,6 +56,11 @@ export default class ChoroplethOverlay extends Component {
     valueAccessor: feature => feature.get('properties').get('value')
   };
 
+  constructor() {
+    super();
+    this._overlay = null;
+  }
+
   componentDidMount() {
     this._redraw();
   }
@@ -64,7 +71,7 @@ export default class ChoroplethOverlay extends Component {
 
   _redraw() {
     const pixelRatio = window.devicePixelRatio;
-    const canvas = this.refs.overlay;
+    const canvas = this._overlay;
     const ctx = canvas.getContext('2d');
     const mercator = ViewportMercator(this.props);
 
@@ -115,11 +122,15 @@ export default class ChoroplethOverlay extends Component {
     }
   }
 
+  @autobind _overlayRefCallback(overlay) {
+    this._overlay = overlay;
+  }
+
   render() {
     const pixelRatio = window.devicePixelRatio || 1;
     return (
       <canvas
-        ref="overlay"
+        ref={this._overlayRefCallback}
         width={ this.props.width * pixelRatio }
         height={ this.props.height * pixelRatio }
         style={ {

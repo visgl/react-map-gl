@@ -17,7 +17,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import pureRender from 'pure-render-decorator';
 
@@ -245,6 +246,7 @@ export default class MapGL extends Component {
       this.componentWillReceiveProps = noop;
       this.componentDidUpdate = noop;
     }
+    this._mapboxMap = null;
   }
 
   componentDidMount() {
@@ -253,7 +255,7 @@ export default class MapGL extends Component {
       this.props.mapStyle;
 
     const map = new mapboxgl.Map({
-      container: this.refs.mapboxMap,
+      container: this._mapboxMap,
       center: [this.props.longitude, this.props.latitude],
       zoom: this.props.zoom,
       maxZoom: this.props.maxZoom,
@@ -667,6 +669,10 @@ export default class MapGL extends Component {
     this._callOnChangeViewport(this._map.transform, {isDragging: false});
   }
 
+  @autobind _mapboxMapRefCallback(mapboxMap) {
+    this._mapboxMap = mapboxMap;
+  }
+
   render() {
     const {className, width, height, style} = this.props;
     const mapStyle = {
@@ -677,7 +683,7 @@ export default class MapGL extends Component {
     };
 
     let content = [
-      <div key="map" ref="mapboxMap"
+      <div key="map" ref={this._mapboxMapRefCallback}
         style={ mapStyle } className={ className }/>,
       <div key="overlays" className="overlays"
         style={ {position: 'absolute', left: 0, top: 0} }>

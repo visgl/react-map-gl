@@ -20,7 +20,8 @@
 
 // Portions of the code below originally from:
 // https://github.com/mapbox/mapbox-gl-js/blob/master/js/ui/handler/scroll_zoom.js
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import document from 'global/document';
 import window from 'global/window';
@@ -123,15 +124,16 @@ export default class Interactions extends Component {
       pos: null,
       mouseWheelPos: null
     };
+    this._container = null;
   }
 
   _getMousePos(event) {
-    const el = this.refs.container;
+    const el = this._container;
     return getMousePosition(el, event);
   }
 
   _getTouchPos(event) {
-    const el = this.refs.container;
+    const el = this._container;
     const positions = getTouchPositions(el, event);
     return centroid(positions);
   }
@@ -322,10 +324,15 @@ export default class Interactions extends Component {
     }.bind(this), 200);
   }
 
+  @autobind
+  _containerRefCallback(container) {
+    this._container = container;
+  }
+
   render() {
     return (
       <div
-        ref="container"
+        ref={this._containerRefCallback}
         onMouseMove={ this._onMouseMove }
         onMouseDown={ this._onMouseDown }
         onTouchStart={ this._onTouchStart }

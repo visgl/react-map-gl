@@ -29,6 +29,7 @@
     "glob": "^7.1.1",
     "global": "^4.3.0",
     "mapbox-gl": "0.32.1",
+    "prop-types": "^15.5.10",
     "pure-render-decorator": "^1.1.0",
     "svg-transform": "0.0.3",
     "viewport-mercator-project": "^2.0.1"
