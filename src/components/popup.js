@@ -85,15 +85,14 @@ export default class Popup extends Component {
     const {viewport} = this.context;
     const {anchor, dynamicPosition, tipSize} = this.props;
 
-    const {content} = this.refs;
-    if (content) {
+    if (this._content) {
       return dynamicPosition ? getDynamicPosition({
         x, y, anchor,
         padding: tipSize,
         width: viewport.width,
         height: viewport.height,
-        selfWidth: content.clientWidth,
-        selfHeight: content.clientHeight
+        selfWidth: this._content.clientWidth,
+        selfHeight: this._content.clientHeight
       }) : anchor;
     }
 
@@ -102,6 +101,10 @@ export default class Popup extends Component {
 
   _onClose() {
     this.props.onClose();
+  }
+
+  _contentLoaded(ref) {
+    this._content = ref;
   }
 
   _renderTip() {
@@ -118,7 +121,7 @@ export default class Popup extends Component {
     const {closeButton, children} = this.props;
     return createElement('div', {
       key: 'content',
-      ref: 'content',
+      ref: this._contentLoaded,
       className: 'mapboxgl-popup-content'
     }, [
       closeButton && createElement('button', {
