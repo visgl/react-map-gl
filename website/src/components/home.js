@@ -1,6 +1,23 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {setHeaderOpacity} from '../actions/app-actions';
 
-export default class Home extends Component {
+class Home extends Component {
+
+  componentDidMount() {
+    window.onscroll = this._onScroll.bind(this);
+    this._onScroll();
+  }
+
+  componentWillUnmount() {
+    window.onscroll = null;
+  }
+
+  _onScroll() {
+    const y = window.pageYOffset;
+    const opacity = Math.max(0, Math.min(1, (y - 168) / 20));
+    this.props.setHeaderOpacity(opacity);
+  }
 
   render() {
     return (
@@ -72,3 +89,5 @@ export default class Home extends Component {
     );
   }
 }
+
+export default connect(null, {setHeaderOpacity})(Home);

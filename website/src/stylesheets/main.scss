@@ -3,9 +3,9 @@
 @import 'mixins';
 @import 'icon';
 
-$primary: #00ADE6;
-$secondary: #05E3D5;
-$black: #041725;
+$primary: #4DC19C;
+$secondary: #BEE4BF;
+$black: #267E63;
 $black-20: #213746;
 $black-40: #5A666D;
 $white: #EDEDED;
@@ -81,7 +81,7 @@ header {
 
     a {
       line-height: 58px;
-      color: $white-40;
+      color: rgba($white, 0.6);
       text-transform: uppercase;
       margin-left: 40px;
       border-style: solid;
@@ -90,13 +90,16 @@ header {
       display: inline-flex;
     }
     a:hover {
-      border-color: $white-40;
+      border-color: rgba($white, 0.4);
     }
     a.active {
       color: $white;
       border-color: $primary;
       @include linearGradientH(border-image, $primary, $secondary);
       border-image-slice: 2;
+    }
+    .icon {
+      margin-left: 4px;
     }
   }
 }
@@ -239,7 +242,7 @@ hr.short {
     position: absolute;
     top: 0;
     right: 12px;
-    color: $black-40;
+    color: $white-40;
   }
 
   .site-link {

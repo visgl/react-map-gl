@@ -57,17 +57,6 @@
   background-size: cover;
   background-position: center;
 
-  &:before {
-    content: ' ';
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    @include linearGradientH(background, rgba(0,0,0,0.75), transparent, 0%, 60%);
-    display: block;
-  }
-
   > .container {
     position: relative;
     top: 50%;
@@ -76,7 +65,7 @@
 
   p {
     font-size: 16px;
-    color: $white-40;
+    color: rgba($white, 0.6);
   }
   .btn {
     border: solid 2px $primary;
@@ -84,7 +73,7 @@
     border-image-slice: 2;
   }
   .btn:hover {
-    background: rgba(0, 173, 230, 0.3);
+    background: rgba($primary, 0.3);
   }
 }
 
