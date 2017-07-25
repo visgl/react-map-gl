@@ -9,7 +9,7 @@ export default class Header extends Component {
     return (
       <div className="site-links">
         { Object.keys(LIBRARIES).map(name =>
-            <div className="site-link"><a href={LIBRARIES[name]}>{name}</a></div>) }
+            <div key={name} className="site-link"><a href={LIBRARIES[name]}>{name}</a></div>) }
       </div>
     );
   }
@@ -32,13 +32,13 @@ export default class Header extends Component {
               href="https://github.com/uber/react-map-gl"
               target="_blank"
               rel="noopener noreferrer">
-              Github <i style={{marginLeft: 2}} className="icon icon-github" />
+              Github <i className="icon icon-github" />
             </a>
             <a
               href="https://github.com/mapbox/mapbox-gl-js"
               target="_blank"
               rel="noopener noreferrer">
-              Mapbox<i style={{marginLeft: 2}} className="icon icon-github" />
+              Mapbox<i className="icon icon-github" />
             </a>
           </div>
         </div>
