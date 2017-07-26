@@ -2,6 +2,8 @@ import React, {PureComponent} from 'react';
 
 import CITIES from '../../data/cities.json';
 
+const defaultContainer =  ({children}) => <div className="control-panel">{children}</div>;
+
 export default class ControlPanel extends PureComponent {
 
   _renderButton = (city, index) => {
@@ -10,15 +12,17 @@ export default class ControlPanel extends PureComponent {
         <input type="radio" name="city"
           id={`city-${index}`}
           defaultChecked={city.city === 'San Francisco'}
-          onChange={() => this.props.onViewportChange(city)} />
+          onClick={() => this.props.onViewportChange(city)} />
         <label htmlFor={`city-${index}`}>{city.city}</label>
       </div>
     );
   };
 
   render() {
+    const Container = this.props.containerComponent || defaultContainer;
+
     return (
-      <div className="options-panel" tabIndex="0">
+      <Container>
         <h3>Camera Transition</h3>
         <p>Smooth animate of the viewport.</p>
         <div className="source-link">
@@ -27,7 +31,7 @@ export default class ControlPanel extends PureComponent {
         <hr />
         
         { CITIES.filter(city => city.state === 'California').map(this._renderButton) }
-      </div>
+      </Container>
     );
   }
 }

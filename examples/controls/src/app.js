@@ -106,7 +106,7 @@ export default class App extends Component {
           <NavigationControl onViewportChange={this._updateViewport} />
         </div>
 
-        <ControlPanel />
+        <ControlPanel containerComponent={this.props.containerComponent} />
 
       </MapGL>
     );

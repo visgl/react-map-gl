@@ -122,7 +122,8 @@ export default class App extends Component {
 
         </MapGL>
 
-        <ControlPanel settings={this.state} onChange={this._updateSettings} />
+        <ControlPanel containerComponent={this.props.containerComponent}
+          settings={this.state} onChange={this._updateSettings} />
       </div>
     );
   }

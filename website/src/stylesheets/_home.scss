@@ -4,7 +4,7 @@
     text-transform: uppercase;
     letter-spacing: 4px;
     font-weight: 700;
-    margin: 8px 0 8px;
+    margin: 96px 0 8px;
   }
   h2 {
     font-size: 2em;
@@ -48,7 +48,6 @@
 }
 
 #banner {
-  height: 80vh;
   background: $black-20;
   color: $white;
   position: relative;
@@ -59,8 +58,6 @@
 
   > .container {
     position: relative;
-    top: 50%;
-    transform: translateY(-50%);
   }
 
   p {
