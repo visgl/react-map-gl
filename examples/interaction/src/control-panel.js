@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 
 const camelPattern = /(^|[A-Z])[a-z]*/g;
+const defaultContainer =  ({children}) => <div className="control-panel">{children}</div>;
 
 export default class ControlPanel extends PureComponent {
 
@@ -40,10 +41,11 @@ export default class ControlPanel extends PureComponent {
   }
 
   render() {
+    const Container = this.props.containerComponent || defaultContainer;
     const {settings} = this.props;
 
     return (
-      <div className="options-panel" tabIndex="0">
+      <Container>
         <h3>Limit Map Interaction</h3>
         <p>Turn interactive features off/on.</p>
         <div className="source-link">
@@ -52,7 +54,7 @@ export default class ControlPanel extends PureComponent {
         <hr />
 
         { Object.keys(settings).map(name => this._renderSetting(name, settings[name])) }
-      </div>
+      </Container>
     );
   }
 }

@@ -84,7 +84,7 @@ export default class App extends Component {
         mapStyle={mapStyle}
         onViewportChange={this._onViewportChange}
         mapboxApiAccessToken={token} >
-        <ControlPanel />
+        <ControlPanel containerComponent={this.props.containerComponent} />
       </MapGL>
     );
   }

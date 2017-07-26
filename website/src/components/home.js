@@ -1,3 +1,4 @@
+/* global window */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {setHeaderOpacity} from '../actions/app-actions';
@@ -24,7 +25,7 @@ class Home extends Component {
       <div className="home-wrapper">
 
         <section id="banner" style={{backgroundImage: 'url(images/hero.jpg)'}}>
-          <div className="container soft">
+          <div className="container soft-left">
             <h1>react-map-gl</h1>
             <p>React components for Mapbox GL JS</p>
             <a href="#/documentation/getting-started" className="btn">Get started</a>

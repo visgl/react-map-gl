@@ -251,7 +251,7 @@ code {
     width: 100%;
     margin: 0;
   }
-  .options-panel:not(:focus) {
+  .options-panel:not(.focus) {
     cursor: pointer;
     >div > *, hr, .input {
       display: none;

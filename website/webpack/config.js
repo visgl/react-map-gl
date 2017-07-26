@@ -64,7 +64,7 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.EnvironmentPlugin(['MAPBOX_ACCESS_TOKEN', 'MapboxAccessToken']),
+    new webpack.EnvironmentPlugin(['MapboxAccessToken']),
     new CopyWebpackPlugin([
       // This will copy the contents to the distribution bundle folder
       {
