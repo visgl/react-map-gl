@@ -84,7 +84,8 @@ export default class App extends Component {
           onViewportChange={this._onViewportChange}
           dragToRotate={false}
           mapboxApiAccessToken={token} />
-        <ControlPanel onViewportChange={this._easeTo} />
+        <ControlPanel containerComponent={this.props.containerComponent}
+          onViewportChange={this._easeTo} />
       </div>
     );
   }

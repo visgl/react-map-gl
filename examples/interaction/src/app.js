@@ -86,7 +86,8 @@ export default class App extends Component {
         mapboxApiAccessToken={token} >
         <style>{MARKER_STYLE}</style>
         { bartStations.map(this._renderMarker) }
-        <ControlPanel settings={settings} onChange={this._onSettingChange} />
+        <ControlPanel containerComponent={this.props.containerComponent}
+          settings={settings} onChange={this._onSettingChange} />
       </MapGL>
     );
   }

@@ -1,17 +1,16 @@
-/* global window */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import autobind from 'autobind-decorator';
 
 import MarkdownPage from './markdown-page';
-import {loadContent, updateMap} from '../actions/app-actions';
+import {loadContent} from '../actions/app-actions';
 
 class Page extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      mapHasFocus: true,
       content: this._loadContent(props.route.content)
     };
   }
@@ -25,10 +24,6 @@ class Page extends Component {
     }
   }
 
-  componentWillUnmount() {
-    window.onresize = null;
-  }
-
   _loadContent(content) {
     if (typeof content === 'string') {
       this.props.loadContent(content);
@@ -37,7 +32,7 @@ class Page extends Component {
   }
 
   // replaces the current query string in react-router
-  _updateQueryString = (queryString) => {
+  @autobind _updateQueryString(queryString) {
     const {location: {pathname, search}} = this.props;
     if (search !== queryString) {
       this.context.router.replace({
@@ -51,17 +46,13 @@ class Page extends Component {
     const {contents, location: {query}} = this.props;
     const {content} = this.state;
 
-    let child;
-
-    if (content.demo) {
-      child = this._renderDemo(content.demo, content.code);
-    } else if (typeof content === 'string') {
-      child = (<MarkdownPage content={contents[content]}
-        query={query}
-        updateQueryString={this._updateQueryString} />);
-    }
-
-    return <div className="page">{child}</div>;
+    return (
+      <div className="page">
+        <MarkdownPage content={contents[content]}
+          query={query}
+          updateQueryString={this._updateQueryString} />
+      </div>
+    );
   }
 }
 
@@ -75,4 +66,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {loadContent, updateMap})(Page);
+export default connect(mapStateToProps, {loadContent})(Page);
