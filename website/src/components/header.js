@@ -9,7 +9,7 @@ export default class Header extends Component {
     return (
       <div className="site-links">
         { Object.keys(LIBRARIES).map(name =>
-            <div key={name} className="site-link"><a href={LIBRARIES[name]}>{name}</a></div>) }
+          <div key={name} className="site-link"><a href={LIBRARIES[name]}>{name}</a></div>) }
       </div>
     );
   }

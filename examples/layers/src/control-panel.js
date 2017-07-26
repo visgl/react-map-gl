@@ -24,6 +24,8 @@ const colorClass = {
   symbol: 'text-color'
 };
 
+const defaultContainer =  ({children}) => <div className="control-panel">{children}</div>;
+
 export default class StyleControls extends PureComponent {
 
   constructor(props) {
@@ -102,8 +104,10 @@ export default class StyleControls extends PureComponent {
   }
 
   render() {
+    const Container = this.props.containerComponent || defaultContainer;
+
     return (
-      <div className="options-panel" tabIndex="0">
+      <Container>
         <h3>Dynamic Styling</h3>
         <p>Dynamically show/hide map layers and change color with Immutable map style.</p>
         <div className="source-link">
@@ -111,7 +115,7 @@ export default class StyleControls extends PureComponent {
         </div>
         <hr />
         { categories.map(name => this._renderLayerControl(name)) }
-      </div>
+      </Container>
     );
   }
 }
