@@ -1,6 +1,6 @@
 /* global window */
 import React, {PureComponent} from 'react';
-import autobind from 'autobind-decorator';
+import autobind from 'react-autobind';
 
 export default class InfoPanel extends PureComponent {
 
@@ -8,14 +8,15 @@ export default class InfoPanel extends PureComponent {
     super(props);
     this.state = {hasFocus: false};
     this._blurTimer = null;
+    autobind(this);
   }
 
-  @autobind _onFocus() {
+  _onFocus() {
     window.clearTimeout(this._blurTimer);
     this.setState({hasFocus: true});
   }
 
-  @autobind _onBlur() {
+  _onBlur() {
     // New focus is not yet available when blur event fires.
     // Wait a bit and if no onfocus event is fired, remove focus
     this._blurTimer = window.setTimeout(() => {
