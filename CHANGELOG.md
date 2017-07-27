@@ -1,146 +1,26 @@
 # CHANGELOG
 
-## Version 3.0.0 (Alpha releases)
+## Version 3.0.0 (July 27, 2017)
 
-### Version 3.0.0-beta.3
-- Fix: viewport misalignment with Mapbox at low zoom levels
-
-### Version 3.0.0-beta.2
-- Fix: scroll zoom with touch does not block page scrolling
-- Fix: feature lookup error when child components are rendered with error
-
-### Version 3.0.0-beta.1
-
-- WEBSITE: Polish docs
-- WEBSITE: Add links to other libraries
-- WEBSITE: babel config fix
-
-### Version 3.0.0-alpha.15
-- update event manager (#283)
-- Fix: Event Manager update fixes an issue where `scrollZoom` disabled will also
-consume the scroll event preventing the page from scrolling.
-- Fix: breakage on node (#292)
-- BREAKING: `fitBounds` is now accessed through the `PerspectiveMercatorViewport` class
-- BREAKING: `react-map-gl` now requires **at least** Node `>=v6.4` in development
-- New: `SVGOverlay` `CanvasOverlay` and `HTMLOverlay` supports perspective mode; no longer requires viewport props
-
-### Version 3.0.0-alpha.14
-- BREAKING: Remove `fitBounds` util (#278)
-- Updated to `mapbox-gl-js` version `0.38.0` (#285)
-- Update overlays code and documentation (#282)
-- Fix: Compass arrow in navigation control (#277)
-
-### Version 3.0.0-alpha.13
-- New: Add new examples (#270)
-- Fix: Add `onLoad` callback to static map props and componentDidMount (#269)
-- Fix: Change `pan` event listener to move specific `panmove` (#272)
-
-### Version 3.0.0-alpha.12
-- Bump mapbox-gl to 0.37.0
-- New: `fitBounds` util function
-- Fix: Map flickering when drag over popups
-- BREAKING: `onChangeViewport` is now `onViewportChange`
-
-### Version 3.0.0-alpha.11
-- New event management system based on hammer.js
-- FIX: Touch interaction
-- Remove `MapControls` React component
-- Remove `ControllerClass` prop from `InteractiveMap`
-- Add `mapControls` prop to `InteractiveMap`
-- Add `visibility` prop to `StaticMap` for showing/hiding the map
-- Rename `_getMap` method to `getMap`
-- Add `queryRenderedFeatures` method that exposes the MapboxGL API with the same name
-- Remove all interactivity related props from `StaticMap`
-- Remove intermediate state props from `InteractiveMap`: `startPanLngLat`, `startZoomLngLat`, `startBearing`, `startPitch`, `startZoom`.
-- `InteractiveMap` is now stateful (`isDragging` and `isHover`)
-- Rename `onClickFeatures` and `onHoverFeatures` to `onClick` and `onHover`. Remove `ignoreEmptyFeatures` prop. The callbacks are invoked with an event object with `features` and `lngLat` fields.
-- New `getCursor` prop of `InteractiveMap`: returns cursor style from the current map state
-- Rename `displayConstraints` to `visibilityConstraints`
-- Remove `perspectiveEnabled` prop. Add `scrollZoom`, `dragPan`, `dragRotate`, `doubleClickZoom`, `touchZoomRotate` props.
-
-### Version 3.0.0-alpha.10 - Add `ControllerClass` prop to `InteractiveMap`
-
-### Version 3.0.0-alpha.9
-- NEW: Marker component
-- NEW: Popup component
-- FIX: `attributeControl` prop
-- NEW: NavigationControl component
-
-### Version 3.0.0-alpha.8 - Fix server side rendering of InteractiveMap
-
-### Version 3.0.0-alpha.7 - Bug fixes
-
-* FIX: Prop comparison bug in static map
-* FIX: Children get unmounted/re-mounted when the map is shown/hidden
-
-### Version 3.0.0-alpha.6 - Bug fixes
-
-* FIX: Viewport jump at start of rotation with pitch
-* FIX: Viewport jump at start of pan with pitch
-* FIX: Zoom around mouse position
-
-### Version 3.0.0-alpha.5 - Add `pressKeyToRotate` prop on `MapControls`
-### Version 3.0.0-alpha.4 - More transpile/export fixes
-### Version 3.0.0-alpha.3 - Transpile/export fixes
-### Version 3.0.0-alpha.3 - Remove JSX from overlays
-### Version 3.0.0-alpha.2 - Hide map when pitch > 60.
-
-## Version 3.0.0-alpha.1 - Major New Rlease
-
-* NEW: Supports "tree-shaking" in Webpack2 and Rollup - adds new package.json
-  `module` field that points to files with preserved ES6 import/exports.
-* NEW: Significant reduction in number of npm dependencies.
-
-* NEW: Setting the new `pressKeyToRotate` prop to `false` will make rotation
-  rather than pan the default operation, requiring a function key to be pressed
-  for pan.
-* BREAKING: The `ChoroplethOverlay` React component is no longer part of the
-  exported library. It has been moved to examples folder, applications that
-  still need it can copy it from there instead of importing it directly.
-  Removing `ChoroplethOverlay` eliminated a number of big D3 dependencies from
-  react-map-gl, which seemed like the right tradeoff since most users are using
-  mapbox styles or deck.gl layers for Choropleths.
-
-### Event Handling Refactor
-
-* Event handling (Pan/Zoom/Tilt) has been significantly refactored, and is
-  now handled by a separate component (`MapControls`).
-* A new `StaticMap` component is the actual `mapbox-gl` wrapper. It only
-  handles click and hover events.
-* The separation of event handling from the map component opens up some
-  interesting use cases, including creating apps that can modify viewports
-  beyond mapbox' rendering limits and using the `MapControls` with
-  non-mapbox maps.
-
-### Compatibility with v1
-
-* A new `InteractiveMap` is provided, that uses the `MapControls` component
-  to add pan/zoom/title to `StaticMap`. `InteractiveMap` closely resembles
-  the original `MapGL` component from version 1 and is the default export
-  of `react-map-gl` in v2. `react-map-gl` should thus be API compatible with
-  v1 in most cases, although there might be subtle differences in how events
-  are handled.
-
-
-
+This is a major release of the library. For more information, please see [What's new](https://github.com/uber/react-map-gl/blob/3.0-release/docs/whats-new.md) in latest documentation.
 
 ## Version 2.0.2 (Feb 09, 2017)
 
-#### Minor Fixes
+### Minor Fixes
 
 - Changed `postinstall` script again to use postinstall.js to run
   flow-remove-types. This attempts to resolve cross-platform issues. (#192)
 
 ## Version 2.0.1 (Jan 24, 2017)
 
-#### Minor Fixes
+### Minor Fixes
 
 - Fixed calculation of map pitch during interaction
 - Changed `postinstall` script
 
 ## Version 2.0.0 (Jan 17, 2017)
 
-#### Reasons for the major version bump
+### Reasons for the major version bump
 
 - We updated to `mapbox-gl` 0.31.0 which introduced flow types as well as having
   a hard dependency on Node >= v4. We now assume that you are on Node >= v4
@@ -151,14 +31,14 @@ consume the scroll event preventing the page from scrolling.
 - This also marks the start of more aggressive development on `react-map-gl`
   and we will start rolling out bigger updates in the coming months.
 
-#### New Features & Updates
+### New Features & Updates
 
 - Bump `mapbox-gl` to v0.31.0
 - Add `maxZoom` prop and defaults to `20`
 - Add `onLoad` event handler
 - Add `onClick` prop handler (#140)
 
-#### Fixes
+### Fixes
 
 - Ensure fitBounds doesn't return NaN zoom value (#159)
 - Use 'changedTouches' for 'touchend' / 'touchcancel' events (#164)
@@ -287,3 +167,128 @@ var SVGOverlay = MapGL.SVGOverlay;
 The previously exported `fitbounds` function will be made available
 as part of the separate package of utilities that handles coordinate
 projections in perspective mode.
+
+
+
+## Beta Releases
+
+### v3 Beta Release
+
+### Version 3.0.0-beta.3
+- Fix: viewport misalignment with Mapbox at low zoom levels
+
+### Version 3.0.0-beta.2
+- Fix: scroll zoom with touch does not block page scrolling
+- Fix: feature lookup error when child components are rendered with error
+
+### Version 3.0.0-beta.1
+
+- WEBSITE: Polish docs
+- WEBSITE: Add links to other libraries
+- WEBSITE: babel config fix
+
+### Version 3.0.0-alpha.15
+- update event manager (#283)
+- Fix: Event Manager update fixes an issue where `scrollZoom` disabled will also
+consume the scroll event preventing the page from scrolling.
+- Fix: breakage on node (#292)
+- BREAKING: `fitBounds` is now accessed through the `PerspectiveMercatorViewport` class
+- BREAKING: `react-map-gl` now requires **at least** Node `>=v6.4` in development
+- New: `SVGOverlay` `CanvasOverlay` and `HTMLOverlay` supports perspective mode; no longer requires viewport props
+
+### Version 3.0.0-alpha.14
+- BREAKING: Remove `fitBounds` util (#278)
+- Updated to `mapbox-gl-js` version `0.38.0` (#285)
+- Update overlays code and documentation (#282)
+- Fix: Compass arrow in navigation control (#277)
+
+### Version 3.0.0-alpha.13
+- New: Add new examples (#270)
+- Fix: Add `onLoad` callback to static map props and componentDidMount (#269)
+- Fix: Change `pan` event listener to move specific `panmove` (#272)
+
+### Version 3.0.0-alpha.12
+- Bump mapbox-gl to 0.37.0
+- New: `fitBounds` util function
+- Fix: Map flickering when drag over popups
+- BREAKING: `onChangeViewport` is now `onViewportChange`
+
+### Version 3.0.0-alpha.11
+- New event management system based on hammer.js
+- FIX: Touch interaction
+- Remove `MapControls` React component
+- Remove `ControllerClass` prop from `InteractiveMap`
+- Add `mapControls` prop to `InteractiveMap`
+- Add `visibility` prop to `StaticMap` for showing/hiding the map
+- Rename `_getMap` method to `getMap`
+- Add `queryRenderedFeatures` method that exposes the MapboxGL API with the same name
+- Remove all interactivity related props from `StaticMap`
+- Remove intermediate state props from `InteractiveMap`: `startPanLngLat`, `startZoomLngLat`, `startBearing`, `startPitch`, `startZoom`.
+- `InteractiveMap` is now stateful (`isDragging` and `isHover`)
+- Rename `onClickFeatures` and `onHoverFeatures` to `onClick` and `onHover`. Remove `ignoreEmptyFeatures` prop. The callbacks are invoked with an event object with `features` and `lngLat` fields.
+- New `getCursor` prop of `InteractiveMap`: returns cursor style from the current map state
+- Rename `displayConstraints` to `visibilityConstraints`
+- Remove `perspectiveEnabled` prop. Add `scrollZoom`, `dragPan`, `dragRotate`, `doubleClickZoom`, `touchZoomRotate` props.
+
+### Version 3.0.0-alpha.10 - Add `ControllerClass` prop to `InteractiveMap`
+
+### Version 3.0.0-alpha.9
+- NEW: Marker component
+- NEW: Popup component
+- FIX: `attributeControl` prop
+- NEW: NavigationControl component
+
+### Version 3.0.0-alpha.8 - Fix server side rendering of InteractiveMap
+
+### Version 3.0.0-alpha.7 - Bug fixes
+
+* FIX: Prop comparison bug in static map
+* FIX: Children get unmounted/re-mounted when the map is shown/hidden
+
+### Version 3.0.0-alpha.6 - Bug fixes
+
+* FIX: Viewport jump at start of rotation with pitch
+* FIX: Viewport jump at start of pan with pitch
+* FIX: Zoom around mouse position
+
+### Version 3.0.0-alpha.5 - Add `pressKeyToRotate` prop on `MapControls`
+### Version 3.0.0-alpha.4 - More transpile/export fixes
+### Version 3.0.0-alpha.3 - Transpile/export fixes
+### Version 3.0.0-alpha.3 - Remove JSX from overlays
+### Version 3.0.0-alpha.2 - Hide map when pitch > 60.
+
+## Version 3.0.0-alpha.1 - Major New Rlease
+
+* NEW: Supports "tree-shaking" in Webpack2 and Rollup - adds new package.json
+  `module` field that points to files with preserved ES6 import/exports.
+* NEW: Significant reduction in number of npm dependencies.
+
+* NEW: Setting the new `pressKeyToRotate` prop to `false` will make rotation
+  rather than pan the default operation, requiring a function key to be pressed
+  for pan.
+* BREAKING: The `ChoroplethOverlay` React component is no longer part of the
+  exported library. It has been moved to examples folder, applications that
+  still need it can copy it from there instead of importing it directly.
+  Removing `ChoroplethOverlay` eliminated a number of big D3 dependencies from
+  react-map-gl, which seemed like the right tradeoff since most users are using
+  mapbox styles or deck.gl layers for Choropleths.
+
+### Event Handling Refactor
+
+* Event handling (Pan/Zoom/Tilt) has been significantly refactored, and is
+  now handled by a separate component (`MapControls`).
+* A new `StaticMap` component is the actual `mapbox-gl` wrapper. It only
+  handles click and hover events.
+* The separation of event handling from the map component opens up some
+  interesting use cases, including creating apps that can modify viewports
+  beyond mapbox' rendering limits and using the `MapControls` with
+  non-mapbox maps.
+
+### Compatibility with v1
+
+* A new `InteractiveMap` is provided, that uses the `MapControls` component
+  to add pan/zoom/title to `StaticMap`. `InteractiveMap` closely resembles
+  the original `MapGL` component from version 1 and is the default export
+  of `react-map-gl` in v2. `react-map-gl` should thus be API compatible with
+  v1 in most cases, although there might be subtle differences in how events
+  are handled.
