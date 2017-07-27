@@ -1,5 +1,9 @@
 # CHANGELOG
 
+[TBD]
+- FIX: pinch zoom
+- FIX: wheel scrolling is blocked when onViewportChange is null
+
 ## Version 3.0.0 (July 27, 2017)
 
 This is a major release of the library. For more information, please see [What's new](https://github.com/uber/react-map-gl/blob/3.0-release/docs/whats-new.md) in latest documentation.
