@@ -1,13 +1,13 @@
 # react-map-gl v3.0
 
-Release date: Friday June 30, 2017
+Release date: July 27th, 2017
 
 ## Highlights
 
 - **Latest Mapbox GL JS**: Bumps `Mapbox GL JS` to [0.38](https://github.com/mapbox/mapbox-gl-js/releases).
 - **Multi-Touch Support**: Full support for multi-touch gestures such as pinch-to-zoom and rotate.
-- **New Components**: The `MapGL` component has been split into `StaticMap` and `InteractiveMap` (the default). Also, `Popup`, `Marker`, `NavigationControl` have been added to provide better React parity with the `Mapbox GL JS` API.
-- **Improved Overlay Components**: Supplying viewport props (`width` `height` `zoom` `longitude` and `latitude`) are no longer required if you render `SVGOverlay` `CanvasOverlay` or `HTMLOverlay` as a child of the map. Perspective mode is now supported in all overlays.
+- **New Components**: The `MapGL` component has been split into [`StaticMap`](/#/Documentation/api-reference/static-map) and [`InteractiveMap`](/#/Documentation/api-reference/interactive-map) (the default). Also, [`Popup`](/#/Documentation/api-reference/popup), [`Marker`](/#/Documentation/api-reference/marker), [`NavigationControl`](/#/Documentation/api-reference/navigation-control) have been added to provide better React parity with the `Mapbox GL JS` API.
+- **Improved Overlay Components**: Supplying viewport props (`width` `height` `zoom` `longitude` and `latitude`) are no longer required if you render [`SVGOverlay`](/#/Documentation/api-reference/svg-overlay), [`CanvasOverlay`](/#/Documentation/api-reference/canvas-overlay) or [`HTMLOverlay`](/#/Documentation/api-reference/html-overlay) as a child of the map. Perspective mode is now supported in all overlays.
 - **New Props**: `maxPitch`, `minPitch`, `dragPan`, `doubleClickZoom`, `touchZoomRotate`,
 `scrollZoom` are now provided to allow granular control of map interactivity.
 - **Documentation**: Significantly expanded and linked with our other geospatial frameworks.
@@ -16,11 +16,11 @@ Release date: Friday June 30, 2017
 
 ## Components
 
-### InteractiveMap (New, MapGL replacement)
+### [InteractiveMap (New, MapGL replacement)](/#/Documentation/api-reference/interactive-map)
 
 This is a wrapper on top of `StaticMap`. It takes all the props of `StaticMap` and additional ones such as `onViewportChange`, `scrollZoom`, `dragRotate`, etc. to control interactivity on the map. See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/interactive-map.js) for more information.
 
-### StaticMap (New)
+### [StaticMap (New)](/#/Documentation/api-reference/static-map)
 
 This is the React wrapper around `Mapbox GL JS` and takes in viewport properties such as `width`, `height`, `latitude`, `longitude`. Style diffing and updating logic also live here. See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/static-map.js) for more information.
 

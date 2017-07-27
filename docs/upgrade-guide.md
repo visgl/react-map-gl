@@ -7,9 +7,7 @@ v3 is a major upgrade of react-map-gl. While we have tried to gently deprecated 
 
 ### Version Requirements
 
-- **Node Version Requirement** is now **>=v6.4.0**: This is introduced by [Mapbox GL JS v0.38.0](https://github.com/mapbox/mapbox-gl-js/releases/tag/v0.38.0)
-
-TBD - this is required to *build* react-map-gl - presumably using it is less demanding?
+- The **Node Version Requirement** for **building** react-map-gl is now **>=v6.4.0**. Using prebuilt react-map-gl does **NOT** has this limitation. This is introduced by [Mapbox GL JS v0.38.0](https://github.com/mapbox/mapbox-gl-js/releases/tag/v0.38.0)
 
 
 ### MapGL Component

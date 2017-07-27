@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import autobind from 'autobind-decorator';
+import autobind from 'react-autobind';
 
 import MarkdownPage from './markdown-page';
 import {loadContent} from '../actions/app-actions';
@@ -13,6 +13,7 @@ class Page extends Component {
     this.state = {
       content: this._loadContent(props.route.content)
     };
+    autobind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -32,7 +33,7 @@ class Page extends Component {
   }
 
   // replaces the current query string in react-router
-  @autobind _updateQueryString(queryString) {
+  _updateQueryString(queryString) {
     const {location: {pathname, search}} = this.props;
     if (search !== queryString) {
       this.context.router.replace({
