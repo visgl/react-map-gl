@@ -7,7 +7,7 @@
     "immutable": "^3.8.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-map-gl": "^3.0.0-alpha.12"
+    "react-map-gl": "^3.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",
