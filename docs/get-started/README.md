@@ -3,7 +3,7 @@
 
 # Installation
 
-`react-map-gl` requires `node >= v4` and `react >= 15.4`.
+Using `react-map-gl` requires `node >= v4` and `react >= 15.4`.
 
 ```sh
 npm install --save react-map-gl

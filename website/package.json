@@ -31,10 +31,11 @@
     "redux": "^3.6.0",
     "redux-actions": "^1.2.0",
     "redux-thunk": "^2.1.0",
-    "tween.js": "tweenjs/tween.js"
+    "tween.js": "^16.6.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
+    "react-autobind": "^1.0.6",
     "babel-cli": "^6.3.15",
     "babel-core": "^6.7.7",
     "babel-eslint": "^7.0.0",
