@@ -1,6 +1,6 @@
 # react-map-gl v3.0
 
-Release date: Friday July 27, 2017
+Release date: July 27th, 2017
 
 ## Highlights
 
