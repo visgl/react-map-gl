@@ -1,6 +1,7 @@
 # CHANGELOG
 
-[TBD]
+## Version 3.0.1 (July 27, 2017)
+
 - FIX: pinch zoom
 - FIX: wheel scrolling is blocked when onViewportChange is null
 
