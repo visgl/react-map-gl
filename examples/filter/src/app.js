@@ -1,4 +1,3 @@
-/* Reproduces https://www.mapbox.com/mapbox-gl-js/example/query-similar-features/ */
 /* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
