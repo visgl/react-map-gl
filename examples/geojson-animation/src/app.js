@@ -1,3 +1,4 @@
+/* Reproduces https://www.mapbox.com/mapbox-gl-js/example/animate-point-along-line/ */
 /* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
