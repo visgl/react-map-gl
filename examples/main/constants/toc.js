@@ -6,6 +6,7 @@ import RouteOverlayExample from '../views/route-overlay';
 import StyleDiffingExample from '../views/style-diffing';
 import ClickExample from '../views/click';
 // Standalone
+import Filter from '../../filter/src/app';
 import Controls from '../../controls/src/app';
 import GeoJson from '../../geojson/src/app';
 import GeoJsonAnimation from '../../geojson-animation/src/app';
@@ -49,6 +50,11 @@ export const standaloneExamples = [
     path: 'viewportAnimationExample',
     name: 'Camera Transition',
     component: ViewportAnimation
+  },
+  {
+    path: 'filter',
+    name: 'Highlight By Filter',
+    component: Filter
   }
 ];
 

@@ -2,6 +2,8 @@
   <img src="https://avatars3.githubusercontent.com/u/2105791?v=3&s=200" />
 </div>
 
-## Example: GeoJSON
+## Example: Animated GeoJSON
+
+This app reproduces Mapbox's [Animate point along line](https://www.mapbox.com/mapbox-gl-js/example/animate-point-along-line/) example.
 
 This example showcases how to dynamically add and update custom data sources.
