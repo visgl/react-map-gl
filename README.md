@@ -1,26 +1,36 @@
-# Introduction
+<p align="right">
+  <a href="https://npmjs.org/package/react-map-gl">
+    <img src="https://img.shields.io/npm/v/react-map-gl.svg?style=flat-square" alt="version" />
+  </a>
+  <a href="https://travis-ci.org/uber/react-map-gl">
+    <img src="https://img.shields.io/travis/uber/react-map-gl/master.svg?style=flat-square" alt="build" />
+  </a>
+  <a href="https://npmjs.org/package/react-map-gl">
+    <img src="https://img.shields.io/npm/dm/react-map-gl.svg?style=flat-square" alt="downloads" />
+  </a>
+</p>
 
-react-map-gl is a suite of [React](http://facebook.github.io/react/) components for
-[Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js), a WebGL-powered vector and raster tile mapping library. In addition to exposing `MapboxGL` functionality to React apps, react-map-gl also integrates seamlessly with [deck.gl](https://uber.github.io/deck.gl).
+<h1 align="center">react-map-gl | <a href="https://uber.github.io/react-map-gl">Docs</a></h1>
 
-# Installation
+<h5 align="center">
+React Components Suite for <a href="https://github.com/mapbox/mapbox-gl-js">Mapbox GL JS</a>.
+</h5>
 
-```sh
-npm install --save react-map-gl
-```
+In addition to exposing MapboxGL functionality to React apps, react-map-gl also integrates seamlessly with [deck.gl](https://uber.github.io/deck.gl).
 
-## Using with Browserify, Webpack, and other JavaScript Bundlers
+### Installation
+
+    npm install --save react-map-gl
 
 * `browserify` - react-map-gl is extensively tested with `browserify` and works without configuration.
 
 * `webpack 2` - Most of the provided react-map-gl examples use webpack 2. For a minimal example, look at the [exhibit-webpack](https://github.com/uber/react-map-gl/tree/master/examples/exhibit-webpack) folder, demonstrating a working demo using `webpack 2`.
 
-* `create-react-app` - At this point configuration-free builds are not possible with webpack due to the way the mapbox-gl-js module is published. You will need to eject your app (sorry) and add one line alias to your webpack config.
+* `create-react-app` - At this point configuration-free builds are not possible with webpack due to the way the mapbox-gl-js module is published. You will need to eject your app and add an alias to your webpack config, as shown in the exhibit-webpack.
 
-While react-map-gl provides many examples, getting mapbox-gl-js to work non-browserify-based build environments can sometimes be tricky. If the examples provided by react-map-gl are not enough, a good source for more information might be [Using mapbox-gl and webpack together](https://mikewilliamson.wordpress.com/2016/02/24/using-mapbox-gl-and-webpack-together/).
+There's many other ready-to-run [examples](https://github.com/uber/react-map-gl/blob/master/examples) you can take a look at if you need more inspiration.
 
-
-## Example Code
+### Example
 
 ```js
 import {Component} from 'react';
@@ -45,25 +55,22 @@ class Map extends Component {
 }
 ```
 
-# About Mapbox Tokens
+### About Mapbox Tokens
 
-To show maps from a service such as Mapbox you will need to register with Mapbox and get a "token" that you need to provide to your map component. The map component will use the token to identify itself to the mapbox service which then will start serving up map tiles. The token will usually be free until a certain level of traffic is exceeded.
+To show maps from a service such as Mapbox you will need to register on their website in order to retrieve an access token required by the map component, which will be used to identify you and start serving up map tiles. The service will be free until a certain level of traffic is exceeded.
 
-While the token will need to be hard-coded into your application in production, there are several ways to provide a token during development:
-* Modify file to specify your Mapbox token,
-* Set an environment variable (MapboxAccessToken) - through the use of a webpack loader or browserify transform, see the hello-world examples for details.
-* Provide a token in the URL.
+There are several ways to provide a token to your app, as showcased in some of the example folders:
 
-To make the maps load, either:
-* add `?access_token=TOKEN` to the URL where `TOKEN` is a valid Mapbox access token, or
-* set the `MapboxAccessToken` environment variable before running `npm start`
+* Modify the source directly
+* Set the `MapboxAccessToken` environment variable
+* Provide it in the URL, e.g `?access_token=TOKEN`
 
-## Using with Redux
+But we would recommend using something like [dotenv](https://github.com/motdotla/dotenv) and put your key in an untracked `.env` file, that will then expose it as a `process.env` variable, with much less leaking risks.
 
-If you're using redux, it is very easy to hook this component up to
-store state in the redux state tree. The simplest way is to take all
-properties passed to the `onChangeViewport` function property and add them
-directly into the store. This state can then be passed back to `react-map-gl`
-without any transformation.
+### Redux Usage
 
-You can use the package [redux-map-gl](https://github.com/Willyham/redux-map-gl) to save writing this code yourself.
+If you're using redux, it is very easy to hook this component up to store state in the redux state tree.
+The simplest way is to take all properties passed to the `onViewportChange` function property and add them
+directly into the store. This state can then be passed back to the `<ReactMapGL>` component without any transformation.
+
+You can even use the package [redux-map-gl](https://github.com/Willyham/redux-map-gl) to save you some writing.
