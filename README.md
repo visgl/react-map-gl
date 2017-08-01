@@ -65,7 +65,7 @@ There are several ways to provide a token to your app, as showcased in some of t
 * Set the `MapboxAccessToken` environment variable
 * Provide it in the URL, e.g `?access_token=TOKEN`
 
-But we would advice you to use something like [dotenv](https://github.com/motdotla/dotenv) and put your key in an untracked `.env` file, that will then expose it as a `process.env` variable, with much less leaking risks.
+But we would recommend using something like [dotenv](https://github.com/motdotla/dotenv) and put your key in an untracked `.env` file, that will then expose it as a `process.env` variable, with much less leaking risks.
 
 ### Redux Usage
 
