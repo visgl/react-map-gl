@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Version 3.0.3 (August 01, 2017)
+
+- FIX: unbound `this` in ref callback for canvas-overlay (#337)
+
 ## Version 3.0.1 (July 27, 2017)
 
 - FIX: pinch zoom
