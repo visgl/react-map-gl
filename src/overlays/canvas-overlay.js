@@ -22,6 +22,7 @@ import {Component, createElement} from 'react';
 import PropTypes from 'prop-types';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import {window} from '../utils/globals';
+import autobind from '../utils/autobind';
 
 const propTypes = {
   redraw: PropTypes.func.isRequired
@@ -33,6 +34,11 @@ const contextTypes = {
 };
 
 export default class CanvasOverlay extends Component {
+  constructor(props) {
+    super(props);
+    autobind(this);
+  }
+
   componentDidMount() {
     this._redraw();
   }
