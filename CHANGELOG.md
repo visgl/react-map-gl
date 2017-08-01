@@ -2,6 +2,7 @@
 
 ## Version 3.0.3 (August 01, 2017)
 
+- `v3.0.2` skipped because of faulty publish
 - FIX: unbound `this` in ref callback for canvas-overlay (#337)
 
 ## Version 3.0.1 (July 27, 2017)
