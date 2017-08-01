@@ -16,9 +16,7 @@
 React Components Suite for <a href="https://github.com/mapbox/mapbox-gl-js">Mapbox GL JS</a>.
 </h5>
 
-### Introduction
-
-The premise of react-map-gl was to ease usage of both React and *MapboxGL*, the famous WebGL-powered vector and raster tile mapping library, while also allowing a seamless integration with [deck.gl](https://uber.github.io/deck.gl).
+In addition to exposing MapboxGL functionality to React apps, react-map-gl also integrates seamlessly with [deck.gl](https://uber.github.io/deck.gl).
 
 ### Installation
 
