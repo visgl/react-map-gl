@@ -118,16 +118,6 @@ const docPages = {
           content: getDocUrl('advanced/custom-map-controls.md')
         },
       ]
-    },
-    {
-      name: 'Mapbox',
-      children: [
-        {
-          name: 'Mapbox GL JS API',
-          content: 'https://www.mapbox.com/mapbox-gl-js/api/',
-          external: 'https://www.mapbox.com/mapbox-gl-js/api/'
-        }
-      ]
     }
   ])
 };
