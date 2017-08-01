@@ -1,91 +1,69 @@
-<p align="right">
-  <a href="https://npmjs.org/package/react-map-gl">
-    <img src="https://img.shields.io/npm/v/react-map-gl.svg?style=flat-square" alt="version" />
-  </a>
-  <a href="https://travis-ci.org/uber/react-map-gl">
-    <img src="https://img.shields.io/travis/uber/react-map-gl/master.svg?style=flat-square" alt="build" />
-  </a>
-  <a href="https://npmjs.org/package/react-map-gl">
-    <img src="https://img.shields.io/npm/dm/react-map-gl.svg?style=flat-square" alt="downloads" />
-  </a>
-</p>
+# Introduction
 
-<h1 align="center">react-map-gl | <a href="https://uber.github.io/react-map-gl">Docs</a></h1>
+react-map-gl is a suite of [React](http://facebook.github.io/react/) components for
+[Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js), a WebGL-powered vector and raster tile mapping library. In addition to exposing `MapboxGL` functionality to React apps, react-map-gl also integrates seamlessly with [deck.gl](https://uber.github.io/deck.gl).
 
-<h5 align="center">React Components for Mapbox GL JS</h5>
+# Installation
 
-![screen](https://cloud.githubusercontent.com/assets/499192/11028165/49f41da2-86bc-11e5-85eb-9279621ef971.png)
+```sh
+npm install --save react-map-gl
+```
 
-## Installation
-
-    npm install --save react-map-gl
-
-## Using with Browserify, Webpack etc
+## Using with Browserify, Webpack, and other JavaScript Bundlers
 
 * `browserify` - react-map-gl is extensively tested with `browserify` and works without configuration.
 
 * `webpack 2` - Most of the provided react-map-gl examples use webpack 2. For a minimal example, look at the [exhibit-webpack](https://github.com/uber/react-map-gl/tree/master/examples/exhibit-webpack) folder, demonstrating a working demo using `webpack 2`.
 
-* `create-react-app` - At this point configuration-free builds are not possible with webpack. You will need to eject your app (sorry) and add one line alias to your webpack config.
+* `create-react-app` - At this point configuration-free builds are not possible with webpack due to the way the mapbox-gl-js module is published. You will need to eject your app (sorry) and add one line alias to your webpack config.
 
-For more information, please refer to the docs <a href="https://uber.github.io/react-map-gl">docs</a>.
+While react-map-gl provides many examples, getting mapbox-gl-js to work non-browserify-based build environments can sometimes be tricky. If the examples provided by react-map-gl are not enough, a good source for more information might be [Using mapbox-gl and webpack together](https://mikewilliamson.wordpress.com/2016/02/24/using-mapbox-gl-and-webpack-together/).
 
 
-## Example
+## Example Code
 
 ```js
-import MapGL from 'react-map-gl';
+import {Component} from 'react';
+import ReactMapGL from 'react-map-gl';
 
-<MapGL
-  width={400}
-  height={400}
-  latitude={37.7577}
-  longitude={-122.4376}
-  zoom={8}
-  onChangeViewport={viewport => {
-    // Call `setState` and use the state to update the map.
-  }}
-/>
+class Map extends Component {
+  render() {
+    return (
+      <ReactMapGL
+        width={400}
+        height={400}
+        latitude={37.7577}
+        longitude={-122.4376}
+        zoom={8}
+        onViewportChange={(viewport) => {
+          const {width, height, latitude, longitude, zoom} = viewport;
+          // Optionally call `setState` and use the state to update the map.
+        }}
+      />
+    );
+  }
+}
 ```
 
+# About Mapbox Tokens
 
-## Visualizing Geospatial Data
+To show maps from a service such as Mapbox you will need to register with Mapbox and get a "token" that you need to provide to your map component. The map component will use the token to identify itself to the mapbox service which then will start serving up map tiles. The token will usually be free until a certain level of traffic is exceeded.
 
-The main point of using a map is usually to visualize geospatial data on top of it. react-map-gl provides several solutions
-
-* **Components** - react-map-gl provides React components like `Marker`, `Popup` etc that takes `longitude` and `latitude` props and will automatically follow the map.
-
-* **Overlays** - react-map-gl provides a basic overlay API. Each overlay takes long/lat encoded data and displays it on top of the map. You can use one of the provided visualization overlays, or create your own.
-
-* **deck.gl Layers** - [deck.gl](https://github.com/uber/deck.gl) is a companion module to react-map-gl that provides high-performance geospatial data visualiation layers (`ScatterplotLayer`, `GeoJsonLayer`, `PointCloudLayer` etc) that are 3D enabled and 100% compatible with mapbox perspective mode. These layers are particularly suitable for very large and/or dynamic data sets.
-
-
-## Development
-
-Install project dependencies and check that the tests run
-
-    npm install
-    npm test
-
-Then start the main example in `examples/main` by running the shortcut
-
-    npm start
-
-This should open a new tab in your browser with the examples.
+While the token will need to be hard-coded into your application in production, there are several ways to provide a token during development:
+* Modify file to specify your Mapbox token,
+* Set an environment variable (MapboxAccessToken) - through the use of a webpack loader or browserify transform, see the hello-world examples for details.
+* Provide a token in the URL.
 
 To make the maps load, either:
 * add `?access_token=TOKEN` to the URL where `TOKEN` is a valid Mapbox access token, or
 * set the `MapboxAccessToken` environment variable before running `npm start`
 
+## Using with Redux
 
-## Testing
+If you're using redux, it is very easy to hook this component up to
+store state in the redux state tree. The simplest way is to take all
+properties passed to the `onChangeViewport` function property and add them
+directly into the store. This state can then be passed back to `react-map-gl`
+without any transformation.
 
-* **Unit Tests** - it is expected that any feature is accompanied by standard unit tests in [test folder](./test).
-* **Run Unit Tests in Node** - Note that This component uses WebGL, but it still runs under Node.js (using headless-gl and jsdom). This is how the standard `npm test` script runs.
-* **Run Unit Tests in Browser** - It is also important to run unit tests in the browser, via `npm run test-browser`.
-* **Manual Testing** - In addition, please test drive new and existing features by running `npm start` and manually testing the demos.
-
-
-## Contributing
-
-Contributions are welcome. It can be helpful to check with maintainers before opening your PR, just open an issue and describe your proposal. Also, be aware that you will need to complete a short open source contribution form before your pull request can be accepted.
+You can use the package [redux-map-gl](https://github.com/Willyham/redux-map-gl) to save writing this code yourself.
