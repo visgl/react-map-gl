@@ -1,3 +1,15 @@
+<p align="right">
+  <a href="https://npmjs.org/package/react-map-gl">
+    <img src="https://img.shields.io/npm/v/react-map-gl.svg?style=flat-square" alt="version" />
+  </a>
+  <a href="https://travis-ci.org/uber/react-map-gl">
+    <img src="https://img.shields.io/travis/uber/react-map-gl/master.svg?style=flat-square" alt="build" />
+  </a>
+  <a href="https://npmjs.org/package/react-map-gl">
+    <img src="https://img.shields.io/npm/dm/react-map-gl.svg?style=flat-square" alt="downloads" />
+  </a>
+</p>
+
 # Introduction
 
 react-map-gl is a suite of [React](http://facebook.github.io/react/) components for
