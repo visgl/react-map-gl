@@ -1,5 +1,10 @@
 # CHANGELOG
 
+
+## Version 3.0.4 (Aug 08, 2017)
+
+Add babel transform-runtime to es5 build for IE11 support.
+
 ## Version 3.0.3 (August 01, 2017)
 
 - `v3.0.2` skipped because of faulty publish
