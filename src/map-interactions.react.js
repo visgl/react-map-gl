@@ -36,9 +36,15 @@ const firefox = ua.indexOf('firefox') !== -1;
 function getMousePosition(el, event) {
   const rect = el.getBoundingClientRect();
   event = event.touches ? event.touches[0] : event;
+
+  // Fix scale for map affected by a CSS transform.
+  // See https://stackoverflow.com/a/26893663/3528533
+  const scaleX = rect.width / el.offsetWidth;
+  const scaleY = rect.height / el.offsetHeight;
+
   return [
-    event.clientX - rect.left - el.clientLeft,
-    event.clientY - rect.top - el.clientTop
+    (event.clientX - rect.left - el.clientLeft) / scaleX,
+    (event.clientY - rect.top - el.clientTop) / scaleY
   ];
 }
 
@@ -47,10 +53,16 @@ function getTouchPositions(el, event) {
   const points = [];
   const rect = el.getBoundingClientRect();
   const touches = getTouches(event);
+
+  // Fix scale for map affected by a CSS transform.
+  // See https://stackoverflow.com/a/26893663/3528533
+  const scaleX = rect.width / el.offsetWidth;
+  const scaleY = rect.height / el.offsetHeight;
+
   for (let i = 0; i < touches.length; i++) {
     points.push([
-      touches[i].clientX - rect.left - el.clientLeft,
-      touches[i].clientY - rect.top - el.clientTop
+      (touches[i].clientX - rect.left - el.clientLeft) / scaleX,
+      (touches[i].clientY - rect.top - el.clientTop) / scaleY
     ]);
   }
   return points;
