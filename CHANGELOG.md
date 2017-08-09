@@ -1,5 +1,8 @@
 # CHANGELOG
 
+[TBD]
+
+- FIX: interaction when map is scaled by CSS transform
 
 ## Version 3.0.4 (Aug 08, 2017)
 
