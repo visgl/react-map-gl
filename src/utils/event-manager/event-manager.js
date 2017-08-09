@@ -16,6 +16,8 @@ function ManagerMock(m) {
   instance.off = chainedNoop;
   instance.destroy = chainedNoop;
   instance.emit = chainedNoop;
+  instance.get = chainedNoop;
+  instance.set = chainedNoop;
   return instance;
 }
 
