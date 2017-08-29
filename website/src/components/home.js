@@ -65,7 +65,7 @@ class Home extends Component {
               </h3>
               <p>
               Use together with e.g. <a
-                href="https://github.com/uber/react-map-gl"
+                href="https://uber.github.io/deck.gl/"
                 target="_blank"
                 rel="noopener noreferrer">
                 deck.gl</a> to render performant and compelling 2D and 3D
