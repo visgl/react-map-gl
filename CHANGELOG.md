@@ -1,3 +1,10 @@
+## Version 2.0.4 (August 29, 2017)
+
+#### Bug Fix
+
+- Fix scale for map affected by a CSS transform (#318)
+- Fixed PropTypes and refs for react v16.x.x (#316)
+
 ## Version 2.0.3 (May 18, 2017)
 
 #### New Props
