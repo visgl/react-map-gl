@@ -37,11 +37,9 @@ export {default as SVGOverlay} from './overlays/svg-overlay';
 
 // Experimental Features (May change in minor version bumps, use at your own risk)
 import MapControls from './utils/map-controls';
-import EventManager from './utils/event-manager/event-manager';
 import autobind from './utils/autobind';
 
 export const experimental = {
-  EventManager,
   MapControls,
   autobind
 };
