@@ -6,7 +6,7 @@ import StaticMap from './static-map';
 import {MAPBOX_LIMITS} from '../utils/map-state';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
-import EventManager from '../utils/event-manager/event-manager';
+import {EventManager} from 'mjolnir.js';
 import MapControls from '../utils/map-controls';
 import config from '../config';
 import deprecateWarn from '../utils/deprecate-warn';

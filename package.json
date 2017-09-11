@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "bowser": "^1.2.0",
-    "hammerjs": "^2.0.8",
+    "mjolnir.js": ">=0.1.0",
     "immutable": "*",
     "mapbox-gl": "0.38.0",
     "prop-types": "^15.5.7",
