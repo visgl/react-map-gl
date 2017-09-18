@@ -20,8 +20,8 @@ MAP_STYLE.layers.splice(
     source: 'counties',
     'source-layer': 'original',
     paint: {
-        'fill-outline-color': 'rgba(0,0,0,0.1)',
-        'fill-color': 'rgba(0,0,0,0.1)'
+      'fill-outline-color': 'rgba(0,0,0,0.1)',
+      'fill-color': 'rgba(0,0,0,0.1)'
     }
   },
   // Highlighted county polygons
@@ -31,14 +31,15 @@ MAP_STYLE.layers.splice(
     source: 'counties',
     'source-layer': 'original',
     paint: {
-        'fill-outline-color': '#484896',
-        'fill-color': '#6e599f',
-        'fill-opacity': 0.75
+      'fill-outline-color': '#484896',
+      'fill-color': '#6e599f',
+      'fill-opacity': 0.75
     },
     filter: ['in', 'COUNTY', '']
   }
 );
 
-export const highlightLayerIndex = MAP_STYLE.layers.findIndex(layer => layer.id === 'counties-highlighted');
+export const highlightLayerIndex =
+  MAP_STYLE.layers.findIndex(layer => layer.id === 'counties-highlighted');
 
 export const defaultMapStyle = fromJS(MAP_STYLE);
