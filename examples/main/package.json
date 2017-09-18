@@ -11,8 +11,8 @@
     "d3-random": "^1.0.2",
     "d3-request": "^1.0.5",
     "d3-scale": "^1.0.3",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1",
+    "react": ">=16.0.0-rc.3",
+    "react-dom": ">=16.0.0-rc.3",
     "react-map-gl": "^3.0.0",
     "tween.js": "^16.6.0"
   },
