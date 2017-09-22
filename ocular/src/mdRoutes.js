@@ -16,10 +16,6 @@ import svgOverlay from '../../docs/overlays/svg-overlay.md';
 // import cumstomMapControls from 'docs/advanced/custom-map-controls.md';
 /* eslint-enable max-len */
 
-import {} from './react-demos';
-
-// const RAW_GITHUB = 'https://raw.githubusercontent.com/uber/react-map-gl/master';
-
 export default [
   // {
   //   name: 'Examples',
