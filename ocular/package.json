@@ -1,0 +1,13 @@
+{
+  "main": "index.js",
+  "scripts": {
+    "start": "ocular start open",
+    "build": "ocular build",
+    "lint": "ocular lint"
+  },
+  "dependencies": {
+    "math.gl": ">=1.0.0-alpha.7",
+    "ocular": "^0.2.13",
+    "stats.js": "^0.17.0"
+  }
+}

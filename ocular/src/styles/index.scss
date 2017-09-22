@@ -1,0 +1,128 @@
+@import 'variables';
+
+.banner {
+  position: relative;
+  height: 30rem;
+
+  .hero {
+    height: 30rem;
+  }
+
+  .fps {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    > div {
+      position: relative !important;
+    }
+  }
+
+  .container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    pointer-events: none;
+    padding: 0 2rem;
+    width: 100%;
+    height: 100%;
+
+    color: white;
+  }
+
+  p {
+    font-size: 16px;
+    text-shadow: 3px 3px 5px black;
+  }
+
+  h1 {
+    font-size: 5em;
+    text-shadow: 3px 3px 5px black;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-weight: 700;
+    margin: 96px 0 8px;
+  }
+
+  .btn {
+    font-size: 12px;
+    line-height: 44px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin: 4rem 0;
+    padding: 0 4rem;
+    pointer-events: all;
+
+    transition: background-color 250ms ease-in, color 250ms ease-in;
+    border: solid 2px $primary;
+    border-image: linear-gradient(to right, $primary 0%, $secondary 100%);
+    border-image-slice: 2;
+    &:hover {
+      background-color: $primary;
+      color: black;
+    }
+  }
+}
+
+.bg-black {
+  background: $black;
+  color: $white;
+}
+
+.thumb {
+  cursor: pointer;
+  position: relative;
+  width: 24%;
+  display: inline-block;
+  line-height: 0;
+
+  img {
+    transition: opacity 0.4s;
+  }
+
+  > div:before, > div:after {
+    display: block;
+    z-index: 1;
+    position: absolute;
+    transition: opacity 0.4s;
+    opacity: 0;
+    text-align: center;
+    pointer-events: none;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+  > div:before {
+    content: attr(data-title);
+    font-size: 1.4em;
+    font-weight: 100;
+    width: 100%;
+    padding: 12%;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  > div:after {
+    font-size: 0.833em;
+    content: attr(data-name);
+    padding: 5%;
+    left: 0;
+    width: 80%;
+    height: 80%;
+    margin: 10%;
+    top: 0;
+    left: 0;
+    border: solid 2px;
+    border-image: linear-gradient(to right, $primary 0%, $secondary 100%);
+    border-image-slice: 2;
+    box-sizing: border-box;
+  }
+  > div:hover img {
+    opacity: 0.2;
+  }
+  > div:hover:before, > div:hover:after {
+    opacity: 1;
+  }
+
+}
