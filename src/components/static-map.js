@@ -22,8 +22,7 @@ import PropTypes from 'prop-types';
 import autobind from '../utils/autobind';
 
 import {getAccessToken} from '../utils/access-token';
-import {getInteractiveLayerIds} from '../utils/style-utils';
-import diffStyles from '../utils/diff-styles';
+import {getInteractiveLayerIds, setDiffStyle} from '../utils/style-utils';
 
 import Immutable from 'immutable';
 
@@ -224,106 +223,6 @@ export default class StaticMap extends PureComponent {
     this._queryParams = {layers: interactiveLayerIds};
   }
 
-  // Update a source in the map style
-  _updateSource(map, update) {
-    const newSource = update.source.toJS();
-    if (newSource.type === 'geojson') {
-      const oldSource = map.getSource(update.id);
-      if (oldSource.type === 'geojson') {
-        // update data if no other GeoJSONSource options were changed
-        const oldOpts = oldSource.workerOptions;
-        if (
-          (newSource.maxzoom === undefined ||
-            newSource.maxzoom === oldOpts.geojsonVtOptions.maxZoom) &&
-          (newSource.buffer === undefined ||
-            newSource.buffer === oldOpts.geojsonVtOptions.buffer) &&
-          (newSource.tolerance === undefined ||
-            newSource.tolerance === oldOpts.geojsonVtOptions.tolerance) &&
-          (newSource.cluster === undefined ||
-            newSource.cluster === oldOpts.cluster) &&
-          (newSource.clusterRadius === undefined ||
-            newSource.clusterRadius === oldOpts.superclusterOptions.radius) &&
-          (newSource.clusterMaxZoom === undefined ||
-            newSource.clusterMaxZoom === oldOpts.superclusterOptions.maxZoom)
-        ) {
-          oldSource.setData(newSource.data);
-          return;
-        }
-      }
-    }
-
-    map.removeSource(update.id);
-    map.addSource(update.id, newSource);
-  }
-
-  // Individually update the maps source and layers that have changed if all
-  // other style props haven't changed. This prevents flicking of the map when
-  // styles only change sources or layers.
-  /* eslint-disable max-statements, complexity */
-  _setDiffStyle(prevStyle, nextStyle) {
-    const prevKeysMap = prevStyle && styleKeysMap(prevStyle) || {};
-    const nextKeysMap = styleKeysMap(nextStyle);
-    function styleKeysMap(style) {
-      return style.map(() => true).delete('layers').delete('sources').toJS();
-    }
-    function propsOtherThanLayersOrSourcesDiffer() {
-      const prevKeysList = Object.keys(prevKeysMap);
-      const nextKeysList = Object.keys(nextKeysMap);
-      if (prevKeysList.length !== nextKeysList.length) {
-        return true;
-      }
-      // `nextStyle` and `prevStyle` should not have the same set of props.
-      if (nextKeysList.some(
-        key => prevStyle.get(key) !== nextStyle.get(key)
-        // But the value of one of those props is different.
-      )) {
-        return true;
-      }
-      return false;
-    }
-
-    const map = this._map;
-
-    if (!prevStyle || propsOtherThanLayersOrSourcesDiffer()) {
-      map.setStyle(nextStyle.toJS());
-      return;
-    }
-
-    const {sourcesDiff, layersDiff} = diffStyles(prevStyle, nextStyle);
-
-    // TODO: It's rather difficult to determine style diffing in the presence
-    // of refs. For now, if any style update has a ref, fallback to no diffing.
-    // We can come back to this case if there's a solid usecase.
-    if (layersDiff.updates.some(node => node.layer.get('ref'))) {
-      map.setStyle(nextStyle.toJS());
-      return;
-    }
-
-    for (const enter of sourcesDiff.enter) {
-      map.addSource(enter.id, enter.source.toJS());
-    }
-    for (const update of sourcesDiff.update) {
-      this._updateSource(map, update);
-    }
-    for (const exit of sourcesDiff.exit) {
-      map.removeSource(exit.id);
-    }
-    for (const exit of layersDiff.exiting) {
-      if (map.style.getLayer(exit.id)) {
-        map.removeLayer(exit.id);
-      }
-    }
-    for (const update of layersDiff.updates) {
-      if (!update.enter) {
-        // This is an old layer that needs to be updated. Remove the old layer
-        // with the same id and add it back again.
-        map.removeLayer(update.id);
-      }
-      map.addLayer(update.layer.toJS(), update.before);
-    }
-  }
-  /* eslint-enable max-statements, complexity */
-
   _updateMapStyle(oldProps, newProps) {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
@@ -332,7 +231,7 @@ export default class StaticMap extends PureComponent {
         if (this.props.preventStyleDiffing) {
           this._map.setStyle(mapStyle.toJS());
         } else {
-          this._setDiffStyle(oldMapStyle, mapStyle);
+          setDiffStyle(oldMapStyle, mapStyle, this._map);
         }
       } else {
         this._map.setStyle(mapStyle);
