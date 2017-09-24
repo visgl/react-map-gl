@@ -21,29 +21,16 @@ import {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
 import autobind from '../utils/autobind';
 
-import {getAccessToken} from '../utils/access-token';
 import {getInteractiveLayerIds, setDiffStyle} from '../utils/style-utils';
-
 import Immutable from 'immutable';
 
-import isBrowser from '../utils/is-browser';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
-let mapboxgl = null;
-if (isBrowser) {
-  mapboxgl = require('mapbox-gl');
-}
+import Mapbox from '../mapbox/mapbox';
 
 function noop() {}
 
-const propTypes = {
-  /** Mapbox API access token for mapbox-gl-js. Required when using Mapbox vector tiles/styles. */
-  mapboxApiAccessToken: PropTypes.string,
-  /** Mapbox WebGL context creation option. Useful when you want to export the canvas as a PNG. */
-  preserveDrawingBuffer: PropTypes.bool,
-  /** Show attribution control or not. */
-  attributionControl: PropTypes.bool,
-
+const propTypes = Object.assign({}, Mapbox.propTypes, {
   /** The Mapbox style. A string url or a MapboxGL style Immutable.Map object. */
   mapStyle: PropTypes.oneOfType([
     PropTypes.string,
@@ -52,41 +39,14 @@ const propTypes = {
   /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
   preventStyleDiffing: PropTypes.bool,
   /** Whether the map is visible */
-  visible: PropTypes.bool,
+  visible: PropTypes.bool
+});
 
-  /** The width of the map. */
-  width: PropTypes.number.isRequired,
-  /** The height of the map. */
-  height: PropTypes.number.isRequired,
-  /** The longitude of the center of the map. */
-  longitude: PropTypes.number.isRequired,
-  /** The latitude of the center of the map. */
-  latitude: PropTypes.number.isRequired,
-  /** The tile zoom level of the map. */
-  zoom: PropTypes.number.isRequired,
-  /** Specify the bearing of the viewport */
-  bearing: PropTypes.number,
-  /** Specify the pitch of the viewport */
-  pitch: PropTypes.number,
-  /** Altitude of the viewport camera. Default 1.5 "screen heights" */
-  // Note: Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
-  altitude: PropTypes.number,
-  /** The onLoad callback for the map */
-  onLoad: PropTypes.func
-};
-
-const defaultProps = {
+const defaultProps = Object.assign({}, Mapbox.defaultProps, {
   mapStyle: 'mapbox://styles/mapbox/light-v8',
-  mapboxApiAccessToken: getAccessToken(),
-  preserveDrawingBuffer: false,
-  attributionControl: true,
   preventStyleDiffing: false,
-  visible: true,
-  bearing: 0,
-  pitch: 0,
-  altitude: 1.5,
-  onLoad: noop
-};
+  visible: true
+});
 
 const childContextTypes = {
   viewport: PropTypes.instanceOf(PerspectiveMercatorViewport)
@@ -94,17 +54,12 @@ const childContextTypes = {
 
 export default class StaticMap extends PureComponent {
   static supported() {
-    return mapboxgl && mapboxgl.supported();
+    return Mapbox && Mapbox.supported();
   }
 
   constructor(props) {
     super(props);
-
     this._queryParams = {};
-    if (mapboxgl) {
-      mapboxgl.accessToken = props.mapboxApiAccessToken;
-    }
-
     if (!StaticMap.supported()) {
       this.componentDidMount = noop;
       this.componentWillReceiveProps = noop;
@@ -120,48 +75,20 @@ export default class StaticMap extends PureComponent {
   }
 
   componentDidMount() {
-    if (!mapboxgl) {
-      return;
-    }
-
-    const mapStyle = Immutable.Map.isMap(this.props.mapStyle) ?
-      this.props.mapStyle.toJS() :
-      this.props.mapStyle;
-    const map = new mapboxgl.Map({
+    this._mapbox = new Mapbox(Object.assign({}, this.props, {
       container: this._mapboxMap,
-      center: [this.props.longitude, this.props.latitude],
-      zoom: this.props.zoom,
-      pitch: this.props.pitch,
-      bearing: this.props.bearing,
-      style: mapStyle,
-      interactive: false,
-      attributionControl: this.props.attributionControl,
-      preserveDrawingBuffer: this.props.preserveDrawingBuffer
-    });
-
-    // Disable outline style
-    const canvas = map.getCanvas();
-    if (canvas) {
-      canvas.style.outline = 'none';
-    }
-
-    // Attach optional onLoad function
-    map.once('load', this.props.onLoad);
-
-    this._map = map;
-    this._updateMapViewport({}, this.props);
-    // this._callOnChangeViewport(map.transform);
-    this._updateQueryParams(mapStyle);
+      style: undefined
+    }));
+    this._map = this._mapbox.getMap();
+    this._updateMapStyle({}, this.props);
   }
 
   componentWillReceiveProps(newProps) {
-    if (!mapboxgl) {
-      return;
-    }
-
-    this._updateStateFromProps(this.props, newProps);
-    this._updateMapViewport(this.props, newProps);
+    this._mapbox.setProps(newProps);
     this._updateMapStyle(this.props, newProps);
+
+    // this._updateMapViewport(this.props, newProps);
+
     // Save width/height so that we can check them in componentDidUpdate
     this.setState({
       width: this.props.width,
@@ -170,23 +97,15 @@ export default class StaticMap extends PureComponent {
   }
 
   componentDidUpdate() {
-    if (!mapboxgl) {
-      return;
-    }
-
     // Since Mapbox's map.resize() reads size from DOM
     // we must wait to read size until after render (i.e. here in "didUpdate")
     this._updateMapSize(this.state, this.props);
   }
 
   componentWillUnmount() {
-    if (!mapboxgl) {
-      return;
-    }
-
-    if (this._map) {
-      this._map.remove();
-    }
+    this._mapbox.finalize();
+    this._mapbox = null;
+    this._map = null;
   }
 
   // External apps can access map this way
@@ -211,16 +130,21 @@ export default class StaticMap extends PureComponent {
     return this._map.queryRenderedFeatures(geometry, queryParams);
   }
 
-  _updateStateFromProps(oldProps, newProps) {
-    if (mapboxgl) {
-      mapboxgl.accessToken = newProps.mapboxApiAccessToken;
-    }
-  }
-
   // Hover and click only query layers whose interactive property is true
   _updateQueryParams(mapStyle) {
     const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
     this._queryParams = {layers: interactiveLayerIds};
+  }
+
+  // Note: needs to be called after render (e.g. in componentDidUpdate)
+  _updateMapSize(oldProps, newProps) {
+    const sizeChanged =
+      oldProps.width !== newProps.width || oldProps.height !== newProps.height;
+
+    if (sizeChanged) {
+      this._map.resize();
+      // this._callOnChangeViewport(this._map.transform);
+    }
   }
 
   _updateMapStyle(oldProps, newProps) {
@@ -237,41 +161,6 @@ export default class StaticMap extends PureComponent {
         this._map.setStyle(mapStyle);
       }
       this._updateQueryParams(mapStyle);
-    }
-  }
-
-  _updateMapViewport(oldProps, newProps) {
-    const viewportChanged =
-      newProps.latitude !== oldProps.latitude ||
-      newProps.longitude !== oldProps.longitude ||
-      newProps.zoom !== oldProps.zoom ||
-      newProps.pitch !== oldProps.pitch ||
-      newProps.bearing !== oldProps.bearing ||
-      newProps.altitude !== oldProps.altitude;
-
-    if (viewportChanged) {
-      this._map.jumpTo({
-        center: [newProps.longitude, newProps.latitude],
-        zoom: newProps.zoom,
-        bearing: newProps.bearing,
-        pitch: newProps.pitch
-      });
-
-      // TODO - jumpTo doesn't handle altitude
-      if (newProps.altitude !== oldProps.altitude) {
-        this._map.transform.altitude = newProps.altitude;
-      }
-    }
-  }
-
-  // Note: needs to be called after render (e.g. in componentDidUpdate)
-  _updateMapSize(oldProps, newProps) {
-    const sizeChanged =
-      oldProps.width !== newProps.width || oldProps.height !== newProps.height;
-
-    if (sizeChanged) {
-      this._map.resize();
-      // this._callOnChangeViewport(this._map.transform);
     }
   }
 

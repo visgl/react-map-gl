@@ -1,3 +1,12 @@
+# react-map-gl v3.1
+
+Release date: TBD, target late 2017
+
+## Highlights
+
+- **Support for Map Reuse**: A new property `reuseMaps` is provided for applications that create and destroy maps, to help work around a mapbox-gl resource leak issue that can lead to a browser crash in certain situations.
+
+
 # react-map-gl v3.0
 
 Release date: July 27th, 2017
