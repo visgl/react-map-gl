@@ -3,12 +3,18 @@
 # Version 3.1 (under development)
 
 ### [TBD - 3.1.0-alpha.1?]
+- Initial ocular folder
+- Build website from src, step towards ocular
 - Remaining style diffing utils broken out from `StaticMap`
 
 
 # Version 3.0
 
+<<<<<<< HEAD
 ## Version 3.0.4 (August 08,m 2017)
+=======
+## Version 3.0.4 (August 08, 2017)
+>>>>>>> Build website from src, first step towards ocular
 
 - FIX: interaction when map is scaled by CSS transform
 
