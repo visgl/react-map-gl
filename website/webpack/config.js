@@ -52,6 +52,7 @@ module.exports = {
       'node_modules'
     ],
     alias: {
+      'react-map-gl': resolve('../src'),
       // used by Mapbox
       webworkify: 'webworkify-webpack-dropin',
       // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
