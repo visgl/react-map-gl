@@ -4,10 +4,6 @@ import MapGL from 'react-map-gl';
 
 const token = process.env.MapboxAccessToken; // eslint-disable-line
 
-if (!token) {
-  throw new Error('Please specify a valid mapbox token');
-}
-
 class Root extends Component {
 
   state = {
