@@ -29,7 +29,7 @@ import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import Mapbox from '../mapbox/mapbox';
 
 /* eslint-disable max-len */
-const TOKEN_DOC_URL = 'http://uber.github.io/deck.gl/#/documentation/overview/getting-started#note-on-map-tokens-';
+const TOKEN_DOC_URL = 'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
 /* eslint-disable max-len */
 
 function noop() {}
