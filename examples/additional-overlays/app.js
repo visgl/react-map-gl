@@ -27,10 +27,6 @@ import customOverlayExamples from './custom-overlay-examples';
 
 const token = process.env.MapboxAccessToken; // eslint-disable-line
 
-if (!token) {
-  throw new Error('Please specify a valid mapbox token');
-}
-
 export default class App extends Component {
   constructor(props) {
     super(props);

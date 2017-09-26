@@ -11,10 +11,6 @@ import {json as requestJson} from 'd3-request';
 
 const token = process.env.MapboxAccessToken; // eslint-disable-line
 
-if (!token) {
-  throw new Error('Please specify a valid mapbox token');
-}
-
 export default class App extends Component {
 
   state = {

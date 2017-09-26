@@ -9,10 +9,6 @@ import ControlPanel from './control-panel';
 
 const token = process.env.MapboxAccessToken; // eslint-disable-line
 
-if (!token) {
-  throw new Error('Please specify a valid mapbox token');
-}
-
 // Required by tween.js
 function animate() {
   TWEEN.update();
