@@ -5,6 +5,7 @@
 ### [TBD - 3.1.0-alpha.1?]
 
 - StaticMap: Based on new Mapbox wrapper that supports reuse of mapbox maps
+- StaticMap: Renders HTML mapbox token warning if no token supplied
 - StaticMap: Remaining style diffing utils broken out
 - ocular: Initial folder
 - ocular: Build website from src, align with ocular setup
