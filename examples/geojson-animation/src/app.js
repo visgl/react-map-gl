@@ -10,10 +10,6 @@ import {fromJS} from 'immutable';
 
 const token = process.env.MapboxAccessToken; // eslint-disable-line
 
-if (!token) {
-  throw new Error('Please specify a valid mapbox token');
-}
-
 let animation = null;
 
 export default class App extends Component {

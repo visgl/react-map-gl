@@ -28,6 +28,10 @@ import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
 import Mapbox from '../mapbox/mapbox';
 
+/* eslint-disable max-len */
+const TOKEN_DOC_URL = 'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
+/* eslint-disable max-len */
+
 function noop() {}
 
 const propTypes = Object.assign({}, Mapbox.propTypes, {
@@ -168,6 +172,16 @@ export default class StaticMap extends PureComponent {
     this._mapboxMap = ref;
   }
 
+  _renderNoTokenWarning() {
+    return (
+      createElement('div', {key: 'warning', id: 'no-token-warning'}, [
+        createElement('h3', {key: 'header'}, 'No Mapbox access token found'),
+        createElement('span', {key: 'text'}, 'For information on setting up your basemap, read'),
+        createElement('a', {key: 'link', href: TOKEN_DOC_URL}, 'Note on Map Tokens')
+      ])
+    );
+  }
+
   render() {
     const {className, width, height, style, visible} = this.props;
     const mapContainerStyle = Object.assign({}, style, {width, height, position: 'relative'});
@@ -191,6 +205,7 @@ export default class StaticMap extends PureComponent {
         key: 'map-container',
         style: mapContainerStyle,
         children: [
+          !this.props.mapboxApiAccessToken && this._renderNoTokenWarning(),
           createElement('div', {
             key: 'map-mapbox',
             ref: this._mapboxMapLoaded,

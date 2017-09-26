@@ -8,10 +8,6 @@ import bartStations from './bart-station.json';
 
 const token = process.env.MapboxAccessToken; // eslint-disable-line
 
-if (!token) {
-  throw new Error('Please specify a valid mapbox token');
-}
-
 import MARKER_STYLE from './marker-style';
 
 export default class App extends Component {

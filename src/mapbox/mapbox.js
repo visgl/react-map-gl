@@ -128,7 +128,7 @@ export default class Mapbox {
   }
 
   setProps(props) {
-    if (!mapboxgl) {
+    if (!mapboxgl || !this._map) {
       return this;
     }
 
@@ -140,7 +140,7 @@ export default class Mapbox {
   // In a system like React we must wait to read size until after render
   // (e.g. until "componentDidUpdate")
   resize() {
-    if (!mapboxgl) {
+    if (!mapboxgl || !this._map) {
       return this;
     }
 
@@ -197,7 +197,12 @@ export default class Mapbox {
 
     // Creation only props
     if (mapboxgl) {
-      mapboxgl.accessToken = props.mapboxApiAccessToken;
+      if (!props.mapboxApiAccessToken) {
+        console.error('An API access token is required to use Mapbox GL'); // eslint-disable-line
+        mapboxgl.accessToken = 'no-token';
+      } else {
+        mapboxgl.accessToken = props.mapboxApiAccessToken;
+      }
     }
 
     this._create(props);
