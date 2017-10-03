@@ -34,10 +34,11 @@
     "publish-beta": "npm run build && npm run test && npm publish --tag beta"
   },
   "dependencies": {
+    "babel-runtime": "^6.23.0",
     "bowser": "^1.2.0",
-    "mjolnir.js": ">=0.1.0",
     "immutable": "*",
     "mapbox-gl": "0.38.0",
+    "mjolnir.js": ">=0.1.0",
     "prop-types": "^15.5.7",
     "viewport-mercator-project": "^4.0.1"
   },
