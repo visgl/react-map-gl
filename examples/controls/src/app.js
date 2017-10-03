@@ -9,7 +9,7 @@ import CityInfo from './city-info';
 
 import CITIES from '../../data/cities.json';
 
-const token = process.env.MapboxAccessToken; // eslint-disable-line
+const TOKEN = ''; // Set your mapbox token here
 
 const navStyle = {
   position: 'absolute',
@@ -92,7 +92,7 @@ export default class App extends Component {
         {...viewport}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._updateViewport}
-        mapboxApiAccessToken={token} >
+        mapboxApiAccessToken={TOKEN} >
 
         { CITIES.map(this._renderCityMarker) }
 

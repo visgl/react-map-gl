@@ -9,7 +9,7 @@ import {updatePercentiles} from './utils';
 import {fromJS} from 'immutable';
 import {json as requestJson} from 'd3-request';
 
-const token = process.env.MapboxAccessToken; // eslint-disable-line
+const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
 
@@ -111,7 +111,7 @@ export default class App extends Component {
           {...viewport}
           mapStyle={mapStyle}
           onViewportChange={this._onViewportChange}
-          mapboxApiAccessToken={token}
+          mapboxApiAccessToken={MAPBOX_TOKEN}
           onHover={this._onHover} >
 
           {this._renderTooltip()}

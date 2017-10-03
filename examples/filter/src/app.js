@@ -6,7 +6,7 @@ import ControlPanel from './control-panel';
 
 import {defaultMapStyle, highlightLayerIndex} from './map-style.js';
 
-const token = process.env.MapboxAccessToken; // eslint-disable-line
+const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
 
@@ -84,7 +84,7 @@ export default class App extends Component {
       <MapGL
         {...viewport}
         mapStyle={mapStyle}
-        mapboxApiAccessToken={token}
+        mapboxApiAccessToken={MAPBOX_TOKEN}
         onViewportChange={this._onViewportChange}
         onHover={this._onHover} >
         { this._renderPopup() }

@@ -6,7 +6,7 @@ import ControlPanel from './control-panel';
 
 import bartStations from './bart-station.json';
 
-const token = process.env.MapboxAccessToken; // eslint-disable-line
+const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 import MARKER_STYLE from './marker-style';
 
@@ -79,7 +79,7 @@ export default class App extends Component {
         {...settings}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={token} >
+        mapboxApiAccessToken={MAPBOX_TOKEN} >
         <style>{MARKER_STYLE}</style>
         { bartStations.map(this._renderMarker) }
         <ControlPanel containerComponent={this.props.containerComponent}

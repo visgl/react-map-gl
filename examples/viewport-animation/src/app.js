@@ -7,7 +7,7 @@ import TWEEN from 'tween.js';
 
 import ControlPanel from './control-panel';
 
-const token = process.env.MapboxAccessToken; // eslint-disable-line
+const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 // Required by tween.js
 function animate() {
@@ -79,7 +79,7 @@ export default class App extends Component {
           mapStyle="mapbox://styles/mapbox/dark-v9"
           onViewportChange={this._onViewportChange}
           dragToRotate={false}
-          mapboxApiAccessToken={token} />
+          mapboxApiAccessToken={MAPBOX_TOKEN} />
         <ControlPanel containerComponent={this.props.containerComponent}
           onViewportChange={this._easeTo} />
       </div>

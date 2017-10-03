@@ -2,7 +2,7 @@
 
 # Version 3.1 (under development)
 
-### [TBD - 3.1.0-alpha.1?]
+### 3.1.0-alpha.1 [TBD - ?]
 
 - StaticMap: Based on new Mapbox wrapper that supports reuse of mapbox maps
 - StaticMap: Renders HTML mapbox token warning if no token supplied
