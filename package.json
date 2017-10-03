@@ -33,6 +33,7 @@
     "publish-beta": "npm run build && npm run test && npm publish --tag beta"
   },
   "dependencies": {
+    "babel-runtime": "^6.23.0",
     "bowser": "^1.2.0",
     "hammerjs": "^2.0.8",
     "immutable": "*",
