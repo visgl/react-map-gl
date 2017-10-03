@@ -13,10 +13,14 @@
 
 # Version 3.0
 
-## Version 3.0.4 (August 08, 2017)
+## Version 3.0.5 (October 03, 2017)
 
 - FIX: missing `babel-runtime` module at runtime
 - FIX: interaction when map is scaled by CSS transform
+
+## Version 3.0.4 (August 08, 2017)
+
+Add babel transform-runtime to es5 build for IE11 support.
 
 ## Version 3.0.3 (August 01, 2017)
 
