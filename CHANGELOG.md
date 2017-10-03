@@ -2,6 +2,7 @@
 
 [TBD]
 
+- FIX: missing `babel-runtime` module at runtime
 - FIX: interaction when map is scaled by CSS transform
 
 ## Version 3.0.3 (August 01, 2017)
