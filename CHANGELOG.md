@@ -4,6 +4,7 @@
 
 ### 3.1.0-alpha.1 [TBD - ?]
 
+- Bump Mapbox to 0.40.1
 - StaticMap: Based on new Mapbox wrapper that supports reuse of mapbox maps
 - StaticMap: Renders HTML mapbox token warning if no token supplied
 - StaticMap: Remaining style diffing utils broken out
