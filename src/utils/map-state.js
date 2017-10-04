@@ -134,9 +134,9 @@ export default class MapState {
   pan({pos, startPos}) {
     const startPanLngLat = this._interactiveState.startPanLngLat || this._unproject(startPos);
 
-    // take the start lnglat and put it where the mouse is down.
-    assert(startPanLngLat, '`startPanLngLat` prop is required ' +
-      'for mouse pan behavior to calculate where to position the map.');
+    if (!startPanLngLat) {
+      return this;
+    }
 
     const [longitude, latitude] = this._calculateNewLngLat({startPanLngLat, pos});
 

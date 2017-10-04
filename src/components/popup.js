@@ -17,14 +17,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {Component, createElement} from 'react';
+import {createElement} from 'react';
 import PropTypes from 'prop-types';
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import BaseControl from './base-control';
 import autobind from '../utils/autobind';
 
 import {getDynamicPosition, ANCHOR_POSITION} from '../utils/dynamic-position';
 
-const propTypes = {
+const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Longitude of the anchor point
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
@@ -45,9 +45,9 @@ const propTypes = {
   dynamicPosition: PropTypes.bool,
   // Callback when component is closed
   onClose: PropTypes.func
-};
+});
 
-const defaultProps = {
+const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   offsetLeft: 0,
   offsetTop: 0,
   tipSize: 10,
@@ -56,11 +56,7 @@ const defaultProps = {
   closeButton: true,
   closeOnClick: true,
   onClose: () => {}
-};
-
-const contextTypes = {
-  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport)
-};
+});
 
 /*
  * PureComponent doesn't update when context changes.
@@ -69,7 +65,7 @@ const contextTypes = {
  * is almost always triggered by a viewport change, we almost definitely need to
  * recalculate the popup's position when the parent re-renders.
  */
-export default class Popup extends Component {
+export default class Popup extends BaseControl {
 
   constructor(props) {
     super(props);
@@ -152,6 +148,7 @@ export default class Popup extends Component {
     return createElement('div', {
       className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType}`,
       style: containerStyle,
+      ref: this._onContainerLoad,
       onClick: closeOnClick ? this._onClose : null
     }, [
       this._renderTip(),
@@ -164,4 +161,3 @@ export default class Popup extends Component {
 Popup.displayName = 'Popup';
 Popup.propTypes = propTypes;
 Popup.defaultProps = defaultProps;
-Popup.contextTypes = contextTypes;
