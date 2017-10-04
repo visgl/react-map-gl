@@ -202,9 +202,15 @@ projections in perspective mode.
 
 
 
-## Beta Releases
+# Beta Releases
 
-### v3 Beta Release
+## v3.1 Beta Releases
+
+### Version 3.1.0-alpha.1
+- React 16 preliminary integration.
+
+
+## v3.0 Beta Releases
 
 ### Version 3.0.0-beta.3
 - Fix: viewport misalignment with Mapbox at low zoom levels
