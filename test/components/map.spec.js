@@ -1,7 +1,7 @@
 // import InteractiveMap from 'react-map-gl';
 import MapGL, {InteractiveMap} from 'react-map-gl';
 import {createElement} from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-test-renderer/shallow';
 import test from 'tape-catch';
 
 const mapboxApiAccessToken =
