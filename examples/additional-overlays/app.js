@@ -25,7 +25,7 @@ import MapGL from 'react-map-gl';
 
 import customOverlayExamples from './custom-overlay-examples';
 
-const token = process.env.MapboxAccessToken; // eslint-disable-line
+const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
   constructor(props) {
@@ -51,7 +51,7 @@ export default class App extends Component {
         {...viewport}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={v => this.setState({viewport: v})}
-        mapboxApiAccessToken={token} >
+        mapboxApiAccessToken={MAPBOX_TOKEN} >
 
         {customOverlayExamples}
 

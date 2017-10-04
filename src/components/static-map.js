@@ -69,6 +69,7 @@ export default class StaticMap extends PureComponent {
       this.componentWillReceiveProps = noop;
       this.componentDidUpdate = noop;
     }
+    this.state = {};
     autobind(this);
   }
 
@@ -85,6 +86,7 @@ export default class StaticMap extends PureComponent {
     }));
     this._map = this._mapbox.getMap();
     this._updateMapStyle({}, this.props);
+    this.forceUpdate(); // Make sure we rerender after mounting
   }
 
   componentWillReceiveProps(newProps) {
@@ -173,13 +175,22 @@ export default class StaticMap extends PureComponent {
   }
 
   _renderNoTokenWarning() {
-    return (
-      createElement('div', {key: 'warning', id: 'no-token-warning'}, [
-        createElement('h3', {key: 'header'}, 'No Mapbox access token found'),
-        createElement('span', {key: 'text'}, 'For information on setting up your basemap, read'),
-        createElement('a', {key: 'link', href: TOKEN_DOC_URL}, 'Note on Map Tokens')
-      ])
-    );
+    if (this._mapbox && !this._mapbox.accessToken) {
+      const style = {
+        position: 'absolute',
+        left: 0,
+        top: 0
+      };
+      return (
+        createElement('div', {key: 'warning', id: 'no-token-warning', style}, [
+          createElement('h3', {key: 'header'}, 'No Mapbox access token found'),
+          createElement('div', {key: 'text'}, 'For information on setting up your basemap, read'),
+          createElement('a', {key: 'link', href: TOKEN_DOC_URL}, 'Note on Map Tokens')
+        ])
+      );
+    }
+
+    return null;
   }
 
   render() {
@@ -205,7 +216,6 @@ export default class StaticMap extends PureComponent {
         key: 'map-container',
         style: mapContainerStyle,
         children: [
-          !this.props.mapboxApiAccessToken && this._renderNoTokenWarning(),
           createElement('div', {
             key: 'map-mapbox',
             ref: this._mapboxMapLoaded,
@@ -218,7 +228,8 @@ export default class StaticMap extends PureComponent {
             className: 'overlays',
             style: overlayContainerStyle,
             children: this.props.children
-          })
+          }),
+          this._renderNoTokenWarning()
         ]
       })
     );

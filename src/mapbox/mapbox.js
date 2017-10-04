@@ -84,7 +84,7 @@ export function getAccessToken() {
 
   if (!accessToken && typeof process !== 'undefined') {
     // Note: This depends on bundler plugins (e.g. webpack) inmporting environment correctly
-    accessToken = accessToken && process.env.MapboxAccessToken; // eslint-disable-line
+    accessToken = accessToken || process.env.MapboxAccessToken; // eslint-disable-line
   }
 
   return accessToken || null;
@@ -195,13 +195,16 @@ export default class Mapbox {
     props = Object.assign({}, defaultProps, props);
     checkPropTypes(props, 'Mapbox');
 
+    // Make empty string pick up default prop
+    this.accessToken = props.mapboxApiAccessToken || defaultProps.mapboxApiAccessToken;
+
     // Creation only props
     if (mapboxgl) {
-      if (!props.mapboxApiAccessToken) {
+      if (!this.accessToken) {
         console.error('An API access token is required to use Mapbox GL'); // eslint-disable-line
-        mapboxgl.accessToken = 'no-token';
+        mapboxgl.accessToken = 'no-token'; // Prevents mapbox from throwing
       } else {
-        mapboxgl.accessToken = props.mapboxApiAccessToken;
+        mapboxgl.accessToken = this.accessToken;
       }
     }
 

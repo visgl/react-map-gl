@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 import ControlPanel from './control-panel';
 
-const token = process.env.MapboxAccessToken; // eslint-disable-line
+const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
 
@@ -53,8 +53,9 @@ export default class App extends Component {
         {...viewport}
         mapStyle={mapStyle}
         onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={token} >
-        <ControlPanel containerComponent={this.props.containerComponent}
+        mapboxApiAccessToken={MAPBOX_TOKEN} >
+        <ControlPanel
+          containerComponent={this.props.containerComponent}
           onChange={this._onStyleChange} />
       </MapGL>
     );
