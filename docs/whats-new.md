@@ -4,7 +4,8 @@ Release date: Under development, target late 2017
 
 ## Highlights
 
-* **React 16** - react-map-gl is now being tested with React 16, but the React peer dependency requirement is unchanged at `>=15.4.x`.
+- **React 16** - react-map-gl is now being tested with React 16, but the React peer dependency requirement is unchanged at `>=15.4.x`.
+- **mapbox-gl v0.40.1**
 - **Support for Map Reuse**: A new property `reuseMaps` is provided for applications that create and destroy maps, to help work around a mapbox-gl resource leak issue that can lead to a browser crash in certain situations.
 - **No Token warning**: react-map-gl now renders an HTML message if no mapbox token is supplied.
 
