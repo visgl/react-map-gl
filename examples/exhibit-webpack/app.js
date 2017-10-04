@@ -1,9 +1,9 @@
-/* global window */
+/* global window, document */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 
-const token = process.env.MapboxAccessToken; // eslint-disable-line
+const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 class Root extends Component {
 
@@ -32,8 +32,7 @@ class Root extends Component {
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={v => this.setState({viewport: v})}
         preventStyleDiffing={false}
-        mapboxApiAccessToken={token} >
-      </MapGL>
+        mapboxApiAccessToken={MAPBOX_TOKEN} />
     );
   }
 
@@ -41,5 +40,4 @@ class Root extends Component {
 
 const root = document.createElement('div');
 document.body.appendChild(root);
-
 render(<Root />, root);

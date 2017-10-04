@@ -8,7 +8,7 @@ import {defaultMapStyle, pointLayer} from './map-style.js';
 import {pointOnCircle} from './utils';
 import {fromJS} from 'immutable';
 
-const token = process.env.MapboxAccessToken; // eslint-disable-line
+const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 let animation = null;
 
@@ -79,7 +79,7 @@ export default class App extends Component {
         {...viewport}
         mapStyle={mapStyle}
         onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={token} >
+        mapboxApiAccessToken={MAPBOX_TOKEN} >
         <ControlPanel containerComponent={this.props.containerComponent} />
       </MapGL>
     );
