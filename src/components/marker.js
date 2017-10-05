@@ -51,7 +51,7 @@ const contextTypes = {
 export default class Marker extends Component {
 
   render() {
-    const {longitude, latitude, offsetLeft, offsetTop} = this.props;
+    const {longitude, latitude, offsetLeft, offsetTop, className, onClick} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);
     const containerStyle = {
@@ -61,9 +61,10 @@ export default class Marker extends Component {
     };
 
     return createElement('div', {
-      className: 'mapboxgl-marker',
+      className: className,
       style: containerStyle,
-      children: this.props.children
+      children: this.props.children,
+      onClick: onClick
     });
   }
 
