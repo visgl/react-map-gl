@@ -21,28 +21,27 @@ import {Component} from 'react';
 import PropTypes from 'prop-types';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
-const stopPropagation = event => event.stopPropagation();
-
 const propTypes = {
   /** Event handling */
-  onWheel: PropTypes.func,
+  preventScrollZoom: PropTypes.bool,
   // Stop map pan & rotate
-  onDragStart: PropTypes.func,
+  preventDragPanRotate: PropTypes.bool,
   // Stop map click
-  onClick: PropTypes.func,
+  preventClick: PropTypes.bool,
   // Stop map double click
-  onDblClick: PropTypes.func
+  preventDoubleClickZoom: PropTypes.bool
 };
 
 const defaultProps = {
-  onWheel: null,
-  onDragStart: stopPropagation,
-  onClick: stopPropagation,
-  onDblClick: stopPropagation
+  preventScrollZoom: false,
+  preventDragPanRotate: true,
+  preventClick: true,
+  preventDoubleClickZoom: true
 };
 
 const contextTypes = {
   viewport: PropTypes.instanceOf(PerspectiveMercatorViewport),
+  isDragging: PropTypes.bool,
   eventManager: PropTypes.object
 };
 
@@ -66,8 +65,8 @@ export default class BaseControl extends Component {
     const events = {
       wheel: this._onEvent,
       panstart: this._onEvent,
-      tap: this._onEvent,
-      doubletap: this._onEvent
+      click: this._onEvent,
+      dblclick: this._onEvent
     };
 
     if (ref) {
@@ -78,25 +77,25 @@ export default class BaseControl extends Component {
   }
 
   _onEvent(event) {
-    let handler;
+    let stopPropagation;
     switch (event.type) {
     case 'wheel':
-      handler = this.props.onWheel;
+      stopPropagation = this.props.preventScrollZoom;
       break;
     case 'panstart':
-      handler = this.props.onDragStart;
+      stopPropagation = this.props.preventDragPanRotate;
       break;
-    case 'tap':
-      handler = this.props.onClick;
+    case 'click':
+      stopPropagation = this.props.preventClick;
       break;
-    case 'doubletap':
-      handler = this.props.onDblClick;
+    case 'dblclick':
+      stopPropagation = this.props.preventDoubleClickZoom;
       break;
     default:
     }
 
-    if (handler) {
-      handler(event);
+    if (stopPropagation) {
+      event.stopPropagation();
     }
   }
 
