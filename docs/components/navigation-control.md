@@ -26,6 +26,18 @@ class Map extends Component {
 ##### `onViewportChange` {Function}
 Callback when the viewport needs to be updated. See [InteractiveMap](/docs/components/interactive-map.md).
 
+##### `preventScrollZoom` {Boolean} - default: `false`
+Block map zoom when scrolling over this component.
+
+##### `preventDragPanRotate` {Boolean} - default: `true`
+Block map pan & rotate when dragging this component.
+
+##### `preventClick` {Boolean} - default: `true`
+Block map click when clicking on this component.
+
+##### `preventDoubleClickZoom` {Boolean} - default: `true`
+Block map zoom when double clicking on this component.
+
 ## Styling
 
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly.

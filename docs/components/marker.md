@@ -34,3 +34,15 @@ Offset of the marker from the left in pixels, negative number indicates left.
 
 ##### `offsetTop` {Number} - default: `0`
 Offset of the marker from the top in pixels, negative number indicates up.
+
+##### `preventScrollZoom` {Boolean} - default: `false`
+Block map zoom when scrolling over this component.
+
+##### `preventDragPanRotate` {Boolean} - default: `true`
+Block map pan & rotate when dragging this component.
+
+##### `preventClick` {Boolean} - default: `true`
+Block map click when clicking on this component.
+
+##### `preventDoubleClickZoom` {Boolean} - default: `true`
+Block map zoom when double clicking on this component.
