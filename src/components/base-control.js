@@ -23,20 +23,20 @@ import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
 const propTypes = {
   /** Event handling */
-  preventScrollZoom: PropTypes.bool,
+  captureScroll: PropTypes.bool,
   // Stop map pan & rotate
-  preventDragPanRotate: PropTypes.bool,
+  captureDrag: PropTypes.bool,
   // Stop map click
-  preventClick: PropTypes.bool,
+  captureClick: PropTypes.bool,
   // Stop map double click
-  preventDoubleClickZoom: PropTypes.bool
+  captureDoubleClick: PropTypes.bool
 };
 
 const defaultProps = {
-  preventScrollZoom: false,
-  preventDragPanRotate: true,
-  preventClick: true,
-  preventDoubleClickZoom: true
+  captureScroll: false,
+  captureDrag: true,
+  captureClick: true,
+  captureDoubleClick: true
 };
 
 const contextTypes = {
@@ -80,16 +80,16 @@ export default class BaseControl extends Component {
     let stopPropagation;
     switch (event.type) {
     case 'wheel':
-      stopPropagation = this.props.preventScrollZoom;
+      stopPropagation = this.props.captureScroll;
       break;
     case 'panstart':
-      stopPropagation = this.props.preventDragPanRotate;
+      stopPropagation = this.props.captureDrag;
       break;
     case 'click':
-      stopPropagation = this.props.preventClick;
+      stopPropagation = this.props.captureClick;
       break;
     case 'dblclick':
-      stopPropagation = this.props.preventDoubleClickZoom;
+      stopPropagation = this.props.captureDoubleClick;
       break;
     default:
     }

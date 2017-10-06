@@ -28,10 +28,10 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
 });
 
 const defaultProps = {
-  preventScrollZoom: false,
-  preventDragPanRotate: false,
-  preventClick: false,
-  preventDoubleClickZoom: false
+  captureScroll: false,
+  captureDrag: false,
+  captureClick: false,
+  captureDoubleClick: false
 };
 
 export default class HTMLOverlay extends BaseControl {

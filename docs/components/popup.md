@@ -53,16 +53,16 @@ If `true`, the anchor will be dynamically adjusted to ensure the popup falls wit
 ##### `onClose` {Function}
 Callback when the user closes the popup.
 
-##### `preventScrollZoom` {Boolean} - default: `false`
+##### `captureScroll` {Boolean} - default: `false`
 Block map zoom when scrolling over this component.
 
-##### `preventDragPanRotate` {Boolean} - default: `true`
+##### `captureDrag` {Boolean} - default: `true`
 Block map pan & rotate when dragging this component.
 
-##### `preventClick` {Boolean} - default: `true`
+##### `captureClick` {Boolean} - default: `true`
 Block map click when clicking on this component.
 
-##### `preventDoubleClickZoom` {Boolean} - default: `true`
+##### `captureDoubleClick` {Boolean} - default: `true`
 Block map zoom when double clicking on this component.
 
 

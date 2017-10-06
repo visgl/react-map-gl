@@ -18,14 +18,14 @@ Parameters:
 
 Additional css styles of the `div` container.
 
-##### `preventScrollZoom` {Boolean} - default: `false`
+##### `captureScroll` {Boolean} - default: `false`
 Block map zoom when scrolling over this component.
 
-##### `preventDragPanRotate` {Boolean} - default: `false`
+##### `captureDrag` {Boolean} - default: `false`
 Block map pan & rotate when dragging this component.
 
-##### `preventClick` {Boolean} - default: `false`
+##### `captureClick` {Boolean} - default: `false`
 Block map click when clicking on this component.
 
-##### `preventDoubleClickZoom` {Boolean} - default: `false`
+##### `captureDoubleClick` {Boolean} - default: `false`
 Block map zoom when double clicking on this component.
