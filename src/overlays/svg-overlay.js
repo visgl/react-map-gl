@@ -18,21 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {Component, createElement} from 'react';
+import {createElement} from 'react';
 import PropTypes from 'prop-types';
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import BaseControl from '../components/base-control';
 
-const propTypes = {
+const propTypes = Object.assign({}, BaseControl.propTypes, {
   redraw: PropTypes.func.isRequired,
   style: PropTypes.object
+});
+
+const defaultProps = {
+  captureScroll: false,
+  captureDrag: false,
+  captureClick: false,
+  captureDoubleClick: false
 };
 
-const contextTypes = {
-  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport),
-  isDragging: PropTypes.bool
-};
-
-export default class SVGOverlay extends Component {
+export default class SVGOverlay extends BaseControl {
   render() {
     const {viewport, isDragging} = this.context;
     const style = Object.assign({
@@ -46,6 +48,7 @@ export default class SVGOverlay extends Component {
       createElement('svg', {
         width: viewport.width,
         height: viewport.height,
+        ref: this._onContainerLoad,
         style
       },
         this.props.redraw({
@@ -62,4 +65,4 @@ export default class SVGOverlay extends Component {
 
 SVGOverlay.displayName = 'SVGOverlay';
 SVGOverlay.propTypes = propTypes;
-SVGOverlay.contextTypes = contextTypes;
+SVGOverlay.defaultProps = defaultProps;
