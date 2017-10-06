@@ -18,22 +18,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {Component, createElement} from 'react';
+import {createElement} from 'react';
 import PropTypes from 'prop-types';
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import BaseControl from '../components/base-control';
 import {window} from '../utils/globals';
 import autobind from '../utils/autobind';
 
-const propTypes = {
+const propTypes = Object.assign({}, BaseControl.propTypes, {
   redraw: PropTypes.func.isRequired
+});
+
+const defaultProps = {
+  captureScroll: false,
+  captureDrag: false,
+  captureClick: false,
+  captureDoubleClick: false
 };
 
-const contextTypes = {
-  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport),
-  isDragging: PropTypes.bool
-};
-
-export default class CanvasOverlay extends Component {
+export default class CanvasOverlay extends BaseControl {
   constructor(props) {
     super(props);
     autobind(this);
@@ -69,6 +71,7 @@ export default class CanvasOverlay extends Component {
 
   _canvasLoaded(ref) {
     this._canvas = ref;
+    this._onContainerLoad(ref);
   }
 
   render() {
@@ -95,4 +98,4 @@ export default class CanvasOverlay extends Component {
 
 CanvasOverlay.displayName = 'CanvasOverlay';
 CanvasOverlay.propTypes = propTypes;
-CanvasOverlay.contextTypes = contextTypes;
+CanvasOverlay.defaultProps = defaultProps;

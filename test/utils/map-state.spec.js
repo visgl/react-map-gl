@@ -109,12 +109,8 @@ test('MapState - Pan', t => {
   });
 
   // insufficient arguments
-  try {
-    new MapState(SAMPLE_VIEWPORTS[0]).pan({pos: POS_START});
-    t.fail('Should throw error for missing argument');
-  } catch (error) {
-    t.ok(/startPanLngLat/.test(error.message), 'Should throw error for missing argument');
-  }
+  const viewport = new MapState(SAMPLE_VIEWPORTS[0]);
+  t.is(viewport, viewport.pan({pos: POS_START}), 'Do nothing when missing argument');
 
   t.end();
 });
