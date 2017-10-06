@@ -54,16 +54,16 @@ If `true`, the anchor will be dynamically adjusted to ensure the popup falls wit
 Callback when the user closes the popup.
 
 ##### `captureScroll` {Boolean} - default: `false`
-Block map zoom when scrolling over this component.
+Stop propagation of mouse wheel event to the map component. Can be used to stop map from zooming when this component is scrolled.
 
 ##### `captureDrag` {Boolean} - default: `true`
-Block map pan & rotate when dragging this component.
+Stop propagation of dragstart event to the map component. Can be used to stop map from panning when this component is dragged.
 
 ##### `captureClick` {Boolean} - default: `true`
-Block map click when clicking on this component.
+Stop propagation of click event to the map component. Can be used to stop map from calling the `onClick` callback when this component is clicked.
 
 ##### `captureDoubleClick` {Boolean} - default: `true`
-Block map zoom when double clicking on this component.
+Stop propagation of dblclick event to the map component. Can be used to stop map from zooming when this component is double clicked.
 
 
 ## Styling
