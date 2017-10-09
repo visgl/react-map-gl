@@ -137,6 +137,8 @@ export default class Popup extends Component {
   render() {
     const {longitude, latitude, offsetLeft, offsetTop, closeOnClick} = this.props;
 
+    let className = this.props.className || '';
+
     const [x, y] = this.context.viewport.project([longitude, latitude]);
 
     const positionType = this._getPosition(x, y);
@@ -150,7 +152,7 @@ export default class Popup extends Component {
     };
 
     return createElement('div', {
-      className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType}`,
+      className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`,
       style: containerStyle,
       onClick: closeOnClick ? this._onClose : null
     }, [

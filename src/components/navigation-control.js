@@ -81,8 +81,11 @@ export default class NavigationControl extends Component {
   }
 
   render() {
+
+    let className = this.props.className || '';
+
     return createElement('div', {
-      className: 'mapboxgl-ctrl mapboxgl-ctrl-group'
+      className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`
     }, [
       this._renderButton('zoom-in', 'Zoom In', this._onZoomIn),
       this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut),
