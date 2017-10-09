@@ -54,10 +54,17 @@ export default class Marker extends Component {
     const {longitude, latitude, offsetLeft, offsetTop} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);
+
+    let left = x + offsetLeft,
+        top = y + offsetTop;
+
     const containerStyle = {
       position: 'absolute',
-      left: x + offsetLeft,
-      top: y + offsetTop
+      left: 0,
+      top: 0,
+      transform: `translate3d(${left}px, ${top}px, 0)`,
+      //'will-change': 'transform',
+      visibility: (top < 0 || left < 0 ? 'hidden' : 'visible')
     };
 
     return createElement('div', {
