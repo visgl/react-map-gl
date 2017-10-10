@@ -17,6 +17,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  className: '',
   onViewportChange: () => {}
 };
 
@@ -82,7 +83,7 @@ export default class NavigationControl extends Component {
 
   render() {
 
-    let className = this.props.className || '';
+    const { className } = this.props;
 
     return createElement('div', {
       className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`

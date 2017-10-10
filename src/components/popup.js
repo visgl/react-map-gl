@@ -25,6 +25,8 @@ import autobind from '../utils/autobind';
 import {getDynamicPosition, ANCHOR_POSITION} from '../utils/dynamic-position';
 
 const propTypes = {
+  // Custom className
+  className: '',
   // Longitude of the anchor point
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
@@ -135,9 +137,7 @@ export default class Popup extends Component {
   }
 
   render() {
-    const {longitude, latitude, offsetLeft, offsetTop, closeOnClick} = this.props;
-
-    let className = this.props.className || '';
+    const {className, longitude, latitude, offsetLeft, offsetTop, closeOnClick} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);
 

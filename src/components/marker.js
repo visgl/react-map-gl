@@ -33,6 +33,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  className: '',
   offsetLeft: 0,
   offsetTop: 0
 };
@@ -51,9 +52,7 @@ const contextTypes = {
 export default class Marker extends Component {
 
   render() {
-    const {longitude, latitude, offsetLeft, offsetTop} = this.props;
-
-    let className = this.props.className || '';
+    const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);
     const containerStyle = {
