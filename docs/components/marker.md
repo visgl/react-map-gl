@@ -34,3 +34,15 @@ Offset of the marker from the left in pixels, negative number indicates left.
 
 ##### `offsetTop` {Number} - default: `0`
 Offset of the marker from the top in pixels, negative number indicates up.
+
+##### `captureScroll` {Boolean} - default: `false`
+Stop propagation of mouse wheel event to the map component. Can be used to stop map from zooming when this component is scrolled.
+
+##### `captureDrag` {Boolean} - default: `true`
+Stop propagation of dragstart event to the map component. Can be used to stop map from panning when this component is dragged.
+
+##### `captureClick` {Boolean} - default: `true`
+Stop propagation of click event to the map component. Can be used to stop map from calling the `onClick` callback when this component is clicked.
+
+##### `captureDoubleClick` {Boolean} - default: `true`
+Stop propagation of dblclick event to the map component. Can be used to stop map from zooming when this component is double clicked.
