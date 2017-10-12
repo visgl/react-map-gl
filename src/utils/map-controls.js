@@ -88,7 +88,13 @@ export default class MapControls {
 
   isRightButtonPressed(event) {
     const {srcEvent: {which, buttons}} = event;
-    return buttons === undefined ? (which === 3) : Boolean(buttons & 2);
+    return buttons === undefined ?
+      // old API - https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/which
+      // 3: Right button
+      (which === 3) :
+      // new API - https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
+      // 2: Secondary button (usually right)
+      Boolean(buttons & 2);
   }
 
   setState(newState) {
