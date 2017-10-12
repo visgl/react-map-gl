@@ -86,6 +86,11 @@ export default class MapControls {
       srcEvent.ctrlKey || srcEvent.shiftKey);
   }
 
+  isRightButtonPressed(event) {
+    const {srcEvent: {which, buttons}} = event;
+    return buttons === undefined ? (which === 3) : Boolean(buttons & 2);
+  }
+
   setState(newState) {
     Object.assign(this._state, newState);
     if (this.onStateChange) {
@@ -175,7 +180,8 @@ export default class MapControls {
 
   // Default handler for the `panmove` event.
   _onPan(event) {
-    return this.isFunctionKeyPressed(event) ? this._onPanRotate(event) : this._onPanMove(event);
+    return this.isFunctionKeyPressed(event) || this.isRightButtonPressed(event) ?
+      this._onPanRotate(event) : this._onPanMove(event);
   }
 
   // Default handler for the `panend` event.
