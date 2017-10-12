@@ -63,7 +63,6 @@ export default class Marker extends Component {
       left: 0,
       top: 0,
       transform: `translate3d(${left}px, ${top}px, 0)`,
-      //'will-change': 'transform',
       visibility: (top < 0 || left < 0 ? 'hidden' : 'visible')
     };
 
