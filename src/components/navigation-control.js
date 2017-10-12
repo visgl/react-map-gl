@@ -79,7 +79,7 @@ export default class NavigationControl extends BaseControl {
 
   render() {
 
-    const { className } = this.props;
+    const {className} = this.props;
 
     return createElement('div', {
       className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
