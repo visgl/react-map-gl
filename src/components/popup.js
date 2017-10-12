@@ -25,6 +25,8 @@ import autobind from '../utils/autobind';
 import {getDynamicPosition, ANCHOR_POSITION} from '../utils/dynamic-position';
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
+  // Custom className
+  className: '',
   // Longitude of the anchor point
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
@@ -131,7 +133,7 @@ export default class Popup extends BaseControl {
   }
 
   render() {
-    const {longitude, latitude, offsetLeft, offsetTop, closeOnClick} = this.props;
+    const {className, longitude, latitude, offsetLeft, offsetTop, closeOnClick} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);
 
@@ -146,7 +148,7 @@ export default class Popup extends BaseControl {
     };
 
     return createElement('div', {
-      className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType}`,
+      className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`,
       style: containerStyle,
       ref: this._onContainerLoad,
       onClick: closeOnClick ? this._onClose : null
