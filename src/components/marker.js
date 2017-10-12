@@ -22,6 +22,8 @@ import PropTypes from 'prop-types';
 import BaseControl from './base-control';
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
+  // Custom className
+  className: PropTypes.string,
   // Longitude of the anchor point
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
