@@ -17,6 +17,7 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
 });
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
+  className: '',
   onViewportChange: () => {}
 });
 
@@ -77,8 +78,11 @@ export default class NavigationControl extends BaseControl {
   }
 
   render() {
+
+    const {className} = this.props;
+
     return createElement('div', {
-      className: 'mapboxgl-ctrl mapboxgl-ctrl-group',
+      className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
       ref: this._onContainerLoad
     }, [
       this._renderButton('zoom-in', 'Zoom In', this._onZoomIn),
