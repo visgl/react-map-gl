@@ -122,7 +122,9 @@ test('MapState - Rotate', t => {
   SAMPLE_VIEWPORTS.forEach(viewport => {
     // one-off rotating
     const viewport1 = new MapState(viewport)
+      .rotateStart({})
       .rotate({deltaScaleX: X_DELTA, deltaScaleY: Y_DELTA})
+      .rotateEnd()
       .getViewportProps();
 
     t.ok(toLowPrecision(viewport1.bearing) !== toLowPrecision(viewport.bearing || 0),
