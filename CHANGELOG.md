@@ -2,7 +2,12 @@
 
 # Version 3.1 (under development)
 
-### 3.1.0-alpha.1 [TBD - ?]
+### 3.1.0-alpha.2
+
+- Allow controls and overlays to block map interactions
+- Extend control elements with custom classNames
+
+### 3.1.0-alpha.1
 
 - Bump Mapbox to 0.40.1
 - StaticMap: Based on new Mapbox wrapper that supports reuse of mapbox maps
