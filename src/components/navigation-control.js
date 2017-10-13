@@ -8,6 +8,8 @@ import MapState from '../utils/map-state';
 import deprecateWarn from '../utils/deprecate-warn';
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
+  // Custom className
+  className: PropTypes.string,
   /**
     * `onViewportChange` callback is fired when the user interacted with the
     * map. The object passed to the callback contains `latitude`,

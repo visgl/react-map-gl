@@ -26,7 +26,7 @@ import {getDynamicPosition, ANCHOR_POSITION} from '../utils/dynamic-position';
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
-  className: '',
+  className: PropTypes.string,
   // Longitude of the anchor point
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
@@ -50,6 +50,7 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
 });
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
+  className: '',
   offsetLeft: 0,
   offsetTop: 0,
   tipSize: 10,

@@ -154,7 +154,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   componentDidMount() {
-    const eventManager = new EventManager(this._eventCanvas);
+    const eventManager = new EventManager(this._eventCanvas, {rightButton: true});
 
     // Register additional event handlers for click and hover
     eventManager.on('mousemove', this._onMouseMove);
