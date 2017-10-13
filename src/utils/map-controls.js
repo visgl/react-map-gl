@@ -29,7 +29,8 @@ const EVENT_TYPES = {
   WHEEL: ['wheel'],
   PAN: ['panstart', 'panmove', 'panend'],
   PINCH: ['pinchstart', 'pinchmove', 'pinchend'],
-  DOUBLE_TAP: ['doubletap']
+  DOUBLE_TAP: ['doubletap'],
+  KEYBOARD: ['keydown']
 };
 
 export default class MapControls {
@@ -49,7 +50,7 @@ export default class MapControls {
    * @param {hammer.Event} event
    */
   handleEvent(event) {
-    this.mapState = new MapState(Object.assign({}, this.mapStateProps, this._state));
+    this.mapState = this.getMapState();
 
     switch (event.type) {
     case 'panstart':
@@ -68,6 +69,8 @@ export default class MapControls {
       return this._onDoubleTap(event);
     case 'wheel':
       return this._onWheel(event);
+    case 'keydown':
+      return this._onKeyDown(event);
     default:
       return false;
     }
@@ -84,17 +87,6 @@ export default class MapControls {
     const {srcEvent} = event;
     return Boolean(srcEvent.metaKey || srcEvent.altKey ||
       srcEvent.ctrlKey || srcEvent.shiftKey);
-  }
-
-  isRightButtonPressed(event) {
-    const {srcEvent: {which, buttons}} = event;
-    return buttons === undefined ?
-      // old API - https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/which
-      // 3: Right button
-      (which === 3) :
-      // new API - https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
-      // 2: Secondary button (usually right)
-      Boolean(buttons & 2);
   }
 
   setState(newState) {
@@ -119,6 +111,10 @@ export default class MapControls {
     this.setState(Object.assign({}, newMapState.getInteractiveState(), extraState));
   }
 
+  getMapState(overrides) {
+    return new MapState(Object.assign({}, this.mapStateProps, this._state, overrides));
+  }
+
   /**
    * Extract interactivity options
    */
@@ -133,7 +129,8 @@ export default class MapControls {
       dragPan = true,
       dragRotate = true,
       doubleClickZoom = true,
-      touchZoomRotate = true
+      touchZoomRotate = true,
+      keyboard = true
     } = options;
 
     // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
@@ -152,6 +149,7 @@ export default class MapControls {
     this.toggleEvents(EVENT_TYPES.PAN, isInteractive && (dragPan || dragRotate));
     this.toggleEvents(EVENT_TYPES.PINCH, isInteractive && touchZoomRotate);
     this.toggleEvents(EVENT_TYPES.DOUBLE_TAP, isInteractive && doubleClickZoom);
+    this.toggleEvents(EVENT_TYPES.KEYBOARD, isInteractive && keyboard);
 
     // Interaction toggles
     this.scrollZoom = scrollZoom;
@@ -159,6 +157,7 @@ export default class MapControls {
     this.dragRotate = dragRotate;
     this.doubleClickZoom = doubleClickZoom;
     this.touchZoomRotate = touchZoomRotate;
+    this.keyboard = keyboard;
   }
 
   toggleEvents(eventNames, enabled) {
@@ -186,7 +185,7 @@ export default class MapControls {
 
   // Default handler for the `panmove` event.
   _onPan(event) {
-    return this.isFunctionKeyPressed(event) || this.isRightButtonPressed(event) ?
+    return this.isFunctionKeyPressed(event) || event.rightButton ?
       this._onPanRotate(event) : this._onPanMove(event);
   }
 
@@ -293,4 +292,64 @@ export default class MapControls {
     const newMapState = this.mapState.zoom({pos, scale: isZoomOut ? 0.5 : 2});
     return this.updateViewport(newMapState);
   }
+
+  /* eslint-disable complexity */
+  // Default handler for the `keydown` event
+  _onKeyDown(event) {
+    if (!this.keyboard) {
+      return false;
+    }
+    const funcKey = this.isFunctionKeyPressed(event);
+    const {mapStateProps} = this;
+    let newMapState;
+
+    switch (event.srcEvent.keyCode) {
+    case 189: // -
+      if (funcKey) {
+        newMapState = this.getMapState({zoom: mapStateProps.zoom - 2});
+      } else {
+        newMapState = this.getMapState({zoom: mapStateProps.zoom - 1});
+      }
+      break;
+    case 187: // +
+      if (funcKey) {
+        newMapState = this.getMapState({zoom: mapStateProps.zoom + 2});
+      } else {
+        newMapState = this.getMapState({zoom: mapStateProps.zoom + 1});
+      }
+      break;
+    case 37: // left
+      if (funcKey) {
+        newMapState = this.getMapState({bearing: mapStateProps.bearing - 15});
+      } else {
+        newMapState = this.mapState.pan({pos: [100, 0], startPos: [0, 0]});
+      }
+      break;
+    case 39: // right
+      if (funcKey) {
+        newMapState = this.getMapState({bearing: mapStateProps.bearing + 15});
+      } else {
+        newMapState = this.mapState.pan({pos: [-100, 0], startPos: [0, 0]});
+      }
+      break;
+    case 38: // up
+      if (funcKey) {
+        newMapState = this.getMapState({pitch: mapStateProps.pitch + 10});
+      } else {
+        newMapState = this.mapState.pan({pos: [0, 100], startPos: [0, 0]});
+      }
+      break;
+    case 40: // down
+      if (funcKey) {
+        newMapState = this.getMapState({pitch: mapStateProps.pitch - 10});
+      } else {
+        newMapState = this.mapState.pan({pos: [0, -100], startPos: [0, 0]});
+      }
+      break;
+    default:
+      return false;
+    }
+    return this.updateViewport(newMapState);
+  }
+  /* eslint-enable complexity */
 }
