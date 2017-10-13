@@ -180,13 +180,10 @@ export default class MapState {
     assert(deltaScaleY >= -1 && deltaScaleY <= 1,
       '`deltaScaleY` must be a number between [-1, 1]');
 
-    let {startBearing, startPitch} = this._interactiveState;
+    const {startBearing, startPitch} = this._interactiveState;
 
-    if (!Number.isFinite(startBearing)) {
-      startBearing = this._viewportProps.bearing;
-    }
-    if (!Number.isFinite(startPitch)) {
-      startPitch = this._viewportProps.pitch;
+    if (!Number.isFinite(startBearing) || !Number.isFinite(startPitch)) {
+      return this;
     }
 
     const {pitch, bearing} = this._calculateNewPitchAndBearing({
