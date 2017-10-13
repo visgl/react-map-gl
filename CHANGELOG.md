@@ -2,6 +2,10 @@
 
 # Version 3.1 (under development)
 
+### 3.1.0-beta.1
+
+- Add right mouse button drag to rotate
+
 ### 3.1.0-alpha.2
 
 - Allow controls and overlays to block map interactions
