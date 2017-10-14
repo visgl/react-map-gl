@@ -42,6 +42,8 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   doubleClickZoom: PropTypes.bool,
   // Pinch to zoom / rotate
   touchZoomRotate: PropTypes.bool,
+  // Keyboard
+  keyboard: PropTypes.bool,
 
  /**
     * Called when the map is hovered over.
