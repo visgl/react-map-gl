@@ -63,10 +63,10 @@ export default class Marker extends BaseControl {
 
     let containerStyle = {};
 
-    if(isVisible) {
+    if (isVisible) {
       containerStyle = {
         transform: `translate3d(${left}px, ${top}px, 0)`
-      }
+      };
     }
 
     return createElement('div', {
