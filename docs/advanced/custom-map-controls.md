@@ -13,11 +13,11 @@ A simple example to disable mouse wheel:
   export default class MyMapControls extends experimental.MapControls {
 
     // override the default handler in MapControls
-    handle(event) {
+    handleEvent(event) {
       if (event.type === 'wheel') {
         return false;
       }
-      return super.handle(event);
+      return super.handleEvent(event);
     }
   }
 ```
@@ -47,6 +47,6 @@ Available events: `click`, `tap`, `doubletap`, `press`, `pinch`, `pinchin`, `pin
 
 Used by `InteractiveMap` to update this control's state.
 
-##### `handle(event)`
+##### `handleEvent(event)`
 
 Called by `InteractiveMap` to handle pointer events.

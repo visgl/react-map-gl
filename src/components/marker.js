@@ -17,11 +17,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {Component, createElement} from 'react';
+import {createElement} from 'react';
 import PropTypes from 'prop-types';
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import BaseControl from './base-control';
 
-const propTypes = {
+const propTypes = Object.assign({}, BaseControl.propTypes, {
+  // Custom className
+  className: PropTypes.string,
   // Longitude of the anchor point
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
@@ -30,16 +32,13 @@ const propTypes = {
   offsetLeft: PropTypes.number,
   // Offset from the top
   offsetTop: PropTypes.number
-};
+});
 
-const defaultProps = {
+const defaultProps = Object.assign({}, BaseControl.defaultProps, {
+  className: '',
   offsetLeft: 0,
   offsetTop: 0
-};
-
-const contextTypes = {
-  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport)
-};
+});
 
 /*
  * PureComponent doesn't update when context changes.
@@ -48,10 +47,10 @@ const contextTypes = {
  * is almost always triggered by a viewport change, we almost definitely need to
  * recalculate the marker's position when the parent re-renders.
  */
-export default class Marker extends Component {
+export default class Marker extends BaseControl {
 
   render() {
-    const {longitude, latitude, offsetLeft, offsetTop} = this.props;
+    const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);
 
@@ -68,7 +67,8 @@ export default class Marker extends Component {
     };
 
     return createElement('div', {
-      className: 'mapboxgl-marker',
+      className: `mapboxgl-marker ${className}`,
+      ref: this._onContainerLoad,
       style: containerStyle,
       children: this.props.children
     });
@@ -79,4 +79,3 @@ export default class Marker extends Component {
 Marker.displayName = 'Marker';
 Marker.propTypes = propTypes;
 Marker.defaultProps = defaultProps;
-Marker.contextTypes = contextTypes;

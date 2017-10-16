@@ -24,6 +24,7 @@ export {default as InteractiveMap} from './components/interactive-map';
 export {default as StaticMap} from './components/static-map';
 
 // React Controls
+export {default as BaseControl} from './components/base-control';
 export {default as Marker} from './components/marker';
 export {default as Popup} from './components/popup';
 export {default as NavigationControl} from './components/navigation-control';

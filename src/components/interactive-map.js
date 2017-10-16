@@ -42,6 +42,8 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   doubleClickZoom: PropTypes.bool,
   // Pinch to zoom / rotate
   touchZoomRotate: PropTypes.bool,
+  // Keyboard
+  keyboard: PropTypes.bool,
 
  /**
     * Called when the map is hovered over.
@@ -117,7 +119,8 @@ const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
 
 const childContextTypes = {
   viewport: PropTypes.instanceOf(PerspectiveMercatorViewport),
-  isDragging: PropTypes.bool
+  isDragging: PropTypes.bool,
+  eventManager: PropTypes.object
 };
 
 export default class InteractiveMap extends PureComponent {
@@ -147,12 +150,13 @@ export default class InteractiveMap extends PureComponent {
   getChildContext() {
     return {
       viewport: new PerspectiveMercatorViewport(this.props),
-      isDragging: this.state.isDragging
+      isDragging: this.state.isDragging,
+      eventManager: this._eventManager
     };
   }
 
   componentDidMount() {
-    const eventManager = new EventManager(this._eventCanvas);
+    const eventManager = new EventManager(this._eventCanvas, {rightButton: true});
 
     // Register additional event handlers for click and hover
     eventManager.on('mousemove', this._onMouseMove);
@@ -288,7 +292,8 @@ export default class InteractiveMap extends PureComponent {
       },
         createElement(StaticMap, Object.assign({}, this.props, {
           visible: this.checkVisibilityConstraints(this.props),
-          ref: this._staticMapLoaded
+          ref: this._staticMapLoaded,
+          children: this._eventManager ? this.props.children : null
         }))
       )
     );

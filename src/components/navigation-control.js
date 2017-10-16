@@ -1,34 +1,33 @@
-import {Component, createElement} from 'react';
+import {createElement} from 'react';
 import PropTypes from 'prop-types';
+import BaseControl from './base-control';
 import autobind from '../utils/autobind';
 
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import MapState from '../utils/map-state';
 
 import deprecateWarn from '../utils/deprecate-warn';
 
-const propTypes = {
+const propTypes = Object.assign({}, BaseControl.propTypes, {
+  // Custom className
+  className: PropTypes.string,
   /**
     * `onViewportChange` callback is fired when the user interacted with the
     * map. The object passed to the callback contains `latitude`,
     * `longitude` and `zoom` and additional state information.
     */
   onViewportChange: PropTypes.func.isRequired
-};
+});
 
-const defaultProps = {
+const defaultProps = Object.assign({}, BaseControl.defaultProps, {
+  className: '',
   onViewportChange: () => {}
-};
-
-const contextTypes = {
-  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport)
-};
+});
 
 /*
  * PureComponent doesn't update when context changes, so
  * implementing our own shouldComponentUpdate here.
  */
-export default class NavigationControl extends Component {
+export default class NavigationControl extends BaseControl {
 
   constructor(props) {
     super(props);
@@ -81,8 +80,12 @@ export default class NavigationControl extends Component {
   }
 
   render() {
+
+    const {className} = this.props;
+
     return createElement('div', {
-      className: 'mapboxgl-ctrl mapboxgl-ctrl-group'
+      className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
+      ref: this._onContainerLoad
     }, [
       this._renderButton('zoom-in', 'Zoom In', this._onZoomIn),
       this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut),
@@ -94,4 +97,3 @@ export default class NavigationControl extends Component {
 NavigationControl.displayName = 'NavigationControl';
 NavigationControl.propTypes = propTypes;
 NavigationControl.defaultProps = defaultProps;
-NavigationControl.contextTypes = contextTypes;

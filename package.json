@@ -1,7 +1,7 @@
 {
   "name": "react-map-gl",
   "description": "A React wrapper for MapboxGL-js and overlay API.",
-  "version": "3.1.0-alpha.1",
+  "version": "3.1.0-beta.1",
   "keywords": [
     "mapbox",
     "mapbox-gl",
@@ -38,7 +38,7 @@
     "bowser": "^1.2.0",
     "immutable": "*",
     "mapbox-gl": "0.40.1",
-    "mjolnir.js": ">=0.1.0",
+    "mjolnir.js": ">=0.4.0",
     "prop-types": "^15.5.7",
     "viewport-mercator-project": "^4.0.1"
   },
