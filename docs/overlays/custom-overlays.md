@@ -7,18 +7,16 @@ the current viewport through the React [context](https://facebook.github.io/reac
 ```js
 import React from 'react';
 import PropTypes from 'prop-types';
+import {BaseControl} from 'react-map-gl';
 
-class MyCustomOverlay extends React.Component {
+class MyCustomOverlay extends BaseControl {
   render() {
     const {viewport} = this.context;
     // draw something
+    // _onContainerLoad registers event listeners for map interactions
+    return <div ref={this._onContainerLoad} />;
   }
 }
-
-MyCustomOverlay.contextType = {
-  viewport: PropTypes.object,
-  isDragging: PropTypes.bool
-};
 ```
 
 Here's an example of using the [ScatterplotOverlay](https://github.com/uber/react-map-gl/blob/master/examples/additional-overlays/scatterplot-overlay.js):
