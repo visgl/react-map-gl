@@ -4,8 +4,13 @@ import BaseControl from './base-control';
 import autobind from '../utils/autobind';
 
 import MapState from '../utils/map-state';
+import TransitionManager from '../utils/transition-manager';
 
 import deprecateWarn from '../utils/deprecate-warn';
+
+const LINEAR_TRANSITION_PROPS = Object.assign({}, TransitionManager.defaultProps, {
+  transitionDuration: 300
+});
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
@@ -42,7 +47,7 @@ export default class NavigationControl extends BaseControl {
 
   _updateViewport(opts) {
     const {viewport} = this.context;
-    const mapState = new MapState(Object.assign({}, viewport, opts));
+    const mapState = new MapState(Object.assign({}, viewport, LINEAR_TRANSITION_PROPS, opts));
     // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
     const onViewportChange = this.props.onChangeViewport || this.props.onViewportChange;
     onViewportChange(mapState.getViewportProps());

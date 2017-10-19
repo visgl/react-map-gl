@@ -18,7 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import MapState from '../utils/map-state';
+import MapState from './map-state';
+import TransitionManager from './transition-manager';
+
+const NO_TRANSITION_PROPS = {
+  transitionDuration: 0
+};
+const LINEAR_TRANSITION_PROPS = Object.assign({}, TransitionManager.defaultProps, {
+  transitionDuration: 300
+});
 
 // EVENT HANDLING PARAMETERS
 const PITCH_MOUSE_THRESHOLD = 5;
@@ -98,9 +106,9 @@ export default class MapControls {
 
   /* Callback util */
   // formats map state and invokes callback function
-  updateViewport(newMapState, extraState = {}) {
+  updateViewport(newMapState, extraProps = {}, extraState = {}) {
     const oldViewport = this.mapState.getViewportProps();
-    const newViewport = newMapState.getViewportProps();
+    const newViewport = Object.assign({}, newMapState.getViewportProps(), extraProps);
 
     if (this.onViewportChange &&
       Object.keys(newViewport).some(key => oldViewport[key] !== newViewport[key])) {
@@ -180,7 +188,7 @@ export default class MapControls {
   _onPanStart(event) {
     const pos = this.getCenter(event);
     const newMapState = this.mapState.panStart({pos}).rotateStart({pos});
-    return this.updateViewport(newMapState, {isDragging: true});
+    return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
   }
 
   // Default handler for the `panmove` event.
@@ -192,7 +200,7 @@ export default class MapControls {
   // Default handler for the `panend` event.
   _onPanEnd(event) {
     const newMapState = this.mapState.panEnd().rotateEnd();
-    return this.updateViewport(newMapState, {isDragging: false});
+    return this.updateViewport(newMapState, null, {isDragging: false});
   }
 
   // Default handler for panning to move.
@@ -203,7 +211,7 @@ export default class MapControls {
     }
     const pos = this.getCenter(event);
     const newMapState = this.mapState.pan({pos});
-    return this.updateViewport(newMapState);
+    return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
   }
 
   // Default handler for panning to rotate.
@@ -235,7 +243,7 @@ export default class MapControls {
     deltaScaleY = Math.min(1, Math.max(-1, deltaScaleY));
 
     const newMapState = this.mapState.rotate({deltaScaleX, deltaScaleY});
-    return this.updateViewport(newMapState);
+    return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
   }
 
   // Default handler for the `wheel` event.
@@ -254,14 +262,14 @@ export default class MapControls {
     }
 
     const newMapState = this.mapState.zoom({pos, scale});
-    return this.updateViewport(newMapState);
+    return this.updateViewport(newMapState, NO_TRANSITION_PROPS);
   }
 
   // Default handler for the `pinchstart` event.
   _onPinchStart(event) {
     const pos = this.getCenter(event);
     const newMapState = this.mapState.zoomStart({pos});
-    return this.updateViewport(newMapState, {isDragging: true});
+    return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
   }
 
   // Default handler for the `pinch` event.
@@ -272,13 +280,13 @@ export default class MapControls {
     const pos = this.getCenter(event);
     const {scale} = event;
     const newMapState = this.mapState.zoom({pos, scale});
-    return this.updateViewport(newMapState);
+    return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
   }
 
   // Default handler for the `pinchend` event.
   _onPinchEnd(event) {
     const newMapState = this.mapState.zoomEnd();
-    return this.updateViewport(newMapState, {isDragging: false});
+    return this.updateViewport(newMapState, null, {isDragging: false});
   }
 
   // Default handler for the `doubletap` event.
@@ -290,7 +298,7 @@ export default class MapControls {
     const isZoomOut = this.isFunctionKeyPressed(event);
 
     const newMapState = this.mapState.zoom({pos, scale: isZoomOut ? 0.5 : 2});
-    return this.updateViewport(newMapState);
+    return this.updateViewport(newMapState, LINEAR_TRANSITION_PROPS);
   }
 
   /* eslint-disable complexity */
@@ -349,7 +357,7 @@ export default class MapControls {
     default:
       return false;
     }
-    return this.updateViewport(newMapState);
+    return this.updateViewport(newMapState, LINEAR_TRANSITION_PROPS);
   }
   /* eslint-enable complexity */
 }

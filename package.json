@@ -38,9 +38,10 @@
     "bowser": "^1.2.0",
     "immutable": "*",
     "mapbox-gl": "0.40.1",
+    "math.gl": ">= 1.0.0-alpha.8",
     "mjolnir.js": ">=0.4.0",
     "prop-types": "^15.5.7",
-    "viewport-mercator-project": "^4.0.1"
+    "viewport-mercator-project": ">= 4.2.0-alpha.2"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",

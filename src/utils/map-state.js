@@ -53,6 +53,15 @@ export default class MapState {
     */
     altitude,
 
+    /** Viewport transitions */
+    transitionDuration,
+    // function called for each transition step, can be used to perform custom transitions.
+    transitionInterpolator,
+    // type of interruption of current transition on update.
+    transitionInterruption,
+    // easing function
+    transitionEasing,
+
     /** Viewport constraints */
     maxZoom,
     minZoom,
@@ -85,6 +94,12 @@ export default class MapState {
       latitude,
       longitude,
       zoom,
+
+      transitionDuration,
+      transitionEasing,
+      transitionInterruption,
+      transitionInterpolator,
+
       bearing: ensureFinite(bearing, defaultState.bearing),
       pitch: ensureFinite(pitch, defaultState.pitch),
       altitude: ensureFinite(altitude, defaultState.altitude),
@@ -278,10 +293,16 @@ export default class MapState {
   }
 
   // Apply any constraints (mathematical or defined by _viewportProps) to map state
+  /* eslint-disable complexity */
   _applyConstraints(props) {
     // Normalize degrees
-    props.longitude = mod(props.longitude + 180, 360) - 180;
-    props.bearing = mod(props.bearing + 180, 360) - 180;
+    const {longitude, bearing} = props;
+    if (longitude < -180 || longitude > 180) {
+      props.longitude = mod(longitude + 180, 360) - 180;
+    }
+    if (bearing < -180 || bearing > 180) {
+      props.bearing = mod(bearing + 180, 360) - 180;
+    }
 
     // Ensure zoom is within specified range
     const {maxZoom, minZoom, zoom} = props;
@@ -319,6 +340,7 @@ export default class MapState {
 
     return props;
   }
+  /* eslint-enable complexity */
 
   // Returns {viewport, latitudeRange: [topY, bottomY]} in non-perspective mode
   _getLatitudeRange(props) {
