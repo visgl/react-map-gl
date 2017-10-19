@@ -47,10 +47,12 @@ export default class NavigationControl extends BaseControl {
 
   _updateViewport(opts) {
     const {viewport} = this.context;
-    const mapState = new MapState(Object.assign({}, viewport, LINEAR_TRANSITION_PROPS, opts));
+    const mapState = new MapState(Object.assign({}, viewport, opts));
     // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
     const onViewportChange = this.props.onChangeViewport || this.props.onViewportChange;
-    onViewportChange(mapState.getViewportProps());
+    const newViewport = Object.assign({}, mapState.getViewportProps(), LINEAR_TRANSITION_PROPS);
+
+    onViewportChange(newViewport);
   }
 
   _onZoomIn() {
@@ -62,7 +64,7 @@ export default class NavigationControl extends BaseControl {
   }
 
   _onResetNorth() {
-    this._updateViewport({bearing: 0});
+    this._updateViewport({bearing: 0, pitch: 0});
   }
 
   _renderCompass() {

@@ -313,7 +313,7 @@ export default class InteractiveMap extends PureComponent {
         style: eventCanvasStyle
       },
         createElement(StaticMap, Object.assign({}, this.props,
-          this._transitionManger && this._transitionManger.getTransionedViewport(),
+          this._transitionManger && this._transitionManger.getViewportInTransition(),
           {
             visible: this._checkVisibilityConstraints(this.props),
             ref: this._staticMapLoaded,

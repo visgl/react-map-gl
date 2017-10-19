@@ -53,15 +53,6 @@ export default class MapState {
     */
     altitude,
 
-    /** Viewport transitions */
-    transitionDuration,
-    // function called for each transition step, can be used to perform custom transitions.
-    transitionInterpolator,
-    // type of interruption of current transition on update.
-    transitionInterruption,
-    // easing function
-    transitionEasing,
-
     /** Viewport constraints */
     maxZoom,
     minZoom,
@@ -94,11 +85,6 @@ export default class MapState {
       latitude,
       longitude,
       zoom,
-
-      transitionDuration,
-      transitionEasing,
-      transitionInterruption,
-      transitionInterpolator,
 
       bearing: ensureFinite(bearing, defaultState.bearing),
       pitch: ensureFinite(pitch, defaultState.pitch),

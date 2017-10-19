@@ -4,8 +4,10 @@ import {projectFlat, unprojectFlat} from 'viewport-mercator-project';
 import {Vector2} from 'math.gl';
 
 const EPSILON = 0.01;
-export const VIEWPORT_PROPS = ['longitude', 'latitude', 'zoom', 'bearing', 'pitch',
+const VIEWPORT_PROPS = ['longitude', 'latitude', 'zoom', 'bearing', 'pitch',
   'position', 'width', 'height'];
+const VIEWPORT_INTERPOLATION_PROPS =
+  ['longitude', 'latitude', 'zoom', 'bearing', 'pitch', 'position'];
 
 export function extractViewportFrom(props) {
   const viewport = {};
@@ -17,6 +19,23 @@ export function extractViewportFrom(props) {
   return viewport;
 }
 
+/* eslint-disable max-depth */
+export function areViewportsEqual(startViewport, endViewport) {
+  for (const p of VIEWPORT_INTERPOLATION_PROPS) {
+    if (Array.isArray(startViewport[p])) {
+      for (let i = 0; i < startViewport[p].length; ++i) {
+        if (startViewport[p][i] !== endViewport[p][i]) {
+          return false;
+        }
+      }
+    } else if (startViewport[p] !== endViewport[p]) {
+      return false;
+    }
+  }
+  return true;
+}
+/* eslint-enable max-depth */
+
 /**
  * Performs linear interpolation of two viewports.
  * @param {Object} startViewport - object containing starting viewport parameters.
@@ -26,8 +45,6 @@ export function extractViewportFrom(props) {
 */
 export function viewportLinearInterpolator(startViewport, endViewport, t) {
   const viewport = Object.assign({}, endViewport);
-  const VIEWPORT_INTERPOLATION_PROPS =
-    ['longitude', 'latitude', 'zoom', 'bearing', 'pitch', 'position'];
   function lerp(start, end, step) {
     if (Array.isArray(start)) {
       return start.map((element, index) => {
