@@ -1,24 +1,16 @@
 # CHANGELOG
 
-# Version 3.1 (under development)
+# Version 3.1
 
-### 3.1.0-beta.1
+### 3.1.0 (October 19, 2017)
 
-- Add right mouse button drag to rotate
-
-### 3.1.0-alpha.2
-
+- Add right mouse button click & drag to rotate
 - Allow controls and overlays to block map interactions
 - Extend control elements with custom classNames
-
-### 3.1.0-alpha.1
-
 - Bump Mapbox to 0.40.1
 - StaticMap: Based on new Mapbox wrapper that supports reuse of mapbox maps
 - StaticMap: Renders HTML mapbox token warning if no token supplied
 - StaticMap: Remaining style diffing utils broken out
-- ocular: Initial folder
-- ocular: Build website from src, align with ocular setup
 
 
 # Version 3.0
