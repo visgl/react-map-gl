@@ -187,12 +187,12 @@ export default class InteractiveMap extends PureComponent {
       eventManager
     }));
 
-    this._transitionManger = new TransitionManager(this.props);
+    this._transitionManager = new TransitionManager(this.props);
   }
 
   componentWillUpdate(nextProps) {
     this._mapControls.setOptions(nextProps);
-    this._transitionManger.processViewportChange(nextProps);
+    this._transitionManager.processViewportChange(nextProps);
   }
 
   componentWillUnmount() {
@@ -313,7 +313,7 @@ export default class InteractiveMap extends PureComponent {
         style: eventCanvasStyle
       },
         createElement(StaticMap, Object.assign({}, this.props,
-          this._transitionManger && this._transitionManger.getViewportInTransition(),
+          this._transitionManager && this._transitionManager.getViewportInTransition(),
           {
             visible: this._checkVisibilityConstraints(this.props),
             ref: this._staticMapLoaded,

@@ -85,7 +85,6 @@ export default class MapState {
       latitude,
       longitude,
       zoom,
-
       bearing: ensureFinite(bearing, defaultState.bearing),
       pitch: ensureFinite(pitch, defaultState.pitch),
       altitude: ensureFinite(altitude, defaultState.altitude),
