@@ -27,9 +27,9 @@ const DEFAULT_PROPS = {
 };
 
 export default class TransitionManager {
-  constructor(props, onTransitionUpdate) {
+  constructor(props) {
     this.props = props;
-    this.onTransitionUpdate = onTransitionUpdate;
+
     this.transitionContext = {
       time: 0,
       delta: 0,
@@ -191,9 +191,9 @@ export default class TransitionManager {
       {},
       this.transitionContext.endViewport,
       viewport);
-    if (this.onTransitionUpdate) {
+    if (this.props.onViewportChange) {
       const mapState = new MapState(Object.assign({}, this.props, viewport));
-      this.onTransitionUpdate(mapState.getViewportProps());
+      this.props.onViewportChange(mapState.getViewportProps());
     }
 
     if (time === 1.0) {

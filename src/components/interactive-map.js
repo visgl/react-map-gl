@@ -158,9 +158,7 @@ export default class InteractiveMap extends PureComponent {
       // Whether the cursor is down
       isDragging: false,
       // Whether the cursor is over a clickable feature
-      isHovering: false,
-      // Transition manager props
-      transition: null
+      isHovering: false
     };
 
     // If props.mapControls is not provided, fallback to default MapControls instance
@@ -189,10 +187,10 @@ export default class InteractiveMap extends PureComponent {
       eventManager
     }));
 
-    this._transitionManger = new TransitionManager(this.props, this._onTransitionUpdate);
+    this._transitionManger = new TransitionManager(this.props);
   }
 
-  componentWillUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps) {
     this._mapControls.setOptions(nextProps);
     this._transitionManger.processViewportChange(nextProps);
   }
@@ -232,13 +230,6 @@ export default class InteractiveMap extends PureComponent {
       }
     }
     return true;
-  }
-
-  // Helper methods
-  _onTransitionUpdate(viewport) {
-    if (this.props.onViewportChange) {
-      this.props.onViewportChange(viewport);
-    }
   }
 
   _getFeatures({pos, radius}) {
