@@ -1,12 +1,22 @@
+# react-map-gl v3.2
+
+Under development
+
+- **Support for Map Reuse**: A new property `reuseMaps` is provided for applications that create and destroy maps, to help work around a mapbox-gl resource leak issue that can lead to a browser crash in certain situations.
+- **Viewport transition**: feature equivalent to Mapbox's flyTo and easeTo; smooth transition when using keyboard navigation or the NavigationControl.
+
 # react-map-gl v3.1
 
-Release date: Under development, target late 2017
+Release date: October 19, 2017
 
 ## Highlights
 
+- **Event handling**
+  + Support right mouse drag to rotate
+  + Support keyboard navigation
+  + Allow controls and overlays to block map interactions
 - **React 16** - react-map-gl is now being tested with React 16, but the React peer dependency requirement is unchanged at `>=15.4.x`.
 - **mapbox-gl v0.40.1**
-- **Support for Map Reuse**: A new property `reuseMaps` is provided for applications that create and destroy maps, to help work around a mapbox-gl resource leak issue that can lead to a browser crash in certain situations.
 - **No Token warning**: react-map-gl now renders an HTML message if no mapbox token is supplied.
 
 
