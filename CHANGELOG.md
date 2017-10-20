@@ -2,6 +2,10 @@
 
 # Version 3.1
 
+### 3.1.1 (October 20, 2017)
+
+- FIX: custom events in MapControls
+
 ### 3.1.0 (October 19, 2017)
 
 - Add right mouse button click & drag to rotate
