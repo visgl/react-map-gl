@@ -3,6 +3,7 @@
 Under development
 
 - **Support for Map Reuse**: A new property `reuseMaps` is provided for applications that create and destroy maps, to help work around a mapbox-gl resource leak issue that can lead to a browser crash in certain situations.
+- **Viewport transition**: feature equivalent to Mapbox's flyTo and easeTo; smooth transition when using keyboard navigation or the NavigationControl.
 
 # react-map-gl v3.1
 
