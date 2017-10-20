@@ -42,6 +42,7 @@ export default class MapControls {
     this._state = {
       isDragging: false
     };
+    this.events = [];
     this.handleEvent = this.handleEvent.bind(this);
   }
 
@@ -141,6 +142,7 @@ export default class MapControls {
       // EventManager has changed
       this.eventManager = eventManager;
       this._events = {};
+      this.toggleEvents(this.events, true);
     }
     const isInteractive = Boolean(this.onViewportChange);
 
