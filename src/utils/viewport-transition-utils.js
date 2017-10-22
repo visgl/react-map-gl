@@ -9,6 +9,24 @@ const VIEWPORT_PROPS = ['longitude', 'latitude', 'zoom', 'bearing', 'pitch',
 const VIEWPORT_INTERPOLATION_PROPS =
   ['longitude', 'latitude', 'zoom', 'bearing', 'pitch', 'position'];
 
+/** Util functions */
+function lerp(start, end, step) {
+  if (Array.isArray(start)) {
+    return start.map((element, index) => {
+      return lerp(element, end[index], step);
+    });
+  }
+  return step * end + (1 - step) * start;
+}
+
+function zoomToScale(zoom) {
+  return Math.pow(2, zoom);
+}
+
+function scaleToZoom(scale) {
+  return Math.log2(scale);
+}
+
 export function extractViewportFrom(props) {
   const viewport = {};
   VIEWPORT_PROPS.forEach((key) => {
@@ -44,15 +62,7 @@ export function areViewportsEqual(startViewport, endViewport) {
  * @return {Object} - interpolated viewport for given step.
 */
 export function viewportLinearInterpolator(startViewport, endViewport, t) {
-  const viewport = Object.assign({}, endViewport);
-  function lerp(start, end, step) {
-    if (Array.isArray(start)) {
-      return start.map((element, index) => {
-        return lerp(element, end[index], step);
-      });
-    }
-    return step * end + (1 - step) * start;
-  }
+  const viewport = {};
 
   for (const p of VIEWPORT_INTERPOLATION_PROPS) {
     const startValue = startViewport[p];
@@ -80,17 +90,7 @@ export function viewportLinearInterpolator(startViewport, endViewport, t) {
 export function viewportFlyToInterpolator(startViewport, endViewport, t) {
   // Equations from above paper are referred where needed.
 
-  const viewport = Object.assign({}, endViewport);
-
-  function lerp(start, end, step) {
-    return step * end + (1 - step) * start;
-  }
-  function zoomToScale(zoom) {
-    return Math.pow(2, zoom);
-  }
-  function scaleToZoom(scale) {
-    return Math.log(scale) / Math.LN2;
-  }
+  const viewport = {};
 
   // TODO: add this as an option for applications.
   const rho = 1.414;
@@ -134,19 +134,17 @@ export function viewportFlyToInterpolator(startViewport, endViewport, t) {
   const b1 = (w1 * w1 - w0 * w0 - rho2 * rho2 * u1 * u1) / (2 * w1 * rho2 * u1);
   const r0 = Math.log(Math.sqrt(b0 * b0 + 1) - b0);
   const r1 = Math.log(Math.sqrt(b1 * b1 + 1) - b1);
-  function w(s) {
-    return (Math.cosh(r0) / Math.cosh(r0 + rho * s));
-  }
-  function u(s) {
-    return w0 * ((Math.cosh(r0) * Math.tanh(r0 + rho * s) - Math.sinh(r0)) / rho2) / u1;
-  }
   const S = (r1 - r0) / rho;
   const s = t * S;
-  const scaleIncrement = 1 / w(s); // Using w method for scaling.
+
+  const w = (Math.cosh(r0) / Math.cosh(r0 + rho * s));
+  const u = w0 * ((Math.cosh(r0) * Math.tanh(r0 + rho * s) - Math.sinh(r0)) / rho2) / u1;
+
+  const scaleIncrement = 1 / w; // Using w method for scaling.
   const newZoom = startZoom + scaleToZoom(scaleIncrement);
 
   const newCenter = unprojectFlat(
-    (startCenterXY.add(uDelta.scale(u(s)))).scale(scaleIncrement),
+    (startCenterXY.add(uDelta.scale(u))).scale(scaleIncrement),
     zoomToScale(newZoom));
   viewport.longitude = newCenter[0];
   viewport.latitude = newCenter[1];

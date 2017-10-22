@@ -163,11 +163,12 @@ export default class TransitionManager {
     t = easing(t);
 
     const viewport = interpolator(startViewport, endViewport, t);
-    this.state.viewport = Object.assign({}, endViewport, viewport);
-    if (this.props.onViewportChange) {
       // Normalize viewport props
-      const mapState = new MapState(Object.assign({}, this.props, viewport));
-      this.props.onViewportChange(mapState.getViewportProps());
+    const mapState = new MapState(Object.assign({}, this.props, viewport));
+    this.state.viewport = mapState.getViewportProps();
+
+    if (this.props.onViewportChange) {
+      this.props.onViewportChange(this.state.viewport);
     }
 
     if (shouldEnd) {
