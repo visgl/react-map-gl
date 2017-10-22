@@ -1,20 +1,12 @@
 /* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL from 'react-map-gl';
+import MapGL, {experimental} from 'react-map-gl';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
-import TWEEN from 'tween.js';
 
 import ControlPanel from './control-panel';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
-
-// Required by tween.js
-function animate() {
-  TWEEN.update();
-  window.requestAnimationFrame(animate);
-}
-animate();
 
 export default class App extends Component {
 
@@ -39,33 +31,24 @@ export default class App extends Component {
     window.removeEventListener('resize', this._resize);
   }
 
-  _resize = () => {
-    this.setState({
-      viewport: {
-        ...this.state.viewport,
-        width: this.props.width || window.innerWidth,
-        height: this.props.height || window.innerHeight
-      }
+  _onViewportChange = viewport => this.setState({
+    viewport: {...this.state.viewport, ...viewport}
+  });
+
+  _resize = () => this._onViewportChange({
+    width: this.props.width || window.innerWidth,
+    height: this.props.height || window.innerHeight
+  });
+
+  _goToViewport = ({longitude, latitude}) => {
+    this._onViewportChange({
+      longitude,
+      latitude,
+      zoom: 11,
+      transitionInterpolator: experimental.viewportFlyToInterpolator,
+      transitionDuration: 3000
     });
   };
-
-  _easeTo = ({longitude, latitude}) => {
-    // Remove existing animations
-    TWEEN.removeAll();
-
-    const {viewport} = this.state;
-
-    new TWEEN.Tween(viewport)
-      .to({
-        longitude, latitude,
-        zoom: 11
-      }, 3000)
-      .easing(TWEEN.Easing.Cubic.InOut)
-      .onUpdate(() => this._onViewportChange(viewport))
-      .start();
-  };
-
-  _onViewportChange = viewport => this.setState({viewport});
 
   render() {
 
@@ -81,7 +64,7 @@ export default class App extends Component {
           dragToRotate={false}
           mapboxApiAccessToken={MAPBOX_TOKEN} />
         <ControlPanel containerComponent={this.props.containerComponent}
-          onViewportChange={this._easeTo} />
+          onViewportChange={this._goToViewport} />
       </div>
     );
   }

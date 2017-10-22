@@ -6,6 +6,8 @@ import StaticMap from './static-map';
 import {MAPBOX_LIMITS} from '../utils/map-state';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 
+import TransitionManager from '../utils/transition-manager';
+
 import {EventManager} from 'mjolnir.js';
 import MapControls from '../utils/map-controls';
 import config from '../config';
@@ -30,6 +32,20 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
    * such as `longitude`, `latitude`, `zoom` etc.
    */
   onViewportChange: PropTypes.func,
+
+  /** Viewport transition **/
+  // transition duration for viewport change
+  transitionDuration: PropTypes.number,
+  // function called for each transition step, can be used to perform custom transitions.
+  transitionInterpolator: PropTypes.func,
+  // type of interruption of current transition on update.
+  transitionInterruption: PropTypes.number,
+  // easing function
+  transitionEasing: PropTypes.func,
+  // transition status update functions
+  onTransitionStart: PropTypes.func,
+  onTransitionInterrupt: PropTypes.func,
+  onTransitionEnd: PropTypes.func,
 
   /** Enables control event handling */
   // Scroll to zoom
@@ -100,22 +116,25 @@ const getDefaultCursor = ({isDragging, isHovering}) => isDragging ?
   config.CURSOR.GRABBING :
   (isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
 
-const defaultProps = Object.assign({}, StaticMap.defaultProps, MAPBOX_LIMITS, {
-  onViewportChange: null,
-  onClick: null,
-  onHover: null,
+const defaultProps = Object.assign({},
+  StaticMap.defaultProps, MAPBOX_LIMITS, TransitionManager.defaultProps,
+  {
+    onViewportChange: null,
+    onClick: null,
+    onHover: null,
 
-  scrollZoom: true,
-  dragPan: true,
-  dragRotate: true,
-  doubleClickZoom: true,
-  touchZoomRotate: true,
+    scrollZoom: true,
+    dragPan: true,
+    dragRotate: true,
+    doubleClickZoom: true,
+    touchZoomRotate: true,
 
-  clickRadius: 0,
-  getCursor: getDefaultCursor,
+    clickRadius: 0,
+    getCursor: getDefaultCursor,
 
-  visibilityConstraints: MAPBOX_LIMITS
-});
+    visibilityConstraints: MAPBOX_LIMITS
+  }
+);
 
 const childContextTypes = {
   viewport: PropTypes.instanceOf(PerspectiveMercatorViewport),
@@ -167,10 +186,13 @@ export default class InteractiveMap extends PureComponent {
       onStateChange: this._onInteractiveStateChange,
       eventManager
     }));
+
+    this._transitionManager = new TransitionManager(this.props);
   }
 
   componentWillUpdate(nextProps) {
     this._mapControls.setOptions(nextProps);
+    this._transitionManager.processViewportChange(nextProps);
   }
 
   componentWillUnmount() {
@@ -189,7 +211,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   // Checks a visibilityConstraints object to see if the map should be displayed
-  checkVisibilityConstraints(props) {
+  _checkVisibilityConstraints(props) {
     const capitalize = s => s[0].toUpperCase() + s.slice(1);
 
     const {visibilityConstraints} = props;
@@ -290,11 +312,14 @@ export default class InteractiveMap extends PureComponent {
         ref: this._eventCanvasLoaded,
         style: eventCanvasStyle
       },
-        createElement(StaticMap, Object.assign({}, this.props, {
-          visible: this.checkVisibilityConstraints(this.props),
-          ref: this._staticMapLoaded,
-          children: this._eventManager ? this.props.children : null
-        }))
+        createElement(StaticMap, Object.assign({}, this.props,
+          this._transitionManager && this._transitionManager.getViewportInTransition(),
+          {
+            visible: this._checkVisibilityConstraints(this.props),
+            ref: this._staticMapLoaded,
+            children: this._eventManager ? this.props.children : null
+          }
+        ))
       )
     );
   }
