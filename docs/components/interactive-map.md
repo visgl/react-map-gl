@@ -116,6 +116,51 @@ Parameters
   + `state.isDragging` - If the map is being dragged.
   + `state.isHovering` - If the pointer is over a clickable feature.
 
+##### `transitionDuration` {Number}
+Duration of transition in milliseconds. If specified, the map will smoothly move from the previous viewport to the current one. Default `0`;
+
+##### `transitionInterpolator` {Function}
+Function that interpolates between two viewports. `react-map-gl` offers two interpolators:
+- `viewportLinearInterpolator` - similar to Mapbox's `easeTo` behavior. This is the default.
+- `viewportFlyToInterpolator` - similar to Mapbox's `flyTo` behavior
+
+You may import them as follows:
+```
+import {experimental} from 'react-map-gl';
+const {viewportLinearInterpolator, viewportFlyToInterpolator} = experimental;
+```
+
+Parameters
+- `startViewport` - The viewport to interpolate from, contains `width`, `height`, `longitude`, `latitude`, `zoom`, `pitch`, and `bearing`.
+- `endViewport` - The viewport to interpolate to, contains `width`, `height`, `longitude`, `latitude`, `zoom`, `pitch`, and `bearing`.
+- `t` - The ratio, between `0` and `1`.
+
+##### `transitionEasing` {Function}
+Easing function that maps a value from `[0, 1]` to `[0, 1]`. Default to `t => t` (linear). Check out [http://easings.net/](http://easings.net/) for common easing curves.
+
+##### `transitionInterruption` {Number}
+What to do if an ongoing transition is interrupted by another transition. There are 3 options:
+- `TRANSITION_EVENTS.BREAK` - Start new transition from the current view. This is the default.
+- `TRANSITION_EVENTS.SNAP_TO_END` - Jump to the end of the previous transition before starting the new transition.
+- `TRANSITION_EVENTS.IGNORE` - Complete the previous transition and ignore the new viewport change.
+
+You may import the constants as follows:
+```
+import {experimental} from 'react-map-gl';
+const {TRANSITION_EVENTS} = experimental;
+```
+
+##### `onTransitionStart` {Function}
+
+Callback that is fired when a transition is triggered.
+
+##### `onTransitionInterrupt` {Function}
+Callback that is fired when an ongoing transition is interrupted by another transition.
+
+##### `onTransitionEnd` {Function}
+
+Callback that is fired when a transition is complete.
+
 ## Methods
 
 Same methods as [StaticMap](/docs/components/static-map.md).
