@@ -30,9 +30,12 @@ import Mapbox from '../mapbox/mapbox';
 
 /* eslint-disable max-len */
 const TOKEN_DOC_URL = 'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
+const NO_TOKEN_WARNING = 'A valid API access token is required to use Mapbox data';
 /* eslint-disable max-len */
 
 function noop() {}
+
+const UNAUTHORIZED_ERROR_CODE = 401;
 
 const propTypes = Object.assign({}, Mapbox.propTypes, {
   /** The Mapbox style. A string url or a MapboxGL style Immutable.Map object. */
@@ -70,7 +73,9 @@ export default class StaticMap extends PureComponent {
       this.componentDidUpdate = noop;
       this.componentWillUnmount = noop;
     }
-    this.state = {};
+    this.state = {
+      accessTokenInvalid: false
+    };
     autobind(this);
   }
 
@@ -83,6 +88,7 @@ export default class StaticMap extends PureComponent {
   componentDidMount() {
     this._mapbox = new Mapbox(Object.assign({}, this.props, {
       container: this._mapboxMap,
+      onError: this._mapboxMapError,
       style: undefined
     }));
     this._map = this._mapbox.getMap();
@@ -175,8 +181,18 @@ export default class StaticMap extends PureComponent {
     this._mapboxMap = ref;
   }
 
+  // Handle map error
+  _mapboxMapError(evt) {
+    if (evt.error && evt.error.status === UNAUTHORIZED_ERROR_CODE &&
+      !this.state.accessTokenInvalid) {
+      // Mapbox throws unauthorized error - invalid token
+      console.error(NO_TOKEN_WARNING); // eslint-disable-line
+      this.setState({accessTokenInvalid: true});
+    }
+  }
+
   _renderNoTokenWarning() {
-    if (this._mapbox && !this._mapbox.accessToken) {
+    if (this.state.accessTokenInvalid) {
       const style = {
         position: 'absolute',
         left: 0,
@@ -184,7 +200,7 @@ export default class StaticMap extends PureComponent {
       };
       return (
         createElement('div', {key: 'warning', id: 'no-token-warning', style}, [
-          createElement('h3', {key: 'header'}, 'No Mapbox access token found'),
+          createElement('h3', {key: 'header'}, NO_TOKEN_WARNING),
           createElement('div', {key: 'text'}, 'For information on setting up your basemap, read'),
           createElement('a', {key: 'link', href: TOKEN_DOC_URL}, 'Note on Map Tokens')
         ])
