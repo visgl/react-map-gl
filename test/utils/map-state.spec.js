@@ -147,23 +147,16 @@ test('MapState - Rotate', t => {
     t.ok(toLowPrecision(viewport1.pitch) === toLowPrecision(viewport2.pitch) &&
       toLowPrecision(viewport1.bearing) === toLowPrecision(viewport2.bearing),
       'Consistent result');
+
   });
 
-  // argument out of bounds
-  try {
-    new MapState(SAMPLE_VIEWPORTS[0]).rotate({deltaScaleX: 2, deltaScaleY: 0});
-    t.fail('Should throw error with out of bounds argument');
-  } catch (error) {
-    t.ok(/deltaScaleX/.test(error.message), 'Should throw error with out of bounds argument');
-  }
+  // out of bounds argument
+  const state = new MapState(SAMPLE_VIEWPORTS[0]).rotateStart({});
 
-  // insufficient arguments
-  try {
-    new MapState(SAMPLE_VIEWPORTS[0]).rotate({deltaScaleX: 0});
-    t.fail('Should throw error for missing argument');
-  } catch (error) {
-    t.ok(/deltaScaleY/.test(error.message), 'Should throw error for missing argument');
-  }
+  t.is(state.rotate({deltaScaleY: 2}).getViewportProps().pitch, 60,
+    'Capped at max pitch');
+  t.is(state.rotate({deltaScaleY: -2}).getViewportProps().pitch, 0,
+    'Capped at min pitch');
 
   t.end();
 });

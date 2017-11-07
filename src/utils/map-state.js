@@ -174,11 +174,7 @@ export default class MapState {
    * @param {Number} deltaScaleY - a number between [-1, 1] specifying the
    *   change to pitch. -1 sets to minPitch and 1 sets to maxPitch.
    */
-  rotate({deltaScaleX, deltaScaleY}) {
-    assert(deltaScaleX >= -1 && deltaScaleX <= 1,
-      '`deltaScaleX` must be a number between [-1, 1]');
-    assert(deltaScaleY >= -1 && deltaScaleY <= 1,
-      '`deltaScaleY` must be a number between [-1, 1]');
+  rotate({deltaScaleX = 0, deltaScaleY = 0}) {
 
     const {startBearing, startPitch} = this._interactiveState;
 
@@ -235,11 +231,7 @@ export default class MapState {
     // Make sure we zoom around the current mouse position rather than map center
     const startZoomLngLat = this._interactiveState.startZoomLngLat ||
       this._unproject(startPos) || this._unproject(pos);
-    let {startZoom} = this._interactiveState;
-
-    if (!Number.isFinite(startZoom)) {
-      startZoom = this._viewportProps.zoom;
-    }
+    const startZoom = ensureFinite(this._interactiveState.startZoom, this._viewportProps.zoom);
 
     // take the start lnglat and put it where the mouse is down.
     assert(startZoomLngLat, '`startZoomLngLat` prop is required ' +
@@ -370,10 +362,10 @@ export default class MapState {
     let pitch = startPitch;
     if (deltaScaleY > 0) {
       // Gradually increase pitch
-      pitch = startPitch + deltaScaleY * (maxPitch - startPitch);
+      pitch = startPitch + Math.min(deltaScaleY, 1) * (maxPitch - startPitch);
     } else if (deltaScaleY < 0) {
       // Gradually decrease pitch
-      pitch = startPitch - deltaScaleY * (minPitch - startPitch);
+      pitch = startPitch - Math.max(deltaScaleY, -1) * (minPitch - startPitch);
     }
 
     return {
