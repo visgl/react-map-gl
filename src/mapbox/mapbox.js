@@ -39,6 +39,7 @@ const propTypes = {
   attributionControl: PropTypes.bool, /** Show attribution control or not. */
   preserveDrawingBuffer: PropTypes.bool, /** Useful when you want to export the canvas as a PNG. */
   onLoad: PropTypes.func, /** The onLoad callback for the map */
+  onError: PropTypes.func, /** The onError callback for the map */
   reuseMaps: PropTypes.bool,
 
   mapStyle: PropTypes.string, /** The Mapbox style. A string url to a MapboxGL style */
@@ -63,6 +64,7 @@ const defaultProps = {
   attributionControl: true,
   preventStyleDiffing: false,
   onLoad: noop,
+  onError: noop,
   reuseMaps: false,
 
   mapStyle: 'mapbox://styles/mapbox/light-v8',
@@ -177,6 +179,7 @@ export default class Mapbox {
       });
       // Attach optional onLoad function
       this.map.once('load', props.onLoad);
+      this.map.on('error', props.onError);
       console.debug('Created new mapbox map', this._map); // eslint-disable-line
     }
 
@@ -201,7 +204,6 @@ export default class Mapbox {
     // Creation only props
     if (mapboxgl) {
       if (!this.accessToken) {
-        console.error('An API access token is required to use Mapbox GL'); // eslint-disable-line
         mapboxgl.accessToken = 'no-token'; // Prevents mapbox from throwing
       } else {
         mapboxgl.accessToken = this.accessToken;
