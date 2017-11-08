@@ -233,9 +233,18 @@ export default class MapState {
     assert(scale > 0, '`scale` must be a positive number');
 
     // Make sure we zoom around the current mouse position rather than map center
-    const startZoomLngLat = this._interactiveState.startZoomLngLat ||
-      this._unproject(startPos) || this._unproject(pos);
-    const startZoom = ensureFinite(this._interactiveState.startZoom, this._viewportProps.zoom);
+    let {startZoom, startZoomLngLat} = this._interactiveState;
+
+    if (!Number.isFinite(startZoom)) {
+      // We have two modes of zoom:
+      // scroll zoom that are discrete events (transform from the current zoom level),
+      // and pinch zoom that are continuous events (transform from the zoom level when
+      // pinch started).
+      // If startZoom state is defined, then use the startZoom state;
+      // otherwise assume discrete zooming
+      startZoom = this._viewportProps.zoom;
+      startZoomLngLat = this._unproject(startPos) || this._unproject(pos);
+    }
 
     // take the start lnglat and put it where the mouse is down.
     assert(startZoomLngLat, '`startZoomLngLat` prop is required ' +
