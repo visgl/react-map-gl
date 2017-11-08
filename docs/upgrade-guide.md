@@ -41,7 +41,7 @@ const bound = viewport.fitBounds(
   {padding: 20, offset: [0, -40]}
 );
 // => bounds: instance of PerspectiveMercatorViewport
-// {longitude: -23.406499999999973, latitude: 64.86850056273362, zoom: 12.89199533073045}
+// {longitude: -73.48760000000007, latitude: 41.268014439447484, zoom: 7.209231188444142}
 ```
 
 ### Deprecations
