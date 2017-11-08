@@ -24,6 +24,10 @@ function mod(value, divisor) {
   return modulus < 0 ? divisor + modulus : modulus;
 }
 
+function clamp(value, min, max) {
+  return value < min ? min : (value > max ? max : value);
+}
+
 function ensureFinite(value, fallbackValue) {
   return Number.isFinite(value) ? value : fallbackValue;
 }
@@ -174,11 +178,7 @@ export default class MapState {
    * @param {Number} deltaScaleY - a number between [-1, 1] specifying the
    *   change to pitch. -1 sets to minPitch and 1 sets to maxPitch.
    */
-  rotate({deltaScaleX, deltaScaleY}) {
-    assert(deltaScaleX >= -1 && deltaScaleX <= 1,
-      '`deltaScaleX` must be a number between [-1, 1]');
-    assert(deltaScaleY >= -1 && deltaScaleY <= 1,
-      '`deltaScaleY` must be a number between [-1, 1]');
+  rotate({deltaScaleX = 0, deltaScaleY = 0}) {
 
     const {startBearing, startPitch} = this._interactiveState;
 
@@ -233,12 +233,17 @@ export default class MapState {
     assert(scale > 0, '`scale` must be a positive number');
 
     // Make sure we zoom around the current mouse position rather than map center
-    const startZoomLngLat = this._interactiveState.startZoomLngLat ||
-      this._unproject(startPos) || this._unproject(pos);
-    let {startZoom} = this._interactiveState;
+    let {startZoom, startZoomLngLat} = this._interactiveState;
 
     if (!Number.isFinite(startZoom)) {
+      // We have two modes of zoom:
+      // scroll zoom that are discrete events (transform from the current zoom level),
+      // and pinch zoom that are continuous events (transform from the zoom level when
+      // pinch started).
+      // If startZoom state is defined, then use the startZoom state;
+      // otherwise assume discrete zooming
       startZoom = this._viewportProps.zoom;
+      startZoomLngLat = this._unproject(startPos) || this._unproject(pos);
     }
 
     // take the start lnglat and put it where the mouse is down.
@@ -364,6 +369,10 @@ export default class MapState {
 
   // Calculates a new pitch and bearing from a position (coming from an event)
   _calculateNewPitchAndBearing({deltaScaleX, deltaScaleY, startBearing, startPitch}) {
+    // clamp deltaScaleY to [-1, 1] so that rotation is constrained between minPitch and maxPitch.
+    // deltaScaleX does not need to be clamped as bearing does not have constraints.
+    deltaScaleY = clamp(deltaScaleY, -1, 1);
+
     const {minPitch, maxPitch} = this._viewportProps;
 
     const bearing = startBearing + 180 * deltaScaleX;
