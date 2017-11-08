@@ -1,5 +1,5 @@
 import test from 'tape-catch';
-import MapState from '../../src/utils/map-state';
+import MapState, {MAPBOX_LIMITS} from '../../src/utils/map-state';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import {toLowPrecision, isSameLocation} from '../test-utils';
 
@@ -148,15 +148,21 @@ test('MapState - Rotate', t => {
       toLowPrecision(viewport1.bearing) === toLowPrecision(viewport2.bearing),
       'Consistent result');
 
+    // out of bounds arguments
+    const state = new MapState(viewport).rotateStart({});
+
+    t.is(state.rotate({deltaScaleY: 2}).getViewportProps().pitch,
+      viewport.maxPitch || MAPBOX_LIMITS.maxPitch,
+      'Capped at max pitch');
+
+    t.is(state.rotate({deltaScaleY: -2}).getViewportProps().pitch,
+      viewport.minPitch || MAPBOX_LIMITS.minPitch,
+      'Capped at min pitch');
+
+    t.is(state.rotate({deltaScaleX: 2}).getViewportProps().bearing,
+      viewport.bearing || 0,
+      'Big delta X is fine');
   });
-
-  // out of bounds argument
-  const state = new MapState(SAMPLE_VIEWPORTS[0]).rotateStart({});
-
-  t.is(state.rotate({deltaScaleY: 2}).getViewportProps().pitch, 60,
-    'Capped at max pitch');
-  t.is(state.rotate({deltaScaleY: -2}).getViewportProps().pitch, 0,
-    'Capped at min pitch');
 
   t.end();
 });

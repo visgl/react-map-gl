@@ -24,6 +24,10 @@ function mod(value, divisor) {
   return modulus < 0 ? divisor + modulus : modulus;
 }
 
+function clamp(value, min, max) {
+  return value < min ? min : (value > max ? max : value);
+}
+
 function ensureFinite(value, fallbackValue) {
   return Number.isFinite(value) ? value : fallbackValue;
 }
@@ -356,16 +360,20 @@ export default class MapState {
 
   // Calculates a new pitch and bearing from a position (coming from an event)
   _calculateNewPitchAndBearing({deltaScaleX, deltaScaleY, startBearing, startPitch}) {
+    // clamp deltaScaleY to [-1, 1] so that rotation is constrained between minPitch and maxPitch.
+    // deltaScaleX does not need to be clamped as bearing does not have constraints.
+    deltaScaleY = clamp(deltaScaleY, -1, 1);
+
     const {minPitch, maxPitch} = this._viewportProps;
 
     const bearing = startBearing + 180 * deltaScaleX;
     let pitch = startPitch;
     if (deltaScaleY > 0) {
       // Gradually increase pitch
-      pitch = startPitch + Math.min(deltaScaleY, 1) * (maxPitch - startPitch);
+      pitch = startPitch + deltaScaleY * (maxPitch - startPitch);
     } else if (deltaScaleY < 0) {
       // Gradually decrease pitch
-      pitch = startPitch - Math.max(deltaScaleY, -1) * (minPitch - startPitch);
+      pitch = startPitch - deltaScaleY * (minPitch - startPitch);
     }
 
     return {
