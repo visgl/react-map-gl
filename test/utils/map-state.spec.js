@@ -1,5 +1,5 @@
 import test from 'tape-catch';
-import MapState from '../../src/utils/map-state';
+import MapState, {MAPBOX_LIMITS} from '../../src/utils/map-state';
 import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
 import {toLowPrecision, isSameLocation} from '../test-utils';
 
@@ -147,23 +147,22 @@ test('MapState - Rotate', t => {
     t.ok(toLowPrecision(viewport1.pitch) === toLowPrecision(viewport2.pitch) &&
       toLowPrecision(viewport1.bearing) === toLowPrecision(viewport2.bearing),
       'Consistent result');
+
+    // out of bounds arguments
+    const state = new MapState(viewport).rotateStart({});
+
+    t.is(state.rotate({deltaScaleY: 2}).getViewportProps().pitch,
+      viewport.maxPitch || MAPBOX_LIMITS.maxPitch,
+      'Capped at max pitch');
+
+    t.is(state.rotate({deltaScaleY: -2}).getViewportProps().pitch,
+      viewport.minPitch || MAPBOX_LIMITS.minPitch,
+      'Capped at min pitch');
+
+    t.is(state.rotate({deltaScaleX: 2}).getViewportProps().bearing,
+      viewport.bearing || 0,
+      'Big delta X is fine');
   });
-
-  // argument out of bounds
-  try {
-    new MapState(SAMPLE_VIEWPORTS[0]).rotate({deltaScaleX: 2, deltaScaleY: 0});
-    t.fail('Should throw error with out of bounds argument');
-  } catch (error) {
-    t.ok(/deltaScaleX/.test(error.message), 'Should throw error with out of bounds argument');
-  }
-
-  // insufficient arguments
-  try {
-    new MapState(SAMPLE_VIEWPORTS[0]).rotate({deltaScaleX: 0});
-    t.fail('Should throw error for missing argument');
-  } catch (error) {
-    t.ok(/deltaScaleY/.test(error.message), 'Should throw error for missing argument');
-  }
 
   t.end();
 });
