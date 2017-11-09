@@ -35,6 +35,8 @@ const NO_TOKEN_WARNING = 'A valid API access token is required to use Mapbox dat
 
 function noop() {}
 
+const UNAUTHORIZED_ERROR_CODE = 401;
+
 const propTypes = Object.assign({}, Mapbox.propTypes, {
   /** The Mapbox style. A string url or a MapboxGL style Immutable.Map object. */
   mapStyle: PropTypes.oneOfType([
@@ -180,7 +182,8 @@ export default class StaticMap extends PureComponent {
 
   // Handle map error
   _mapboxMapError(evt) {
-    if (evt.error && evt.error.status === 401 && !this.state.accessTokenInvalid) {
+    if (evt.error && evt.error.status === UNAUTHORIZED_ERROR_CODE &&
+      !this.state.accessTokenInvalid) {
       // Mapbox throws unauthorized error - invalid token
       console.error(NO_TOKEN_WARNING); // eslint-disable-line
       this.setState({accessTokenInvalid: true});
