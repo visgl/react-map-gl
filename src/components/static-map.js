@@ -68,6 +68,7 @@ export default class StaticMap extends PureComponent {
       this.componentDidMount = noop;
       this.componentWillReceiveProps = noop;
       this.componentDidUpdate = noop;
+      this.componentWillUnmount = noop;
     }
     this.state = {};
     autobind(this);
