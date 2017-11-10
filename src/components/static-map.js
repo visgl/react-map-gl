@@ -86,14 +86,15 @@ export default class StaticMap extends PureComponent {
   }
 
   componentDidMount() {
+    const {mapStyle} = this.props;
+
     this._mapbox = new Mapbox(Object.assign({}, this.props, {
       container: this._mapboxMap,
       onError: this._mapboxMapError,
-      style: undefined
+      mapStyle: Immutable.Map.isMap(mapStyle) ? mapStyle.toJS() : mapStyle
     }));
     this._map = this._mapbox.getMap();
-    this._updateMapStyle({}, this.props);
-    this.forceUpdate(); // Make sure we rerender after mounting
+    this._updateQueryParams(mapStyle);
   }
 
   componentWillReceiveProps(newProps) {
@@ -183,8 +184,8 @@ export default class StaticMap extends PureComponent {
 
   // Handle map error
   _mapboxMapError(evt) {
-    if (evt.error && evt.error.status === UNAUTHORIZED_ERROR_CODE &&
-      !this.state.accessTokenInvalid) {
+    const statusCode = evt.error && evt.error.status || evt.status;
+    if (statusCode === UNAUTHORIZED_ERROR_CODE && !this.state.accessTokenInvalid) {
       // Mapbox throws unauthorized error - invalid token
       console.error(NO_TOKEN_WARNING); // eslint-disable-line
       this.setState({accessTokenInvalid: true});
