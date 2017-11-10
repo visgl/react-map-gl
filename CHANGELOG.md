@@ -2,6 +2,13 @@
 
 # Version 3.1
 
+### 3.1.2 (November 10, 2017)
+
+- FIX: Console error when drag distance is larger than map width/height (#398)
+- FIX: Do not show missing Mapbox token error unless Mapbox data is used (#400)
+- FIX: Error in non-browser environment when unmounting the map (#402)
+- FIX: Error in non-browser environment when constructing EventManager (#403)
+
 ### 3.1.1 (October 20, 2017)
 
 - FIX: custom events in MapControls
