@@ -2,6 +2,9 @@
 
 # Version 3.1
 
+### 3.1.3 (November 10, 2017)
+- FIX: Console error at map creation if using Immutable map style (#404)
+
 ### 3.1.2 (November 10, 2017)
 
 - FIX: Console error when drag distance is larger than map width/height (#398)
