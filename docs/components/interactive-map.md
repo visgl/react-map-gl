@@ -118,4 +118,4 @@ Parameters
 
 ## Methods
 
-Same methods as [StaticMap](/docs/controls/static-map.md).
+Same methods as [StaticMap](/docs/components/static-map.md).
