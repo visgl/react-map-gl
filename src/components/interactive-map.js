@@ -4,7 +4,7 @@ import autobind from '../utils/autobind';
 
 import StaticMap from './static-map';
 import {MAPBOX_LIMITS} from '../utils/map-state';
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import WebMercatorViewport from 'viewport-mercator-project';
 
 import TransitionManager from '../utils/transition-manager';
 
@@ -137,7 +137,7 @@ const defaultProps = Object.assign({},
 );
 
 const childContextTypes = {
-  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport),
+  viewport: PropTypes.instanceOf(WebMercatorViewport),
   isDragging: PropTypes.bool,
   eventManager: PropTypes.object
 };
@@ -168,7 +168,7 @@ export default class InteractiveMap extends PureComponent {
 
   getChildContext() {
     return {
-      viewport: new PerspectiveMercatorViewport(this.props),
+      viewport: new WebMercatorViewport(this.props),
       isDragging: this.state.isDragging,
       eventManager: this._eventManager
     };
@@ -268,7 +268,7 @@ export default class InteractiveMap extends PureComponent {
       }
 
       if (this.props.onHover) {
-        const viewport = new PerspectiveMercatorViewport(this.props);
+        const viewport = new WebMercatorViewport(this.props);
         event.lngLat = viewport.unproject(pos);
         event.features = features;
 
@@ -280,7 +280,7 @@ export default class InteractiveMap extends PureComponent {
   _onMouseClick(event) {
     if (this.props.onClick) {
       const pos = this._getPos(event);
-      const viewport = new PerspectiveMercatorViewport(this.props);
+      const viewport = new WebMercatorViewport(this.props);
       event.lngLat = viewport.unproject(pos);
       event.features = this._getFeatures({pos, radius: this.props.clickRadius});
 

@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 import {Component} from 'react';
 import PropTypes from 'prop-types';
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import WebMercatorViewport from 'viewport-mercator-project';
 
 const propTypes = {
   /** Event handling */
@@ -40,7 +40,7 @@ const defaultProps = {
 };
 
 const contextTypes = {
-  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport),
+  viewport: PropTypes.instanceOf(WebMercatorViewport),
   isDragging: PropTypes.bool,
   eventManager: PropTypes.object
 };
