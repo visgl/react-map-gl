@@ -19,7 +19,7 @@ class Map extends Component {
         zoom={8}
         onViewportChange={(viewport) => {
           const {width, height, latitude, longitude, zoom} = viewport;
-          // Optionally call `setState` and use the state to update the map.
+          // call `setState` and use the state to update the map.
         }}
       />
     );
@@ -119,21 +119,22 @@ Parameters
 ##### `transitionDuration` {Number}
 Duration of transition in milliseconds. If specified, the map will smoothly move from the previous viewport to the current one. Default `0`;
 
-##### `transitionInterpolator` {Function}
-Function that interpolates between two viewports. `react-map-gl` offers two interpolators:
-- `viewportLinearInterpolator` - similar to Mapbox's `easeTo` behavior. This is the default.
-- `viewportFlyToInterpolator` - similar to Mapbox's `flyTo` behavior
+##### `transitionInterpolator` {Object}
+An interpolator object that defines the transition behavior between two map states. `react-map-gl` offers two interpolators:
+- `LinearInterpolator` - similar to Mapbox's `easeTo` behavior.
+- `FlyToInterpolator` - similar to Mapbox's `flyTo` behavior.
 
 You may import them as follows:
-```
-import {experimental} from 'react-map-gl';
-const {viewportLinearInterpolator, viewportFlyToInterpolator} = experimental;
+```jsx
+import ReactMapGL, {experimental} from 'react-map-gl';
+const {LinearInterpolator, FlyToInterpolator} = experimental;
+
+<ReactMapGL transitionDuration={1000} transitionInterpolator={new FlyToInterpolator()}>
 ```
 
-Parameters
-- `startViewport` - The viewport to interpolate from, contains `width`, `height`, `longitude`, `latitude`, `zoom`, `pitch`, and `bearing`.
-- `endViewport` - The viewport to interpolate to, contains `width`, `height`, `longitude`, `latitude`, `zoom`, `pitch`, and `bearing`.
-- `t` - The ratio, between `0` and `1`.
+Default: `new LinearInterpolator()`
+
+For details about using transition interpolators, see [transitions](/docs/user-guide/transitions.md).
 
 ##### `transitionEasing` {Function}
 Easing function that maps a value from `[0, 1]` to `[0, 1]`. Default to `t => t` (linear). Check out [http://easings.net/](http://easings.net/) for common easing curves.
