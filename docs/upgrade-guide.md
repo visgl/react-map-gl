@@ -34,13 +34,13 @@ The `viewport` parameter passed to the `onChangeViewport` callback now includes 
 
 The `fitBounds` utility has been moved to the [viewport-mercator-project](https://github.com/uber-common/viewport-mercator-project) library. The function can now be called as follows:
 ```js
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
-const viewport = new PerspectiveMercatorViewport({width: 600, height: 400});
+import WebMercatorViewport from 'viewport-mercator-project';
+const viewport = new WebMercatorViewport({width: 600, height: 400});
 const bound = viewport.fitBounds(
   [[-73.9876, 40.7661], [-72.9876, 41.7661]],
   {padding: 20, offset: [0, -40]}
 );
-// => bounds: instance of PerspectiveMercatorViewport
+// => bounds: instance of WebMercatorViewport
 // {longitude: -73.48760000000007, latitude: 41.268014439447484, zoom: 7.209231188444142}
 ```
 

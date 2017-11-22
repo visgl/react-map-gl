@@ -1,4 +1,4 @@
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import WebMercatorViewport from 'viewport-mercator-project';
 import assert from 'assert';
 
 // MAPBOX LIMITS
@@ -252,7 +252,7 @@ export default class MapState {
 
     const zoom = this._calculateNewZoom({scale, startZoom});
 
-    const zoomedViewport = new PerspectiveMercatorViewport(
+    const zoomedViewport = new WebMercatorViewport(
       Object.assign({}, this._viewportProps, {zoom})
     );
     const [longitude, latitude] = zoomedViewport.getLocationAtPoint({lngLat: startZoomLngLat, pos});
@@ -334,7 +334,7 @@ export default class MapState {
 
   // Returns {viewport, latitudeRange: [topY, bottomY]} in non-perspective mode
   _getLatitudeRange(props) {
-    const flatViewport = new PerspectiveMercatorViewport(Object.assign({}, props, {
+    const flatViewport = new WebMercatorViewport(Object.assign({}, props, {
       pitch: 0,
       bearing: 0
     }));
@@ -348,13 +348,13 @@ export default class MapState {
   }
 
   _unproject(pos) {
-    const viewport = new PerspectiveMercatorViewport(this._viewportProps);
-    return pos && viewport.unproject(pos, {topLeft: false});
+    const viewport = new WebMercatorViewport(this._viewportProps);
+    return pos && viewport.unproject(pos);
   }
 
   // Calculate a new lnglat based on pixel dragging position
   _calculateNewLngLat({startPanLngLat, pos}) {
-    const viewport = new PerspectiveMercatorViewport(this._viewportProps);
+    const viewport = new WebMercatorViewport(this._viewportProps);
     return viewport.getLocationAtPoint({lngLat: startPanLngLat, pos});
   }
 

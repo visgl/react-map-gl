@@ -24,7 +24,7 @@ import autobind from '../utils/autobind';
 import {getInteractiveLayerIds, setDiffStyle} from '../utils/style-utils';
 import Immutable from 'immutable';
 
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import WebMercatorViewport from 'viewport-mercator-project';
 
 import Mapbox from '../mapbox/mapbox';
 
@@ -56,7 +56,7 @@ const defaultProps = Object.assign({}, Mapbox.defaultProps, {
 });
 
 const childContextTypes = {
-  viewport: PropTypes.instanceOf(PerspectiveMercatorViewport)
+  viewport: PropTypes.instanceOf(WebMercatorViewport)
 };
 
 export default class StaticMap extends PureComponent {
@@ -81,7 +81,7 @@ export default class StaticMap extends PureComponent {
 
   getChildContext() {
     return {
-      viewport: new PerspectiveMercatorViewport(this.props)
+      viewport: new WebMercatorViewport(this.props)
     };
   }
 
