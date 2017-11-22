@@ -49,5 +49,5 @@ export const experimental = {
   autobind,
   TRANSITION_EVENTS,
   LinearInterpolator,
-  ViewportFlyToInterpolator
+  FlyToInterpolator: ViewportFlyToInterpolator
 };

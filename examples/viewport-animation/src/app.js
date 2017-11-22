@@ -44,7 +44,7 @@ export default class App extends Component {
       longitude,
       latitude,
       zoom: 11,
-      transitionInterpolator: new experimental.ViewportFlyToInterpolator(),
+      transitionInterpolator: new experimental.FlyToInterpolator(),
       transitionDuration: 3000
     });
   };
