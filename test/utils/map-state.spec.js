@@ -1,6 +1,6 @@
 import test from 'tape-catch';
 import MapState, {MAPBOX_LIMITS} from '../../src/utils/map-state';
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import WebMercatorViewport from 'viewport-mercator-project';
 import {toLowPrecision, isSameLocation} from '../test-utils';
 
 const SAMPLE_VIEWPORTS = [
@@ -91,8 +91,8 @@ test('MapState - Pan', t => {
     t.ok(viewport1.latitude <= 90 &&
       viewport1.latitude >= -90, 'Latitude is within bounds');
     t.ok(isSameLocation(
-      new PerspectiveMercatorViewport(viewport).unproject(POS_START),
-      new PerspectiveMercatorViewport(viewport1).unproject(POS_END)),
+      new WebMercatorViewport(viewport).unproject(POS_START),
+      new WebMercatorViewport(viewport1).unproject(POS_END)),
       'Location under the pointer remains the same');
 
     // chained panning
@@ -184,8 +184,8 @@ test('MapState - Zoom', t => {
     t.ok(viewport1.zoom <= viewport1.maxZoom &&
       viewport1.zoom >= viewport1.minZoom, 'Zoom is within bounds');
     t.ok(isSameLocation(
-      new PerspectiveMercatorViewport(viewport).unproject(POS_START),
-      new PerspectiveMercatorViewport(viewport1).unproject(POS_END)),
+      new WebMercatorViewport(viewport).unproject(POS_START),
+      new WebMercatorViewport(viewport1).unproject(POS_END)),
       'Location under the pointer remains the same');
 
     // chained panning
