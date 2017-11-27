@@ -169,7 +169,7 @@ export default class InteractiveMap extends PureComponent {
     const eventManagerStub = {
       queue: [],
       on(events, ref) {
-        this.queue.push({events, ref});
+        this.queue.push({events, ref, on: true});
       },
       off(events) {
         this.queue.push({events});
@@ -196,8 +196,8 @@ export default class InteractiveMap extends PureComponent {
     eventManager.on('click', this._onMouseClick);
 
     // run stub queued action
-    this._eventManager.queue.forEach(({events, ref}) => {
-      if (ref) {
+    this._eventManager.queue.forEach(({events, ref, on}) => {
+      if (on === true) {
         eventManager.on(events, ref);
       } else {
         eventManager.off(events);
