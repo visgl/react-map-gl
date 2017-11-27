@@ -164,6 +164,20 @@ export default class InteractiveMap extends PureComponent {
     // If props.mapControls is not provided, fallback to default MapControls instance
     // Cannot use defaultProps here because it needs to be per map instance
     this._mapControls = props.mapControls || new MapControls();
+
+    // provide an eventManager stub until real eventManager created
+    const eventManagerStub = {
+      queue: [],
+      on(events, ref) {
+        this.queue.push({events, ref, on: true});
+      },
+      off(events) {
+        this.queue.push({events});
+      },
+      destroy() {}
+    };
+
+    this._eventManager = eventManagerStub;
   }
 
   getChildContext() {
@@ -180,6 +194,16 @@ export default class InteractiveMap extends PureComponent {
     // Register additional event handlers for click and hover
     eventManager.on('mousemove', this._onMouseMove);
     eventManager.on('click', this._onMouseClick);
+
+    // run stub queued action
+    this._eventManager.queue.forEach(({events, ref, on}) => {
+      if (on === true) {
+        eventManager.on(events, ref);
+      } else {
+        eventManager.off(events);
+      }
+    });
+
     this._eventManager = eventManager;
 
     this._mapControls.setOptions(Object.assign({}, this.props, {
@@ -317,7 +341,7 @@ export default class InteractiveMap extends PureComponent {
           {
             visible: this._checkVisibilityConstraints(this.props),
             ref: this._staticMapLoaded,
-            children: this._eventManager ? this.props.children : null
+            children: this.props.children
           }
         ))
       )
