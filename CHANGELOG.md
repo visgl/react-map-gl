@@ -2,6 +2,9 @@
 
 # Version 3.1
 
+### 3.1.4 (November 27, 2017)
+- FIX: Interactive map always needs a double render to render children (#413)
+
 ### 3.1.3 (November 10, 2017)
 - FIX: Console error at map creation if using Immutable map style (#404)
 
