@@ -2,6 +2,8 @@
 import MapGL, {InteractiveMap} from 'react-map-gl';
 import {createElement} from 'react';
 import ReactTestUtils from 'react-test-renderer/shallow';
+import ReactTestRenderer from 'react-test-renderer';
+import sinon from 'sinon';
 import test from 'tape-catch';
 
 const mapboxApiAccessToken =
@@ -60,4 +62,20 @@ test('InteractiveMap#call onLoad when provided', t => {
       t.end();
     }, 1000);
   }
+});
+
+test('Interactive map renders children on first render', t => {
+  const childComponent = sinon.spy(() => null);
+  const child = createElement(childComponent);
+  const map = createElement(InteractiveMap, defaultProps, child);
+  try {
+    ReactTestRenderer.create(map);
+  } catch (e) {
+    // we use try catch here as InteractiveMap fails in DidMount
+    // but having that render have already called this fail does not matter
+    // for this test
+  }
+
+  t.ok(childComponent.called, 'Child rendered');
+  t.end();
 });
