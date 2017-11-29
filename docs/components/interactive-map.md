@@ -19,7 +19,7 @@ class Map extends Component {
         zoom={8}
         onViewportChange={(viewport) => {
           const {width, height, latitude, longitude, zoom} = viewport;
-          // Optionally call `setState` and use the state to update the map.
+          // call `setState` and use the state to update the map.
         }}
       />
     );
@@ -115,6 +115,50 @@ Parameters
 - `state` - The current state of the component.
   + `state.isDragging` - If the map is being dragged.
   + `state.isHovering` - If the pointer is over a clickable feature.
+
+##### `transitionDuration` {Number}
+Duration of transition in milliseconds. If specified, the map's viewport will smoothly move from the previous props to the current one. Default `0`;
+
+##### `transitionInterpolator` {Object}
+An interpolator object that defines the transition behavior between two map states. `react-map-gl` offers two interpolators:
+- `LinearInterpolator` - similar to Mapbox's `easeTo` behavior.
+- `FlyToInterpolator` - similar to Mapbox's `flyTo` behavior.
+
+You may import them as follows:
+```jsx
+import ReactMapGL, {LinearInterpolator, FlyToInterpolator} from 'react-map-gl';
+
+<ReactMapGL transitionDuration={1000} transitionInterpolator={new FlyToInterpolator()}>
+```
+
+Default: `new LinearInterpolator()`
+
+For details about using transition interpolators, see [transitions](/docs/user-guide/transitions.md).
+
+##### `transitionEasing` {Function}
+Easing function that maps a value from `[0, 1]` to `[0, 1]`. Default to `t => t` (linear). Check out [http://easings.net/](http://easings.net/) for common easing curves.
+
+##### `transitionInterruption` {Number}
+What to do if an ongoing transition is interrupted by another transition. There are 3 options:
+- `TRANSITION_EVENTS.BREAK` - Start new transition from the current view. This is the default.
+- `TRANSITION_EVENTS.SNAP_TO_END` - Jump to the end of the previous transition before starting the new transition.
+- `TRANSITION_EVENTS.IGNORE` - Complete the previous transition and ignore the new viewport change.
+
+You may import the constants as follows:
+```
+import {TRANSITION_EVENTS} from 'react-map-gl';
+```
+
+##### `onTransitionStart` {Function}
+
+Callback that is fired when a transition is triggered.
+
+##### `onTransitionInterrupt` {Function}
+Callback that is fired when an ongoing transition is interrupted by another transition.
+
+##### `onTransitionEnd` {Function}
+
+Callback that is fired when a transition is complete.
 
 ## Methods
 
