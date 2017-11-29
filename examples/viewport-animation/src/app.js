@@ -1,8 +1,7 @@
 /* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL, {experimental} from 'react-map-gl';
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
+import MapGL, {FlyToInterpolator} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
 
@@ -45,7 +44,7 @@ export default class App extends Component {
       longitude,
       latitude,
       zoom: 11,
-      transitionInterpolator: experimental.viewportFlyToInterpolator,
+      transitionInterpolator: new FlyToInterpolator(),
       transitionDuration: 3000
     });
   };
