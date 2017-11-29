@@ -34,9 +34,12 @@ export {default as CanvasOverlay} from './overlays/canvas-overlay';
 export {default as HTMLOverlay} from './overlays/html-overlay';
 export {default as SVGOverlay} from './overlays/svg-overlay';
 
-import {TRANSITION_EVENTS} from './utils/transition-manager';
-import {viewportLinearInterpolator, viewportFlyToInterpolator}
-  from './utils/viewport-transition-utils';
+export {TRANSITION_EVENTS} from './utils/transition-manager';
+export {
+  TransitionInterpolator,
+  LinearInterpolator,
+  ViewportFlyToInterpolator as FlyToInterpolator
+} from './utils/transition';
 
 // Utilities
 
@@ -46,8 +49,5 @@ import autobind from './utils/autobind';
 
 export const experimental = {
   MapControls,
-  autobind,
-  TRANSITION_EVENTS,
-  viewportLinearInterpolator,
-  viewportFlyToInterpolator
+  autobind
 };
