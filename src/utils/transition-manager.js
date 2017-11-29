@@ -41,7 +41,7 @@ export default class TransitionManager {
     return this.state.propsInTransition;
   }
 
-  // Process the vewiport change, either ignore or trigger a new transiton.
+  // Process the viewport change, either ignore or trigger a new transiton.
   // Return true if a new transition is triggered, false otherwise.
   processViewportChange(nextProps) {
     let transitionTriggered = false;
@@ -59,7 +59,7 @@ export default class TransitionManager {
     if (this._isTransitionEnabled(nextProps)) {
       const startProps = Object.assign({}, currentProps,
         this.state.interruption === TRANSITION_EVENTS.SNAP_TO_END ?
-        this.state.endProps : (this.state.propsInTransition || currentProps)
+        this.state.endProps : this.state.propsInTransition
       );
 
       if (isTransitionInProgress) {
@@ -81,11 +81,11 @@ export default class TransitionManager {
   // Helper methods
 
   _isTransitionInProgress() {
-    return this.state.propsInTransition;
+    return Boolean(this.state.propsInTransition);
   }
 
   _isTransitionEnabled(props) {
-    return props.transitionDuration > 0 && props.transitionInterpolator;
+    return props.transitionDuration > 0 && Boolean(props.transitionInterpolator);
   }
 
   _isUpdateDueToCurrentTransition(props) {
