@@ -117,7 +117,7 @@ Parameters
   + `state.isHovering` - If the pointer is over a clickable feature.
 
 ##### `transitionDuration` {Number}
-Duration of transition in milliseconds. If specified, the map will smoothly move from the previous viewport to the current one. Default `0`;
+Duration of transition in milliseconds. If specified, the map's viewport will smoothly move from the previous props to the current one. Default `0`;
 
 ##### `transitionInterpolator` {Object}
 An interpolator object that defines the transition behavior between two map states. `react-map-gl` offers two interpolators:
@@ -126,8 +126,7 @@ An interpolator object that defines the transition behavior between two map stat
 
 You may import them as follows:
 ```jsx
-import ReactMapGL, {experimental} from 'react-map-gl';
-const {LinearInterpolator, FlyToInterpolator} = experimental;
+import ReactMapGL, {LinearInterpolator, FlyToInterpolator} from 'react-map-gl';
 
 <ReactMapGL transitionDuration={1000} transitionInterpolator={new FlyToInterpolator()}>
 ```
@@ -147,8 +146,7 @@ What to do if an ongoing transition is interrupted by another transition. There 
 
 You may import the constants as follows:
 ```
-import {experimental} from 'react-map-gl';
-const {TRANSITION_EVENTS} = experimental;
+import {TRANSITION_EVENTS} from 'react-map-gl';
 ```
 
 ##### `onTransitionStart` {Function}

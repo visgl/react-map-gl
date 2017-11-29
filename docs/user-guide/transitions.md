@@ -4,9 +4,7 @@
 
 Instead, transitions can be defined using [InteractiveMap](/docs/components/interactive-map.md)'s transition props. For example:
 ```jsx
-import ReactMapGL, {experimental} from 'react-map-gl';
-// interpolators are currently an experimental feature
-const {LinearInterpolator, FlyToInterpolator} = experimental;
+import ReactMapGL, {LinearInterpolator, FlyToInterpolator} from 'react-map-gl';
 // 3rd-party easing functions
 import d3 from 'd3-ease';
 
@@ -41,7 +39,7 @@ A `TransitionInterpolator` instance must be supplied to the `transitionInterpola
 - `initiateProps(startProps, endProps)` - called before transition starts to pre-process the start and end viewport props.
 - `interpolateProps(startProps, endProps, t)` - called to get viewport props in transition. `t` is a time factor between `[0, 1]`.
 
-### `experimental.LinearInterpolator`
+### `LinearInterpolator`
 
 Interpolates all viewport props linearly. This interpolator offers similar behavior to Mapbox's `easeTo` when combined with a `transitionEasing` function. You may optionally limit the transition to selected viewport props, for example `new LinearInterpolator(['pitch', 'bearing'])` animates pitch and bearing while the user is still allowed to pan and zoom.
 
@@ -52,7 +50,7 @@ Interpolates all viewport props linearly. This interpolator offers similar behav
 Parameters:
 - `transitionProps` {Array} (optional) - list of prop names to interpolate. Default: `['longitude', 'latitude', 'zoom', 'pitch', 'bearing']`.
 
-### `experimental.FlyToInterpolator`
+### `FlyToInterpolator`
 
 This interpolator offers similar behavior to Mapbox's `flyTo` method. 
 
