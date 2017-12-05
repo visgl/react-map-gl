@@ -165,19 +165,7 @@ export default class InteractiveMap extends PureComponent {
     // Cannot use defaultProps here because it needs to be per map instance
     this._mapControls = props.mapControls || new MapControls();
 
-    // provide an eventManager stub until real eventManager created
-    const eventManagerStub = {
-      queue: [],
-      on(events, ref) {
-        this.queue.push({events, ref, on: true});
-      },
-      off(events) {
-        this.queue.push({events});
-      },
-      destroy() {}
-    };
-
-    this._eventManager = eventManagerStub;
+    this._eventManager = new EventManager(null, {rightButton: true});
   }
 
   getChildContext() {
@@ -189,22 +177,11 @@ export default class InteractiveMap extends PureComponent {
   }
 
   componentDidMount() {
-    const eventManager = new EventManager(this._eventCanvas, {rightButton: true});
+    const eventManager = this._eventManager;
 
     // Register additional event handlers for click and hover
     eventManager.on('mousemove', this._onMouseMove);
     eventManager.on('click', this._onMouseClick);
-
-    // run stub queued action
-    this._eventManager.queue.forEach(({events, ref, on}) => {
-      if (on === true) {
-        eventManager.on(events, ref);
-      } else {
-        eventManager.off(events);
-      }
-    });
-
-    this._eventManager = eventManager;
 
     this._mapControls.setOptions(Object.assign({}, this.props, {
       onStateChange: this._onInteractiveStateChange,
@@ -313,7 +290,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   _eventCanvasLoaded(ref) {
-    this._eventCanvas = ref;
+    this._eventManager.setElement(ref);
   }
 
   _staticMapLoaded(ref) {
