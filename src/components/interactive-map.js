@@ -196,13 +196,6 @@ export default class InteractiveMap extends PureComponent {
     this._transitionManager.processViewportChange(nextProps);
   }
 
-  componentWillUnmount() {
-    if (this._eventManager) {
-      // Must destroy because hammer adds event listeners to window
-      this._eventManager.destroy();
-    }
-  }
-
   getMap() {
     return this._map.getMap();
   }
@@ -290,6 +283,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   _eventCanvasLoaded(ref) {
+    // This will be called with `null` after unmount, releasing event manager resource
     this._eventManager.setElement(ref);
   }
 
