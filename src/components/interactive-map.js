@@ -283,6 +283,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   _eventCanvasLoaded(ref) {
+    // This will be called with `null` after unmount, releasing event manager resource
     this._eventManager.setElement(ref);
   }
 
