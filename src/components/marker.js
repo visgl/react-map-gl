@@ -53,14 +53,25 @@ export default class Marker extends BaseControl {
     const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);
-    const containerStyle = {
-      position: 'absolute',
+
+    const {left, top} = {
       left: x + offsetLeft,
       top: y + offsetTop
     };
 
+    const isVisible = !(top < 0 || left < 0);
+
+    let containerStyle = {};
+
+    if (isVisible) {
+      containerStyle = {
+        transform: `translate3d(${left}px, ${top}px, 0)`
+      };
+    }
+
     return createElement('div', {
-      className: `mapboxgl-marker ${className}`,
+      // isVisible toggles the .visible to show/hide the element
+      className: `mapboxgl-marker ${className} ${isVisible ? 'visible' : ''}`,
       ref: this._onContainerLoad,
       style: containerStyle,
       children: this.props.children
