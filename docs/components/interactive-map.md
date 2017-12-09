@@ -63,8 +63,11 @@ Enable drag to rotate.
 ##### `doubleClickZoom` {Bool} [default: true]
 Enable double click to zoom.
 
-##### `touchZoomRotate` {Bool} [default: true]
-Enable touch to zoom and rotate.
+##### `touchZoom` {Bool} [default: true]
+Enable multitouch zoom.
+
+##### `touchRotate` {Bool} [default: false]
+Enable multitouch rotate.
 
 ##### `clickRadius` {Number} [default: 0]
 Radius to detect features around a clicked point.
