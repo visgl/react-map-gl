@@ -41,6 +41,7 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
   /** The Mapbox style. A string url or a MapboxGL style Immutable.Map object. */
   mapStyle: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.object,
     PropTypes.instanceOf(Immutable.Map)
   ]),
   /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
