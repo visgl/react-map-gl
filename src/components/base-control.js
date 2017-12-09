@@ -45,6 +45,13 @@ const contextTypes = {
   eventManager: PropTypes.object
 };
 
+const EVENT_MAP = {
+  captureScroll: 'wheel',
+  captureDrag: 'panstart',
+  captureClick: 'click',
+  captureDoubleClick: 'dblclick'
+};
+
 /*
  * PureComponent doesn't update when context changes.
  * The only way is to implement our own shouldComponentUpdate here. Considering
@@ -57,46 +64,44 @@ export default class BaseControl extends Component {
   constructor(props) {
     super(props);
 
+    this._events = null;
+
     this._onContainerLoad = this._onContainerLoad.bind(this);
-    this._onEvent = this._onEvent.bind(this);
   }
 
   _onContainerLoad(ref) {
-    const events = {
-      wheel: this._onEvent,
-      panstart: this._onEvent,
-      click: this._onEvent,
-      dblclick: this._onEvent
-    };
-
-    if (ref) {
-      this.context.eventManager.on(events, ref);
-    } else {
-      this.context.eventManager.off(events);
-    }
+    this._toggleEvents(this.props, ref);
   }
 
-  _onEvent(event) {
-    let stopPropagation;
-    switch (event.type) {
-    case 'wheel':
-      stopPropagation = this.props.captureScroll;
-      break;
-    case 'panstart':
-      stopPropagation = this.props.captureDrag;
-      break;
-    case 'click':
-      stopPropagation = this.props.captureClick;
-      break;
-    case 'dblclick':
-      stopPropagation = this.props.captureDoubleClick;
-      break;
-    default:
+  _captureEvent(evt) {
+    evt.stopPropagation();
+  }
+
+  _toggleEvents(props, srcElement) {
+    const {eventManager} = this.context;
+    let events = this._events;
+
+    if (events) {
+      eventManager.off(events);
+      events = null;
     }
 
-    if (stopPropagation) {
-      event.stopPropagation();
+    if (srcElement) {
+      events = {};
+
+      for (const propName in EVENT_MAP) {
+        const shouldCapture = props[propName];
+        const eventName = EVENT_MAP[propName];
+
+        if (shouldCapture) {
+          events[eventName] = this._captureEvent;
+        }
+      }
+
+      eventManager.on(events, srcElement);
     }
+
+    this._events = events;
   }
 
   render() {
