@@ -70,14 +70,6 @@ export default class BaseControl extends Component {
   }
 
   _onContainerLoad(ref) {
-    this._toggleEvents(this.props, ref);
-  }
-
-  _captureEvent(evt) {
-    evt.stopPropagation();
-  }
-
-  _toggleEvents(props, srcElement) {
     const {eventManager} = this.context;
     let events = this._events;
 
@@ -86,11 +78,11 @@ export default class BaseControl extends Component {
       events = null;
     }
 
-    if (srcElement) {
+    if (ref) {
       events = {};
 
       for (const propName in EVENT_MAP) {
-        const shouldCapture = props[propName];
+        const shouldCapture = this.props[propName];
         const eventName = EVENT_MAP[propName];
 
         if (shouldCapture) {
@@ -98,10 +90,14 @@ export default class BaseControl extends Component {
         }
       }
 
-      eventManager.on(events, srcElement);
+      eventManager.on(events, ref);
     }
 
     this._events = events;
+  }
+
+  _captureEvent(evt) {
+    evt.stopPropagation();
   }
 
   render() {
