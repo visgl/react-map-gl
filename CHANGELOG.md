@@ -2,6 +2,11 @@
 
 # Version 3.1
 
+### 3.1.5 (December 9, 2017)
+- `mapStyle` prop now allows plain JS object (#421)
+- FIX: `onClick`, `onHover` and `queryRenderedFeatures` return empty features when using string as mapStyle (#423)
+- FIX: controls blocking global interaction with `capture*` set to false (#422)
+
 ### 3.1.4 (November 27, 2017)
 - FIX: Interactive map always needs a double render to render children (#413)
 
