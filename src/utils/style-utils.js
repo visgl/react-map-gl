@@ -2,7 +2,7 @@ import {Map} from 'immutable';
 import diffStyles from './diff-styles';
 
 export function getInteractiveLayerIds(mapStyle) {
-  let interactiveLayerIds = [];
+  let interactiveLayerIds = null;
 
   if (Map.isMap(mapStyle) && mapStyle.has('layers')) {
     interactiveLayerIds = mapStyle.get('layers')

@@ -19,7 +19,7 @@ const TEST_STYLE_IMMUTABLE = Immutable.fromJS(TEST_STYLE_JS);
 
 test('getInteractiveLayerIds#String style', t => {
   const layers = getInteractiveLayerIds(TEST_STYLE_STRING);
-  t.equal(deepEqual(layers, []), true, 'got expected layer ids');
+  t.notOk(layers, 'should not return layer ids');
   t.end();
 });
 
