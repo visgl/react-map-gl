@@ -73,12 +73,14 @@ export default class BaseControl extends Component {
     const {eventManager} = this.context;
     let events = this._events;
 
+    // Remove all previously registered events
     if (events) {
       eventManager.off(events);
       events = null;
     }
 
     if (ref) {
+      // container is mounted: register events for this element
       events = {};
 
       for (const propName in EVENT_MAP) {
