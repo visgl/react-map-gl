@@ -131,6 +131,9 @@ export default class MapControls {
     const {
       // TODO(deprecate): remove this when `onChangeViewport` gets deprecated
       onChangeViewport,
+      // TODO(deprecate): remove this when `touchZoomRotate` gets deprecated
+      touchZoomRotate = true,
+
       onViewportChange,
       onStateChange = this.onStateChange,
       eventManager = this.eventManager,
@@ -138,7 +141,8 @@ export default class MapControls {
       dragPan = true,
       dragRotate = true,
       doubleClickZoom = true,
-      touchZoomRotate = true,
+      touchZoom = true,
+      touchRotate = false,
       keyboard = true
     } = options;
 
@@ -166,7 +170,8 @@ export default class MapControls {
     this.dragPan = dragPan;
     this.dragRotate = dragRotate;
     this.doubleClickZoom = doubleClickZoom;
-    this.touchZoomRotate = touchZoomRotate;
+    this.touchZoom = touchZoomRotate && touchZoom;
+    this.touchRotate = touchZoomRotate && touchRotate;
     this.keyboard = keyboard;
   }
 
@@ -270,24 +275,37 @@ export default class MapControls {
   // Default handler for the `pinchstart` event.
   _onPinchStart(event) {
     const pos = this.getCenter(event);
-    const newMapState = this.mapState.zoomStart({pos});
+    const newMapState = this.mapState.zoomStart({pos}).rotateStart({pos});
+    // hack - hammer's `rotation` field doesn't seem to produce the correct angle
+    this._state.startPinchRotation = event.rotation;
     return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
   }
 
   // Default handler for the `pinch` event.
   _onPinch(event) {
-    if (!this.touchZoomRotate) {
+    if (!this.touchZoom && !this.touchRotate) {
       return false;
     }
-    const pos = this.getCenter(event);
-    const {scale} = event;
-    const newMapState = this.mapState.zoom({pos, scale});
+
+    let newMapState = this.mapState;
+    if (this.touchZoom) {
+      const {scale} = event;
+      const pos = this.getCenter(event);
+      newMapState = newMapState.zoom({pos, scale});
+    }
+    if (this.touchRotate) {
+      const {rotation} = event;
+      const {startPinchRotation} = this._state;
+      newMapState = newMapState.rotate({deltaScaleX: -(rotation - startPinchRotation) / 180});
+    }
+
     return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
   }
 
   // Default handler for the `pinchend` event.
   _onPinchEnd(event) {
-    const newMapState = this.mapState.zoomEnd();
+    const newMapState = this.mapState.zoomEnd().rotateEnd();
+    this._state.startPinchRotation = 0;
     return this.updateViewport(newMapState, null, {isDragging: false});
   }
 
