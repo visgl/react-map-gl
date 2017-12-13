@@ -3,7 +3,8 @@ const DEPRECATED_PROPS = [
   {old: 'onChangeViewport', new: 'onViewportChange'},
   {old: 'perspectiveEnabled', new: 'dragRotate'},
   {old: 'onHoverFeatures', new: 'onHover'},
-  {old: 'onClickFeatures', new: 'onClick'}
+  {old: 'onClickFeatures', new: 'onClick'},
+  {old: 'touchZoomRotate', new: 'touchZoom, touchRotate'}
 ];
 
 function getDeprecatedText(name) {

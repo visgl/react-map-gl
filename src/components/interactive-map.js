@@ -56,8 +56,10 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   dragRotate: PropTypes.bool,
   // Double click to zoom
   doubleClickZoom: PropTypes.bool,
-  // Pinch to zoom / rotate
-  touchZoomRotate: PropTypes.bool,
+  // Multitouch zoom
+  touchZoom: PropTypes.bool,
+  // Multitouch rotate
+  touchRotate: PropTypes.bool,
   // Keyboard
   keyboard: PropTypes.bool,
 
