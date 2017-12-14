@@ -41,6 +41,7 @@ const propTypes = {
   onLoad: PropTypes.func, /** The onLoad callback for the map */
   onError: PropTypes.func, /** The onError callback for the map */
   reuseMaps: PropTypes.bool,
+  transformRequest: PropTypes.func, /** Usage: https://www.mapbox.com/mapbox-gl-js/api#requestparameters */
 
   mapStyle: PropTypes.string, /** The Mapbox style. A string url to a MapboxGL style */
   visible: PropTypes.bool, /** Whether the map is visible */
@@ -66,6 +67,7 @@ const defaultProps = {
   onLoad: noop,
   onError: noop,
   reuseMaps: false,
+  transformRequest: noop,
 
   mapStyle: 'mapbox://styles/mapbox/light-v8',
   visible: true,
@@ -175,7 +177,8 @@ export default class Mapbox {
         style: props.mapStyle,
         interactive: false,
         attributionControl: props.attributionControl,
-        preserveDrawingBuffer: props.preserveDrawingBuffer
+        preserveDrawingBuffer: props.preserveDrawingBuffer,
+        transformRequest: props.transformRequest
       });
       // Attach optional onLoad function
       this.map.once('load', props.onLoad);
