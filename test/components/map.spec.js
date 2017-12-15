@@ -79,3 +79,30 @@ test('Interactive map renders children on first render', t => {
   t.ok(childComponent.called, 'Child rendered');
   t.end();
 });
+
+test('Interactive map#call transformRequest callback when provided', t => {
+  function transformRequest(url, resourceType) {
+    t.ok(true, 'transformRequest handler was called');
+    t.end();
+  }
+
+  const props = Object.assign({}, defaultProps, {transformRequest});
+
+  const map = createElement(InteractiveMap, props);
+
+  // const result = ReactTestUtils.createRenderer().render(map);
+  const result = ReactTestRenderer.create(map);
+
+  t.ok(result, 'InteractiveMap rendered');
+
+  if (!InteractiveMap.supported()) {
+    t.ok('transformRequest not called since InteractiveMap.supported() false');
+    t.end();
+  } else {
+    /* global setTimeout */
+    setTimeout(() => {
+      t.fail('transformRequest wasn\'t called');
+      t.end();
+    }, 1000);
+  }
+});
