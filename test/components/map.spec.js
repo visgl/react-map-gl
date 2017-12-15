@@ -40,7 +40,7 @@ test('InteractiveMap#named export', t => {
 
 test('InteractiveMap#call onLoad when provided', t => {
   function onLoad(...args) {
-    t.ok(args.length, 0, 'onLoad does not expose the map object.');
+    t.is(args.length, 0, 'onLoad does not expose the map object.');
     t.end();
   }
 
@@ -48,7 +48,7 @@ test('InteractiveMap#call onLoad when provided', t => {
 
   const map = createElement(InteractiveMap, props);
 
-  const result = ReactTestUtils.createRenderer().render(map);
+  const result = ReactTestRenderer.create(map);
 
   t.ok(result, 'InteractiveMap rendered');
 
@@ -60,7 +60,7 @@ test('InteractiveMap#call onLoad when provided', t => {
     setTimeout(() => {
       t.fail('onLoad wasn\'t called');
       t.end();
-    }, 1000);
+    }, 5000);
   }
 });
 
