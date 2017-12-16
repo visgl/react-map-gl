@@ -92,7 +92,7 @@ A callback run when the map emits a `load` event.
 A callback run when the map emits an `error` event.
 [Mapbox docs](https://www.mapbox.com/mapbox-gl-js/api#map.event:error)
 
-##### `transformRequest` {Function} - default: `undefined`
+##### `transformRequest` {Function} - default: `null`
 A callback run before the Map makes a request for an external URL. The callback can be used
 to modify the url, set headers, or set the credentials property for cross-origin requests.
 Expected to return an object with a `url` property and optionally `headers` and `credentials`
