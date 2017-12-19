@@ -41,6 +41,7 @@ const propTypes = {
   onLoad: PropTypes.func, /** The onLoad callback for the map */
   onError: PropTypes.func, /** The onError callback for the map */
   reuseMaps: PropTypes.bool,
+  transformRequest: PropTypes.func, /** The transformRequest callback for the map */
 
   mapStyle: PropTypes.string, /** The Mapbox style. A string url to a MapboxGL style */
   visible: PropTypes.bool, /** Whether the map is visible */
@@ -66,6 +67,7 @@ const defaultProps = {
   onLoad: noop,
   onError: noop,
   reuseMaps: false,
+  transformRequest: null,
 
   mapStyle: 'mapbox://styles/mapbox/light-v8',
   visible: true,
@@ -166,7 +168,7 @@ export default class Mapbox {
       props.onLoad();
       console.debug('Reused existing mapbox map', this._map); // eslint-disable-line
     } else {
-      this._map = this.map = new mapboxgl.Map({
+      const mapOptions = {
         container: props.container || document.body,
         center: [props.longitude, props.latitude],
         zoom: props.zoom,
@@ -176,7 +178,12 @@ export default class Mapbox {
         interactive: false,
         attributionControl: props.attributionControl,
         preserveDrawingBuffer: props.preserveDrawingBuffer
-      });
+      };
+      // We don't want to pass a null or no-op transformRequest function.
+      if (props.transformRequest) {
+        mapOptions.transformRequest = props.transformRequest;
+      }
+      this._map = this.map = new mapboxgl.Map(mapOptions);
       // Attach optional onLoad function
       this.map.once('load', props.onLoad);
       this.map.on('error', props.onError);

@@ -5,6 +5,7 @@ require('reify');
 const path = require('path');
 const moduleAlias = require('module-alias');
 
+// Needed for `npm run test`, whereas `npm run test-browser` alias is declared in webpack.config.js
 moduleAlias.addAlias('react-map-gl', path.resolve('./src'));
 
 // Run the tests

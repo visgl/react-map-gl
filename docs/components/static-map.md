@@ -84,6 +84,20 @@ map from reloading and flickering when the map style changes.
 
 There are known issues with style diffing. As stopgap, use this option to prevent style diffing.
 
+##### `onLoad` {Function} - default: `no-op function`
+A callback run when the map emits a `load` event.
+[Mapbox docs](https://www.mapbox.com/mapbox-gl-js/api#map.event:load)
+
+##### `onError` {Function} - default: `no-op function`
+A callback run when the map emits an `error` event.
+[Mapbox docs](https://www.mapbox.com/mapbox-gl-js/api#map.event:error)
+
+##### `transformRequest` {Function} - default: `null`
+A callback run before the Map makes a request for an external URL. The callback can be used
+to modify the url, set headers, or set the credentials property for cross-origin requests.
+Expected to return an object with a `url` property and optionally `headers` and `credentials`
+properties.  Equivalent to Mapbox's `transformRequest` [map option](https://www.mapbox.com/mapbox-gl-js/api#map).
+
 ## Methods
 
 ##### `getMap()`
