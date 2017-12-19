@@ -166,7 +166,6 @@ export default class Mapbox {
       Mapbox.savedMap = null;
       // TODO - need to call onload again, need to track with Promise?
       props.onLoad();
-      console.debug('Reused existing mapbox map', this._map); // eslint-disable-line
     } else {
       const mapOptions = {
         container: props.container || document.body,
@@ -187,7 +186,6 @@ export default class Mapbox {
       // Attach optional onLoad function
       this.map.once('load', props.onLoad);
       this.map.on('error', props.onError);
-      console.debug('Created new mapbox map', this._map); // eslint-disable-line
     }
 
     return this;
