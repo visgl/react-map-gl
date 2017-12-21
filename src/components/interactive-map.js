@@ -129,7 +129,6 @@ const defaultProps = Object.assign({},
     dragPan: true,
     dragRotate: true,
     doubleClickZoom: true,
-    touchZoomRotate: true,
 
     clickRadius: 0,
     getCursor: getDefaultCursor,
