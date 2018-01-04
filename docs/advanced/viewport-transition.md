@@ -1,4 +1,4 @@
-# Transitions
+# Viewport Transition
 
 `react-map-gl` does not expose the transition API from `mapbox-gl-js` since it is designed to be a stateless component, and needs to synchronize with separate overlay systems such as deck.gl.
 
@@ -32,6 +32,29 @@ See properties of [InteractiveMap](/docs/components/interactive-map.md).
 - `onTransitionInterrupt` {Function}
 - `onTransitionEnd` {Function}
 
+
+## Transition and the onViewportChange Callback
+
+`InteractiveMap` is designed to be a stateless component. Its appearance is entirely controlled by the properties that are passed in from its parent. In this architecture, transition works the same way as interaction: the component shall notify the application of "user intent" by calling the `onViewportChange` callback, but ultimately the application needs to decide what to do with it.
+
+The most simple handling of this intent is to accept it:
+```
+render() {
+    const {viewport} = this.state;
+    return <ReactMapGL
+        {...viewport}
+        onViewportChange={newViewport => this.setState({viewport: newViewport})}
+        />;
+}
+```
+The default interaction/transition are guaranteed to work with this set up.
+
+Remarks:
+- The props returned by the callback may contain transition properties. For example, during panning and rotating, the callback is invoked with `transitionDuration: 0`, meaning that the map movement instantly matches the change of the pointer. When panning or zooming with keyboard, the callback is invoked with a 300ms linear transition.
+- It is recommended that when programatically triggering a transition, always explicitly set the transition properties (interpolator, easing and duration).
+- The default interaction/transition behavior can always be intercepted and overwritten in the handler for `onViewportChange`. However, if a transition is in progress, the properties that are being transitioned (e.g. longitude and latitude) should not be manipulated, otherwise the change will be interpreted as an interruption of the transition.
+
+
 ## Transition Interpolators
 
 A `TransitionInterpolator` instance must be supplied to the `transitionInterpolator` prop. It contains the following methods:
@@ -57,3 +80,4 @@ This interpolator offers similar behavior to Mapbox's `flyTo` method.
 ##### constructor
 
 `new FlyToInterpolator()`
+

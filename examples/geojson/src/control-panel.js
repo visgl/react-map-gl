@@ -14,7 +14,7 @@ export default class ControlPanel extends PureComponent {
         Hover over a state to see details.</p>
         <p>Data source: <a href="www.census.gov">US Census Bureau</a></p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/master/examples/geojson" target="_new">View Code ↗</a>
+          <a href="https://github.com/uber/react-map-gl/tree/3.0-release/examples/geojson" target="_new">View Code ↗</a>
         </div>
         <hr />
 

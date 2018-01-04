@@ -49,7 +49,7 @@ export default class ControlPanel extends PureComponent {
         <h3>Limit Map Interaction</h3>
         <p>Turn interactive features off/on.</p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/master/examples/interaction" target="_new">View Code ↗</a>
+          <a href="https://github.com/uber/react-map-gl/tree/3.0-release/examples/interaction" target="_new">View Code ↗</a>
         </div>
         <hr />
 

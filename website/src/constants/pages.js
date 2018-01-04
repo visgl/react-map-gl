@@ -60,7 +60,7 @@ const docPages = {
       children: [
         {
           name: 'Get Started',
-          content: getDocUrl('get-started/README.md')
+          content: getDocUrl('get-started/get-started.md')
         },
         {
           name: 'About Mapbox Tokens',
@@ -70,6 +70,19 @@ const docPages = {
           name: 'Using with Redux',
           content: getDocUrl('get-started/using-with-redux.md')
         },
+      ]
+    },
+    {
+      name: 'Advanced',
+      children: [
+        {
+          name: 'Custom Map Controls',
+          content: getDocUrl('advanced/custom-map-controls.md')
+        },
+        {
+          name: 'Viewport Transition',
+          content: getDocUrl('advanced/viewport-transition.md')
+        }
       ]
     },
     {
@@ -107,15 +120,6 @@ const docPages = {
         {
           name: 'SVGOverlay',
           content: getDocUrl('overlays/svg-overlay.md')
-        },
-      ]
-    },
-    {
-      name: 'Advanced',
-      children: [
-        {
-          name: 'Custom Map Controls',
-          content: getDocUrl('advanced/custom-map-controls.md')
         },
       ]
     }

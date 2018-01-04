@@ -2,41 +2,23 @@
 
 ## Overriding The Default Map Controller
 
-To change the default behavior of map interaction, you can implement/extend the `MapControls`
-class add pass an instance to the `mapControls` prop of `InteractiveMap`.
+To change the default behavior of map interaction, you can provide a custom map control to the `mapControls` prop of `InteractiveMap`.
 
-A simple example to disable mouse wheel:
-```js
-  /// my-map-controls.js
-  import {experimental} from 'react-map-gl';
+This custom map control must offer the following interface:
+- `setOptions(options)` - called by `InteractiveMap` when props change.
 
-  export default class MyMapControls extends experimental.MapControls {
-
-    constructor() {
-      super();
-      // subscribe to additional events
-      this.events = ['click'];
-    }
-
-    // Override the default handler in MapControls
-    handleEvent(event) {
-      if (event.type === 'click') {
-        console.log('hi!');
-      }
-      return super.handleEvent(event);
-    }
-  }
-```
-Then pass it to the map during render:
 ```jsx
   const mapControls = new MyMapControls();
-  <ReactMapGL mapControls={mapControls} ... />
+
+  render() {
+    return <ReactMapGL mapControls={mapControls} ... />;
+  }
 ```
 
 
-## MapControls Interface
+## MapControls Class
 
-A custom map controls class must implement the following interface:
+The easiest way to create a custom map control is to extend the default `MapControls` class.
 
 ### Properties
 
@@ -76,10 +58,115 @@ Additionally, event objects for different event types contain a subset of the fo
 
 ##### `handleEvent(event)`
 
-Called by `InteractiveMap` to handle pointer events.
+Called by the event manager to handle pointer events. This method delegate to the following methods to handle the default events:
+- `_onPanStart(event)`
+- `_onPan(event)`
+- `_onPanEnd(event)`
+- `_onPinchStart(event)`
+- `_onPinch(event)`
+- `_onPinchEnd(event)`
+- `_onDoubleTap(event)`
+- `_onWheel(event)`
+- `_onKeyDown(event)`
+
+##### `getMapState(overrides)`
+
+Get a new descriptor object of the map state. If specified, props in the `overrides` object override the current map props.
 
 ##### `setOptions(options)`
 
-Called by `InteractiveMap` when props change.
+Add/remove event listeners based on the latest `InteractiveMap` props.
 
+##### `setState(newState)`
+
+Save a persistent state (e.g. isDragging) for future use.
+
+##### `updateViewport(newMapState, extraProps, extraState)`
+
+Invoke `onViewportChange` callback with a new map state.
+
+
+### Source
+[map-controls.js](https://github.com/uber/react-map-gl/tree/3.0-release/src/utils/map-controls.js)
+
+
+## Examples
+
+A simple example to swap drag pan and drag rotate:
+```js
+  /// my-map-controls.js
+  import {experimental} from 'react-map-gl';
+
+  export default class MyMapControls extends experimental.MapControls {
+
+    _onPan(event) {
+      return this.isFunctionKeyPressed(event) || event.rightButton ?
+    //  Default implementation in MapControls
+    //  this._onPanRotate(event) : this._onPanMove(event);
+        this._onPanMove(event) : this._onPanRotate(event);
+    }
+  }
+```
+
+Overwrite existing event handling:
+```js
+  /// my-map-controls.js
+  import {experimental} from 'react-map-gl';
+
+  export default class MyMapControls extends experimental.MapControls {
+
+    // Override the default double tap handler
+    _onDoubleTap(event) {
+      // Go to New York City
+      this.updateViewport(this.getMapState(), {
+        longitude: -74.0,
+        latitude: 40.7,
+        zoom: 10
+      });
+    }
+  }
+```
+
+Listen to additional events:
+```js
+  /// my-map-controls.js
+  import {experimental} from 'react-map-gl';
+
+  export default class MyMapControls extends experimental.MapControls {
+
+    constructor() {
+      super();
+      // subscribe to additional events
+      this.events = ['click'];
+    }
+
+    // Override the default handler in MapControls
+    handleEvent(event) {
+      if (event.type === 'click') {
+        console.log('hi');
+      }
+      return super.handleEvent(event);
+    }
+  }
+```
+
+Add a custom callback:
+```js
+  /// my-map-controls.js
+  import {experimental} from 'react-map-gl';
+
+  export default class MyMapControls extends experimental.MapControls {
+
+    setOptions(options) {
+      super.setOptions(options);
+      // save the custom callback
+      this.onRotate = options.onRotate;
+    }
+
+    _onPanRotate(event) {
+      super._onPanRotate(event);
+      this.onRotate();
+    }
+  }
+```
 

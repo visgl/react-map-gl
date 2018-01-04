@@ -1,5 +1,11 @@
 # Upgrade Guide
 
+## Upgrading to v3.2
+
+- The latest mapbox-gl release requires stylesheet to be included at all times. See [Get Started](/docs/get-started/get-started.md) for information about styling.
+- Immutable.js is no longer a dependency. If you are importing immutable in your application, it must be added to the application's dependencies.
+
+
 ## Upgrading to v3
 
 v3 is a major upgrade of react-map-gl. While we have tried to gently deprecated any changed or removed features, a few breaking changes could not be avoided.

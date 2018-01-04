@@ -111,7 +111,7 @@ export default class StyleControls extends PureComponent {
         <h3>Dynamic Styling</h3>
         <p>Dynamically show/hide map layers and change color with Immutable map style.</p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/master/examples/layers" target="_new">
+          <a href="https://github.com/uber/react-map-gl/tree/3.0-release/examples/layers" target="_new">
             View Code ↗
           </a>
         </div>

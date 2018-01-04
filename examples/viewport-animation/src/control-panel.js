@@ -26,7 +26,7 @@ export default class ControlPanel extends PureComponent {
         <h3>Camera Transition</h3>
         <p>Smooth animate of the viewport.</p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/master/examples/viewport-animation" target="_new">View Code ↗</a>
+          <a href="https://github.com/uber/react-map-gl/tree/3.0-release/examples/viewport-animation" target="_new">View Code ↗</a>
         </div>
         <hr />
         

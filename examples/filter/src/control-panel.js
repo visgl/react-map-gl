@@ -13,7 +13,7 @@ export default class ControlPanel extends PureComponent {
         <h3>Highlight Features Containing Similar Data</h3>
         <p>Hover over counties to highlight counties that share the same name.</p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/master/examples/filter" target="_new">View Code ↗</a>
+          <a href="https://github.com/uber/react-map-gl/tree/3.0-release/examples/filter" target="_new">View Code ↗</a>
         </div>
       </Container>
     );
