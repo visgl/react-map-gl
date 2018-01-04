@@ -1,3 +1,4 @@
+/* global setTimeout, clearTimeout */
 // import InteractiveMap from 'react-map-gl';
 import MapGL, {InteractiveMap} from 'react-map-gl';
 import {createElement} from 'react';
@@ -5,6 +6,7 @@ import ReactTestUtils from 'react-test-renderer/shallow';
 import ReactTestRenderer from 'react-test-renderer';
 import sinon from 'sinon';
 import test from 'tape-catch';
+import Immutable from 'immutable';
 
 const mapboxApiAccessToken =
   process.env.MapboxAccessToken || process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
@@ -17,6 +19,66 @@ const defaultProps = {
   zoom: 14,
   mapboxApiAccessToken
 };
+
+const minimalStyle = {
+  version: 8,
+  name: 'Minimal',
+  sources: {
+    point: {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [-122, 37]
+        }
+      }
+    }
+  },
+  layers: [
+    {
+      id: 'point',
+      source: 'point',
+      type: 'circle',
+      paint: {
+        'circle-radius': 10,
+        'circle-color': '#000000'
+      }
+    }
+  ]
+};
+
+const TEST_CASES = [
+  {
+    title: 'Mapbox data without token',
+    props: Object.assign({}, defaultProps, {
+      mapboxApiAccessToken: ''
+    }),
+    shouldLoad: false
+  },
+  {
+    title: 'Mapbox data with token (string)',
+    props: Object.assign({}, defaultProps, {
+      mapStyle: 'mapbox://styles/mapbox/dark-v9'
+    }),
+    shouldLoad: true
+  },
+  {
+    title: 'non-Mapbox data without token (JSON)',
+    props: Object.assign({}, defaultProps, {
+      mapStyle: minimalStyle,
+      mapboxApiAccessToken: ''
+    }),
+    shouldLoad: true
+  },
+  {
+    title: 'non-Mapbox data without token (Immutable)',
+    props: Object.assign({}, defaultProps, {
+      mapStyle: Immutable.fromJS(minimalStyle)
+    }),
+    shouldLoad: true
+  }
+];
 
 test('InteractiveMap#default export', t => {
   t.ok(MapGL, 'InteractiveMap is defined');
@@ -38,30 +100,56 @@ test('InteractiveMap#named export', t => {
   t.end();
 });
 
-test('InteractiveMap#call onLoad when provided', t => {
-  function onLoad(...args) {
-    t.is(args.length, 0, 'onLoad does not expose the map object.');
-    t.end();
-  }
+TEST_CASES.forEach(testCase => {
+  test(`InteractiveMap#load ${testCase.title}`, t => {
+    let result = null;
+    let timer = null;
 
-  const props = Object.assign({}, defaultProps, {onLoad});
+    function end() {
+      const warning = result.root.findAllByType('h3');
+      if (testCase.shouldLoad) {
+        t.notOk(warning.length, 'shouldn\'t show warning');
+      } else {
+        t.ok(warning.length, 'should show warning');
+      }
 
-  const map = createElement(InteractiveMap, props);
-
-  const result = ReactTestRenderer.create(map);
-
-  t.ok(result, 'InteractiveMap rendered');
-
-  if (!InteractiveMap.supported()) {
-    t.ok('onLoad not called since InteractiveMap.supported() false');
-    t.end();
-  } else {
-    /* global setTimeout */
-    setTimeout(() => {
-      t.fail('onLoad wasn\'t called');
+      result.unmount();
       t.end();
-    }, 5000);
-  }
+    }
+
+    function onLoad() {
+      if (testCase.shouldLoad) {
+        t.pass('onLoad is called');
+      } else {
+        t.fail('onLoad should not be called');
+      }
+      clearTimeout(timer);
+      end();
+    }
+
+    const props = Object.assign({}, testCase.props, {onLoad});
+
+    const map = createElement(InteractiveMap, props);
+
+    result = ReactTestRenderer.create(map);
+
+    t.ok(result, 'InteractiveMap rendered');
+
+    if (!InteractiveMap.supported()) {
+      t.ok('onLoad not called since InteractiveMap.supported() false');
+      result.unmount();
+      t.end();
+    } else {
+      timer = setTimeout(() => {
+        if (testCase.shouldLoad) {
+          t.fail('onLoad wasn\'t called');
+        } else {
+          t.pass('onLoad wasn\'t called');
+        }
+        end();
+      }, 5000);
+    }
+  });
 });
 
 test('Interactive map renders children on first render', t => {
@@ -69,7 +157,8 @@ test('Interactive map renders children on first render', t => {
   const child = createElement(childComponent);
   const map = createElement(InteractiveMap, defaultProps, child);
   try {
-    ReactTestRenderer.create(map);
+    const result = ReactTestRenderer.create(map);
+    result.unmount();
   } catch (e) {
     // we use try catch here as InteractiveMap fails in DidMount
     // but having that render have already called this fail does not matter
@@ -81,9 +170,10 @@ test('Interactive map renders children on first render', t => {
 });
 
 test('Interactive map#call transformRequest callback when provided', t => {
+  let transformRequestCalled = false;
+
   function transformRequest(url, resourceType) {
-    t.ok(true, 'transformRequest handler was called');
-    t.end();
+    transformRequestCalled = true;
   }
 
   const props = Object.assign({}, defaultProps, {transformRequest});
@@ -93,16 +183,11 @@ test('Interactive map#call transformRequest callback when provided', t => {
   // const result = ReactTestUtils.createRenderer().render(map);
   const result = ReactTestRenderer.create(map);
 
-  t.ok(result, 'InteractiveMap rendered');
-
   if (!InteractiveMap.supported()) {
-    t.ok('transformRequest not called since InteractiveMap.supported() false');
-    t.end();
+    t.pass('transformRequest not called since InteractiveMap.supported() false');
   } else {
-    /* global setTimeout */
-    setTimeout(() => {
-      t.fail('transformRequest wasn\'t called');
-      t.end();
-    }, 1000);
+    t.ok(transformRequestCalled, 'transformRequest handler was called');
   }
+  result.unmount();
+  t.end();
 });
