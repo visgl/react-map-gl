@@ -8,8 +8,7 @@ import sinon from 'sinon';
 import test from 'tape-catch';
 import Immutable from 'immutable';
 
-const mapboxApiAccessToken =
-  process.env.MapboxAccessToken || process.env.MAPBOX_ACCESS_TOKEN; // eslint-disable-line
+const mapboxApiAccessToken = process.env._MapboxAccessToken_; // eslint-disable-line
 
 const defaultProps = {
   width: 500,
@@ -105,7 +104,8 @@ TEST_CASES.forEach(testCase => {
     let result = null;
     let timer = null;
 
-    function end() {
+    function checkRenderResult() {
+      // The "Mapbox API access token required" warning is rendered with a <h3 />
       const warning = result.root.findAllByType('h3');
       if (testCase.shouldLoad) {
         t.notOk(warning.length, 'shouldn\'t show warning');
@@ -113,8 +113,8 @@ TEST_CASES.forEach(testCase => {
         t.ok(warning.length, 'should show warning');
       }
 
+      // Unmount the component to avoid creating too many maps
       result.unmount();
-      t.end();
     }
 
     function onLoad() {
@@ -124,7 +124,18 @@ TEST_CASES.forEach(testCase => {
         t.fail('onLoad should not be called');
       }
       clearTimeout(timer);
-      end();
+      checkRenderResult();
+      t.end();
+    }
+
+    function onTimeout() {
+      if (testCase.shouldLoad) {
+        t.fail('onLoad wasn\'t called');
+      } else {
+        t.pass('onLoad wasn\'t called');
+      }
+      checkRenderResult();
+      t.end();
     }
 
     const props = Object.assign({}, testCase.props, {onLoad});
@@ -137,17 +148,9 @@ TEST_CASES.forEach(testCase => {
 
     if (!InteractiveMap.supported()) {
       t.ok('onLoad not called since InteractiveMap.supported() false');
-      result.unmount();
       t.end();
     } else {
-      timer = setTimeout(() => {
-        if (testCase.shouldLoad) {
-          t.fail('onLoad wasn\'t called');
-        } else {
-          t.pass('onLoad wasn\'t called');
-        }
-        end();
-      }, 5000);
+      timer = setTimeout(onTimeout, 5000);
     }
   });
 });
@@ -158,6 +161,7 @@ test('Interactive map renders children on first render', t => {
   const map = createElement(InteractiveMap, defaultProps, child);
   try {
     const result = ReactTestRenderer.create(map);
+    // Unmount the component to avoid creating too many maps
     result.unmount();
   } catch (e) {
     // we use try catch here as InteractiveMap fails in DidMount
@@ -170,11 +174,7 @@ test('Interactive map renders children on first render', t => {
 });
 
 test('Interactive map#call transformRequest callback when provided', t => {
-  let transformRequestCalled = false;
-
-  function transformRequest(url, resourceType) {
-    transformRequestCalled = true;
-  }
+  const transformRequest = sinon.spy(() => null);
 
   const props = Object.assign({}, defaultProps, {transformRequest});
 
@@ -186,7 +186,7 @@ test('Interactive map#call transformRequest callback when provided', t => {
   if (!InteractiveMap.supported()) {
     t.pass('transformRequest not called since InteractiveMap.supported() false');
   } else {
-    t.ok(transformRequestCalled, 'transformRequest handler was called');
+    t.ok(transformRequest.called, 'transformRequest handler was called');
   }
   result.unmount();
   t.end();

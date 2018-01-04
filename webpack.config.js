@@ -80,7 +80,8 @@ const BROWSER_CONFIG = Object.assign({}, BASE_CONFIG, {
     new webpack.DefinePlugin({
       // Overwrite the default env var so that we can test access token handling
       'process.env.MapboxAccessToken': JSON.stringify(''),
-      'process.env.MAPBOX_ACCESS_TOKEN': JSON.stringify(process.env.MapboxAccessToken)
+      // Secret env var for testing only
+      'process.env._MapboxAccessToken_': JSON.stringify(process.env.MapboxAccessToken)
     })
   ]
 });
