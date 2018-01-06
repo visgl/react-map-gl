@@ -34,7 +34,6 @@
     "publish-beta": "npm run build && npm run test && npm publish --tag beta"
   },
   "dependencies": {
-    "@mapbox/mapbox-gl-style-spec": "^11.0.0",
     "babel-runtime": "^6.23.0",
     "bowser": "^1.2.0",
     "mapbox-gl": "0.42.2",
