@@ -18,21 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import React from 'react';
-import Immutable from 'immutable';
 
-import ScatterplotOverlay from './scatterplot-overlay';
 import ChoroplethOverlay from './choropleth-overlay';
+import ScatterplotOverlay from './scatterplot-overlay';
 
 // San Francisco
 import ZIPCODES_SF from './data/feature-example-sf.json';
 import CITIES from './data/cities.json';
 
-const ZIPCODES = Immutable.fromJS(ZIPCODES_SF.features)
-  .map(f => f.setIn(['properties', 'value'], Math.random() * 1000));
+const ZIPCODES = ZIPCODES_SF.features
+  .map(feature => {
+    feature.properties.value = Math.random() * 1000;
+    return feature;
+  });
 
-const CITY_LOCATIONS = Immutable.fromJS(
-  CITIES.map(c => [c.longitude, c.latitude])
-);
+const CITY_LOCATIONS = CITIES.map(city => [city.longitude, city.latitude]);
 
 export default [
   (<ChoroplethOverlay key="choropleth"

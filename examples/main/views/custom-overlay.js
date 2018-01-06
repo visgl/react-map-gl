@@ -25,7 +25,6 @@ import MapGL, {CanvasOverlay, SVGOverlay} from 'react-map-gl';
 
 import {randomNormal} from 'd3-random';
 import {range} from 'd3-array';
-import Immutable from 'immutable';
 
 import alphaify from '../alphaify';
 
@@ -42,9 +41,9 @@ const wiggle = (function _wiggle() {
 }());
 
 // Example data.
-const locations = Immutable.fromJS(range(30).map(
+const locations = range(30).map(
   () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
-));
+);
 
 const propTypes = {
   width: PropTypes.number.isRequired,
@@ -89,7 +88,7 @@ export default class CustomOverlayExample extends Component {
     opt.ctx.lineWidth = 2;
     locations.forEach((loc, index) => {
       opt.ctx.beginPath();
-      const p2 = opt.project(loc.toArray());
+      const p2 = opt.project(loc);
       opt.ctx.moveTo(p1[0], p1[1]);
       opt.ctx.lineTo(p2[0], p2[1]);
       opt.ctx.stroke();
@@ -131,7 +130,7 @@ export default class CustomOverlayExample extends Component {
               key={ index + 1 }
               style={ style }
               r={ 6 }
-              transform={ svgTransform([{translate: opt.project(loc.toArray())}]) }
+              transform={ svgTransform([{translate: opt.project(loc)}]) }
               onClick={ () => {
                 const windowAlert = window.alert;
                 windowAlert(`dot ${index}`);

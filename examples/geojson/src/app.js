@@ -4,9 +4,8 @@ import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 import ControlPanel from './control-panel';
 
-import {defaultMapStyle, dataLayer} from './map-style.js';
+import {defaultMapStyle, dataLayer} from './map-style';
 import {updatePercentiles} from './utils';
-import {fromJS} from 'immutable';
 import {json as requestJson} from 'd3-request';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
@@ -54,16 +53,15 @@ export default class App extends Component {
     });
   };
 
-  _loadData = data => {
+  _loadData = originalData => {
 
-    updatePercentiles(data, f => f.properties.income[this.state.year]);
+    const data = updatePercentiles(originalData, f => f.properties.income[this.state.year]);
 
-    const mapStyle = defaultMapStyle
-      // Add geojson source to map
-      .setIn(['sources', 'incomeByState'], fromJS({type: 'geojson', data}))
-      // Add point layer to map
-      .set('layers', defaultMapStyle.get('layers').push(dataLayer));
-
+    const mapStyle = Object.assign({}, defaultMapStyle);
+    // Add geojson source to map
+    mapStyle.sources.incomeByState = { type: 'geojson', data};
+    // Add point layer to map
+    mapStyle.layers.push(dataLayer);
     this.setState({data, mapStyle});
   };
 
@@ -71,10 +69,12 @@ export default class App extends Component {
     if (name === 'year') {
       this.setState({year: value});
 
-      const {data, mapStyle} = this.state;
-      if (data) {
-        updatePercentiles(data, f => f.properties.income[value]);
-        const newMapStyle = mapStyle.setIn(['sources', 'incomeByState', 'data'], fromJS(data));
+      const {data: originalData, mapStyle} = this.state;
+      if (originalData) {
+        const data = updatePercentiles(originalData, f => f.properties.income[value]);
+        const newMapStyle = Object.assign({}, mapStyle);
+        newMapStyle.sources = Object.assign({}, newMapStyle.sources);
+        newMapStyle.sources.incomeByState = { type: 'geojson', data };
         this.setState({mapStyle: newMapStyle});
       }
     }

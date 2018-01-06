@@ -22,7 +22,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import MapGL from 'react-map-gl';
-import Immutable from 'immutable';
 
 // San Francisco
 import SF_FEATURE from '../../data/feature-example-sf.json';
@@ -31,7 +30,7 @@ import CITIES from '../../data/cities.json';
 const location = CITIES[0];
 
 function buildStyle({fill = 'red', stroke = 'blue'}) {
-  return Immutable.fromJS({
+  return {
     version: 8,
     name: 'Example raster tile source',
     sources: {
@@ -55,7 +54,7 @@ function buildStyle({fill = 'red', stroke = 'blue'}) {
         interactive: false
       }
     ]
-  });
+  };
 }
 
 const propTypes = {

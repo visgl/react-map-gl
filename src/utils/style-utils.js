@@ -1,10 +1,7 @@
-import {Map} from 'immutable';
-import diffStyles from './diff-styles';
-
 export function getInteractiveLayerIds(mapStyle) {
   let interactiveLayerIds = null;
 
-  if (Map.isMap(mapStyle) && mapStyle.has('layers')) {
+  if (typeof mapStyle.toJS === 'function' && mapStyle.has('layers')) {
     interactiveLayerIds = mapStyle.get('layers')
       .filter(l => l.get('interactive'))
       .map(l => l.get('id'))
@@ -17,100 +14,50 @@ export function getInteractiveLayerIds(mapStyle) {
   return interactiveLayerIds;
 }
 
-// Individually update the maps source and layers that have changed if all
-// other style props haven't changed. This prevents flicking of the map when
-// styles only change sources or layers.
-/* eslint-disable max-statements, complexity */
-export function setDiffStyle(prevStyle, nextStyle, map) {
-  const prevKeysMap = prevStyle && styleKeysMap(prevStyle) || {};
-  const nextKeysMap = styleKeysMap(nextStyle);
-  function styleKeysMap(style) {
-    return style.map(() => true).delete('layers').delete('sources').toJS();
+// Style diffing doesn't work with refs so expand them out manually before diffing.
+export function expandRefs(style) {
+  if (!style) {
+    return null;
   }
-  function propsOtherThanLayersOrSourcesDiffer() {
-    const prevKeysList = Object.keys(prevKeysMap);
-    const nextKeysList = Object.keys(nextKeysMap);
-    if (prevKeysList.length !== nextKeysList.length) {
-      return true;
-    }
-    // `nextStyle` and `prevStyle` should not have the same set of props.
-    if (nextKeysList.some(
-      key => prevStyle.get(key) !== nextStyle.get(key)
-      // But the value of one of those props is different.
-    )) {
-      return true;
-    }
-    return false;
+  if (typeof style === 'string') {
+    return style;
   }
-
-  if (!prevStyle || propsOtherThanLayersOrSourcesDiffer()) {
-    map.setStyle(nextStyle.toJS());
-    return;
+  if (style.toJS) {
+    style = style.toJS();
   }
-
-  const {sourcesDiff, layersDiff} = diffStyles(prevStyle, nextStyle);
-
-  // TODO: It's rather difficult to determine style diffing in the presence
-  // of refs. For now, if any style update has a ref, fallback to no diffing.
-  // We can come back to this case if there's a solid usecase.
-  if (layersDiff.updates.some(node => node.layer.get('ref'))) {
-    map.setStyle(nextStyle.toJS());
-    return;
-  }
-
-  for (const enter of sourcesDiff.enter) {
-    map.addSource(enter.id, enter.source.toJS());
-  }
-  for (const update of sourcesDiff.update) {
-    updateStyleSource(map, update);
-  }
-  for (const exit of sourcesDiff.exit) {
-    map.removeSource(exit.id);
-  }
-  for (const exit of layersDiff.exiting) {
-    if (map.style.getLayer(exit.id)) {
-      map.removeLayer(exit.id);
-    }
-  }
-  for (const update of layersDiff.updates) {
-    if (!update.enter) {
-      // This is an old layer that needs to be updated. Remove the old layer
-      // with the same id and add it back again.
-      map.removeLayer(update.id);
-    }
-    map.addLayer(update.layer.toJS(), update.before);
-  }
-}
-/* eslint-enable max-statements, complexity */
-
-// Update a source in the map style
-function updateStyleSource(map, update) {
-  const newSource = update.source.toJS();
-  if (newSource.type === 'geojson') {
-    const oldSource = map.getSource(update.id);
-    if (oldSource.type === 'geojson') {
-      // update data if no other GeoJSONSource options were changed
-      const oldOpts = oldSource.workerOptions;
-      if (
-        (newSource.maxzoom === undefined ||
-          newSource.maxzoom === oldOpts.geojsonVtOptions.maxZoom) &&
-        (newSource.buffer === undefined ||
-          newSource.buffer === oldOpts.geojsonVtOptions.buffer) &&
-        (newSource.tolerance === undefined ||
-          newSource.tolerance === oldOpts.geojsonVtOptions.tolerance) &&
-        (newSource.cluster === undefined ||
-          newSource.cluster === oldOpts.cluster) &&
-        (newSource.clusterRadius === undefined ||
-          newSource.clusterRadius === oldOpts.superclusterOptions.radius) &&
-        (newSource.clusterMaxZoom === undefined ||
-          newSource.clusterMaxZoom === oldOpts.superclusterOptions.maxZoom)
-      ) {
-        oldSource.setData(newSource.data);
-        return;
+  const layerIndex = style.layers.reduce(
+    (accum, current) => Object.assign(accum, {[current.id]: current}),
+    {}
+  );
+  style.layers = style.layers.map(layer => {
+    layer = Object.assign({}, layer);
+    const layerRef = layerIndex[layer.ref];
+    if (layerRef) {
+      delete layer.ref;
+      if (layerRef.type !== undefined) {
+        layer.type = layerRef.type;
+      }
+      if (layerRef.source !== undefined) {
+        layer.source = layerRef.source;
+      }
+      if (layerRef['source-layer'] !== undefined) {
+        layer['source-layer'] = layerRef['source-layer'];
+      }
+      if (layerRef.minzoom !== undefined) {
+        layer.minzoom = layerRef.minzoom;
+      }
+      if (layerRef.maxzoom !== undefined) {
+        layer.maxzoom = layerRef.maxzoom;
+      }
+      if (layerRef.filter !== undefined) {
+        layer.filter = layerRef.filter;
+      }
+      if (layerRef.layout !== undefined) {
+        layer.layout = layer.layout || {};
+        layer.layout = Object.assign({}, layer.layout, layerRef.layout);
       }
     }
-  }
-
-  map.removeSource(update.id);
-  map.addSource(update.id, newSource);
+    return layer;
+  });
+  return style;
 }

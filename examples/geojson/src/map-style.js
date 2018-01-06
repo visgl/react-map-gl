@@ -1,8 +1,7 @@
-import {fromJS} from 'immutable';
 import MAP_STYLE from '../../map-style-basic-v8.json';
 
 // For more information on data-driven styles, see https://www.mapbox.com/help/gl-dds-ref/
-export const dataLayer = fromJS({
+export const dataLayer = {
   id: 'data',
   source: 'incomeByState',
   type: 'fill',
@@ -24,6 +23,6 @@ export const dataLayer = fromJS({
     },
     'fill-opacity': 0.8
   }
-});
+};
 
-export const defaultMapStyle = fromJS(MAP_STYLE);
+export const defaultMapStyle = MAP_STYLE;

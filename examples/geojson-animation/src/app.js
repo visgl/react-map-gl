@@ -4,9 +4,8 @@ import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 
 import ControlPanel from './control-panel';
-import {defaultMapStyle, pointLayer} from './map-style.js';
+import {defaultMapStyle, pointLayer} from './map-style';
 import {pointOnCircle} from './utils';
-import {fromJS} from 'immutable';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
@@ -55,15 +54,16 @@ export default class App extends Component {
 
   _updatePointData = pointData => {
     let {mapStyle} = this.state;
-    if (!mapStyle.hasIn(['source', 'point'])) {
-      mapStyle = mapStyle
-        // Add geojson source to map
-        .setIn(['sources', 'point'], fromJS({type: 'geojson'}))
-        // Add point layer to map
-        .set('layers', mapStyle.get('layers').push(pointLayer));
+    // Trigger an update to the map stylesheet by returning a new instance.
+    mapStyle = Object.assign({}, mapStyle);
+    if (!mapStyle.sources.point) {
+      // Add point layer to map
+      mapStyle.layers.push(pointLayer);
     }
-    // Update data source
-    mapStyle = mapStyle.setIn(['sources', 'point', 'data'], pointData);
+    // Update data source. It's important that we recreate it each time
+    // so that the changes are detected by react-map-gl.
+    mapStyle.sources = Object.assign({}, mapStyle.sources);
+    mapStyle.sources.point = {type: 'geojson', data: pointData };
 
     this.setState({mapStyle});
   }
@@ -73,7 +73,6 @@ export default class App extends Component {
   render() {
 
     const {viewport, mapStyle} = this.state;
-
     return (
       <MapGL
         {...viewport}

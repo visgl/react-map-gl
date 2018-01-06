@@ -1,8 +1,7 @@
 import React, {PureComponent} from 'react';
-import {fromJS} from 'immutable';
 import MAP_STYLE from '../../map-style-basic-v8.json';
 
-const defaultMapStyle = fromJS(MAP_STYLE);
+const defaultMapStyle = MAP_STYLE;
 
 const categories = ['labels', 'roads', 'buildings', 'parks', 'water', 'background'];
 
@@ -31,7 +30,7 @@ export default class StyleControls extends PureComponent {
   constructor(props) {
     super(props);
 
-    this._defaultLayers = defaultMapStyle.get('layers');
+    this._defaultLayers = defaultMapStyle.layers;
 
     this.state = {
       visibility: {
@@ -73,12 +72,12 @@ export default class StyleControls extends PureComponent {
 
     const layers = this._defaultLayers
     .filter(layer => {
-      const id = layer.get('id');
+      const id = layer.id;
       return categories.every(name => visibility[name] || !layerSelector[name].test(id));
     })
     .map(layer => {
-      const id = layer.get('id');
-      const type = layer.get('type');
+      const id = layer.id;
+      const type = layer.type;
       const category = categories.find(name => layerSelector[name].test(id));
       if (category && colorClass[type]) {
         return layer.setIn(['paint', colorClass[type]], color[category]);
@@ -109,7 +108,7 @@ export default class StyleControls extends PureComponent {
     return (
       <Container>
         <h3>Dynamic Styling</h3>
-        <p>Dynamically show/hide map layers and change color with Immutable map style.</p>
+        <p>Dynamically show/hide map layers and change color with map style.</p>
         <div className="source-link">
           <a href="https://github.com/uber/react-map-gl/tree/master/examples/layers" target="_new">
             View Code ↗

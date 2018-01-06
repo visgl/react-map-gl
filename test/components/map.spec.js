@@ -6,7 +6,6 @@ import ReactTestUtils from 'react-test-renderer/shallow';
 import ReactTestRenderer from 'react-test-renderer';
 import sinon from 'sinon';
 import test from 'tape-catch';
-import Immutable from 'immutable';
 
 const mapboxApiAccessToken = process.env._MapboxAccessToken_; // eslint-disable-line
 
@@ -67,13 +66,6 @@ const TEST_CASES = [
     props: Object.assign({}, defaultProps, {
       mapStyle: minimalStyle,
       mapboxApiAccessToken: ''
-    }),
-    shouldLoad: true
-  },
-  {
-    title: 'non-Mapbox data without token (Immutable)',
-    props: Object.assign({}, defaultProps, {
-      mapStyle: Immutable.fromJS(minimalStyle)
     }),
     shouldLoad: true
   }

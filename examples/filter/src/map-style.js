@@ -1,4 +1,3 @@
-import {fromJS} from 'immutable';
 import MAP_STYLE from '../../map-style-basic-v8.json';
 
 // Add the vector tile source for counties
@@ -42,4 +41,4 @@ MAP_STYLE.layers.splice(
 export const highlightLayerIndex =
   MAP_STYLE.layers.findIndex(layer => layer.id === 'counties-highlighted');
 
-export const defaultMapStyle = fromJS(MAP_STYLE);
+export const defaultMapStyle = MAP_STYLE;

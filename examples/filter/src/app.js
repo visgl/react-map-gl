@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 import MapGL, {Popup} from 'react-map-gl';
 import ControlPanel from './control-panel';
 
-import {defaultMapStyle, highlightLayerIndex} from './map-style.js';
+import {defaultMapStyle, highlightLayerIndex} from './map-style';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
@@ -58,10 +58,9 @@ export default class App extends Component {
       };
       countyName = county.properties.COUNTY;
     }
-    this.setState({
-      mapStyle: defaultMapStyle.setIn(['layers', highlightLayerIndex, 'filter', 2], countyName),
-      hoverInfo
-    });
+    const mapStyle = {...defaultMapStyle};
+    mapStyle.layers[highlightLayerIndex].filter[2] = countyName;
+    this.setState({mapStyle, hoverInfo});
   };
 
   _renderPopup() {
