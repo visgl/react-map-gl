@@ -27,8 +27,11 @@ import ChoroplethOverlay from './choropleth-overlay';
 import ZIPCODES_SF from './data/feature-example-sf.json';
 import CITIES from './data/cities.json';
 
-const ZIPCODES = Immutable.fromJS(ZIPCODES_SF.features)
-  .map(f => f.setIn(['properties', 'value'], Math.random() * 1000));
+const ZIPCODES = ZIPCODES_SF.features
+  .map(feature => {
+    feature.properties.value = Math.random() * 1000;
+    return feature;
+  });
 
 const CITY_LOCATIONS = Immutable.fromJS(
   CITIES.map(c => [c.longitude, c.latitude])

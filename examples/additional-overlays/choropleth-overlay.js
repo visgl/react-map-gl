@@ -22,7 +22,6 @@ import PropTypes from 'prop-types';
 import {extent} from 'd3-array';
 import {scaleLinear} from 'd3-scale';
 import {geoPath, geoTransform} from 'd3-geo';
-import Immutable from 'immutable';
 /* global window */
 
 const propTypes = {
@@ -31,7 +30,7 @@ const propTypes = {
   /**
     * An Immutable List of feature objects.
     */
-  features: PropTypes.instanceOf(Immutable.List),
+  features: PropTypes.array,
   /* eslint-disable react/forbid-prop-types */
   colorDomain: PropTypes.array,
   colorRange: PropTypes.array.isRequired,
@@ -43,7 +42,7 @@ const defaultProps = {
   globalOpacity: 1,
   colorDomain: null,
   colorRange: ['#FFFFFF', '#1FBAD6'],
-  valueAccessor: feature => feature.get('properties').get('value')
+  valueAccessor: feature => feature.properties.value
 };
 
 const contextTypes = {
@@ -103,10 +102,10 @@ export default class ChoroplethOverlay extends Component {
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
       ctx.lineWidth = '1';
       ctx.fillStyle = colorScale(this.props.valueAccessor(feature));
-      const geometry = feature.get('geometry');
+      const geometry = feature.geometry;
       path({
-        type: geometry.get('type'),
-        coordinates: geometry.get('coordinates').toJS()
+        type: geometry.type,
+        coordinates: geometry.coordinates
       });
       ctx.fill();
       ctx.stroke();
