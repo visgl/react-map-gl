@@ -21,7 +21,6 @@
 import {Component, createElement} from 'react';
 import PropTypes from 'prop-types';
 
-import Immutable from 'immutable';
 import {document} from '../utils/globals';
 
 function noop() {}
@@ -46,7 +45,7 @@ function mouse(container, event) {
 }
 
 const propTypes = {
-  points: PropTypes.instanceOf(Immutable.List).isRequired,
+  points: PropTypes.array.isRequired,
   keyAccessor: PropTypes.func.isRequired,
   lngLatAccessor: PropTypes.func.isRequired,
   onAddPoint: PropTypes.func.isRequired,
@@ -55,8 +54,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  keyAccessor: point => point.get('id'),
-  lngLatAccessor: point => point.get('location').toArray(),
+  keyAccessor: point => point.id,
+  lngLatAccessor: point => point.location,
   onAddPoint: noop,
   onUpdatePoint: noop,
   renderPoint: noop,
@@ -75,7 +74,6 @@ export default class DraggablePointsOverlay extends Component {
     this.state = {
       draggedPointKey: null
     };
-    autobind(this);
   }
 
   _onDragStart(point, event) {

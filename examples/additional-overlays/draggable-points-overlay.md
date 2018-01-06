@@ -19,15 +19,15 @@ var DraggablePointsOverlay = require('./draggable-points-overlay');
 
 #### points
 
-An [ImmutableJS](https://facebook.github.io/immutable-js/) [List](https://facebook.github.io/immutable-js/docs/#/List) of geo locations.
+An array of geo locations.
 
 ```js
-const points = Immutable.fromJS([
+const points = [
   {location:[-122.39508481737994, 37.79450507471435 ], id: 0},
   {location:[-122.39750244137034, 37.79227619464379 ], id: 1},
   {location:[-122.4013303460217,  37.789251178427776], id: 2},
   ...
-]);
+];
 ```
 
 #### lngLatAccessor
@@ -93,7 +93,7 @@ A required prop called whenever the user right clicks on the map. It's passed th
 ```js
 function addPoint(location) {
   var {points} = this.state;
-  var point = Immutable.fromJS({id: points.last().get('id') + 1, location});
+  var point = {id: points[points.length -1].id + 1, location};
   this.setState({points: points.push(point)});
 }
 ```
