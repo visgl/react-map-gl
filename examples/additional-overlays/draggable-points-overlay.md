@@ -36,7 +36,7 @@ Use the `lngLatAccessor` prop to provide the location in a custom format. It's c
 
 ```js
 function lngLatAccessor(point) {
-  return point.get('location').toArray();
+  return point.location;
 }
 ```
 
@@ -48,7 +48,7 @@ The default `keyAccessor` assumes each point has an `id` property.'
 
 ```js
 function keyAccessor(point) {
-  return point.get('id');
+  return point.id;
 }
 ```
 
@@ -58,12 +58,12 @@ A required prop used to control the look of each point. It takes as the first ar
 
 ```js
 function renderPoint(point) {
-  const scale = point.get('id') / 10 + 1;
+  const scale = point.id / 10 + 1;
   return (
     <g transform={'scale(' + scale + ')'}>
       <circle r="10" />
       <text style={{fill: 'white', textAnchor: 'middle'}} y="6">
-        {point.get('id')}
+        {point.id}
       </text>
     </g>
   );
@@ -79,7 +79,7 @@ Here's what a typical callback looks like.'
 ```
 function updatePoint({key, location}) {
   const points = this.state.points.map(point => {
-    const id = point.get('id');
+    const {id} = point;
     return id === key ? point.set('location', List(location)) : point;
   });
   this.setState({points: points});

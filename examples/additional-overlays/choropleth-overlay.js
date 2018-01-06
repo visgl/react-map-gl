@@ -28,7 +28,7 @@ const propTypes = {
   renderWhileDragging: PropTypes.bool.isRequired,
   globalOpacity: PropTypes.number.isRequired,
   /**
-    * An Immutable List of feature objects.
+    * A List of feature objects.
     */
   features: PropTypes.array,
   /* eslint-disable react/forbid-prop-types */
@@ -90,7 +90,7 @@ export default class ChoroplethOverlay extends Component {
       return;
     }
     const colorDomain = this.props.colorDomain ||
-      extent(features.toArray(), this.props.valueAccessor);
+      extent(features, this.props.valueAccessor);
 
     const colorScale = scaleLinear()
       .domain(colorDomain)

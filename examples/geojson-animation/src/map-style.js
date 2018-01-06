@@ -1,7 +1,6 @@
-import {fromJS} from 'immutable';
 import MAP_STYLE from '../../map-style-basic-v8.json';
 
-export const pointLayer = fromJS({
+export const pointLayer = {
   id: 'point',
   source: 'point',
   type: 'circle',
@@ -9,6 +8,6 @@ export const pointLayer = fromJS({
     'circle-radius': 10,
     'circle-color': '#007cbf'
   }
-});
+};
 
-export const defaultMapStyle = fromJS(MAP_STYLE);
+export const defaultMapStyle = MAP_STYLE;

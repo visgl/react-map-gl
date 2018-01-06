@@ -28,10 +28,10 @@ class Map extends Component {
 Mapbox API access token for `MapboxGL`. Required when using Mapbox vector tiles/styles
 Mapbox WebGL context creation option. Useful when you want to export the canvas as a PNG
 
-##### `mapStyle` {String | Object | Immutable.Map}
+##### `mapStyle` {String | Object}
 The Mapbox style. A string url or a
 [MapboxGL style](https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive)
-object (regular JS object or Immutable.Map).
+object (regular JS object).
 
 ##### `width` {Number} (required)
 The width of the map.
@@ -75,9 +75,7 @@ Equivalent to Mapbox's `attributionControl`
 If `true`, shows Mapbox's attribution control.
 
 ##### `preventStyleDiffing` {Bool} - default: `false`
-If `mapStyle` is assigned an Immutable object, when the prop changes, `StaticMap` can diff
-between the two values and call the appropriate Mapbox API such as `addLayer`,
-`removeLayer`, `setStyle`, `setData`, etc.
+`StaticMap` can diff between the two values and call the appropriate Mapbox API such as `addLayer`, `removeLayer`, `setStyle`, `setData`, etc.
 This allows apps to update data sources and layer styles efficiently.
 In use cases such as animation or dynamic showing/hiding layers, style diffing prevents the
 map from reloading and flickering when the map style changes.
