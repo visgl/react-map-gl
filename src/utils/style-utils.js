@@ -1,10 +1,10 @@
-import {Map} from 'immutable';
+import isImmutableMap from './is-immutable-map';
 import diffStyles from './diff-styles';
 
 export function getInteractiveLayerIds(mapStyle) {
   let interactiveLayerIds = null;
 
-  if (Map.isMap(mapStyle) && mapStyle.has('layers')) {
+  if (isImmutableMap(mapStyle) && mapStyle.has('layers')) {
     interactiveLayerIds = mapStyle.get('layers')
       .filter(l => l.get('interactive'))
       .map(l => l.get('id'))
