@@ -23,7 +23,6 @@ import PropTypes from 'prop-types';
 import autobind from 'react-autobind';
 import {InteractiveMap} from 'react-map-gl';
 import DeckGL, {ArcLayer} from 'deck.gl';
-import Immutable from 'immutable';
 
 import ScatterplotOverlay from '../additional-overlays/scatterplot-overlay';
 /* global window */
@@ -34,13 +33,13 @@ import CITIES from './data/cities.json';
 const location = CITIES[0];
 
 // Example data.
-const locations = Immutable.fromJS(new Array(4000).fill(0).map(() => [
+const locations = new Array(4000).fill(0).map(() => [
   location.longitude + Math.random() * 0.01,
   location.latitude + Math.random() * 0.01
-]));
+]);
 
 function buildStyle({fill = 'red', stroke = 'blue'}) {
-  return Immutable.fromJS({
+  return {
     version: 8,
     name: 'Example raster tile source',
     sources: {
@@ -64,7 +63,7 @@ function buildStyle({fill = 'red', stroke = 'blue'}) {
         interactive: false
       }
     ]
-  });
+  };
 }
 
 const propTypes = {

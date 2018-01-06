@@ -6,7 +6,6 @@ export default class ControlPanel extends PureComponent {
 
   render() {
     const Container = this.props.containerComponent || defaultContainer;
-    const {settings} = this.props;
 
     return (
       <Container>
