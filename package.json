@@ -38,6 +38,7 @@
     "bowser": "^1.2.0",
     "immutable": "*",
     "mapbox-gl": "0.42.2",
+    "mapbox-gl-style-spec": "8.10.0",
     "math.gl": ">= 1.0.0-alpha.8",
     "mjolnir.js": ">=1.0.0-alpha.1",
     "prop-types": "^15.5.7",

@@ -17,12 +17,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+/* global window */
 import {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
+import styleSpec from 'mapbox-gl-style-spec';
 import autobind from '../utils/autobind';
 
-import {getInteractiveLayerIds, setDiffStyle} from '../utils/style-utils';
-import Immutable from 'immutable';
+import {getInteractiveLayerIds, expandRefs} from '../utils/style-utils';
 
 import WebMercatorViewport from 'viewport-mercator-project';
 
@@ -38,11 +39,10 @@ function noop() {}
 const UNAUTHORIZED_ERROR_CODE = 401;
 
 const propTypes = Object.assign({}, Mapbox.propTypes, {
-  /** The Mapbox style. A string url or a MapboxGL style Immutable.Map object. */
+  /** The Mapbox style. A string url, a MapboxGL style Object or an ImmutableJS style object. */
   mapStyle: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.object,
-    PropTypes.instanceOf(Immutable.Map)
+    PropTypes.object
   ]),
   /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
   preventStyleDiffing: PropTypes.bool,
@@ -92,7 +92,7 @@ export default class StaticMap extends PureComponent {
     this._mapbox = new Mapbox(Object.assign({}, this.props, {
       container: this._mapboxMap,
       onError: this._mapboxMapError,
-      mapStyle: Immutable.Map.isMap(mapStyle) ? mapStyle.toJS() : mapStyle
+      mapStyle: typeof mapStyle.toJS === 'function' ? mapStyle.toJS() : mapStyle
     }));
     this._map = this._mapbox.getMap();
     this._updateQueryParams(mapStyle);
@@ -100,10 +100,6 @@ export default class StaticMap extends PureComponent {
 
   componentWillReceiveProps(newProps) {
     this._mapbox.setProps(newProps);
-    this._updateMapStyle(this.props, newProps);
-
-    // this._updateMapViewport(this.props, newProps);
-
     // Save width/height so that we can check them in componentDidUpdate
     this.setState({
       width: this.props.width,
@@ -112,9 +108,12 @@ export default class StaticMap extends PureComponent {
   }
 
   componentDidUpdate() {
+    const {mapStyle} = this.props;
     // Since Mapbox's map.resize() reads size from DOM
     // we must wait to read size until after render (i.e. here in "didUpdate")
     this._updateMapSize(this.state, this.props);
+    this._updateQueryParams(mapStyle);
+    this._tryToApplyLatestMapChanges();
   }
 
   componentWillUnmount() {
@@ -162,23 +161,6 @@ export default class StaticMap extends PureComponent {
     }
   }
 
-  _updateMapStyle(oldProps, newProps) {
-    const mapStyle = newProps.mapStyle;
-    const oldMapStyle = oldProps.mapStyle;
-    if (mapStyle !== oldMapStyle) {
-      if (Immutable.Map.isMap(mapStyle)) {
-        if (this.props.preventStyleDiffing) {
-          this._map.setStyle(mapStyle.toJS());
-        } else {
-          setDiffStyle(oldMapStyle, mapStyle, this._map);
-        }
-      } else {
-        this._map.setStyle(mapStyle);
-      }
-      this._updateQueryParams(mapStyle);
-    }
-  }
-
   _mapboxMapLoaded(ref) {
     this._mapboxMap = ref;
   }
@@ -210,6 +192,35 @@ export default class StaticMap extends PureComponent {
     }
 
     return null;
+  }
+
+  _tryToApplyLatestMapChanges() {
+    if (this._map.loaded()) {
+      if (this.props.mapStyle !== this._lastAppliedStyle) {
+        const previousStyle = expandRefs(this._lastAppliedStyle);
+        const latestStyle = expandRefs(this.props.mapStyle);
+        const hasUrl = typeof previousStyle === 'string' || typeof latestStyle === 'string';
+        const changes = hasUrl ? [] : styleSpec.diff(previousStyle, latestStyle);
+        const unknownCommand = changes.find(change => {
+          return !this._map[change.command];
+        });
+        if (hasUrl || unknownCommand) {
+          this._map.setStyle(latestStyle);
+        } else {
+          changes.forEach(change => this._map[change.command](...change.args));
+        }
+        this._lastAppliedStyle = this.props.mapStyle;
+      }
+      if (this._mapCheckLoadedInterval !== null) {
+        window.clearInterval(this._mapCheckLoadedInterval);
+      }
+      this._mapCheckLoadedInterval = null;
+    } else if (typeof this._mapCheckLoadedInterval !== 'number') {
+      this._mapCheckLoadedInterval = window.setInterval(
+        this._tryToApplyLatestMapChanges.bind(this),
+        30
+      );
+    }
   }
 
   render() {

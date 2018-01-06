@@ -39,6 +39,10 @@ const config = {
     }]
   },
 
+  node: {
+    fs: 'empty'
+  },
+
   resolve: {
     alias: {
       // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
