@@ -54,7 +54,7 @@
     "eslint-config-uber-jsx": "^3.0.0",
     "eslint-plugin-react": "~6.7.0",
     "gl": "^4.0.3",
-    "immutable": "*",
+    "immutable": "^3.8.2",
     "jsdom": "~9.9.1",
     "module-alias": "^2.0.0",
     "path-exists": "^3.0.0",
