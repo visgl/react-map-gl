@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 import autobind from '../utils/autobind';
 
 import {getInteractiveLayerIds, setDiffStyle} from '../utils/style-utils';
-import Immutable from 'immutable';
+import isImmutableMap from '../utils/is-immutable-map';
 
 import WebMercatorViewport from 'viewport-mercator-project';
 
@@ -41,8 +41,7 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
   /** The Mapbox style. A string url or a MapboxGL style Immutable.Map object. */
   mapStyle: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.object,
-    PropTypes.instanceOf(Immutable.Map)
+    PropTypes.object
   ]),
   /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
   preventStyleDiffing: PropTypes.bool,
@@ -92,7 +91,7 @@ export default class StaticMap extends PureComponent {
     this._mapbox = new Mapbox(Object.assign({}, this.props, {
       container: this._mapboxMap,
       onError: this._mapboxMapError,
-      mapStyle: Immutable.Map.isMap(mapStyle) ? mapStyle.toJS() : mapStyle
+      mapStyle: isImmutableMap(mapStyle) ? mapStyle.toJS() : mapStyle
     }));
     this._map = this._mapbox.getMap();
     this._updateQueryParams(mapStyle);
@@ -166,7 +165,7 @@ export default class StaticMap extends PureComponent {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
     if (mapStyle !== oldMapStyle) {
-      if (Immutable.Map.isMap(mapStyle)) {
+      if (isImmutableMap(mapStyle)) {
         if (this.props.preventStyleDiffing) {
           this._map.setStyle(mapStyle.toJS());
         } else {
