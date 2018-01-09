@@ -1,4 +1,4 @@
-import WebMercatorViewport from 'viewport-mercator-project';
+import WebMercatorViewport, {normalizeViewportProps} from 'viewport-mercator-project';
 import assert from 'assert';
 
 // MAPBOX LIMITS
@@ -283,7 +283,6 @@ export default class MapState {
   }
 
   // Apply any constraints (mathematical or defined by _viewportProps) to map state
-  /* eslint-disable complexity */
   _applyConstraints(props) {
     // Normalize degrees
     const {longitude, bearing} = props;
@@ -305,46 +304,9 @@ export default class MapState {
     props.pitch = pitch > maxPitch ? maxPitch : pitch;
     props.pitch = pitch < minPitch ? minPitch : pitch;
 
-    // Constrain zoom and shift center at low zoom levels
-    const {height} = props;
-    let {latitudeRange: [topY, bottomY], viewport} = this._getLatitudeRange(props);
-    let shiftY = 0;
-
-    if (bottomY - topY < height) {
-      // Map height must not be smaller than viewport height
-      props.zoom += Math.log2(height / (bottomY - topY));
-      const newRange = this._getLatitudeRange(props);
-      [topY, bottomY] = newRange.latitudeRange;
-      viewport = newRange.viewport;
-    }
-    if (topY > 0) {
-      // Compensate for white gap on top
-      shiftY = topY;
-    } else if (bottomY < height) {
-      // Compensate for white gap on bottom
-      shiftY = bottomY - height;
-    }
-    if (shiftY) {
-      props.latitude = viewport.unproject([props.width / 2, height / 2 + shiftY])[1];
-    }
+    Object.assign(props, normalizeViewportProps(props));
 
     return props;
-  }
-  /* eslint-enable complexity */
-
-  // Returns {viewport, latitudeRange: [topY, bottomY]} in non-perspective mode
-  _getLatitudeRange(props) {
-    const flatViewport = new WebMercatorViewport(Object.assign({}, props, {
-      pitch: 0,
-      bearing: 0
-    }));
-    return {
-      viewport: flatViewport,
-      latitudeRange: [
-        flatViewport.project([props.longitude, props.maxLatitude])[1],
-        flatViewport.project([props.longitude, props.minLatitude])[1]
-      ]
-    };
   }
 
   _unproject(pos) {
@@ -355,7 +317,7 @@ export default class MapState {
   // Calculate a new lnglat based on pixel dragging position
   _calculateNewLngLat({startPanLngLat, pos}) {
     const viewport = new WebMercatorViewport(this._viewportProps);
-    return viewport.getLocationAtPoint({lngLat: startPanLngLat, pos});
+    return viewport.getMapCenterByLngLatPosition({lngLat: startPanLngLat, pos});
   }
 
   // Calculates new zoom
