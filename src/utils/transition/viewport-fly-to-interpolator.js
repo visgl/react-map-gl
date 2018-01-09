@@ -49,22 +49,14 @@ export default class ViewportFlyToInterpolator extends TransitionInterpolator {
   }
 
   interpolateProps(startProps, endProps, t) {
-    return viewportFlyToInterpolator(startProps, endProps, t);
+    const viewport = flyToViewport(startProps, endProps, t);
+
+    // Linearly interpolate 'bearing' and 'pitch' if exist.
+    for (const key of LINEARLY_INTERPOLATED_PROPS) {
+      viewport[key] = lerp(startProps[key], endProps[key], t);
+    }
+
+    return viewport;
   }
 
 }
-
-/* eslint-disable max-statements */
-function viewportFlyToInterpolator(startProps, endProps, t) {
-  // Equations from above paper are referred where needed.
-
-  const viewport = flyToViewport(startProps, endProps, t);
-
-  // Linearly interpolate 'bearing' and 'pitch' if exist.
-  for (const key of LINEARLY_INTERPOLATED_PROPS) {
-    viewport[key] = lerp(startProps[key], endProps[key], t);
-  }
-
-  return viewport;
-}
-/* eslint-enable max-statements */
