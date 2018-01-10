@@ -67,9 +67,13 @@ const docPages = {
           content: getDocUrl('get-started/mapbox-tokens.md')
         },
         {
-          name: 'Using with Redux',
-          content: getDocUrl('get-started/using-with-redux.md')
+          name: 'State Management',
+          content: getDocUrl('get-started/state-management.md')
         },
+        {
+          name: 'Adding Custom Data',
+          content: getDocUrl('get-started/adding-custom-data.md')
+        }
       ]
     },
     {
@@ -78,6 +82,10 @@ const docPages = {
         {
           name: 'Custom Map Controls',
           content: getDocUrl('advanced/custom-map-controls.md')
+        },
+        {
+          name: 'Custom Overlays',
+          content: getDocUrl('overlays/custom-overlays.md')
         },
         {
           name: 'Viewport Transition',
@@ -94,6 +102,10 @@ const docPages = {
           content: getDocUrl('overlays/canvas-overlay.md')
         },
         {
+          name: 'FlyToInterpolator',
+          content: getDocUrl('components/fly-to-interpolator.md')
+        },
+        {
           name: 'HTMLOverlay',
           content: getDocUrl('overlays/html-overlay.md')
         },
@@ -102,8 +114,16 @@ const docPages = {
           content: getDocUrl('components/interactive-map.md')
         },
         {
+          name: 'LinearInterpolator',
+          content: getDocUrl('components/linear-interpolator.md')
+        },
+        {
           name: 'Marker',
           content: getDocUrl('components/marker.md')
+        },
+        {
+          name: 'MapControls',
+          content: getDocUrl('components/map-controls.md')
         },
         {
           name: 'Navigation Control',

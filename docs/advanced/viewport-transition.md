@@ -15,7 +15,7 @@ import d3 from 'd3-ease';
     transitionEasing={d3.easeCubic}
     onTransitionEnd={() => {
         // do something
-        }} >
+        }} />
 ```
 
 See [viewport transition](#examples/viewport-transition) for a complete example.
@@ -35,19 +35,12 @@ See properties of [InteractiveMap](/docs/components/interactive-map.md).
 
 ## Transition and the onViewportChange Callback
 
-`InteractiveMap` is designed to be a stateless component. Its appearance is entirely controlled by the properties that are passed in from its parent. In this architecture, transition works the same way as interaction: the component shall notify the application of "user intent" by calling the `onViewportChange` callback, but ultimately the application needs to decide what to do with it.
-
-The most simple handling of this intent is to accept it:
+`InteractiveMap` is designed to be a stateless component. For transitions to work, the application must update the viewport props returned by the `onViewportChange` callback:
 ```
-render() {
-    const {viewport} = this.state;
-    return <ReactMapGL
-        {...viewport}
-        onViewportChange={newViewport => this.setState({viewport: newViewport})}
-        />;
-}
+<ReactMapGL
+    {...this.state.viewport}
+    onViewportChange={(viewport) => this.setState({viewport})}
 ```
-The default interaction/transition are guaranteed to work with this set up.
 
 Remarks:
 - The props returned by the callback may contain transition properties. For example, during panning and rotating, the callback is invoked with `transitionDuration: 0`, meaning that the map movement instantly matches the change of the pointer. When panning or zooming with keyboard, the callback is invoked with a 300ms linear transition.
@@ -62,22 +55,6 @@ A `TransitionInterpolator` instance must be supplied to the `transitionInterpola
 - `initiateProps(startProps, endProps)` - called before transition starts to pre-process the start and end viewport props.
 - `interpolateProps(startProps, endProps, t)` - called to get viewport props in transition. `t` is a time factor between `[0, 1]`.
 
-### `LinearInterpolator`
-
-Interpolates all viewport props linearly. This interpolator offers similar behavior to Mapbox's `easeTo` when combined with a `transitionEasing` function. You may optionally limit the transition to selected viewport props, for example `new LinearInterpolator(['pitch', 'bearing'])` animates pitch and bearing while the user is still allowed to pan and zoom.
-
-##### constructor
-
-`new LinearInterpolator([transitionProps])`
-
-Parameters:
-- `transitionProps` {Array} (optional) - list of prop names to interpolate. Default: `['longitude', 'latitude', 'zoom', 'pitch', 'bearing']`.
-
-### `FlyToInterpolator`
-
-This interpolator offers similar behavior to Mapbox's `flyTo` method. 
-
-##### constructor
-
-`new FlyToInterpolator()`
-
+react-map-gl offers two built-in interpolator classes:
+- [LinearInterpolator](/docs/components/linear-interpolator.md)
+- [FlyToInterpolator](/docs/components/fly-to-interpolator.md)
