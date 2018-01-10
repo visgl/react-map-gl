@@ -6,30 +6,18 @@ export const MAPBOX_LIMITS = {
   minZoom: 0,
   maxZoom: 20,
   minPitch: 0,
-  maxPitch: 60,
-  // defined by mapbox-gl
-  maxLatitude: 85.05113,
-  minLatitude: -85.05113
+  maxPitch: 60
 };
 
-const defaultState = {
+const DEFAULT_STATE = {
   pitch: 0,
   bearing: 0,
   altitude: 1.5
 };
 
 /* Utils */
-function mod(value, divisor) {
-  const modulus = value % divisor;
-  return modulus < 0 ? divisor + modulus : modulus;
-}
-
 function clamp(value, min, max) {
   return value < min ? min : (value > max ? max : value);
-}
-
-function ensureFinite(value, fallbackValue) {
-  return Number.isFinite(value) ? value : fallbackValue;
 }
 
 export default class MapState {
@@ -47,23 +35,21 @@ export default class MapState {
     /** The tile zoom level of the map. */
     zoom,
     /** The bearing of the viewport in degrees */
-    bearing,
+    bearing = DEFAULT_STATE.bearing,
     /** The pitch of the viewport in degrees */
-    pitch,
+    pitch = DEFAULT_STATE.pitch,
     /**
-    * Specify the altitude of the viewport camera
-    * Unit: map heights, default 1.5
-    * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
-    */
-    altitude,
+     * Specify the altitude of the viewport camera
+     * Unit: map heights, default 1.5
+     * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
+     */
+    altitude = DEFAULT_STATE.altitude,
 
     /** Viewport constraints */
-    maxZoom,
-    minZoom,
-    maxPitch,
-    minPitch,
-    maxLatitude,
-    minLatitude,
+    maxZoom = MAPBOX_LIMITS.maxZoom,
+    minZoom = MAPBOX_LIMITS.minZoom,
+    maxPitch = MAPBOX_LIMITS.maxPitch,
+    minPitch = MAPBOX_LIMITS.minPitch,
 
     /** Interaction states, required to calculate change during transform */
     /* The point on map being grabbed when the operation first started */
@@ -89,15 +75,13 @@ export default class MapState {
       latitude,
       longitude,
       zoom,
-      bearing: ensureFinite(bearing, defaultState.bearing),
-      pitch: ensureFinite(pitch, defaultState.pitch),
-      altitude: ensureFinite(altitude, defaultState.altitude),
-      maxZoom: ensureFinite(maxZoom, MAPBOX_LIMITS.maxZoom),
-      minZoom: ensureFinite(minZoom, MAPBOX_LIMITS.minZoom),
-      maxPitch: ensureFinite(maxPitch, MAPBOX_LIMITS.maxPitch),
-      minPitch: ensureFinite(minPitch, MAPBOX_LIMITS.minPitch),
-      maxLatitude: ensureFinite(maxLatitude, MAPBOX_LIMITS.maxLatitude),
-      minLatitude: ensureFinite(minLatitude, MAPBOX_LIMITS.minLatitude)
+      bearing,
+      pitch,
+      altitude,
+      maxZoom,
+      minZoom,
+      maxPitch,
+      minPitch
     });
 
     this._interactiveState = {
@@ -284,25 +268,13 @@ export default class MapState {
 
   // Apply any constraints (mathematical or defined by _viewportProps) to map state
   _applyConstraints(props) {
-    // Normalize degrees
-    const {longitude, bearing} = props;
-    if (longitude < -180 || longitude > 180) {
-      props.longitude = mod(longitude + 180, 360) - 180;
-    }
-    if (bearing < -180 || bearing > 180) {
-      props.bearing = mod(bearing + 180, 360) - 180;
-    }
-
     // Ensure zoom is within specified range
     const {maxZoom, minZoom, zoom} = props;
-    props.zoom = zoom > maxZoom ? maxZoom : zoom;
-    props.zoom = zoom < minZoom ? minZoom : zoom;
+    props.zoom = clamp(zoom, minZoom, maxZoom);
 
     // Ensure pitch is within specified range
     const {maxPitch, minPitch, pitch} = props;
-
-    props.pitch = pitch > maxPitch ? maxPitch : pitch;
-    props.pitch = pitch < minPitch ? minPitch : pitch;
+    props.pitch = clamp(pitch, minPitch, maxPitch);
 
     Object.assign(props, normalizeViewportProps(props));
 
@@ -323,10 +295,8 @@ export default class MapState {
   // Calculates new zoom
   _calculateNewZoom({scale, startZoom}) {
     const {maxZoom, minZoom} = this._viewportProps;
-    let zoom = startZoom + Math.log2(scale);
-    zoom = zoom > maxZoom ? maxZoom : zoom;
-    zoom = zoom < minZoom ? minZoom : zoom;
-    return zoom;
+    const zoom = startZoom + Math.log2(scale);
+    return clamp(zoom, minZoom, maxZoom);
   }
 
   // Calculates a new pitch and bearing from a position (coming from an event)
