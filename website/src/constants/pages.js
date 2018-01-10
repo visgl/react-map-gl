@@ -60,16 +60,37 @@ const docPages = {
       children: [
         {
           name: 'Get Started',
-          content: getDocUrl('get-started/README.md')
+          content: getDocUrl('get-started/get-started.md')
         },
         {
           name: 'About Mapbox Tokens',
           content: getDocUrl('get-started/mapbox-tokens.md')
         },
         {
-          name: 'Using with Redux',
-          content: getDocUrl('get-started/using-with-redux.md')
+          name: 'State Management',
+          content: getDocUrl('get-started/state-management.md')
         },
+        {
+          name: 'Adding Custom Data',
+          content: getDocUrl('get-started/adding-custom-data.md')
+        }
+      ]
+    },
+    {
+      name: 'Advanced',
+      children: [
+        {
+          name: 'Custom Map Controls',
+          content: getDocUrl('advanced/custom-map-controls.md')
+        },
+        {
+          name: 'Custom Overlays',
+          content: getDocUrl('overlays/custom-overlays.md')
+        },
+        {
+          name: 'Viewport Transition',
+          content: getDocUrl('advanced/viewport-transition.md')
+        }
       ]
     },
     {
@@ -81,6 +102,10 @@ const docPages = {
           content: getDocUrl('overlays/canvas-overlay.md')
         },
         {
+          name: 'FlyToInterpolator',
+          content: getDocUrl('components/fly-to-interpolator.md')
+        },
+        {
           name: 'HTMLOverlay',
           content: getDocUrl('overlays/html-overlay.md')
         },
@@ -89,8 +114,16 @@ const docPages = {
           content: getDocUrl('components/interactive-map.md')
         },
         {
+          name: 'LinearInterpolator',
+          content: getDocUrl('components/linear-interpolator.md')
+        },
+        {
           name: 'Marker',
           content: getDocUrl('components/marker.md')
+        },
+        {
+          name: 'MapControls',
+          content: getDocUrl('components/map-controls.md')
         },
         {
           name: 'Navigation Control',
@@ -107,15 +140,6 @@ const docPages = {
         {
           name: 'SVGOverlay',
           content: getDocUrl('overlays/svg-overlay.md')
-        },
-      ]
-    },
-    {
-      name: 'Advanced',
-      children: [
-        {
-          name: 'Custom Map Controls',
-          content: getDocUrl('advanced/custom-map-controls.md')
         },
       ]
     }

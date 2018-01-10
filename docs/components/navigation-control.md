@@ -40,17 +40,8 @@ Stop propagation of dblclick event to the map component. Can be used to stop map
 
 ## Styling
 
-Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly.
+Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.
 
-You may add the stylesheet to your page:
-```html
-<!-- index.html -->
-<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css' rel='stylesheet' />
-```
+## Source
+[navigation-control.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/navigation-control.js)
 
-Or embed it in your app by using - [browserify-css](https://www.npmjs.com/package/browserify-css)
-with Browserify or - [css-loader](https://webpack.github.io/docs/stylesheets.html) with Webpack:
-```js
-// app.js
-import 'mapbox-gl/dist/mapbox-gl.css';
-```

@@ -1,11 +1,54 @@
-# Overlays
+# Adding Custom Data
+
+## Native Mapbox Layers
+
+You can inject data and mapbox native layers by modifying the map style object:
+
+```js
+import fromJS from 'immutable';
+const mapStyle = fromJS({
+    version: 8,
+    sources: {
+        points: {
+            type: 'geojson',
+            data: {
+                type: 'FeatureCollection',
+                features: [
+                    {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.45, 37.78]}}
+                ]
+            }
+        }
+    },
+    layers: [
+        {
+            id: 'my-layer',
+            type: 'circle',
+            source: 'points',
+            paint: {
+                'circle-color': '#f00',
+                'circle-radius': '4'
+            }
+        }
+    ]
+});
+
+<ReactMapGL mapStyle={mapStyle} ... />
+
+```
+
+For details about data sources and layer configuration, check out the [Mapbox style specification](https://www.mapbox.com/mapbox-gl-js/style-spec).
+
+For dynamically updating data and layers, check out the [GeoJSON](#examples/geojson) and [GeoJSON animation](#examples/geojson-animation) examples.
+
+
+## Overlays
 
 react-map-gl provides a basic overlay API that enables applications to overlay data on top of maps.
 
-Note that the built-in overlays are intended to provide basic functionality only. For more feature rich and performant data visualization overlay use cases, consider using [deck.gl](deck.gl) and/or mapbox styles.
+Note that the built-in overlays are intended to provide basic functionality only. For more feature rich and performant data visualization overlay use cases, consider using [deck.gl](deck.gl).
 
 
-## Example
+### Example
 
 ```js
 import {SVGOverlay} from 'react-map-gl';
@@ -21,14 +64,14 @@ function redraw({project}) {
 ```
 
 
-## Built-in Overlays
+### Built-in Overlays
 
 Built-in overlays are: `SVGOverlay`, `HTMLOverlay`, and `CanvasOverlay`. They are imported using
 ```
 import {SVGOverlay, HTMLOverlay, CanvasOverlay} from 'react-map-gl';
 ```
 
-## Example Overlays
+### Example Overlays
 
 There are a couple of [additional overlays](https://github.com/uber/react-map-gl/tree/master/examples/additional-overlays) in the examples folder that can be copied into applications `ScatterplotOverlay`, `DraggablePointsOverlay`, `ChoroplethOverlay`.
 
@@ -49,6 +92,3 @@ import cities from 'example-cities';
 ```
 
 Want to create and share your own overlay? Check the [examples/additional-overlays](https://github.com/uber/react-map-gl/tree/master/examples/additional-overlays) folder for examples.
-
-## Remarks
-* In `react-map-gl` v1, overlays were exported directly from 'react-map-gl'.

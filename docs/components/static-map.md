@@ -84,6 +84,13 @@ map from reloading and flickering when the map style changes.
 
 There are known issues with style diffing. As stopgap, use this option to prevent style diffing.
 
+##### `reuseMaps` {Bool} - default: `false`
+** This prop is experimental. **
+
+If `true`, when the map component is unmounted, instead of calling `remove` on the Mapbox map instance, save it for later reuse. This will avoid repeatedly creating new Mapbox map instances if possible.
+
+Applications that frequently mount and unmount maps may try this prop to help work around a mapbox-gl resource leak issue that can lead to a browser crash in certain situations.
+
 ##### `onLoad` {Function} - default: `no-op function`
 A callback run when the map emits a `load` event.
 [Mapbox docs](https://www.mapbox.com/mapbox-gl-js/api#map.event:load)
@@ -115,3 +122,7 @@ Parameters:
 - `parameters`
   Query options. For more details, see
   [Mapbox API documentation](https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures).
+
+## Source
+[static-map.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/static-map.js)
+

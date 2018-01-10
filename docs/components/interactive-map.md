@@ -136,7 +136,7 @@ import ReactMapGL, {LinearInterpolator, FlyToInterpolator} from 'react-map-gl';
 
 Default: `new LinearInterpolator()`
 
-For details about using transition interpolators, see [transitions](/docs/user-guide/transitions.md).
+For details about using transition interpolators, see [transitions](/docs/advanced/viewport-transitions.md).
 
 ##### `transitionEasing` {Function}
 Easing function that maps a value from `[0, 1]` to `[0, 1]`. Default to `t => t` (linear). Check out [http://easings.net/](http://easings.net/) for common easing curves.
@@ -166,3 +166,7 @@ Callback that is fired when a transition is complete.
 ## Methods
 
 Same methods as [StaticMap](/docs/components/static-map.md).
+
+## Source
+[interactive-map.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/interactive-map.js)
+
