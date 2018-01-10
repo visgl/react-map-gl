@@ -36,6 +36,7 @@
   "dependencies": {
     "babel-runtime": "^6.23.0",
     "bowser": "^1.2.0",
+    "immutable": "*",
     "mapbox-gl": "0.42.2",
     "math.gl": "^1.0.0",
     "mjolnir.js": "^1.0.0",
