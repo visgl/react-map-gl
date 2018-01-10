@@ -9,7 +9,7 @@ export const MAPBOX_LIMITS = {
   maxPitch: 60
 };
 
-const defaultState = {
+const DEFAULT_STATE = {
   pitch: 0,
   bearing: 0,
   altitude: 1.5
@@ -35,15 +35,15 @@ export default class MapState {
     /** The tile zoom level of the map. */
     zoom,
     /** The bearing of the viewport in degrees */
-    bearing = defaultState.bearing,
+    bearing = DEFAULT_STATE.bearing,
     /** The pitch of the viewport in degrees */
-    pitch = defaultState.pitch,
+    pitch = DEFAULT_STATE.pitch,
     /**
      * Specify the altitude of the viewport camera
      * Unit: map heights, default 1.5
      * Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
      */
-    altitude = defaultState.altitude,
+    altitude = DEFAULT_STATE.altitude,
 
     /** Viewport constraints */
     maxZoom = MAPBOX_LIMITS.maxZoom,
@@ -63,11 +63,11 @@ export default class MapState {
     /** Zoom when current zoom operation started */
     startZoom
   } = {}) {
-    assert(isFinite(width), '`width` must be supplied');
-    assert(isFinite(height), '`height` must be supplied');
-    assert(isFinite(longitude), '`longitude` must be supplied');
-    assert(isFinite(latitude), '`latitude` must be supplied');
-    assert(isFinite(zoom), '`zoom` must be supplied');
+    assert(Number.isFinite(width), '`width` must be supplied');
+    assert(Number.isFinite(height), '`height` must be supplied');
+    assert(Number.isFinite(longitude), '`longitude` must be supplied');
+    assert(Number.isFinite(latitude), '`latitude` must be supplied');
+    assert(Number.isFinite(zoom), '`zoom` must be supplied');
 
     this._viewportProps = this._applyConstraints({
       width,
@@ -270,11 +270,11 @@ export default class MapState {
   _applyConstraints(props) {
     // Ensure zoom is within specified range
     const {maxZoom, minZoom, zoom} = props;
-    props.zoom = zoom > maxZoom ? maxZoom : (zoom < minZoom ? minZoom : zoom);
+    props.zoom = clamp(zoom, minZoom, maxZoom);
 
     // Ensure pitch is within specified range
     const {maxPitch, minPitch, pitch} = props;
-    props.pitch = pitch > maxPitch ? maxPitch : (pitch < minPitch ? minPitch : pitch);
+    props.pitch = clamp(pitch, minPitch, maxPitch);
 
     Object.assign(props, normalizeViewportProps(props));
 
@@ -295,10 +295,8 @@ export default class MapState {
   // Calculates new zoom
   _calculateNewZoom({scale, startZoom}) {
     const {maxZoom, minZoom} = this._viewportProps;
-    let zoom = startZoom + Math.log2(scale);
-    zoom = zoom > maxZoom ? maxZoom : zoom;
-    zoom = zoom < minZoom ? minZoom : zoom;
-    return zoom;
+    const zoom = startZoom + Math.log2(scale);
+    return clamp(zoom, minZoom, maxZoom);
   }
 
   // Calculates a new pitch and bearing from a position (coming from an event)
