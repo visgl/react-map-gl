@@ -19,7 +19,7 @@ const SAMPLE_VIEWPORTS = [
     longitude: -179,
     latitude: 75,
     zoom: 3,
-    maxZoom: 0.5
+    maxZoom: 5
   },
   // SF with rotation, custom pitch limit
   {
