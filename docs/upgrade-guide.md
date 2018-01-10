@@ -1,5 +1,11 @@
 # Upgrade Guide
 
+## Upgrading to v3.2
+
+- The latest mapbox-gl release requires stylesheet to be included at all times. See [Get Started](/docs/get-started/get-started.md) for information about styling.
+- Immutable.js is no longer a hard dependency and will be removed in the next major release. If you are importing immutable in your application, it is recommended that you explicitly list it in the application's dependencies.
+
+
 ## Upgrading to v3
 
 v3 is a major upgrade of react-map-gl. While we have tried to gently deprecated any changed or removed features, a few breaking changes could not be avoided.
@@ -34,14 +40,14 @@ The `viewport` parameter passed to the `onChangeViewport` callback now includes 
 
 The `fitBounds` utility has been moved to the [viewport-mercator-project](https://github.com/uber-common/viewport-mercator-project) library. The function can now be called as follows:
 ```js
-import {PerspectiveMercatorViewport} from 'viewport-mercator-project';
-const viewport = new PerspectiveMercatorViewport({width: 600, height: 400});
+import WebMercatorViewport from 'viewport-mercator-project';
+const viewport = new WebMercatorViewport({width: 600, height: 400});
 const bound = viewport.fitBounds(
   [[-73.9876, 40.7661], [-72.9876, 41.7661]],
   {padding: 20, offset: [0, -40]}
 );
-// => bounds: instance of PerspectiveMercatorViewport
-// {longitude: -23.406499999999973, latitude: 64.86850056273362, zoom: 12.89199533073045}
+// => bounds: instance of WebMercatorViewport
+// {longitude: -73.48760000000007, latitude: 41.268014439447484, zoom: 7.209231188444142}
 ```
 
 ### Deprecations
