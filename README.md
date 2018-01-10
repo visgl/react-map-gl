@@ -55,23 +55,6 @@ class Map extends Component {
 }
 ```
 
-### Styling
-
-The current mapbox-gl release requires its stylesheet be included at all times. The marker, popup and navigation components in react-map-gl also need the stylesheet to work properly.
-
-You may add the stylesheet to the head of your page:
-```html
-<!-- index.html -->
-<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.0/mapbox-gl.css' rel='stylesheet' />
-```
-
-Or embed it in your app by using - [browserify-css](https://www.npmjs.com/package/browserify-css)
-with Browserify or - [css-loader](https://webpack.github.io/docs/stylesheets.html) with Webpack:
-```js
-// app.js
-import 'mapbox-gl/dist/mapbox-gl.css';
-```
-
 ### About Mapbox Tokens
 
 To show maps from a service such as Mapbox you will need to register on their website in order to retrieve an access token required by the map component, which will be used to identify you and start serving up map tiles. The service will be free until a certain level of traffic is exceeded.
