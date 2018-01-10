@@ -3,7 +3,7 @@
 ## Upgrading to v3.2
 
 - The latest mapbox-gl release requires stylesheet to be included at all times. See [Get Started](/docs/get-started/get-started.md) for information about styling.
-- Immutable.js is no longer a dependency. If you are importing immutable in your application, it must be added to the application's dependencies.
+- Immutable.js is no longer a hard dependency and will be removed in the next major release. If you are importing immutable in your application, it is recommended that you explicitly list it in the application's dependencies.
 
 
 ## Upgrading to v3
