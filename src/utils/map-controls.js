@@ -19,14 +19,18 @@
 // THE SOFTWARE.
 
 import MapState from './map-state';
-import TransitionManager from './transition-manager';
+import {LinearInterpolator} from './transition';
+import {TRANSITION_EVENTS} from './transition-manager';
 
 const NO_TRANSITION_PROPS = {
   transitionDuration: 0
 };
-const LINEAR_TRANSITION_PROPS = Object.assign({}, TransitionManager.defaultProps, {
-  transitionDuration: 300
-});
+const LINEAR_TRANSITION_PROPS = {
+  transitionDuration: 300,
+  transitionEasing: t => t,
+  transitionInterpolator: new LinearInterpolator(),
+  transitionInterruption: TRANSITION_EVENTS.BREAK
+};
 
 // EVENT HANDLING PARAMETERS
 const PITCH_MOUSE_THRESHOLD = 5;
