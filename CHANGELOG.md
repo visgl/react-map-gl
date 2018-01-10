@@ -1,5 +1,16 @@
 # CHANGELOG
 
+# Version 3.2
+
+### 3.2.0 (January 10, 2018)
+
+- mapbox-gl 0.42.2
+- Viewport transition: feature equivalent to Mapbox's flyTo and easeTo; smooth transition when using keyboard navigation or the NavigationControl. Add new props `transitionDuration`, `transitionInterpolator`, `transitionEasing`, `transitionInterruption`, `onTransitionStart`, `onTransitionInterrupt`, `onTransitionEnd`
+- Navigation using keyboard and the navigation control matches Mapbox behavior, including smooth transition when zooming and panning.
+- Touch rotate support: new props of InteractiveMap `touchZoom` and `touchRotate`
+- Expose Mapbox's `transformRequest` API
+- Map Reuse (experimental): A new property `reuseMaps` is provided for applications that create and destroy maps, to help work around a mapbox-gl resource leak issue that can lead to a browser crash in certain situations.
+
 # Version 3.1
 
 ### 3.1.1 (October 20, 2017)
