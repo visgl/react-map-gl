@@ -18,7 +18,7 @@ import d3 from 'd3-ease';
         }} />
 ```
 
-See [viewport transition](#examples/viewport-transition) for a complete example.
+See [viewport animation](#examples/viewport-animation) for a complete example.
 
 ## InteractiveMap's Transition Props
 
