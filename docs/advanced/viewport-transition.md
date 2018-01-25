@@ -70,7 +70,7 @@ See properties of [InteractiveMap](/docs/components/interactive-map.md).
 Remarks:
 - The props returned by the callback may contain transition properties. For example, during panning and rotating, the callback is invoked with `transitionDuration: 0`, meaning that the map movement instantly matches the change of the pointer. When panning or zooming with keyboard, the callback is invoked with a 300ms linear transition.
 - It is recommended that when programatically triggering a transition, always explicitly set the transition properties (interpolator, easing and duration).
-- Once a transition starts, the following props are ignored till the transition ends or is interrupted:
+- "Set and forget": the values of the following props at the start of a transition carry through the entire duration of the transition:
   + `transitionDuration`
   + `transitionInterpolator`
   + `transitionEasing`
