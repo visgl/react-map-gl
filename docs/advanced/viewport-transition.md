@@ -8,14 +8,39 @@ import ReactMapGL, {LinearInterpolator, FlyToInterpolator} from 'react-map-gl';
 // 3rd-party easing functions
 import d3 from 'd3-ease';
 
-<ReactMapGL
-    {...viewport}
-    transitionDuration={1000}
-    transitionInterpolator={new FlyToInterpolator()}
-    transitionEasing={d3.easeCubic}
-    onTransitionEnd={() => {
-        // do something
-        }} />
+class MyApp extends React.Component {
+    state = {
+        longitude: -122.45
+        latitude: 37.78,
+        zoom: 14
+    };
+
+    _onViewportChange = viewport => {
+        this.setState({viewport});
+    };
+
+    _goToNYC = () => {
+        const viewport = {
+            ...this.state.viewport,
+            longitude: -74.1,
+            latitude: 40.7,
+            zoom: 14,
+            transitionDuration: 5000,
+            transitionInterpolator: new FlyToInterpolator(),
+            transitionEasing: d3.easeCubic
+        };
+        this.setState({viewport});
+    };
+
+    render() {
+        return (
+            <div>
+                <ReactMapGL {...this.state.viewport} onViewportChange={this._onViewportChange} />
+                <button onClick={this._goToNYC}>New York City</button>
+            </div>
+        );
+    }
+}
 ```
 
 See [viewport animation](#examples/viewport-animation) for a complete example.
@@ -45,6 +70,11 @@ See properties of [InteractiveMap](/docs/components/interactive-map.md).
 Remarks:
 - The props returned by the callback may contain transition properties. For example, during panning and rotating, the callback is invoked with `transitionDuration: 0`, meaning that the map movement instantly matches the change of the pointer. When panning or zooming with keyboard, the callback is invoked with a 300ms linear transition.
 - It is recommended that when programatically triggering a transition, always explicitly set the transition properties (interpolator, easing and duration).
+- "Set and forget": the values of the following props at the start of a transition carry through the entire duration of the transition:
+  + `transitionDuration`
+  + `transitionInterpolator`
+  + `transitionEasing`
+  + `transitionInterruption`
 - The default interaction/transition behavior can always be intercepted and overwritten in the handler for `onViewportChange`. However, if a transition is in progress, the properties that are being transitioned (e.g. longitude and latitude) should not be manipulated, otherwise the change will be interpreted as an interruption of the transition.
 
 
