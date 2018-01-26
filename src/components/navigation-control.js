@@ -102,7 +102,8 @@ export default class NavigationControl extends BaseControl {
     }, [
       showZoom && this._renderButton('zoom-in', 'Zoom In', this._onZoomIn),
       showZoom && this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut),
-      showCompass && this._renderButton('compass', 'Reset North', this._onResetNorth, this._renderCompass())
+      showCompass &&
+        this._renderButton('compass', 'Reset North', this._onResetNorth, this._renderCompass())
     ]);
   }
 }
