@@ -18,7 +18,8 @@
   "module": "dist-es6/index.js",
   "files": [
     "src",
-    "dist"
+    "dist",
+    "dist-es6"
   ],
   "scripts": {
     "start": "(cd examples/main && (path-exists node_modules || npm i) && npm run start-local)",
