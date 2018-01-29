@@ -40,7 +40,7 @@
     "immutable": "*",
     "mapbox-gl": "0.42.2",
     "math.gl": "^1.0.0",
-    "mjolnir.js": "^1.0.0",
+    "mjolnir.js": "^1.0.1",
     "prop-types": "^15.5.7",
     "viewport-mercator-project": "^5.0.0"
   },
