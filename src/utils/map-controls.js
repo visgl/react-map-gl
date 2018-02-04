@@ -112,7 +112,7 @@ export default class MapControls {
   /* Callback util */
   // formats map state and invokes callback function
   updateViewport(newMapState, extraProps = {}, extraState = {}) {
-    const oldViewport = this.mapState.getViewportProps();
+    const oldViewport = this.mapState ? this.mapState.getViewportProps() : {};
     const newViewport = Object.assign({}, newMapState.getViewportProps(), extraProps);
 
     if (this.onViewportChange &&
@@ -153,6 +153,12 @@ export default class MapControls {
     // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
     this.onViewportChange = onViewportChange || onChangeViewport;
     this.onStateChange = onStateChange;
+
+    if (this.mapStateProps && this.mapStateProps.height !== options.height) {
+      // Dimensions changed, normalize the props
+      this.updateViewport(new MapState(options));
+    }
+
     this.mapStateProps = options;
     if (this.eventManager !== eventManager) {
       // EventManager has changed
