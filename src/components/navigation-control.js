@@ -20,12 +20,18 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
     * map. The object passed to the callback contains `latitude`,
     * `longitude` and `zoom` and additional state information.
     */
-  onViewportChange: PropTypes.func.isRequired
+  onViewportChange: PropTypes.func.isRequired,
+  // Show/hide compass button
+  showCompass: PropTypes.bool,
+  // Show/hide zoom buttons
+  showZoom: PropTypes.bool
 });
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
-  onViewportChange: () => {}
+  onViewportChange: () => {},
+  showCompass: true,
+  showZoom: true
 });
 
 /*
@@ -88,15 +94,16 @@ export default class NavigationControl extends BaseControl {
 
   render() {
 
-    const {className} = this.props;
+    const {className, showCompass, showZoom} = this.props;
 
     return createElement('div', {
       className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
       ref: this._onContainerLoad
     }, [
-      this._renderButton('zoom-in', 'Zoom In', this._onZoomIn),
-      this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut),
-      this._renderButton('compass', 'Reset North', this._onResetNorth, this._renderCompass())
+      showZoom && this._renderButton('zoom-in', 'Zoom In', this._onZoomIn),
+      showZoom && this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut),
+      showCompass &&
+        this._renderButton('compass', 'Reset North', this._onResetNorth, this._renderCompass())
     ]);
   }
 }
