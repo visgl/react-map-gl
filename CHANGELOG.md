@@ -2,6 +2,16 @@
 
 # Version 3.2
 
+### 3.2.2 (February 5, 2018)
+
+- FIX: `getMap()` crashes if map is unmounted (#454)
+- NEW: `showZoom` and `showCompass` props to NavigationControl (#448)
+- FIX: projection alignment bug when resizing (#455)
+
+### 3.2.1 (January 26, 2018)
+
+- Include dist-es6 in published npm files (#447)
+
 ### 3.2.0 (January 10, 2018)
 
 - mapbox-gl 0.42.2
