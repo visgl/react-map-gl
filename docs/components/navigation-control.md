@@ -26,6 +26,12 @@ class Map extends Component {
 ##### `onViewportChange` {Function}
 Callback when the viewport needs to be updated. See [InteractiveMap](/docs/components/interactive-map.md).
 
+##### `showZoom` {Boolean} - default: `true`
+Show the zoom buttons.
+
+##### `showCompass` {Boolean} - default: `true`
+Show the compass button.
+
 ##### `captureScroll` {Boolean} - default: `false`
 Stop propagation of mouse wheel event to the map component. Can be used to stop map from zooming when this component is scrolled.
 
