@@ -33,8 +33,7 @@ function noop() {}
 
 const propTypes = {
   // Creation parameters
-  // container: PropTypes.DOMElement || String
-
+  container: PropTypes.object, /** The container to have the map. */
   mapboxApiAccessToken: PropTypes.string, /** Mapbox API access token for Mapbox tiles/styles. */
   attributionControl: PropTypes.bool, /** Show attribution control or not. */
   preserveDrawingBuffer: PropTypes.bool, /** Useful when you want to export the canvas as a PNG. */
@@ -163,6 +162,17 @@ export default class Mapbox {
     // Reuse a saved map, if available
     if (props.reuseMaps && Mapbox.savedMap) {
       this._map = this.map = Mapbox.savedMap;
+      // When reusing the saved map, we need to reparent the map(canvas) and other child nodes
+      // intoto the new container from the props.
+      // Step1: reparenting child nodes from old container to new container
+      const oldContainer = this._map.getContainer();
+      const newContainer = props.container;
+      newContainer.classList.add('mapboxgl-map');
+      while (oldContainer.childNodes.length > 0) {
+        newContainer.appendChild(oldContainer.childNodes[0]);
+      }
+      // Step2: replace the internal container with new container from the react component
+      this._map._container = newContainer;
       Mapbox.savedMap = null;
       // TODO - need to call onload again, need to track with Promise?
       props.onLoad();
