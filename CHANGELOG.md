@@ -2,6 +2,9 @@
 
 # Version 3.2
 
+### 3.2.3 (February 9, 2018)
+- FIX: reuseMaps function - reparenting child nodes when reusing the saved map
+
 ### 3.2.2 (February 5, 2018)
 
 - FIX: `getMap()` crashes if map is unmounted (#454)
