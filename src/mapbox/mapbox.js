@@ -163,6 +163,15 @@ export default class Mapbox {
     // Reuse a saved map, if available
     if (props.reuseMaps && Mapbox.savedMap) {
       this._map = this.map = Mapbox.savedMap;
+      const oldContainer = this._map._container;
+      const newContainer = props.container;
+      // reparenting child nodes from old container to new container
+      newContainer.classList.add('mapboxgl-map');
+      while (oldContainer.childNodes.length > 0) {
+        newContainer.appendChild(oldContainer.childNodes[0]);
+      }
+      // replace it with new container from the react component
+      this._map._container = newContainer;
       Mapbox.savedMap = null;
       // TODO - need to call onload again, need to track with Promise?
       props.onLoad();
