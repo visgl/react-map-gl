@@ -1,7 +1,7 @@
 // Modules
 import MarkerExample from '../views/marker';
 import NotInteractiveExample from '../views/not-interactive';
-import CustomOverlayExample from '../views/custom-overlay';
+import VesselExmaple from '../views/vessels';
 import RouteOverlayExample from '../views/route-overlay';
 import StyleDiffingExample from '../views/style-diffing';
 import ClickExample from '../views/click';
@@ -64,6 +64,11 @@ export default [
     name: 'Basic Examples',
     children: [
       {
+        path: 'customOverlay',
+        name: 'Vessels',
+        component: VesselExmaple
+      },
+      {
         path: 'markerExample',
         name: 'Marker Example',
         component: MarkerExample
@@ -72,11 +77,6 @@ export default [
         path: 'notInteractive',
         name: 'Not Interactive',
         component: NotInteractiveExample
-      },
-      {
-        path: 'customOverlay',
-        name: 'Custom Overlay',
-        component: CustomOverlayExample
       },
       {
         path: 'routeOverlay',
