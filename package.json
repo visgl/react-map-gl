@@ -29,6 +29,7 @@
     "clean": "rm -fr dist/* dist-es6/*",
     "lint": "eslint src test && npm run lint-yarn",
     "lint-yarn": "!(grep -q unpm.u yarn.lock) || (echo 'Please rebuild yarn file using public npmrc' && false)",
+    "test-overlay-helpers": "node ./examples/data/custom-overlay.test.js",
     "test": "npm run lint && node test/node.js",
     "test-browser": "webpack-dev-server --env.browser --progress --hot --open",
     "publish-prod": "npm run build && npm run test && npm publish",
