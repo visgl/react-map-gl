@@ -20,6 +20,14 @@ export class Vessels extends Component {
   }
 
   render() {
+    // TODO: create extensible <Sidebar position='left' modules={Array[Object]} ... />
+    // Shape of Module definitions: { name, position, node, icon, id }
+
+    // TODO: create extensible <MiniMap position='bottomRight' modules={Array[Object]} ... />
+    // Shape of modules: { name, position, icon, node, id } lookup componentConfig from Redux Store
+
+    // Q: is store available in component constructor? If not, initialise with defaults and w
+    
     const viewport = {...this.state.viewport, ...this.props};
     return (
       <MapGL
