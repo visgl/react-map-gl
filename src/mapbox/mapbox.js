@@ -117,6 +117,11 @@ export default class Mapbox {
       throw new Error('Mapbox not supported');
     }
 
+    if (!Mapbox.initialized && console.debug) { // eslint-disable-line
+      Mapbox.initialized = true;
+      console.debug(`react-map-gl: using mapbox-gl v${mapboxgl.version}`); // eslint-disable-line
+    }
+
     this.props = {};
     this._initialize(props);
   }
