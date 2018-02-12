@@ -24,9 +24,10 @@ export class Vessels extends Component {
     // Shape of Module definitions: { name, position, node, icon, id }
 
     // TODO: create extensible <MiniMap position='bottomRight' modules={Array[Object]} ... />
-    // Shape of modules: { name, position, icon, node, id } lookup componentConfig from Redux Store
+    // Shape of modules: { name, position, icon, node, id } lookup componentConfig based on id from Redux Store
 
-    // Q: is store available in component constructor? If not, initialise with defaults and w
+    // Q: is store available in component constructor? If not, initialise with defaults
+    // and use componentWillReceiveProps to configure component
     
     const viewport = {...this.state.viewport, ...this.props};
     return (
