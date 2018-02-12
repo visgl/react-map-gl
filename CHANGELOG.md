@@ -1,6 +1,11 @@
 # CHANGELOG
 
-# Version 3.2
+# Version 3.2.4
+
+- mapbox-gl 0.44.0
+- Fix `reuseMap` option
+- Add showZoom and showCompass options (#448)
+
 
 ### 3.2.0 (January 10, 2018)
 
