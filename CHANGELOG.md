@@ -1,6 +1,11 @@
 # CHANGELOG
 
-# Version 3.2
+# Version 3.2.4
+
+- mapbox-gl 0.44.0
+- Fix `reuseMap` option
+- Add showZoom and showCompass options (#448)
+
 
 ### 3.2.3 (February 9, 2018)
 - FIX: reuseMaps function - reparenting child nodes when reusing the saved map

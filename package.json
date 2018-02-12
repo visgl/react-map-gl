@@ -38,7 +38,7 @@
     "babel-runtime": "^6.23.0",
     "bowser": "^1.2.0",
     "immutable": "*",
-    "mapbox-gl": "0.42.2",
+    "mapbox-gl": "0.44",
     "math.gl": "^1.0.0",
     "mjolnir.js": "^1.0.0",
     "prop-types": "^15.5.7",
