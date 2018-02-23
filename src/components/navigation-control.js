@@ -1,7 +1,6 @@
 import {createElement} from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
-import autobind from '../utils/autobind';
 
 import MapState from '../utils/map-state';
 import TransitionManager from '../utils/transition-manager';
@@ -42,9 +41,15 @@ export default class NavigationControl extends BaseControl {
 
   constructor(props) {
     super(props);
-    autobind(this);
     // Check for deprecated props
     deprecateWarn(props);
+
+    this._updateViewport = this._updateViewport.bind(this);
+    this._onZoomIn = this._onZoomIn.bind(this);
+    this._onZoomOut = this._onZoomOut.bind(this);
+    this._onResetNorth = this._onResetNorth.bind(this);
+    this._renderCompass = this._renderCompass.bind(this);
+    this._renderButton = this._renderButton.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
