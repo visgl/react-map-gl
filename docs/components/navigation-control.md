@@ -26,10 +26,10 @@ class Map extends Component {
 ##### `onViewportChange` {Function}
 Callback when the viewport needs to be updated. See [InteractiveMap](/docs/components/interactive-map.md).
 
-#### `showCompass` {Boolean} - default `true`
+##### `showCompass` {Boolean} - default: `true`
 Show or hide the compass button
 
-#### `showZoom` {Boolean} - default `true`
+##### `showZoom` {Boolean} - default: `true`
 Show or hide the zoom buttons
 
 ##### `captureScroll` {Boolean} - default: `false`
