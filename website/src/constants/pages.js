@@ -14,7 +14,7 @@ function generatePath(tree, parentPath = '') {
     tree.forEach(branch => generatePath(branch, parentPath));
   }
   if (tree.name) {
-    tree.path = tree.name.match(/(GeoJSON|3D|API|([A-Z]|^)[a-z'0-9]+|\d+)/g)
+    tree.path = tree.name.match(/(GeoJSON|3D|API|SVG|([A-Z]|^)[a-z'0-9]+|\d+)/g)
         .join('-')
         .toLowerCase()
         .replace(/[^\w-]/g, '');
