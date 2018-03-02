@@ -16,6 +16,6 @@
     "tween.js": "^16.6.0"
   },
   "devDependencies": {
-    "ocular": "^0.2.13"
+    "ocular": "^0.4.2"
   }
 }

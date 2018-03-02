@@ -1,84 +1,49 @@
-/* eslint-disable max-len */
-import README from '../../docs/README.md';
-import whatsNew from '../../docs/whats-new.md';
-import upgradeGuide from '../../docs/upgrade-guide.md';
-import installation from '../../docs/get-started/README.md';
-import mapboxTokens from '../../docs/get-started/mapbox-tokens.md';
-import usingWithRedux from '../../docs/get-started/using-with-redux.md';
-import canvasOverlay from '../../docs/overlays/canvas-overlay.md';
-import htmlOverlay from '../../docs/overlays/html-overlay.md';
-import interactiveMap from '../../docs/components/interactive-map.md';
-import marker from '../../docs/components/marker.md';
-import navigationControl from '../../docs/components/navigation-control.md';
-import popup from '../../docs/components/popup.md';
-import staticMap from '../../docs/components/static-map.md';
-import svgOverlay from '../../docs/overlays/svg-overlay.md';
-// import cumstomMapControls from 'docs/advanced/custom-map-controls.md';
-/* eslint-enable max-len */
-
-
-// Modules
-import MarkerExample from '../../examples/main/views/marker';
-import NotInteractiveExample from '../../examples/main/views/not-interactive';
-import CustomOverlayExample from '../../examples/main/views/custom-overlay';
-import RouteOverlayExample from '../../examples/main/views/route-overlay';
-import StyleDiffingExample from '../../examples/main/views/style-diffing';
-import ClickExample from '../../examples/main/views/click';
-// Standalone
-import Filter from '../../examples/filter/src/app';
-import Controls from '../../examples/controls/src/app';
-import GeoJson from '../../examples/geojson/src/app';
-import GeoJsonAnimation from '../../examples/geojson-animation/src/app';
-import Interaction from '../../examples/interaction/src/app';
-import Layers from '../../examples/layers/src/app';
-import ViewportAnimation from '../../examples/viewport-animation/src/app';
+export const makeUrl = url =>
+  `https://raw.githubusercontent.com/uber-web/probe.gl/master/${url}`;
 
 export default [
   {
     name: 'Examples',
     path: '/examples',
     data: [
-      // {
-      //   name: 'Overview',
-      //   markdown: overview
-      // },
       {
         name: 'Showcases',
         children: [
           {
             path: 'layersExample',
             name: 'Dynamic Styling',
-            component: Layers
+            component: require('../../examples/layers/src/app').default
+
           },
           {
             path: 'controlsExample',
             name: 'Markers & Popups',
-            component: Controls
+            component: require('../../examples/controls/src/app').default
           },
           {
             path: 'geojsonExample',
             name: 'GeoJSON',
-            component: GeoJson
+            component: require('../../examples/geojson/src/app').default
           },
           {
             path: 'geojsonAnimationExample',
             name: 'GeoJSON Animation',
-            component: GeoJsonAnimation
+            component: require('../../examples/geojson-animation/src/app').default
           },
           {
             path: 'interactionExample',
             name: 'Limit Map Interaction',
-            component: Interaction
+            component: require('../../examples/interaction/src/app').default
           },
           {
             path: 'viewportAnimationExample',
             name: 'Camera Transition',
-            component: ViewportAnimation
+            component: require('../../examples/viewport-animation/src/app').default
           },
           {
             path: 'filter',
             name: 'Highlight By Filter',
-            component: Filter
+            component: require('../../examples/filter/src/app').default
           }
         ]
       },
@@ -88,32 +53,33 @@ export default [
           {
             path: 'markerExample',
             name: 'Marker Example',
-            component: MarkerExample
+            component: require('../../examples/main/views/marker')
           },
           {
             path: 'notInteractive',
             name: 'Not Interactive',
-            component: NotInteractiveExample
+            component: require('../../examples/main/views/not-interactive')
           },
           {
             path: 'customOverlay',
             name: 'Custom Overlay',
-            component: CustomOverlayExample
+            component: require('../../examples/main/views/custom-overlay')
           },
           {
             path: 'routeOverlay',
             name: 'Route Overlay',
-            component: RouteOverlayExample
+            component: require('../../examples/main/views/route-overlay')
+
           },
           {
             path: 'styleDiffing',
             name: 'Style Diffing',
-            component: StyleDiffingExample
+            component: require('../../examples/main/views/style-diffing')
           },
           {
             path: 'clickExample',
             name: 'Click',
-            component: ClickExample
+            component: require('../../examples/main/views/click')
           }
         ]
       }
@@ -128,15 +94,15 @@ export default [
         children: [
           {
             name: 'Introduction',
-            markdown: README
+            markdownUrl: makeUrl('docs/README.md')
           },
           {
             name: 'What\'s New',
-            markdown: whatsNew
+            markdownUrl: makeUrl('docs/whats-new.md')
           },
           {
             name: 'Upgrade Guide',
-            markdown: upgradeGuide
+            markdownUrl: makeUrl('docs/upgrade-guide.md')
           }
         ]
       },
@@ -145,15 +111,19 @@ export default [
         children: [
           {
             name: 'Get Started',
-            markdown: installation
+            markdownUrl: makeUrl('docs/get-started/get-started.md')
           },
           {
             name: 'About Mapbox Tokens',
-            markdown: mapboxTokens
+            markdownUrl: makeUrl('docs/get-started/mapbox-tokens.md')
           },
           {
-            name: 'Using with Redux',
-            markdown: usingWithRedux
+            name: 'Adding Custom Data',
+            markdownUrl: makeUrl('docs/get-started/adding-custom-data.md')
+          },
+          {
+            name: 'State Management',
+            markdownUrl: makeUrl('docs/get-started/state-management.md')
           }
         ]
       },
@@ -163,35 +133,35 @@ export default [
           // NOTE: Keep this ordered Alphabetically
           {
             name: 'CanvasOverlay',
-            markdown: canvasOverlay
+            markdownUrl: makeUrl('docs/overlays/canvas-overlay.md')
           },
           {
             name: 'HTMLOverlay',
-            markdown: htmlOverlay
+            markdownUrl: makeUrl('docs/overlays/html-overlay.md')
           },
           {
             name: 'Interactive Map',
-            markdown: interactiveMap
+            markdownUrl: makeUrl('docs/components/interactive-map.md')
           },
           {
             name: 'Marker',
-            markdown: marker
+            markdownUrl: makeUrl('docs/components/marker.md')
           },
           {
             name: 'Navigation Control',
-            markdown: navigationControl
+            markdownUrl: makeUrl('docs/components/navigation-control.md')
           },
           {
             name: 'Popup',
-            markdown: popup
+            markdownUrl: makeUrl('docs/components/popup.md')
           },
           {
             name: 'Static Map',
-            markdown: staticMap
+            markdownUrl: makeUrl('docs/components/static-map.md')
           },
           {
             name: 'SVGOverlay',
-            markdown: svgOverlay
+            markdownUrl: makeUrl('docs/overlays/svg-overlay.md')
           }
         ]
       }
