@@ -94,15 +94,15 @@ export default [
         children: [
           {
             name: 'Introduction',
-            markdown: require('../../docs/README.md')
+            markdownUrl: makeUrl('docs/README.md')
           },
           {
             name: 'What\'s New',
-            markdown: require('../../docs/whats-new.md')
+            markdownUrl: makeUrl('docs/whats-new.md')
           },
           {
             name: 'Upgrade Guide',
-            markdown: require('../../docs/upgrade-guide.md')
+            markdownUrl: makeUrl('docs/upgrade-guide.md')
           }
         ]
       },
@@ -111,19 +111,19 @@ export default [
         children: [
           {
             name: 'Get Started',
-            markdown: require('../../docs/get-started/get-started.md')
+            markdownUrl: makeUrl('docs/get-started/get-started.md')
           },
           {
             name: 'About Mapbox Tokens',
-            markdown: require('../../docs/get-started/mapbox-tokens.md')
+            markdownUrl: makeUrl('docs/get-started/mapbox-tokens.md')
           },
           {
             name: 'Adding Custom Data',
-            markdown: require('../../docs/get-started/adding-custom-data.md')
+            markdownUrl: makeUrl('docs/get-started/adding-custom-data.md')
           },
           {
             name: 'State Management',
-            markdown: require('../../docs/get-started/state-management.md')
+            markdownUrl: makeUrl('docs/get-started/state-management.md')
           }
         ]
       },
@@ -133,35 +133,35 @@ export default [
           // NOTE: Keep this ordered Alphabetically
           {
             name: 'CanvasOverlay',
-            markdown: require('../../docs/overlays/canvas-overlay.md')
+            markdownUrl: makeUrl('docs/overlays/canvas-overlay.md')
           },
           {
             name: 'HTMLOverlay',
-            markdown: require('../../docs/overlays/html-overlay.md')
+            markdownUrl: makeUrl('docs/overlays/html-overlay.md')
           },
           {
             name: 'Interactive Map',
-            markdown: require('../../docs/components/interactive-map.md')
+            markdownUrl: makeUrl('docs/components/interactive-map.md')
           },
           {
             name: 'Marker',
-            markdown: require('../../docs/components/marker.md')
+            markdownUrl: makeUrl('docs/components/marker.md')
           },
           {
             name: 'Navigation Control',
-            markdown: require('../../docs/components/navigation-control.md')
+            markdownUrl: makeUrl('docs/components/navigation-control.md')
           },
           {
             name: 'Popup',
-            markdown: require('../../docs/components/popup.md')
+            markdownUrl: makeUrl('docs/components/popup.md')
           },
           {
             name: 'Static Map',
-            markdown: require('../../docs/components/static-map.md')
+            markdownUrl: makeUrl('docs/components/static-map.md')
           },
           {
             name: 'SVGOverlay',
-            markdown: require('../../docs/overlays/svg-overlay.md')
+            markdownUrl: makeUrl('docs/overlays/svg-overlay.md')
           }
         ]
       }
