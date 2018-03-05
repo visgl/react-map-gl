@@ -45,7 +45,7 @@ For dynamically updating data and layers, check out the [GeoJSON](#examples/geoj
 
 react-map-gl provides a basic overlay API that enables applications to overlay data on top of maps.
 
-Note that the built-in overlays are intended to provide basic functionality only. For more feature rich and performant data visualization overlay use cases, consider using [deck.gl](deck.gl).
+Note that the built-in overlays are intended to provide basic functionality only. For more feature rich and performant data visualization overlay use cases, consider using [deck.gl](https://uber.github.io/deck.gl).
 
 
 ### Example
