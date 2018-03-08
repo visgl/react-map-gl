@@ -45,9 +45,7 @@ export {
 
 // Experimental Features (May change in minor version bumps, use at your own risk)
 import MapControls from './utils/map-controls';
-import autobind from './utils/autobind';
 
 export const experimental = {
-  MapControls,
-  autobind
+  MapControls
 };

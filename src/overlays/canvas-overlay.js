@@ -22,7 +22,6 @@ import {createElement} from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from '../components/base-control';
 import {window} from '../utils/globals';
-import autobind from '../utils/autobind';
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   redraw: PropTypes.func.isRequired
@@ -38,7 +37,8 @@ const defaultProps = {
 export default class CanvasOverlay extends BaseControl {
   constructor(props) {
     super(props);
-    autobind(this);
+    this._redraw = this._redraw.bind(this);
+    this._canvasLoaded = this._canvasLoaded.bind(this);
   }
 
   componentDidMount() {

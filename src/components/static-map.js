@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 import {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
-import autobind from '../utils/autobind';
 
 import {getInteractiveLayerIds, setDiffStyle} from '../utils/style-utils';
 import isImmutableMap from '../utils/is-immutable-map';
@@ -76,7 +75,15 @@ export default class StaticMap extends PureComponent {
     this.state = {
       accessTokenInvalid: false
     };
-    autobind(this);
+
+    this.getMap = this.getMap.bind(this);
+    this.queryRenderedFeatures = this.queryRenderedFeatures.bind(this);
+    this._updateQueryParams = this._updateQueryParams.bind(this);
+    this._updateMapSize = this._updateMapSize.bind(this);
+    this._updateMapStyle = this._updateMapStyle.bind(this);
+    this._mapboxMapLoaded = this._mapboxMapLoaded.bind(this);
+    this._mapboxMapError = this._mapboxMapError.bind(this);
+    this._renderNoTokenWarning = this._renderNoTokenWarning.bind(this);
   }
 
   getChildContext() {
