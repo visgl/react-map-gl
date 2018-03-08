@@ -1,6 +1,5 @@
 import {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
-import autobind from '../utils/autobind';
 
 import StaticMap from './static-map';
 import {MAPBOX_LIMITS} from '../utils/map-state';
@@ -151,7 +150,6 @@ export default class InteractiveMap extends PureComponent {
 
   constructor(props) {
     super(props);
-    autobind(this);
     // Check for deprecated props
     deprecateWarn(props);
 
@@ -167,6 +165,17 @@ export default class InteractiveMap extends PureComponent {
     this._mapControls = props.mapControls || new MapControls();
 
     this._eventManager = new EventManager(null, {rightButton: true});
+
+    this.getMap = this.getMap.bind(this);
+    this.queryRenderedFeatures = this.queryRenderedFeatures.bind(this);
+    this._checkVisibilityConstraints = this._checkVisibilityConstraints.bind(this);
+    this._getFeatures = this._getFeatures.bind(this);
+    this._onInteractiveStateChange = this._onInteractiveStateChange.bind(this);
+    this._getPos = this._getPos.bind(this);
+    this._onMouseMove = this._onMouseMove.bind(this);
+    this._onMouseClick = this._onMouseClick.bind(this);
+    this._eventCanvasLoaded = this._eventCanvasLoaded.bind(this);
+    this._staticMapLoaded = this._staticMapLoaded.bind(this);
   }
 
   getChildContext() {

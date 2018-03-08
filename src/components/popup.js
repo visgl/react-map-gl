@@ -20,7 +20,6 @@
 import {createElement} from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
-import autobind from '../utils/autobind';
 
 import {getDynamicPosition, ANCHOR_POSITION} from '../utils/dynamic-position';
 
@@ -72,7 +71,12 @@ export default class Popup extends BaseControl {
 
   constructor(props) {
     super(props);
-    autobind(this);
+
+    this._getPosition = this._getPosition.bind(this);
+    this._onClose = this._onClose.bind(this);
+    this._contentLoaded = this._contentLoaded.bind(this);
+    this._renderTip = this._renderTip.bind(this);
+    this._renderContent = this._renderContent.bind(this);
   }
 
   componentDidMount() {
