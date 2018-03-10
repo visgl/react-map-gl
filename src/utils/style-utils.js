@@ -128,6 +128,7 @@ function checkForEqualLayerSourceChanges(sourceExit, nextLayers, callback) {
   const sourceIds = sourceExit.map(s => s.id);
   const layersNotRemoved = nextLayers.filter(lyr => sourceIds.includes(lyr.get('source')));
   if (layersNotRemoved.size) {
+    // because of this, no source/layer changes will take effect if there is an error
     throw new Error(`You must remove any layers associated with sources you are removing: ${layersNotRemoved.map(l => l.get('id')).toJS().join('')}`);
   }
   callback();
