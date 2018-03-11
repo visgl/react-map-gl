@@ -71,6 +71,12 @@ export default class BaseControl extends Component {
 
   _onContainerLoad(ref) {
     const {eventManager} = this.context;
+
+    // Return early if no eventManager is found
+    if (!eventManager) {
+      return;
+    }
+
     let events = this._events;
 
     // Remove all previously registered events
