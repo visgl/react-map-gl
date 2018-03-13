@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# Version 3.2.5
+
+- Add null check to BaseControl ref callback (#479)
+- Manually bind methods (#463)
+
 # Version 3.2.4
 
 - mapbox-gl 0.44.0
