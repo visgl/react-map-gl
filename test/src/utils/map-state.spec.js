@@ -1,7 +1,7 @@
 import test from 'tape-catch';
-import MapState, {MAPBOX_LIMITS} from '../../src/utils/map-state';
+import MapState, {MAPBOX_LIMITS} from 'react-map-gl/utils/map-state';
 import WebMercatorViewport from 'viewport-mercator-project';
-import {toLowPrecision, isSameLocation} from '../test-utils';
+import {toLowPrecision, isSameLocation} from 'react-map-gl/test/test-utils';
 
 const SAMPLE_VIEWPORTS = [
   // SF

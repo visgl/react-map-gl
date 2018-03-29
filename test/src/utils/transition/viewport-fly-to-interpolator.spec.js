@@ -1,6 +1,6 @@
 import test from 'tape-catch';
-import {ViewportFlyToInterpolator} from '../../../src/utils/transition';
-import {toLowPrecision} from '../../test-utils';
+import {ViewportFlyToInterpolator} from 'react-map-gl/utils/transition';
+import {toLowPrecision} from 'react-map-gl/test/test-utils';
 
 /* eslint-disable max-len */
 const TEST_CASES = [

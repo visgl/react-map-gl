@@ -1,5 +1,5 @@
 import test from 'tape-catch';
-import {getDynamicPosition, ANCHOR_POSITION} from '../../src/utils/dynamic-position';
+import {getDynamicPosition, ANCHOR_POSITION} from 'react-map-gl/utils/dynamic-position';
 
 const ANCHORS = Object.keys(ANCHOR_POSITION);
 

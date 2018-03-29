@@ -1,5 +1,5 @@
 import test from 'tape-catch';
-import {LinearInterpolator} from '../../../src/utils/transition';
+import {LinearInterpolator} from 'react-map-gl/utils/transition';
 
 const TEST_CASES = [
   {
