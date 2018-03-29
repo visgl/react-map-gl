@@ -1,5 +1,5 @@
 /* global requestAnimationFrame, cancelAnimationFrame */
-import assert from 'assert';
+import assert from './assert';
 import {LinearInterpolator} from './transition';
 import MapState from './map-state';
 
