@@ -1,3 +1,3 @@
 require('tap-browser-color')();
 
-require('./index');
+require('./src/index');

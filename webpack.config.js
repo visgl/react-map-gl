@@ -49,7 +49,7 @@ const BROWSER_CONFIG = Object.assign({}, BASE_CONFIG, {
 
   // Bundle the tests for running in the browser
   entry: {
-    'test-browser': resolve('./test/browser.js')
+    'test-browser': resolve('./test/test-browser.js')
   },
 
   // Generate a bundle in dist folder
@@ -63,6 +63,7 @@ const BROWSER_CONFIG = Object.assign({}, BASE_CONFIG, {
   resolve: {
     alias: {
       // Build tests against source rather than an installed version of react-map-gl
+      'react-map-gl/test': resolve('./test'),
       'react-map-gl': resolve('./src'),
       // Use mapbox prebuilt
       'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js'),

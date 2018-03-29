@@ -1,5 +1,5 @@
 import test from 'tape-catch';
-import TransitionManager from '../../src/utils/transition-manager';
+import TransitionManager from 'react-map-gl/utils/transition-manager';
 
 /* global global, setTimeout, clearTimeout */
 // backfill requestAnimationFrame on Node
