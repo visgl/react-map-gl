@@ -1,10 +1,17 @@
 # CHANGELOG
 
+
 # Version TBD
 
 - Remove import of external 'assert' module
+- Upgraded build system, webpack 4 and bundle size instrumentation
+- New es6 dist
 
-# Version 3.2.4
+
+# Version 3.2.5 (Mar 13, 2018)
+
+
+# Version 3.2.4 (Feb 21, 2018)
 
 - mapbox-gl 0.44.0
 - Fix `reuseMap` option
