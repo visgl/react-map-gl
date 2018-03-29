@@ -25,48 +25,12 @@ case 'test-dist':
   require('./src/index'); // Run the tests
   break;
 
-case 'test-ci':
-  // Run a smaller selection of the tests (avoid overwhelming Travis CI)
-  require('./src/imports-spec');
-  require('./src/core');
-  // require('./src/core-layers');
-  require('./src/core-layers/polygon-tesselation.spec');
-  // require('./core-layers.spec');
-  // require('./polygon-layer.spec');
-  require('./src/core-layers/geojson.spec');
-  // require('./geojson-layer.spec');
-  // require('./hexagon-cell-layer.spec');
-  // require('./grid-layer.spec');
-  // require('./hexagon-layer.spec');
-  break;
-
 case 'test-browser':
   new BrowserTestDriver().run({
     process: 'webpack-dev-server',
     parameters: ['--env.test-browser'],
     exposeFunction: 'testDone'
   });
-  break;
-
-case 'test-render':
-case 'render':
-  new BrowserTestDriver().run({
-    process: 'webpack-dev-server',
-    parameters: ['--env.render'],
-    exposeFunction: 'testDone'
-  });
-  break;
-
-case 'render-react':
-  new BrowserTestDriver().run({
-    process: 'webpack-dev-server',
-    parameters: ['--env.render-react'],
-    exposeFunction: 'testDone'
-  });
-  break;
-
-case 'bench':
-  require('./bench/index'); // Run the benchmarks
   break;
 
 default:
