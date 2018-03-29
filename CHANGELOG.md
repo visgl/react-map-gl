@@ -1,7 +1,6 @@
 # CHANGELOG
 
-
-# Version TBD
+# Version 3.3.0-alpha.1
 
 - Remove import of external 'assert' module
 - Upgraded build system, webpack 4 and bundle size instrumentation
