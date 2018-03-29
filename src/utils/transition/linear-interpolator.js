@@ -1,4 +1,4 @@
-import assert from 'assert';
+import assert from '../assert';
 import TransitionInterpolator from './transition-interpolator';
 
 import {isValid, lerp, getEndValueByShortestPath} from './transition-utils';

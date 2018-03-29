@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# Version TBD
+
+- Remove import of external 'assert' module
+
 # Version 3.2.4
 
 - mapbox-gl 0.44.0

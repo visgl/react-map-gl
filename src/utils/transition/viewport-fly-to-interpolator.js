@@ -1,4 +1,4 @@
-import assert from 'assert';
+import assert from '../assert';
 import TransitionInterpolator from './transition-interpolator';
 
 import {flyToViewport} from 'viewport-mercator-project';

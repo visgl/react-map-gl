@@ -1,5 +1,5 @@
 import WebMercatorViewport, {normalizeViewportProps} from 'viewport-mercator-project';
-import assert from 'assert';
+import assert from './assert';
 
 // MAPBOX LIMITS
 export const MAPBOX_LIMITS = {
