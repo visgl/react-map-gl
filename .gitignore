@@ -5,6 +5,7 @@ node_modules
 coverage
 npm-debug.log
 
+yarn.lock
 */**/yarn.lock
 */**/package-lock.json
 yarn-error.log
