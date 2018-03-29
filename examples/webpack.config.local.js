@@ -11,7 +11,7 @@ const webpack = require('webpack');
 const LIB_DIR = resolve(__dirname, '..');
 const SRC_DIR = resolve(LIB_DIR, './src');
 
-// Support for hot reloading changes to the deck.gl library:
+// Support for hot reloading changes
 const LOCAL_DEVELOPMENT_CONFIG = {
   // suppress warnings about bundle size
   devServer: {
