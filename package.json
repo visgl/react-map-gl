@@ -29,7 +29,7 @@
     "clean": "rm -fr dist/* dist-es6/*",
     "lint": "eslint src test && npm run lint-yarn",
     "lint-yarn": "!(grep -q unpm.u yarn.lock) || (echo 'Please rebuild yarn file using public npmrc' && false)",
-    "test": "npm run lint && node test/node.js",
+    "test": "npm run lint && node test/start.js test",
     "test-browser": "webpack-dev-server --env.browser --progress --hot --open",
     "publish-prod": "npm run build && npm run test && npm publish",
     "publish-beta": "npm run build && npm run test && npm publish --tag beta"
@@ -61,6 +61,7 @@
     "module-alias": "^2.0.0",
     "path-exists": "^3.0.0",
     "pre-commit": "^1.2.2",
+    "probe.gl": "^1.0.0-alpha.11",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-test-renderer": "^16.0.0",
