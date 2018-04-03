@@ -32,7 +32,7 @@ Or manipulate the viewport outside of the ReactMap component:
 
 ```jsx
 _goToNYC = () => {
-    const viewport = {...this.state, longitude: -74.1, latitude: 40.7};
+    const viewport = {...this.state.viewport, longitude: -74.1, latitude: 40.7};
     this.setState({viewport});
 }
 
