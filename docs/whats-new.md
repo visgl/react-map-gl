@@ -1,3 +1,8 @@
+# react-map-gl v3.3
+
+- **Flexible width and height props** - The `width` and `height` properties can now be set to any CSS strings, or they can be omitted for cases where they will be set by other React components.
+
+
 # react-map-gl v3.2
 
 Realease date: January, 2018
