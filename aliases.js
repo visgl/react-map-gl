@@ -30,11 +30,8 @@ const ALIASES = {
 
 if (module.require) {
   module.require('reify');
-
   const moduleAlias = module.require('module-alias');
   moduleAlias.addAliases(ALIASES);
-
-  module.require('babel-polyfill');
 }
 
 module.exports = ALIASES;
