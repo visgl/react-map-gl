@@ -48,9 +48,12 @@ const propTypes = {
   // Map view state
   width: PropTypes.number.isRequired, /** The width of the map. */
   height: PropTypes.number.isRequired, /** The height of the map. */
-  longitude: PropTypes.number.isRequired, /** The longitude of the center of the map. */
-  latitude: PropTypes.number.isRequired, /** The latitude of the center of the map. */
-  zoom: PropTypes.number.isRequired, /** The tile zoom level of the map. */
+
+  viewState: PropTypes.object, /** object containing lng/lat/zoom/bearing/pitch */
+
+  longitude: PropTypes.number, /** The longitude of the center of the map. */
+  latitude: PropTypes.number, /** The latitude of the center of the map. */
+  zoom: PropTypes.number, /** The tile zoom level of the map. */
   bearing: PropTypes.number, /** Specify the bearing of the viewport */
   pitch: PropTypes.number, /** Specify the pitch of the viewport */
 
@@ -254,36 +257,43 @@ export default class Mapbox {
     this.props = newProps;
   }
 
-  _updateMapViewport(oldProps, newProps) {
-    const viewportChanged =
-      newProps.latitude !== oldProps.latitude ||
-      newProps.longitude !== oldProps.longitude ||
-      newProps.zoom !== oldProps.zoom ||
-      newProps.pitch !== oldProps.pitch ||
-      newProps.bearing !== oldProps.bearing ||
-      newProps.altitude !== oldProps.altitude;
-
-    if (viewportChanged) {
-      this._map.jumpTo({
-        center: [newProps.longitude, newProps.latitude],
-        zoom: newProps.zoom,
-        bearing: newProps.bearing,
-        pitch: newProps.pitch
-      });
-
-      // TODO - jumpTo doesn't handle altitude
-      if (newProps.altitude !== oldProps.altitude) {
-        this._map.transform.altitude = newProps.altitude;
-      }
-    }
-  }
-
   // Note: needs to be called after render (e.g. in componentDidUpdate)
   _updateMapSize(oldProps, newProps) {
     const sizeChanged = oldProps.width !== newProps.width || oldProps.height !== newProps.height;
     if (sizeChanged) {
       this._map.resize();
     }
+  }
+
+  _updateMapViewport(oldProps, newProps) {
+    const oldViewState = this._getViewState(oldProps);
+    const newViewState = this._getViewState(newProps);
+
+    const viewportChanged =
+      newViewState.latitude !== oldViewState.latitude ||
+      newViewState.longitude !== oldViewState.longitude ||
+      newViewState.zoom !== oldViewState.zoom ||
+      newViewState.pitch !== oldViewState.pitch ||
+      newViewState.bearing !== oldViewState.bearing ||
+      newViewState.altitude !== oldViewState.altitude;
+
+    if (viewportChanged) {
+      this._map.jumpTo({
+        center: [newViewState.longitude, newViewState.latitude],
+        zoom: newViewState.zoom,
+        bearing: newViewState.bearing,
+        pitch: newViewState.pitch
+      });
+
+      // TODO - jumpTo doesn't handle altitude
+      if (newViewState.altitude !== oldViewState.altitude) {
+        this._map.transform.altitude = newViewState.altitude;
+      }
+    }
+  }
+
+  _getViewState(props) {
+    return props.viewState || props;
   }
 }
 

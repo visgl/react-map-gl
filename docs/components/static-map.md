@@ -34,18 +34,32 @@ The Mapbox style. A string url or a
 object (regular JS object or Immutable.Map).
 
 ##### `width` {Number} (required)
+
 The width of the map.
 
 ##### `height` {Number} (required)
+
 The height of the map.
 
-##### `latitude` {Number} (required)
+##### `viewState` {Object}
+
+An object containing the view state of the map specified by the following fields:
+* `latitude` {Number} - The latitude of the center of the map.
+* `longitude` {Number} - The longitude of the center of the map.
+* `zoom` {Number} - The tile zoom level of the map. Bounded implicitly by default `minZoom` and `maxZoom` of `MapboxGL`.
+* `bearing` {Number} - default: `0` - The bearing of the viewport.
+* `pitch` {Number} - default: `0` - The pitch of the viewport.
+* `altitude` {Number} - default: `1.5 screen heights`
+
+Note: Either the viewState, or the `latitude`, `longitude` and `zoom` properties need to be specified.
+
+##### `latitude` {Number}
 The latitude of the center of the map.
 
-##### `longitude` {Number} (required)
+##### `longitude` {Number}
 The longitude of the center of the map.
 
-##### `zoom` {Number} (required)
+##### `zoom` {Number}
 The tile zoom level of the map. Bounded implicitly by default `minZoom`
 and `maxZoom` of `MapboxGL`.
 

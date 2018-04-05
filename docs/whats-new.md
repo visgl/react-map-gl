@@ -1,3 +1,12 @@
+# react-map-gl v3.3
+
+Release date: In development, target April, 2018
+
+## Hightlights
+
+- **New `viewState` Property**: Makes it possible to specify all map state properties (`longitude`, `latitude`, `zoom`, `bearing` and `pitch`) as a single property.
+
+
 # react-map-gl v3.2
 
 Realease date: January, 2018
@@ -12,6 +21,7 @@ Realease date: January, 2018
   + Map creation: `transformRequest`, `reuseMaps`
   + Interaction: `touchZoom`, `touchRotate`
   + Transition: `transitionDuration`, `transitionInterpolator`, `transitionEasing`, `transitionInterruption`, `onTransitionStart`, `onTransitionInterrupt`, `onTransitionEnd`
+
 
 # react-map-gl v3.1
 
