@@ -46,8 +46,9 @@ const propTypes = {
   visible: PropTypes.bool, /** Whether the map is visible */
 
   // Map view state
-  width: PropTypes.number.isRequired, /** The width of the map. */
-  height: PropTypes.number.isRequired, /** The height of the map. */
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]), /** The width of the map. */
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]), /** The height of the map. */
+
   longitude: PropTypes.number.isRequired, /** The longitude of the center of the map. */
   latitude: PropTypes.number.isRequired, /** The latitude of the center of the map. */
   zoom: PropTypes.number.isRequired, /** The tile zoom level of the map. */
@@ -123,6 +124,8 @@ export default class Mapbox {
     }
 
     this.props = {};
+    this.width = 0;
+    this.height = 0;
     this._initialize(props);
   }
 
@@ -278,10 +281,20 @@ export default class Mapbox {
     }
   }
 
+  // If canvas size has changed, reads out the new size and returns true
+  _checkForContainerSizeChange() {
+    const {canvas} = this;
+    if (canvas && (this.width !== canvas.clientWidth || this.height !== canvas.clientHeight)) {
+      this.width = canvas.clientWidth;
+      this.height = canvas.clientHeight;
+      return true;
+    }
+    return false;
+  }
+
   // Note: needs to be called after render (e.g. in componentDidUpdate)
   _updateMapSize(oldProps, newProps) {
-    const sizeChanged = oldProps.width !== newProps.width || oldProps.height !== newProps.height;
-    if (sizeChanged) {
+    if (this._checkForContainerSizeChange()) {
       this._map.resize();
     }
   }

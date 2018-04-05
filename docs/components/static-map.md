@@ -33,11 +33,11 @@ The Mapbox style. A string url or a
 [MapboxGL style](https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive)
 object (regular JS object or Immutable.Map).
 
-##### `width` {Number} (required)
-The width of the map.
+##### `width` {Number|String}
+The width of the map, if supplied must be either a number in pixels or valid CSS string (e.g. '100%')
 
-##### `height` {Number} (required)
-The height of the map.
+##### `height` {Number|String}
+The height of the map, if supplied must be either a number in pixels or valid CSS string (e.g. '100%')
 
 ##### `latitude` {Number} (required)
 The latitude of the center of the map.
