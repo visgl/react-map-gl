@@ -115,19 +115,11 @@ export default class Mapbox {
   }
 
   finalize() {
-    if (!this.props.mapboxgl || !this._map) {
-      return this;
-    }
-
     this._destroy();
     return this;
   }
 
   setProps(props) {
-    if (!props.mapboxgl || !this._map) {
-      return this;
-    }
-
     this._update(this.props, props);
     return this;
   }
@@ -136,10 +128,6 @@ export default class Mapbox {
   // In a system like React we must wait to read size until after render
   // (e.g. until "componentDidUpdate")
   resize() {
-    if (!this.props.mapboxgl || !this._map) {
-      return this;
-    }
-
     this._map.resize();
     return this;
   }
@@ -195,11 +183,16 @@ export default class Mapbox {
   }
 
   _destroy() {
+    if (!this._map) {
+      return;
+    }
+
     if (!Mapbox.savedMap) {
       Mapbox.savedMap = this._map;
     } else {
       this._map.remove();
     }
+    this._map = null;
   }
 
   _initialize(props) {
@@ -233,6 +226,10 @@ export default class Mapbox {
   }
 
   _update(oldProps, newProps) {
+    if (!this._map) {
+      return;
+    }
+
     newProps = Object.assign({}, this.props, newProps);
     checkPropTypes(newProps, 'Mapbox');
 
