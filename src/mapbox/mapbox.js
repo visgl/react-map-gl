@@ -21,14 +21,6 @@
 /* global window, document, process */
 import PropTypes from 'prop-types';
 
-const isBrowser = !(
-  typeof process === 'object' &&
-  String(process) === '[object process]' &&
-  !process.browser
-);
-
-const mapboxgl = isBrowser ? require('mapbox-gl') : null;
-
 function noop() {}
 
 const propTypes = {
@@ -111,18 +103,14 @@ function checkPropTypes(props, component = 'component') {
 // - Provides support for specifying tokens during development
 
 export default class Mapbox {
-  static supported() {
-    return mapboxgl && mapboxgl.supported();
-  }
-
   constructor(props) {
-    if (!mapboxgl) {
-      throw new Error('Mapbox not supported');
+    if (!props.mapboxgl) {
+      throw new Error('Mapbox not available');
     }
 
     if (!Mapbox.initialized && console.debug) { // eslint-disable-line
       Mapbox.initialized = true;
-      console.debug(`react-map-gl: using mapbox-gl v${mapboxgl.version}`); // eslint-disable-line
+      console.debug(`react-map-gl: using mapbox-gl v${props.mapboxgl.version}`); // eslint-disable-line
     }
 
     this.props = {};
@@ -130,19 +118,11 @@ export default class Mapbox {
   }
 
   finalize() {
-    if (!mapboxgl || !this._map) {
-      return this;
-    }
-
     this._destroy();
     return this;
   }
 
   setProps(props) {
-    if (!mapboxgl || !this._map) {
-      return this;
-    }
-
     this._update(this.props, props);
     return this;
   }
@@ -151,10 +131,6 @@ export default class Mapbox {
   // In a system like React we must wait to read size until after render
   // (e.g. until "componentDidUpdate")
   resize() {
-    if (!mapboxgl || !this._map) {
-      return this;
-    }
-
     this._map.resize();
     return this;
   }
@@ -200,7 +176,7 @@ export default class Mapbox {
       if (props.transformRequest) {
         mapOptions.transformRequest = props.transformRequest;
       }
-      this._map = this.map = new mapboxgl.Map(mapOptions);
+      this._map = this.map = new props.mapboxgl.Map(mapOptions);
       // Attach optional onLoad function
       this.map.once('load', props.onLoad);
       this.map.on('error', props.onError);
@@ -210,11 +186,16 @@ export default class Mapbox {
   }
 
   _destroy() {
+    if (!this._map) {
+      return;
+    }
+
     if (!Mapbox.savedMap) {
       Mapbox.savedMap = this._map;
     } else {
       this._map.remove();
     }
+    this._map = null;
   }
 
   _initialize(props) {
@@ -225,11 +206,11 @@ export default class Mapbox {
     this.accessToken = props.mapboxApiAccessToken || defaultProps.mapboxApiAccessToken;
 
     // Creation only props
-    if (mapboxgl) {
+    if (props.mapboxgl) {
       if (!this.accessToken) {
-        mapboxgl.accessToken = 'no-token'; // Prevents mapbox from throwing
+        props.mapboxgl.accessToken = 'no-token'; // Prevents mapbox from throwing
       } else {
-        mapboxgl.accessToken = this.accessToken;
+        props.mapboxgl.accessToken = this.accessToken;
       }
     }
 
@@ -248,6 +229,10 @@ export default class Mapbox {
   }
 
   _update(oldProps, newProps) {
+    if (!this._map) {
+      return;
+    }
+
     newProps = Object.assign({}, this.props, newProps);
     checkPropTypes(newProps, 'Mapbox');
 

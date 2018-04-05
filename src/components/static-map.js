@@ -27,6 +27,15 @@ import WebMercatorViewport from 'viewport-mercator-project';
 
 import Mapbox from '../mapbox/mapbox';
 
+/* global process */
+const isBrowser = !(
+  typeof process === 'object' &&
+  String(process) === '[object process]' &&
+  !process.browser
+);
+
+const mapboxgl = isBrowser ? require('mapbox-gl') : null;
+
 /* eslint-disable max-len */
 const TOKEN_DOC_URL = 'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
 const NO_TOKEN_WARNING = 'A valid API access token is required to use Mapbox data';
@@ -60,7 +69,7 @@ const childContextTypes = {
 
 export default class StaticMap extends PureComponent {
   static supported() {
-    return Mapbox && Mapbox.supported();
+    return mapboxgl && mapboxgl.supported();
   }
 
   constructor(props) {
@@ -96,6 +105,7 @@ export default class StaticMap extends PureComponent {
     const {mapStyle} = this.props;
 
     this._mapbox = new Mapbox(Object.assign({}, this.props, {
+      mapboxgl, // Handle to mapbox-gl library
       container: this._mapboxMap,
       onError: this._mapboxMapError,
       mapStyle: isImmutableMap(mapStyle) ? mapStyle.toJS() : mapStyle
