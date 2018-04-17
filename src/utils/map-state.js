@@ -51,6 +51,12 @@ export default class MapState {
     maxPitch = MAPBOX_LIMITS.maxPitch,
     minPitch = MAPBOX_LIMITS.minPitch,
 
+    /** Transition props */
+    transitionDuration,
+    transitionEasing,
+    transitionInterpolator,
+    transitionInterruption,
+
     /** Interaction states, required to calculate change during transform */
     /* The point on map being grabbed when the operation first started */
     startPanLngLat,
@@ -81,7 +87,11 @@ export default class MapState {
       maxZoom,
       minZoom,
       maxPitch,
-      minPitch
+      minPitch,
+      transitionDuration,
+      transitionEasing,
+      transitionInterpolator,
+      transitionInterruption
     });
 
     this._interactiveState = {
