@@ -8,15 +8,15 @@ const webpack = require('webpack');
 // https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
 const BABEL_CONFIG = {
   presets: [
-    'es2015',
-    'react',
-    'stage-2'
-  ].map(function configMap(name) {
-    return require.resolve(`babel-preset-${name}`);
-  })
+    require.resolve('@babel/preset-env'),
+    require.resolve('@babel/preset-stage-2'),
+    require.resolve('@babel/preset-react')
+  ]
 };
 
 const config = {
+  mode: 'development',
+
   // Example entry point
   entry: {
     app: resolve('./root.js')
@@ -47,7 +47,7 @@ const config = {
       }]
     }, {
       test: /\.scss$/,
-      loaders: ['style-loader', 'css-loader', 'sass-loader', 'autoprefixer-loader']
+      loaders: ['style-loader', 'css-loader', 'sass-loader']
     }]
   },
 
