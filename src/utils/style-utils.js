@@ -91,6 +91,7 @@ function updateStyleSource(map, update) {
     if (oldSource.type === 'geojson') {
       // update data if no other GeoJSONSource options were changed
       const oldOpts = oldSource.workerOptions;
+      // GeoJSONSource class scales user options before assigning to workerOptions
       // https://github.com/mapbox/mapbox-gl-js/blob/master/src/source/geojson_source.js
       const scale = oldOpts.geojsonVtOptions.extent / 512;
 
