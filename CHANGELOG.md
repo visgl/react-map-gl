@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# Version 3.3.0-alpha.2
+- Move mapbox-gl import from mapbox wrapper to `StaticMap`
+
 # Version 3.3.0-alpha.1
 
 - Remove import of external 'assert' module
