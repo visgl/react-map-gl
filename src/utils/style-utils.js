@@ -91,17 +91,21 @@ function updateStyleSource(map, update) {
     if (oldSource.type === 'geojson') {
       // update data if no other GeoJSONSource options were changed
       const oldOpts = oldSource.workerOptions;
+      // GeoJSONSource class scales user options before assigning to workerOptions
+      // https://github.com/mapbox/mapbox-gl-js/blob/master/src/source/geojson_source.js
+      const scale = oldOpts.geojsonVtOptions.extent / 512;
+
       if (
         (newSource.maxzoom === undefined ||
           newSource.maxzoom === oldOpts.geojsonVtOptions.maxZoom) &&
         (newSource.buffer === undefined ||
-          newSource.buffer === oldOpts.geojsonVtOptions.buffer) &&
+          newSource.buffer === oldOpts.geojsonVtOptions.buffer / scale) &&
         (newSource.tolerance === undefined ||
-          newSource.tolerance === oldOpts.geojsonVtOptions.tolerance) &&
+          newSource.tolerance === oldOpts.geojsonVtOptions.tolerance / scale) &&
         (newSource.cluster === undefined ||
           newSource.cluster === oldOpts.cluster) &&
         (newSource.clusterRadius === undefined ||
-          newSource.clusterRadius === oldOpts.superclusterOptions.radius) &&
+          newSource.clusterRadius === oldOpts.superclusterOptions.radius / scale) &&
         (newSource.clusterMaxZoom === undefined ||
           newSource.clusterMaxZoom === oldOpts.superclusterOptions.maxZoom)
       ) {
