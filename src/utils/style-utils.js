@@ -49,38 +49,11 @@ export function setDiffStyle(prevStyle, nextStyle, map) {
   }
 
   const {sourcesDiff, layersDiff} = diffStyles(prevStyle, nextStyle);
-
-  // TODO: It's rather difficult to determine style diffing in the presence
-  // of refs. For now, if any style update has a ref, fallback to no diffing.
-  // We can come back to this case if there's a solid usecase.
-  if (layersDiff.updates.some(node => node.layer.get('ref'))) {
-    map.setStyle(nextStyle.toJS());
-    return;
-  }
-
-  for (const enter of sourcesDiff.enter) {
-    map.addSource(enter.id, enter.source.toJS());
-  }
-  for (const update of sourcesDiff.update) {
-    updateStyleSource(map, update);
-  }
-  for (const exit of sourcesDiff.exit) {
-    map.removeSource(exit.id);
-  }
-  for (const exit of layersDiff.exiting) {
-    if (map.style.getLayer(exit.id)) {
-      map.removeLayer(exit.id);
-    }
-  }
-  for (const update of layersDiff.updates) {
-    if (!update.enter) {
-      // This is an old layer that needs to be updated. Remove the old layer
-      // with the same id and add it back again.
-      map.removeLayer(update.id);
-    }
-    map.addLayer(update.layer.toJS(), update.before);
-  }
+  checkForEqualLayerSourceChanges(sourcesDiff.exit, nextStyle.get('layers'),
+    () => applySourceLayerChanges(map, nextStyle, sourcesDiff, layersDiff)
+  );
 }
+
 /* eslint-enable max-statements, complexity */
 
 // Update a source in the map style
@@ -117,4 +90,50 @@ function updateStyleSource(map, update) {
 
   map.removeSource(update.id);
   map.addSource(update.id, newSource);
+}
+
+function applySourceLayerChanges(map, nextStyle, sourcesDiff, layersDiff) {
+// TODO: It's rather difficult to determine style diffing in the presence
+  // of refs. For now, if any style update has a ref, fallback to no diffing.
+  // We can come back to this case if there's a solid usecase.
+  if (layersDiff.updates.some(node => node.layer.get('ref'))) {
+    map.setStyle(nextStyle.toJS());
+    return;
+  }
+
+  for (const enter of sourcesDiff.enter) {
+    map.addSource(enter.id, enter.source.toJS());
+  }
+  for (const update of sourcesDiff.update) {
+    updateStyleSource(map, update);
+  }
+
+  for (const exit of layersDiff.exiting) {
+    if (map.style.getLayer(exit.id)) {
+      map.removeLayer(exit.id);
+    }
+  }
+  for (const update of layersDiff.updates) {
+    if (!update.enter) {
+      // This is an old layer that needs to be updated. Remove the old layer
+      // with the same id and add it back again.
+      map.removeLayer(update.id);
+    }
+    map.addLayer(update.layer.toJS(), update.before);
+  }
+
+  for (const exit of sourcesDiff.exit) {
+    map.removeSource(exit.id);
+  }
+}
+
+/* eslint-disable max-len */
+function checkForEqualLayerSourceChanges(sourceExit, nextLayers, callback) {
+  const sourceIds = sourceExit.map(s => s.id);
+  const layersNotRemoved = nextLayers.filter(lyr => sourceIds.includes(lyr.get('source')));
+  if (layersNotRemoved.size) {
+    // because of this, no source/layer changes will take effect if there is an error
+    throw new Error(`You must remove any layers associated with sources you are removing: ${layersNotRemoved.map(l => l.get('id')).toJS().join('')}`);
+  }
+  callback();
 }
