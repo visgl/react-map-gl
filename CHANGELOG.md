@@ -1,9 +1,17 @@
 # CHANGELOG
 
+# Version 3.2.6
+
+- FIX: `onViewportChange` triggered with nothing changed
+- FIX: mapbox error when attempting to remove sources
+- FIX: flicker when updating clustered GeoJSON source
+
+
 # Version 3.2.5
 
 - Add null check to BaseControl ref callback (#479)
 - Manually bind methods (#463)
+
 
 # Version 3.2.4
 
