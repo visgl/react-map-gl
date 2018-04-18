@@ -164,7 +164,7 @@ export default class InteractiveMap extends PureComponent {
     // Cannot use defaultProps here because it needs to be per map instance
     this._mapControls = props.mapControls || new MapControls();
 
-    this._eventManager = new EventManager(null, {rightButton: true});
+    this._eventManager = new EventManager(null, {rightButton: true, legacyBlockScroll: false});
 
     this.getMap = this.getMap.bind(this);
     this.queryRenderedFeatures = this.queryRenderedFeatures.bind(this);
