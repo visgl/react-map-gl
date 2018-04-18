@@ -269,6 +269,8 @@ export default class MapControls {
       return false;
     }
 
+    event.srcEvent.preventDefault();
+
     const pos = this.getCenter(event);
     const {delta} = event;
 
