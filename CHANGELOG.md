@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# Version 3.2.7
+
+- FIX: Cannot scroll over popups with `captureScroll` turned on
+
+
 # Version 3.2.6
 
 - FIX: `onViewportChange` triggered with nothing changed
