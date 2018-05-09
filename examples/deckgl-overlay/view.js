@@ -103,7 +103,7 @@ export default class Example extends Component {
     }.bind(this), 2000);
   }
 
-  _onChangeViewport(opt) {
+  _onViewportChange(opt) {
     this.setState({viewport: opt});
   }
 
@@ -121,7 +121,7 @@ export default class Example extends Component {
       <InteractiveMap
         { ...viewport }
         maxPitch={85}
-        onViewportChange={ this._onChangeViewport }
+        onViewportChange={ this._onViewportChange }
         onClick={ this._onClickFeatures }
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
