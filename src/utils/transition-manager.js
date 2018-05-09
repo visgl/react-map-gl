@@ -164,8 +164,10 @@ export default class TransitionManager {
     const mapState = new MapState(Object.assign({}, this.props, viewport));
     this.state.propsInTransition = mapState.getViewportProps();
 
-    if (this.props.onViewportChange) {
-      this.props.onViewportChange(this.state.propsInTransition);
+    // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
+    const onViewportChange = this.props.onViewportChange || this.props.onChangeViewport;
+    if (onViewportChange) {
+      onViewportChange(this.state.propsInTransition);
     }
 
     if (shouldEnd) {
