@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# Version 3.3.0-alpha.X
+- Add alternate interaction callback `onViewStateChange`
+
 # Version 3.3.0-alpha.4
 - Fix bug in handling deck.gl style `viewState` prop
 - Automatically load missing Mapbox stylesheet

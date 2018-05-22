@@ -25,11 +25,9 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Min pitch in degrees
   minPitch: PropTypes.number,
 
-  /**
-   * `onViewportChange` callback is fired when the user interacted with the
-   * map. The object passed to the callback contains viewport properties
-   * such as `longitude`, `latitude`, `zoom` etc.
-   */
+  // Callbacks fired when the user interacted with the map. The object passed to the callbacks
+  // contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
+  onViewStateChange: PropTypes.func,
   onViewportChange: PropTypes.func,
 
   /** Viewport transition **/
@@ -120,6 +118,7 @@ const getDefaultCursor = ({isDragging, isHovering}) => isDragging ?
 const defaultProps = Object.assign({},
   StaticMap.defaultProps, MAPBOX_LIMITS, TransitionManager.defaultProps,
   {
+    onViewStateChange: null,
     onViewportChange: null,
     onClick: null,
     onHover: null,
@@ -193,7 +192,7 @@ export default class InteractiveMap extends PureComponent {
     eventManager.on('mousemove', this._onMouseMove);
     eventManager.on('click', this._onMouseClick);
 
-    this._mapControls.setOptions(Object.assign({}, this.props, {
+    this._mapControls.setOptions(Object.assign({}, this.props, this.props.viewState, {
       onStateChange: this._onInteractiveStateChange,
       eventManager
     }));
@@ -202,7 +201,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   componentWillUpdate(nextProps) {
-    this._mapControls.setOptions(nextProps);
+    this._mapControls.setOptions(Object.assign({}, nextProps, nextProps.viewState));
     this._transitionManager.processViewportChange(nextProps);
   }
 

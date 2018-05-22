@@ -14,12 +14,10 @@ const LINEAR_TRANSITION_PROPS = Object.assign({}, TransitionManager.defaultProps
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
   className: PropTypes.string,
-  /**
-    * `onViewportChange` callback is fired when the user interacted with the
-    * map. The object passed to the callback contains `latitude`,
-    * `longitude` and `zoom` and additional state information.
-    */
-  onViewportChange: PropTypes.func.isRequired,
+  // Callbacks fired when the user interacted with the map. The object passed to the callbacks
+  // contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
+  onViewStateChange: PropTypes.func,
+  onViewportChange: PropTypes.func,
   // Show/hide compass button
   showCompass: PropTypes.bool,
   // Show/hide zoom buttons
@@ -28,6 +26,7 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
+  onViewStateChange: () => {},
   onViewportChange: () => {},
   showCompass: true,
   showZoom: true
@@ -59,11 +58,15 @@ export default class NavigationControl extends BaseControl {
   _updateViewport(opts) {
     const {viewport} = this.context;
     const mapState = new MapState(Object.assign({}, viewport, opts));
+    const viewState = Object.assign({}, mapState.getViewportProps(), LINEAR_TRANSITION_PROPS);
+
+    // Call new style callback
+    this.props.onViewStateChange({viewState});
+
+    // Call old style callback
     // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
     const onViewportChange = this.props.onChangeViewport || this.props.onViewportChange;
-    const newViewport = Object.assign({}, mapState.getViewportProps(), LINEAR_TRANSITION_PROPS);
-
-    onViewportChange(newViewport);
+    onViewportChange(viewState);
   }
 
   _onZoomIn() {

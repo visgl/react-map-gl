@@ -31,6 +31,19 @@ class Map extends Component {
 
 Has all properties of [StaticMap](/docs/components/static-map.md) and the following:
 
+##### `onViewStateChange` {Function}
+
+Callback that is fired when the user interacted with the map.
+
+`onViewStateChange({viewState})`
+
+The object passed to the callback contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
+
+If the map is intended to be interactive, the app uses this prop to listen to map updates and update the props accordingly.
+
+Note:
+* `onViewStateChange` is a newer version of the `onViewportChange` callback. Both are supported and provide equivalent functionality.
+
 ##### `onViewportChange` {Function}
 
 Callback that is fired when the user interacted with the map.

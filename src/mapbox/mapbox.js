@@ -39,8 +39,8 @@ const propTypes = {
   visible: PropTypes.bool, /** Whether the map is visible */
 
   // Map view state
-  width: PropTypes.number.isRequired, /** The width of the map. */
-  height: PropTypes.number.isRequired, /** The height of the map. */
+  width: PropTypes.number, /** The width of the map. */
+  height: PropTypes.number, /** The height of the map. */
 
   viewState: PropTypes.object, /** object containing lng/lat/zoom/bearing/pitch */
 
@@ -70,7 +70,10 @@ const defaultProps = {
 
   bearing: 0,
   pitch: 0,
-  altitude: 1.5
+  altitude: 1.5,
+
+  width: 0,
+  height: 0
 };
 
 // Try to get access token from URL, env, local storage or config
@@ -278,12 +281,7 @@ export default class Mapbox {
       newViewState.altitude !== oldViewState.altitude;
 
     if (viewportChanged) {
-      this._map.jumpTo({
-        center: [newViewState.longitude, newViewState.latitude],
-        zoom: newViewState.zoom,
-        bearing: newViewState.bearing,
-        pitch: newViewState.pitch
-      });
+      this._map.jumpTo(this._getMapboxViewStateProps(newProps));
 
       // TODO - jumpTo doesn't handle altitude
       if (newViewState.altitude !== oldViewState.altitude) {
@@ -327,6 +325,18 @@ export default class Mapbox {
     } catch (error) {
       // do nothing
     }
+  }
+
+  _getMapboxViewStateProps(props) {
+    const viewState = this._getViewState(props);
+    return {
+      center: [viewState.longitude, viewState.latitude],
+      zoom: viewState.zoom,
+      bearing: viewState.bearing,
+      pitch: viewState.pitch,
+      width: props.width,
+      height: props.height
+    };
   }
 }
 
