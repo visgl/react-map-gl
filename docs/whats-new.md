@@ -1,10 +1,11 @@
 # react-map-gl v3.3
 
-Release date: In development, target April, 2018
+Release date: In development, target May 25, 2018
 
-## Hightlights
+## Highlights
 
 - **New `viewState` Property**: Makes it possible to specify all map state properties (`longitude`, `latitude`, `zoom`, `bearing` and `pitch`) as a single property.
+- **New `onViewStateChange` callback**: An alternative callback that matches the new `viewState` prop.
 
 
 # react-map-gl v3.2
