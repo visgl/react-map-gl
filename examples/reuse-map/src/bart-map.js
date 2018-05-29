@@ -10,14 +10,12 @@ import MARKER_STYLE from './marker-style';
 export default class BartMap extends Component {
 
   state = {
-      viewport: {
+    viewState: {
       latitude: 37.729,
       longitude: -122.36,
       zoom: 11,
       bearing: 0,
-      pitch: 50,
-      width: 500,
-      height: 500
+      pitch: 50
     },
     settings: {
       dragPan: true,
@@ -34,7 +32,7 @@ export default class BartMap extends Component {
     }
   };
 
-  _onViewportChange = viewport => this.setState({viewport});
+  _onViewportChange = viewState => this.setState({viewState});
 
   _renderMarker(station, i) {
     const {name, coordinates} = station;
@@ -46,14 +44,19 @@ export default class BartMap extends Component {
   }
 
   render() {
-    const {viewport, settings} = this.state;
+    const {mapStyle} = this.props;
+    const {viewState, settings} = this.state;
     return (
       <MapGL
-        {...viewport}
+        {...viewState}
         {...settings}
-        mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={this._onViewportChange}
         mapboxApiAccessToken={MAPBOX_TOKEN}
+        mapStyle={mapStyle}
+
+        width={500}
+        height={500}
+        onViewportChange={this._onViewportChange}
+
         reuseMaps={true}
       >
         <style>{MARKER_STYLE}</style>

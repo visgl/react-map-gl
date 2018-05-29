@@ -32,56 +32,71 @@ class Map extends Component {
 Has all properties of [StaticMap](/docs/components/static-map.md) and the following:
 
 ##### `onViewportChange` {Function}
-Callback that is fired when the user interacted with the map.
-The object passed to the callback contains viewport properties such as
-`longitude`, `latitude`, `zoom` etc.
 
-If the map is intended to be interactive, the app use this prop to listen to
-map updates and update the props accordingly.
+Callback that is fired when the user interacted with the map.
+
+`onViewportChange(viewState)`
+
+The object passed to the callback contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
+
+Note:
+* Even if the newer `onViewStateChange` callback is supplied, the `onViewportChange` callback will still be called if supplied.
 
 ##### `maxZoom` {Number} [default: 20]
+
 Max zoom level.
 
 ##### `minZoom` {Number} [default: 0]
+
 Min zoom level.
 
 ##### `maxPitch` {Number} [default: 60]
+
 Max pitch in degrees.
 
 ##### `minPitch` {Number} [default: 0]
+
 Min pitch in degrees.
 
 ##### `scrollZoom` {Bool} [default: true]
+
 Enable croll to zoom.
 
 ##### `dragPan` {Bool} [default: true]
+
 Enable drag to pan.
 
 ##### `dragRotate` {Bool} [default: true]
+
 Enable drag to rotate.
 
 ##### `doubleClickZoom` {Bool} [default: true]
+
 Enable double click to zoom.
 
 ##### `touchZoom` {Bool} [default: true]
+
 Enable multitouch zoom.
 
 ##### `touchRotate` {Bool} [default: false]
+
 Enable multitouch rotate.
 
 ##### `clickRadius` {Number} [default: 0]
+
 Radius to detect features around a clicked point.
 
 ##### `mapControls` {Object}
-A map control instance to replace the default map controls.
-This object must implement the following interface:
 
+A map control instance to replace the default map controls.
+
+This object must implement the following interface:
 - `events` - An array of subscribed events
 - `handleEvent(event, context)` - A method that handles interactive events
 
 ##### `visibilityConstraints` {Object} ==EXPERIMENTAL==
-An object with the bounding `minZoom`, `maxZoom`, `minPitch`, `maxPitch` within
-which the map should be visible. This will manage automatically toggling the
+
+An object with the bounding `minZoom`, `maxZoom`, `minPitch`, `maxPitch` within which the map should be visible. This will manage automatically toggling the
 `visible` prop in `StaticMap`.
 
 Parameters
@@ -92,6 +107,7 @@ Parameters
     To make a layer interactive, set the `interactive` property in the layer style to `true`.
 
 ##### `onHover` {Function}
+
 Called when the map is hovered over.
 
 Parameters
@@ -102,6 +118,7 @@ Parameters
     To make a layer interactive, set the `interactive` property in the layer style to `true`.
 
 ##### `onClick` {Function}
+
 Called when the map is clicked.
 
 Parameters
@@ -112,6 +129,7 @@ Parameters
     To make a layer interactive, set the `interactive` property in the layer style to `true`.
 
 ##### `getCursor` {Function}
+
 Accessor that returns a cursor style to show interactive state. Called when the component is being rendered.
 
 Parameters
@@ -120,9 +138,11 @@ Parameters
   + `state.isHovering` - If the pointer is over a clickable feature.
 
 ##### `transitionDuration` {Number}
+
 Duration of transition in milliseconds. If specified, the map's viewport will smoothly move from the previous props to the current one. Default `0`;
 
 ##### `transitionInterpolator` {Object}
+
 An interpolator object that defines the transition behavior between two map states. `react-map-gl` offers two interpolators:
 - `LinearInterpolator` - similar to Mapbox's `easeTo` behavior.
 - `FlyToInterpolator` - similar to Mapbox's `flyTo` behavior.
@@ -139,9 +159,11 @@ Default: `new LinearInterpolator()`
 For details about using transition interpolators, see [transitions](/docs/advanced/viewport-transitions.md).
 
 ##### `transitionEasing` {Function}
+
 Easing function that maps a value from `[0, 1]` to `[0, 1]`. Default to `t => t` (linear). Check out [http://easings.net/](http://easings.net/) for common easing curves.
 
 ##### `transitionInterruption` {Number}
+
 What to do if an ongoing transition is interrupted by another transition. There are 3 options:
 - `TRANSITION_EVENTS.BREAK` - Start new transition from the current view. This is the default.
 - `TRANSITION_EVENTS.SNAP_TO_END` - Jump to the end of the previous transition before starting the new transition.
@@ -157,6 +179,7 @@ import {TRANSITION_EVENTS} from 'react-map-gl';
 Callback that is fired when a transition is triggered.
 
 ##### `onTransitionInterrupt` {Function}
+
 Callback that is fired when an ongoing transition is interrupted by another transition.
 
 ##### `onTransitionEnd` {Function}
