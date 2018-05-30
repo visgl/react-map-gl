@@ -1,5 +1,14 @@
 # CHANGELOG
 
+# Version 3.3.0-alpha.3
+- reuseMap prop now respects mapStyles
+- Update main example to babel-loader@8 (#503)
+- upgrade to latest dependencies (#505)
+- code style (#502)
+- add transition props to map state (#500)
+- handle source removal without layer removal (#477)
+- Fix source options comparison (#501)
+
 # Version 3.3.0-alpha.2
 - Move mapbox-gl import from mapbox wrapper to `StaticMap`
 
