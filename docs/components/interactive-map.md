@@ -60,7 +60,7 @@ Min pitch in degrees.
 
 ##### `scrollZoom` {Bool} [default: true]
 
-Enable croll to zoom.
+Enable scroll to zoom.
 
 ##### `dragPan` {Bool} [default: true]
 
