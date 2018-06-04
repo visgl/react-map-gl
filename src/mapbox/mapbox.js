@@ -234,6 +234,8 @@ export default class Mapbox {
     this._updateMapSize({}, props);
 
     this.props = props;
+
+    this._checkStyleSheet();
   }
 
   _update(oldProps, newProps) {
@@ -295,6 +297,31 @@ export default class Mapbox {
       altitude = 1.5
     } = props.viewState || props;
     return {longitude, latitude, zoom, pitch, bearing, altitude};
+  }
+
+  _checkStyleSheet() {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
+    // check mapbox styles
+    try {
+      const missingCssWarning = document.querySelector('.mapboxgl-missing-css');
+      const isCssLoaded = window.getComputedStyle(missingCssWarning).display === 'none';
+
+      if (!isCssLoaded) {
+        // attempt to insert mapbox stylesheet
+        const mapboxVersion = this.props.mapboxgl.version;
+        const link = document.createElement('link');
+        link.setAttribute('rel', 'stylesheet');
+        link.setAttribute('type', 'text/css');
+        link.setAttribute('href',
+          `https://api.tiles.mapbox.com/mapbox-gl-js/v${mapboxVersion}/mapbox-gl.css`);
+        document.head.append(link);
+      }
+    } catch (error) {
+      // do nothing
+    }
   }
 }
 
