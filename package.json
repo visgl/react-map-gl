@@ -23,7 +23,6 @@
   ],
   "scripts": {
     "start": "(cd examples/main && (path-exists node_modules || npm i) && npm run start-local)",
-    "clean": "rm -fr dist dist-es6 && mkdir -p dist/es5 dist/esm dist/es6",
     "build": "./scripts/build.sh && ./scripts/collect-metrics.sh",
     "publish-prod": "npm run build && npm run test && npm publish",
     "publish-beta": "npm run build && npm run test && npm publish --tag beta",

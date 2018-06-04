@@ -171,10 +171,10 @@ export default class Mapbox {
     } else {
       const mapOptions = {
         container: props.container || document.body,
-        center: [props.longitude, props.latitude],
-        zoom: props.zoom,
-        pitch: props.pitch,
-        bearing: props.bearing,
+        center: [0, 0],
+        zoom: 8,
+        pitch: 0,
+        bearing: 0,
         style: props.mapStyle,
         interactive: false,
         attributionControl: props.attributionControl,
@@ -286,7 +286,15 @@ export default class Mapbox {
   }
 
   _getViewState(props) {
-    return props.viewState || props;
+    const {
+      longitude,
+      latitude,
+      zoom,
+      pitch = 0,
+      bearing = 0,
+      altitude = 1.5
+    } = props.viewState || props;
+    return {longitude, latitude, zoom, pitch, bearing, altitude};
   }
 }
 
