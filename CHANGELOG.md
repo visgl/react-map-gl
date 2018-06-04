@@ -1,5 +1,10 @@
 # CHANGELOG
 
+# Version 3.2.8
+
+- FIX: support for to-be-deprecated prop `onChangeViewport` in viewport transition
+- FIX: reused map now applies new mapStyle
+
 # Version 3.2.7
 
 - FIX: Cannot scroll over popups with `captureScroll` turned on
