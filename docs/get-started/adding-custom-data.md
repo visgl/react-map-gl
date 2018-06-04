@@ -5,7 +5,7 @@
 You can inject data and mapbox native layers by modifying the map style object:
 
 ```js
-import fromJS from 'immutable';
+import {fromJS} from 'immutable';
 const mapStyle = fromJS({
     version: 8,
     sources: {
