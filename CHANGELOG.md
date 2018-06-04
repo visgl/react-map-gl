@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# Version 3.3.0-alpha.4
+- Fix bug in handling deck.gl style `viewState` prop
+- Automatically load missing Mapbox stylesheet
+
 # Version 3.3.0-alpha.3
 - reuseMap prop now respects mapStyles
 - Update main example to babel-loader@8 (#503)
