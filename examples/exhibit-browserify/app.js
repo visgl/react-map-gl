@@ -26,7 +26,7 @@ class Root extends Component {
       <MapGL
         {...viewport}
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onChangeViewport={v => this.setState({viewport: v})}
+        onViewportChange={v => this.setState({viewport: v})}
         preventStyleDiffing={false}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         perspectiveEnabled
