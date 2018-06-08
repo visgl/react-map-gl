@@ -170,6 +170,10 @@ export default class TransitionManager {
       onViewportChange(this.state.propsInTransition);
     }
 
+    if (this.props.onViewStateChange) {
+      this.props.onViewStateChange({viewState: this.state.propsInTransition});
+    }
+
     if (shouldEnd) {
       this._endTransition();
       this.props.onTransitionEnd();
