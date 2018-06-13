@@ -10,8 +10,8 @@ import ReactMapGL, {Popup} from 'react-map-gl';
 class Map extends Component {
   render() {
     return (
-      <ReactMapGL latitude={-122.41} longitude={37.78} zoom={8}>
-        <Popup latitude={-122.41} longitude={37.78} closeButton={true} closeOnClick={false} anchor="top">
+      <ReactMapGL latitude={37.78} longitude={-122.41} zoom={8}>
+        <Popup latitude={37.78} longitude={-122.41} closeButton={true} closeOnClick={false} anchor="top">
           <div>You are here</div>
         </Popup>
       </ReactMapGL>
