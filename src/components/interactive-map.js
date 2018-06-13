@@ -201,8 +201,9 @@ export default class InteractiveMap extends PureComponent {
   }
 
   componentWillUpdate(nextProps) {
-    this._mapControls.setOptions(Object.assign({}, nextProps, nextProps.viewState));
-    this._transitionManager.processViewportChange(nextProps);
+    const nextPropsWithViewState = Object.assign({}, nextProps, nextProps.viewState);
+    this._mapControls.setOptions(nextPropsWithViewState);
+    this._transitionManager.processViewportChange(nextPropsWithViewState);
   }
 
   getMap() {
