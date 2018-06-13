@@ -20,12 +20,7 @@
 
 /* global window, document, process */
 import PropTypes from 'prop-types';
-
-const isBrowser = !(
-  typeof process === 'object' &&
-  String(process) === '[object process]' &&
-  !process.browser
-);
+import isBrowser from '../utils/is-browser';
 
 const mapboxgl = isBrowser ? require('mapbox-gl') : null;
 
