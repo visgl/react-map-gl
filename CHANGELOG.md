@@ -1,5 +1,12 @@
 # CHANGELOG
 
+# Version 3.2.9
+
+- NEW: `onContextMenu` prop
+- NEW: `touchAction` prop
+- FIX: support usage in Electron environments
+- NEW: bump `mapbox-gl` version to 0.45
+
 # Version 3.2.8
 
 - FIX: support for to-be-deprecated prop `onChangeViewport` in viewport transition
