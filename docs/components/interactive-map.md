@@ -82,6 +82,13 @@ Enable multitouch zoom.
 
 Enable multitouch rotate.
 
+##### `touchAction` {String} [default: 'none']
+
+Allow browser default touch actions. Default `none`. See [hammer.js doc](http://hammerjs.github.io/touch-action/).
+
+By default, the map captures all touch interactions. This prop is useful for mobile applications to unblock default scrolling behavior. For example, use the combination `dragPan: false` and `touchAction: 'pan-y'` to allow vertical page scroll when dragging over the map.
+
+
 ##### `clickRadius` {Number} [default: 0]
 
 Radius to detect features around a clicked point.
