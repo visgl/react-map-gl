@@ -89,6 +89,9 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
     */
   onClick: PropTypes.func,
 
+  /** Custom touch-action CSS for the event canvas. Defaults to 'none' */
+  touchAction: PropTypes.string,
+
   /** Radius to detect features around a clicked point. Defaults to 0. */
   clickRadius: PropTypes.number,
 
@@ -129,6 +132,7 @@ const defaultProps = Object.assign({},
     dragRotate: true,
     doubleClickZoom: true,
 
+    touchAction: 'none',
     clickRadius: 0,
     getCursor: getDefaultCursor,
 
@@ -164,7 +168,11 @@ export default class InteractiveMap extends PureComponent {
     // Cannot use defaultProps here because it needs to be per map instance
     this._mapControls = props.mapControls || new MapControls();
 
-    this._eventManager = new EventManager(null, {rightButton: true, legacyBlockScroll: false});
+    this._eventManager = new EventManager(null, {
+      rightButton: true,
+      legacyBlockScroll: false,
+      touchAction: props.touchAction
+    });
 
     this.getMap = this.getMap.bind(this);
     this.queryRenderedFeatures = this.queryRenderedFeatures.bind(this);
