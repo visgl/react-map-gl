@@ -88,6 +88,10 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
     * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
     */
   onClick: PropTypes.func,
+  /**
+    * Called when the context menu is activated.
+    */
+  onContextMenu: PropTypes.func,
 
   /** Custom touch-action CSS for the event canvas. Defaults to 'none' */
   touchAction: PropTypes.string,
@@ -126,6 +130,7 @@ const defaultProps = Object.assign({},
     onViewportChange: null,
     onClick: null,
     onHover: null,
+    onContextMenu: event => event.preventDefault(),
 
     scrollZoom: true,
     dragPan: true,
@@ -169,7 +174,6 @@ export default class InteractiveMap extends PureComponent {
     this._mapControls = props.mapControls || new MapControls();
 
     this._eventManager = new EventManager(null, {
-      rightButton: true,
       legacyBlockScroll: false,
       touchAction: props.touchAction
     });
@@ -182,6 +186,7 @@ export default class InteractiveMap extends PureComponent {
     this._getPos = this._getPos.bind(this);
     this._onMouseMove = this._onMouseMove.bind(this);
     this._onMouseClick = this._onMouseClick.bind(this);
+    this._onContextMenu = this._onContextMenu.bind(this);
     this._eventCanvasLoaded = this._eventCanvasLoaded.bind(this);
     this._staticMapLoaded = this._staticMapLoaded.bind(this);
   }
@@ -200,6 +205,7 @@ export default class InteractiveMap extends PureComponent {
     // Register additional event handlers for click and hover
     eventManager.on('mousemove', this._onMouseMove);
     eventManager.on('click', this._onMouseClick);
+    eventManager.on('contextmenu', this._onContextMenu);
 
     this._mapControls.setOptions(Object.assign({}, this.props, {
       onStateChange: this._onInteractiveStateChange,
@@ -297,6 +303,12 @@ export default class InteractiveMap extends PureComponent {
       event.features = this._getFeatures({pos, radius: this.props.clickRadius});
 
       this.props.onClick(event);
+    }
+  }
+
+  _onContextMenu(event) {
+    if (this.props.onContextMenu) {
+      this.props.onContextMenu(event);
     }
   }
 
