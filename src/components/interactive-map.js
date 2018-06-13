@@ -184,9 +184,6 @@ export default class InteractiveMap extends PureComponent {
     this._getFeatures = this._getFeatures.bind(this);
     this._onInteractiveStateChange = this._onInteractiveStateChange.bind(this);
     this._getPos = this._getPos.bind(this);
-    this._onMouseMove = this._onMouseMove.bind(this);
-    this._onMouseClick = this._onMouseClick.bind(this);
-    this._onContextMenu = this._onContextMenu.bind(this);
     this._eventCanvasLoaded = this._eventCanvasLoaded.bind(this);
     this._staticMapLoaded = this._staticMapLoaded.bind(this);
   }
@@ -203,9 +200,11 @@ export default class InteractiveMap extends PureComponent {
     const eventManager = this._eventManager;
 
     // Register additional event handlers for click and hover
-    eventManager.on('mousemove', this._onMouseMove);
-    eventManager.on('click', this._onMouseClick);
-    eventManager.on('contextmenu', this._onContextMenu);
+    eventManager.on({
+      mousemove: this._onMouseMove.bind(this),
+      click: this._onMouseClick.bind(this),
+      contextmenu: this._onContextMenu.bind(this)
+    });
 
     this._mapControls.setOptions(Object.assign({}, this.props, {
       onStateChange: this._onInteractiveStateChange,
