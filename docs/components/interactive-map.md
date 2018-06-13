@@ -148,6 +148,12 @@ Parameters
     [queryRenderedFeatures](https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures) API.
     To make a layer interactive, set the `interactive` property in the layer style to `true`.
 
+##### `onContextMenu` {Function}
+
+Called when the context menu is activated. Prevent default here to enable right button interaction.
+
+Default: `event => event.preventDefault()`
+
 ##### `getCursor` {Function}
 
 Accessor that returns a cursor style to show interactive state. Called when the component is being rendered.
