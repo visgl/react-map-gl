@@ -26,13 +26,7 @@ import isImmutableMap from '../utils/is-immutable-map';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import Mapbox from '../mapbox/mapbox';
-
-/* global process */
-const isBrowser = !(
-  typeof process === 'object' &&
-  String(process) === '[object process]' &&
-  !process.browser
-);
+import isBrowser from '../utils/is-browser';
 
 const mapboxgl = isBrowser ? require('mapbox-gl') : null;
 
