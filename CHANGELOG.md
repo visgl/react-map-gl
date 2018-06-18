@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# Version 3.2.10
+
+- FIX: `captureClick` not working on Popup components
+
 # Version 3.2.9
 
 - NEW: `onContextMenu` prop
