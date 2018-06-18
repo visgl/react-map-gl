@@ -45,13 +45,6 @@ const contextTypes = {
   eventManager: PropTypes.object
 };
 
-const EVENT_MAP = {
-  captureScroll: 'wheel',
-  captureDrag: 'panstart',
-  captureClick: 'click',
-  captureDoubleClick: 'dblclick'
-};
-
 /*
  * PureComponent doesn't update when context changes.
  * The only way is to implement our own shouldComponentUpdate here. Considering
@@ -87,16 +80,12 @@ export default class BaseControl extends Component {
 
     if (ref) {
       // container is mounted: register events for this element
-      events = {};
-
-      for (const propName in EVENT_MAP) {
-        const shouldCapture = this.props[propName];
-        const eventName = EVENT_MAP[propName];
-
-        if (shouldCapture) {
-          events[eventName] = this._captureEvent;
-        }
-      }
+      events = {
+        wheel: this._onScroll.bind(this),
+        panstart: this._onDrag.bind(this),
+        click: this._onClick.bind(this),
+        dblclick: this._onDoubleClick.bind(this)
+      };
 
       eventManager.on(events, ref);
     }
@@ -104,8 +93,28 @@ export default class BaseControl extends Component {
     this._events = events;
   }
 
-  _captureEvent(evt) {
-    evt.stopPropagation();
+  _onScroll(evt) {
+    if (this.props.captureScroll) {
+      evt.stopPropagation();
+    }
+  }
+
+  _onDrag(evt) {
+    if (this.props.captureDrag) {
+      evt.stopPropagation();
+    }
+  }
+
+  _onClick(evt) {
+    if (this.props.captureClick) {
+      evt.stopPropagation();
+    }
+  }
+
+  _onDoubleClick(evt) {
+    if (this.props.captureDoubleClick) {
+      evt.stopPropagation();
+    }
   }
 
   render() {

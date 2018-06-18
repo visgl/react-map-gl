@@ -77,6 +77,8 @@ export default class Popup extends BaseControl {
     this._contentLoaded = this._contentLoaded.bind(this);
     this._renderTip = this._renderTip.bind(this);
     this._renderContent = this._renderContent.bind(this);
+
+    this._closeOnClick = false;
   }
 
   componentDidMount() {
@@ -102,8 +104,27 @@ export default class Popup extends BaseControl {
     return anchor;
   }
 
+  /*
+   * Hack -
+   * React's `onClick` is called before mjolnir.js' `click` event (aka `tap` from hammer.js)
+   * which has a configurable delay.
+   * If we close the popup on the React event, by the time `click` fires, this component will
+   * have been unmounted, thus `captureClick` will not work.
+   * Instead, we flag the popup as closed on the React event, and actually close it on the hammer.js
+   * event.
+   */
+  _onClick(evt) {
+    if (this.props.captureClick) {
+      evt.stopPropagation();
+    }
+
+    if (this.props.closeOnClick || this._closeOnClick) {
+      this.props.onClose();
+    }
+  }
+
   _onClose() {
-    this.props.onClose();
+    this._closeOnClick = true;
   }
 
   _contentLoaded(ref) {
@@ -138,7 +159,7 @@ export default class Popup extends BaseControl {
   }
 
   render() {
-    const {className, longitude, latitude, offsetLeft, offsetTop, closeOnClick} = this.props;
+    const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);
 
@@ -155,8 +176,7 @@ export default class Popup extends BaseControl {
     return createElement('div', {
       className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`,
       style: containerStyle,
-      ref: this._onContainerLoad,
-      onClick: closeOnClick ? this._onClose : null
+      ref: this._onContainerLoad
     }, [
       this._renderTip(),
       this._renderContent()
