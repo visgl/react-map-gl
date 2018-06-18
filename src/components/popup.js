@@ -114,9 +114,11 @@ export default class Popup extends BaseControl {
    * event.
    */
   _onClick(evt) {
-    super._onClick(evt);
+    if (this.props.captureClick) {
+      evt.stopPropagation();
+    }
 
-    if (this._closeOnClick) {
+    if (this.props.closeOnClick || this._closeOnClick) {
       this.props.onClose();
     }
   }
@@ -157,7 +159,7 @@ export default class Popup extends BaseControl {
   }
 
   render() {
-    const {className, longitude, latitude, offsetLeft, offsetTop, closeOnClick} = this.props;
+    const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);
 
@@ -174,8 +176,7 @@ export default class Popup extends BaseControl {
     return createElement('div', {
       className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`,
       style: containerStyle,
-      ref: this._onContainerLoad,
-      onClick: closeOnClick ? this._onClose : null
+      ref: this._onContainerLoad
     }, [
       this._renderTip(),
       this._renderContent()
