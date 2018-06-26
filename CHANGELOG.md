@@ -1,7 +1,14 @@
 # CHANGELOG
 
-# Version 3.3.0-alpha.X
-- Add alternate interaction callback `onViewStateChange`
+# Version 3.3.0-alpha.5
+- Fix captureClick in popup component (#532)
+- Add onContextMenu prop (#529)
+- Support `onViewStateChange` in InteractiveMap and NavigationControl (#518)
+- Bump mapbox version (#530)
+- Fix latitude longitude mismatch (#526)
+- Add support for use in electron environments (#525)
+- Add touchAction prop (#528)
+- Log react-map-gl version number (#524)- Add alternate interaction callback `onViewStateChange`
 
 # Version 3.3.0-alpha.4
 - Fix bug in handling deck.gl style `viewState` prop
