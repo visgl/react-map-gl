@@ -1,39 +1,46 @@
 # CHANGELOG
 
-# Version 3.3.0-alpha.5
-- Fix captureClick in popup component (#532)
-- Add onContextMenu prop (#529)
-- Support `onViewStateChange` in InteractiveMap and NavigationControl (#518)
-- Bump mapbox version (#530)
-- Fix latitude longitude mismatch (#526)
-- Add support for use in electron environments (#525)
-- Add touchAction prop (#528)
-- Log react-map-gl version number (#524)- Add alternate interaction callback `onViewStateChange`
+# Version 3.3.0 (July 4, 2018)
 
-# Version 3.3.0-alpha.4
-- Fix bug in handling deck.gl style `viewState` prop
-- Automatically load missing Mapbox stylesheet
-
-# Version 3.3.0-alpha.3
-- reuseMap prop now respects mapStyles
-- Update main example to babel-loader@8 (#503)
-- upgrade to latest dependencies (#505)
-- code style (#502)
-- add transition props to map state (#500)
-- handle source removal without layer removal (#477)
-- Fix source options comparison (#501)
-
-# Version 3.3.0-alpha.2
-- Move mapbox-gl import from mapbox wrapper to `StaticMap`
-
-# Version 3.3.0-alpha.1
-
-- Remove import of external 'assert' module
-- Upgraded build system, webpack 4 and bundle size instrumentation
-- New es6 dist
+- NEW: `viewState` and `onViewStateChange` prop
+- NEW: Automatically load missing Mapbox stylesheet
+- FIX: `reuseMap` prop now respects mapStyles
+- Log react-map-gl version number
+- Upgraded build system to support webpack 4 tree-shaking
 
 
-# Version 3.2.5 (Mar 13, 2018)
+# Version 3.2.10
+
+- FIX: `captureClick` not working on Popup components
+
+# Version 3.2.9
+
+- NEW: `onContextMenu` prop
+- NEW: `touchAction` prop
+- FIX: support usage in Electron environments
+- NEW: bump `mapbox-gl` version to 0.45
+
+# Version 3.2.8
+
+- FIX: support for to-be-deprecated prop `onChangeViewport` in viewport transition
+- FIX: reused map now applies new mapStyle
+
+# Version 3.2.7
+
+- FIX: Cannot scroll over popups with `captureScroll` turned on
+
+
+# Version 3.2.6
+
+- FIX: `onViewportChange` triggered with nothing changed
+- FIX: mapbox error when attempting to remove sources
+- FIX: flicker when updating clustered GeoJSON source
+
+
+# Version 3.2.5
+
+- Add null check to BaseControl ref callback (#479)
+- Manually bind methods (#463)
 
 
 # Version 3.2.4 (Feb 21, 2018)
