@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# Version 3.3.1 (July 19, 2018)
+
+- Bump math.gl version
+- Move map visibility check to StaticMap
+- Enables extra options to be passed to mapbox-gl constructor
+
 # Version 3.3.0 (July 4, 2018)
 
 - NEW: `viewState` and `onViewStateChange` prop
