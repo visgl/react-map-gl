@@ -232,7 +232,8 @@ export default class StaticMap extends PureComponent {
     const {className, width, height, style, visibilityConstraints} = this.props;
     const mapContainerStyle = Object.assign({}, style, {width, height, position: 'relative'});
 
-    const visible = this.props.visible && checkVisibilityConstraints(this.props, visibilityConstraints);
+    const visible = this.props.visible &&
+      checkVisibilityConstraints(this.props.viewState || this.props, visibilityConstraints);
 
     const mapStyle = Object.assign({}, style, {
       width,
