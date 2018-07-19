@@ -38,7 +38,7 @@
     "bowser": "^1.2.0",
     "immutable": "*",
     "mapbox-gl": "0.45",
-    "math.gl": "^1.1.0",
+    "math.gl": "^2.0.0",
     "mjolnir.js": "^1.2.1",
     "prop-types": "^15.5.7",
     "viewport-mercator-project": "^5.1.0"
