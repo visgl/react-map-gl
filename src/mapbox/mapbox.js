@@ -51,7 +51,8 @@ const propTypes = {
   pitch: PropTypes.number, /** Specify the pitch of the viewport */
 
   // Note: Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
-  altitude: PropTypes.number /** Altitude of the viewport camera. Default 1.5 "screen heights" */
+  altitude: PropTypes.number, /** Altitude of the viewport camera. Default 1.5 "screen heights" */
+  mapOptions: PropTypes.object /** Extra options to pass to Mapbox constructor. See #545. **/
 };
 
 const defaultProps = {
@@ -73,7 +74,9 @@ const defaultProps = {
   altitude: 1.5,
 
   width: 0,
-  height: 0
+  height: 0,
+
+  mapOptions: {}
 };
 
 // Try to get access token from URL, env, local storage or config
@@ -192,7 +195,9 @@ export default class Mapbox {
       if (props.transformRequest) {
         mapOptions.transformRequest = props.transformRequest;
       }
-      this._map = this.map = new props.mapboxgl.Map(mapOptions);
+      this._map = this.map = new props.mapboxgl.Map(
+        Object.assign({}, mapOptions, props.mapOptions));
+
       // Attach optional onLoad function
       this.map.once('load', props.onLoad);
       this.map.on('error', props.onError);
