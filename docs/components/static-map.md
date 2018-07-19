@@ -122,6 +122,13 @@ Expected to return an object with a `url` property and optionally `headers` and 
 An object of additional options to be passed to Mapbox's [`Map` constructor](https://www.mapbox.com/mapbox-gl-js/api/#map). Options specified here
 will take precedence over those same options if set via props.
 
+##### `visibilityConstraints` {Object} ==EXPERIMENTAL==
+
+An object that specifies bounds for viewport props with `min*`, `max*` keys. If the viewport props are outside of these constraints, the Mapbox map is automatically hidden. 
+
+Default: `{ minZoom: 0, maxZoom: 20, minPitch: 0, maxPitch: 60 }`
+
+
 ## Callbacks
 
 ##### `onLoad` {Function} - default: `no-op function`

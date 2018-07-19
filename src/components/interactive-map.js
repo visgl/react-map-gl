@@ -100,15 +100,6 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   /** Accessor that returns a cursor style to show interactive state */
   getCursor: PropTypes.func,
 
-  /** Advanced features */
-  // Contraints for displaying the map. If not met, then the map is hidden.
-  // Experimental! May be changed in minor version updates.
-  visibilityConstraints: PropTypes.shape({
-    minZoom: PropTypes.number,
-    maxZoom: PropTypes.number,
-    minPitch: PropTypes.number,
-    maxPitch: PropTypes.number
-  }),
   // A map control instance to replace the default map controls
   // The object must expose one property: `events` as an array of subscribed
   // event names; and two methods: `setState(state)` and `handle(event)`
@@ -138,9 +129,7 @@ const defaultProps = Object.assign({},
 
     touchAction: 'none',
     clickRadius: 0,
-    getCursor: getDefaultCursor,
-
-    visibilityConstraints: MAPBOX_LIMITS
+    getCursor: getDefaultCursor
   }
 );
 
@@ -179,7 +168,6 @@ export default class InteractiveMap extends PureComponent {
 
     this.getMap = this.getMap.bind(this);
     this.queryRenderedFeatures = this.queryRenderedFeatures.bind(this);
-    this._checkVisibilityConstraints = this._checkVisibilityConstraints.bind(this);
     this._getFeatures = this._getFeatures.bind(this);
     this._onInteractiveStateChange = this._onInteractiveStateChange.bind(this);
     this._getPos = this._getPos.bind(this);
@@ -225,28 +213,6 @@ export default class InteractiveMap extends PureComponent {
 
   queryRenderedFeatures(geometry, options) {
     return this._map.queryRenderedFeatures(geometry, options);
-  }
-
-  // Checks a visibilityConstraints object to see if the map should be displayed
-  _checkVisibilityConstraints(props) {
-    const capitalize = s => s[0].toUpperCase() + s.slice(1);
-
-    const {visibilityConstraints} = props;
-    for (const propName in props) {
-      const capitalizedPropName = capitalize(propName);
-      const minPropName = `min${capitalizedPropName}`;
-      const maxPropName = `max${capitalizedPropName}`;
-
-      if (minPropName in visibilityConstraints &&
-        props[propName] < visibilityConstraints[minPropName]) {
-        return false;
-      }
-      if (maxPropName in visibilityConstraints &&
-        props[propName] > visibilityConstraints[maxPropName]) {
-        return false;
-      }
-    }
-    return true;
   }
 
   _getFeatures({pos, radius}) {
@@ -339,7 +305,6 @@ export default class InteractiveMap extends PureComponent {
         createElement(StaticMap, Object.assign({}, this.props,
           this._transitionManager && this._transitionManager.getViewportInTransition(),
           {
-            visible: this._checkVisibilityConstraints(this.props),
             ref: this._staticMapLoaded,
             children: this.props.children
           }

@@ -27,6 +27,7 @@ import WebMercatorViewport from 'viewport-mercator-project';
 
 import Mapbox from '../mapbox/mapbox';
 import isBrowser from '../utils/is-browser';
+import {checkVisibilityConstraints} from '../utils/map-constraints';
 
 const mapboxgl = isBrowser ? require('mapbox-gl') : null;
 
@@ -48,7 +49,12 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
   /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
   preventStyleDiffing: PropTypes.bool,
   /** Whether the map is visible */
-  visible: PropTypes.bool
+  visible: PropTypes.bool,
+
+  /** Advanced features */
+  // Contraints for displaying the map. If not met, then the map is hidden.
+  // Experimental! May be changed in minor version updates.
+  visibilityConstraints: PropTypes.object
 });
 
 const defaultProps = Object.assign({}, Mapbox.defaultProps, {
@@ -223,8 +229,12 @@ export default class StaticMap extends PureComponent {
   }
 
   render() {
-    const {className, width, height, style, visible} = this.props;
+    const {className, width, height, style, visibilityConstraints} = this.props;
     const mapContainerStyle = Object.assign({}, style, {width, height, position: 'relative'});
+
+    const visible = this.props.visible &&
+      checkVisibilityConstraints(this.props.viewState || this.props, visibilityConstraints);
+
     const mapStyle = Object.assign({}, style, {
       width,
       height,
