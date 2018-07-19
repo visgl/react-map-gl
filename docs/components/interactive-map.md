@@ -212,5 +212,5 @@ Callback that is fired when a transition is complete.
 Same methods as [StaticMap](/docs/components/static-map.md).
 
 ## Source
-[interactive-map.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/interactive-map.js)
+[interactive-map.js](https://github.com/uber/react-map-gl/tree/3.3-release/src/components/interactive-map.js)
 

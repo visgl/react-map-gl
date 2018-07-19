@@ -69,4 +69,4 @@ Invoke `onViewportChange` callback with a new map state.
 
 
 ## Source
-[map-controls.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/utils/map-controls.js)
+[map-controls.js](https://github.com/uber/react-map-gl/tree/3.3-release/src/utils/map-controls.js)

@@ -156,4 +156,4 @@ Parameters:
 
 ## Source
 
-[static-map.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/static-map.js)
+[static-map.js](https://github.com/uber/react-map-gl/tree/3.3-release/src/components/static-map.js)

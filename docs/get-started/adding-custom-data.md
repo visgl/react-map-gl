@@ -73,7 +73,7 @@ import {SVGOverlay, HTMLOverlay, CanvasOverlay} from 'react-map-gl';
 
 ### Example Overlays
 
-There are a couple of [additional overlays](https://github.com/uber/react-map-gl/tree/master/examples/additional-overlays) in the examples folder that can be copied into applications `ScatterplotOverlay`, `DraggablePointsOverlay`, `ChoroplethOverlay`.
+There are a couple of [additional overlays](https://github.com/uber/react-map-gl/tree/3.3-release/examples/additional-overlays) in the examples folder that can be copied into applications `ScatterplotOverlay`, `DraggablePointsOverlay`, `ChoroplethOverlay`.
 
 
 ### Third-party Overlays
@@ -91,4 +91,4 @@ import cities from 'example-cities';
 </MapGL>
 ```
 
-Want to create and share your own overlay? Check the [examples/additional-overlays](https://github.com/uber/react-map-gl/tree/master/examples/additional-overlays) folder for examples.
+Want to create and share your own overlay? Check the [examples/additional-overlays](https://github.com/uber/react-map-gl/tree/3.3-release/examples/additional-overlays) folder for examples.

@@ -31,4 +31,4 @@ Stop propagation of click event to the map component. Can be used to stop map fr
 Stop propagation of dblclick event to the map component. Can be used to stop map from zooming when this component is double clicked.
 
 ## Source
-[html-overlay.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/overlays/html-overlay.js)
+[html-overlay.js](https://github.com/uber/react-map-gl/tree/3.3-release/src/overlays/html-overlay.js)

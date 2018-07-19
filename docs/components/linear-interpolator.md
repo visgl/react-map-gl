@@ -22,5 +22,5 @@ Parameters:
 
 
 ## Source
-[linear-interpolator.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/utils/transition/linear-interpolator.js)
+[linear-interpolator.js](https://github.com/uber/react-map-gl/tree/3.3-release/src/utils/transition/linear-interpolator.js)
 
