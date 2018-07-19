@@ -114,11 +114,6 @@ This object must implement the following interface:
 - `events` - An array of subscribed events
 - `handleEvent(event, context)` - A method that handles interactive events
 
-##### `visibilityConstraints` {Object} ==EXPERIMENTAL==
-
-An object with the bounding `minZoom`, `maxZoom`, `minPitch`, `maxPitch` within which the map should be visible. This will manage automatically toggling the
-`visible` prop in `StaticMap`.
-
 Parameters
 - `event` - The pointer event.
   + `event.lngLat` - The geo coordinates that is being hovered.
