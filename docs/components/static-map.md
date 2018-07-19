@@ -115,6 +115,13 @@ Applications that frequently mount and unmount maps may try this prop to help wo
 A callback run before the Map makes a request for an external URL. The callback can be used to modify the url, set headers, or set the credentials property for cross-origin requests.
 Expected to return an object with a `url` property and optionally `headers` and `credentials` properties.  Equivalent to Mapbox's `transformRequest` [map option](https://www.mapbox.com/mapbox-gl-js/api#map).
 
+##### `mapOptions` {Object} - default: `{}`
+
+> Non-public API, see https://github.com/uber/react-map-gl/issues/545
+
+An object of additional options to be passed to Mapbox's [`Map` constructor](https://www.mapbox.com/mapbox-gl-js/api/#map). Options specified here
+will take precedence over those same options if set via props.
+
 ## Callbacks
 
 ##### `onLoad` {Function} - default: `no-op function`
@@ -143,4 +150,3 @@ Parameters:
 ## Source
 
 [static-map.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/static-map.js)
-
