@@ -1,5 +1,13 @@
 # CHANGELOG
 
+# Version 3.3.2
+- Bump MapboxGl Version (#554)
+
+# Version 3.3.1 
+- Bump Math.gl Version (#549)
+- Move Visibility Check to StaticMap (#548)
+- Pass the `maxTileCacheSize` option to the MapboxGL constructor (#546)   
+
 # Version 3.3.0-alpha.5
 - Fix captureClick in popup component (#532)
 - Add onContextMenu prop (#529)
