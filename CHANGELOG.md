@@ -1,10 +1,19 @@
 # CHANGELOG
 
+# Version 3.3.3 (Aug 3, 2018)
+
+- Fix queryRenderedFeatures (#560)
+- Dcoument compability with create-react-app and Typescript (#540)
+
+# Version 3.3.2 (July 23, 2018)
+
+- Bump MapboxGl Version (#554)
+
 # Version 3.3.1 (July 19, 2018)
 
-- Bump math.gl version
-- Move map visibility check to StaticMap
-- Enables extra options to be passed to mapbox-gl constructor
+- Bump Math.gl Version (#549)
+- Move Visibility Check to StaticMap (#548)
+- Pass the `maxTileCacheSize` option to the MapboxGL constructor (#546)
 
 # Version 3.3.0 (July 4, 2018)
 
