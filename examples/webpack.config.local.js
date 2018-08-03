@@ -22,8 +22,9 @@ const LOCAL_DEVELOPMENT_CONFIG = {
 
   resolve: {
     alias: {
-      // Imports the deck.gl library from the src directory in this repo
+      // Imports the react-map-gl library from the src directory in this repo
       'react-map-gl': SRC_DIR,
+      'mapbox-gl$': resolve(LIB_DIR, './node_modules/mapbox-gl/dist/mapbox-gl-dev.js'),
       react: resolve(LIB_DIR, './node_modules/react')
     }
   },
