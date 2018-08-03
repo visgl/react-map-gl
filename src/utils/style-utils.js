@@ -19,6 +19,9 @@ export function getInteractiveLayerIds(style) {
   return null;
 }
 
+// Prepare a map style object for diffing
+// If immutable - convert to plain object
+// Work around some issues in the styles that would fail Mapbox's diffing
 export function normalizeStyle(style) {
   if (!style) {
     return null;

@@ -1,49 +1,82 @@
 # CHANGELOG
 
-# Version 3.3.0-alpha.5
-- Fix captureClick in popup component (#532)
-- Add onContextMenu prop (#529)
-- Support `onViewStateChange` in InteractiveMap and NavigationControl (#518)
-- Bump mapbox version (#530)
-- Fix latitude longitude mismatch (#526)
-- Add support for use in electron environments (#525)
-- Add touchAction prop (#528)
-- Log react-map-gl version number (#524)- Add alternate interaction callback `onViewStateChange`
 
-# Version 3.3.0-alpha.4
-- Fix bug in handling deck.gl style `viewState` prop
-- Automatically load missing Mapbox stylesheet
+# Version 4.0.0 Prereleases
 
-# Version 3.3.0-alpha.3
-- reuseMap prop now respects mapStyles
-- Update main example to babel-loader@8 (#503)
-- upgrade to latest dependencies (#505)
-- code style (#502)
-- add transition props to map state (#500)
-- handle source removal without layer removal (#477)
-- Fix source options comparison (#501)
+## 4.0.0-alpha.1
 
-# Version 3.3.0-alpha.2
-- Move mapbox-gl import from mapbox wrapper to `StaticMap`
+- Remove immutablejs from dependency
+- Use Mapbox's style diffing
 
-# Version 3.3.0-alpha.1
+# Version 3.3.0
 
-- Remove import of external 'assert' module
-- Upgraded build system, webpack 4 and bundle size instrumentation
-- New es6 dist
+## 3.3.3 (Aug 3, 2018)
+
+- Fix queryRenderedFeatures (#560)
+- Dcoument compability with create-react-app and Typescript (#540)
+
+## 3.3.2 (July 23, 2018)
+
+- Bump MapboxGl Version (#554)
+
+## 3.3.1 (July 19, 2018)
+
+- Bump Math.gl Version (#549)
+- Move Visibility Check to StaticMap (#548)
+- Pass the `maxTileCacheSize` option to the MapboxGL constructor (#546)
+
+## 3.3.0 (July 4, 2018)
+
+- NEW: `viewState` and `onViewStateChange` prop
+- NEW: Automatically load missing Mapbox stylesheet
+- FIX: `reuseMap` prop now respects mapStyles
+- Log react-map-gl version number
+- Upgraded build system to support webpack 4 tree-shaking
+
+# Version 3.2.0
+
+## 3.2.10
+
+- FIX: `captureClick` not working on Popup components
+
+## 3.2.9
+
+- NEW: `onContextMenu` prop
+- NEW: `touchAction` prop
+- FIX: support usage in Electron environments
+- NEW: bump `mapbox-gl` version to 0.45
+
+## 3.2.8
+
+- FIX: support for to-be-deprecated prop `onChangeViewport` in viewport transition
+- FIX: reused map now applies new mapStyle
+
+## 3.2.7
+
+- FIX: Cannot scroll over popups with `captureScroll` turned on
 
 
-# Version 3.2.5 (Mar 13, 2018)
+## 3.2.6
+
+- FIX: `onViewportChange` triggered with nothing changed
+- FIX: mapbox error when attempting to remove sources
+- FIX: flicker when updating clustered GeoJSON source
 
 
-# Version 3.2.4 (Feb 21, 2018)
+## 3.2.5
+
+- Add null check to BaseControl ref callback (#479)
+- Manually bind methods (#463)
+
+
+## 3.2.4 (Feb 21, 2018)
 
 - mapbox-gl 0.44.0
 - Fix `reuseMap` option
 - Add showZoom and showCompass options (#448)
 
 
-### 3.2.0 (January 10, 2018)
+## 3.2.0 (January 10, 2018)
 
 - mapbox-gl 0.42.2
 - Viewport transition: feature equivalent to Mapbox's flyTo and easeTo; smooth transition when using keyboard navigation or the NavigationControl. Add new props `transitionDuration`, `transitionInterpolator`, `transitionEasing`, `transitionInterruption`, `onTransitionStart`, `onTransitionInterrupt`, `onTransitionEnd`
@@ -52,13 +85,14 @@
 - Expose Mapbox's `transformRequest` API
 - Map Reuse (experimental): A new property `reuseMaps` is provided for applications that create and destroy maps, to help work around a mapbox-gl resource leak issue that can lead to a browser crash in certain situations.
 
+
 # Version 3.1
 
-### 3.1.1 (October 20, 2017)
+## 3.1.1 (October 20, 2017)
 
 - FIX: custom events in MapControls
 
-### 3.1.0 (October 19, 2017)
+## 3.1.0 (October 19, 2017)
 
 - Add right mouse button click & drag to rotate
 - Allow controls and overlays to block map interactions
