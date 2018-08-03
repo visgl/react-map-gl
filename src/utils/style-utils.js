@@ -1,6 +1,8 @@
 import isImmutableMap from './is-immutable-map';
 import diffStyles from './diff-styles';
 
+// TODO - remove in the next major release
+// Mapbox dropped the `interactive` property: https://github.com/mapbox/mapbox-gl-js/issues/1479
 export function getInteractiveLayerIds(mapStyle) {
   let interactiveLayerIds = null;
 
