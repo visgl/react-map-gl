@@ -20,7 +20,7 @@
 import {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
 
-import {getInteractiveLayerIds, setDiffStyle} from '../utils/style-utils';
+import {setDiffStyle} from '../utils/style-utils';
 import isImmutableMap from '../utils/is-immutable-map';
 
 import WebMercatorViewport from 'viewport-mercator-project';
@@ -87,7 +87,6 @@ export default class StaticMap extends PureComponent {
 
     this.getMap = this.getMap.bind(this);
     this.queryRenderedFeatures = this.queryRenderedFeatures.bind(this);
-    this._updateQueryParams = this._updateQueryParams.bind(this);
     this._updateMapSize = this._updateMapSize.bind(this);
     this._updateMapStyle = this._updateMapStyle.bind(this);
     this._mapboxMapLoaded = this._mapboxMapLoaded.bind(this);
@@ -111,7 +110,6 @@ export default class StaticMap extends PureComponent {
       mapStyle: isImmutableMap(mapStyle) ? mapStyle.toJS() : mapStyle
     }));
     this._map = this._mapbox.getMap();
-    this._updateQueryParams(mapStyle);
   }
 
   componentWillReceiveProps(newProps) {
@@ -151,20 +149,10 @@ export default class StaticMap extends PureComponent {
     * layer style to `true`.
     * @param {[Number, Number]|[[Number, Number], [Number, Number]]} geometry -
     *   Point or an array of two points defining the bounding box
-    * @param {Object} parameters - query options
+    * @param {Object} options - query options
     */
-  queryRenderedFeatures(geometry, parameters) {
-    const queryParams = parameters || this._queryParams;
-    if (queryParams.layers && queryParams.layers.length === 0) {
-      return [];
-    }
-    return this._map.queryRenderedFeatures(geometry, queryParams);
-  }
-
-  // Hover and click only query layers whose interactive property is true
-  _updateQueryParams(mapStyle) {
-    const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
-    this._queryParams = {layers: interactiveLayerIds};
+  queryRenderedFeatures(geometry, options = {}) {
+    return this._map.queryRenderedFeatures(geometry, options);
   }
 
   // Note: needs to be called after render (e.g. in componentDidUpdate)
@@ -191,7 +179,6 @@ export default class StaticMap extends PureComponent {
       } else {
         this._map.setStyle(mapStyle);
       }
-      this._updateQueryParams(mapStyle);
     }
   }
 

@@ -6,6 +6,7 @@ import {MAPBOX_LIMITS} from '../utils/map-state';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import TransitionManager from '../utils/transition-manager';
+import {getInteractiveLayerIds} from '../utils/style-utils';
 
 import {EventManager} from 'mjolnir.js';
 import MapControls from '../utils/map-controls';
@@ -166,9 +167,12 @@ export default class InteractiveMap extends PureComponent {
       touchAction: props.touchAction
     });
 
+    this._updateQueryParams(props.mapStyle);
+
     this.getMap = this.getMap.bind(this);
     this.queryRenderedFeatures = this.queryRenderedFeatures.bind(this);
     this._getFeatures = this._getFeatures.bind(this);
+    this._updateQueryParams = this._updateQueryParams.bind(this);
     this._onInteractiveStateChange = this._onInteractiveStateChange.bind(this);
     this._getPos = this._getPos.bind(this);
     this._eventCanvasLoaded = this._eventCanvasLoaded.bind(this);
@@ -202,6 +206,10 @@ export default class InteractiveMap extends PureComponent {
   }
 
   componentWillUpdate(nextProps) {
+    if (this.props.mapStyle !== nextProps.mapStyle) {
+      this._updateQueryParams(nextProps.mapStyle);
+    }
+
     const nextPropsWithViewState = Object.assign({}, nextProps, nextProps.viewState);
     this._mapControls.setOptions(nextPropsWithViewState);
     this._transitionManager.processViewportChange(nextPropsWithViewState);
@@ -221,11 +229,17 @@ export default class InteractiveMap extends PureComponent {
       // Radius enables point features, like marker symbols, to be clicked.
       const size = radius;
       const bbox = [[pos[0] - size, pos[1] + size], [pos[0] + size, pos[1] - size]];
-      features = this._map.queryRenderedFeatures(bbox);
+      features = this._map.queryRenderedFeatures(bbox, this._queryParams);
     } else {
-      features = this._map.queryRenderedFeatures(pos);
+      features = this._map.queryRenderedFeatures(pos, this._queryParams);
     }
     return features;
+  }
+
+  // Hover and click only query layers whose interactive property is true
+  _updateQueryParams(mapStyle) {
+    const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
+    this._queryParams = {layers: interactiveLayerIds};
   }
 
   _onInteractiveStateChange({isDragging = false}) {
