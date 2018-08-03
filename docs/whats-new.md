@@ -1,6 +1,15 @@
+# react-map-gl v4.0
+
+Release date: In development, target September, 2018
+
+## Highlights
+
+- **Breaking** Immutable.js is no longer a dependency
+- **Style diffing** Now use Mapbox's native style diffing
+
 # react-map-gl v3.3
 
-Release date: In development, target May 25, 2018
+Release date: July, 2018
 
 ## Highlights
 

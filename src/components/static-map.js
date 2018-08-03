@@ -20,8 +20,7 @@
 import {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
 
-import {setDiffStyle} from '../utils/style-utils';
-import isImmutableMap from '../utils/is-immutable-map';
+import {normalizeStyle} from '../utils/style-utils';
 
 import WebMercatorViewport from 'viewport-mercator-project';
 
@@ -107,7 +106,7 @@ export default class StaticMap extends PureComponent {
       mapboxgl, // Handle to mapbox-gl library
       container: this._mapboxMap,
       onError: this._mapboxMapError,
-      mapStyle: isImmutableMap(mapStyle) ? mapStyle.toJS() : mapStyle
+      mapStyle: normalizeStyle(mapStyle)
     }));
     this._map = this._mapbox.getMap();
   }
@@ -170,15 +169,7 @@ export default class StaticMap extends PureComponent {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
     if (mapStyle !== oldMapStyle) {
-      if (isImmutableMap(mapStyle)) {
-        if (this.props.preventStyleDiffing) {
-          this._map.setStyle(mapStyle.toJS());
-        } else {
-          setDiffStyle(oldMapStyle, mapStyle, this._map);
-        }
-      } else {
-        this._map.setStyle(mapStyle);
-      }
+      this._map.setStyle(normalizeStyle(mapStyle), {diff: !this.props.preventStyleDiffing});
     }
   }
 

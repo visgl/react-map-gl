@@ -1,139 +1,77 @@
-import isImmutableMap from './is-immutable-map';
-import diffStyles from './diff-styles';
 
 // TODO - remove in the next major release
 // Mapbox dropped the `interactive` property: https://github.com/mapbox/mapbox-gl-js/issues/1479
-export function getInteractiveLayerIds(mapStyle) {
-  let interactiveLayerIds = null;
-
-  if (isImmutableMap(mapStyle) && mapStyle.has('layers')) {
-    interactiveLayerIds = mapStyle.get('layers')
-      .filter(l => l.get('interactive'))
-      .map(l => l.get('id'))
-      .toJS();
-  } else if (Array.isArray(mapStyle.layers)) {
-    interactiveLayerIds = mapStyle.layers.filter(l => l.interactive)
-      .map(l => l.id);
+export function getInteractiveLayerIds(style) {
+  if (!style) {
+    return null;
+  }
+  if (typeof style === 'string') {
+    return null;
+  }
+  if (style.toJS) {
+    style = style.toJS();
   }
 
-  return interactiveLayerIds;
+  if (Array.isArray(style.layers)) {
+    return style.layers.filter(l => l.interactive).map(l => l.id);
+  }
+
+  return null;
 }
 
-// Individually update the maps source and layers that have changed if all
-// other style props haven't changed. This prevents flicking of the map when
-// styles only change sources or layers.
-/* eslint-disable max-statements, complexity */
-export function setDiffStyle(prevStyle, nextStyle, map) {
-  const prevKeysMap = prevStyle && styleKeysMap(prevStyle) || {};
-  const nextKeysMap = styleKeysMap(nextStyle);
-  function styleKeysMap(style) {
-    return style.map(() => true).delete('layers').delete('sources').toJS();
+// Prepare a map style object for diffing
+// If immutable - convert to plain object
+// Work around some issues in the styles that would fail Mapbox's diffing
+export function normalizeStyle(style) {
+  if (!style) {
+    return null;
   }
-  function propsOtherThanLayersOrSourcesDiffer() {
-    const prevKeysList = Object.keys(prevKeysMap);
-    const nextKeysList = Object.keys(nextKeysMap);
-    if (prevKeysList.length !== nextKeysList.length) {
-      return true;
-    }
-    // `nextStyle` and `prevStyle` should not have the same set of props.
-    if (nextKeysList.some(
-      key => prevStyle.get(key) !== nextStyle.get(key)
-      // But the value of one of those props is different.
-    )) {
-      return true;
-    }
-    return false;
+  if (typeof style === 'string') {
+    return style;
   }
-
-  if (!prevStyle || propsOtherThanLayersOrSourcesDiffer()) {
-    map.setStyle(nextStyle.toJS());
-    return;
+  if (style.toJS) {
+    style = style.toJS();
   }
+  const layerIndex = style.layers.reduce(
+    (accum, current) => Object.assign(accum, {[current.id]: current}),
+    {}
+  );
 
-  const {sourcesDiff, layersDiff} = diffStyles(prevStyle, nextStyle);
-  checkForEqualLayerSourceChanges(sourcesDiff.exit, nextStyle.get('layers'));
-  applySourceLayerChanges(map, nextStyle, sourcesDiff, layersDiff);
-}
+  style.layers = style.layers.map(layer => {
+    layer = Object.assign({}, layer);
 
-/* eslint-enable max-statements, complexity */
+    // Breaks style diffing :(
+    delete layer.interactive;
 
-// Update a source in the map style
-function updateStyleSource(map, update) {
-  const newSource = update.source.toJS();
-  if (newSource.type === 'geojson') {
-    const oldSource = map.getSource(update.id);
-    if (oldSource.type === 'geojson') {
-      // update data if no other GeoJSONSource options were changed
-      const oldOpts = oldSource.workerOptions;
-      // GeoJSONSource class scales user options before assigning to workerOptions
-      // https://github.com/mapbox/mapbox-gl-js/blob/master/src/source/geojson_source.js
-      const scale = oldOpts.geojsonVtOptions.extent / 512;
-
-      if (
-        (newSource.maxzoom === undefined ||
-          newSource.maxzoom === oldOpts.geojsonVtOptions.maxZoom) &&
-        (newSource.buffer === undefined ||
-          newSource.buffer === oldOpts.geojsonVtOptions.buffer / scale) &&
-        (newSource.tolerance === undefined ||
-          newSource.tolerance === oldOpts.geojsonVtOptions.tolerance / scale) &&
-        (newSource.cluster === undefined ||
-          newSource.cluster === oldOpts.cluster) &&
-        (newSource.clusterRadius === undefined ||
-          newSource.clusterRadius === oldOpts.superclusterOptions.radius / scale) &&
-        (newSource.clusterMaxZoom === undefined ||
-          newSource.clusterMaxZoom === oldOpts.superclusterOptions.maxZoom)
-      ) {
-        oldSource.setData(newSource.data);
-        return;
+    const layerRef = layerIndex[layer.ref];
+    // Style diffing doesn't work with refs so expand them out manually before diffing.
+    if (layerRef) {
+      delete layer.ref;
+      if (layerRef.type !== undefined) {
+        layer.type = layerRef.type;
+      }
+      if (layerRef.source !== undefined) {
+        layer.source = layerRef.source;
+      }
+      if (layerRef['source-layer'] !== undefined) {
+        layer['source-layer'] = layerRef['source-layer'];
+      }
+      if (layerRef.minzoom !== undefined) {
+        layer.minzoom = layerRef.minzoom;
+      }
+      if (layerRef.maxzoom !== undefined) {
+        layer.maxzoom = layerRef.maxzoom;
+      }
+      if (layerRef.filter !== undefined) {
+        layer.filter = layerRef.filter;
+      }
+      if (layerRef.layout !== undefined) {
+        layer.layout = layer.layout || {};
+        layer.layout = Object.assign({}, layer.layout, layerRef.layout);
       }
     }
-  }
+    return layer;
+  });
 
-  map.removeSource(update.id);
-  map.addSource(update.id, newSource);
-}
-
-function applySourceLayerChanges(map, nextStyle, sourcesDiff, layersDiff) {
-// TODO: It's rather difficult to determine style diffing in the presence
-  // of refs. For now, if any style update has a ref, fallback to no diffing.
-  // We can come back to this case if there's a solid usecase.
-  if (layersDiff.updates.some(node => node.layer.get('ref'))) {
-    map.setStyle(nextStyle.toJS());
-    return;
-  }
-
-  for (const enter of sourcesDiff.enter) {
-    map.addSource(enter.id, enter.source.toJS());
-  }
-  for (const update of sourcesDiff.update) {
-    updateStyleSource(map, update);
-  }
-
-  for (const exit of layersDiff.exiting) {
-    if (map.style.getLayer(exit.id)) {
-      map.removeLayer(exit.id);
-    }
-  }
-  for (const update of layersDiff.updates) {
-    if (!update.enter) {
-      // This is an old layer that needs to be updated. Remove the old layer
-      // with the same id and add it back again.
-      map.removeLayer(update.id);
-    }
-    map.addLayer(update.layer.toJS(), update.before);
-  }
-
-  for (const exit of sourcesDiff.exit) {
-    map.removeSource(exit.id);
-  }
-}
-
-/* eslint-disable max-len */
-function checkForEqualLayerSourceChanges(sourceExit, nextLayers) {
-  const sourceIds = sourceExit.map(s => s.id);
-  const layersNotRemoved = nextLayers.filter(lyr => sourceIds.includes(lyr.get('source')));
-  if (layersNotRemoved.size) {
-    // because of this, no source/layer changes will take effect if there is an error
-    throw new Error(`You must remove any layers associated with sources you are removing: ${layersNotRemoved.map(l => l.get('id')).toJS().join('')}`);
-  }
+  return style;
 }
