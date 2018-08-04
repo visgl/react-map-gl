@@ -38,7 +38,6 @@ export default class SVGOverlay extends BaseControl {
   render() {
     const {viewport, isDragging} = this.context;
     const style = Object.assign({
-      pointerEvents: 'none',
       position: 'absolute',
       left: 0,
       top: 0
