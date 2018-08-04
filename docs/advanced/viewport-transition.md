@@ -11,6 +11,8 @@ import d3 from 'd3-ease';
 class MyApp extends React.Component {
     state = {
         viewport: {
+            width: 800,
+            heigh: 600,
             longitude: -122.45
             latitude: 37.78,
             zoom: 14
@@ -58,7 +60,7 @@ import WebMercatorViewport from 'viewport-mercator-project';
 
 ```js
     _goToSF = () => {
-        const {longitude, latitude, zoom} = new WebMercatorViewport({width: this.state.width, height: this.state.height})
+        const {longitude, latitude, zoom} = new WebMercatorViewport(this.state.viewport)
             .fitBounds([[-122.4, 37.7], [-122.5, 37.8]], {
               padding: 20,
               offset: [0, -100]
