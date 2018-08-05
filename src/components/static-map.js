@@ -47,6 +47,8 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
   ]),
   /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
   preventStyleDiffing: PropTypes.bool,
+  /** Hide invalid token warning even if request fails */
+  disableTokenWarning: PropTypes.bool,
   /** Whether the map is visible */
   visible: PropTypes.bool,
 
@@ -188,7 +190,7 @@ export default class StaticMap extends PureComponent {
   }
 
   _renderNoTokenWarning() {
-    if (this.state.accessTokenInvalid) {
+    if (this.state.accessTokenInvalid && !this.props.disableTokenWarning) {
       const style = {
         position: 'absolute',
         left: 0,

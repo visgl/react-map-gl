@@ -102,6 +102,10 @@ This allows apps to update data sources and layer styles efficiently. In use cas
 
 There are known issues with style diffing. As stopgap, use this option to prevent style diffing.
 
+##### `disableTokenWarning` {Bool} - default `false`
+
+If the provided API access token is rejected by Mapbox, `StaticMap` renders a warning instead of failing silently. If you know what you are doing and want to hide this warning anyways, set this prop to `true`.
+
 ##### `reuseMaps` {Bool} - default: `false`
 
 > This prop is experimental.
