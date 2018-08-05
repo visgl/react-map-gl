@@ -2,6 +2,12 @@
 
 # Version 3.3.0
 
+## 3.3.4 (Aug 4, 2018)
+
+- Add `fitBounds` util to docs (#563)
+- add disableTokenWarning prop (#564)
+- fix capture* props for overlay components (#565)
+
 ## 3.3.3 (Aug 3, 2018)
 
 - Fix queryRenderedFeatures (#560)
