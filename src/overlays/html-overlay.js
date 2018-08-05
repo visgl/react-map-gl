@@ -39,7 +39,6 @@ export default class HTMLOverlay extends BaseControl {
     const {viewport, isDragging} = this.context;
     const style = Object.assign({
       position: 'absolute',
-      pointerEvents: 'none',
       left: 0,
       top: 0,
       width: viewport.width,
