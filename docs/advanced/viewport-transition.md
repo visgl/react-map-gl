@@ -10,9 +10,13 @@ import d3 from 'd3-ease';
 
 class MyApp extends React.Component {
     state = {
-        longitude: -122.45
-        latitude: 37.78,
-        zoom: 14
+        viewport: {
+            width: 800,
+            heigh: 600,
+            longitude: -122.45
+            latitude: 37.78,
+            zoom: 14
+        }
     };
 
     _onViewportChange = viewport => {
@@ -44,6 +48,38 @@ class MyApp extends React.Component {
 ```
 
 See [viewport animation](#examples/viewport-animation) for a complete example.
+
+
+## Transition Viewport To A Bounding Box
+
+You can use the `WebMercatorViewport` utility to find the target viewport that fits around a lngLat bounding box:
+
+```js
+import WebMercatorViewport from 'viewport-mercator-project';
+```
+
+```js
+    _goToSF = () => {
+        const {longitude, latitude, zoom} = new WebMercatorViewport(this.state.viewport)
+            .fitBounds([[-122.4, 37.7], [-122.5, 37.8]], {
+              padding: 20,
+              offset: [0, -100]
+            });
+        const viewport = {
+            ...this.state.viewport,
+            longitude,
+            latitude,
+            zoom,
+            transitionDuration: 5000,
+            transitionInterpolator: new FlyToInterpolator(),
+            transitionEasing: d3.easeCubic
+        }
+        this.setState({viewport});
+    };
+```
+
+[Documentation of WebMercatorViewport](https://uber-common.github.io/viewport-mercator-project/#/documentation/api-reference/webmercatorviewport)
+
 
 ## InteractiveMap's Transition Props
 
