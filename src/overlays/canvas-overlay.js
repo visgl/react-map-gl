@@ -87,7 +87,6 @@ export default class CanvasOverlay extends BaseControl {
           width: `${width}px`,
           height: `${height}px`,
           position: 'absolute',
-          pointerEvents: 'none',
           left: 0,
           top: 0
         }
