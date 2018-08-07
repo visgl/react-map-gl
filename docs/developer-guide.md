@@ -61,6 +61,8 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
 
 ### New Release Branch Checklist
 
+> NOTE: for authorized team members only
+
 - [ ] Push to new `<latest>-release` branch
 - [ ] Update the dependencies of examples to the latest minor/major version
 - [ ] Update the links in all documentation to point to the new branch
@@ -69,6 +71,8 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
 
 
 ## Publish
+
+> NOTE: for authorized team members only
 
 ### Production Release
 
@@ -166,7 +170,7 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
 
 4. And add new commit messages to CHANGELOG.md.
 
-5. Manually bump the verion in `package.json` to the next pre-release version.
+5. Manually bump the version in `package.json` to the next pre-release version.
 
 6. Commit and publish:
 
@@ -179,7 +183,7 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
 
 ### Website
 
-1. Make sure the `<latest>-release` branch is up to daate:
+1. Make sure the `<latest>-release` branch is up to date:
 
     ```bash
     $ git checkout 3.3-release
