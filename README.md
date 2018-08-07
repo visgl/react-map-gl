@@ -66,3 +66,7 @@ There are several ways to provide a token to your app, as showcased in some of t
 * Provide it in the URL, e.g `?access_token=TOKEN`
 
 But we would recommend using something like [dotenv](https://github.com/motdotla/dotenv) and put your key in an untracked `.env` file, that will then expose it as a `process.env` variable, with much less leaking risks.
+
+### Contribute
+
+See [developer guide](docs/developer-guide.md).

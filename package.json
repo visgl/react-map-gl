@@ -24,6 +24,8 @@
   "scripts": {
     "start": "(cd examples/main && (path-exists node_modules || npm i) && npm run start-local)",
     "build": "./scripts/build.sh && ./scripts/collect-metrics.sh",
+    "preversion": "npm run test",
+    "postversion": "git push && git push --tags",
     "publish-prod": "npm run build && npm run test && npm publish",
     "publish-beta": "npm run build && npm run test && npm publish --tag beta",
     "lint": "eslint src test && npm run lint-yarn",
