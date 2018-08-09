@@ -69,12 +69,9 @@ Possible fields include:
 
 - `interactionState.inTransition` (Boolean)
 - `interactionState.isDragging` (Boolean)
-- `interactionState.isPanning` (Boolean)
-- `interactionState.isZooming` (Boolean)
-- `interactionState.isRotating` (Boolean)
 
 Note:
-* `onInteractionStateChange` may be fired without `onViewportChange`. For example, when the pointer is released at the end of a drag-pan, `isDragging` and `isPanning` are reset to `false`, without the viewport's `longitude` and `latitude` changing.
+* `onInteractionStateChange` may be fired without `onViewportChange`. For example, when the pointer is released at the end of a drag-pan, `isDragging` are reset to `false`, without the viewport's `longitude` and `latitude` changing.
 
 
 ##### `maxZoom` {Number} [default: 20]
