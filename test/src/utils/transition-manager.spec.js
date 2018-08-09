@@ -88,7 +88,7 @@ test('TransitionManager#callbacks', t => {
         'viewport matches end props');
       endCount++;
     },
-    onViewportChange: newViewport => {
+    onViewStateChange: ({viewState: newViewport}) => {
       t.ok(!transitionInterpolator.arePropsEqual(viewport, newViewport),
         'viewport has changed');
       viewport = newViewport;

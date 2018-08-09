@@ -102,16 +102,9 @@ export default class MapControls {
       srcEvent.ctrlKey || srcEvent.shiftKey);
   }
 
-  setState(newState) {
-    Object.assign(this._state, newState);
-    if (this.onStateChange) {
-      this.onStateChange(this._state);
-    }
-  }
-
   /* Callback util */
   // formats map state and invokes callback function
-  updateViewport(newMapState, extraProps = {}, extraState = {}) {
+  updateViewport(newMapState, extraProps = {}, interactionState = {}) {
     const oldViewport = this.mapState ? this.mapState.getViewportProps() : {};
     const newViewport = Object.assign({}, newMapState.getViewportProps(), extraProps);
 
@@ -120,15 +113,22 @@ export default class MapControls {
 
     // viewState has changed
     if (viewStateChanged && this.onViewStateChange) {
-      this.onViewStateChange({viewState: newViewport});
+      this.onViewStateChange({
+        viewState: newViewport,
+        oldViewState: oldViewport,
+        interactionState
+      });
     }
 
-    // viewport has changed
-    if (viewStateChanged && this.onViewportChange) {
-      this.onViewportChange(newViewport);
-    }
+    Object.assign(
+      this._state,
+      newMapState.getInteractiveState(),
+      interactionState
+    );
 
-    this.setState(Object.assign({}, newMapState.getInteractiveState(), extraState));
+    if (this.onInteractionStateChange) {
+      this.onInteractionStateChange(this._state);
+    }
   }
 
   getMapState(overrides) {
@@ -140,15 +140,14 @@ export default class MapControls {
    */
   setOptions(options) {
     const {
-      // TODO(deprecate): remove this when `onChangeViewport` gets deprecated
-      onChangeViewport,
       // TODO(deprecate): remove this when `touchZoomRotate` gets deprecated
       touchZoomRotate = true,
 
       onViewStateChange,
-      onViewportChange,
-      onStateChange = this.onStateChange,
+      onInteractionStateChange,
       eventManager = this.eventManager,
+
+      isInteractive = true,
       scrollZoom = true,
       dragPan = true,
       dragRotate = true,
@@ -159,9 +158,7 @@ export default class MapControls {
     } = options;
 
     this.onViewStateChange = onViewStateChange;
-    // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
-    this.onViewportChange = onViewportChange || onChangeViewport;
-    this.onStateChange = onStateChange;
+    this.onInteractionStateChange = onInteractionStateChange;
 
     if (this.mapStateProps && this.mapStateProps.height !== options.height) {
       // Dimensions changed, normalize the props
@@ -175,7 +172,6 @@ export default class MapControls {
       this._events = {};
       this.toggleEvents(this.events, true);
     }
-    const isInteractive = Boolean(this.onViewStateChange || this.onViewportChange);
 
     // Register/unregister events
     this.toggleEvents(EVENT_TYPES.WHEEL, isInteractive && scrollZoom);

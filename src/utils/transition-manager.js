@@ -49,6 +49,10 @@ export default class TransitionManager {
     // Set this.props here as '_triggerTransition' calls '_updateViewport' that uses this.props.
     this.props = nextProps;
 
+    if (!currentProps) {
+      return false;
+    }
+
     // NOTE: Be cautious re-ordering statements in this function.
     if (this._shouldIgnoreViewportChange(currentProps, nextProps)) {
       return transitionTriggered;
@@ -164,14 +168,12 @@ export default class TransitionManager {
     const mapState = new MapState(Object.assign({}, this.props, viewport));
     this.state.propsInTransition = mapState.getViewportProps();
 
-    // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
-    const onViewportChange = this.props.onViewportChange || this.props.onChangeViewport;
-    if (onViewportChange) {
-      onViewportChange(this.state.propsInTransition);
-    }
-
     if (this.props.onViewStateChange) {
-      this.props.onViewStateChange({viewState: this.state.propsInTransition});
+      this.props.onViewStateChange({
+        viewState: this.state.propsInTransition,
+        oldViewState: this.props,
+        interactionState: {inTransition: true}
+      });
     }
 
     if (shouldEnd) {
