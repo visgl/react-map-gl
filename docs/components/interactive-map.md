@@ -31,29 +31,39 @@ class Map extends Component {
 
 Has all properties of [StaticMap](/docs/components/static-map.md) and the following:
 
-##### `onViewStateChange` {Function}
-
-Callback that is fired when the user interacted with the map.
-
-`onViewStateChange({viewState})`
-
-The object passed to the callback contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
-
-If the map is intended to be interactive, the app uses this prop to listen to map updates and update the props accordingly.
-
-Note:
-* `onViewStateChange` is a newer version of the `onViewportChange` callback. Both are supported and provide equivalent functionality.
-
 ##### `onViewportChange` {Function}
 
 Callback that is fired when the user interacted with the map.
 
-`onViewportChange(viewState)`
+`onViewportChange(viewState, interactionState, oldViewState)`
 
-The object passed to the callback contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
+Arguments: 
+
+- `viewState` {Object} The next viewport properties, including: `width`, `height`, `latitude`, `longitude`, `zoom`, `bearing`, `pitch`, `altitude`, `maxZoom`, `minZoom`, `maxPitch`, `minPitch`, `transitionDuration`, `transitionEasing`, `transitionInterpolator`, `transitionInterruption`.
+- `interactionState` {Object} Describes the interaction that caused this viewport change. May contain the following fields:
+  + `interactionState.isDragging` (Boolean)
+  + `interactionState.isPanning` (Boolean)
+  + `interactionState.isZooming` (Boolean)
+  + `interactionState.isRotating` (Boolean)
+- `oldViewState` {Object} The current viewport properties.
 
 Note:
-* Even if the newer `onViewStateChange` callback is supplied, the `onViewportChange` callback will still be called if supplied.
+* Even if both `onViewStateChange` and `onViewportChange` callbacks are supplied, they will both be called during an update.
+
+
+##### `onViewStateChange` {Function}
+
+Callback that is fired when the user interacted with the map.
+
+`onViewStateChange({viewState, interactionState, oldViewState})`
+
+If the map is intended to be interactive, the app uses this prop to listen to map updates and update the props accordingly.
+
+See `onViewportChange` for details of the arguments.
+
+Note:
+* `onViewStateChange` is a newer version of the `onViewportChange` callback. Both are supported and provide equivalent functionality.
+
 
 ##### `maxZoom` {Number} [default: 20]
 
