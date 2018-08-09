@@ -20,7 +20,7 @@
 
 import MapState from './map-state';
 import {LinearInterpolator} from './transition';
-import {TRANSITION_EVENTS} from './transition-manager';
+import TransitionManager, {TRANSITION_EVENTS} from './transition-manager';
 
 const NO_TRANSITION_PROPS = {
   transitionDuration: 0
@@ -54,8 +54,10 @@ export default class MapControls {
     this._state = {
       isDragging: false
     };
+    this._transitionManager = new TransitionManager();
     this.events = [];
     this.handleEvent = this.handleEvent.bind(this);
+    this.setState = this.setState.bind(this);
   }
 
   /**
@@ -102,9 +104,16 @@ export default class MapControls {
       srcEvent.ctrlKey || srcEvent.shiftKey);
   }
 
+  setState(newState) {
+    Object.assign(this._state, newState);
+    if (this.onStateChange) {
+      this.onStateChange(this._state);
+    }
+  }
+
   /* Callback util */
   // formats map state and invokes callback function
-  updateViewport(newMapState, extraProps = {}, interactionState = {}) {
+  updateViewport(newMapState, extraProps = {}, extraState = {}) {
     const oldViewport = this.mapState ? this.mapState.getViewportProps() : {};
     const newViewport = Object.assign({}, newMapState.getViewportProps(), extraProps);
 
@@ -112,23 +121,13 @@ export default class MapControls {
       Object.keys(newViewport).some(key => oldViewport[key] !== newViewport[key]);
 
     // viewState has changed
-    if (viewStateChanged && this.onViewStateChange) {
-      this.onViewStateChange({
-        viewState: newViewport,
-        oldViewState: oldViewport,
-        interactionState
-      });
+    if (viewStateChanged) {
+      this.onViewportChange(newViewport, extraState, oldViewport);
     }
 
-    Object.assign(
-      this._state,
-      newMapState.getInteractiveState(),
-      interactionState
-    );
+    this.setState(Object.assign({}, newMapState.getInteractiveState(), extraState));
 
-    if (this.onInteractionStateChange) {
-      this.onInteractionStateChange(this._state);
-    }
+    return true;
   }
 
   getMapState(overrides) {
@@ -143,8 +142,8 @@ export default class MapControls {
       // TODO(deprecate): remove this when `touchZoomRotate` gets deprecated
       touchZoomRotate = true,
 
-      onViewStateChange,
-      onInteractionStateChange,
+      onViewportChange,
+      onStateChange,
       eventManager = this.eventManager,
 
       isInteractive = true,
@@ -157,8 +156,8 @@ export default class MapControls {
       keyboard = true
     } = options;
 
-    this.onViewStateChange = onViewStateChange;
-    this.onInteractionStateChange = onInteractionStateChange;
+    this.onViewportChange = onViewportChange;
+    this.onStateChange = onStateChange;
 
     if (this.mapStateProps && this.mapStateProps.height !== options.height) {
       // Dimensions changed, normalize the props
@@ -166,6 +165,11 @@ export default class MapControls {
     }
 
     this.mapStateProps = options;
+    // Update transition
+    this._transitionManager.processViewportChange(Object.assign({}, options, {
+      onStateChange: this.setState
+    }));
+
     if (this.eventManager !== eventManager) {
       // EventManager has changed
       this.eventManager = eventManager;
