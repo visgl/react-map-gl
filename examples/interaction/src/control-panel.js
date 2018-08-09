@@ -40,9 +40,21 @@ export default class ControlPanel extends PureComponent {
     }
   }
 
+  _renderInteractionStates({isDragging, isPanning, isRotating, isZooming, inTransition}) {
+    return (
+      <div>
+        <div><label>Dragging</label><span>{isDragging && 'Yes'}</span></div>
+        <div><label>Transition</label><span>{inTransition && 'Yes'}</span></div>
+        <div><label>Panning</label><span>{isPanning && 'Yes'}</span></div>
+        <div><label>Rotating</label><span>{isRotating && 'Yes'}</span></div>
+        <div><label>Zooming</label><span>{isZooming && 'Yes'}</span></div>
+      </div>
+    );
+  }
+
   render() {
     const Container = this.props.containerComponent || defaultContainer;
-    const {settings} = this.props;
+    const {settings, interactionState} = this.props;
 
     return (
       <Container>
@@ -54,6 +66,11 @@ export default class ControlPanel extends PureComponent {
         <hr />
 
         { Object.keys(settings).map(name => this._renderSetting(name, settings[name])) }
+
+        <hr />
+
+        { this._renderInteractionStates(interactionState) }
+
       </Container>
     );
   }
