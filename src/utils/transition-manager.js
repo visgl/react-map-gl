@@ -18,7 +18,9 @@ const DEFAULT_PROPS = {
   transitionInterruption: TRANSITION_EVENTS.BREAK,
   onTransitionStart: noop,
   onTransitionInterrupt: noop,
-  onTransitionEnd: noop
+  onTransitionEnd: noop,
+  onViewportChange: noop,
+  onStateChange: noop
 };
 
 const DEFAULT_STATE = {
@@ -48,6 +50,10 @@ export default class TransitionManager {
     const currentProps = this.props;
     // Set this.props here as '_triggerTransition' calls '_updateViewport' that uses this.props.
     this.props = nextProps;
+
+    if (!currentProps) {
+      return false;
+    }
 
     // NOTE: Be cautious re-ordering statements in this function.
     if (this._shouldIgnoreViewportChange(currentProps, nextProps)) {
@@ -133,6 +139,7 @@ export default class TransitionManager {
     };
 
     this._onTransitionFrame();
+    this.props.onStateChange({inTransition: true});
   }
 
   _onTransitionFrame() {
@@ -144,6 +151,7 @@ export default class TransitionManager {
   _endTransition() {
     cancelAnimationFrame(this.state.animation);
     this.state = DEFAULT_STATE;
+    this.props.onStateChange({inTransition: false});
   }
 
   _updateViewport() {
@@ -164,15 +172,7 @@ export default class TransitionManager {
     const mapState = new MapState(Object.assign({}, this.props, viewport));
     this.state.propsInTransition = mapState.getViewportProps();
 
-    // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
-    const onViewportChange = this.props.onViewportChange || this.props.onChangeViewport;
-    if (onViewportChange) {
-      onViewportChange(this.state.propsInTransition);
-    }
-
-    if (this.props.onViewStateChange) {
-      this.props.onViewStateChange({viewState: this.state.propsInTransition});
-    }
+    this.props.onViewportChange(this.state.propsInTransition, {inTransition: true}, this.props);
 
     if (shouldEnd) {
       this._endTransition();

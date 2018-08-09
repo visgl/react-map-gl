@@ -88,9 +88,10 @@ test('TransitionManager#callbacks', t => {
         'viewport matches end props');
       endCount++;
     },
-    onViewportChange: newViewport => {
+    onViewportChange: (newViewport, interactionState) => {
       t.ok(!transitionInterpolator.arePropsEqual(viewport, newViewport),
         'viewport has changed');
+      t.ok(interactionState.inTransition, 'inTransition flag is true');
       viewport = newViewport;
       // update props in transition, should not trigger interruption
       transitionManager.processViewportChange(Object.assign({}, transitionProps, viewport));

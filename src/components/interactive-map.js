@@ -30,6 +30,7 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   // contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
   onViewStateChange: PropTypes.func,
   onViewportChange: PropTypes.func,
+  onInteractionStateChange: PropTypes.func,
 
   /** Viewport transition **/
   // transition duration for viewport change
@@ -173,7 +174,8 @@ export default class InteractiveMap extends PureComponent {
     this.queryRenderedFeatures = this.queryRenderedFeatures.bind(this);
     this._getFeatures = this._getFeatures.bind(this);
     this._updateQueryParams = this._updateQueryParams.bind(this);
-    this._onInteractiveStateChange = this._onInteractiveStateChange.bind(this);
+    this._onViewportChange = this._onViewportChange.bind(this);
+    this._onInteractionStateChange = this._onInteractionStateChange.bind(this);
     this._getPos = this._getPos.bind(this);
     this._eventCanvasLoaded = this._eventCanvasLoaded.bind(this);
     this._staticMapLoaded = this._staticMapLoaded.bind(this);
@@ -197,12 +199,7 @@ export default class InteractiveMap extends PureComponent {
       contextmenu: this._onContextMenu.bind(this)
     });
 
-    this._mapControls.setOptions(Object.assign({}, this.props, this.props.viewState, {
-      onStateChange: this._onInteractiveStateChange,
-      eventManager
-    }));
-
-    this._transitionManager = new TransitionManager(this.props);
+    this._setControllerProps(this.props);
   }
 
   componentWillUpdate(nextProps) {
@@ -210,9 +207,7 @@ export default class InteractiveMap extends PureComponent {
       this._updateQueryParams(nextProps.mapStyle);
     }
 
-    const nextPropsWithViewState = Object.assign({}, nextProps, nextProps.viewState);
-    this._mapControls.setOptions(nextPropsWithViewState);
-    this._transitionManager.processViewportChange(nextPropsWithViewState);
+    this._setControllerProps(nextProps);
   }
 
   getMap() {
@@ -221,6 +216,18 @@ export default class InteractiveMap extends PureComponent {
 
   queryRenderedFeatures(geometry, options) {
     return this._map.queryRenderedFeatures(geometry, options);
+  }
+
+  _setControllerProps(props) {
+    props = Object.assign({}, props, props.viewState, {
+      isInteractive: Boolean(props.onViewStateChange ||
+        props.onViewportChange || props.onChangeViewport),
+      onViewportChange: this._onViewportChange,
+      onStateChange: this._onInteractionStateChange,
+      eventManager: this._eventManager
+    });
+
+    this._mapControls.setOptions(props);
   }
 
   _getFeatures({pos, radius}) {
@@ -242,9 +249,27 @@ export default class InteractiveMap extends PureComponent {
     this._queryParams = {layers: interactiveLayerIds};
   }
 
-  _onInteractiveStateChange({isDragging = false}) {
+  _onInteractionStateChange(interactionState) {
+    const {isDragging = false} = interactionState;
     if (isDragging !== this.state.isDragging) {
       this.setState({isDragging});
+    }
+
+    const {onInteractionStateChange} = this.props;
+    if (onInteractionStateChange) {
+      onInteractionStateChange(interactionState);
+    }
+  }
+
+  _onViewportChange(viewState, interactionState, oldViewState) {
+    const onViewStateChange = this.props.onViewStateChange;
+    const onViewportChange = this.props.onViewportChange || this.props.onChangeViewport;
+
+    if (onViewStateChange) {
+      onViewStateChange({viewState, interactionState, oldViewState});
+    }
+    if (onViewportChange) {
+      onViewportChange(viewState, interactionState, oldViewState);
     }
   }
 
@@ -317,7 +342,6 @@ export default class InteractiveMap extends PureComponent {
         style: eventCanvasStyle
       },
         createElement(StaticMap, Object.assign({}, this.props,
-          this._transitionManager && this._transitionManager.getViewportInTransition(),
           {
             ref: this._staticMapLoaded,
             children: this.props.children

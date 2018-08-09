@@ -33,27 +33,46 @@ Has all properties of [StaticMap](/docs/components/static-map.md) and the follow
 
 ##### `onViewStateChange` {Function}
 
-Callback that is fired when the user interacted with the map.
+Callback that is fired when the map's viewport properties should be updated.
 
-`onViewStateChange({viewState})`
-
-The object passed to the callback contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
+`onViewStateChange({viewState, interactionState, oldViewState})`
 
 If the map is intended to be interactive, the app uses this prop to listen to map updates and update the props accordingly.
+
+See `onViewportChange` for details of the arguments.
 
 Note:
 * `onViewStateChange` is a newer version of the `onViewportChange` callback. Both are supported and provide equivalent functionality.
 
 ##### `onViewportChange` {Function}
 
-Callback that is fired when the user interacted with the map.
+Callback that is fired when the map's viewport properties should be updated.
 
-`onViewportChange(viewState)`
+`onViewportChange(viewState, interactionState, oldViewState)`
 
-The object passed to the callback contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
+Arguments: 
+
+- `viewState` {Object} The next viewport properties, including: `width`, `height`, `latitude`, `longitude`, `zoom`, `bearing`, `pitch`, `altitude`, `maxZoom`, `minZoom`, `maxPitch`, `minPitch`, `transitionDuration`, `transitionEasing`, `transitionInterpolator`, `transitionInterruption`.
+- `interactionState` {Object} The current interaction that caused this viewport change. See `onInteractionStateChange` for possible fields.
+- `oldViewState` {Object} The current viewport properties.
 
 Note:
-* Even if the newer `onViewStateChange` callback is supplied, the `onViewportChange` callback will still be called if supplied.
+* Even if both `onViewStateChange` and `onViewportChange` callbacks are supplied, they will both be called during an update.
+
+##### `onInteractionStateChange` {Function}
+
+Callback that is fired when the user interacted with the map.
+
+`onInteractionStateChange(interactionState)`
+
+Possible fields include:
+
+- `interactionState.inTransition` (Boolean)
+- `interactionState.isDragging` (Boolean)
+
+Note:
+* `onInteractionStateChange` may be fired without `onViewportChange`. For example, when the pointer is released at the end of a drag-pan, `isDragging` are reset to `false`, without the viewport's `longitude` and `latitude` changing.
+
 
 ##### `maxZoom` {Number} [default: 20]
 
