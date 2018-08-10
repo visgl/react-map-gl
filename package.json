@@ -22,7 +22,7 @@
     "dist"
   ],
   "scripts": {
-    "start": "(cd examples/main && (path-exists node_modules || npm i) && npm run start-local)",
+    "start": "(cd examples/main && (if [ ! -d 'node_modules' ]; then npm i; fi) && npm run start-local)",
     "build": "./scripts/build.sh && ./scripts/collect-metrics.sh",
     "preversion": "npm run test",
     "postversion": "git push && git push --tags",
@@ -63,7 +63,6 @@
     "immutable": "^3.8.2",
     "jsdom": "~9.9.1",
     "module-alias": "^2.0.0",
-    "path-exists": "^3.0.0",
     "pre-commit": "^1.2.2",
     "probe.gl": "^1.0.0-alpha.11",
     "puppeteer": "^1.2.0",
