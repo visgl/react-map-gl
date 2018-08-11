@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 
-const defaultContainer =  ({children}) => <div className="control-panel">{children}</div>;
+const defaultContainer = ({children}) => <div className="control-panel">{children}</div>;
 
 export default class ControlPanel extends PureComponent {
   render() {

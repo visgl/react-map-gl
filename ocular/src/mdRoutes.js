@@ -21,6 +21,11 @@ export default [
             component: require('../../examples/controls/src/app').default
           },
           {
+            path: 'draggableMarkerExample',
+            name: 'Draggable Marker',
+            component: require('../../examples/draggable-markers/src/app').default
+          },
+          {
             path: 'geojsonExample',
             name: 'GeoJSON',
             component: require('../../examples/geojson/src/app').default

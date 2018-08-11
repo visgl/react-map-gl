@@ -58,11 +58,21 @@ export default class BaseControl extends Component {
     super(props);
 
     this._events = null;
+    this._containerRef = null;
 
     this._onContainerLoad = this._onContainerLoad.bind(this);
   }
 
+  componentWillUnmount() {
+    const {eventManager} = this.context;
+    if (eventManager && this._events) {
+      eventManager.off(this._events);
+    }
+  }
+
   _onContainerLoad(ref) {
+    this._containerRef = ref;
+
     const {eventManager} = this.context;
 
     // Return early if no eventManager is found
@@ -82,7 +92,7 @@ export default class BaseControl extends Component {
       // container is mounted: register events for this element
       events = {
         wheel: this._onScroll.bind(this),
-        panstart: this._onDrag.bind(this),
+        panstart: this._onDragStart.bind(this),
         click: this._onClick.bind(this),
         dblclick: this._onDoubleClick.bind(this)
       };
@@ -99,7 +109,7 @@ export default class BaseControl extends Component {
     }
   }
 
-  _onDrag(evt) {
+  _onDragStart(evt) {
     if (this.props.captureDrag) {
       evt.stopPropagation();
     }

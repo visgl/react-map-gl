@@ -35,11 +35,35 @@ Offset of the marker from the left in pixels, negative number indicates left.
 ##### `offsetTop` {Number} - default: `0`
 Offset of the marker from the top in pixels, negative number indicates up.
 
+##### `draggable` {Boolean} - default `false`
+Allows this marker component to be dragged around the map. (Use `onDragEnd` to capture the final position and update `longitude` and `latitude`).
+
+##### `onDragStart` {Function}
+Called when a draggable marker starts being dragged.
+
+Parameters
+- `event` - The pointer event.
+  + `event.lngLat` - The geo coordinates where the drag started, as `[lng, lat]`.
+
+##### `onDrag` {Function}
+Continuously called while a draggable marker is being dragged.
+
+Parameters
+- `event` - The pointer event.
+  + `event.lngLat` - The geo coordinates of the drag event, as `[lng, lat]`.
+
+##### `onDragEnd` {Function}
+Called when a draggable marker is released at its final position. This is usually a good time to capture `event.lngLat` and update the marker's `longitude` and `latitude` props.
+
+Parameters
+- `event` - The pointer event.
+  + `event.lngLat` - The geo coordinates where the drag ended, as `[lng, lat]`.
+
 ##### `captureScroll` {Boolean} - default: `false`
 Stop propagation of mouse wheel event to the map component. Can be used to stop map from zooming when this component is scrolled.
 
 ##### `captureDrag` {Boolean} - default: `true`
-Stop propagation of dragstart event to the map component. Can be used to stop map from panning when this component is dragged.
+Stop propagation of dragstart event to the map component. Can be used to stop map from panning when this component is dragged. Automatically true if `draggable` is `true`.
 
 ##### `captureClick` {Boolean} - default: `true`
 Stop propagation of click event to the map component. Can be used to stop map from calling the `onClick` callback when this component is clicked.
