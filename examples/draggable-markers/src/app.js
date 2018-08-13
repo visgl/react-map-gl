@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 import MapGL, {Marker, Popup, NavigationControl} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
-import CityPin from '../../controls/src/city-pin';
+import Pin from './pin';
 
 const TOKEN = ''; // Set your mapbox token here
 
@@ -104,7 +104,7 @@ export default class App extends Component {
           onDragStart={this._onMarkerDragStart}
           onDrag={this._onMarkerDrag}
           onDragEnd={this._onMarkerDragEnd} >
-          <CityPin size={20} />
+          <Pin size={20} />
         </Marker>
 
         <div className="nav" style={navStyle}>
