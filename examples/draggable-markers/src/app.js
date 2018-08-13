@@ -4,10 +4,7 @@ import {render} from 'react-dom';
 import MapGL, {Marker, Popup, NavigationControl} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
-import CityPin from './city-pin';
-import CityInfo from './city-info';
-
-import CITIES from '../../data/cities.json';
+import Pin from './pin';
 
 const TOKEN = ''; // Set your mapbox token here
 
@@ -32,7 +29,11 @@ export default class App extends Component {
         width: 500,
         height: 500,
       },
-      popupInfo: null
+      marker: {
+        latitude: 37.785164,
+        longitude: -100,
+      },
+      events: {}
     };
   }
 
@@ -59,34 +60,36 @@ export default class App extends Component {
     this.setState({viewport});
   }
 
-  _renderCityMarker = (city, index) => {
-    return (
-      <Marker 
-        key={`marker-${index}`}
-        longitude={city.longitude}
-        latitude={city.latitude} >
-        <CityPin size={20} onClick={() => this.setState({popupInfo: city})} />
-      </Marker>
-    );
+  _logDragEvent(name, event) {
+    this.setState({
+      events: {
+        ...this.state.events,
+        [name]: event.lngLat,
+      }
+    })
   }
 
-  _renderPopup() {
-    const {popupInfo} = this.state;
+  _onMarkerDragStart = (event) => {
+    this._logDragEvent('onDragStart', event);
+  };
 
-    return popupInfo && (
-      <Popup tipSize={5}
-        anchor="top"
-        longitude={popupInfo.longitude}
-        latitude={popupInfo.latitude}
-        onClose={() => this.setState({popupInfo: null})} >
-        <CityInfo info={popupInfo} />
-      </Popup>
-    );
-  }
+  _onMarkerDrag = (event) => {
+    this._logDragEvent('onDrag', event);
+  };
+
+  _onMarkerDragEnd = (event) => {
+    this._logDragEvent('onDragEnd', event);
+    this.setState({
+      marker: {
+        longitude: event.lngLat[0],
+        latitude: event.lngLat[1],
+      }
+    });
+  };
 
   render() {
 
-    const {viewport} = this.state;
+    const {viewport, marker} = this.state;
 
     return (
       <MapGL
@@ -94,17 +97,24 @@ export default class App extends Component {
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._updateViewport}
         mapboxApiAccessToken={TOKEN} >
-
-        { CITIES.map(this._renderCityMarker) }
-
-        {this._renderPopup()}
+        <Marker 
+          longitude={marker.longitude}
+          latitude={marker.latitude}
+          draggable
+          onDragStart={this._onMarkerDragStart}
+          onDrag={this._onMarkerDrag}
+          onDragEnd={this._onMarkerDragEnd} >
+          <Pin size={20} />
+        </Marker>
 
         <div className="nav" style={navStyle}>
           <NavigationControl onViewportChange={this._updateViewport} />
         </div>
 
-        <ControlPanel containerComponent={this.props.containerComponent} />
-
+        <ControlPanel
+          containerComponent={this.props.containerComponent}
+          events={this.state.events}
+        />
       </MapGL>
     );
   }

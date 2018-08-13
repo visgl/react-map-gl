@@ -19,9 +19,9 @@
 // THE SOFTWARE.
 import {createElement} from 'react';
 import PropTypes from 'prop-types';
-import BaseControl from './base-control';
+import DraggableControl from './draggable-control';
 
-const propTypes = Object.assign({}, BaseControl.propTypes, {
+const propTypes = Object.assign({}, DraggableControl.propTypes, {
   // Custom className
   className: PropTypes.string,
   // Longitude of the anchor point
@@ -31,10 +31,15 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Offset from the left
   offsetLeft: PropTypes.number,
   // Offset from the top
-  offsetTop: PropTypes.number
+  offsetTop: PropTypes.number,
+  // Drag and Drop props
+  draggable: PropTypes.bool,
+  onDrag: PropTypes.func,
+  onDragEnd: PropTypes.func,
+  onDragStart: PropTypes.func
 });
 
-const defaultProps = Object.assign({}, BaseControl.defaultProps, {
+const defaultProps = Object.assign({}, DraggableControl.defaultProps, {
   className: '',
   offsetLeft: 0,
   offsetTop: 0
@@ -47,12 +52,15 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
  * is almost always triggered by a viewport change, we almost definitely need to
  * recalculate the marker's position when the parent re-renders.
  */
-export default class Marker extends BaseControl {
-
+export default class Marker extends DraggableControl {
   render() {
     const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
+    const {dragPos, dragOffset} = this.state;
 
-    const [x, y] = this.context.viewport.project([longitude, latitude]);
+    const [x, y] = dragPos ?
+      this._getDraggedPosition(dragPos, dragOffset) :
+      this.context.viewport.project([longitude, latitude]);
+
     const containerStyle = {
       position: 'absolute',
       left: x + offsetLeft,

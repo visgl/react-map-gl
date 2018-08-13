@@ -8,6 +8,7 @@ import ClickExample from '../views/click';
 // Standalone
 import Filter from '../../filter/src/app';
 import Controls from '../../controls/src/app';
+import DraggableMarker from '../../draggable-markers/src/app';
 import GeoJson from '../../geojson/src/app';
 import GeoJsonAnimation from '../../geojson-animation/src/app';
 import Interaction from '../../interaction/src/app';
@@ -30,6 +31,11 @@ export const standaloneExamples = [
     path: 'controlsExample',
     name: 'Markers & Popups',
     component: Controls
+  },
+  {
+    path: 'draggableMarkerExample',
+    name: 'Draggable Marker',
+    component: DraggableMarker
   },
   {
     path: 'geojsonExample',
