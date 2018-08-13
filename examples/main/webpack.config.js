@@ -38,7 +38,7 @@ const config = {
 
   module: {
     rules: [{
-      // Compile ES2015 using bable
+      // Compile ES2015 using babel
       test: /\.js$/,
       exclude: [/node_modules/],
       use: [{
