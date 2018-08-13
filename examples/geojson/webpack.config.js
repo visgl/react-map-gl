@@ -35,7 +35,7 @@ const config = {
 
   module: {
     rules: [{
-      // Compile ES2015 using bable
+      // Compile ES2015 using babel
       test: /\.js$/,
       include: [resolve('.')],
       exclude: [/node_modules/],
@@ -44,13 +44,6 @@ const config = {
         options: BABEL_CONFIG
       }]
     }]
-  },
-
-  resolve: {
-    alias: {
-      // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
-      'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
-    }
   },
 
   // Optional: Enables reading mapbox token from environment variable

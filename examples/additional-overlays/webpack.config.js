@@ -11,19 +11,12 @@ const config = {
 
   module: {
     rules: [{
-      // Compile ES2015 using bable
+      // Compile ES2015 using babel
       test: /\.js$/,
       loader: 'babel-loader',
       include: [resolve('.')],
       exclude: [/node_modules/]
     }]
-  },
-
-  resolve: {
-    alias: {
-      // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
-      'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
-    }
   },
 
   // Optional: Enables reading mapbox token from environment variable
