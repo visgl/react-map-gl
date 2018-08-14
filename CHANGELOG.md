@@ -7,6 +7,7 @@
 
 - Remove immutablejs from dependency
 - Use Mapbox's style diffing
+- Add drag and drop support for Marker (#576)
 
 # Version 3.3.0
 
