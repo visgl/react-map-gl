@@ -124,6 +124,15 @@ export default class TransitionManager {
       endProps
     );
 
+    const interactionState = {
+      inTransition: true,
+      isZooming: startProps.zoom !== endProps.zoom,
+      isPanning: startProps.longitude !== endProps.longitude ||
+        startProps.latitude !== endProps.latitude,
+      isRotating: startProps.bearing !== endProps.bearing ||
+        startProps.pitch !== endProps.pitch
+    };
+
     this.state = {
       // Save current transition props
       duration: endProps.transitionDuration,
@@ -135,11 +144,12 @@ export default class TransitionManager {
       startProps: initialProps.start,
       endProps: initialProps.end,
       animation: null,
-      propsInTransition: {}
+      propsInTransition: {},
+      interactionState
     };
 
     this._onTransitionFrame();
-    this.props.onStateChange({inTransition: true});
+    this.props.onStateChange(interactionState);
   }
 
   _onTransitionFrame() {
@@ -151,7 +161,12 @@ export default class TransitionManager {
   _endTransition() {
     cancelAnimationFrame(this.state.animation);
     this.state = DEFAULT_STATE;
-    this.props.onStateChange({inTransition: false});
+    this.props.onStateChange({
+      inTransition: false,
+      isZooming: false,
+      isPanning: false,
+      isRotating: false
+    });
   }
 
   _updateViewport() {
@@ -172,7 +187,11 @@ export default class TransitionManager {
     const mapState = new MapState(Object.assign({}, this.props, viewport));
     this.state.propsInTransition = mapState.getViewportProps();
 
-    this.props.onViewportChange(this.state.propsInTransition, {inTransition: true}, this.props);
+    this.props.onViewportChange(
+      this.state.propsInTransition,
+      this.state.interactionState,
+      this.props
+    );
 
     if (shouldEnd) {
       this._endTransition();

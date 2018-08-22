@@ -126,8 +126,6 @@ export default class MapControls {
     }
 
     this.setState(Object.assign({}, newMapState.getInteractiveState(), extraState));
-
-    return true;
   }
 
   getMapState(overrides) {
@@ -214,7 +212,8 @@ export default class MapControls {
   _onPanStart(event) {
     const pos = this.getCenter(event);
     const newMapState = this.mapState.panStart({pos}).rotateStart({pos});
-    return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
+    this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
+    return true;
   }
 
   // Default handler for the `panmove` event.
@@ -226,7 +225,12 @@ export default class MapControls {
   // Default handler for the `panend` event.
   _onPanEnd(event) {
     const newMapState = this.mapState.panEnd().rotateEnd();
-    return this.updateViewport(newMapState, null, {isDragging: false});
+    this.updateViewport(newMapState, null, {
+      isDragging: false,
+      isPanning: false,
+      isRotating: false
+    });
+    return true;
   }
 
   // Default handler for panning to move.
@@ -237,7 +241,8 @@ export default class MapControls {
     }
     const pos = this.getCenter(event);
     const newMapState = this.mapState.pan({pos});
-    return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
+    this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isPanning: true});
+    return true;
   }
 
   // Default handler for panning to rotate.
@@ -269,7 +274,8 @@ export default class MapControls {
     deltaScaleY = Math.min(1, Math.max(-1, deltaScaleY));
 
     const newMapState = this.mapState.rotate({deltaScaleX, deltaScaleY});
-    return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
+    this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isRotating: true});
+    return true;
   }
 
   // Default handler for the `wheel` event.
@@ -290,7 +296,10 @@ export default class MapControls {
     }
 
     const newMapState = this.mapState.zoom({pos, scale});
-    return this.updateViewport(newMapState, NO_TRANSITION_PROPS);
+    this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isZooming: true});
+    // This is a one-off event, state should not persist
+    this.setState({isZooming: false});
+    return true;
   }
 
   // Default handler for the `pinchstart` event.
@@ -299,7 +308,8 @@ export default class MapControls {
     const newMapState = this.mapState.zoomStart({pos}).rotateStart({pos});
     // hack - hammer's `rotation` field doesn't seem to produce the correct angle
     this._state.startPinchRotation = event.rotation;
-    return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
+    this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
+    return true;
   }
 
   // Default handler for the `pinch` event.
@@ -320,14 +330,26 @@ export default class MapControls {
       newMapState = newMapState.rotate({deltaScaleX: -(rotation - startPinchRotation) / 180});
     }
 
-    return this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
+    this.updateViewport(newMapState, NO_TRANSITION_PROPS, {
+      isDragging: true,
+      isPanning: this.touchZoom,
+      isZooming: this.touchZoom,
+      isRotating: this.touchRotate
+    });
+    return true;
   }
 
   // Default handler for the `pinchend` event.
   _onPinchEnd(event) {
     const newMapState = this.mapState.zoomEnd().rotateEnd();
     this._state.startPinchRotation = 0;
-    return this.updateViewport(newMapState, null, {isDragging: false});
+    this.updateViewport(newMapState, null, {
+      isDragging: false,
+      isPanning: false,
+      isZooming: false,
+      isRotating: false
+    });
+    return true;
   }
 
   // Default handler for the `doubletap` event.
@@ -339,7 +361,8 @@ export default class MapControls {
     const isZoomOut = this.isFunctionKeyPressed(event);
 
     const newMapState = this.mapState.zoom({pos, scale: isZoomOut ? 0.5 : 2});
-    return this.updateViewport(newMapState, LINEAR_TRANSITION_PROPS);
+    this.updateViewport(newMapState, LINEAR_TRANSITION_PROPS);
+    return true;
   }
 
   /* eslint-disable complexity */
