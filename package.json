@@ -53,7 +53,6 @@
     "babel-plugin-istanbul": "^4.1.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-plugin-version-inline": "^1.0.0",
-    "babel-preset-minify": "^0.4.0-alpha.caaefb4c",
     "eslint": "^3.0.0",
     "eslint-config-uber-es2015": "^3.0.0",
     "eslint-config-uber-jsx": "^3.0.0",
