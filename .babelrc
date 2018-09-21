@@ -1,16 +1,21 @@
 {
-  "plugins": [
-    "version-inline"
-  ],
   "env": {
     "es5": {
       "presets": [
-        ["@babel/es2015", {modules: 'commonjs'}]
+        ["@babel/env", {modules: 'commonjs'}]
+      ],
+      "plugins": [
+        "@babel/transform-runtime",
+        "version-inline"
       ]
     },
     "esm": {
       "presets": [
-        ["@babel/es2015", {modules: false}]
+        ["@babel/env", {modules: false}]
+      ],
+      "plugins": [
+        ["@babel/transform-runtime", { useESModules: true }],
+        "version-inline"
       ]
     },
     "es6": {
@@ -26,6 +31,10 @@
           },
           "modules": false
         }]
+      ],
+      "plugins": [
+        ["@babel/transform-runtime", { useESModules: true }],
+        "version-inline"
       ]
     },
     "test": {
