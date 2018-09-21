@@ -72,12 +72,6 @@ export default class Popup extends BaseControl {
   constructor(props) {
     super(props);
 
-    this._getPosition = this._getPosition.bind(this);
-    this._onClose = this._onClose.bind(this);
-    this._contentLoaded = this._contentLoaded.bind(this);
-    this._renderTip = this._renderTip.bind(this);
-    this._renderContent = this._renderContent.bind(this);
-
     this._closeOnClick = false;
   }
 
@@ -113,7 +107,7 @@ export default class Popup extends BaseControl {
    * Instead, we flag the popup as closed on the React event, and actually close it on the hammer.js
    * event.
    */
-  _onClick(evt) {
+  _onClick = (evt) => {
     if (this.props.captureClick) {
       evt.stopPropagation();
     }
@@ -123,11 +117,11 @@ export default class Popup extends BaseControl {
     }
   }
 
-  _onClose() {
+  _onClose = () => {
     this._closeOnClick = true;
   }
 
-  _contentLoaded(ref) {
+  _contentLoaded = (ref) => {
     this._content = ref;
   }
 

@@ -54,9 +54,9 @@ export default class DraggableControl extends BaseControl {
     // panstart is already attached by parent class BaseControl,
     // here we just add listeners for subsequent drag events
     this._dragEvents = {
-      panmove: this._onDrag.bind(this),
-      panend: this._onDragEnd.bind(this),
-      pancancel: this._onDragCancel.bind(this)
+      panmove: this._onDrag,
+      panend: this._onDragEnd,
+      pancancel: this._onDragCancel
     };
     eventManager.on(this._dragEvents);
   }
@@ -98,7 +98,7 @@ export default class DraggableControl extends BaseControl {
     );
   }
 
-  _onDragStart(event) {
+  _onDragStart = (event) => {
     const {draggable, captureDrag} = this.props;
     if (draggable || captureDrag) {
       event.stopPropagation();
@@ -118,7 +118,7 @@ export default class DraggableControl extends BaseControl {
     }
   }
 
-  _onDrag(event) {
+  _onDrag = (event) => {
     event.stopPropagation();
 
     const dragPos = this._getDragEventPosition(event);
@@ -130,7 +130,7 @@ export default class DraggableControl extends BaseControl {
     }
   }
 
-  _onDragEnd(event) {
+  _onDragEnd = (event) => {
     const {dragPos, dragOffset} = this.state;
 
     event.stopPropagation();
@@ -143,7 +143,7 @@ export default class DraggableControl extends BaseControl {
     }
   }
 
-  _onDragCancel(event) {
+  _onDragCancel = (event) => {
     event.stopPropagation();
     this.setState({dragPos: null, dragOffset: null});
     this._removeDragEvents();

@@ -6,6 +6,7 @@
       ],
       "plugins": [
         "@babel/transform-runtime",
+        "@babel/proposal-class-properties",
         "version-inline"
       ]
     },
@@ -15,6 +16,7 @@
       ],
       "plugins": [
         ["@babel/transform-runtime", { useESModules: true }],
+        "@babel/proposal-class-properties",
         "version-inline"
       ]
     },
@@ -34,12 +36,19 @@
       ],
       "plugins": [
         ["@babel/transform-runtime", { useESModules: true }],
+        "@babel/proposal-class-properties",
         "version-inline"
       ]
     },
     "test": {
+      "presets": [
+        ["@babel/env", {modules: 'commonjs'}]
+      ],
       "plugins": [
-        "istanbul"
+        "istanbul",
+        "@babel/transform-runtime",
+        "@babel/proposal-class-properties",
+        "version-inline"
       ]
     }
   }

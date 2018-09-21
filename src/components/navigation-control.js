@@ -42,13 +42,6 @@ export default class NavigationControl extends BaseControl {
     super(props);
     // Check for deprecated props
     deprecateWarn(props);
-
-    this._updateViewport = this._updateViewport.bind(this);
-    this._onZoomIn = this._onZoomIn.bind(this);
-    this._onZoomOut = this._onZoomOut.bind(this);
-    this._onResetNorth = this._onResetNorth.bind(this);
-    this._renderCompass = this._renderCompass.bind(this);
-    this._renderButton = this._renderButton.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -69,15 +62,15 @@ export default class NavigationControl extends BaseControl {
     onViewportChange(viewState);
   }
 
-  _onZoomIn() {
+  _onZoomIn = () => {
     this._updateViewport({zoom: this.context.viewport.zoom + 1});
   }
 
-  _onZoomOut() {
+  _onZoomOut = () => {
     this._updateViewport({zoom: this.context.viewport.zoom - 1});
   }
 
-  _onResetNorth() {
+  _onResetNorth = () => {
     this._updateViewport({bearing: 0, pitch: 0});
   }
 

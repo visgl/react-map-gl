@@ -18,8 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// Enables ES2015 import/export in Node.js
-
 // Registers an alias for this module
 const path = require('path');
 
@@ -29,7 +27,6 @@ const ALIASES = {
 };
 
 if (module.require) {
-  module.require('reify');
   const moduleAlias = module.require('module-alias');
   moduleAlias.addAliases(ALIASES);
 }

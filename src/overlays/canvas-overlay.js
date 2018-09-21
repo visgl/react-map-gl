@@ -37,8 +37,6 @@ const defaultProps = {
 export default class CanvasOverlay extends BaseControl {
   constructor(props) {
     super(props);
-    this._redraw = this._redraw.bind(this);
-    this._canvasLoaded = this._canvasLoaded.bind(this);
   }
 
   componentDidMount() {
@@ -49,7 +47,7 @@ export default class CanvasOverlay extends BaseControl {
     this._redraw();
   }
 
-  _redraw() {
+  _redraw = () => {
     const pixelRatio = window.devicePixelRatio || 1;
     const canvas = this._canvas;
     const ctx = canvas.getContext('2d');
@@ -69,7 +67,7 @@ export default class CanvasOverlay extends BaseControl {
     ctx.restore();
   }
 
-  _canvasLoaded(ref) {
+  _canvasLoaded = (ref) => {
     this._canvas = ref;
     this._onContainerLoad(ref);
   }
