@@ -36,7 +36,7 @@
     "test-analyze-size": "./scripts/build.sh && NODE_ENV=production webpack --config test/webpack.config.js --env.import-nothing --env.es6"
   },
   "dependencies": {
-    "babel-runtime": "^6.23.0",
+    "@babel/runtime": "^7.0.0",
     "bowser": "^1.2.0",
     "mapbox-gl": "0.47.0",
     "math.gl": "^2.0.0",
@@ -45,13 +45,12 @@
     "viewport-mercator-project": "^5.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.0.0-beta.44",
-    "@babel/core": "^7.0.0-beta.44",
-    "@babel/preset-env": "7.0.0-beta.44",
-    "@babel/preset-es2015": "7.0.0-beta.44",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "babel-eslint": "^6.0.0",
     "babel-plugin-istanbul": "^4.1.1",
-    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-plugin-version-inline": "^1.0.0",
     "eslint": "^3.0.0",
     "eslint-config-uber-es2015": "^3.0.0",
