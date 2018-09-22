@@ -1,57 +1,50 @@
-// NOTE: This is a Webpack 2 configuration file for react-map-gl
-const {resolve} = require('path');
+// NOTE: To use this example standalone (e.g. outside of repo)
+// delete the local development overrides at the bottom of this file
+
+// avoid destructuring for older Node version support
+const resolve = require('path').resolve;
 const webpack = require('webpack');
 
-const LIB_DIR = resolve(__dirname, '../..');
+const BABEL_CONFIG = {
+  presets: [
+    '@babel/env',
+    '@babel/react'
+  ],
+  plugins: [
+    '@babel/proposal-class-properties'
+  ]
+};
 
 const config = {
-  // Example entry point
+  mode: 'development',
+
   entry: {
-    app: resolve('./root.js')
+    app: resolve('./src/app.js')
   },
 
-  // Silence excessive webpack dev server warnings
-  devServer: {
-    stats: {
-      warnings: false
-    }
-  },
-
-  devtool: 'source-maps',
-
-  resolve: {
-    alias: {
-      // Work against the latest base library in this repo
-      'react-map-gl': resolve(LIB_DIR),
-      // Ensure only one copy of react
-      react: resolve('./node_modules/react')
-    }
+  output: {
+    library: ['App']
   },
 
   module: {
-    rules: [
-      {
-        // Compile ES2015 and JSX using buble
-        test: /\.js$/,
-        loader: 'buble-loader',
-        exclude: [/node_modules/],
-        options: {
-          objectAssign: 'Object.assign',
-          transforms: {
-            dangerousForOf: true,
-            modules: false
-          }
-        }
-      }
-    ]
+    rules: [{
+      // Compile ES2015 using babel
+      test: /\.js$/,
+      include: [resolve('.')],
+      exclude: [/node_modules/],
+      use: [{
+        loader: 'babel-loader',
+        options: BABEL_CONFIG
+      }]
+    }]
   },
 
-  // Allow setting mapbox token using environment variables
+  // Optional: Enables reading mapbox token from environment variable
   plugins: [
     new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]
 };
 
 // Enables bundling against src in this repo rather than the installed version
-module.exports = (env) => env && env.local ?
+module.exports = env => env && env.local ?
   require('../webpack.config.local')(config)(env) : config;

@@ -1,16 +1,15 @@
 // NOTE: This is a Webpack 2 configuration file for react-map-gl
 const {resolve} = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-// Otherwise modules imported from outside this directory does not compile.
-// Also needed if modules from this directory were imported elsewhere
-// Seems to be a Babel bug
-// https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
 const BABEL_CONFIG = {
   presets: [
-    require.resolve('@babel/preset-env'),
-    require.resolve('@babel/preset-stage-2'),
-    require.resolve('@babel/preset-react')
+    '@babel/env',
+    '@babel/react'
+  ],
+  plugins: [
+    '@babel/proposal-class-properties'
   ]
 };
 
@@ -19,7 +18,7 @@ const config = {
 
   // Example entry point
   entry: {
-    app: resolve('./root.js')
+    app: resolve('./app.js')
   },
 
   // Silence excessive webpack dev server warnings
@@ -56,17 +55,12 @@ const config = {
       // Always resolve module to this app's node_modules first
       resolve('./node_modules'),
       'node_modules'
-    ],
-    alias: {
-      // used by Mapbox
-      webworkify: 'webworkify-webpack-dropin',
-      // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
-      'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
-    }
+    ]
   },
 
   // Allow setting mapbox token using environment variables
   plugins: [
+    new HtmlWebpackPlugin({title: 'react-map-gl Example'}),
     new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]
 };

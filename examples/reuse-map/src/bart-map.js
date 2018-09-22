@@ -5,8 +5,6 @@ import bartStations from '../../data/bart-station.json';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-import MARKER_STYLE from './marker-style';
-
 export default class BartMap extends Component {
 
   state = {
@@ -16,19 +14,6 @@ export default class BartMap extends Component {
       zoom: 11,
       bearing: 0,
       pitch: 50
-    },
-    settings: {
-      dragPan: true,
-      dragRotate: true,
-      scrollZoom: true,
-      touchZoom: true,
-      touchRotate: true,
-      keyboard: true,
-      doubleClickZoom: true,
-      minZoom: 0,
-      maxZoom: 20,
-      minPitch: 0,
-      maxPitch: 85
     }
   };
 
@@ -45,11 +30,10 @@ export default class BartMap extends Component {
 
   render() {
     const {mapStyle} = this.props;
-    const {viewState, settings} = this.state;
+    const {viewState} = this.state;
     return (
       <MapGL
         {...viewState}
-        {...settings}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         mapStyle={mapStyle}
 
@@ -59,7 +43,6 @@ export default class BartMap extends Component {
 
         reuseMaps={true}
       >
-        <style>{MARKER_STYLE}</style>
         { bartStations.map(this._renderMarker) }
       </MapGL>
     );

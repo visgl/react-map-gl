@@ -38,6 +38,4 @@ class Root extends Component {
 
 }
 
-const root = document.createElement('div');
-document.body.appendChild(root);
-render(<Root />, root);
+render(<Root />, document.body.appendChild(document.createElement('div')));
