@@ -55,7 +55,7 @@ export default class App extends Component {
 
   _updatePointData = pointData => {
     let {mapStyle} = this.state;
-    if (!mapStyle.hasIn(['source', 'point'])) {
+    if (!mapStyle.hasIn(['sources', 'point'])) {
       mapStyle = mapStyle
         // Add geojson source to map
         .setIn(['sources', 'point'], fromJS({type: 'geojson'}))
