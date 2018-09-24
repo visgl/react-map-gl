@@ -85,14 +85,6 @@ export default class StaticMap extends PureComponent {
     this.state = {
       accessTokenInvalid: false
     };
-
-    this.getMap = this.getMap.bind(this);
-    this.queryRenderedFeatures = this.queryRenderedFeatures.bind(this);
-    this._updateMapSize = this._updateMapSize.bind(this);
-    this._updateMapStyle = this._updateMapStyle.bind(this);
-    this._mapboxMapLoaded = this._mapboxMapLoaded.bind(this);
-    this._mapboxMapError = this._mapboxMapError.bind(this);
-    this._renderNoTokenWarning = this._renderNoTokenWarning.bind(this);
   }
 
   getChildContext() {
@@ -139,7 +131,7 @@ export default class StaticMap extends PureComponent {
   }
 
   // External apps can access map this way
-  getMap() {
+  getMap = () => {
     return this._map;
   }
 
@@ -152,7 +144,7 @@ export default class StaticMap extends PureComponent {
     *   Point or an array of two points defining the bounding box
     * @param {Object} options - query options
     */
-  queryRenderedFeatures(geometry, options = {}) {
+  queryRenderedFeatures = (geometry, options = {}) => {
     return this._map.queryRenderedFeatures(geometry, options);
   }
 
@@ -175,12 +167,12 @@ export default class StaticMap extends PureComponent {
     }
   }
 
-  _mapboxMapLoaded(ref) {
+  _mapboxMapLoaded = (ref) => {
     this._mapboxMap = ref;
   }
 
   // Handle map error
-  _mapboxMapError(evt) {
+  _mapboxMapError = (evt) => {
     const statusCode = evt.error && evt.error.status || evt.status;
     if (statusCode === UNAUTHORIZED_ERROR_CODE && !this.state.accessTokenInvalid) {
       // Mapbox throws unauthorized error - invalid token

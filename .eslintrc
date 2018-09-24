@@ -1,4 +1,5 @@
 {
+  "parser": "babel-eslint",
   "plugins": [
     "react"
   ],
@@ -8,6 +9,10 @@
   ],
   "rules": {
     "guard-for-in": 0,
-    "no-inline-comments": 0
+    "no-inline-comments": 0,
+    "no-invalid-this": 0
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
   }
 }

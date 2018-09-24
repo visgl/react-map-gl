@@ -169,16 +169,6 @@ export default class InteractiveMap extends PureComponent {
     });
 
     this._updateQueryParams(props.mapStyle);
-
-    this.getMap = this.getMap.bind(this);
-    this.queryRenderedFeatures = this.queryRenderedFeatures.bind(this);
-    this._getFeatures = this._getFeatures.bind(this);
-    this._updateQueryParams = this._updateQueryParams.bind(this);
-    this._onViewportChange = this._onViewportChange.bind(this);
-    this._onInteractionStateChange = this._onInteractionStateChange.bind(this);
-    this._getPos = this._getPos.bind(this);
-    this._eventCanvasLoaded = this._eventCanvasLoaded.bind(this);
-    this._staticMapLoaded = this._staticMapLoaded.bind(this);
   }
 
   getChildContext() {
@@ -194,9 +184,9 @@ export default class InteractiveMap extends PureComponent {
 
     // Register additional event handlers for click and hover
     eventManager.on({
-      mousemove: this._onMouseMove.bind(this),
-      click: this._onMouseClick.bind(this),
-      contextmenu: this._onContextMenu.bind(this)
+      mousemove: this._onMouseMove,
+      click: this._onMouseClick,
+      contextmenu: this._onContextMenu
     });
 
     this._setControllerProps(this.props);
@@ -210,11 +200,11 @@ export default class InteractiveMap extends PureComponent {
     this._setControllerProps(nextProps);
   }
 
-  getMap() {
+  getMap = () => {
     return this._map ? this._map.getMap() : null;
   }
 
-  queryRenderedFeatures(geometry, options) {
+  queryRenderedFeatures = (geometry, options) => {
     return this._map.queryRenderedFeatures(geometry, options);
   }
 
@@ -249,7 +239,7 @@ export default class InteractiveMap extends PureComponent {
     this._queryParams = {layers: interactiveLayerIds};
   }
 
-  _onInteractionStateChange(interactionState) {
+  _onInteractionStateChange = (interactionState) => {
     const {isDragging = false} = interactionState;
     if (isDragging !== this.state.isDragging) {
       this.setState({isDragging});
@@ -261,7 +251,7 @@ export default class InteractiveMap extends PureComponent {
     }
   }
 
-  _onViewportChange(viewState, interactionState, oldViewState) {
+  _onViewportChange = (viewState, interactionState, oldViewState) => {
     const onViewStateChange = this.props.onViewStateChange;
     const onViewportChange = this.props.onViewportChange || this.props.onChangeViewport;
 
@@ -279,7 +269,7 @@ export default class InteractiveMap extends PureComponent {
     return [x, y];
   }
 
-  _onMouseMove(event) {
+  _onMouseMove = (event) => {
     if (!this.state.isDragging) {
       const pos = this._getPos(event);
       const features = this._getFeatures({pos, radius: this.props.clickRadius});
@@ -299,7 +289,7 @@ export default class InteractiveMap extends PureComponent {
     }
   }
 
-  _onMouseClick(event) {
+  _onMouseClick = (event) => {
     if (this.props.onClick) {
       const pos = this._getPos(event);
       const viewport = new WebMercatorViewport(this.props);
@@ -310,18 +300,18 @@ export default class InteractiveMap extends PureComponent {
     }
   }
 
-  _onContextMenu(event) {
+  _onContextMenu = (event) => {
     if (this.props.onContextMenu) {
       this.props.onContextMenu(event);
     }
   }
 
-  _eventCanvasLoaded(ref) {
+  _eventCanvasLoaded = (ref) => {
     // This will be called with `null` after unmount, releasing event manager resource
     this._eventManager.setElement(ref);
   }
 
-  _staticMapLoaded(ref) {
+  _staticMapLoaded = (ref) => {
     this._map = ref;
   }
 

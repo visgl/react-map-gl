@@ -1,4 +1,5 @@
 // Launch script for various Node test configurations
+require('@babel/register');
 require('../aliases');
 
 /* global process */

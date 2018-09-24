@@ -59,8 +59,6 @@ export default class BaseControl extends Component {
 
     this._events = null;
     this._containerRef = null;
-
-    this._onContainerLoad = this._onContainerLoad.bind(this);
   }
 
   componentWillUnmount() {
@@ -70,7 +68,7 @@ export default class BaseControl extends Component {
     }
   }
 
-  _onContainerLoad(ref) {
+  _onContainerLoad = (ref) => {
     this._containerRef = ref;
 
     const {eventManager} = this.context;
@@ -91,10 +89,10 @@ export default class BaseControl extends Component {
     if (ref) {
       // container is mounted: register events for this element
       events = {
-        wheel: this._onScroll.bind(this),
-        panstart: this._onDragStart.bind(this),
-        click: this._onClick.bind(this),
-        dblclick: this._onDoubleClick.bind(this)
+        wheel: this._onScroll,
+        panstart: this._onDragStart,
+        click: this._onClick,
+        dblclick: this._onDoubleClick
       };
 
       eventManager.on(events, ref);
@@ -103,25 +101,25 @@ export default class BaseControl extends Component {
     this._events = events;
   }
 
-  _onScroll(evt) {
+  _onScroll = (evt) => {
     if (this.props.captureScroll) {
       evt.stopPropagation();
     }
   }
 
-  _onDragStart(evt) {
+  _onDragStart = (evt) => {
     if (this.props.captureDrag) {
       evt.stopPropagation();
     }
   }
 
-  _onClick(evt) {
+  _onClick = (evt) => {
     if (this.props.captureClick) {
       evt.stopPropagation();
     }
   }
 
-  _onDoubleClick(evt) {
+  _onDoubleClick = (evt) => {
     if (this.props.captureDoubleClick) {
       evt.stopPropagation();
     }
