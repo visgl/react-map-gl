@@ -11,6 +11,16 @@ const webpack = require('webpack');
 const LIB_DIR = resolve(__dirname, '..');
 const SRC_DIR = resolve(LIB_DIR, './src');
 
+const BABEL_CONFIG = {
+  presets: [
+    '@babel/env',
+    '@babel/react'
+  ],
+  plugins: [
+    '@babel/proposal-class-properties'
+  ]
+};
+
 // Support for hot reloading changes
 const LOCAL_DEVELOPMENT_CONFIG = {
   // suppress warnings about bundle size
@@ -29,7 +39,15 @@ const LOCAL_DEVELOPMENT_CONFIG = {
     }
   },
   module: {
-    rules: []
+    rules: [{
+      // Compile ES2015 using babel
+      test: /\.js$/,
+      include: [SRC_DIR],
+      use: [{
+        loader: 'babel-loader',
+        options: BABEL_CONFIG
+      }]
+    }]
   },
   // Optional: Enables reading mapbox token from environment variable
   plugins: [
