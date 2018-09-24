@@ -120,3 +120,7 @@ export default class App extends Component {
   }
 
 }
+
+export function renderToDom() {
+  render(<App/>, document.body.appendChild(document.createElement('div')));
+}

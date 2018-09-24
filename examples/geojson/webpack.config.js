@@ -5,23 +5,25 @@
 const resolve = require('path').resolve;
 const webpack = require('webpack');
 
-// Otherwise modules imported from outside this directory does not compile.
-// Also needed if modules from this directory were imported elsewhere
-// Seems to be a Babel bug
-// https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
 const BABEL_CONFIG = {
   presets: [
-    'es2015',
-    'react',
-    'stage-2'
-  ].map(function configMap(name) {
-    return require.resolve(`babel-preset-${name}`);
-  })
+    '@babel/env',
+    '@babel/react'
+  ],
+  plugins: [
+    '@babel/proposal-class-properties'
+  ]
 };
 
 const config = {
+  mode: 'development',
+
   entry: {
-    app: resolve('./src/root.js')
+    app: resolve('./src/app.js')
+  },
+
+  output: {
+    library: ['App']
   },
 
   devServer: {
@@ -30,8 +32,6 @@ const config = {
       resolve(__dirname, '../')
     ]
   },
-
-  devtool: 'source-map',
 
   module: {
     rules: [{

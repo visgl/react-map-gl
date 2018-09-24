@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import TOC from './constants/toc';
 import TableOfContents from './table-of-contents';
 import ExampleContainer from './example-container';
@@ -61,3 +62,5 @@ export default class App extends Component {
 App.defaultProps = {
   disablePadding: true
 };
+
+ReactDOM.render(<App/>, document.body.appendChild(document.createElement('div')));
