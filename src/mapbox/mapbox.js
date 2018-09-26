@@ -307,7 +307,7 @@ export default class Mapbox {
     return {longitude, latitude, zoom, pitch, bearing, altitude};
   }
 
-  _checkStyleSheet(mapboxVersion) {
+  _checkStyleSheet(mapboxVersion = '0.47.0') {
     if (typeof document === 'undefined') {
       return;
     }
