@@ -180,10 +180,15 @@ export default class Mapbox {
       // TODO - need to call onload again, need to track with Promise?
       props.onLoad();
     } else {
-      const getContext = HTMLCanvasElement.prototype.getContext;
       if (props.gl) {
+        const getContext = HTMLCanvasElement.prototype.getContext;
         // Hijack canvas.getContext to return our own WebGLContext
-        HTMLCanvasElement.prototype.getContext = () => props.gl;
+        // This will be called inside the mapboxgl.Map constructor
+        HTMLCanvasElement.prototype.getContext = () => {
+          // Unhijack immediately
+          HTMLCanvasElement.prototype.getContext = getContext;
+          return props.gl;
+        };
       }
 
       const mapOptions = {
@@ -207,10 +212,6 @@ export default class Mapbox {
       // Attach optional onLoad function
       this.map.once('load', props.onLoad);
       this.map.on('error', props.onError);
-
-      if (props.gl) {
-        HTMLCanvasElement.prototype.getContext = getContext;
-      }
     }
 
     return this;
