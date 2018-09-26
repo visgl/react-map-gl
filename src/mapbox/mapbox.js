@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* global window, document, process */
+/* global window, document, process, HTMLCanvasElement */
 import PropTypes from 'prop-types';
 
 function noop() {}
@@ -182,6 +182,17 @@ export default class Mapbox {
       // TODO - need to call onload again, need to track with Promise?
       props.onLoad();
     } else {
+      if (props.gl) {
+        const getContext = HTMLCanvasElement.prototype.getContext;
+        // Hijack canvas.getContext to return our own WebGLContext
+        // This will be called inside the mapboxgl.Map constructor
+        HTMLCanvasElement.prototype.getContext = () => {
+          // Unhijack immediately
+          HTMLCanvasElement.prototype.getContext = getContext;
+          return props.gl;
+        };
+      }
+
       const mapOptions = {
         container: props.container || document.body,
         center: [0, 0],

@@ -132,6 +132,10 @@ An object that specifies bounds for viewport props with `min*`, `max*` keys. If 
 
 Default: `{ minZoom: 0, maxZoom: 20, minPitch: 0, maxPitch: 60 }`
 
+##### `gl` {WebGLContext} ==EXPERIMENTAL==
+
+Use an existing WebGLContext instead of creating a new one. This allows multiple libraries to render into a shared buffer. Use with caution.
+
 
 ## Callbacks
 
