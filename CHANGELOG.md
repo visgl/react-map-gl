@@ -2,6 +2,10 @@
 
 # Version 3.3.0
 
+## 3.3.5 (Sep 26, 2018)
+
+- Fix auto stylesheet detection (#601)
+
 ## 3.3.4 (Aug 4, 2018)
 
 - Add `fitBounds` util to docs (#563)
