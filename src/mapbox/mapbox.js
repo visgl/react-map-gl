@@ -124,6 +124,8 @@ export default class Mapbox {
       const VERSION = typeof __VERSION__ !== 'undefined' ? __VERSION__ : 'untranspiled source';
 
       console.debug(`react-map-gl: ${VERSION} using mapbox-gl v${props.mapboxgl.version}`); // eslint-disable-line
+
+      this._checkStyleSheet(props.mapboxgl.version);
     }
 
     this.props = {};
@@ -247,8 +249,6 @@ export default class Mapbox {
     this._updateMapSize({}, props);
 
     this.props = props;
-
-    this._checkStyleSheet();
   }
 
   _update(oldProps, newProps) {
@@ -307,19 +307,21 @@ export default class Mapbox {
     return {longitude, latitude, zoom, pitch, bearing, altitude};
   }
 
-  _checkStyleSheet() {
+  _checkStyleSheet(mapboxVersion = '0.47.0') {
     if (typeof document === 'undefined') {
       return;
     }
 
     // check mapbox styles
     try {
-      const missingCssWarning = document.querySelector('.mapboxgl-missing-css');
-      const isCssLoaded = window.getComputedStyle(missingCssWarning).display === 'none';
+      const testElement = document.createElement('div');
+      testElement.className = 'mapboxgl-map';
+      testElement.style.display = 'none';
+      document.body.append(testElement);
+      const isCssLoaded = window.getComputedStyle(testElement).position !== 'static';
 
       if (!isCssLoaded) {
         // attempt to insert mapbox stylesheet
-        const mapboxVersion = this.props.mapboxgl.version;
         const link = document.createElement('link');
         link.setAttribute('rel', 'stylesheet');
         link.setAttribute('type', 'text/css');
