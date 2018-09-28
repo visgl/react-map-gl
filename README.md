@@ -18,6 +18,9 @@ React Components Suite for <a href="https://github.com/mapbox/mapbox-gl-js">Mapb
 
 In addition to exposing MapboxGL functionality to React apps, react-map-gl also integrates seamlessly with [deck.gl](https://uber.github.io/deck.gl).
 
+### Before You Begin
+This library provides convenient wrappers around initializing and (to some degree) tracking the state of a Mapbox WebGL map. However, because most of the functionality of Mapbox's JS API depends on the use of HTML5 canvases and WebGL, which React is not built to manipulate, this library is somewhat limited in the functionality that it exposes, and most implementation of Mapbox features and interactivity is better done with the [Mapbox API](https://www.mapbox.com/mapbox-gl-js/api/) exposed by the `getMap()` function in this library.
+
 ### Installation
 
 Using `react-map-gl` requires `node >= v4` and `react >= 15.4`.
