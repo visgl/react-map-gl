@@ -25,10 +25,8 @@ import {normalizeStyle} from '../utils/style-utils';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import Mapbox from '../mapbox/mapbox';
-import isBrowser from '../utils/is-browser';
+import mapboxgl from '../utils/mapboxgl';
 import {checkVisibilityConstraints} from '../utils/map-constraints';
-
-const mapboxgl = isBrowser ? require('mapbox-gl') : null;
 
 /* eslint-disable max-len */
 const TOKEN_DOC_URL = 'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
