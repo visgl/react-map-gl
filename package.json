@@ -18,9 +18,9 @@
   "module": "dist/esm/index.js",
   "esnext": "dist/es6/index.js",
   "browser": {
-    "dist/es5/utils/mapboxgl.js": "dist/es5/utils/mapboxgl.browser.js",
-    "dist/esm/utils/mapboxgl.js": "dist/esm/utils/mapboxgl.browser.js",
-    "dist/es6/utils/mapboxgl.js": "dist/es6/utils/mapboxgl.browser.js"
+    "./dist/es5/utils/mapboxgl.js": "./dist/es5/utils/mapboxgl.browser.js",
+    "./dist/esm/utils/mapboxgl.js": "./dist/esm/utils/mapboxgl.browser.js",
+    "./dist/es6/utils/mapboxgl.js": "./dist/es6/utils/mapboxgl.browser.js"
   },
   "files": [
     "src",
