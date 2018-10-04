@@ -37,7 +37,10 @@ const LOCAL_DEVELOPMENT_CONFIG = {
 };
 
 function addLocalDevSettings(config) {
-  Object.assign(config.resolve.alias, LOCAL_DEVELOPMENT_CONFIG.resolve.alias);
+  if (!config.resolve) {
+    config.resolve = {};
+  }
+  config.resolve.alias = Object.assign({}, config.resolve.alias, LOCAL_DEVELOPMENT_CONFIG.resolve.alias);
   config.module.rules = config.module.rules.concat(LOCAL_DEVELOPMENT_CONFIG.module.rules);
   return config;
 }

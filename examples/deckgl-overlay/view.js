@@ -25,7 +25,6 @@ import {InteractiveMap} from 'react-map-gl';
 import DeckGL, {ArcLayer} from 'deck.gl';
 import Immutable from 'immutable';
 
-import ScatterplotOverlay from '../additional-overlays/scatterplot-overlay';
 /* global window */
 
 // San Francisco
@@ -126,13 +125,6 @@ export default class Example extends Component {
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
         preventStyleDiffing={ false }>
-
-        <ScatterplotOverlay
-          { ...viewport }
-          locations={ locations }
-          dotRadius={ 2 }
-          globalOpacity={ 1 }
-          compositeOperation="screen"/>
 
         <DeckGL {...viewport} layers={[
           new ArcLayer({

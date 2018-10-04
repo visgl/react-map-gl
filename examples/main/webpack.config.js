@@ -7,6 +7,7 @@ const webpack = require('webpack');
 // Seems to be a Babel bug
 // https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
 const BABEL_CONFIG = {
+  babelrc: false,
   presets: [
     require.resolve('@babel/preset-env'),
     require.resolve('@babel/preset-stage-2'),
@@ -59,9 +60,7 @@ const config = {
     ],
     alias: {
       // used by Mapbox
-      webworkify: 'webworkify-webpack-dropin',
-      // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
-      'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
+      webworkify: 'webworkify-webpack-dropin'
     }
   },
 

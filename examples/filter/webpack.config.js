@@ -10,6 +10,7 @@ const webpack = require('webpack');
 // Seems to be a Babel bug
 // https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
 const BABEL_CONFIG = {
+  babelrc: false,
   presets: [
     'es2015',
     'react',
@@ -37,13 +38,6 @@ const config = {
         options: BABEL_CONFIG
       }]
     }]
-  },
-
-  resolve: {
-    alias: {
-      // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
-      'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
-    }
   },
 
   // Optional: Enables reading mapbox token from environment variable
