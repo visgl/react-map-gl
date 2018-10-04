@@ -3,6 +3,16 @@
 
 # Version 4.0.0 Prereleases
 
+## 4.0.0-alpha.2
+
+- Add more interaction states (#573)
+- Remove commonjs from globals (#592)
+- Remove minify to make the code debuggable (#593)
+- Upgrade build system (#596)
+- Fix: Stylesheet check (#601)
+- New: Support external GL context (#603)
+- Provide static browser/node targets (#599)
+
 ## 4.0.0-alpha.1
 
 - Remove immutablejs from dependency
