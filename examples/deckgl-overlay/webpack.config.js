@@ -23,7 +23,7 @@ const config = {
   },
 
   output: {
-    library: ['App']
+    library: 'App'
   },
 
   module: {
