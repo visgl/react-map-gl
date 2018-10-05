@@ -3,6 +3,10 @@
 
 # Version 4.0.0 Prereleases
 
+## 4.0.0-alpha.3 (Oct 5, 2018)
+
+- Fix browser targets (#610)
+
 ## 4.0.0-alpha.2
 
 - Add more interaction states (#573)
