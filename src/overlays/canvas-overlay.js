@@ -22,6 +22,7 @@ import {createElement} from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from '../components/base-control';
 import {window} from '../utils/globals';
+// import {InteractiveContext} from "../components/interactive-map";
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   redraw: PropTypes.func.isRequired
@@ -54,7 +55,7 @@ export default class CanvasOverlay extends BaseControl {
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
 
-    const {viewport, isDragging} = this.context;
+    const {viewport, isDragging} = this._context;
     this.props.redraw({
       width: viewport.width,
       height: viewport.height,
@@ -72,9 +73,10 @@ export default class CanvasOverlay extends BaseControl {
     this._onContainerLoad(ref);
   }
 
-  render() {
+  _render(context) {
+    this._context = context;
     const pixelRatio = window.devicePixelRatio || 1;
-    const {viewport: {width, height}} = this.context;
+    const {viewport: {width, height}} = context;
 
     return (
       createElement('canvas', {

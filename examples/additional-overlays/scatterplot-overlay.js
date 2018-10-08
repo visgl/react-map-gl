@@ -21,6 +21,8 @@ import {Component, createElement} from 'react';
 import PropTypes from 'prop-types';
 
 import Immutable from 'immutable';
+import {StaticContext} from '../../src/components/static-map';
+import {InteractiveContext} from '../../src/components/interactive-map';
 /* global window */
 
 function round(x, n) {
@@ -48,11 +50,6 @@ const defaultProps = {
   compositeOperation: 'source-over'
 };
 
-const contextTypes = {
-  viewport: PropTypes.object,
-  isDragging: PropTypes.bool
-};
-
 export default class ScatterplotOverlay extends Component {
 
   componentDidMount() {
@@ -65,7 +62,7 @@ export default class ScatterplotOverlay extends Component {
 
   /* eslint-disable max-statements */
   _redraw() {
-    const {viewport, isDragging} = this.context;
+    const {viewport, isDragging} = this._context;
     const {
       dotRadius, dotFill, compositeOperation,
       renderWhileDragging, locations, lngLatAccessor
@@ -85,9 +82,9 @@ export default class ScatterplotOverlay extends Component {
         const pixel = viewport.project(lngLatAccessor(location));
         const pixelRounded = [round(pixel[0], 1), round(pixel[1], 1)];
         if (pixelRounded[0] + dotRadius >= 0 &&
-            pixelRounded[0] - dotRadius < viewport.width &&
-            pixelRounded[1] + dotRadius >= 0 &&
-            pixelRounded[1] - dotRadius < viewport.height
+          pixelRounded[0] - dotRadius < viewport.width &&
+          pixelRounded[1] + dotRadius >= 0 &&
+          pixelRounded[1] - dotRadius < viewport.height
         ) {
           ctx.fillStyle = dotFill;
           ctx.beginPath();
@@ -102,24 +99,34 @@ export default class ScatterplotOverlay extends Component {
   /* eslint-enable max-statements */
 
   render() {
-    const {viewport: {width, height}} = this.context;
-    const {globalOpacity} = this.props;
-    const pixelRatio = window.devicePixelRatio || 1;
     return (
-      createElement('canvas', {
-        ref: 'overlay',
-        width: width * pixelRatio,
-        height: height * pixelRatio,
-        style: {
-          width: `${width}px`,
-          height: `${height}px`,
-          position: 'absolute',
-          pointerEvents: 'none',
-          opacity: globalOpacity,
-          left: 0,
-          top: 0
-        }
-      })
+      createElement(StaticContext.Consumer, null,
+        sContext => {
+          return createElement(InteractiveContext.Consumer, null,
+            iContext => {
+              this._context = Object.assign({}, sContext, iContext);
+              const {viewport: {width, height}} = this._context;
+              const {globalOpacity} = this.props;
+              const pixelRatio = window.devicePixelRatio || 1;
+              return (
+                createElement('canvas', {
+                  ref: 'overlay',
+                  width: width * pixelRatio,
+                  height: height * pixelRatio,
+                  style: {
+                    width: `${width}px`,
+                    height: `${height}px`,
+                    position: 'absolute',
+                    pointerEvents: 'none',
+                    opacity: globalOpacity,
+                    left: 0,
+                    top: 0
+                  }
+                })
+              );
+            }
+          );
+        })
     );
   }
 }
@@ -127,4 +134,4 @@ export default class ScatterplotOverlay extends Component {
 ScatterplotOverlay.displayName = 'ScatterplotOverlay';
 ScatterplotOverlay.propTypes = propTypes;
 ScatterplotOverlay.defaultProps = defaultProps;
-ScatterplotOverlay.contextTypes = contextTypes;
+// ScatterplotOverlay.contextTypes = contextTypes;

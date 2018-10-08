@@ -152,10 +152,11 @@ export default class Popup extends BaseControl {
     ]);
   }
 
-  render() {
+  _render(context) {
+    this.context = context;
     const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
 
-    const [x, y] = this.context.viewport.project([longitude, latitude]);
+    const [x, y] = context.viewport.project([longitude, latitude]);
 
     const positionType = this._getPosition(x, y);
     const anchorPosition = ANCHOR_POSITION[positionType];
@@ -174,7 +175,8 @@ export default class Popup extends BaseControl {
     }, [
       this._renderTip(),
       this._renderContent()
-    ]);
+    ]
+    );
   }
 
 }

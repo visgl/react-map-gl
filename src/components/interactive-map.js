@@ -1,4 +1,4 @@
-import {PureComponent, createElement} from 'react';
+import React, {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -12,6 +12,8 @@ import {EventManager} from 'mjolnir.js';
 import MapControls from '../utils/map-controls';
 import config from '../config';
 import deprecateWarn from '../utils/deprecate-warn';
+
+export const InteractiveContext = React.createContext();
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -135,11 +137,11 @@ const defaultProps = Object.assign({},
   }
 );
 
-const childContextTypes = {
-  viewport: PropTypes.instanceOf(WebMercatorViewport),
-  isDragging: PropTypes.bool,
-  eventManager: PropTypes.object
-};
+// const childContextTypes = {
+//   viewport: PropTypes.instanceOf(WebMercatorViewport),
+//   isDragging: PropTypes.bool,
+//   eventManager: PropTypes.object
+// };
 
 export default class InteractiveMap extends PureComponent {
 
@@ -171,13 +173,13 @@ export default class InteractiveMap extends PureComponent {
     this._updateQueryParams(props.mapStyle);
   }
 
-  getChildContext() {
-    return {
-      viewport: new WebMercatorViewport(this.props),
-      isDragging: this.state.isDragging,
-      eventManager: this._eventManager
-    };
-  }
+  // getChildContext() {
+  //   return {
+  //     viewport: new WebMercatorViewport(this.props),
+  //     isDragging: this.state.isDragging,
+  //     eventManager: this._eventManager
+  //   };
+  // }
 
   componentDidMount() {
     const eventManager = this._eventManager;
@@ -326,17 +328,21 @@ export default class InteractiveMap extends PureComponent {
     };
 
     return (
-      createElement('div', {
-        key: 'map-controls',
-        ref: this._eventCanvasLoaded,
-        style: eventCanvasStyle
-      },
-        createElement(StaticMap, Object.assign({}, this.props,
-          {
-            ref: this._staticMapLoaded,
-            children: this.props.children
-          }
-        ))
+      createElement(InteractiveContext.Provider,
+        {value: {isDragging: this.state.isDragging,
+          eventManager: this._eventManager}},
+        createElement('div', {
+          key: 'map-controls',
+          ref: this._eventCanvasLoaded,
+          style: eventCanvasStyle
+        },
+          createElement(StaticMap, Object.assign({}, this.props,
+            {
+              ref: this._staticMapLoaded,
+              children: this.props.children
+            }
+          ))
+        )
       )
     );
   }
@@ -345,4 +351,4 @@ export default class InteractiveMap extends PureComponent {
 InteractiveMap.displayName = 'InteractiveMap';
 InteractiveMap.propTypes = propTypes;
 InteractiveMap.defaultProps = defaultProps;
-InteractiveMap.childContextTypes = childContextTypes;
+// InteractiveMap.childContextTypes = childContextTypes;

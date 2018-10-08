@@ -21,6 +21,7 @@
 import {createElement} from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from '../components/base-control';
+// import {InteractiveContext} from "../components/interactive-map";
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   redraw: PropTypes.func.isRequired,
@@ -35,8 +36,8 @@ const defaultProps = {
 };
 
 export default class HTMLOverlay extends BaseControl {
-  render() {
-    const {viewport, isDragging} = this.context;
+  _render(context) {
+    const {viewport, isDragging} = context;
     const style = Object.assign({
       position: 'absolute',
       left: 0,
