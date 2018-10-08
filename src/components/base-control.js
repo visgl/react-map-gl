@@ -17,9 +17,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {Component} from 'react';
+import {Component, createElement} from 'react';
 import PropTypes from 'prop-types';
-import WebMercatorViewport from 'viewport-mercator-project';
+// import WebMercatorViewport from 'viewport-mercator-project';
+import {InteractiveContext} from './interactive-map';
+import {StaticContext} from './static-map';
 
 const propTypes = {
   /** Event handling */
@@ -39,11 +41,11 @@ const defaultProps = {
   captureDoubleClick: true
 };
 
-const contextTypes = {
-  viewport: PropTypes.instanceOf(WebMercatorViewport),
-  isDragging: PropTypes.bool,
-  eventManager: PropTypes.object
-};
+// const contextTypes = {
+//   viewport: PropTypes.instanceOf(WebMercatorViewport),
+//   isDragging: PropTypes.bool,
+//   eventManager: PropTypes.object
+// };
 
 /*
  * PureComponent doesn't update when context changes.
@@ -62,7 +64,7 @@ export default class BaseControl extends Component {
   }
 
   componentWillUnmount() {
-    const {eventManager} = this.context;
+    const eventManager = this._eventManager;
     if (eventManager && this._events) {
       eventManager.off(this._events);
     }
@@ -71,7 +73,7 @@ export default class BaseControl extends Component {
   _onContainerLoad = (ref) => {
     this._containerRef = ref;
 
-    const {eventManager} = this.context;
+    const eventManager = this._eventManager;
 
     // Return early if no eventManager is found
     if (!eventManager) {
@@ -125,12 +127,29 @@ export default class BaseControl extends Component {
     }
   }
 
-  render() {
-    return null;
+  _render(context) {
+    throw new Error('_render() must be implemented');
   }
 
+  render() {
+    return (
+      createElement(InteractiveContext.Consumer,
+        null, iContext => {
+          this._eventManager = iContext.eventManager;
+          return createElement(StaticContext.Consumer,
+            null, sContext => {
+              return this._render({
+                viewport: sContext.viewport,
+                isDragging: iContext.isDragging
+              });
+            }
+          );
+        }
+      )
+    );
+  }
 }
 
 BaseControl.propTypes = propTypes;
 BaseControl.defaultProps = defaultProps;
-BaseControl.contextTypes = contextTypes;
+// BaseControl.contextTypes = contextTypes;

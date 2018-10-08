@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,12 +18,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {Component} from 'react';
+import React, {Component, createElement} from 'react';
 import PropTypes from 'prop-types';
 import {extent} from 'd3-array';
 import {scaleLinear} from 'd3-scale';
 import {geoPath, geoTransform} from 'd3-geo';
 import Immutable from 'immutable';
+import {InteractiveContext} from '../../src/components/interactive-map';
+import {StaticContext} from '../../src/components/static-map';
 /* global window */
 
 const propTypes = {
@@ -46,12 +49,8 @@ const defaultProps = {
   valueAccessor: feature => feature.get('properties').get('value')
 };
 
-const contextTypes = {
-  viewport: PropTypes.object,
-  isDragging: PropTypes.bool
-};
-
 export default class ChoroplethOverlay extends Component {
+
   componentDidMount() {
     this._redraw();
   }
@@ -64,7 +63,7 @@ export default class ChoroplethOverlay extends Component {
     const pixelRatio = window.devicePixelRatio;
     const canvas = this.refs.overlay;
     const ctx = canvas.getContext('2d');
-    const {viewport, isDragging} = this.context;
+    const {viewport, isDragging} = this._context;
 
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
@@ -114,26 +113,38 @@ export default class ChoroplethOverlay extends Component {
   }
 
   render() {
-    const {viewport: {width, height}} = this.context;
-    const pixelRatio = window.devicePixelRatio || 1;
     return (
-      <canvas
-        ref="overlay"
-        width={ width * pixelRatio }
-        height={ height * pixelRatio }
-        style={ {
-          width: `${width}px`,
-          height: `${height}px`,
-          position: 'absolute',
-          pointerEvents: 'none',
-          opacity: this.props.globalOpacity,
-          left: 0,
-          top: 0
-        } }/>
+      createElement(StaticContext.Consumer,
+        null, sContext => {
+          const {viewport: {width, height}} = sContext;
+          return createElement(InteractiveContext.Consumer, null,
+            iContext => {
+              this._context = Object.assign({}, iContext, sContext);
+              const pixelRatio = window.devicePixelRatio || 1;
+              return (
+                <canvas
+                  ref="overlay"
+                  width={ width * pixelRatio }
+                  height={ height * pixelRatio }
+                  style={ {
+                    width: `${width}px`,
+                    height: `${height}px`,
+                    position: 'absolute',
+                    pointerEvents: 'none',
+                    opacity: this.props.globalOpacity,
+                    left: 0,
+                    top: 0
+                  } }/>
+              );
+            }
+          );
+        }
+      )
     );
+
   }
 }
 
 ChoroplethOverlay.propTypes = propTypes;
 ChoroplethOverlay.defaultProps = defaultProps;
-ChoroplethOverlay.contextTypes = contextTypes;
+// ChoroplethOverlay.contextTypes = contextTypes;

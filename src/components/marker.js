@@ -53,13 +53,13 @@ const defaultProps = Object.assign({}, DraggableControl.defaultProps, {
  * recalculate the marker's position when the parent re-renders.
  */
 export default class Marker extends DraggableControl {
-  render() {
+  _render(context) {
     const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
     const {dragPos, dragOffset} = this.state;
 
     const [x, y] = dragPos ?
       this._getDraggedPosition(dragPos, dragOffset) :
-      this.context.viewport.project([longitude, latitude]);
+      context.viewport.project([longitude, latitude]);
 
     const containerStyle = {
       position: 'absolute',
@@ -74,9 +74,9 @@ export default class Marker extends DraggableControl {
       children: this.props.children
     });
   }
-
 }
 
 Marker.displayName = 'Marker';
 Marker.propTypes = propTypes;
 Marker.defaultProps = defaultProps;
+

@@ -17,8 +17,10 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
+// import {InteractiveContext} from "./interactive-map";
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   draggable: PropTypes.bool,
@@ -46,7 +48,8 @@ export default class DraggableControl extends BaseControl {
   }
 
   _setupDragEvents() {
-    const {eventManager} = this.context;
+    // const {eventManager} = this.context;
+    const eventManager = this._eventManager;
     if (!eventManager) {
       return;
     }
@@ -62,7 +65,8 @@ export default class DraggableControl extends BaseControl {
   }
 
   _removeDragEvents() {
-    const {eventManager} = this.context;
+    // const {eventManager} = this.context;
+    const eventManager = this._eventManager;
     if (!eventManager || !this._dragEvents) {
       return;
     }
@@ -93,7 +97,7 @@ export default class DraggableControl extends BaseControl {
   }
 
   _getDragLngLat(dragPos, dragOffset) {
-    return this.context.viewport.unproject(
+    return this._context.viewport.unproject(
       this._getDraggedPosition(dragPos, dragOffset)
     );
   }
@@ -149,8 +153,8 @@ export default class DraggableControl extends BaseControl {
     this._removeDragEvents();
   }
 
-  render() {
-    return null;
+  _render(context) {
+    this._context = context;
   }
 
 }
