@@ -59,7 +59,7 @@ export default class Marker extends DraggableControl {
 
     const [x, y] = dragPos ?
       this._getDraggedPosition(dragPos, dragOffset) :
-      this.context.viewport.project([longitude, latitude]);
+      this._context.viewport.project([longitude, latitude]);
 
     const containerStyle = {
       position: 'absolute',

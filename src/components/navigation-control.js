@@ -45,7 +45,7 @@ export default class NavigationControl extends BaseControl {
   }
 
   _updateViewport(opts) {
-    const {viewport} = this.context;
+    const {viewport} = this._context;
     const mapState = new MapState(Object.assign({}, viewport, opts));
     const viewState = Object.assign({}, mapState.getViewportProps(), LINEAR_TRANSITION_PROPS);
 
@@ -59,11 +59,11 @@ export default class NavigationControl extends BaseControl {
   }
 
   _onZoomIn = () => {
-    this._updateViewport({zoom: this.context.viewport.zoom + 1});
+    this._updateViewport({zoom: this._context.viewport.zoom + 1});
   }
 
   _onZoomOut = () => {
-    this._updateViewport({zoom: this.context.viewport.zoom - 1});
+    this._updateViewport({zoom: this._context.viewport.zoom - 1});
   }
 
   _onResetNorth = () => {
@@ -71,7 +71,7 @@ export default class NavigationControl extends BaseControl {
   }
 
   _renderCompass() {
-    const {bearing} = this.context.viewport;
+    const {bearing} = this._context.viewport;
     return createElement('span', {
       className: 'mapboxgl-ctrl-compass-arrow',
       style: {transform: `rotate(${bearing}deg)`}

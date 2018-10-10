@@ -81,7 +81,7 @@ export default class Popup extends BaseControl {
   }
 
   _getPosition(x, y) {
-    const {viewport} = this.context;
+    const {viewport} = this._context;
     const {anchor, dynamicPosition, tipSize} = this.props;
 
     if (this._content) {
@@ -155,7 +155,7 @@ export default class Popup extends BaseControl {
   _render() {
     const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
 
-    const [x, y] = this.context.viewport.project([longitude, latitude]);
+    const [x, y] = this._context.viewport.project([longitude, latitude]);
 
     const positionType = this._getPosition(x, y);
     const anchorPosition = ANCHOR_POSITION[positionType];

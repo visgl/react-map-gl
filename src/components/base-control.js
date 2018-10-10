@@ -52,13 +52,13 @@ export default class BaseControl extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.context = {};
+    this._context = {};
     this._events = null;
     this._containerRef = null;
   }
 
   componentWillUnmount() {
-    const {eventManager} = this.context;
+    const {eventManager} = this._context;
     if (eventManager && this._events) {
       eventManager.off(this._events);
     }
@@ -67,7 +67,7 @@ export default class BaseControl extends PureComponent {
   _onContainerLoad = (ref) => {
     this._containerRef = ref;
 
-    const {eventManager} = this.context;
+    const {eventManager} = this._context;
 
     // Return early if no eventManager is found
     if (!eventManager) {
@@ -121,7 +121,7 @@ export default class BaseControl extends PureComponent {
     }
   }
 
-  _render(context) {
+  _render() {
     throw new Error('_render() not implemented');
   }
 
@@ -132,7 +132,7 @@ export default class BaseControl extends PureComponent {
           // Save event manager
           return createElement(StaticContext.Consumer, null,
             (staticContext) => {
-              this.context = {...interactiveContext, ...staticContext};
+              this._context = {...interactiveContext, ...staticContext};
               return this._render();
             }
           );
