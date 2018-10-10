@@ -72,7 +72,7 @@ export default class CanvasOverlay extends BaseControl {
     this._onContainerLoad(ref);
   }
 
-  render() {
+  _render() {
     const pixelRatio = window.devicePixelRatio || 1;
     const {viewport: {width, height}} = this.context;
 

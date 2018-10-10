@@ -152,7 +152,7 @@ export default class Popup extends BaseControl {
     ]);
   }
 
-  render() {
+  _render() {
     const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
 
     const [x, y] = this.context.viewport.project([longitude, latitude]);

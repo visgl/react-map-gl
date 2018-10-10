@@ -44,10 +44,6 @@ export default class NavigationControl extends BaseControl {
     deprecateWarn(props);
   }
 
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    return this.context.viewport.bearing !== nextContext.viewport.bearing;
-  }
-
   _updateViewport(opts) {
     const {viewport} = this.context;
     const mapState = new MapState(Object.assign({}, viewport, opts));
@@ -93,8 +89,7 @@ export default class NavigationControl extends BaseControl {
     });
   }
 
-  render() {
-
+  _render() {
     const {className, showCompass, showZoom} = this.props;
 
     return createElement('div', {

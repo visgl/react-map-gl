@@ -17,7 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {PureComponent, createElement} from 'react';
+import {PureComponent, createElement, createContext} from 'react';
 import PropTypes from 'prop-types';
 
 import {normalizeStyle} from '../utils/style-utils';
@@ -32,6 +32,10 @@ import {checkVisibilityConstraints} from '../utils/map-constraints';
 const TOKEN_DOC_URL = 'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
 const NO_TOKEN_WARNING = 'A valid API access token is required to use Mapbox data';
 /* eslint-disable max-len */
+
+export const StaticContext = createContext({
+  viewport: null
+});
 
 function noop() {}
 
@@ -62,10 +66,6 @@ const defaultProps = Object.assign({}, Mapbox.defaultProps, {
   visible: true
 });
 
-const childContextTypes = {
-  viewport: PropTypes.instanceOf(WebMercatorViewport)
-};
-
 export default class StaticMap extends PureComponent {
   static supported() {
     return mapboxgl && mapboxgl.supported();
@@ -82,12 +82,6 @@ export default class StaticMap extends PureComponent {
     }
     this.state = {
       accessTokenInvalid: false
-    };
-  }
-
-  getChildContext() {
-    return {
-      viewport: new WebMercatorViewport(this.props)
     };
   }
 
@@ -218,9 +212,11 @@ export default class StaticMap extends PureComponent {
       height,
       overflow: 'hidden'
     };
+    const staticContext = {
+      viewport: new WebMercatorViewport(this.props)
+    };
 
-    // Note: a static map still handles clicks and hover events
-    return (
+    return createElement(StaticContext.Provider, {value: staticContext},
       createElement('div', {
         key: 'map-container',
         style: mapContainerStyle,
@@ -233,7 +229,6 @@ export default class StaticMap extends PureComponent {
           }),
           createElement('div', {
             key: 'map-overlays',
-            // Same as interactive map's overlay container
             className: 'overlays',
             style: overlayContainerStyle,
             children: this.props.children
@@ -248,4 +243,3 @@ export default class StaticMap extends PureComponent {
 StaticMap.displayName = 'StaticMap';
 StaticMap.propTypes = propTypes;
 StaticMap.defaultProps = defaultProps;
-StaticMap.childContextTypes = childContextTypes;

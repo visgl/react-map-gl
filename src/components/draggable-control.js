@@ -149,10 +149,6 @@ export default class DraggableControl extends BaseControl {
     this._removeDragEvents();
   }
 
-  render() {
-    return null;
-  }
-
 }
 
 DraggableControl.propTypes = propTypes;
