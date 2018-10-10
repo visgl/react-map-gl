@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import {Marker} from 'react-map-gl';
 import React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
@@ -6,49 +5,30 @@ import WebMercatorViewport from 'viewport-mercator-project';
 import sinon from 'sinon';
 import test from 'tape-catch';
 
-function createMockContext() {
-  const viewport = new WebMercatorViewport({
+import {StaticContext} from 'react-map-gl/components/static-map';
+import {InteractiveContext} from 'react-map-gl/components/interactive-map';
+
+const mockStaticContext = {
+  viewport: new WebMercatorViewport({
     width: 800,
     height: 600,
     longitude: -122.58,
     latitude: 37.74,
     zoom: 14
-  });
-  const eventManager = {
+  })
+};
+const mockInteractiveContext = {
+  eventManager: {
     on: sinon.spy(),
     off: sinon.spy()
-  };
-
-  class MockContext extends React.Component {
-    getChildContext() {
-      return {
-        viewport,
-        eventManager
-      };
-    }
-
-    render() {
-      return this.props.children;
-    }
   }
-
-  MockContext.childContextTypes = {
-    viewport: PropTypes.instanceOf(WebMercatorViewport),
-    eventManager: PropTypes.object
-  };
-
-  MockContext.viewport = viewport;
-  MockContext.eventManager = eventManager;
-
-  return MockContext;
-}
+};
 
 test('Marker#renders children', t => {
   t.ok(Marker, 'Marker is defined');
 
-  const MockContext = createMockContext();
-
-  const tree = React.createElement(MockContext, {},
+  const staticUsage = React.createElement(StaticContext.Provider,
+    {value: mockStaticContext},
     React.createElement(
       Marker,
       {
@@ -58,12 +38,21 @@ test('Marker#renders children', t => {
       React.createElement('div', {className: 'test-marker'}, ['hello'])
     )
   );
+  const interactiveUsage = React.createElement(InteractiveContext.Provider,
+    {value: mockInteractiveContext},
+    [staticUsage]
+  );
 
-  const result = ReactTestRenderer.create(tree);
-  const resultRoot = result.root;
+  const result = ReactTestRenderer.create(staticUsage);
+  let resultRoot = result.root;
 
   t.ok(resultRoot.findByProps({className: 'mapboxgl-marker '}));
   t.equal(resultRoot.findByProps({className: 'test-marker'}).children[0], 'hello');
+
+  result.update(interactiveUsage);
+  resultRoot = result.root;
+
+  t.ok(resultRoot.findByProps({className: 'mapboxgl-marker '}));
 
   result.unmount();
 

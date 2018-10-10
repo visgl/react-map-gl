@@ -54,7 +54,7 @@ export default class CanvasOverlay extends BaseControl {
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
 
-    const {viewport, isDragging} = this.context;
+    const {viewport, isDragging} = this._context;
     this.props.redraw({
       width: viewport.width,
       height: viewport.height,
@@ -72,9 +72,9 @@ export default class CanvasOverlay extends BaseControl {
     this._onContainerLoad(ref);
   }
 
-  render() {
+  _render() {
     const pixelRatio = window.devicePixelRatio || 1;
-    const {viewport: {width, height}} = this.context;
+    const {viewport: {width, height}} = this._context;
 
     return (
       createElement('canvas', {

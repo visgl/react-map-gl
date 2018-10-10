@@ -35,8 +35,8 @@ const defaultProps = {
 };
 
 export default class HTMLOverlay extends BaseControl {
-  render() {
-    const {viewport, isDragging} = this.context;
+  _render() {
+    const {viewport, isDragging} = this._context;
     const style = Object.assign({
       position: 'absolute',
       left: 0,

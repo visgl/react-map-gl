@@ -46,7 +46,7 @@ export default class DraggableControl extends BaseControl {
   }
 
   _setupDragEvents() {
-    const {eventManager} = this.context;
+    const {eventManager} = this._context;
     if (!eventManager) {
       return;
     }
@@ -62,7 +62,7 @@ export default class DraggableControl extends BaseControl {
   }
 
   _removeDragEvents() {
-    const {eventManager} = this.context;
+    const {eventManager} = this._context;
     if (!eventManager || !this._dragEvents) {
       return;
     }
@@ -93,7 +93,7 @@ export default class DraggableControl extends BaseControl {
   }
 
   _getDragLngLat(dragPos, dragOffset) {
-    return this.context.viewport.unproject(
+    return this._context.viewport.unproject(
       this._getDraggedPosition(dragPos, dragOffset)
     );
   }
@@ -147,10 +147,6 @@ export default class DraggableControl extends BaseControl {
     event.stopPropagation();
     this.setState({dragPos: null, dragOffset: null});
     this._removeDragEvents();
-  }
-
-  render() {
-    return null;
   }
 
 }

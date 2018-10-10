@@ -1,4 +1,4 @@
-import {PureComponent, createElement} from 'react';
+import {PureComponent, createElement, createContext} from 'react';
 import PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -12,6 +12,11 @@ import {EventManager} from 'mjolnir.js';
 import MapControls from '../utils/map-controls';
 import config from '../config';
 import deprecateWarn from '../utils/deprecate-warn';
+
+export const InteractiveContext = createContext({
+  eventManager: null,
+  isDragging: false
+});
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -135,12 +140,6 @@ const defaultProps = Object.assign({},
   }
 );
 
-const childContextTypes = {
-  viewport: PropTypes.instanceOf(WebMercatorViewport),
-  isDragging: PropTypes.bool,
-  eventManager: PropTypes.object
-};
-
 export default class InteractiveMap extends PureComponent {
 
   static supported() {
@@ -169,14 +168,6 @@ export default class InteractiveMap extends PureComponent {
     });
 
     this._updateQueryParams(props.mapStyle);
-  }
-
-  getChildContext() {
-    return {
-      viewport: new WebMercatorViewport(this.props),
-      isDragging: this.state.isDragging,
-      eventManager: this._eventManager
-    };
   }
 
   componentDidMount() {
@@ -324,8 +315,12 @@ export default class InteractiveMap extends PureComponent {
       position: 'relative',
       cursor: getCursor(this.state)
     };
+    const interactiveContext = {
+      isDragging: this.state.isDragging,
+      eventManager: this._eventManager
+    };
 
-    return (
+    return createElement(InteractiveContext.Provider, {value: interactiveContext},
       createElement('div', {
         key: 'map-controls',
         ref: this._eventCanvasLoaded,
@@ -345,4 +340,3 @@ export default class InteractiveMap extends PureComponent {
 InteractiveMap.displayName = 'InteractiveMap';
 InteractiveMap.propTypes = propTypes;
 InteractiveMap.defaultProps = defaultProps;
-InteractiveMap.childContextTypes = childContextTypes;
