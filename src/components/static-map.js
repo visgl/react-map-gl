@@ -147,11 +147,13 @@ export default class StaticMap extends PureComponent {
   }
 
   // Note: needs to be called after render (e.g. in componentDidUpdate)
-  _onResize = ({width, height}) => {
-    this._width = width;
-    this._height = height;
-    this._updateMapProps(this.props);
-    this.props.onResize({width, height});
+  _updateMapSize(width, height) {
+    if (this._width !== width || this._height !== height) {
+      this._width = width;
+      this._height = height;
+      this._updateMapProps(this.props);
+      this.props.onResize({width, height});
+    }
   }
 
   _updateMapStyle(oldProps, newProps) {
@@ -205,7 +207,13 @@ export default class StaticMap extends PureComponent {
     return null;
   }
 
-  _renderOverlays({width, height}) {
+  _renderOverlays(dimensions) {
+    const {
+      width = this.props.width,
+      height = this.props.height
+    } = dimensions;
+    this._updateMapSize(width, height);
+
     const staticContext = {
       viewport: new WebMercatorViewport(Object.assign({}, this.props, {
         width,
@@ -246,7 +254,8 @@ export default class StaticMap extends PureComponent {
         }),
         createElement(AutoSizer, {
           key: 'autosizer',
-          onResize: this._onResize
+          disableWidth: Number.isFinite(width),
+          disableHeight: Number.isFinite(height)
         }, this._renderOverlays.bind(this)),
         this._renderNoTokenWarning()
       ]
