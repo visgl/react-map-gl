@@ -117,9 +117,9 @@ export default class StaticMap extends PureComponent {
     this._map = this._mapbox.getMap();
   }
 
-  componentWillReceiveProps(newProps) {
-    this._updateMapStyle(this.props, newProps);
-    this._updateMapProps(newProps);
+  componentDidUpdate(prevProps) {
+    this._updateMapStyle(prevProps, this.props);
+    this._updateMapProps(this.props);
   }
 
   componentWillUnmount() {
@@ -252,6 +252,8 @@ export default class StaticMap extends PureComponent {
           style: mapStyle,
           className
         }),
+        // AutoSizer is a pure component and does not rerender when map props change
+        // rebind the callback so that it's triggered every render pass
         createElement(AutoSizer, {
           key: 'autosizer',
           disableWidth: Number.isFinite(width),
