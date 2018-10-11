@@ -35,13 +35,17 @@ The Mapbox style. A string url or a
 [MapboxGL style](https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive)
 object (regular JS object or Immutable.Map).
 
-##### `width` {Number} (required)
+##### `style` {Object}
 
-The width of the map.
+The CSS style of the container.
 
-##### `height` {Number} (required)
+##### `width` {Number | String} (required)
 
-The height of the map.
+The width of the map. Can be either a number in pixels, or a valid CSS string.
+
+##### `height` {Number | String} (required)
+
+The height of the map. Can be either a number in pixels, or a valid CSS string.
 
 ##### `viewState` {Object}
 
@@ -142,6 +146,10 @@ Use an existing WebGLContext instead of creating a new one. This allows multiple
 ##### `onLoad` {Function} - default: `no-op function`
 
 A callback run when the map emits a `load` event. [Mapbox docs](https://www.mapbox.com/mapbox-gl-js/api#map.event:load)
+
+##### `onResize` {Function} - default: `no-op function`
+
+A callback run when the map size has changed.
 
 ##### `onError` {Function} - default: `no-op function`
 

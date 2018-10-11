@@ -28,32 +28,11 @@ export default class App extends Component {
         longitude: -100,
         zoom: 3.5,
         bearing: 0,
-        pitch: 0,
-        width: 500,
-        height: 500,
+        pitch: 0
       },
       popupInfo: null
     };
   }
-
-  componentDidMount() {
-    window.addEventListener('resize', this._resize);
-    this._resize();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this._resize);
-  }
-
-  _resize = () => {
-    this.setState({
-      viewport: {
-        ...this.state.viewport,
-        width: this.props.width || window.innerWidth,
-        height: this.props.height || window.innerHeight
-      }
-    });
-  };
 
   _updateViewport = (viewport) => {
     this.setState({viewport});
@@ -91,6 +70,8 @@ export default class App extends Component {
     return (
       <MapGL
         {...viewport}
+        width="100vw"
+        height="100vh"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._updateViewport}
         mapboxApiAccessToken={TOKEN} >
