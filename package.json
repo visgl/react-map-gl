@@ -58,6 +58,7 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
     "babel-eslint": "^6.0.0",
+    "babel-loader": "^8.0.0",
     "babel-plugin-istanbul": "^4.1.1",
     "babel-plugin-version-inline": "^1.0.0",
     "eslint": "^3.0.0",
