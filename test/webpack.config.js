@@ -42,6 +42,19 @@ const BROWSER_CONFIG = {
         test: /\.js$/,
         use: ['source-map-loader'],
         enforce: 'pre'
+      },
+      {
+        test: /\.js$/,
+        include: [/src/, /test/],
+        exclude: [/node_modules/],
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            plugins: [
+              '@babel/proposal-class-properties'
+            ]
+          }
+        }]
       }
     ]
   },
