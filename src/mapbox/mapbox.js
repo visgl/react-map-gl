@@ -256,11 +256,12 @@ export default class Mapbox {
 
     // Hijack dimension properties
     // This eliminates the timing issue between calling resize() and DOM update
+    /* eslint-disable accessor-pairs */
     const {container} = props;
-    container.__defineGetter__('offsetWidth', () => this.width);
-    container.__defineGetter__('clientWidth', () => this.width);
-    container.__defineGetter__('offsetHeight', () => this.height);
-    container.__defineGetter__('clientHeight', () => this.height);
+    Object.defineProperty(container, 'offsetWidth', {get: () => this.width});
+    Object.defineProperty(container, 'clientWidth', {get: () => this.width});
+    Object.defineProperty(container, 'offsetHeight', {get: () => this.height});
+    Object.defineProperty(container, 'clientHeight', {get: () => this.height});
 
     // Disable outline style
     const canvas = this.map.getCanvas();
