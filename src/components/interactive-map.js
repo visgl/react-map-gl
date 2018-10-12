@@ -166,6 +166,8 @@ export default class InteractiveMap extends PureComponent {
       legacyBlockScroll: false,
       touchAction: props.touchAction
     });
+    this._width = 0;
+    this._height = 0;
 
     this._updateQueryParams(props.mapStyle);
   }
@@ -205,7 +207,9 @@ export default class InteractiveMap extends PureComponent {
         props.onViewportChange || props.onChangeViewport),
       onViewportChange: this._onViewportChange,
       onStateChange: this._onInteractionStateChange,
-      eventManager: this._eventManager
+      eventManager: this._eventManager,
+      width: this._width,
+      height: this._height
     });
 
     this._mapControls.setOptions(props);
@@ -240,6 +244,13 @@ export default class InteractiveMap extends PureComponent {
     if (onInteractionStateChange) {
       onInteractionStateChange(interactionState);
     }
+  }
+
+  _onResize = ({width, height}) => {
+    this._width = width;
+    this._height = height;
+    this._setControllerProps(this.props);
+    this.props.onResize({width, height});
   }
 
   _onViewportChange = (viewState, interactionState, oldViewState) => {
@@ -307,14 +318,13 @@ export default class InteractiveMap extends PureComponent {
   }
 
   render() {
-    const {width, height, getCursor} = this.props;
+    const {width, height, style, getCursor} = this.props;
 
-    const eventCanvasStyle = {
+    const eventCanvasStyle = Object.assign({position: 'relative'}, style, {
       width,
       height,
-      position: 'relative',
       cursor: getCursor(this.state)
-    };
+    });
     const interactiveContext = {
       isDragging: this.state.isDragging,
       eventManager: this._eventManager
@@ -328,6 +338,10 @@ export default class InteractiveMap extends PureComponent {
       },
         createElement(StaticMap, Object.assign({}, this.props,
           {
+            width: '100%',
+            height: '100%',
+            style: null,
+            onResize: this._onResize,
             ref: this._staticMapLoaded,
             children: this.props.children
           }

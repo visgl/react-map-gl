@@ -18,8 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* global window, document, process, HTMLCanvasElement */
+/* global window, process, HTMLCanvasElement */
 import PropTypes from 'prop-types';
+import {document} from '../utils/globals';
 
 function noop() {}
 
@@ -56,6 +57,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  container: document.body,
   mapboxApiAccessToken: getAccessToken(),
   preserveDrawingBuffer: false,
   attributionControl: true,
@@ -147,6 +149,7 @@ export default class Mapbox {
   // (e.g. until "componentDidUpdate")
   resize() {
     this._map.resize();
+    this._map._render();
     return this;
   }
 
@@ -194,13 +197,14 @@ export default class Mapbox {
       }
 
       const mapOptions = {
-        container: props.container || document.body,
+        container: props.container,
         center: [0, 0],
         zoom: 8,
         pitch: 0,
         bearing: 0,
         style: props.mapStyle,
         interactive: false,
+        trackResize: false,
         attributionControl: props.attributionControl,
         preserveDrawingBuffer: props.preserveDrawingBuffer
       };
@@ -250,6 +254,15 @@ export default class Mapbox {
 
     this._create(props);
 
+    // Hijack dimension properties
+    // This eliminates the timing issue between calling resize() and DOM update
+    /* eslint-disable accessor-pairs */
+    const {container} = props;
+    Object.defineProperty(container, 'offsetWidth', {get: () => this.width});
+    Object.defineProperty(container, 'clientWidth', {get: () => this.width});
+    Object.defineProperty(container, 'offsetHeight', {get: () => this.height});
+    Object.defineProperty(container, 'clientHeight', {get: () => this.height});
+
     // Disable outline style
     const canvas = this.map.getCanvas();
     if (canvas) {
@@ -280,7 +293,9 @@ export default class Mapbox {
   _updateMapSize(oldProps, newProps) {
     const sizeChanged = oldProps.width !== newProps.width || oldProps.height !== newProps.height;
     if (sizeChanged) {
-      this._map.resize();
+      this.width = newProps.width;
+      this.height = newProps.height;
+      this.resize();
     }
   }
 
