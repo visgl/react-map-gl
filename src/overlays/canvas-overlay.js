@@ -43,14 +43,13 @@ export default class CanvasOverlay extends BaseControl {
     this._redraw();
   }
 
-  componentDidUpdate() {
-    this._redraw();
-  }
-
   _redraw = () => {
+    const ctx = this._ctx;
+    if (!ctx) {
+      return;
+    }
+
     const pixelRatio = window.devicePixelRatio || 1;
-    const canvas = this._canvas;
-    const ctx = canvas.getContext('2d');
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
 
@@ -69,12 +68,14 @@ export default class CanvasOverlay extends BaseControl {
 
   _canvasLoaded = (ref) => {
     this._canvas = ref;
+    this._ctx = ref && ref.getContext('2d');
     this._onContainerLoad(ref);
   }
 
   _render() {
     const pixelRatio = window.devicePixelRatio || 1;
     const {viewport: {width, height}} = this._context;
+    this._redraw();
 
     return (
       createElement('canvas', {

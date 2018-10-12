@@ -17,11 +17,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {Component, createElement} from 'react';
+import React, {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
 
 import Immutable from 'immutable';
-/* global window */
+import {CanvasOverlay} from 'react-map-gl';
 
 function round(x, n) {
   const tenN = Math.pow(10, n);
@@ -48,46 +48,26 @@ const defaultProps = {
   compositeOperation: 'source-over'
 };
 
-const contextTypes = {
-  viewport: PropTypes.object,
-  isDragging: PropTypes.bool
-};
-
-export default class ScatterplotOverlay extends Component {
-
-  componentDidMount() {
-    this._redraw();
-  }
-
-  componentDidUpdate() {
-    this._redraw();
-  }
+export default class ScatterplotOverlay extends PureComponent {
 
   /* eslint-disable max-statements */
-  _redraw() {
-    const {viewport, isDragging} = this.context;
+  _redraw = ({width, height, ctx, isDragging, project, unproject}) => {
     const {
       dotRadius, dotFill, compositeOperation,
       renderWhileDragging, locations, lngLatAccessor
     } = this.props;
 
-    const pixelRatio = window.devicePixelRatio || 1;
-    const canvas = this.refs.overlay;
-    const ctx = canvas.getContext('2d');
-
-    ctx.save();
-    ctx.scale(pixelRatio, pixelRatio);
-    ctx.clearRect(0, 0, viewport.width, viewport.height);
+    ctx.clearRect(0, 0, width, height);
     ctx.globalCompositeOperation = compositeOperation;
 
     if ((renderWhileDragging || !isDragging) && locations) {
       for (const location of locations) {
-        const pixel = viewport.project(lngLatAccessor(location));
+        const pixel = project(lngLatAccessor(location));
         const pixelRounded = [round(pixel[0], 1), round(pixel[1], 1)];
         if (pixelRounded[0] + dotRadius >= 0 &&
-            pixelRounded[0] - dotRadius < viewport.width &&
+            pixelRounded[0] - dotRadius < width &&
             pixelRounded[1] + dotRadius >= 0 &&
-            pixelRounded[1] - dotRadius < viewport.height
+            pixelRounded[1] - dotRadius < height
         ) {
           ctx.fillStyle = dotFill;
           ctx.beginPath();
@@ -96,35 +76,14 @@ export default class ScatterplotOverlay extends Component {
         }
       }
     }
-
-    ctx.restore();
   }
   /* eslint-enable max-statements */
 
   render() {
-    const {viewport: {width, height}} = this.context;
-    const {globalOpacity} = this.props;
-    const pixelRatio = window.devicePixelRatio || 1;
-    return (
-      createElement('canvas', {
-        ref: 'overlay',
-        width: width * pixelRatio,
-        height: height * pixelRatio,
-        style: {
-          width: `${width}px`,
-          height: `${height}px`,
-          position: 'absolute',
-          pointerEvents: 'none',
-          opacity: globalOpacity,
-          left: 0,
-          top: 0
-        }
-      })
-    );
+    return <CanvasOverlay redraw={this._redraw} />;
   }
 }
 
 ScatterplotOverlay.displayName = 'ScatterplotOverlay';
 ScatterplotOverlay.propTypes = propTypes;
 ScatterplotOverlay.defaultProps = defaultProps;
-ScatterplotOverlay.contextTypes = contextTypes;
