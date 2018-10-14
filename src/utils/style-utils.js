@@ -1,24 +1,3 @@
-
-// TODO - remove in the next major release
-// Mapbox dropped the `interactive` property: https://github.com/mapbox/mapbox-gl-js/issues/1479
-export function getInteractiveLayerIds(style) {
-  if (!style) {
-    return null;
-  }
-  if (typeof style === 'string') {
-    return null;
-  }
-  if (style.toJS) {
-    style = style.toJS();
-  }
-
-  if (Array.isArray(style.layers)) {
-    return style.layers.filter(l => l.interactive).map(l => l.id);
-  }
-
-  return null;
-}
-
 // Prepare a map style object for diffing
 // If immutable - convert to plain object
 // Work around some issues in the styles that would fail Mapbox's diffing
