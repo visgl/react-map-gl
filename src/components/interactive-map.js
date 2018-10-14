@@ -6,7 +6,6 @@ import {MAPBOX_LIMITS} from '../utils/map-state';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import TransitionManager from '../utils/transition-manager';
-import {getInteractiveLayerIds} from '../utils/style-utils';
 
 import {EventManager} from 'mjolnir.js';
 import MapControls from '../utils/map-controls';
@@ -104,6 +103,9 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   /** Radius to detect features around a clicked point. Defaults to 0. */
   clickRadius: PropTypes.number,
 
+  /** List of layers that are interactive */
+  interactiveLayerIds: PropTypes.array,
+
   /** Accessor that returns a cursor style to show interactive state */
   getCursor: PropTypes.func,
 
@@ -168,8 +170,6 @@ export default class InteractiveMap extends PureComponent {
     });
     this._width = 0;
     this._height = 0;
-
-    this._updateQueryParams(props.mapStyle);
   }
 
   componentDidMount() {
@@ -186,10 +186,6 @@ export default class InteractiveMap extends PureComponent {
   }
 
   componentWillUpdate(nextProps) {
-    if (this.props.mapStyle !== nextProps.mapStyle) {
-      this._updateQueryParams(nextProps.mapStyle);
-    }
-
     this._setControllerProps(nextProps);
   }
 
@@ -217,21 +213,21 @@ export default class InteractiveMap extends PureComponent {
 
   _getFeatures({pos, radius}) {
     let features;
+    const queryParams = {};
+
+    if (this.props.interactiveLayerIds) {
+      queryParams.layers = this.props.interactiveLayerIds;
+    }
+
     if (radius) {
       // Radius enables point features, like marker symbols, to be clicked.
       const size = radius;
       const bbox = [[pos[0] - size, pos[1] + size], [pos[0] + size, pos[1] - size]];
-      features = this._map.queryRenderedFeatures(bbox, this._queryParams);
+      features = this._map.queryRenderedFeatures(bbox, queryParams);
     } else {
-      features = this._map.queryRenderedFeatures(pos, this._queryParams);
+      features = this._map.queryRenderedFeatures(pos, queryParams);
     }
     return features;
-  }
-
-  // Hover and click only query layers whose interactive property is true
-  _updateQueryParams(mapStyle) {
-    const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
-    this._queryParams = {layers: interactiveLayerIds};
   }
 
   _onInteractionStateChange = (interactionState) => {
@@ -276,7 +272,7 @@ export default class InteractiveMap extends PureComponent {
       const pos = this._getPos(event);
       const features = this._getFeatures({pos, radius: this.props.clickRadius});
 
-      const isHovering = features && features.length > 0;
+      const isHovering = this.props.interactiveLayerIds && features && features.length > 0;
       if (isHovering !== this.state.isHovering) {
         this.setState({isHovering});
       }

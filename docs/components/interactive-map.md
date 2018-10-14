@@ -136,12 +136,15 @@ This object must implement the following interface:
 - `events` - An array of subscribed events
 - `handleEvent(event, context)` - A method that handles interactive events
 
-Parameters
-- `event` - The pointer event.
-  + `event.lngLat` - The geo coordinates that is being hovered.
-  + `event.features` - The array of features under the pointer, queried using Mapbox's
-    [queryRenderedFeatures](https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures) API.
-    To make a layer interactive, set the `interactive` property in the layer style to `true`.
+##### `interactiveLayerIds` {Array} [default: null]
+
+A list of layer ids that are interactive. If specified:
+- Pointer event callbacks will only query the features under the pointer of these layers.
+- The `getCursor` callback will receive `isHovering: true` when hover over features of these layers.
+
+If not specified:
+- Pointer event callbacks will query the features under the pointer of all layers.
+- The `getCursor` callback will always receive `isHovering: false`.
 
 ##### `onHover` {Function}
 
@@ -152,7 +155,7 @@ Parameters
   + `event.lngLat` - The geo coordinates that is being clicked.
   + `event.features` - The array of features under the pointer, queried using Mapbox's
     [queryRenderedFeatures](https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures) API.
-    To make a layer interactive, set the `interactive` property in the layer style to `true`.
+    To make only selected layers interactive, set the `interactiveLayerIds` prop.
 
 ##### `onClick` {Function}
 
@@ -163,7 +166,7 @@ Parameters
   + `event.lngLat` - The geo coordinates that is being clicked.
   + `event.features` - The array of features under the pointer, queried using Mapbox's
     [queryRenderedFeatures](https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures) API.
-    To make a layer interactive, set the `interactive` property in the layer style to `true`.
+    To make only selected layers interactive, set the `interactiveLayerIds` prop.
 
 ##### `onContextMenu` {Function}
 
@@ -178,7 +181,9 @@ Accessor that returns a cursor style to show interactive state. Called when the 
 Parameters
 - `state` - The current state of the component.
   + `state.isDragging` - If the map is being dragged.
-  + `state.isHovering` - If the pointer is over a clickable feature.
+  + `state.isHovering` - If the pointer is over an interactive feature. See `interactiveLayerIds` prop.
+
+The default implementation of `getCursor` returns `'pointer'` if `isHovering`, `'grabbing'` if `isDragging` and `'grab'` otherwise.
 
 ##### `transitionDuration` {Number}
 
