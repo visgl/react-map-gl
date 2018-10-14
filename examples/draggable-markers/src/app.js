@@ -25,9 +25,7 @@ export default class App extends Component {
         longitude: -100,
         zoom: 3.5,
         bearing: 0,
-        pitch: 0,
-        width: 500,
-        height: 500,
+        pitch: 0
       },
       marker: {
         latitude: 37.785164,
@@ -36,25 +34,6 @@ export default class App extends Component {
       events: {}
     };
   }
-
-  componentDidMount() {
-    window.addEventListener('resize', this._resize);
-    this._resize();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this._resize);
-  }
-
-  _resize = () => {
-    this.setState({
-      viewport: {
-        ...this.state.viewport,
-        width: this.props.width || window.innerWidth,
-        height: this.props.height || window.innerHeight
-      }
-    });
-  };
 
   _updateViewport = (viewport) => {
     this.setState({viewport});
@@ -94,6 +73,8 @@ export default class App extends Component {
     return (
       <MapGL
         {...viewport}
+        width="100%"
+        height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._updateViewport}
         mapboxApiAccessToken={TOKEN} >
@@ -121,6 +102,6 @@ export default class App extends Component {
 
 }
 
-export function renderToDom() {
-  render(<App/>, document.body.appendChild(document.createElement('div')));
+export function renderToDom(container) {
+  render(<App/>, container);
 }

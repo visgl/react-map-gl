@@ -37,8 +37,8 @@ export default class BartMap extends Component {
         mapboxApiAccessToken={MAPBOX_TOKEN}
         mapStyle={mapStyle}
 
-        width={500}
-        height={500}
+        width="100%"
+        height="100%"
         onViewportChange={this._onViewportChange}
 
         reuseMaps={true}

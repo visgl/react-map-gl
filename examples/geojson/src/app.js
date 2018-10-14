@@ -23,36 +23,17 @@ export default class App extends Component {
       longitude: -100,
       zoom: 3,
       bearing: 0,
-      pitch: 0,
-      width: 500,
-      height: 500
+      pitch: 0
     }
   };
 
   componentDidMount() {
-    window.addEventListener('resize', this._resize);
-    this._resize();
-
     requestJson('data/us-income.geojson', (error, response) => {
       if (!error) {
         this._loadData(response);
       }
     });
   }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this._resize);
-  }
-
-  _resize = () => {
-    this.setState({
-      viewport: {
-        ...this.state.viewport,
-        width: this.props.width || window.innerWidth,
-        height: this.props.height || window.innerHeight
-      }
-    });
-  };
 
   _loadData = data => {
 
@@ -106,9 +87,11 @@ export default class App extends Component {
     const {viewport, mapStyle} = this.state;
 
     return (
-      <div>
+      <div style={{height: '100%'}}>
         <MapGL
           {...viewport}
+          width="100%"
+          height="100%"
           mapStyle={mapStyle}
           onViewportChange={this._onViewportChange}
           mapboxApiAccessToken={MAPBOX_TOKEN}
@@ -126,6 +109,6 @@ export default class App extends Component {
 
 }
 
-export function renderToDom() {
-  render(<App/>, document.body.appendChild(document.createElement('div')));
+export function renderToDom(container) {
+  render(<App/>, container);
 }
