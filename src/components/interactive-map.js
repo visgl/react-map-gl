@@ -282,7 +282,10 @@ export default class InteractiveMap extends PureComponent {
       }
 
       if (this.props.onHover) {
-        const viewport = new WebMercatorViewport(this.props);
+        const viewport = new WebMercatorViewport(Object.assign({}, this.props, {
+          width: this._width,
+          height: this._height
+        }));
         event.lngLat = viewport.unproject(pos);
         event.features = features;
 
@@ -294,7 +297,10 @@ export default class InteractiveMap extends PureComponent {
   _onMouseClick = (event) => {
     if (this.props.onClick) {
       const pos = this._getPos(event);
-      const viewport = new WebMercatorViewport(this.props);
+      const viewport = new WebMercatorViewport(Object.assign({}, this.props, {
+        width: this._width,
+        height: this._height
+      }));
       event.lngLat = viewport.unproject(pos);
       event.features = this._getFeatures({pos, radius: this.props.clickRadius});
 

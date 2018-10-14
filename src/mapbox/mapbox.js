@@ -149,7 +149,10 @@ export default class Mapbox {
   // (e.g. until "componentDidUpdate")
   resize() {
     this._map.resize();
-    this._map._render();
+    // map render will throw error if style is not loaded
+    if (this._map.isStyleLoaded()) {
+      this._map._render();
+    }
     return this;
   }
 
