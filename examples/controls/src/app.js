@@ -70,8 +70,8 @@ export default class App extends Component {
     return (
       <MapGL
         {...viewport}
-        width="100vw"
-        height="100vh"
+        width="100%"
+        height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._updateViewport}
         mapboxApiAccessToken={TOKEN} >
@@ -92,6 +92,6 @@ export default class App extends Component {
 
 }
 
-export function renderToDom() {
-  render(<App/>, document.body.appendChild(document.createElement('div')));
+export function renderToDom(container) {
+  render(<App/>, container);
 }

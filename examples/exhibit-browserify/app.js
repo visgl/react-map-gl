@@ -13,14 +13,12 @@ class Root extends Component {
       zoom: 16.140440,
       bearing: -20.55991,
       pitch: 60,
-    },
-    width: 500,
-    height: 500,
+    }
   }
 
   render() {
 
-    const {viewport, width, height} = this.state;
+    const {viewport} = this.state;
 
     return (
       <MapGL
@@ -30,8 +28,8 @@ class Root extends Component {
         preventStyleDiffing={false}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         perspectiveEnabled
-        width={width}
-        height={height}>
+        width="100vw"
+        height="100vh"
       </MapGL>
     );
   }

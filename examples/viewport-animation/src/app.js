@@ -15,28 +15,12 @@ export default class App extends Component {
       longitude: -122.4193,
       zoom: 11,
       bearing: 0,
-      pitch: 0,
-      width: 500,
-      height: 500
+      pitch: 0
     }
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this._resize);
-    this._resize();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this._resize);
   }
 
   _onViewportChange = viewport => this.setState({
     viewport: {...this.state.viewport, ...viewport}
-  });
-
-  _resize = () => this._onViewportChange({
-    width: this.props.width || window.innerWidth,
-    height: this.props.height || window.innerHeight
   });
 
   _goToViewport = ({longitude, latitude}) => {
@@ -54,10 +38,12 @@ export default class App extends Component {
     const {viewport, settings} = this.state;
 
     return (
-      <div>
+      <div style={{height: '100%'}}>
         <MapGL
           {...viewport}
           {...settings}
+          width="100%"
+          height="100%"
           mapStyle="mapbox://styles/mapbox/dark-v9"
           onViewportChange={this._onViewportChange}
           dragToRotate={false}
@@ -70,6 +56,6 @@ export default class App extends Component {
 
 }
 
-export function renderToDom() {
-  render(<App/>, document.body.appendChild(document.createElement('div')));
+export function renderToDom(container) {
+  render(<App/>, container);
 }

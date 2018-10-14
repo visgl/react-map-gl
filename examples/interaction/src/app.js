@@ -18,9 +18,7 @@ export default class App extends Component {
       longitude: -122.36,
       zoom: 11,
       bearing: 0,
-      pitch: 50,
-      width: 500,
-      height: 500
+      pitch: 50
     },
     interactionState: {},
     settings: {
@@ -37,25 +35,6 @@ export default class App extends Component {
       maxPitch: 85
     }
   }
-
-  componentDidMount() {
-    window.addEventListener('resize', this._resize);
-    this._resize();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this._resize);
-  }
-
-  _resize = () => {
-    this.setState({
-      viewport: {
-        ...this.state.viewport,
-        width: this.props.width || window.innerWidth,
-        height: this.props.height || window.innerHeight
-      }
-    });
-  };
 
   _onViewportChange = viewport => this.setState({viewport});
 
@@ -83,6 +62,8 @@ export default class App extends Component {
       <MapGL
         {...viewport}
         {...settings}
+        width="100%"
+        height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
         onInteractionStateChange={this._onInteractionStateChange}
@@ -99,6 +80,6 @@ export default class App extends Component {
 
 }
 
-export function renderToDom() {
-  render(<App/>, document.body.appendChild(document.createElement('div')));
+export function renderToDom(container) {
+  render(<App/>, container);
 }

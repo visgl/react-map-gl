@@ -15,9 +15,7 @@ class Root extends Component {
         longitude: -122.41669,
         zoom: 14,
         bearing: 0,
-        pitch: 0,
-        width: window.innerWidth,
-        height: window.innerHeight
+        pitch: 0
       }
     };
   }
@@ -29,6 +27,8 @@ class Root extends Component {
     return (
       <MapGL
         {...viewport}
+        width="100vw"
+        height="100vh"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={v => this.setState({viewport: v})}
         preventStyleDiffing={false}
