@@ -2,6 +2,11 @@
 
 # Version 3.3.0
 
+## 3.3.6 (Oct 15, 2018)
+
+- `mapbox-gl` v0.50 (#618)
+- Remove `bower` dependency (#615)
+
 ## 3.3.5 (Sep 26, 2018)
 
 - Fix auto stylesheet detection (#601)
