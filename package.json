@@ -42,7 +42,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "bowser": "^1.2.0",
     "mapbox-gl": "~0.50.0",
     "math.gl": "^2.0.0",
     "mjolnir.js": "^2.0.0-alpha.1",
