@@ -23,6 +23,7 @@ import PropTypes from 'prop-types';
 import {normalizeStyle} from '../utils/style-utils';
 
 import WebMercatorViewport from 'viewport-mercator-project';
+import AutoSizer from 'react-virtualized-auto-sizer';
 
 import Mapbox from '../mapbox/mapbox';
 import mapboxgl from '../utils/mapboxgl';
@@ -41,7 +42,21 @@ function noop() {}
 
 const UNAUTHORIZED_ERROR_CODE = 401;
 
+const CONTAINER_STYLE = {
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  overflow: 'hidden'
+};
+
 const propTypes = Object.assign({}, Mapbox.propTypes, {
+  /** The dimensions of the map **/
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+
+  /** Callback when map size changes **/
+  onResize: PropTypes.func,
+
   /** The Mapbox style. A string url or a MapboxGL style Immutable.Map object. */
   mapStyle: PropTypes.oneOfType([
     PropTypes.string,
@@ -63,7 +78,8 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
 const defaultProps = Object.assign({}, Mapbox.defaultProps, {
   mapStyle: 'mapbox://styles/mapbox/light-v8',
   preventStyleDiffing: false,
-  visible: true
+  visible: true,
+  onResize: noop
 });
 
 export default class StaticMap extends PureComponent {
@@ -83,6 +99,8 @@ export default class StaticMap extends PureComponent {
     this.state = {
       accessTokenInvalid: false
     };
+    this._width = 0;
+    this._height = 0;
   }
 
   componentDidMount() {
@@ -90,6 +108,8 @@ export default class StaticMap extends PureComponent {
 
     this._mapbox = new Mapbox(Object.assign({}, this.props, {
       mapboxgl, // Handle to mapbox-gl library
+      width: this._width,
+      height: this._height,
       container: this._mapboxMap,
       onError: this._mapboxMapError,
       mapStyle: normalizeStyle(mapStyle)
@@ -97,23 +117,9 @@ export default class StaticMap extends PureComponent {
     this._map = this._mapbox.getMap();
   }
 
-  componentWillReceiveProps(newProps) {
-    this._mapbox.setProps(newProps);
-    this._updateMapStyle(this.props, newProps);
-
-    // this._updateMapViewport(this.props, newProps);
-
-    // Save width/height so that we can check them in componentDidUpdate
-    this.setState({
-      width: this.props.width,
-      height: this.props.height
-    });
-  }
-
-  componentDidUpdate() {
-    // Since Mapbox's map.resize() reads size from DOM
-    // we must wait to read size until after render (i.e. here in "didUpdate")
-    this._updateMapSize(this.state, this.props);
+  componentDidUpdate(prevProps) {
+    this._updateMapStyle(prevProps, this.props);
+    this._updateMapProps(this.props);
   }
 
   componentWillUnmount() {
@@ -141,13 +147,12 @@ export default class StaticMap extends PureComponent {
   }
 
   // Note: needs to be called after render (e.g. in componentDidUpdate)
-  _updateMapSize(oldProps, newProps) {
-    const sizeChanged =
-      oldProps.width !== newProps.width || oldProps.height !== newProps.height;
-
-    if (sizeChanged) {
-      this._map.resize();
-      // this._callOnChangeViewport(this._map.transform);
+  _updateMapSize(width, height) {
+    if (this._width !== width || this._height !== height) {
+      this._width = width;
+      this._height = height;
+      this._updateMapProps(this.props);
+      this.props.onResize({width, height});
     }
   }
 
@@ -157,6 +162,16 @@ export default class StaticMap extends PureComponent {
     if (mapStyle !== oldMapStyle) {
       this._map.setStyle(normalizeStyle(mapStyle), {diff: !this.props.preventStyleDiffing});
     }
+  }
+
+  _updateMapProps(props) {
+    if (!this._mapbox) {
+      return;
+    }
+    this._mapbox.setProps(Object.assign({}, props, {
+      width: this._width,
+      height: this._height
+    }));
   }
 
   _mapboxMapLoaded = (ref) => {
@@ -192,51 +207,61 @@ export default class StaticMap extends PureComponent {
     return null;
   }
 
-  render() {
-    const {className, width, height, style, visibilityConstraints} = this.props;
-    const mapContainerStyle = Object.assign({}, style, {width, height, position: 'relative'});
+  _renderOverlays(dimensions) {
+    const {
+      width = this.props.width,
+      height = this.props.height
+    } = dimensions;
+    this._updateMapSize(width, height);
 
-    const visible = this.props.visible &&
-      checkVisibilityConstraints(this.props.viewState || this.props, visibilityConstraints);
-
-    const mapStyle = Object.assign({}, style, {
-      width,
-      height,
-      visibility: visible ? 'visible' : 'hidden'
-    });
-    const overlayContainerStyle = {
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      width,
-      height,
-      overflow: 'hidden'
-    };
     const staticContext = {
-      viewport: new WebMercatorViewport(this.props)
+      viewport: new WebMercatorViewport(Object.assign({}, this.props, {
+        width,
+        height
+      }))
     };
 
     return createElement(StaticContext.Provider, {value: staticContext},
       createElement('div', {
-        key: 'map-container',
-        style: mapContainerStyle,
-        children: [
-          createElement('div', {
-            key: 'map-mapbox',
-            ref: this._mapboxMapLoaded,
-            style: mapStyle,
-            className
-          }),
-          createElement('div', {
-            key: 'map-overlays',
-            className: 'overlays',
-            style: overlayContainerStyle,
-            children: this.props.children
-          }),
-          this._renderNoTokenWarning()
-        ]
+        key: 'map-overlays',
+        className: 'overlays',
+        style: CONTAINER_STYLE,
+        children: this.props.children
       })
     );
+  }
+
+  render() {
+    const {className, width, height, style, visibilityConstraints} = this.props;
+    const mapContainerStyle = Object.assign({position: 'relative'}, style, {width, height});
+
+    const visible = this.props.visible &&
+      checkVisibilityConstraints(this.props.viewState || this.props, visibilityConstraints);
+
+    const mapStyle = Object.assign({}, CONTAINER_STYLE, {
+      visibility: visible ? 'visible' : 'hidden'
+    });
+
+    return createElement('div', {
+      key: 'map-container',
+      style: mapContainerStyle,
+      children: [
+        createElement('div', {
+          key: 'map-mapbox',
+          ref: this._mapboxMapLoaded,
+          style: mapStyle,
+          className
+        }),
+        // AutoSizer is a pure component and does not rerender when map props change
+        // rebind the callback so that it's triggered every render pass
+        createElement(AutoSizer, {
+          key: 'autosizer',
+          disableWidth: Number.isFinite(width),
+          disableHeight: Number.isFinite(height)
+        }, this._renderOverlays.bind(this)),
+        this._renderNoTokenWarning()
+      ]
+    });
   }
 }
 

@@ -3,6 +3,14 @@
 
 # Version 4.0.0 Prereleases
 
+## 4.0.0-beta.1 (Oct 13, 2018)
+
+- Upgrade to new React context API (#613)
+- Support relative map size (#614)
+- Bump mapbox-gl dep to 0.50.0 (#618)
+- Bug fixes for auto-resize mode (#619)
+- Remove usage of deprecated `interactive` properties in map styles (#621)
+
 ## 4.0.0-alpha.3 (Oct 5, 2018)
 
 - Fix browser targets (#610)

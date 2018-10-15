@@ -47,16 +47,13 @@ module.exports = {
 
   resolve: {
     modules: [
-      // Always resolve module to this app's node_modules first
-      resolve('./node_modules'),
-      'node_modules'
+      // Always resolve module to root dependencies first
+      resolve('../node_modules'),
+      resolve('./node_modules')
     ],
     alias: {
       'react-map-gl': resolve('../src'),
-      // used by Mapbox
-      webworkify: 'webworkify-webpack-dropin',
-      // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
-      'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js')
+      '../utils/mapboxgl': resolve('../node_modules/mapbox-gl/dist/mapbox-gl-dev.js'),
     }
   },
 

@@ -22,10 +22,22 @@
 import ReactDOM from 'react-dom';
 import React, {Component} from 'react';
 import MapGL from 'react-map-gl';
+import Immutable from 'immutable';
 
-import customOverlayExamples from './custom-overlay-examples';
+import ScatterplotOverlay from './scatterplot-overlay';
+import ChoroplethOverlay from './choropleth-overlay';
+
+import ZIPCODES_SF from '../../data/feature-example-sf.json';
+import CITIES from '../../data/cities.json';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
+
+const ZIPCODES = Immutable.fromJS(ZIPCODES_SF.features)
+  .map(f => f.setIn(['properties', 'value'], Math.random() * 1000));
+
+const CITY_LOCATIONS = Immutable.fromJS(
+  CITIES.map(c => [c.longitude, c.latitude])
+);
 
 export default class App extends Component {
   constructor(props) {
@@ -44,7 +56,7 @@ export default class App extends Component {
   }
 
   render() {
-    const {viewport} = this.state;
+    const {viewport, draggablePoints} = this.state;
 
     return (
       <MapGL
@@ -53,7 +65,20 @@ export default class App extends Component {
         onViewportChange={v => this.setState({viewport: v})}
         mapboxApiAccessToken={MAPBOX_TOKEN} >
 
-        {customOverlayExamples}
+        <ChoroplethOverlay key="choropleth"
+          globalOpacity={ 0.8 }
+          colorDomain={ [0, 500, 1000] }
+          colorRange={ ['#31a354', '#addd8e', '#f7fcb9'] }
+          renderWhileDragging={ false }
+          features={ ZIPCODES } />
+
+        <ScatterplotOverlay key="scatterplot"
+          locations={CITY_LOCATIONS}
+          dotRadius={10}
+          globalOpacity={0.8}
+          compositeOperation="lighter"
+          dotFill="#00a8fe"
+          renderWhileDragging={true} />
 
       </MapGL>
     );

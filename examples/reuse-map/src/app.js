@@ -31,7 +31,7 @@ export default class App extends Component {
     const mapStyle = mapStyleLight ? LIGHT_STYLE : DARK_STYLE;
     console.warn(mapStyle);
     return (
-      <div>
+      <div style={{height: '100%'}}>
         <div onClick={this._toggleMap.bind(this)}>
           Toggle Map
         </div>
@@ -42,6 +42,6 @@ export default class App extends Component {
 
 }
 
-export function renderToDom() {
-  render(<App/>, document.body.appendChild(document.createElement('div')));
+export function renderToDom(container) {
+  render(<App/>, container);
 }

@@ -6,7 +6,6 @@ import {MAPBOX_LIMITS} from '../utils/map-state';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import TransitionManager from '../utils/transition-manager';
-import {getInteractiveLayerIds} from '../utils/style-utils';
 
 import {EventManager} from 'mjolnir.js';
 import MapControls from '../utils/map-controls';
@@ -104,6 +103,9 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   /** Radius to detect features around a clicked point. Defaults to 0. */
   clickRadius: PropTypes.number,
 
+  /** List of layers that are interactive */
+  interactiveLayerIds: PropTypes.array,
+
   /** Accessor that returns a cursor style to show interactive state */
   getCursor: PropTypes.func,
 
@@ -166,8 +168,8 @@ export default class InteractiveMap extends PureComponent {
       legacyBlockScroll: false,
       touchAction: props.touchAction
     });
-
-    this._updateQueryParams(props.mapStyle);
+    this._width = 0;
+    this._height = 0;
   }
 
   componentDidMount() {
@@ -184,10 +186,6 @@ export default class InteractiveMap extends PureComponent {
   }
 
   componentWillUpdate(nextProps) {
-    if (this.props.mapStyle !== nextProps.mapStyle) {
-      this._updateQueryParams(nextProps.mapStyle);
-    }
-
     this._setControllerProps(nextProps);
   }
 
@@ -205,7 +203,9 @@ export default class InteractiveMap extends PureComponent {
         props.onViewportChange || props.onChangeViewport),
       onViewportChange: this._onViewportChange,
       onStateChange: this._onInteractionStateChange,
-      eventManager: this._eventManager
+      eventManager: this._eventManager,
+      width: this._width,
+      height: this._height
     });
 
     this._mapControls.setOptions(props);
@@ -213,21 +213,21 @@ export default class InteractiveMap extends PureComponent {
 
   _getFeatures({pos, radius}) {
     let features;
+    const queryParams = {};
+
+    if (this.props.interactiveLayerIds) {
+      queryParams.layers = this.props.interactiveLayerIds;
+    }
+
     if (radius) {
       // Radius enables point features, like marker symbols, to be clicked.
       const size = radius;
       const bbox = [[pos[0] - size, pos[1] + size], [pos[0] + size, pos[1] - size]];
-      features = this._map.queryRenderedFeatures(bbox, this._queryParams);
+      features = this._map.queryRenderedFeatures(bbox, queryParams);
     } else {
-      features = this._map.queryRenderedFeatures(pos, this._queryParams);
+      features = this._map.queryRenderedFeatures(pos, queryParams);
     }
     return features;
-  }
-
-  // Hover and click only query layers whose interactive property is true
-  _updateQueryParams(mapStyle) {
-    const interactiveLayerIds = getInteractiveLayerIds(mapStyle);
-    this._queryParams = {layers: interactiveLayerIds};
   }
 
   _onInteractionStateChange = (interactionState) => {
@@ -240,6 +240,13 @@ export default class InteractiveMap extends PureComponent {
     if (onInteractionStateChange) {
       onInteractionStateChange(interactionState);
     }
+  }
+
+  _onResize = ({width, height}) => {
+    this._width = width;
+    this._height = height;
+    this._setControllerProps(this.props);
+    this.props.onResize({width, height});
   }
 
   _onViewportChange = (viewState, interactionState, oldViewState) => {
@@ -265,13 +272,16 @@ export default class InteractiveMap extends PureComponent {
       const pos = this._getPos(event);
       const features = this._getFeatures({pos, radius: this.props.clickRadius});
 
-      const isHovering = features && features.length > 0;
+      const isHovering = this.props.interactiveLayerIds && features && features.length > 0;
       if (isHovering !== this.state.isHovering) {
         this.setState({isHovering});
       }
 
       if (this.props.onHover) {
-        const viewport = new WebMercatorViewport(this.props);
+        const viewport = new WebMercatorViewport(Object.assign({}, this.props, {
+          width: this._width,
+          height: this._height
+        }));
         event.lngLat = viewport.unproject(pos);
         event.features = features;
 
@@ -283,7 +293,10 @@ export default class InteractiveMap extends PureComponent {
   _onMouseClick = (event) => {
     if (this.props.onClick) {
       const pos = this._getPos(event);
-      const viewport = new WebMercatorViewport(this.props);
+      const viewport = new WebMercatorViewport(Object.assign({}, this.props, {
+        width: this._width,
+        height: this._height
+      }));
       event.lngLat = viewport.unproject(pos);
       event.features = this._getFeatures({pos, radius: this.props.clickRadius});
 
@@ -307,14 +320,13 @@ export default class InteractiveMap extends PureComponent {
   }
 
   render() {
-    const {width, height, getCursor} = this.props;
+    const {width, height, style, getCursor} = this.props;
 
-    const eventCanvasStyle = {
+    const eventCanvasStyle = Object.assign({position: 'relative'}, style, {
       width,
       height,
-      position: 'relative',
       cursor: getCursor(this.state)
-    };
+    });
     const interactiveContext = {
       isDragging: this.state.isDragging,
       eventManager: this._eventManager
@@ -328,6 +340,10 @@ export default class InteractiveMap extends PureComponent {
       },
         createElement(StaticMap, Object.assign({}, this.props,
           {
+            width: '100%',
+            height: '100%',
+            style: null,
+            onResize: this._onResize,
             ref: this._staticMapLoaded,
             children: this.props.children
           }

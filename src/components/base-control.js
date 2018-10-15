@@ -132,7 +132,7 @@ export default class BaseControl extends PureComponent {
           // Save event manager
           return createElement(StaticContext.Consumer, null,
             (staticContext) => {
-              this._context = {...interactiveContext, ...staticContext};
+              this._context = Object.assign({}, interactiveContext, staticContext);
               return this._render();
             }
           );

@@ -17,13 +17,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {extent} from 'd3-array';
 import {scaleLinear} from 'd3-scale';
 import {geoPath, geoTransform} from 'd3-geo';
 import Immutable from 'immutable';
-/* global window */
+
+import {CanvasOverlay} from 'react-map-gl';
 
 const propTypes = {
   renderWhileDragging: PropTypes.bool.isRequired,
@@ -46,32 +47,13 @@ const defaultProps = {
   valueAccessor: feature => feature.get('properties').get('value')
 };
 
-const contextTypes = {
-  viewport: PropTypes.object,
-  isDragging: PropTypes.bool
-};
+export default class ChoroplethOverlay extends PureComponent {
 
-export default class ChoroplethOverlay extends Component {
-  componentDidMount() {
-    this._redraw();
-  }
-
-  componentDidUpdate() {
-    this._redraw();
-  }
-
-  _redraw() {
-    const pixelRatio = window.devicePixelRatio;
-    const canvas = this.refs.overlay;
-    const ctx = canvas.getContext('2d');
-    const {viewport, isDragging} = this.context;
-
-    ctx.save();
-    ctx.scale(pixelRatio, pixelRatio);
-    ctx.clearRect(0, 0, viewport.width, viewport.height);
+  _redraw = ({width, height, ctx, isDragging, project, unproject}) => {
+    ctx.clearRect(0, 0, width, height);
 
     function projectPoint(lon, lat) {
-      const point = viewport.project([lon, lat]);
+      const point = project([lon, lat]);
       /* eslint-disable no-invalid-this */
       this.stream.point(point[0], point[1]);
       /* eslint-enable no-invalid-this */
@@ -82,7 +64,6 @@ export default class ChoroplethOverlay extends Component {
       const path = geoPath().projection(transform).context(ctx);
       this._drawFeatures(ctx, path);
     }
-    ctx.restore();
   }
 
   _drawFeatures(ctx, path) {
@@ -114,26 +95,9 @@ export default class ChoroplethOverlay extends Component {
   }
 
   render() {
-    const {viewport: {width, height}} = this.context;
-    const pixelRatio = window.devicePixelRatio || 1;
-    return (
-      <canvas
-        ref="overlay"
-        width={ width * pixelRatio }
-        height={ height * pixelRatio }
-        style={ {
-          width: `${width}px`,
-          height: `${height}px`,
-          position: 'absolute',
-          pointerEvents: 'none',
-          opacity: this.props.globalOpacity,
-          left: 0,
-          top: 0
-        } }/>
-    );
+    return <CanvasOverlay redraw={this._redraw} />;
   }
 }
 
 ChoroplethOverlay.propTypes = propTypes;
 ChoroplethOverlay.defaultProps = defaultProps;
-ChoroplethOverlay.contextTypes = contextTypes;

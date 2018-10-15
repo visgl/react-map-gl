@@ -13,9 +13,7 @@ export default class App extends Component {
         latitude: 37.78,
         zoom: 11,
         bearing: 0,
-        pitch: 30,
-        width: window.innerWidth,
-        height: window.innerHeight
+        pitch: 30
       },
     };
   }
@@ -30,6 +28,8 @@ export default class App extends Component {
     return (
       <MapGL
         { ...viewport }
+        width="100%"
+        height="100%"
         maxPitch={85}
         onViewportChange={ this._onViewportChange } >
 
@@ -49,6 +49,6 @@ export default class App extends Component {
   }
 }
 
-export function renderToDom() {
-  render(<App/>, document.body.appendChild(document.createElement('div')));
+export function renderToDom(container) {
+  render(<App/>, container);
 }
