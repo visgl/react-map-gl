@@ -30,6 +30,8 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
   latitude: PropTypes.number.isRequired,
+  // Altitude of the anchor point
+  altitude: PropTypes.number,
   // Offset from the left
   offsetLeft: PropTypes.number,
   // Offset from the top
@@ -44,17 +46,21 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   anchor: PropTypes.oneOf(Object.keys(ANCHOR_POSITION)),
   // Whether the popup anchor should be auto-adjusted to fit within the container
   dynamicPosition: PropTypes.bool,
+  // Whether popups should be sorted by depth. Useful when using multiple popups with tilted map.
+  sortByDepth: PropTypes.bool,
   // Callback when component is closed
   onClose: PropTypes.func
 });
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
+  altitude: 0,
   offsetLeft: 0,
   offsetTop: 0,
   tipSize: 10,
   anchor: 'bottom',
   dynamicPosition: true,
+  sortByDepth: false,
   closeButton: true,
   closeOnClick: true,
   onClose: () => {}
@@ -98,6 +104,32 @@ export default class Popup extends BaseControl {
     return anchor;
   }
 
+  _getContainerStyle(x, y, z, positionType) {
+    const {viewport} = this._context;
+    const {offsetLeft, offsetTop, sortByDepth} = this.props;
+    const anchorPosition = ANCHOR_POSITION[positionType];
+
+    const style = {
+      position: 'absolute',
+      left: x + offsetLeft,
+      top: y + offsetTop,
+      transform: `translate(${-anchorPosition.x * 100}%, ${-anchorPosition.y * 100}%)`
+    };
+
+    if (!sortByDepth) {
+      return style;
+    }
+    if (z > 1 || z < -1 || x < 0 || x > viewport.width || y < 0 || y > viewport.height) {
+      // clipped
+      style.display = 'none';
+    } else {
+      // use z-index to rearrange components
+      style.zIndex = Math.floor(((1 - z) / 2) * 100000);
+    }
+
+    return style;
+  }
+
   /*
    * Hack -
    * React's `onClick` is called before mjolnir.js' `click` event (aka `tap` from hammer.js)
@@ -125,7 +157,7 @@ export default class Popup extends BaseControl {
     this._content = ref;
   }
 
-  _renderTip() {
+  _renderTip(positionType) {
     const {tipSize} = this.props;
 
     return createElement('div', {
@@ -153,26 +185,19 @@ export default class Popup extends BaseControl {
   }
 
   _render() {
-    const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
+    const {className, longitude, latitude, altitude} = this.props;
 
-    const [x, y] = this._context.viewport.project([longitude, latitude]);
+    const [x, y, z] = this._context.viewport.project([longitude, latitude, altitude]);
 
     const positionType = this._getPosition(x, y);
-    const anchorPosition = ANCHOR_POSITION[positionType];
-
-    const containerStyle = {
-      position: 'absolute',
-      left: x + offsetLeft,
-      top: y + offsetTop,
-      transform: `translate(${-anchorPosition.x * 100}%, ${-anchorPosition.y * 100}%)`
-    };
+    const containerStyle = this._getContainerStyle(x, y, z, positionType);
 
     return createElement('div', {
       className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`,
       style: containerStyle,
       ref: this._onContainerLoad
     }, [
-      this._renderTip(),
+      this._renderTip(positionType),
       this._renderContent()
     ]);
   }

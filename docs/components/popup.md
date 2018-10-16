@@ -23,16 +23,19 @@ class Map extends Component {
 ## Properties
 
 ##### `latitude` {Number} (required)
-Latitude of the marker.
+Latitude of the anchor.
 
 ##### `longitude` {Number} (required)
-Longitude of the marker.
+Longitude of the anchor.
+
+##### `altitude` {Number} - default: `0`
+Altitude of the anchor.
 
 ##### `offsetLeft` {Number} - default: `0`
-Offset of the marker from the left in pixels, negative number indicates left.
+Offset of the anchor from the left in pixels, negative number indicates left.
 
 ##### `offsetTop` {Number} - default: `0`
-Offset of the marker from the top in pixels, negative number indicates up.
+Offset of the anchor from the top in pixels, negative number indicates up.
 
 ##### `closeButton` {Boolean} - default: `true`
 If `true`, a close button will appear in the top right corner of the popup.
@@ -49,6 +52,9 @@ Options are `top`, `bottom`, `left`, `right`, `top-left`, `top-right`, `bottom-l
 
 ##### `dynamicPosition` {Boolean} - default: `true`
 If `true`, the anchor will be dynamically adjusted to ensure the popup falls within the map container.
+
+##### `sortByDepth` {Boolean} - default: `false`
+If `true`, the order of the popups will be dynamically rearranged to ensure that the ones anchored closer to the camera are rendered on top. Useful when showing multiple popups in a tilted map.
 
 ##### `onClose` {Function}
 Callback when the user closes the popup.
