@@ -64,7 +64,7 @@ To show maps from a service such as Mapbox you will need to register on their we
 
 There are several ways to provide a token to your app, as showcased in some of the example folders:
 
-* Modify the source directly
+* Provide a `mapboxApiAccessToken` prop to the map component
 * Set the `MapboxAccessToken` environment variable
 * Provide it in the URL, e.g `?access_token=TOKEN`
 
