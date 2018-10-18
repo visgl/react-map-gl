@@ -15,12 +15,12 @@ import ReactMapGL, {LinearInterpolator} from 'react-map-gl';
 
 ##### constructor
 
-`new LinearInterpolator([transitionProps], [options])`
+`new LinearInterpolator([options])`
 
 Parameters:
-- `transitionProps` {Array} (optional) - list of prop names to interpolate. Default: `['longitude', 'latitude', 'zoom', 'pitch', 'bearing']`.
 - `options` {Object} (optional)
-  + `around` {Array} - a point to zoom/rotate the map around, as `[x, y]` in screen position.
+  + `transitionProps` {Array} (optional) - list of prop names to interpolate. Default: `['longitude', 'latitude', 'zoom', 'pitch', 'bearing']`.
+  + `around` {Array} (optional) - a point to zoom/rotate the map around, as `[x, y]` in screen position.
 
 
 ## Source

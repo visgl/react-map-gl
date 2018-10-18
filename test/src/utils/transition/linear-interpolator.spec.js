@@ -63,7 +63,7 @@ test('LinearInterpolator#constructor', t => {
     'propNames is set');
   t.deepEqual(interpolator.around, [0, 0], 'center is set');
 
-  interpolator = new LinearInterpolator(['pitch'], {around: [0, 0]});
+  interpolator = new LinearInterpolator({transitionProps: ['pitch'], around: [0, 0]});
   t.deepEqual(interpolator.propNames, ['pitch'], 'propNames is set');
   t.deepEqual(interpolator.around, [0, 0], 'center is set');
 

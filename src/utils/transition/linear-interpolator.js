@@ -13,20 +13,19 @@ const VIEWPORT_TRANSITION_PROPS = ['longitude', 'latitude', 'zoom', 'bearing', '
 export default class LinearInterpolator extends TransitionInterpolator {
 
   /**
-   * @param {Array} [transitionProps] - list of props to apply linear transition to.
-   * @param {Array} [opts] - additional options.
+   * @param opts {Object}
+   *  - opts.transitionProps {Array}] - list of props to apply linear transition to.
+   *  - opts.around {Array} - a screen point to zoom/rotate around
    */
-  constructor(transitionProps, opts) {
+  constructor(opts = {}) {
     super();
 
-    if (Array.isArray(transitionProps)) {
-      this.propNames = transitionProps;
-      opts = opts || {};
-    } else {
-      this.propNames = VIEWPORT_TRANSITION_PROPS;
-      opts = transitionProps || {};
+    if (Array.isArray(opts)) {
+      // backward compatibility
+      opts = {transitionProps: opts};
     }
 
+    this.propNames = opts.transitionProps || VIEWPORT_TRANSITION_PROPS;
     this.around = opts.around;
   }
 
