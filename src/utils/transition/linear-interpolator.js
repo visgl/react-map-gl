@@ -34,6 +34,13 @@ export default class LinearInterpolator extends TransitionInterpolator {
     const startViewportProps = {};
     const endViewportProps = {};
 
+    if (this.around) {
+      Object.assign(endViewportProps, endProps, {
+        around: this.around,
+        aroundLngLat: new WebMercatorViewport(endProps).unproject(this.around)
+      });
+    }
+
     for (const key of this.propNames) {
       const startValue = startProps[key];
       const endValue = endProps[key];
@@ -41,15 +48,6 @@ export default class LinearInterpolator extends TransitionInterpolator {
 
       startViewportProps[key] = startValue;
       endViewportProps[key] = getEndValueByShortestPath(key, startValue, endValue);
-    }
-
-    if (this.around) {
-      Object.assign(endViewportProps, {
-        width: endProps.width,
-        height: endProps.height,
-        around: this.around,
-        aroundLngLat: new WebMercatorViewport(endProps).unproject(this.around)
-      });
     }
 
     return {
