@@ -361,7 +361,9 @@ export default class MapControls {
     const isZoomOut = this.isFunctionKeyPressed(event);
 
     const newMapState = this.mapState.zoom({pos, scale: isZoomOut ? 0.5 : 2});
-    this.updateViewport(newMapState, LINEAR_TRANSITION_PROPS);
+    this.updateViewport(newMapState, Object.assign({}, LINEAR_TRANSITION_PROPS, {
+      transitionInterpolator: new LinearInterpolator({around: pos})
+    }));
     return true;
   }
 
