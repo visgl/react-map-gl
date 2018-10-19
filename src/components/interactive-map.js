@@ -66,36 +66,21 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Keyboard
   keyboard: PropTypes.bool,
 
- /**
-    * Called when the map is hovered over.
-    * @callback
-    * @param {Object} event - The mouse event.
-    * @param {[Number, Number]} event.lngLat - The coordinates of the pointer
-    * @param {Array} event.features - The features under the pointer, using Mapbox's
-    * queryRenderedFeatures API:
-    * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
-    * To make a layer interactive, set the `interactive` property in the
-    * layer style to `true`. See Mapbox's style spec
-    * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
-    */
+  /** Event callbacks */
   onHover: PropTypes.func,
-  /**
-    * Called when the map is clicked.
-    * @callback
-    * @param {Object} event - The mouse event.
-    * @param {[Number, Number]} event.lngLat - The coordinates of the pointer
-    * @param {Array} event.features - The features under the pointer, using Mapbox's
-    * queryRenderedFeatures API:
-    * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
-    * To make a layer interactive, set the `interactive` property in the
-    * layer style to `true`. See Mapbox's style spec
-    * https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive
-    */
   onClick: PropTypes.func,
-  /**
-    * Called when the context menu is activated.
-    */
+  onDblClick: PropTypes.func,
   onContextMenu: PropTypes.func,
+  onMouseDown: PropTypes.func,
+  onMouseMove: PropTypes.func,
+  onMouseUp: PropTypes.func,
+  onTouchStart: PropTypes.func,
+  onTouchMove: PropTypes.func,
+  onTouchEnd: PropTypes.func,
+  onMouseEnter: PropTypes.func,
+  onMouseLeave: PropTypes.func,
+  onMouseOut: PropTypes.func,
+  onWheel: PropTypes.func,
 
   /** Custom touch-action CSS for the event canvas. Defaults to 'none' */
   touchAction: PropTypes.string,
@@ -177,9 +162,14 @@ export default class InteractiveMap extends PureComponent {
 
     // Register additional event handlers for click and hover
     eventManager.on({
-      mousemove: this._onMouseMove,
-      click: this._onMouseClick,
-      contextmenu: this._onContextMenu
+      pointerdown: this._onPointerDown,
+      pointermove: this._onPointerMove,
+      pointerup: this._onPointerUp,
+      pointerleave: this._onEvent.bind(this, 'onMouseOut'),
+      click: this._onClick,
+      dblclick: this._onEvent.bind(this, 'onDblClick'),
+      wheel: this._onEvent.bind(this, 'onWheel'),
+      contextmenu: this._onEvent.bind(this, 'onContextMenu')
     });
 
     this._setControllerProps(this.props);
@@ -261,52 +251,102 @@ export default class InteractiveMap extends PureComponent {
     }
   }
 
-  // HOVER AND CLICK
-  _getPos(event) {
+  /* Generic event handling */
+  _normalizeEvent(event) {
+    if (event.lngLat) {
+      // Already unprojected
+      return event;
+    }
+
     const {offsetCenter: {x, y}} = event;
-    return [x, y];
+    const pos = [x, y];
+
+    const viewport = new WebMercatorViewport(Object.assign({}, this.props, {
+      width: this._width,
+      height: this._height
+    }));
+
+    event.point = pos;
+    event.lngLat = viewport.unproject(pos);
+
+    return event;
   }
 
-  _onMouseMove = (event) => {
-    if (!this.state.isDragging) {
-      const pos = this._getPos(event);
-      const features = this._getFeatures({pos, radius: this.props.clickRadius});
+  _onEvent = (callbackName, event) => {
+    const func = this.props[callbackName];
+    if (func) {
+      func(this._normalizeEvent(event));
+    }
+  }
 
-      const isHovering = this.props.interactiveLayerIds && features && features.length > 0;
-      if (isHovering !== this.state.isHovering) {
+  /* Special case event handling */
+  _onPointerDown = (event) => {
+    switch (event.pointerType) {
+    case 'touch':
+      this._onEvent('onTouchStart', event);
+      break;
+
+    default:
+      this._onEvent('onMouseDown', event);
+    }
+  }
+
+  _onPointerUp = (event) => {
+    switch (event.pointerType) {
+    case 'touch':
+      this._onEvent('onTouchEnd', event);
+      break;
+
+    default:
+      this._onEvent('onMouseUp', event);
+    }
+  }
+
+  _onPointerMove = (event) => {
+    switch (event.pointerType) {
+    case 'touch':
+      this._onEvent('onTouchMove', event);
+      break;
+
+    default:
+      this._onEvent('onMouseMove', event);
+    }
+
+    if (!this.state.isDragging) {
+      const {onHover, interactiveLayerIds} = this.props;
+      let features;
+      if (interactiveLayerIds || onHover) {
+        event = this._normalizeEvent(event);
+        features = this._getFeatures({pos: event.point, radius: this.props.clickRadius});
+      }
+      if (onHover) {
+        // backward compatibility: v3 `onHover` interface
+        event.features = features;
+        onHover(event);
+      }
+
+      const isHovering = interactiveLayerIds && features && features.length > 0;
+      const isEntering = isHovering && !this.state.isHovering;
+      const isExiting = !isHovering && this.state.isHovering;
+
+      if (isEntering) {
+        this._onEvent('onMouseEnter', event);
+      }
+      if (isExiting) {
+        this._onEvent('onMouseLeave', event);
+      }
+      if (isEntering || isExiting) {
         this.setState({isHovering});
       }
-
-      if (this.props.onHover) {
-        const viewport = new WebMercatorViewport(Object.assign({}, this.props, {
-          width: this._width,
-          height: this._height
-        }));
-        event.lngLat = viewport.unproject(pos);
-        event.features = features;
-
-        this.props.onHover(event);
-      }
     }
   }
 
-  _onMouseClick = (event) => {
+  _onClick = (event) => {
     if (this.props.onClick) {
-      const pos = this._getPos(event);
-      const viewport = new WebMercatorViewport(Object.assign({}, this.props, {
-        width: this._width,
-        height: this._height
-      }));
-      event.lngLat = viewport.unproject(pos);
-      event.features = this._getFeatures({pos, radius: this.props.clickRadius});
-
+      event = this._normalizeEvent(event);
+      // backward compatibility: v3 `onClick` interface
+      event.features = this._getFeatures({pos: event.point, radius: this.props.clickRadius});
       this.props.onClick(event);
-    }
-  }
-
-  _onContextMenu = (event) => {
-    if (this.props.onContextMenu) {
-      this.props.onContextMenu(event);
     }
   }
 
