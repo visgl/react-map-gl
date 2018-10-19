@@ -2,6 +2,10 @@
 
 # Version 3.3.0
 
+## 3.3.7 (Oct 18, 2018)
+
+- Fix double-click zoom transition (#625)
+
 ## 3.3.6 (Oct 15, 2018)
 
 - `mapbox-gl` v0.50 (#618)
