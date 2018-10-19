@@ -48,9 +48,24 @@ const TEST_CASES = [
 
 test('LinearInterpolator#constructor', t => {
 
-  const interpolator = new LinearInterpolator(['width', 'height']);
+  let interpolator = new LinearInterpolator();
   t.ok(interpolator, 'constructor does not throw error');
+  t.deepEqual(interpolator.propNames,
+    ['longitude', 'latitude', 'zoom', 'bearing', 'pitch'],
+    'propNames is set');
+
+  interpolator = new LinearInterpolator(['width', 'height']);
   t.deepEqual(interpolator.propNames, ['width', 'height'], 'propNames is set');
+
+  interpolator = new LinearInterpolator({around: [0, 0]});
+  t.deepEqual(interpolator.propNames,
+    ['longitude', 'latitude', 'zoom', 'bearing', 'pitch'],
+    'propNames is set');
+  t.deepEqual(interpolator.around, [0, 0], 'center is set');
+
+  interpolator = new LinearInterpolator({transitionProps: ['pitch'], around: [0, 0]});
+  t.deepEqual(interpolator.propNames, ['pitch'], 'propNames is set');
+  t.deepEqual(interpolator.around, [0, 0], 'center is set');
 
   t.end();
 });
