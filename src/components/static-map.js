@@ -75,8 +75,7 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
   visibilityConstraints: PropTypes.object
 });
 
-
-//** Set different map styles by changing the mapStyle  variable to available options*/
+/** Set different map styles by changing the mapStyle  variable to available options */
 // mapbox://styles/mapbox/streets-v10
 // mapbox://styles/mapbox/outdoors-v10
 // mapbox://styles/mapbox/light-v9
@@ -87,7 +86,7 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
 // mapbox://styles/mapbox/navigation-preview-night-v4
 // mapbox://styles/mapbox/navigation-guidance-day-v4
 // mapbox://styles/mapbox/navigation-guidance-night-v4
-//** Reference : https://www.mapbox.com/api-documentation/#styles */
+/** Reference : https://www.mapbox.com/api-documentation/#styles */
 const defaultProps = Object.assign({}, Mapbox.defaultProps, {
   mapStyle: 'mapbox://styles/mapbox/light-v8',
   preventStyleDiffing: false,
