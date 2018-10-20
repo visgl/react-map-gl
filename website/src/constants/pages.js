@@ -80,6 +80,10 @@ const docPages = {
       name: 'Advanced',
       children: [
         {
+          name: 'Custom Components',
+          content: getDocUrl('overlays/custom-components.md')
+        },
+        {
           name: 'Custom Map Controls',
           content: getDocUrl('advanced/custom-map-controls.md')
         },

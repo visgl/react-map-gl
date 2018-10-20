@@ -35,7 +35,8 @@ const NO_TOKEN_WARNING = 'A valid API access token is required to use Mapbox dat
 /* eslint-disable max-len */
 
 export const StaticContext = createContext({
-  viewport: null
+  viewport: null,
+  map: null
 });
 
 function noop() {}
@@ -218,7 +219,8 @@ export default class StaticMap extends PureComponent {
       viewport: new WebMercatorViewport(Object.assign({}, this.props, {
         width,
         height
-      }))
+      })),
+      map: this._map
     };
 
     return createElement(StaticContext.Provider, {value: staticContext},
