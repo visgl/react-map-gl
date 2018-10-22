@@ -8,7 +8,8 @@ const noop = () => {};
 export const TRANSITION_EVENTS = {
   BREAK: 1,
   SNAP_TO_END: 2,
-  IGNORE: 3
+  IGNORE: 3,
+  UPDATE: 4
 };
 
 const DEFAULT_PROPS = {
@@ -27,7 +28,8 @@ const DEFAULT_STATE = {
   animation: null,
   propsInTransition: null,
   startProps: null,
-  endProps: null
+  endProps: null,
+  completion: 0
 };
 
 export default class TransitionManager {
@@ -63,10 +65,17 @@ export default class TransitionManager {
     const isTransitionInProgress = this._isTransitionInProgress();
 
     if (this._isTransitionEnabled(nextProps)) {
-      const startProps = Object.assign({}, currentProps,
-        this.state.interruption === TRANSITION_EVENTS.SNAP_TO_END ?
-        this.state.endProps : this.state.propsInTransition
-      );
+      let startProps = this.state.startProps;
+      if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
+        if (!startProps) {
+          startProps = Object.assign({}, currentProps);
+        }
+      } else {
+        startProps = Object.assign({}, currentProps,
+          this.state.interruption === TRANSITION_EVENTS.SNAP_TO_END ?
+            this.state.endProps : this.state.propsInTransition
+        );
+      }
 
       if (isTransitionInProgress) {
         currentProps.onTransitionInterrupt();
@@ -123,7 +132,11 @@ export default class TransitionManager {
       startProps,
       endProps
     );
-
+    const currentTime = Date.now();
+    let completion = 0;
+    if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
+      completion = (currentTime - this.state.startTime) / this.state.duration;
+    }
     const interactionState = {
       inTransition: true,
       isZooming: startProps.zoom !== endProps.zoom,
@@ -133,15 +146,22 @@ export default class TransitionManager {
         startProps.pitch !== endProps.pitch
     };
 
+    let newStartProps;
+    if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
+      newStartProps = !startProps ? initialProps.start : startProps;
+    } else {
+      newStartProps = initialProps.start;
+    }
     this.state = {
       // Save current transition props
+      completion: this.state.completion + completion,
       duration: endProps.transitionDuration,
       easing: endProps.transitionEasing,
       interpolator: endProps.transitionInterpolator,
       interruption: endProps.transitionInterruption,
 
-      startTime: Date.now(),
-      startProps: initialProps.start,
+      startTime: currentTime,
+      startProps: newStartProps,
       endProps: initialProps.end,
       animation: null,
       propsInTransition: {},
@@ -175,15 +195,16 @@ export default class TransitionManager {
     const {startTime, duration, easing, interpolator, startProps, endProps} = this.state;
 
     let shouldEnd = false;
-    let t = (currentTime - startTime) / duration;
+    let t = (currentTime - startTime) / duration + this.state.completion;
     if (t >= 1) {
       t = 1;
       shouldEnd = true;
+      this.state.completion = 0;
     }
     t = easing(t);
 
     const viewport = interpolator.interpolateProps(startProps, endProps, t);
-      // Normalize viewport props
+    // Normalize viewport props
     const mapState = new MapState(Object.assign({}, this.props, viewport));
     this.state.propsInTransition = mapState.getViewportProps();
 
@@ -201,3 +222,4 @@ export default class TransitionManager {
 }
 
 TransitionManager.defaultProps = DEFAULT_PROPS;
+
