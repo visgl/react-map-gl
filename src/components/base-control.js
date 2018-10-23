@@ -112,9 +112,9 @@ export default class BaseControl extends PureComponent {
   _onPointerUp = (evt) => {
     if (this.props.captureDoubleClick) {
       const {eventManager} = this._context;
-      const doubletap = eventManager.manager.get('doubletap');
+      const {options: {enable}} = eventManager.manager.get('doubletap');
       // Temporarily disable doubletap
-      if (doubletap.options.enable) {
+      if (enable) {
         eventManager._toggleRecognizer('doubletap', false);
         /* global setTimeout */
         setTimeout(() => {
