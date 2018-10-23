@@ -16,7 +16,7 @@ const DEFAULT_PROPS = {
   transitionDuration: 0,
   transitionEasing: t => t,
   transitionInterpolator: new LinearInterpolator(),
-  transitionInterruption: TRANSITION_EVENTS.BREAK,
+  transitionInterruption: TRANSITION_EVENTS.UPDATE,
   onTransitionStart: noop,
   onTransitionInterrupt: noop,
   onTransitionEnd: noop,
@@ -29,7 +29,7 @@ const DEFAULT_STATE = {
   propsInTransition: null,
   startProps: null,
   endProps: null,
-  completion: 0
+  totalCompletion: 0
 };
 
 export default class TransitionManager {
@@ -65,17 +65,10 @@ export default class TransitionManager {
     const isTransitionInProgress = this._isTransitionInProgress();
 
     if (this._isTransitionEnabled(nextProps)) {
-      let startProps = this.state.startProps;
-      if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
-        if (!startProps) {
-          startProps = Object.assign({}, currentProps);
-        }
-      } else {
-        startProps = Object.assign({}, currentProps,
-          this.state.interruption === TRANSITION_EVENTS.SNAP_TO_END ?
-            this.state.endProps : this.state.propsInTransition
-        );
-      }
+      const startProps = Object.assign({}, currentProps,
+        this.state.interruption === TRANSITION_EVENTS.SNAP_TO_END ?
+          this.state.endProps : this.state.propsInTransition
+      );
 
       if (isTransitionInProgress) {
         currentProps.onTransitionInterrupt();
@@ -132,11 +125,7 @@ export default class TransitionManager {
       startProps,
       endProps
     );
-    const currentTime = Date.now();
-    let completion = 0;
-    if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
-      completion = (currentTime - this.state.startTime) / this.state.duration;
-    }
+
     const interactionState = {
       inTransition: true,
       isZooming: startProps.zoom !== endProps.zoom,
@@ -145,23 +134,20 @@ export default class TransitionManager {
       isRotating: startProps.bearing !== endProps.bearing ||
         startProps.pitch !== endProps.pitch
     };
-
-    let newStartProps;
-    if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
-      newStartProps = !startProps ? initialProps.start : startProps;
-    } else {
-      newStartProps = initialProps.start;
-    }
+    const currentTime = Date.now();
+    const completion = this.state.interruption === TRANSITION_EVENTS.UPDATE ?
+                      (currentTime - this.state.startTime) / startProps.transitionDuration : 0;
+    const totalCompletion = this.state.totalCompletion + completion;
     this.state = {
       // Save current transition props
-      completion: this.state.completion + completion,
-      duration: endProps.transitionDuration,
+      totalCompletion,
+      duration: endProps.transitionDuration * (1 - totalCompletion),
       easing: endProps.transitionEasing,
       interpolator: endProps.transitionInterpolator,
       interruption: endProps.transitionInterruption,
 
       startTime: currentTime,
-      startProps: newStartProps,
+      startProps: initialProps.start,
       endProps: initialProps.end,
       animation: null,
       propsInTransition: {},
@@ -193,16 +179,15 @@ export default class TransitionManager {
     // NOTE: Be cautious re-ordering statements in this function.
     const currentTime = Date.now();
     const {startTime, duration, easing, interpolator, startProps, endProps} = this.state;
-
     let shouldEnd = false;
-    let t = (currentTime - startTime) / duration + this.state.completion;
+    let t = (currentTime - startTime) / duration;
     if (t >= 1) {
       t = 1;
       shouldEnd = true;
-      this.state.completion = 0;
+      this.state.totalCompletion = 0;
     }
-    t = easing(t);
-
+    const tc = this.state.totalCompletion;
+    t = (easing(t * (1 - tc) + tc) - easing(tc)) / (1 - tc);
     const viewport = interpolator.interpolateProps(startProps, endProps, t);
     // Normalize viewport props
     const mapState = new MapState(Object.assign({}, this.props, viewport));
@@ -222,4 +207,3 @@ export default class TransitionManager {
 }
 
 TransitionManager.defaultProps = DEFAULT_PROPS;
-
