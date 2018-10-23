@@ -130,15 +130,19 @@ const docPages = {
           content: getDocUrl('components/map-controls.md')
         },
         {
-          name: 'Navigation Control',
+          name: 'NavigationControl',
           content: getDocUrl('components/navigation-control.md')
+        },
+        {
+          name: 'PointerEvent',
+          content: getDocUrl('components/pointer-event.md')
         },
         {
           name: 'Popup',
           content: getDocUrl('components/popup.md')
         },
         {
-          name: 'Static Map',
+          name: 'StaticMap',
           content: getDocUrl('components/static-map.md')
         },
         {

@@ -29,53 +29,58 @@ class Map extends Component {
 
 ## Properties
 
-Has all properties of [StaticMap](/docs/components/static-map.md) and the following:
+### Initialization
 
-##### `onViewStateChange` {Function}
+Inherit the following props from [StaticMap](/docs/components/static-map.md):
 
-Callback that is fired when the map's viewport properties should be updated.
+- `attributionControl` {Bool}
+- `disableTokenWarning` {Bool}
+- `gl` {WebGLContext}
+- `mapboxApiAccessToken` {String}
+- `mapOptions` {Object}
+- `preserveDrawingBuffer` {Bool}
+- `preventStyleDiffing` {Bool}
+- `reuseMaps` {Bool}
+- `transformRequest` {Function}
 
-`onViewStateChange({viewState, interactionState, oldViewState})`
 
-If the map is intended to be interactive, the app uses this prop to listen to map updates and update the props accordingly.
+### Map State
 
-See `onViewportChange` for details of the arguments.
+Inherit the following props from [StaticMap](/docs/components/static-map.md):
 
-Note:
-* `onViewStateChange` is a newer version of the `onViewportChange` callback. Both are supported and provide equivalent functionality.
+- `mapStyle` {String | Object | Immutable.Map}
+- `width` {Number | String} (required)
+- `height` {Number | String} (required)
+- `latitude` {Number}
+- `longitude` {Number}
+- `zoom` {Number}
+- `bearing` {Number} - default: `0`
+- `pitch` {Number} - default: `0`
+- `altitude` {Number} - default: `1.5 (screen heights)`
+- `viewState` {Object}
 
-##### `onViewportChange` {Function}
 
-Callback that is fired when the map's viewport properties should be updated.
+### Render Options
 
-`onViewportChange(viewState, interactionState, oldViewState)`
+Inherit the following props from [StaticMap](/docs/components/static-map.md):
 
-Arguments: 
+- `style` {Object}
+- `visible` {Bool}
+- `visibilityConstraints` {Object}
 
-- `viewState` {Object} The next viewport properties, including: `width`, `height`, `latitude`, `longitude`, `zoom`, `bearing`, `pitch`, `altitude`, `maxZoom`, `minZoom`, `maxPitch`, `minPitch`, `transitionDuration`, `transitionEasing`, `transitionInterpolator`, `transitionInterruption`.
-- `interactionState` {Object} The current interaction that caused this viewport change. See `onInteractionStateChange` for possible fields.
-- `oldViewState` {Object} The current viewport properties.
+##### `getCursor` {Function}
 
-Note:
-* Even if both `onViewStateChange` and `onViewportChange` callbacks are supplied, they will both be called during an update.
+Accessor that returns a cursor style to show interactive state. Called when the component is being rendered.
 
-##### `onInteractionStateChange` {Function}
+Parameters
+- `state` - The current state of the component.
+  + `state.isDragging` - If the map is being dragged.
+  + `state.isHovering` - If the pointer is over an interactive feature. See `interactiveLayerIds` prop.
 
-Callback that is fired when the user interacted with the map.
+The default implementation of `getCursor` returns `'pointer'` if `isHovering`, `'grabbing'` if `isDragging` and `'grab'` otherwise.
 
-`onInteractionStateChange(interactionState)`
 
-Possible fields include:
-
-- `interactionState.inTransition` (Boolean)
-- `interactionState.isDragging` (Boolean)
-- `interactionState.isPanning` (Boolean)
-- `interactionState.isRotating` (Boolean)
-- `interactionState.isZooming` (Boolean)
-
-Note:
-* `onInteractionStateChange` may be fired without `onViewportChange`. For example, when the pointer is released at the end of a drag-pan, `isDragging` are reset to `false`, without the viewport's `longitude` and `latitude` changing.
-
+### Interaction Options
 
 ##### `maxZoom` {Number} [default: 20]
 
@@ -146,44 +151,8 @@ If not specified:
 - Pointer event callbacks will query the features under the pointer of all layers.
 - The `getCursor` callback will always receive `isHovering: false`.
 
-##### `onHover` {Function}
 
-Called when the map is hovered over.
-
-Parameters
-- `event` - The pointer event.
-  + `event.lngLat` - The geo coordinates that is being clicked.
-  + `event.features` - The array of features under the pointer, queried using Mapbox's
-    [queryRenderedFeatures](https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures) API.
-    To make only selected layers interactive, set the `interactiveLayerIds` prop.
-
-##### `onClick` {Function}
-
-Called when the map is clicked.
-
-Parameters
-- `event` - The pointer event.
-  + `event.lngLat` - The geo coordinates that is being clicked.
-  + `event.features` - The array of features under the pointer, queried using Mapbox's
-    [queryRenderedFeatures](https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures) API.
-    To make only selected layers interactive, set the `interactiveLayerIds` prop.
-
-##### `onContextMenu` {Function}
-
-Called when the context menu is activated. Prevent default here to enable right button interaction.
-
-Default: `event => event.preventDefault()`
-
-##### `getCursor` {Function}
-
-Accessor that returns a cursor style to show interactive state. Called when the component is being rendered.
-
-Parameters
-- `state` - The current state of the component.
-  + `state.isDragging` - If the map is being dragged.
-  + `state.isHovering` - If the pointer is over an interactive feature. See `interactiveLayerIds` prop.
-
-The default implementation of `getCursor` returns `'pointer'` if `isHovering`, `'grabbing'` if `isDragging` and `'grab'` otherwise.
+### Transitions
 
 ##### `transitionDuration` {Number}
 
@@ -218,9 +187,122 @@ What to do if an ongoing transition is interrupted by another transition. There 
 - `TRANSITION_EVENTS.IGNORE` - Complete the previous transition and ignore the new viewport change.
 
 You may import the constants as follows:
-```
+
+```js
 import {TRANSITION_EVENTS} from 'react-map-gl';
 ```
+
+
+### Callbacks
+
+Inherit the following props from [StaticMap](/docs/components/static-map.md):
+
+- `onLoad` {Function}
+- `onResize` {Function}
+- `onError` {Function}
+
+
+##### `onViewportChange` {Function}
+
+Callback that is fired when the map's viewport properties should be updated.
+
+```js
+onViewportChange(viewState, interactionState, oldViewState);
+```
+
+Arguments: 
+
+- `viewState` {Object} The next viewport properties, including: `width`, `height`, `latitude`, `longitude`, `zoom`, `bearing`, `pitch`, `altitude`, `maxZoom`, `minZoom`, `maxPitch`, `minPitch`, `transitionDuration`, `transitionEasing`, `transitionInterpolator`, `transitionInterruption`.
+- `interactionState` {Object} The current interaction that caused this viewport change. See `onInteractionStateChange` for possible fields.
+- `oldViewState` {Object} The current viewport properties.
+
+
+##### `onViewStateChange` {Function}
+
+A newer version of the `onViewportChange` callback. Both are supported and provide equivalent functionality.
+
+```js
+onViewStateChange({viewState, interactionState, oldViewState});
+```
+
+
+##### `onInteractionStateChange` {Function}
+
+Callback that is fired when the user interacted with the map.
+
+```js
+onInteractionStateChange(interactionState)
+```
+
+Possible fields include:
+
+- `interactionState.inTransition` (Boolean)
+- `interactionState.isDragging` (Boolean)
+- `interactionState.isPanning` (Boolean)
+- `interactionState.isRotating` (Boolean)
+- `interactionState.isZooming` (Boolean)
+
+Note:
+* `onInteractionStateChange` may be fired without `onViewportChange`. For example, when the pointer is released at the end of a drag-pan, `isDragging` are reset to `false`, without the viewport's `longitude` and `latitude` changing.
+
+
+##### `onHover` {Function}
+
+Called when the map is hovered over with mouse (not pressed). Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onClick` {Function}
+
+Called when the map is clicked. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onDblClick` {Function}
+
+Called when the map is double clicked. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onMouseDown` {Function}
+
+Called when a pointing device (usually a mouse) is pressed within the map. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onMouseMove` {Function}
+
+Called when a pointing device (usually a mouse) is moved within the map. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onMouseUp` {Function}
+
+Called when a pointing device (usually a mouse) is released within the map. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onTouchStart` {Function}
+
+Called when a `touchstart` event occurs within the map. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onTouchMove` {Function}
+
+Called when a `touchmove` event occurs within the map. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onTouchEnd` {Function}
+
+Called when a `touchend` event occurs within the map. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onMouseEnter` {Function}
+
+Called when a pointing device (usually a mouse) enters a visible portion of one of the interactive layers, defined by the `interactiveLayerIds` prop. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onMouseLeave` {Function}
+
+Called when a pointing device (usually a mouse) leaves a visible portion of one of the interactive layers, defined by the `interactiveLayerIds` prop. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onWheel` {Function}
+
+Called when a `wheel` event occurs within the map. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onMouseOut` {Function}
+
+Called when a point device (usually a mouse) leaves the map's canvas. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+
+##### `onContextMenu` {Function}
+
+Called when the context menu is activated. Prevent default here to enable right button interaction.
+
+Default: `event => event.preventDefault()`
 
 ##### `onTransitionStart` {Function}
 
@@ -236,7 +318,11 @@ Callback that is fired when a transition is complete.
 
 ## Methods
 
-Same methods as [StaticMap](/docs/components/static-map.md).
+Inherit the following methods from [StaticMap](/docs/components/static-map.md):
+
+- `getMap()`
+- `queryRenderedFeatures(geometry, parameters)`
+
 
 ## Source
 [interactive-map.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/interactive-map.js)
