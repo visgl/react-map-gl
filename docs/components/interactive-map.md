@@ -66,7 +66,7 @@ Inherit the following props from [StaticMap](/docs/components/static-map.md):
 
 - `style` {Object}
 - `visible` {Bool}
-- `visibilityConstraints`
+- `visibilityConstraints` {Object}
 
 ##### `getCursor` {Function}
 
