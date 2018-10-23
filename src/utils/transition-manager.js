@@ -16,7 +16,7 @@ const DEFAULT_PROPS = {
   transitionDuration: 0,
   transitionEasing: t => t,
   transitionInterpolator: new LinearInterpolator(),
-  transitionInterruption: TRANSITION_EVENTS.UPDATE,
+  transitionInterruption: TRANSITION_EVENTS.BREAK,
   onTransitionStart: noop,
   onTransitionInterrupt: noop,
   onTransitionEnd: noop,
