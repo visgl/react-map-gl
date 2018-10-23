@@ -135,9 +135,14 @@ export default class TransitionManager {
         startProps.pitch !== endProps.pitch
     };
     const currentTime = Date.now();
-    const completion = this.state.interruption === TRANSITION_EVENTS.UPDATE ?
-                      (currentTime - this.state.startTime) / startProps.transitionDuration : 0;
-    const totalCompletion = this.state.totalCompletion + completion;
+    let completion = 0;
+    let totalCompletion = 0;
+    if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
+      completion = (currentTime - this.state.startTime) / startProps.transitionDuration;
+      totalCompletion = this.state.totalCompletion + completion;
+    } else {
+      this.state.totalCompletion = 0;
+    }
     this.state = {
       // Save current transition props
       totalCompletion,
@@ -186,7 +191,8 @@ export default class TransitionManager {
       shouldEnd = true;
       this.state.totalCompletion = 0;
     }
-    const tc = this.state.totalCompletion;
+    const tc = this.state.interruption === TRANSITION_EVENTS.UPDATE ?
+               this.state.totalCompletion : 0;
     t = (easing(t * (1 - tc) + tc) - easing(tc)) / (1 - tc);
     const viewport = interpolator.interpolateProps(startProps, endProps, t);
     // Normalize viewport props
