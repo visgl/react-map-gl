@@ -1,7 +1,15 @@
 # CHANGELOG
 
-
 # Version 4.0.0 Prereleases
+
+## 4.0.0-beta.2 (Oct 23, 2018)
+
+- Add `sortByDepth` option to Popup component (#623)
+- Remove bower dependency (#615)
+- Handle zoom center during linear transition (#625)
+- Add interaction callbacks (#626)
+- Add map to context (#627)
+- Remove click delay in map controls when `captureDoubleClick` is on (#628)
 
 ## 4.0.0-beta.1 (Oct 13, 2018)
 
