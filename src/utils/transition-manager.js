@@ -28,8 +28,7 @@ const DEFAULT_STATE = {
   animation: null,
   propsInTransition: null,
   startProps: null,
-  endProps: null,
-  totalCompletion: 0
+  endProps: null
 };
 
 export default class TransitionManager {
@@ -116,6 +115,10 @@ export default class TransitionManager {
     return true;
   }
 
+  _cropEasingFunction(easing, x0, y0) {
+    return t => (1 - y0) * (easing(t / (1 - x0) + x0) - y0);
+  }
+
   _triggerTransition(startProps, endProps) {
     assert(this._isTransitionEnabled(endProps), 'Transition is not enabled');
 
@@ -135,20 +138,21 @@ export default class TransitionManager {
         startProps.pitch !== endProps.pitch
     };
     const currentTime = Date.now();
-    let completion = 0;
-    let totalCompletion = 0;
+    let newDuration = endProps.transitionDuration;
+    let newEasing = endProps.transitionEasing;
+    let newInterpolator = endProps.transitionInterpolator;
     if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
-      completion = (currentTime - this.state.startTime) / startProps.transitionDuration;
-      totalCompletion = this.state.totalCompletion + completion;
-    } else {
-      this.state.totalCompletion = 0;
+      const x0 = (currentTime - this.state.startTime) / this.state.duration;
+      const y0 = startProps.transitionEasing(x0);
+      newDuration = this.state.duration - (currentTime - this.state.startTime);
+      newEasing = this._cropEasingFunction(this.state.easing, x0, y0);
+      newInterpolator = startProps.transitionInterpolator;
     }
     this.state = {
       // Save current transition props
-      totalCompletion,
-      duration: endProps.transitionDuration * (1 - totalCompletion),
-      easing: endProps.transitionEasing,
-      interpolator: endProps.transitionInterpolator,
+      duration: newDuration,
+      easing: newEasing,
+      interpolator: newInterpolator,
       interruption: endProps.transitionInterruption,
 
       startTime: currentTime,
@@ -158,7 +162,6 @@ export default class TransitionManager {
       propsInTransition: {},
       interactionState
     };
-
     this._onTransitionFrame();
     this.props.onStateChange(interactionState);
   }
@@ -189,11 +192,9 @@ export default class TransitionManager {
     if (t >= 1) {
       t = 1;
       shouldEnd = true;
-      this.state.totalCompletion = 0;
     }
-    const tc = this.state.interruption === TRANSITION_EVENTS.UPDATE ?
-               this.state.totalCompletion : 0;
-    t = (easing(t * (1 - tc) + tc) - easing(tc)) / (1 - tc);
+    t = easing(t);
+
     const viewport = interpolator.interpolateProps(startProps, endProps, t);
     // Normalize viewport props
     const mapState = new MapState(Object.assign({}, this.props, viewport));
