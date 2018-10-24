@@ -45,7 +45,9 @@ export {
 
 // Experimental Features (May change in minor version bumps, use at your own risk)
 import MapControls from './utils/map-controls';
+import {StaticContext} from './components/static-map';
 
 export const experimental = {
-  MapControls
+  MapControls,
+  MapContext: StaticContext
 };

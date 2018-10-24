@@ -216,7 +216,7 @@ export default class StaticMap extends PureComponent {
     this._updateMapSize(width, height);
 
     const staticContext = {
-      viewport: new WebMercatorViewport(Object.assign({}, this.props, {
+      viewport: new WebMercatorViewport(Object.assign({}, this.props, this.props.viewState, {
         width,
         height
       })),
