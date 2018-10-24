@@ -2,6 +2,10 @@
 
 # Version 4.0.0 Prereleases
 
+## 4.0.0-beta.3 (Oct 24, 2018)
+
+- Fix render error when using `viewState` instead of flat props (#632)
+
 ## 4.0.0-beta.2 (Oct 23, 2018)
 
 - Add `sortByDepth` option to Popup component (#623)
