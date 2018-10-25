@@ -5,6 +5,11 @@ import MapState from './map-state';
 
 const noop = () => {};
 
+export function cropEasingFunction(easing, x0) {
+  const y0 = easing(x0);
+  return t => 1 / (1 - y0) * (easing(t * (1 - x0) + x0) - y0);
+}
+
 export const TRANSITION_EVENTS = {
   BREAK: 1,
   SNAP_TO_END: 2,
@@ -115,10 +120,6 @@ export default class TransitionManager {
     return true;
   }
 
-  _cropEasingFunction(easing, x0, y0) {
-    return t => (1 - y0) * (easing(t / (1 - x0) + x0) - y0);
-  }
-
   _triggerTransition(startProps, endProps) {
     assert(this._isTransitionEnabled(endProps), 'Transition is not enabled');
 
@@ -143,9 +144,8 @@ export default class TransitionManager {
     let newInterpolator = endProps.transitionInterpolator;
     if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
       const x0 = (currentTime - this.state.startTime) / this.state.duration;
-      const y0 = startProps.transitionEasing(x0);
       newDuration = this.state.duration - (currentTime - this.state.startTime);
-      newEasing = this._cropEasingFunction(this.state.easing, x0, y0);
+      newEasing = cropEasingFunction(this.state.easing, x0);
       newInterpolator = startProps.transitionInterpolator;
     }
     this.state = {

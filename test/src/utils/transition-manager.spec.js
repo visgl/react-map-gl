@@ -1,5 +1,7 @@
 import test from 'tape-catch';
 import TransitionManager from 'react-map-gl/utils/transition-manager';
+import {equals} from 'math.gl';
+import {cropEasingFunction} from '../../../src/utils/transition-manager';
 
 /* global global, setTimeout, clearTimeout */
 // backfill requestAnimationFrame on Node
@@ -115,4 +117,25 @@ test('TransitionManager#callbacks', t => {
     t.ok(updateCount > 2, 'onViewportChange() called');
     t.end();
   }, 500);
+});
+
+// testing cropEasingFunction
+const easingFunctions = [
+  t => Math.sqrt(t),
+  t => t,
+  t => t * t,
+  t => t * t * t];
+const interruptions = [0.2, 0.5, 0.8];
+const values = [0, 0.5, 1];
+
+test('cropEasingFunction', function (t) {
+  easingFunctions.forEach(func => {
+    interruptions.forEach(x0 => {
+      var newEasing = cropEasingFunction(func, x0);
+      values.forEach(val => {
+        t.ok(equals(func(x0 + val * (1 - x0)), func(x0) + (1 - func(x0)) * newEasing(val)), 'cropped easing function matches the old one');
+      })
+    })
+  });
+  t.end();
 });

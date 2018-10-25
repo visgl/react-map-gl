@@ -181,10 +181,11 @@ Easing function that maps a value from `[0, 1]` to `[0, 1]`. Default to `t => t`
 
 ##### `transitionInterruption` {Number}
 
-What to do if an ongoing transition is interrupted by another transition. There are 3 options:
+What to do if an ongoing transition is interrupted by another transition. There are 4 options:
 - `TRANSITION_EVENTS.BREAK` - Start new transition from the current view. This is the default.
 - `TRANSITION_EVENTS.SNAP_TO_END` - Jump to the end of the previous transition before starting the new transition.
 - `TRANSITION_EVENTS.IGNORE` - Complete the previous transition and ignore the new viewport change.
+- `TRANSITION_EVENTS.UPDATE` - Continue the ongoing transition but change its path from the current view toward the end of the interrupting transition.
 
 You may import the constants as follows:
 
@@ -210,7 +211,7 @@ Callback that is fired when the map's viewport properties should be updated.
 onViewportChange(viewState, interactionState, oldViewState);
 ```
 
-Arguments: 
+Arguments:
 
 - `viewState` {Object} The next viewport properties, including: `width`, `height`, `latitude`, `longitude`, `zoom`, `bearing`, `pitch`, `altitude`, `maxZoom`, `minZoom`, `maxPitch`, `minPitch`, `transitionDuration`, `transitionEasing`, `transitionInterpolator`, `transitionInterruption`.
 - `interactionState` {Object} The current interaction that caused this viewport change. See `onInteractionStateChange` for possible fields.
