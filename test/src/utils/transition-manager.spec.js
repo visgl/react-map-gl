@@ -132,6 +132,8 @@ test('cropEasingFunction', function (t) {
   easingFunctions.forEach(func => {
     interruptions.forEach(x0 => {
       var newEasing = cropEasingFunction(func, x0);
+      t.ok(equals(newEasing(0), 0), 'cropped easing function starts at (0, 0)');
+      t.ok(equals(newEasing(1), 1), 'cropped easing function ends at (1, 1)');
       values.forEach(val => {
         t.ok(equals(func(x0 + val * (1 - x0)), func(x0) + (1 - func(x0)) * newEasing(val)), 'cropped easing function matches the old one');
       })

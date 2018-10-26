@@ -5,6 +5,8 @@ import MapState from './map-state';
 
 const noop = () => {};
 
+// crops the old easing function from x0 to 1 where x0 is the interruption point
+// returns a new easing function with domain [0, 1] and range [0, 1]
 export function cropEasingFunction(easing, x0) {
   const y0 = easing(x0);
   return t => 1 / (1 - y0) * (easing(t * (1 - x0) + x0) - y0);
@@ -74,6 +76,14 @@ export default class TransitionManager {
           this.state.endProps : this.state.propsInTransition
       );
 
+      const currentTime = Date.now();
+      if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
+        const x0 = (currentTime - this.state.startTime) / this.state.duration;
+        nextProps.transitionDuration = this.state.duration - (currentTime - this.state.startTime);
+        nextProps.transitionEasing = cropEasingFunction(this.state.easing, x0);
+        nextProps.transitionInterpolator = startProps.transitionInterpolator;
+      }
+
       if (isTransitionInProgress) {
         currentProps.onTransitionInterrupt();
       }
@@ -138,24 +148,15 @@ export default class TransitionManager {
       isRotating: startProps.bearing !== endProps.bearing ||
         startProps.pitch !== endProps.pitch
     };
-    const currentTime = Date.now();
-    let newDuration = endProps.transitionDuration;
-    let newEasing = endProps.transitionEasing;
-    let newInterpolator = endProps.transitionInterpolator;
-    if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
-      const x0 = (currentTime - this.state.startTime) / this.state.duration;
-      newDuration = this.state.duration - (currentTime - this.state.startTime);
-      newEasing = cropEasingFunction(this.state.easing, x0);
-      newInterpolator = startProps.transitionInterpolator;
-    }
+
     this.state = {
       // Save current transition props
-      duration: newDuration,
-      easing: newEasing,
-      interpolator: newInterpolator,
+      duration: endProps.transitionDuration,
+      easing: endProps.transitionEasing,
+      interpolator: endProps.transitionInterpolator,
       interruption: endProps.transitionInterruption,
 
-      startTime: currentTime,
+      startTime: Date.now(),
       startProps: initialProps.start,
       endProps: initialProps.end,
       animation: null,

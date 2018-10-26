@@ -185,7 +185,7 @@ What to do if an ongoing transition is interrupted by another transition. There 
 - `TRANSITION_EVENTS.BREAK` - Start new transition from the current view. This is the default.
 - `TRANSITION_EVENTS.SNAP_TO_END` - Jump to the end of the previous transition before starting the new transition.
 - `TRANSITION_EVENTS.IGNORE` - Complete the previous transition and ignore the new viewport change.
-- `TRANSITION_EVENTS.UPDATE` - Continue the ongoing transition but change its path from the current view toward the end of the interrupting transition.
+- `TRANSITION_EVENTS.UPDATE` - Continue the ongoing transition but change its destination to the new viewport.
 
 You may import the constants as follows:
 
