@@ -27,7 +27,7 @@ class CustomMarker extends BaseControl {
     };
 
     return (
-      <div ref={this._onContainerLoad}
+      <div ref={this._containerRef}
         style={markerStyle} />
         ({longitude}, {latitude})
       </div>
@@ -52,20 +52,29 @@ Stop propagation of click event to the map component. Can be used to stop map fr
 ##### `captureDoubleClick` {Boolean} - default: `true`
 Stop propagation of dblclick event to the map component. Can be used to stop map from zooming when this component is double clicked.
 
-## Private Methods
+## Private Members
 
-##### `_render`
+##### `_containerRef`
 
-Implement this method to render the content of this component. `this._context` is accessible when this method is called, containing the following fields:
+A React [ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) object.
+
+Should be assigned to the `ref` prop of the root DOM element of this component. Required to leverage the `capture*` props.
+
+##### `_context`
+
+An object containing the following fields:
 
 - `viewport` {WebMercatorViewport} - the current viewport
 - `map` {mapboxgl.Map} - the Mapbox map instance
 - `eventManager` {EventManager} - the event manager. Only available if using `InteractiveMap`.
 - `isDragging` {Bool} - whether the map is being dragged. Only available if using `InteractiveMap`.
 
-##### `_onContainerLoad`
 
-Should be assigned to the `ref` prop of the root DOM element of this component. This is required to leverage the `capture*` props.
+## Private Methods
+
+##### `_render`
+
+Implement this method to render the content of this component. `this._context` is accessible when this method is called.
 
 
 ## Source

@@ -1,4 +1,4 @@
-import {PureComponent, createElement, createContext} from 'react';
+import {PureComponent, createElement, createContext, createRef} from 'react';
 import PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -155,11 +155,14 @@ export default class InteractiveMap extends PureComponent {
     });
     this._width = 0;
     this._height = 0;
+    this._eventCanvasRef = createRef();
+    this._staticMapRef = createRef();
   }
 
   componentDidMount() {
     const eventManager = this._eventManager;
 
+    eventManager.setElement(this._eventCanvasRef.current);
     // Register additional event handlers for click and hover
     eventManager.on({
       pointerdown: this._onPointerDown,
@@ -180,7 +183,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   getMap = () => {
-    return this._map ? this._map.getMap() : null;
+    return this._staticMapRef.current ? this._staticMapRef.current.getMap() : null;
   }
 
   queryRenderedFeatures = (geometry, options) => {
@@ -350,15 +353,6 @@ export default class InteractiveMap extends PureComponent {
     }
   }
 
-  _eventCanvasLoaded = (ref) => {
-    // This will be called with `null` after unmount, releasing event manager resource
-    this._eventManager.setElement(ref);
-  }
-
-  _staticMapLoaded = (ref) => {
-    this._map = ref;
-  }
-
   render() {
     const {width, height, style, getCursor} = this.props;
 
@@ -375,7 +369,7 @@ export default class InteractiveMap extends PureComponent {
     return createElement(InteractiveContext.Provider, {value: interactiveContext},
       createElement('div', {
         key: 'map-controls',
-        ref: this._eventCanvasLoaded,
+        ref: this._eventCanvasRef,
         style: eventCanvasStyle
       },
         createElement(StaticMap, Object.assign({}, this.props,
@@ -384,7 +378,7 @@ export default class InteractiveMap extends PureComponent {
             height: '100%',
             style: null,
             onResize: this._onResize,
-            ref: this._staticMapLoaded,
+            ref: this._staticMapRef,
             children: this.props.children
           }
         ))

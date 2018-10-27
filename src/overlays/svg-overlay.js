@@ -47,7 +47,7 @@ export default class SVGOverlay extends BaseControl {
       createElement('svg', {
         width: viewport.width,
         height: viewport.height,
-        ref: this._onContainerLoad,
+        ref: this._containerRef,
         style
       },
         this.props.redraw({
