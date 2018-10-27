@@ -1,11 +1,28 @@
 # react-map-gl v4.0
 
-Release date: In development, target September, 2018
+Release date: TBD
 
 ## Highlights
 
-- **Breaking** Immutable.js is no longer a dependency
+- **Relative dimensions** Both `InteractiveMap` and `StaticMap` now support CSS strings supplied to map `width` and `height` props. New `onResize` callback is fired when the map resizes.
+- **React 16** Upgrade to React 16.3 context and ref patterns
+- **Babel 7** Upgrade build system to Babel 7, better support for tree-shaking
 - **Style diffing** Now use Mapbox's native style diffing
+- **Interaction states** `onViewportChange` is now called with richer descriptors of the user interaction, including `isPanning`, `isZooming` and `isRotating`.
+- **New callback props** `InteractiveMap` supports more callbacks:
+  + `onDblClick`
+  + `onMouseDown`
+  + `onMouseMove`
+  + `onMouseUp`
+  + `onTouchStart`
+  + `onTouchMove`
+  + `onTouchEnd`
+  + `onMouseEnter`
+  + `onMouseLeave`
+  + `onWheel`
+  + `onMouseOut`
+
+See [upgrade guide](/docs/upgrade-guide.md) for breaking changes.
 
 # react-map-gl v3.3
 
