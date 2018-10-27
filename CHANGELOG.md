@@ -2,6 +2,10 @@
 
 # Version 3.3.0
 
+## 3.3.8 (Oct 26, 2018)
+
+- Add support for Create React App access token environment variable (#633)
+
 ## 3.3.7 (Oct 18, 2018)
 
 - Fix double-click zoom transition (#625)
