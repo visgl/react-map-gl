@@ -81,7 +81,7 @@ export default class DraggableControl extends BaseControl {
    */
   _getDragEventOffset(event) {
     const {center: {x, y}} = event;
-    const rect = this._containerRef.getBoundingClientRect();
+    const rect = this._containerRef.current.getBoundingClientRect();
     return [rect.left - x, rect.top - y];
   }
 

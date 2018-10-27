@@ -17,7 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {createElement} from 'react';
+import {createElement, createRef} from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
 
@@ -79,9 +79,11 @@ export default class Popup extends BaseControl {
     super(props);
 
     this._closeOnClick = false;
+    this._contentRef = createRef();
   }
 
   componentDidMount() {
+    super.componentDidMount();
     // Container just got a size, re-calculate position
     this.forceUpdate();
   }
@@ -89,15 +91,16 @@ export default class Popup extends BaseControl {
   _getPosition(x, y) {
     const {viewport} = this._context;
     const {anchor, dynamicPosition, tipSize} = this.props;
+    const content = this._contentRef.current;
 
-    if (this._content) {
+    if (content) {
       return dynamicPosition ? getDynamicPosition({
         x, y, anchor,
         padding: tipSize,
         width: viewport.width,
         height: viewport.height,
-        selfWidth: this._content.clientWidth,
-        selfHeight: this._content.clientHeight
+        selfWidth: content.clientWidth,
+        selfHeight: content.clientHeight
       }) : anchor;
     }
 
@@ -153,10 +156,6 @@ export default class Popup extends BaseControl {
     this._closeOnClick = true;
   }
 
-  _contentLoaded = (ref) => {
-    this._content = ref;
-  }
-
   _renderTip(positionType) {
     const {tipSize} = this.props;
 
@@ -171,7 +170,7 @@ export default class Popup extends BaseControl {
     const {closeButton, children} = this.props;
     return createElement('div', {
       key: 'content',
-      ref: this._contentLoaded,
+      ref: this._contentRef,
       className: 'mapboxgl-popup-content'
     }, [
       closeButton && createElement('button', {
@@ -195,7 +194,7 @@ export default class Popup extends BaseControl {
     return createElement('div', {
       className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`,
       style: containerStyle,
-      ref: this._onContainerLoad
+      ref: this._containerRef
     }, [
       this._renderTip(positionType),
       this._renderContent()

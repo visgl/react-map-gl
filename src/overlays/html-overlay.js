@@ -47,7 +47,7 @@ export default class HTMLOverlay extends BaseControl {
 
     return (
       createElement('div', {
-        ref: this._onContainerLoad,
+        ref: this._containerRef,
         style
       },
         this.props.redraw({

@@ -17,7 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {PureComponent, createElement} from 'react';
+import {PureComponent, createElement, createRef} from 'react';
 import PropTypes from 'prop-types';
 import {InteractiveContext} from './interactive-map';
 import {StaticContext} from './static-map';
@@ -54,7 +54,27 @@ export default class BaseControl extends PureComponent {
 
     this._context = {};
     this._events = null;
-    this._containerRef = null;
+    this._containerRef = createRef();
+  }
+
+  componentDidMount() {
+    const ref = this._containerRef.current;
+    if (!ref) {
+      return;
+    }
+
+    const {eventManager} = this._context;
+
+    // Return early if no eventManager is found
+    if (eventManager) {
+      this._events = {
+        wheel: this._onScroll,
+        panstart: this._onDragStart,
+        click: this._onClick,
+        pointerup: this._onPointerUp
+      };
+      eventManager.on(this._events, ref);
+    }
   }
 
   componentWillUnmount() {
@@ -62,39 +82,6 @@ export default class BaseControl extends PureComponent {
     if (eventManager && this._events) {
       eventManager.off(this._events);
     }
-  }
-
-  _onContainerLoad = (ref) => {
-    this._containerRef = ref;
-
-    const {eventManager} = this._context;
-
-    // Return early if no eventManager is found
-    if (!eventManager) {
-      return;
-    }
-
-    let events = this._events;
-
-    // Remove all previously registered events
-    if (events) {
-      eventManager.off(events);
-      events = null;
-    }
-
-    if (ref) {
-      // container is mounted: register events for this element
-      events = {
-        wheel: this._onScroll,
-        panstart: this._onDragStart,
-        click: this._onClick,
-        pointerup: this._onPointerUp
-      };
-
-      eventManager.on(events, ref);
-    }
-
-    this._events = events;
   }
 
   _onScroll = (evt) => {

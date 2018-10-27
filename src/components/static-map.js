@@ -17,7 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {PureComponent, createElement, createContext} from 'react';
+import {PureComponent, createElement, createContext, createRef} from 'react';
 import PropTypes from 'prop-types';
 
 import {normalizeStyle} from '../utils/style-utils';
@@ -102,6 +102,7 @@ export default class StaticMap extends PureComponent {
     };
     this._width = 0;
     this._height = 0;
+    this._mapboxMapRef = createRef();
   }
 
   componentDidMount() {
@@ -111,7 +112,7 @@ export default class StaticMap extends PureComponent {
       mapboxgl, // Handle to mapbox-gl library
       width: this._width,
       height: this._height,
-      container: this._mapboxMap,
+      container: this._mapboxMapRef.current,
       onError: this._mapboxMapError,
       mapStyle: normalizeStyle(mapStyle)
     }));
@@ -173,10 +174,6 @@ export default class StaticMap extends PureComponent {
       width: this._width,
       height: this._height
     }));
-  }
-
-  _mapboxMapLoaded = (ref) => {
-    this._mapboxMap = ref;
   }
 
   // Handle map error
@@ -250,7 +247,7 @@ export default class StaticMap extends PureComponent {
       children: [
         createElement('div', {
           key: 'map-mapbox',
-          ref: this._mapboxMapLoaded,
+          ref: this._mapboxMapRef,
           style: mapStyle,
           className
         }),

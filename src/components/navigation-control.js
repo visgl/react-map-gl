@@ -94,7 +94,7 @@ export default class NavigationControl extends BaseControl {
 
     return createElement('div', {
       className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
-      ref: this._onContainerLoad
+      ref: this._containerRef
     }, [
       showZoom && this._renderButton('zoom-in', 'Zoom In', this._onZoomIn),
       showZoom && this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut),

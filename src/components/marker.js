@@ -69,7 +69,7 @@ export default class Marker extends DraggableControl {
 
     return createElement('div', {
       className: `mapboxgl-marker ${className}`,
-      ref: this._onContainerLoad,
+      ref: this._containerRef,
       style: containerStyle,
       children: this.props.children
     });
