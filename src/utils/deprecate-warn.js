@@ -4,11 +4,12 @@ const DEPRECATED_PROPS = [
   {old: 'perspectiveEnabled', new: 'dragRotate'},
   {old: 'onHoverFeatures', new: 'onHover'},
   {old: 'onClickFeatures', new: 'onClick'},
-  {old: 'touchZoomRotate', new: 'touchZoom, touchRotate'}
+  {old: 'touchZoomRotate', new: 'touchZoom, touchRotate'},
+  {old: 'mapControls', new: 'controller'}
 ];
 
 function getDeprecatedText(name) {
-  return `react-map-gl: \`${name}\` is deprecated and will be removed in a later version.`;
+  return `react-map-gl: \`${name}\` is removed.`;
 }
 
 function getNewText(name) {
