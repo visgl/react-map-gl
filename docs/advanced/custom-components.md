@@ -56,7 +56,7 @@ Stop propagation of dblclick event to the map component. Can be used to stop map
 
 ##### `_containerRef`
 
-A React [ref]() object.
+A React [ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) object.
 
 Should be assigned to the `ref` prop of the root DOM element of this component. Required to leverage the `capture*` props.
 
