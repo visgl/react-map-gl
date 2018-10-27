@@ -65,7 +65,7 @@ To show maps from a service such as Mapbox you will need to register on their we
 There are several ways to provide a token to your app, as showcased in some of the example folders:
 
 * Provide a `mapboxApiAccessToken` prop to the map component
-* Set the `MapboxAccessToken` environment variable
+* Set the `MapboxAccessToken` environment variable (or set `REACT_APP_MAPBOX_ACCESS_TOKEN` if you are using Create React App)
 * Provide it in the URL, e.g `?access_token=TOKEN`
 
 But we would recommend using something like [dotenv](https://github.com/motdotla/dotenv) and put your key in an untracked `.env` file, that will then expose it as a `process.env` variable, with much less leaking risks.
