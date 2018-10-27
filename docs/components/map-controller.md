@@ -1,6 +1,6 @@
-# MapControls (experimental)
+# MapController
 
-The easiest way to create a custom map control is to extend the default `MapControls` class.
+The easiest way to create a custom map control is to extend the default `MapController` class.
 
 ## Properties
 
@@ -8,7 +8,7 @@ The easiest way to create a custom map control is to extend the default `MapCont
 
 A list of additional event names that this control subscribes to.
 
-Available events: `click`, `dblclick`, `tap`, `doubletap`, `press`, `pinch`, `pinchin`, `pinchout`, `pinchstart`, `pinchmove`, `pinchend`, `pinchcancel`, `rotate`, `rotatestart`, `rotatemove`, `rotateend`, `rotatecancel`, `pan`, `panstart`, `panmove`, `panup`, `pandown`, `panleft`, `panright`, `panend`, `pancancel`, `swipe`, `swipeleft`, `swiperight`, `swipeup`, `swipedown`, `pointerdown`, `pointermove`, `pointerup`, `touchstart`, `touchmove`, `touchend`, `mousedown`, `mousemove`, `mouseup`, `keydown`, and `keyup`.
+Available events: `click`, `dblclick`, `tap`, `doubletap`, `press`, `pinch`, `pinchin`, `pinchout`, `pinchstart`, `pinchmove`, `pinchend`, `pinchcancel`, `rotate`, `rotatestart`, `rotatemove`, `rotateend`, `rotatecancel`, `pan`, `panstart`, `panmove`, `panup`, `pandown`, `panleft`, `panright`, `panend`, `pancancel`, `swipe`, `swipeleft`, `swiperight`, `swipeup`, `swipedown`, `pointerdown`, `pointermove`, `pointerup`, `keydown`, and `keyup`.
 
 The following events are toggled on/off by InteractiveMap props: 
 
@@ -69,4 +69,4 @@ Invoke `onViewportChange` callback with a new map state.
 
 
 ## Source
-[map-controls.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/utils/map-controls.js)
+[map-controller.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/utils/map-controller.js)

@@ -1,36 +1,37 @@
-# Custom Map Controls
+# Custom Map Controller
 
 ## Overriding The Default Map Controller
 
-To change the default behavior of map interaction, you can provide a custom map control to the `mapControls` prop of `InteractiveMap`.
+To change the default behavior of map interaction, you can provide a custom map control to the `mapController` prop of `InteractiveMap`.
 
 This custom map control must offer the following interface:
 - `setOptions(options)` - called by `InteractiveMap` when props change.
 
 ```jsx
-  const mapControls = new MyMapControls();
+  const mapController = new MyMapController();
 
   render() {
-    return <ReactMapGL mapControls={mapControls} ... />;
+    return <ReactMapGL mapController={mapController} ... />;
   }
 ```
 
 
-Documentation of [the MapControls class](/docs/components/map-controls.md).
+Documentation of [the MapController class](/docs/components/map-controller.md).
 
 
 ## Examples
 
 A simple example to swap drag pan and drag rotate:
-```js
-  /// my-map-controls.js
-  import {experimental} from 'react-map-gl';
 
-  export default class MyMapControls extends experimental.MapControls {
+```js
+  /// my-map-controller.js
+  import {MapController} from 'react-map-gl';
+
+  export default class MyMapController extends MapController {
 
     _onPan(event) {
       return this.isFunctionKeyPressed(event) || event.rightButton ?
-    //  Default implementation in MapControls
+    //  Default implementation in MapController
     //  this._onPanRotate(event) : this._onPanMove(event);
         this._onPanMove(event) : this._onPanRotate(event);
     }
@@ -38,11 +39,12 @@ A simple example to swap drag pan and drag rotate:
 ```
 
 Overwrite existing event handling:
-```js
-  /// my-map-controls.js
-  import {experimental} from 'react-map-gl';
 
-  export default class MyMapControls extends experimental.MapControls {
+```js
+  /// my-map-controller.js
+  import {MapController} from 'react-map-gl';
+
+  export default class MyMapController extends MapController {
 
     // Override the default double tap handler
     _onDoubleTap(event) {
@@ -57,11 +59,12 @@ Overwrite existing event handling:
 ```
 
 Listen to additional events:
-```js
-  /// my-map-controls.js
-  import {experimental} from 'react-map-gl';
 
-  export default class MyMapControls extends experimental.MapControls {
+```js
+  /// my-map-controller.js
+  import {MapController} from 'react-map-gl';
+
+  export default class MyMapController extends MapController {
 
     constructor() {
       super();
@@ -69,7 +72,7 @@ Listen to additional events:
       this.events = ['click'];
     }
 
-    // Override the default handler in MapControls
+    // Override the default handler in MapController
     handleEvent(event) {
       if (event.type === 'click') {
         console.log('hi');
@@ -80,11 +83,12 @@ Listen to additional events:
 ```
 
 Add a custom callback:
-```js
-  /// my-map-controls.js
-  import {experimental} from 'react-map-gl';
 
-  export default class MyMapControls extends experimental.MapControls {
+```js
+  /// my-map-controller.js
+  import {MapController} from 'react-map-gl';
+
+  export default class MyMapController extends MapController {
 
     setOptions(options) {
       super.setOptions(options);

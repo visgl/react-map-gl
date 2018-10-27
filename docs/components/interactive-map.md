@@ -133,9 +133,9 @@ By default, the map captures all touch interactions. This prop is useful for mob
 
 Radius to detect features around a clicked point.
 
-##### `mapControls` {Object}
+##### `controller` {Object}
 
-A map control instance to replace the default map controls.
+A map controller instance to replace the default map controller.
 
 This object must implement the following interface:
 - `events` - An array of subscribed events

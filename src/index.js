@@ -41,7 +41,7 @@ export {
   LinearInterpolator,
   ViewportFlyToInterpolator as FlyToInterpolator
 } from './utils/transition';
-export {MapControls} from './utils/map-controls';
+export {default as MapController} from './utils/map-controller';
 
 // Experimental Features (May change in minor version bumps, use at your own risk)
 export {StaticContext as _StaticContext} from './components/static-map';

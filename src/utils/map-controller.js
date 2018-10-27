@@ -45,7 +45,7 @@ const EVENT_TYPES = {
   KEYBOARD: ['keydown']
 };
 
-export default class MapControls {
+export default class MapController {
   /**
    * @classdesc
    * A class that handles events and updates mercator style viewport parameters
