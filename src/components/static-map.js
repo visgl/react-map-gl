@@ -154,7 +154,6 @@ export default class StaticMap extends PureComponent {
       this._width = width;
       this._height = height;
       this._updateMapProps(this.props);
-      this.props.onResize({width, height});
     }
   }
 
@@ -256,7 +255,8 @@ export default class StaticMap extends PureComponent {
         createElement(AutoSizer, {
           key: 'autosizer',
           disableWidth: Number.isFinite(width),
-          disableHeight: Number.isFinite(height)
+          disableHeight: Number.isFinite(height),
+          onResize: this.props.onResize
         }, this._renderOverlays.bind(this)),
         this._renderNoTokenWarning()
       ]
