@@ -1,5 +1,13 @@
 # Upgrade Guide
 
+## Upgrading to v4
+
+- `onChangeViewport` is removed, use `onViewportChange` instead
+- `Immutable.js` is no longer a dependency
+- Export `experimental.MapControls` is removed, use `MapController` instead
+- `InteractiveMap`'s `mapControls` prop is renamed to `controller`
+
+
 ## Upgrading to v3.2
 
 - The latest mapbox-gl release requires stylesheet to be included at all times. See [Get Started](/docs/get-started/get-started.md) for information about styling.
