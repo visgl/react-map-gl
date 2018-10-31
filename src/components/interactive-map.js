@@ -8,7 +8,7 @@ import WebMercatorViewport from 'viewport-mercator-project';
 import TransitionManager from '../utils/transition-manager';
 
 import {EventManager} from 'mjolnir.js';
-import MapControls from '../utils/map-controls';
+import MapController from '../utils/map-controller';
 import config from '../config';
 import deprecateWarn from '../utils/deprecate-warn';
 
@@ -94,10 +94,10 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   /** Accessor that returns a cursor style to show interactive state */
   getCursor: PropTypes.func,
 
-  // A map control instance to replace the default map controls
+  // A map control instance to replace the default map controller
   // The object must expose one property: `events` as an array of subscribed
   // event names; and two methods: `setState(state)` and `handle(event)`
-  mapControls: PropTypes.shape({
+  controller: PropTypes.shape({
     events: PropTypes.arrayOf(PropTypes.string),
     handleEvent: PropTypes.func
   })
@@ -145,9 +145,9 @@ export default class InteractiveMap extends PureComponent {
       isHovering: false
     };
 
-    // If props.mapControls is not provided, fallback to default MapControls instance
+    // If props.controller is not provided, fallback to default MapController instance
     // Cannot use defaultProps here because it needs to be per map instance
-    this._mapControls = props.mapControls || new MapControls();
+    this._controller = props.controller || new MapController();
 
     this._eventManager = new EventManager(null, {
       legacyBlockScroll: false,
@@ -201,7 +201,7 @@ export default class InteractiveMap extends PureComponent {
       height: this._height
     });
 
-    this._mapControls.setOptions(props);
+    this._controller.setOptions(props);
   }
 
   _getFeatures({pos, radius}) {
@@ -368,7 +368,7 @@ export default class InteractiveMap extends PureComponent {
 
     return createElement(InteractiveContext.Provider, {value: interactiveContext},
       createElement('div', {
-        key: 'map-controls',
+        key: 'event-canvas',
         ref: this._eventCanvasRef,
         style: eventCanvasStyle
       },

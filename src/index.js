@@ -34,20 +34,14 @@ export {default as CanvasOverlay} from './overlays/canvas-overlay';
 export {default as HTMLOverlay} from './overlays/html-overlay';
 export {default as SVGOverlay} from './overlays/svg-overlay';
 
+// Utilities
 export {TRANSITION_EVENTS} from './utils/transition-manager';
 export {
   TransitionInterpolator,
   LinearInterpolator,
   ViewportFlyToInterpolator as FlyToInterpolator
 } from './utils/transition';
-
-// Utilities
+export {default as MapController} from './utils/map-controller';
 
 // Experimental Features (May change in minor version bumps, use at your own risk)
-import MapControls from './utils/map-controls';
-import {StaticContext} from './components/static-map';
-
-export const experimental = {
-  MapControls,
-  MapContext: StaticContext
-};
+export {StaticContext as _StaticContext} from './components/static-map';

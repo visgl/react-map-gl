@@ -84,8 +84,8 @@ const docPages = {
           content: getDocUrl('overlays/custom-components.md')
         },
         {
-          name: 'Custom Map Controls',
-          content: getDocUrl('advanced/custom-map-controls.md')
+          name: 'Custom Map Controller',
+          content: getDocUrl('advanced/custom-map-controller.md')
         },
         {
           name: 'Custom Overlays',
@@ -126,8 +126,8 @@ const docPages = {
           content: getDocUrl('components/marker.md')
         },
         {
-          name: 'MapControls',
-          content: getDocUrl('components/map-controls.md')
+          name: 'MapController',
+          content: getDocUrl('components/map-controller.md')
         },
         {
           name: 'NavigationControl',

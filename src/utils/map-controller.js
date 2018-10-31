@@ -45,7 +45,7 @@ const EVENT_TYPES = {
   KEYBOARD: ['keydown']
 };
 
-export default class MapControls {
+export default class MapController {
   /**
    * @classdesc
    * A class that handles events and updates mercator style viewport parameters
@@ -137,9 +137,6 @@ export default class MapControls {
    */
   setOptions(options) {
     const {
-      // TODO(deprecate): remove this when `touchZoomRotate` gets deprecated
-      touchZoomRotate = true,
-
       onViewportChange,
       onStateChange,
       eventManager = this.eventManager,
@@ -178,7 +175,7 @@ export default class MapControls {
     // Register/unregister events
     this.toggleEvents(EVENT_TYPES.WHEEL, isInteractive && scrollZoom);
     this.toggleEvents(EVENT_TYPES.PAN, isInteractive && (dragPan || dragRotate));
-    this.toggleEvents(EVENT_TYPES.PINCH, isInteractive && touchZoomRotate);
+    this.toggleEvents(EVENT_TYPES.PINCH, isInteractive && (touchZoom || touchRotate));
     this.toggleEvents(EVENT_TYPES.DOUBLE_TAP, isInteractive && doubleClickZoom);
     this.toggleEvents(EVENT_TYPES.KEYBOARD, isInteractive && keyboard);
 
@@ -187,8 +184,8 @@ export default class MapControls {
     this.dragPan = dragPan;
     this.dragRotate = dragRotate;
     this.doubleClickZoom = doubleClickZoom;
-    this.touchZoom = touchZoomRotate && touchZoom;
-    this.touchRotate = touchZoomRotate && touchRotate;
+    this.touchZoom = touchZoom;
+    this.touchRotate = touchRotate;
     this.keyboard = keyboard;
   }
 
