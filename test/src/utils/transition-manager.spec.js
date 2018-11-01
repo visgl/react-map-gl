@@ -217,7 +217,7 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
     // testing easing function
     let testEasingFunc = testCase.input[0].transitionEasing;
     if(mode === TRANSITION_EVENTS.UPDATE) {
-      const completion = mode === (time[1] - time[0]) / testCase.input[0].transitionDuration;
+      const completion = (time[1] - time[0]) / testCase.input[0].transitionDuration;
       testEasingFunc = cropEasingFunction(testCase.input[0].transitionEasing, completion);
     }
     t.is(transitionManager.state.easing.toString() === testEasingFunc.toString(), testCase.expect[mode - 1][4], 'transitionEasing match');
