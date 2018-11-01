@@ -1,17 +1,22 @@
 import {fromJS} from 'immutable';
 import MAP_STYLE from '../../map-style-basic-v8.json';
 
+// Make a copy of the map style
+const mapStyle = {
+  ...MAP_STYLE,
+  sources: {...MAP_STYLE.sources},
+  layers: MAP_STYLE.layers.slice()
+};
+
 // Add the vector tile source for counties
-Object.assign(MAP_STYLE.sources, {
-  counties: {
-    type: 'vector',
-    url: 'mapbox://mapbox.82pkq93d'
-  }
-});
+mapStyle.sources.counties = {
+  type: 'vector',
+  url: 'mapbox://mapbox.82pkq93d'
+};
 
 // Insert custom layers before city labels
-MAP_STYLE.layers.splice(
-  MAP_STYLE.layers.findIndex(layer => layer.id === 'place_label_city'), 0,
+mapStyle.layers.splice(
+  mapStyle.layers.findIndex(layer => layer.id === 'place_label_city'), 0,
   // Counties polygons
   {
     id: 'counties',
@@ -40,6 +45,6 @@ MAP_STYLE.layers.splice(
 );
 
 export const highlightLayerIndex =
-  MAP_STYLE.layers.findIndex(layer => layer.id === 'counties-highlighted');
+  mapStyle.layers.findIndex(layer => layer.id === 'counties-highlighted');
 
-export const defaultMapStyle = fromJS(MAP_STYLE);
+export const defaultMapStyle = fromJS(mapStyle);

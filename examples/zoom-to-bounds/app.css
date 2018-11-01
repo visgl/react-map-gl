@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  background: #000;
+}
+#map {
+  width: 100vw;
+  height: 100vh;
+}
+
+#hint {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #a00;
+  color: #fff;
+  padding: 12px;
+}

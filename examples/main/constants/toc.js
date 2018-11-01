@@ -14,6 +14,7 @@ import GeoJsonAnimation from '../../geojson-animation/src/app';
 import Interaction from '../../interaction/src/app';
 import Layers from '../../layers/src/app';
 import ViewportAnimation from '../../viewport-animation/src/app';
+import ZoomToBounds from '../../zoom-to-bounds/src/app';
 
 export const BASIC_EXAMPLES = 'basicExamples';
 export const STANDALONE_EXAMPLES = 'standalonExamples';
@@ -61,6 +62,11 @@ export const standaloneExamples = [
     path: 'filter',
     name: 'Highlight By Filter',
     component: Filter
+  },
+  {
+    path: 'zoom-to-bounds',
+    name: 'Zoom To Bounds',
+    component: ZoomToBounds
   }
 ];
 
