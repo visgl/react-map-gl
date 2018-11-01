@@ -2,6 +2,9 @@ import test from 'tape-catch';
 import TransitionManager from 'react-map-gl/utils/transition-manager';
 import {equals} from 'math.gl';
 import {cropEasingFunction} from '../../../src/utils/transition-manager';
+import {TRANSITION_EVENTS} from '../../../src/utils/transition-manager';
+import LinearInterpolator from '../../../src/utils/transition/linear-interpolator';
+import ViewportFlyToInterpolator from '../../../src/utils/transition/viewport-fly-to-interpolator';
 
 /* global global, setTimeout, clearTimeout */
 // backfill requestAnimationFrame on Node
@@ -128,7 +131,7 @@ const easingFunctions = [
 const interruptions = [0.2, 0.5, 0.8];
 const values = [0, 0.5, 1];
 
-test('cropEasingFunction', function (t) {
+test('TransitionManager#cropEasingFunction', function (t) {
   easingFunctions.forEach(func => {
     interruptions.forEach(x0 => {
       var newEasing = cropEasingFunction(func, x0);
@@ -138,6 +141,88 @@ test('cropEasingFunction', function (t) {
         t.ok(equals(func(x0 + val * (1 - x0)), func(x0) + (1 - func(x0)) * newEasing(val)), 'cropped easing function matches the old one');
       })
     })
+  });
+  t.end();
+});
+
+
+// testing interruption mode
+
+test('TransitionManager#TRANSITION_EVENTS', t => {
+  const testCase = {
+    title: 'Transition events',
+    initialProps:
+      { width: 100,
+        height: 100,
+        longitude: -70.9,
+        latitude: 41,
+        zoom: 12,
+        pitch: 60,
+        bearing: 0,
+        transitionDuration: 200,
+        transitionInterpolator: new LinearInterpolator()},
+    input: [
+      // viewport change
+      { width: 100,
+        height: 100,
+        longitude: -102.45,
+        latitude: 3.78,
+        zoom: 1,
+        pitch: 10,
+        bearing: 30,
+        transitionDuration: 200,
+        transitionEasing: t => t * t,
+        transitionInterpolator: new ViewportFlyToInterpolator()},
+      // viewport change interrupting transition
+      { width: 100,
+        height: 100,
+        longitude: -122.45,
+        latitude: 37.78,
+        zoom: 12, pitch: 0,
+        bearing: 0,
+        transitionDuration: 2000,
+        transitionEasing: t => t,
+        transitionInterpolator: new LinearInterpolator()}
+    ],
+    expect: [
+      [false, true, false, true, false, true], //break
+      [false, true, false, true, false, true], //snap_to_end
+      [true, false, true, false, true, false], //ignore
+      [true, false, true, false, true, false]  //update
+    ],
+    modes: [TRANSITION_EVENTS.BREAK, TRANSITION_EVENTS.SNAP_TO_END, TRANSITION_EVENTS.IGNORE, TRANSITION_EVENTS.UPDATE]
+  };
+
+  testCase.modes.forEach((mode) => {
+    let transitionProps;
+    let time = [0, 0];
+    let interruptionMode = mode;
+    const transitionManager = new TransitionManager(Object.assign({}, TransitionManager.defaultProps, testCase.initialProps, {transitionInterruption: interruptionMode}));
+
+    testCase.input.forEach((props, i) => {
+      transitionProps = Object.assign({}, TransitionManager.defaultProps, props, {transitionInterruption: interruptionMode});
+      time[i] = Date.now();
+      transitionManager.processViewportChange(transitionProps);
+    });
+    // testing interpolator
+    t.is(transitionManager.state.interpolator === testCase.input[0].transitionInterpolator, testCase.expect[mode - 1][0], 'interpolator match');
+    t.is(transitionManager.state.interpolator === testCase.input[1].transitionInterpolator, testCase.expect[mode - 1][1], 'interpolator match');
+
+    // testing duration
+    const testDuration = mode === TRANSITION_EVENTS.UPDATE ?
+                          testCase.input[0].transitionDuration - (time[1] - time[0]) : testCase.input[0].transitionDuration;
+    t.is(transitionManager.state.duration === testDuration, testCase.expect[mode - 1][2], 'duration match');
+    t.is(transitionManager.state.duration === testCase.input[1].transitionDuration, testCase.expect[mode - 1][3], 'duration match');
+
+    // testing easing function
+    let testEasingFunc = testCase.input[0].transitionEasing;
+    if(mode === TRANSITION_EVENTS.UPDATE) {
+      const completion = mode === (time[1] - time[0]) / testCase.input[0].transitionDuration;
+      testEasingFunc = cropEasingFunction(testCase.input[0].transitionEasing, completion);
+    }
+    t.is(transitionManager.state.easing.toString() === testEasingFunc.toString(), testCase.expect[mode - 1][4], 'transitionEasing match');
+    t.is(transitionManager.state.easing.toString() === testCase.input[1].transitionEasing.toString(), testCase.expect[mode - 1][5], 'transitionEasing match');
+
   });
   t.end();
 });

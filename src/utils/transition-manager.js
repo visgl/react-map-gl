@@ -75,21 +75,21 @@ export default class TransitionManager {
         this.state.interruption === TRANSITION_EVENTS.SNAP_TO_END ?
           this.state.endProps : this.state.propsInTransition
       );
-
+      const endProps = Object.assign({}, nextProps);
       const currentTime = Date.now();
       if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
         const x0 = (currentTime - this.state.startTime) / this.state.duration;
-        nextProps.transitionDuration = this.state.duration - (currentTime - this.state.startTime);
-        nextProps.transitionEasing = cropEasingFunction(this.state.easing, x0);
-        nextProps.transitionInterpolator = startProps.transitionInterpolator;
+        endProps.transitionDuration =
+        this.state.duration - (currentTime - this.state.startTime);
+        endProps.transitionEasing = cropEasingFunction(this.state.easing, x0);
+        endProps.transitionInterpolator = startProps.transitionInterpolator;
       }
-
       if (isTransitionInProgress) {
         currentProps.onTransitionInterrupt();
       }
-      nextProps.onTransitionStart();
+      endProps.onTransitionStart();
 
-      this._triggerTransition(startProps, nextProps);
+      this._triggerTransition(startProps, endProps);
 
       transitionTriggered = true;
     } else if (isTransitionInProgress) {
@@ -127,6 +127,7 @@ export default class TransitionManager {
       // Ignore if none of the viewport props changed.
       return nextProps.transitionInterpolator.arePropsEqual(currentProps, nextProps);
     }
+
     return true;
   }
 
