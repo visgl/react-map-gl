@@ -34,9 +34,14 @@ export default class LinearInterpolator extends TransitionInterpolator {
     const endViewportProps = {};
 
     if (this.around) {
+      // anchor point in origin screen coordinates
+      startViewportProps.around = this.around;
+      // anchor point in spherical coordinates
+      const aroundLngLat = new WebMercatorViewport(startProps).unproject(this.around);
       Object.assign(endViewportProps, endProps, {
-        around: this.around,
-        aroundLngLat: new WebMercatorViewport(endProps).unproject(this.around)
+        // anchor point in destination screen coordinates
+        around: new WebMercatorViewport(endProps).project(aroundLngLat),
+        aroundLngLat
       });
     }
 
@@ -66,7 +71,8 @@ export default class LinearInterpolator extends TransitionInterpolator {
       const [longitude, latitude] = new WebMercatorViewport(Object.assign({}, endProps, viewport))
         .getMapCenterByLngLatPosition({
           lngLat: endProps.aroundLngLat,
-          pos: endProps.around
+          // anchor point in current screen coordinates
+          pos: lerp(startProps.around, endProps.around, t)
         });
       viewport.longitude = longitude;
       viewport.latitude = latitude;

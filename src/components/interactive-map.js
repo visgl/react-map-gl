@@ -186,7 +186,7 @@ export default class InteractiveMap extends PureComponent {
     return this._staticMapRef.current ? this._staticMapRef.current.getMap() : null;
   }
 
-  queryRenderedFeatures = (geometry, options) => {
+  queryRenderedFeatures = (geometry, options = {}) => {
     return this.getMap().queryRenderedFeatures(geometry, options);
   }
 
