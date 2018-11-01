@@ -187,7 +187,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   queryRenderedFeatures = (geometry, options) => {
-    return this._map.queryRenderedFeatures(geometry, options);
+    return this.getMap().queryRenderedFeatures(geometry, options);
   }
 
   _setControllerProps(props) {
@@ -215,9 +215,9 @@ export default class InteractiveMap extends PureComponent {
       // Radius enables point features, like marker symbols, to be clicked.
       const size = radius;
       const bbox = [[pos[0] - size, pos[1] + size], [pos[0] + size, pos[1] - size]];
-      features = this._map.queryRenderedFeatures(bbox, queryParams);
+      features = this.getMap().queryRenderedFeatures(bbox, queryParams);
     } else {
-      features = this._map.queryRenderedFeatures(pos, queryParams);
+      features = this.getMap().queryRenderedFeatures(pos, queryParams);
     }
     return features;
   }
