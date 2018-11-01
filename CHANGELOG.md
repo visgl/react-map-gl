@@ -2,6 +2,13 @@
 
 # Version 4.0.0 Prereleases
 
+## 4.0.0-beta.4 (Oct 31, 2018)
+
+- Add support for Create React App access token environment variable (#633)
+- Upgrade function ref to createRef (#637)
+- API audit (#638)
+- Do not call onResize during render (#643)
+
 ## 4.0.0-beta.3 (Oct 24, 2018)
 
 - Fix render error when using `viewState` instead of flat props (#632)

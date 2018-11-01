@@ -53,9 +53,7 @@ export default class NavigationControl extends BaseControl {
     this.props.onViewStateChange({viewState});
 
     // Call old style callback
-    // TODO(deprecate): remove this check when `onChangeViewport` gets deprecated
-    const onViewportChange = this.props.onChangeViewport || this.props.onViewportChange;
-    onViewportChange(viewState);
+    this.props.onViewportChange(viewState);
   }
 
   _onZoomIn = () => {

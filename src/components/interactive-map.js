@@ -192,8 +192,7 @@ export default class InteractiveMap extends PureComponent {
 
   _setControllerProps(props) {
     props = Object.assign({}, props, props.viewState, {
-      isInteractive: Boolean(props.onViewStateChange ||
-        props.onViewportChange || props.onChangeViewport),
+      isInteractive: Boolean(props.onViewStateChange || props.onViewportChange),
       onViewportChange: this._onViewportChange,
       onStateChange: this._onInteractionStateChange,
       eventManager: this._eventManager,
@@ -243,8 +242,7 @@ export default class InteractiveMap extends PureComponent {
   }
 
   _onViewportChange = (viewState, interactionState, oldViewState) => {
-    const onViewStateChange = this.props.onViewStateChange;
-    const onViewportChange = this.props.onViewportChange || this.props.onChangeViewport;
+    const {onViewStateChange, onViewportChange} = this.props;
 
     if (onViewStateChange) {
       onViewStateChange({viewState, interactionState, oldViewState});
