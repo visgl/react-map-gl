@@ -79,7 +79,7 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
 const defaultProps = Object.assign({}, Mapbox.defaultProps, {
   mapStyle: 'mapbox://styles/mapbox/light-v8',
   preventStyleDiffing: false,
-  visible: undefined,
+  visible: true,
   onResize: noop
 });
 
@@ -237,7 +237,7 @@ export default class StaticMap extends PureComponent {
       checkVisibilityConstraints(this.props.viewState || this.props, visibilityConstraints);
 
     const mapStyle = Object.assign({}, CONTAINER_STYLE, {
-      visibility: visible === undefined ? 'inherit' : visible ? 'visible' : 'hidden'
+      visibility: visible ? 'inherit' : 'hidden'
     });
 
     return createElement('div', {
