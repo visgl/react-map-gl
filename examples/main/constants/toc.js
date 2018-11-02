@@ -8,6 +8,7 @@ import ClickExample from '../views/click';
 // Standalone
 import Filter from '../../filter/src/app';
 import Controls from '../../controls/src/app';
+import CustomCursor from '../../custom-cursor/src/app';
 import DraggableMarker from '../../draggable-markers/src/app';
 import GeoJson from '../../geojson/src/app';
 import GeoJsonAnimation from '../../geojson-animation/src/app';
@@ -32,6 +33,11 @@ export const standaloneExamples = [
     path: 'controlsExample',
     name: 'Markers & Popups',
     component: Controls
+  },
+  {
+    path: 'customCursor',
+    name: 'Custom Cursor',
+    component: CustomCursor
   },
   {
     path: 'draggableMarkerExample',

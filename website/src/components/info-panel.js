@@ -1,8 +1,16 @@
 /* global window */
 import React, {PureComponent} from 'react';
 import autobind from 'react-autobind';
+import {BaseControl} from 'react-map-gl';
 
-export default class InfoPanel extends PureComponent {
+export default class InfoPanel extends BaseControl {
+
+  static defaultProps = {
+    captureScroll: true,
+    captureDrag: true,
+    captureClick: true,
+    captureDoubleClick: true
+  };
 
   constructor(props) {
     super(props);
@@ -24,11 +32,12 @@ export default class InfoPanel extends PureComponent {
     }, 1);
   }
 
-  render() {
+  _render() {
     const {hasFocus} = this.state;
 
     return (
       <div className={`options-panel top-right ${hasFocus ? 'focus' : ''}`}
+        ref={this._containerRef}
         tabIndex="0"
         onFocus={this._onFocus}
         onBlur={this._onBlur} >

@@ -5,6 +5,7 @@ import MapGL, {LinearInterpolator} from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import bbox from '@turf/bbox';
 
+import ControlPanel from './control-panel';
 import MAP_STYLE from './map-style';
 
 const TOKEN = ''; // Set your mapbox token here
@@ -72,7 +73,7 @@ export default class App extends Component {
         onViewportChange={this._updateViewport}
         mapboxApiAccessToken={TOKEN} >
 
-        <div id="hint">Click on a neighborhood to zoom in</div>
+        <ControlPanel containerComponent={this.props.containerComponent} />
 
       </MapGL>
     );

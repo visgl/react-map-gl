@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background: #000;
+  font-family: Helvetica, Arial, sans-serif;
 }
 #map {
   width: 100vw;
@@ -21,4 +21,13 @@ body {
   color: #6b6b76;
   text-transform: uppercase;
   outline: none;
+}
+
+label {
+  display: inline-block;
+  width: 100px;
+}
+
+input {
+  margin-left: 20px;
 }
