@@ -237,7 +237,7 @@ export default class StaticMap extends PureComponent {
       checkVisibilityConstraints(this.props.viewState || this.props, visibilityConstraints);
 
     const mapStyle = Object.assign({}, CONTAINER_STYLE, {
-      visibility: visible ? 'visible' : 'hidden'
+      visibility: visible ? 'inherit' : 'hidden'
     });
 
     return createElement('div', {
