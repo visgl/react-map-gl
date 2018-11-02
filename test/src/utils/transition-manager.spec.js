@@ -148,8 +148,8 @@ test('TransitionManager#cropEasingFunction', function (t) {
 
 // testing interruption mode
 
-test('TransitionManager#TRANSITION_EVENTS', t => {
-  const testCase = {
+const TEST_CASES_EVENTS = [
+  {
     title: 'Transition events',
     initialProps:
       { width: 100,
@@ -184,59 +184,127 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
         transitionEasing: t => t,
         transitionInterpolator: new LinearInterpolator()}
     ],
-    expect: {
+    shouldChange: {
       [TRANSITION_EVENTS.BREAK]: {
-        transitionInterpolator: [false, true],
-        transitionDuration: [false, true],
-        transitionEasing: [false, true]
+        transitionInterpolator: false,
+        transitionDuration: false,
+        transitionEasing: false
       },
       [TRANSITION_EVENTS.SNAP_TO_END]: {
-        transitionInterpolator: [false, true],
-        transitionDuration: [false, true],
-        transitionEasing: [false, true]
+        transitionInterpolator: false,
+        transitionDuration: false,
+        transitionEasing: false
       },
       [TRANSITION_EVENTS.IGNORE]: {
-        transitionInterpolator: [true, false],
-        transitionDuration: [true, false],
-        transitionEasing: [true, false]
+        transitionInterpolator: true,
+        transitionDuration: true,
+        transitionEasing: true
       },
       [TRANSITION_EVENTS.UPDATE]: {
-        transitionInterpolator: [true, false],
-        transitionDuration: [true, false],
-        transitionEasing: [true, false]
+        transitionInterpolator: true,
+        transitionDuration: true,
+        transitionEasing: true
       }
     }
-  };
-  for (let mode in testCase.expect) {
-    mode = parseInt(mode);
-    let transitionProps;
-    let time = [0, 0];
-    const transitionManager = new TransitionManager(Object.assign({}, TransitionManager.defaultProps, testCase.initialProps, {transitionInterruption: mode}));
-
-    testCase.input.forEach((props, i) => {
-      transitionProps = Object.assign({}, TransitionManager.defaultProps, props, {transitionInterruption: mode});
-      time[i] = Date.now();
-      transitionManager.processViewportChange(transitionProps);
-    });
-    // testing interpolator
-    t.is(transitionManager.state.interpolator === testCase.input[0].transitionInterpolator, testCase.expect[mode].transitionInterpolator[0], 'transitionInterpolator match');
-    t.is(transitionManager.state.interpolator === testCase.input[1].transitionInterpolator, testCase.expect[mode].transitionInterpolator[1], 'transitionInterpolator match');
-
-    // testing duration
-    const testDuration = mode === TRANSITION_EVENTS.UPDATE ?
-                          testCase.input[0].transitionDuration - (time[1] - time[0]) : testCase.input[0].transitionDuration;
-
-    t.is(transitionManager.state.duration === testDuration, testCase.expect[mode].transitionDuration[0], 'transitionDuration match');
-    t.is(transitionManager.state.duration === testCase.input[1].transitionDuration, testCase.expect[mode].transitionDuration[1], 'transitionDuration match');
-
-    // testing easing function
-    let testEasingFunc = testCase.input[0].transitionEasing;
-    if(mode === TRANSITION_EVENTS.UPDATE) {
-      const completion = (time[1] - time[0]) / testCase.input[0].transitionDuration;
-      testEasingFunc = cropEasingFunction(testCase.input[0].transitionEasing, completion);
+  },
+  {
+    title: 'Transition events',
+    initialProps:
+      { width: 100,
+        height: 100,
+        longitude: -70.9,
+        latitude: 41,
+        zoom: 12,
+        pitch: 60,
+        bearing: 0,
+        transitionDuration: 200,
+        transitionInterpolator: new LinearInterpolator()},
+    input: [
+      // viewport change
+      { width: 100,
+        height: 100,
+        longitude: -102.45,
+        latitude: 3.78,
+        zoom: 1,
+        pitch: 10,
+        bearing: 30,
+        transitionDuration: 200,
+        transitionEasing: t => t * t,
+        transitionInterpolator: new ViewportFlyToInterpolator()},
+      // viewport change interrupting transition
+      { width: 100,
+        height: 100,
+        longitude: -122.45,
+        latitude: 37.78,
+        zoom: 12, pitch: 0,
+        bearing: 0,
+        transitionDuration: 2000,
+        transitionEasing: t => t,
+        transitionInterpolator: new LinearInterpolator()}
+    ],
+    shouldChange: {
+      [TRANSITION_EVENTS.BREAK]: {
+        transitionInterpolator: true,
+        transitionDuration: true,
+        transitionEasing: true
+      },
+      [TRANSITION_EVENTS.SNAP_TO_END]: {
+        transitionInterpolator: true,
+        transitionDuration: true,
+        transitionEasing: true
+      },
+      [TRANSITION_EVENTS.IGNORE]: {
+        transitionInterpolator: false,
+        transitionDuration: false,
+        transitionEasing: false
+      },
+      [TRANSITION_EVENTS.UPDATE]: {
+        transitionInterpolator: false,
+        transitionDuration: false,
+        transitionEasing: false
+      }
     }
-    t.is(transitionManager.state.easing.toString() === testEasingFunc.toString(), testCase.expect[mode].transitionEasing[0], 'transitionEasing match');
-    t.is(transitionManager.state.easing.toString() === testCase.input[1].transitionEasing.toString(), testCase.expect[mode].transitionEasing[1], 'transitionEasing match');
-  };
+  }
+];
+
+function compareFunc(func1, func2, step){
+  for(let i = 0; i <= 1; i += step){
+    if(func1(i) !== func2(i)) return false;
+  }
+  return true;
+}
+
+test('TransitionManager#TRANSITION_EVENTS', t => {
+  TEST_CASES_EVENTS.forEach((testCase, ti) => {
+    for (let mode in testCase.shouldChange) {
+      mode = parseInt(mode);
+      let transitionProps;
+      let time = [0, 0];
+      const transitionManager = new TransitionManager(Object.assign({}, TransitionManager.defaultProps, testCase.initialProps, {transitionInterruption: mode}));
+
+      testCase.input.forEach((props, i) => {
+        transitionProps = Object.assign({}, TransitionManager.defaultProps, props, {transitionInterruption: mode});
+        time[i] = Date.now();
+        transitionManager.processViewportChange(transitionProps);
+      });
+      // testing interpolator
+      t.is(transitionManager.state.interpolator === testCase.input[ti].transitionInterpolator, testCase.shouldChange[mode].transitionInterpolator, 'transitionInterpolator match');
+
+      // testing duration
+      const testDuration = mode === TRANSITION_EVENTS.UPDATE ?
+        testCase.input[ti].transitionDuration - (time[1] - time[0]) : testCase.input[ti].transitionDuration;
+      t.is(transitionManager.state.duration === testDuration, testCase.shouldChange[mode].transitionDuration, 'transitionDuration match');
+
+      // testing easing function
+      let testEasingFunc = testCase.input[ti].transitionEasing;
+      if(mode === TRANSITION_EVENTS.UPDATE) {
+        const completion = (time[1] - time[0]) / testCase.input[ti].transitionDuration;
+        testEasingFunc = cropEasingFunction(testCase.input[ti].transitionEasing, completion);
+      }
+
+      t.is(compareFunc(transitionManager.state.easing, testEasingFunc, 0.1), testCase.shouldChange[mode].transitionEasing, 'transitionEasing match');
+    };
+  });
   t.end();
 });
+
