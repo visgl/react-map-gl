@@ -6,7 +6,7 @@
 - `Immutable.js` is no longer a dependency
 - Export `experimental.MapControls` is removed, use `MapController` instead
 - `InteractiveMap`'s `mapControls` prop is renamed to `controller`
-
+- Removed support for the deprecated `interactive` property on the layer styles. Use the `interactiveLayerIds` prop to specify which layers are clickable.
 
 ## Upgrading to v3.2
 

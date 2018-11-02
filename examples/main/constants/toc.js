@@ -8,12 +8,14 @@ import ClickExample from '../views/click';
 // Standalone
 import Filter from '../../filter/src/app';
 import Controls from '../../controls/src/app';
+import CustomCursor from '../../custom-cursor/src/app';
 import DraggableMarker from '../../draggable-markers/src/app';
 import GeoJson from '../../geojson/src/app';
 import GeoJsonAnimation from '../../geojson-animation/src/app';
 import Interaction from '../../interaction/src/app';
 import Layers from '../../layers/src/app';
 import ViewportAnimation from '../../viewport-animation/src/app';
+import ZoomToBounds from '../../zoom-to-bounds/src/app';
 
 export const BASIC_EXAMPLES = 'basicExamples';
 export const STANDALONE_EXAMPLES = 'standalonExamples';
@@ -31,6 +33,11 @@ export const standaloneExamples = [
     path: 'controlsExample',
     name: 'Markers & Popups',
     component: Controls
+  },
+  {
+    path: 'customCursor',
+    name: 'Custom Cursor',
+    component: CustomCursor
   },
   {
     path: 'draggableMarkerExample',
@@ -61,6 +68,11 @@ export const standaloneExamples = [
     path: 'filter',
     name: 'Highlight By Filter',
     component: Filter
+  },
+  {
+    path: 'zoom-to-bounds',
+    name: 'Zoom To Bounds',
+    component: ZoomToBounds
   }
 ];
 

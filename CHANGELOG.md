@@ -2,6 +2,10 @@
 
 # Version 4.0.0 Prereleases
 
+## 4.0.0-beta.6 (Nov 2, 2018)
+
+- Don't override visibility style when visible is true (#650)
+
 ## 4.0.0-beta.5 (Nov 2, 2018)
 
 - Fix usage of map ref in interactive-map (#645)
