@@ -7,8 +7,9 @@ Release date: TBD
 - **Relative dimensions** Both `InteractiveMap` and `StaticMap` now support CSS strings supplied to map `width` and `height` props. New `onResize` callback is fired when the map resizes.
 - **React 16** Upgrade to React 16.3 context and ref patterns
 - **Babel 7** Upgrade build system to Babel 7, better support for tree-shaking
-- **Style diffing** Now use Mapbox's native style diffing
+- **Style diffing** Now use Mapbox's native style diffing. Immutable is no longer required.
 - **Interaction states** `onViewportChange` is now called with richer descriptors of the user interaction, including `isPanning`, `isZooming` and `isRotating`.
+- **Interactive layers** Dropped the requirement for the deprecated `interactive` property on the layer styles. Use the `interactiveLayerIds` prop to specify which layers are clickable.
 - **New callback props** `InteractiveMap` supports more callbacks:
   + `onDblClick`
   + `onMouseDown`
