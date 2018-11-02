@@ -2,6 +2,11 @@
 
 # Version 4.0.0 Prereleases
 
+## 4.0.0-beta.5 (Nov 2, 2018)
+
+- Fix usage of map ref in interactive-map (#645)
+- Various bug fixes (#648)
+
 ## 4.0.0-beta.4 (Oct 31, 2018)
 
 - Add support for Create React App access token environment variable (#633)
