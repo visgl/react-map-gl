@@ -1,10 +1,10 @@
 import test from 'tape-catch';
-import TransitionManager from 'react-map-gl/utils/transition-manager';
 import {equals} from 'math.gl';
-import {cropEasingFunction} from '../../../src/utils/transition-manager';
-import {TRANSITION_EVENTS} from '../../../src/utils/transition-manager';
-import LinearInterpolator from '../../../src/utils/transition/linear-interpolator';
-import ViewportFlyToInterpolator from '../../../src/utils/transition/viewport-fly-to-interpolator';
+import TransitionManager from 'react-map-gl/utils/transition-manager';
+import {cropEasingFunction} from 'react-map-gl/utils/transition-manager';
+import {TRANSITION_EVENTS} from 'react-map-gl/utils/transition-manager';
+import LinearInterpolator from 'react-map-gl/utils/transition/linear-interpolator';
+import ViewportFlyToInterpolator from 'react-map-gl/utils/transition/viewport-fly-to-interpolator';
 
 /* global global, setTimeout, clearTimeout */
 // backfill requestAnimationFrame on Node
@@ -184,35 +184,50 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
         transitionEasing: t => t,
         transitionInterpolator: new LinearInterpolator()}
     ],
-    expect: [
-      [false, true, false, true, false, true], //break
-      [false, true, false, true, false, true], //snap_to_end
-      [true, false, true, false, true, false], //ignore
-      [true, false, true, false, true, false]  //update
-    ],
-    modes: [TRANSITION_EVENTS.BREAK, TRANSITION_EVENTS.SNAP_TO_END, TRANSITION_EVENTS.IGNORE, TRANSITION_EVENTS.UPDATE]
+    expect: {
+      [TRANSITION_EVENTS.BREAK]: {
+        transitionInterpolator: [false, true],
+        transitionDuration: [false, true],
+        transitionEasing: [false, true]
+      },
+      [TRANSITION_EVENTS.SNAP_TO_END]: {
+        transitionInterpolator: [false, true],
+        transitionDuration: [false, true],
+        transitionEasing: [false, true]
+      },
+      [TRANSITION_EVENTS.IGNORE]: {
+        transitionInterpolator: [true, false],
+        transitionDuration: [true, false],
+        transitionEasing: [true, false]
+      },
+      [TRANSITION_EVENTS.UPDATE]: {
+        transitionInterpolator: [true, false],
+        transitionDuration: [true, false],
+        transitionEasing: [true, false]
+      }
+    }
   };
-
-  testCase.modes.forEach((mode) => {
+  for (let mode in testCase.expect) {
+    mode = parseInt(mode);
     let transitionProps;
     let time = [0, 0];
-    let interruptionMode = mode;
-    const transitionManager = new TransitionManager(Object.assign({}, TransitionManager.defaultProps, testCase.initialProps, {transitionInterruption: interruptionMode}));
+    const transitionManager = new TransitionManager(Object.assign({}, TransitionManager.defaultProps, testCase.initialProps, {transitionInterruption: mode}));
 
     testCase.input.forEach((props, i) => {
-      transitionProps = Object.assign({}, TransitionManager.defaultProps, props, {transitionInterruption: interruptionMode});
+      transitionProps = Object.assign({}, TransitionManager.defaultProps, props, {transitionInterruption: mode});
       time[i] = Date.now();
       transitionManager.processViewportChange(transitionProps);
     });
     // testing interpolator
-    t.is(transitionManager.state.interpolator === testCase.input[0].transitionInterpolator, testCase.expect[mode - 1][0], 'interpolator match');
-    t.is(transitionManager.state.interpolator === testCase.input[1].transitionInterpolator, testCase.expect[mode - 1][1], 'interpolator match');
+    t.is(transitionManager.state.interpolator === testCase.input[0].transitionInterpolator, testCase.expect[mode].transitionInterpolator[0], 'transitionInterpolator match');
+    t.is(transitionManager.state.interpolator === testCase.input[1].transitionInterpolator, testCase.expect[mode].transitionInterpolator[1], 'transitionInterpolator match');
 
     // testing duration
     const testDuration = mode === TRANSITION_EVENTS.UPDATE ?
                           testCase.input[0].transitionDuration - (time[1] - time[0]) : testCase.input[0].transitionDuration;
-    t.is(transitionManager.state.duration === testDuration, testCase.expect[mode - 1][2], 'duration match');
-    t.is(transitionManager.state.duration === testCase.input[1].transitionDuration, testCase.expect[mode - 1][3], 'duration match');
+
+    t.is(transitionManager.state.duration === testDuration, testCase.expect[mode].transitionDuration[0], 'transitionDuration match');
+    t.is(transitionManager.state.duration === testCase.input[1].transitionDuration, testCase.expect[mode].transitionDuration[1], 'transitionDuration match');
 
     // testing easing function
     let testEasingFunc = testCase.input[0].transitionEasing;
@@ -220,9 +235,8 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
       const completion = (time[1] - time[0]) / testCase.input[0].transitionDuration;
       testEasingFunc = cropEasingFunction(testCase.input[0].transitionEasing, completion);
     }
-    t.is(transitionManager.state.easing.toString() === testEasingFunc.toString(), testCase.expect[mode - 1][4], 'transitionEasing match');
-    t.is(transitionManager.state.easing.toString() === testCase.input[1].transitionEasing.toString(), testCase.expect[mode - 1][5], 'transitionEasing match');
-
-  });
+    t.is(transitionManager.state.easing.toString() === testEasingFunc.toString(), testCase.expect[mode].transitionEasing[0], 'transitionEasing match');
+    t.is(transitionManager.state.easing.toString() === testCase.input[1].transitionEasing.toString(), testCase.expect[mode].transitionEasing[1], 'transitionEasing match');
+  };
   t.end();
 });
