@@ -154,7 +154,7 @@ export default class MapController {
     this.onViewportChange = onViewportChange;
     this.onStateChange = onStateChange;
 
-    if (this.mapStateProps && this.mapStateProps.height !== options.height) {
+    if (!this.mapStateProps || this.mapStateProps.height !== options.height) {
       // Dimensions changed, normalize the props
       this.updateViewport(new MapState(options));
     }
