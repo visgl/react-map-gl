@@ -5,10 +5,18 @@ import MapState from './map-state';
 
 const noop = () => {};
 
+// crops the old easing function from x0 to 1 where x0 is the interruption point
+// returns a new easing function with domain [0, 1] and range [0, 1]
+export function cropEasingFunction(easing, x0) {
+  const y0 = easing(x0);
+  return t => 1 / (1 - y0) * (easing(t * (1 - x0) + x0) - y0);
+}
+
 export const TRANSITION_EVENTS = {
   BREAK: 1,
   SNAP_TO_END: 2,
-  IGNORE: 3
+  IGNORE: 3,
+  UPDATE: 4
 };
 
 const DEFAULT_PROPS = {
@@ -65,15 +73,23 @@ export default class TransitionManager {
     if (this._isTransitionEnabled(nextProps)) {
       const startProps = Object.assign({}, currentProps,
         this.state.interruption === TRANSITION_EVENTS.SNAP_TO_END ?
-        this.state.endProps : this.state.propsInTransition
+          this.state.endProps : this.state.propsInTransition
       );
-
+      const endProps = Object.assign({}, nextProps);
+      const currentTime = Date.now();
+      if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
+        const x0 = (currentTime - this.state.startTime) / this.state.duration;
+        endProps.transitionDuration =
+        this.state.duration - (currentTime - this.state.startTime);
+        endProps.transitionEasing = cropEasingFunction(this.state.easing, x0);
+        endProps.transitionInterpolator = startProps.transitionInterpolator;
+      }
       if (isTransitionInProgress) {
         currentProps.onTransitionInterrupt();
       }
-      nextProps.onTransitionStart();
+      endProps.onTransitionStart();
 
-      this._triggerTransition(startProps, nextProps);
+      this._triggerTransition(startProps, endProps);
 
       transitionTriggered = true;
     } else if (isTransitionInProgress) {
@@ -111,6 +127,7 @@ export default class TransitionManager {
       // Ignore if none of the viewport props changed.
       return nextProps.transitionInterpolator.arePropsEqual(currentProps, nextProps);
     }
+
     return true;
   }
 
@@ -147,7 +164,6 @@ export default class TransitionManager {
       propsInTransition: {},
       interactionState
     };
-
     this._onTransitionFrame();
     this.props.onStateChange(interactionState);
   }
@@ -173,7 +189,6 @@ export default class TransitionManager {
     // NOTE: Be cautious re-ordering statements in this function.
     const currentTime = Date.now();
     const {startTime, duration, easing, interpolator, startProps, endProps} = this.state;
-
     let shouldEnd = false;
     let t = (currentTime - startTime) / duration;
     if (t >= 1) {
@@ -183,7 +198,7 @@ export default class TransitionManager {
     t = easing(t);
 
     const viewport = interpolator.interpolateProps(startProps, endProps, t);
-      // Normalize viewport props
+    // Normalize viewport props
     const mapState = new MapState(Object.assign({}, this.props, viewport));
     this.state.propsInTransition = mapState.getViewportProps();
 
