@@ -50,6 +50,9 @@ const BROWSER_CONFIG = {
         use: [{
           loader: 'babel-loader',
           options: {
+            presets: [
+              '@babel/flow'
+            ],
             plugins: [
               '@babel/proposal-class-properties'
             ]
@@ -70,7 +73,7 @@ const BROWSER_CONFIG = {
       // Secret env var for testing only
       'process.env._MapboxAccessToken_': JSON.stringify(process.env.MapboxAccessToken) // eslint-disable-line
     }),
-    new HtmlWebpackPlugin({title: 'luma.gl tests'})
+    new HtmlWebpackPlugin({title: 'react-map-gl tests'})
   ]
 };
 
