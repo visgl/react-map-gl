@@ -1,32 +1,28 @@
+// @flow
 
 const WRAPPED_ANGULAR_PROPS = {
   longitude: 1,
   bearing: 1
 };
 
-export function mod(value, divisor) {
+export function mod(value: number, divisor: number): number {
   const modulus = value % divisor;
   return modulus < 0 ? divisor + modulus : modulus;
 }
 
-export function lerp(start, end, step) {
-  if (Array.isArray(start)) {
-    return start.map((element, index) => {
-      return lerp(element, end[index], step);
-    });
-  }
-  return step * end + (1 - step) * start;
-}
-
-export function isValid(prop) {
+export function isValid(prop: any): boolean {
   return Number.isFinite(prop) || Array.isArray(prop);
 }
 
-function isWrappedAngularProp(propName) {
-  return WRAPPED_ANGULAR_PROPS[propName];
+function isWrappedAngularProp(propName: string): boolean {
+  return propName in WRAPPED_ANGULAR_PROPS;
 }
 
-export function getEndValueByShortestPath(propName, startValue, endValue) {
+export function getEndValueByShortestPath(
+  propName: string,
+  startValue: number,
+  endValue: number
+) : number {
   if (isWrappedAngularProp(propName) && Math.abs(endValue - startValue) > 180) {
     endValue = (endValue < 0) ? endValue + 360 : endValue - 360;
   }

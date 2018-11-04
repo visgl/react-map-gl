@@ -2,7 +2,8 @@
   "env": {
     "es5": {
       "presets": [
-        ["@babel/env", {modules: 'commonjs'}]
+        ["@babel/env", {modules: 'commonjs'}],
+        "@babel/flow"
       ],
       "plugins": [
         "@babel/transform-runtime",
@@ -12,7 +13,8 @@
     },
     "esm": {
       "presets": [
-        ["@babel/env", {modules: false}]
+        ["@babel/env", {modules: false}],
+        "@babel/flow"
       ],
       "plugins": [
         ["@babel/transform-runtime", { useESModules: true }],
@@ -32,7 +34,8 @@
             "node": "8"
           },
           "modules": false
-        }]
+        }],
+        "@babel/flow"
       ],
       "plugins": [
         ["@babel/transform-runtime", { useESModules: true }],

@@ -38,6 +38,9 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
  */
 export default class NavigationControl extends BaseControl {
 
+  static propTypes = propTypes;
+  static defaultProps = defaultProps;
+
   constructor(props) {
     super(props);
     // Check for deprecated props
@@ -101,7 +104,3 @@ export default class NavigationControl extends BaseControl {
     ]);
   }
 }
-
-NavigationControl.displayName = 'NavigationControl';
-NavigationControl.propTypes = propTypes;
-NavigationControl.defaultProps = defaultProps;

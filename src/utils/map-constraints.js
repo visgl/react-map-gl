@@ -1,12 +1,15 @@
+// @flow
 import {MAPBOX_LIMITS} from './map-state';
 
-function decapitalize(s) {
+import type {ViewState} from '../mapbox/mapbox';
+
+function decapitalize(s: string) : string {
   return s[0].toLowerCase() + s.slice(1);
 }
 
 // Checks a visibilityConstraints object to see if the map should be displayed
 // Returns true if props are within the constraints
-export function checkVisibilityConstraints(props, constraints = MAPBOX_LIMITS) {
+export function checkVisibilityConstraints(props: ViewState, constraints: any = MAPBOX_LIMITS) {
 
   for (const constraintName in constraints) {
     // in the format of min* or max*

@@ -1,7 +1,13 @@
+// @flow
+type MapboxStyle = string | {
+  toJS?: Function,
+  layers: Array<any>
+};
+
 // Prepare a map style object for diffing
 // If immutable - convert to plain object
 // Work around some issues in the styles that would fail Mapbox's diffing
-export function normalizeStyle(style) {
+export function normalizeStyle(style: ?MapboxStyle): ?MapboxStyle {
   if (!style) {
     return null;
   }
