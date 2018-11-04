@@ -9,7 +9,6 @@ import TransitionManager from '../utils/transition-manager';
 
 import {EventManager} from 'mjolnir.js';
 import MapController from '../utils/map-controller';
-import config from '../config';
 import deprecateWarn from '../utils/deprecate-warn';
 
 export const InteractiveContext = createContext({
@@ -104,8 +103,8 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
 });
 
 const getDefaultCursor = ({isDragging, isHovering}) => isDragging ?
-  config.CURSOR.GRABBING :
-  (isHovering ? config.CURSOR.POINTER : config.CURSOR.GRAB);
+  'grabbing' :
+  (isHovering ? 'pointer' : 'grab');
 
 const defaultProps = Object.assign({},
   StaticMap.defaultProps, MAPBOX_LIMITS, TransitionManager.defaultProps,

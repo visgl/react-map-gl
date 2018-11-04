@@ -45,3 +45,4 @@ export {default as MapController} from './utils/map-controller';
 
 // Experimental Features (May change in minor version bumps, use at your own risk)
 export {StaticContext as _StaticContext} from './components/static-map';
+export {StaticContext as _MapContext} from './components/static-map';
