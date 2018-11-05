@@ -269,7 +269,7 @@ const TEST_CASES_EVENTS = [
 
 function compareFunc(func1, func2, step){
   for(let i = 0; i <= 1; i += step){
-    if(func1(i) !== func2(i)) return false;
+    if(!equals(func1(i), func2(i))) return false;
   }
   return true;
 }
@@ -293,7 +293,7 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
       // testing duration
       const testDuration = mode === TRANSITION_EVENTS.UPDATE ?
         testCase.input[ti].transitionDuration - (time[1] - time[0]) : testCase.input[ti].transitionDuration;
-      t.is(transitionManager.state.duration === testDuration, testCase.shouldChange[mode].transitionDuration, 'transitionDuration match');
+      t.is(equals(transitionManager.state.duration, testDuration), testCase.shouldChange[mode].transitionDuration, 'transitionDuration match');
 
       // testing easing function
       let testEasingFunc = testCase.input[ti].transitionEasing;
