@@ -1,7 +1,10 @@
+// @flow
 import {equals} from 'math.gl';
 import assert from '../assert';
 
 export default class TransitionInterpolator {
+
+  propNames: Array<string> = [];
 
   /**
    * Checks if two sets of props need transition in between
@@ -9,7 +12,7 @@ export default class TransitionInterpolator {
    * @param nextProps {object} - a list of viewport props
    * @returns {bool} - true if two props are equivalent
    */
-  arePropsEqual(currentProps, nextProps) {
+  arePropsEqual(currentProps: any, nextProps: any): boolean {
     for (const key of (this.propNames || [])) {
       if (!equals(currentProps[key], nextProps[key])) {
         return false;
@@ -25,7 +28,10 @@ export default class TransitionInterpolator {
    * @returns {Object} {start, end} - start and end props to be passed
    *   to `interpolateProps`
    */
-  initializeProps(startProps, endProps) {
+  initializeProps(startProps: any, endProps: any): {
+    start: any,
+    end: any
+  } {
     return {start: startProps, end: endProps};
   }
 
@@ -36,7 +42,7 @@ export default class TransitionInterpolator {
    * @param t {number} - a time factor between [0, 1]
    * @returns {object} - a list of interpolated viewport props
    */
-  interpolateProps(startProps, endProps, t) {
+  interpolateProps(startProps: any, endProps: any, t: number): any {
     assert(false, 'interpolateProps is not implemented');
   }
 

@@ -14,7 +14,8 @@ const SRC_DIR = resolve(LIB_DIR, './src');
 const BABEL_CONFIG = {
   presets: [
     '@babel/env',
-    '@babel/react'
+    '@babel/react',
+    '@babel/flow'
   ],
   plugins: [
     '@babel/proposal-class-properties'

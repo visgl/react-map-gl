@@ -1,3 +1,4 @@
+// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,6 +29,10 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import Mapbox from '../mapbox/mapbox';
 import mapboxgl from '../utils/mapboxgl';
 import {checkVisibilityConstraints} from '../utils/map-constraints';
+import {MAPBOX_LIMITS} from '../utils/map-state';
+
+import type {ViewState} from '../mapbox/mapbox';
+import type {Node} from 'react';
 
 /* eslint-disable max-len */
 const TOKEN_DOC_URL = 'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
@@ -57,18 +62,16 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
 
   /** Callback when map size changes **/
   onResize: PropTypes.func,
-
-  /** The Mapbox style. A string url or a MapboxGL style Immutable.Map object. */
-  mapStyle: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object
-  ]),
   /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
   preventStyleDiffing: PropTypes.bool,
   /** Hide invalid token warning even if request fails */
   disableTokenWarning: PropTypes.bool,
   /** Whether the map is visible */
   visible: PropTypes.bool,
+  /** Custom class name for the map */
+  className: PropTypes.string,
+  /** Custom CSS for the container */
+  style: PropTypes.object,
 
   /** Advanced features */
   // Contraints for displaying the map. If not met, then the map is hidden.
@@ -77,37 +80,63 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
 });
 
 const defaultProps = Object.assign({}, Mapbox.defaultProps, {
-  mapStyle: 'mapbox://styles/mapbox/light-v8',
   preventStyleDiffing: false,
+  disableTokenWarning: false,
   visible: true,
-  onResize: noop
+  onResize: noop,
+  className: '',
+  style: null,
+  visibilityConstraints: MAPBOX_LIMITS
 });
 
-export default class StaticMap extends PureComponent {
+export type StaticMapProps = {
+  gl?: any,
+  width: number | string,
+  height: number | string,
+  preventStyleDiffing: boolean,
+  disableTokenWarning: false,
+  visible: boolean,
+  className: string,
+  style: any,
+  visibilityConstraints: any,
+  children?: Node,
+  onLoad: Function,
+  onError: Function,
+  onResize: Function,
+  mapStyle: any,
+  visible: boolean,
+  viewState?: ViewState,
+  longitude: number,
+  latitude: number,
+  zoom: number,
+  bearing: number,
+  pitch: number,
+  altitude?: number
+};
+
+type State = {
+  accessTokenInvalid: boolean
+};
+
+export default class StaticMap extends PureComponent<StaticMapProps, State> {
   static supported() {
     return mapboxgl && mapboxgl.supported();
   }
 
-  constructor(props) {
-    super(props);
-    this._queryParams = {};
-    if (!StaticMap.supported()) {
-      this.componentDidMount = noop;
-      this.componentWillReceiveProps = noop;
-      this.componentDidUpdate = noop;
-      this.componentWillUnmount = noop;
-    }
-    this.state = {
-      accessTokenInvalid: false
-    };
-    this._width = 0;
-    this._height = 0;
-    this._mapboxMapRef = createRef();
-  }
+  static propTypes : any = propTypes;
+  static defaultProps : StaticMapProps = defaultProps;
+
+  state : State = {
+    accessTokenInvalid: false
+  };
 
   componentDidMount() {
+    if (!StaticMap.supported()) {
+      return;
+    }
     const {mapStyle} = this.props;
 
+    // $FlowFixMe
     this._mapbox = new Mapbox(Object.assign({}, this.props, {
       mapboxgl, // Handle to mapbox-gl library
       width: this._width,
@@ -119,16 +148,27 @@ export default class StaticMap extends PureComponent {
     this._map = this._mapbox.getMap();
   }
 
-  componentDidUpdate(prevProps) {
-    this._updateMapStyle(prevProps, this.props);
-    this._updateMapProps(this.props);
+  componentDidUpdate(prevProps : StaticMapProps) {
+    if (this._mapbox) {
+      this._updateMapStyle(prevProps, this.props);
+      this._updateMapProps(this.props);
+    }
   }
 
   componentWillUnmount() {
-    this._mapbox.finalize();
-    this._mapbox = null;
-    this._map = null;
+    if (this._mapbox) {
+      this._mapbox.finalize();
+      this._mapbox = null;
+      this._map = null;
+    }
   }
+
+  _mapbox : any = null;
+  _map : any = null;
+  _mapboxMapRef: { current: null | HTMLDivElement } = createRef();
+  _queryParams : any = {};
+  _width : number = 0;
+  _height : number = 0;
 
   // External apps can access map this way
   getMap = () => {
@@ -144,12 +184,12 @@ export default class StaticMap extends PureComponent {
     *   Point or an array of two points defining the bounding box
     * @param {Object} options - query options
     */
-  queryRenderedFeatures = (geometry, options = {}) => {
+  queryRenderedFeatures = (geometry : any, options : any = {}) => {
     return this._map.queryRenderedFeatures(geometry, options);
   }
 
   // Note: needs to be called after render (e.g. in componentDidUpdate)
-  _updateMapSize(width, height) {
+  _updateMapSize(width : number, height : number) {
     if (this._width !== width || this._height !== height) {
       this._width = width;
       this._height = height;
@@ -157,7 +197,7 @@ export default class StaticMap extends PureComponent {
     }
   }
 
-  _updateMapStyle(oldProps, newProps) {
+  _updateMapStyle(oldProps : StaticMapProps, newProps : StaticMapProps) {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
     if (mapStyle !== oldMapStyle) {
@@ -165,7 +205,7 @@ export default class StaticMap extends PureComponent {
     }
   }
 
-  _updateMapProps(props) {
+  _updateMapProps(props : StaticMapProps) {
     if (!this._mapbox) {
       return;
     }
@@ -176,13 +216,20 @@ export default class StaticMap extends PureComponent {
   }
 
   // Handle map error
-  _mapboxMapError = (evt) => {
+  _mapboxMapError = (evt : {
+    error?: {
+      message: string,
+      status: number
+    },
+    status: number
+  }) => {
     const statusCode = evt.error && evt.error.status || evt.status;
     if (statusCode === UNAUTHORIZED_ERROR_CODE && !this.state.accessTokenInvalid) {
       // Mapbox throws unauthorized error - invalid token
       console.error(NO_TOKEN_WARNING); // eslint-disable-line
       this.setState({accessTokenInvalid: true});
     }
+    this.props.onError(evt);
   }
 
   _renderNoTokenWarning() {
@@ -204,14 +251,18 @@ export default class StaticMap extends PureComponent {
     return null;
   }
 
-  _renderOverlays(dimensions) {
+  _renderOverlays(dimensions : {
+    width?: number,
+    height?: number
+  }) {
     const {
-      width = this.props.width,
-      height = this.props.height
+      width = Number(this.props.width),
+      height = Number(this.props.height)
     } = dimensions;
     this._updateMapSize(width, height);
 
     const staticContext = {
+      // $FlowFixMe
       viewport: new WebMercatorViewport(Object.assign({}, this.props, this.props.viewState, {
         width,
         height
@@ -263,7 +314,3 @@ export default class StaticMap extends PureComponent {
     });
   }
 }
-
-StaticMap.displayName = 'StaticMap';
-StaticMap.propTypes = propTypes;
-StaticMap.defaultProps = defaultProps;

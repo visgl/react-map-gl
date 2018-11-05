@@ -1,3 +1,4 @@
+// @flow
 
 export const ANCHOR_POSITION = {
   top: {x: 0.5, y: 0},
@@ -9,6 +10,8 @@ export const ANCHOR_POSITION = {
   left: {x: 0, y: 0.5},
   right: {x: 1, y: 0.5}
 };
+
+const ANCHOR_TYPES = Object.keys(ANCHOR_POSITION);
 
 /**
  * Calculate the dynamic position for a popup to fit in a container.
@@ -30,7 +33,16 @@ export function getDynamicPosition({
   selfWidth, selfHeight,
   anchor,
   padding = 0
-}) {
+} : {
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  selfWidth: number,
+  selfHeight: number,
+  anchor: string,
+  padding: number
+}) : string {
   let {x: anchorX, y: anchorY} = ANCHOR_POSITION[anchor];
 
   // anchorY: top - 0, center - 0.5, bottom - 1
@@ -80,8 +92,8 @@ export function getDynamicPosition({
   }
 
   // Find the name of the new anchor position
-  return Object.keys(ANCHOR_POSITION).find((positionType) => {
+  return ANCHOR_TYPES.find((positionType) => {
     const anchorPosition = ANCHOR_POSITION[positionType];
     return anchorPosition.x === anchorX && anchorPosition.y === anchorY;
-  });
+  }) || anchor;
 }

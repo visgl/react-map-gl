@@ -1,3 +1,4 @@
+// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,6 +23,8 @@ import MapState from './map-state';
 import {LinearInterpolator} from './transition';
 import TransitionManager, {TRANSITION_EVENTS} from './transition-manager';
 
+import type {MjolnirEvent} from 'mjolnir.js';
+
 const NO_TRANSITION_PROPS = {
   transitionDuration: 0
 };
@@ -45,26 +48,37 @@ const EVENT_TYPES = {
   KEYBOARD: ['keydown']
 };
 
+/**
+ * @classdesc
+ * A class that handles events and updates mercator style viewport parameters
+ */
 export default class MapController {
-  /**
-   * @classdesc
-   * A class that handles events and updates mercator style viewport parameters
-   */
-  constructor() {
-    this._state = {
-      isDragging: false
-    };
-    this._transitionManager = new TransitionManager();
-    this.events = [];
-    this.handleEvent = this.handleEvent.bind(this);
-    this.setState = this.setState.bind(this);
-  }
+
+  events: Array<string> = [];
+  mapState: MapState;
+  onViewportChange: Function;
+  onStateChange: Function;
+  mapStateProps: any;
+  eventManager: any;
+  scrollZoom: boolean = true;
+  dragPan: boolean = true;
+  dragRotate: boolean = true;
+  doubleClickZoom: boolean = true;
+  touchZoom: boolean = true;
+  touchRotate: boolean = false;
+  keyboard: boolean = true;
+
+  _state: any = {
+    isDragging: false
+  };
+  _events: any = {};
+  _transitionManager: TransitionManager = new TransitionManager();
 
   /**
    * Callback for events
    * @param {hammer.Event} event
    */
-  handleEvent(event) {
+  handleEvent = (event: MjolnirEvent) => {
     this.mapState = this.getMapState();
 
     switch (event.type) {
@@ -93,18 +107,18 @@ export default class MapController {
 
   /* Event utils */
   // Event object: http://hammerjs.github.io/api/#event-object
-  getCenter(event) {
+  getCenter(event: MjolnirEvent): Array<number> {
     const {offsetCenter: {x, y}} = event;
     return [x, y];
   }
 
-  isFunctionKeyPressed(event) {
+  isFunctionKeyPressed(event: MjolnirEvent): boolean {
     const {srcEvent} = event;
     return Boolean(srcEvent.metaKey || srcEvent.altKey ||
       srcEvent.ctrlKey || srcEvent.shiftKey);
   }
 
-  setState(newState) {
+  setState = (newState: any) => {
     Object.assign(this._state, newState);
     if (this.onStateChange) {
       this.onStateChange(this._state);
@@ -113,7 +127,7 @@ export default class MapController {
 
   /* Callback util */
   // formats map state and invokes callback function
-  updateViewport(newMapState, extraProps = {}, extraState = {}) {
+  updateViewport(newMapState: MapState, extraProps: any = {}, extraState: any = {}) {
     const oldViewport = this.mapState ? this.mapState.getViewportProps() : {};
     const newViewport = Object.assign({}, newMapState.getViewportProps(), extraProps);
 
@@ -128,27 +142,27 @@ export default class MapController {
     this.setState(Object.assign({}, newMapState.getInteractiveState(), extraState));
   }
 
-  getMapState(overrides) {
+  getMapState(overrides?: any): MapState {
     return new MapState(Object.assign({}, this.mapStateProps, this._state, overrides));
   }
 
   /**
    * Extract interactivity options
    */
-  setOptions(options) {
+  setOptions(options: any) {
     const {
       onViewportChange,
       onStateChange,
       eventManager = this.eventManager,
 
       isInteractive = true,
-      scrollZoom = true,
-      dragPan = true,
-      dragRotate = true,
-      doubleClickZoom = true,
-      touchZoom = true,
-      touchRotate = false,
-      keyboard = true
+      scrollZoom = this.scrollZoom,
+      dragPan = this.dragPan,
+      dragRotate = this.dragRotate,
+      doubleClickZoom = this.doubleClickZoom,
+      touchZoom = this.touchZoom,
+      touchRotate = this.touchRotate,
+      keyboard = this.keyboard
     } = options;
 
     this.onViewportChange = onViewportChange;
@@ -189,7 +203,7 @@ export default class MapController {
     this.keyboard = keyboard;
   }
 
-  toggleEvents(eventNames, enabled) {
+  toggleEvents(eventNames: Array<string>, enabled: boolean) {
     if (this.eventManager) {
       eventNames.forEach(eventName => {
         if (this._events[eventName] !== enabled) {
@@ -206,7 +220,7 @@ export default class MapController {
 
   /* Event handlers */
   // Default handler for the `panstart` event.
-  _onPanStart(event) {
+  _onPanStart(event: MjolnirEvent) {
     const pos = this.getCenter(event);
     const newMapState = this.mapState.panStart({pos}).rotateStart({pos});
     this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isDragging: true});
@@ -214,13 +228,13 @@ export default class MapController {
   }
 
   // Default handler for the `panmove` event.
-  _onPan(event) {
+  _onPan(event: MjolnirEvent) {
     return this.isFunctionKeyPressed(event) || event.rightButton ?
       this._onPanRotate(event) : this._onPanMove(event);
   }
 
   // Default handler for the `panend` event.
-  _onPanEnd(event) {
+  _onPanEnd(event: MjolnirEvent) {
     const newMapState = this.mapState.panEnd().rotateEnd();
     this.updateViewport(newMapState, null, {
       isDragging: false,
@@ -232,7 +246,7 @@ export default class MapController {
 
   // Default handler for panning to move.
   // Called by `_onPan` when panning without function key pressed.
-  _onPanMove(event) {
+  _onPanMove(event: MjolnirEvent) {
     if (!this.dragPan) {
       return false;
     }
@@ -244,7 +258,7 @@ export default class MapController {
 
   // Default handler for panning to rotate.
   // Called by `_onPan` when panning with function key pressed.
-  _onPanRotate(event) {
+  _onPanRotate(event: MjolnirEvent) {
     if (!this.dragRotate) {
       return false;
     }
@@ -276,12 +290,12 @@ export default class MapController {
   }
 
   // Default handler for the `wheel` event.
-  _onWheel(event) {
+  _onWheel(event: MjolnirEvent) {
     if (!this.scrollZoom) {
       return false;
     }
 
-    event.srcEvent.preventDefault();
+    event.preventDefault();
 
     const pos = this.getCenter(event);
     const {delta} = event;
@@ -300,7 +314,7 @@ export default class MapController {
   }
 
   // Default handler for the `pinchstart` event.
-  _onPinchStart(event) {
+  _onPinchStart(event: MjolnirEvent) {
     const pos = this.getCenter(event);
     const newMapState = this.mapState.zoomStart({pos}).rotateStart({pos});
     // hack - hammer's `rotation` field doesn't seem to produce the correct angle
@@ -310,7 +324,7 @@ export default class MapController {
   }
 
   // Default handler for the `pinch` event.
-  _onPinch(event) {
+  _onPinch(event: MjolnirEvent) {
     if (!this.touchZoom && !this.touchRotate) {
       return false;
     }
@@ -337,7 +351,7 @@ export default class MapController {
   }
 
   // Default handler for the `pinchend` event.
-  _onPinchEnd(event) {
+  _onPinchEnd(event: MjolnirEvent) {
     const newMapState = this.mapState.zoomEnd().rotateEnd();
     this._state.startPinchRotation = 0;
     this.updateViewport(newMapState, null, {
@@ -350,7 +364,7 @@ export default class MapController {
   }
 
   // Default handler for the `doubletap` event.
-  _onDoubleTap(event) {
+  _onDoubleTap(event: MjolnirEvent) {
     if (!this.doubleClickZoom) {
       return false;
     }
@@ -366,7 +380,7 @@ export default class MapController {
 
   /* eslint-disable complexity */
   // Default handler for the `keydown` event
-  _onKeyDown(event) {
+  _onKeyDown(event: MjolnirEvent) {
     if (!this.keyboard) {
       return false;
     }

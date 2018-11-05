@@ -32,6 +32,10 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
 });
 
 export default class DraggableControl extends BaseControl {
+
+  static propTypes = propTypes;
+  static defaultProps = defaultProps;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -150,6 +154,3 @@ export default class DraggableControl extends BaseControl {
   }
 
 }
-
-DraggableControl.propTypes = propTypes;
-DraggableControl.defaultProps = defaultProps;

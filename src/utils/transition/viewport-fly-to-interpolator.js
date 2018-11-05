@@ -1,8 +1,12 @@
+// @flow
 import assert from '../assert';
 import TransitionInterpolator from './transition-interpolator';
 
 import {flyToViewport} from 'viewport-mercator-project';
-import {isValid, lerp, getEndValueByShortestPath} from './transition-utils';
+import {isValid, getEndValueByShortestPath} from './transition-utils';
+import {lerp} from 'math.gl';
+
+import type {MapStateProps} from '../map-state';
 
 const VIEWPORT_TRANSITION_PROPS = ['longitude', 'latitude', 'zoom', 'bearing', 'pitch'];
 const REQUIRED_PROPS = ['latitude', 'longitude', 'zoom', 'width', 'height'];
@@ -17,12 +21,9 @@ const LINEARLY_INTERPOLATED_PROPS = ['bearing', 'pitch'];
 */
 export default class ViewportFlyToInterpolator extends TransitionInterpolator {
 
-  constructor() {
-    super();
-    this.propNames = VIEWPORT_TRANSITION_PROPS;
-  }
+  propNames = VIEWPORT_TRANSITION_PROPS;
 
-  initializeProps(startProps, endProps) {
+  initializeProps(startProps: MapStateProps, endProps: MapStateProps) {
     const startViewportProps = {};
     const endViewportProps = {};
 
@@ -48,7 +49,7 @@ export default class ViewportFlyToInterpolator extends TransitionInterpolator {
     };
   }
 
-  interpolateProps(startProps, endProps, t) {
+  interpolateProps(startProps: MapStateProps, endProps: MapStateProps, t: number) {
     const viewport = flyToViewport(startProps, endProps, t);
 
     // Linearly interpolate 'bearing' and 'pitch' if exist.

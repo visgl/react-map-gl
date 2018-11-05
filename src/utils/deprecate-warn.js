@@ -1,3 +1,5 @@
+// @flow
+
 // 'new' is optional
 const DEPRECATED_PROPS = [
   {old: 'onChangeViewport', new: 'onViewportChange'},
@@ -8,11 +10,11 @@ const DEPRECATED_PROPS = [
   {old: 'mapControls', new: 'controller'}
 ];
 
-function getDeprecatedText(name) {
+function getDeprecatedText(name : string) : string {
   return `react-map-gl: \`${name}\` is removed.`;
 }
 
-function getNewText(name) {
+function getNewText(name : string) : string {
   return `Use \`${name}\` instead.`;
 }
 
@@ -21,7 +23,7 @@ function getNewText(name) {
  * warning to the user. This will also print out the recommended new prop/API
  * if one exists.
  */
-export default function checkDeprecatedProps(props = {}) {
+export default function checkDeprecatedProps(props: any = {}) {
   /* eslint-disable no-console, no-undef */
   DEPRECATED_PROPS.forEach((depProp) => {
     if (props.hasOwnProperty(depProp.old)) {

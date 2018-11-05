@@ -1,5 +1,7 @@
 // Launch script for various Node test configurations
-require('@babel/register');
+require('@babel/register')({
+  presets: ['@babel/flow']
+});
 require('../aliases');
 
 /* global process */

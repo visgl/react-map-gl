@@ -1,3 +1,4 @@
+// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -53,6 +54,10 @@ const defaultProps = Object.assign({}, DraggableControl.defaultProps, {
  * recalculate the marker's position when the parent re-renders.
  */
 export default class Marker extends DraggableControl {
+
+  static propTypes = propTypes;
+  static defaultProps = defaultProps;
+
   _render() {
     const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
     const {dragPos, dragOffset} = this.state;
@@ -76,7 +81,3 @@ export default class Marker extends DraggableControl {
   }
 
 }
-
-Marker.displayName = 'Marker';
-Marker.propTypes = propTypes;
-Marker.defaultProps = defaultProps;

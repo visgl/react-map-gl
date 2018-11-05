@@ -1,11 +1,20 @@
+// @flow
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import assert from '../assert';
 import TransitionInterpolator from './transition-interpolator';
 
-import {isValid, lerp, getEndValueByShortestPath} from './transition-utils';
+import {isValid, getEndValueByShortestPath} from './transition-utils';
+import {lerp} from 'math.gl';
+
+import type {MapStateProps} from '../map-state';
 
 const VIEWPORT_TRANSITION_PROPS = ['longitude', 'latitude', 'zoom', 'bearing', 'pitch'];
+
+type TransitionProps = MapStateProps & {
+  around: Array<number>,
+  aroundLngLat: Array<number>
+};
 
 /**
  * Performs linear interpolation of two viewports.
@@ -17,7 +26,10 @@ export default class LinearInterpolator extends TransitionInterpolator {
    *  - opts.transitionProps {Array}] - list of props to apply linear transition to.
    *  - opts.around {Array} - a screen point to zoom/rotate around
    */
-  constructor(opts = {}) {
+  constructor(opts: {
+    transitionProps?: Array<string>,
+    around?: Array<number>
+  } = {}) {
     super();
 
     if (Array.isArray(opts)) {
@@ -26,10 +38,14 @@ export default class LinearInterpolator extends TransitionInterpolator {
     }
 
     this.propNames = opts.transitionProps || VIEWPORT_TRANSITION_PROPS;
-    this.around = opts.around;
+    if (opts.around) {
+      this.around = opts.around;
+    }
   }
 
-  initializeProps(startProps, endProps) {
+  around: Array<number>;
+
+  initializeProps(startProps: MapStateProps, endProps: MapStateProps) {
     const startViewportProps = {};
     const endViewportProps = {};
 
@@ -60,7 +76,7 @@ export default class LinearInterpolator extends TransitionInterpolator {
     };
   }
 
-  interpolateProps(startProps, endProps, t) {
+  interpolateProps(startProps: TransitionProps, endProps: TransitionProps, t: number) {
     const viewport = {};
     for (const key of this.propNames) {
       viewport[key] = lerp(startProps[key], endProps[key], t);

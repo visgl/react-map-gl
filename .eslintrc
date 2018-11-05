@@ -1,7 +1,8 @@
 {
   "parser": "babel-eslint",
   "plugins": [
-    "react"
+    "react",
+    "flowtype"
   ],
   "extends": [
     "eslint-config-uber-jsx",
@@ -10,7 +11,9 @@
   "rules": {
     "guard-for-in": 0,
     "no-inline-comments": 0,
-    "no-invalid-this": 0
+    "no-invalid-this": 0,
+    "flowtype/define-flow-type": "error",
+    "flowtype/use-flow-type": "error"
   },
   "parserOptions": {
     "ecmaVersion": 2017

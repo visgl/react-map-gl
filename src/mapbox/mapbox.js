@@ -1,3 +1,4 @@
+// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,16 +28,23 @@ function noop() {}
 const propTypes = {
   // Creation parameters
   container: PropTypes.object, /** The container to have the map. */
+  gl: PropTypes.object, /** External WebGLContext to use */
+
   mapboxApiAccessToken: PropTypes.string, /** Mapbox API access token for Mapbox tiles/styles. */
   attributionControl: PropTypes.bool, /** Show attribution control or not. */
   preserveDrawingBuffer: PropTypes.bool, /** Useful when you want to export the canvas as a PNG. */
-  onLoad: PropTypes.func, /** The onLoad callback for the map */
-  onError: PropTypes.func, /** The onError callback for the map */
   reuseMaps: PropTypes.bool,
   transformRequest: PropTypes.func, /** The transformRequest callback for the map */
+  mapOptions: PropTypes.object, /** Extra options to pass to Mapbox constructor. See #545. **/
+  mapStyle: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]), /** The Mapbox style. A string url to a MapboxGL style */
 
-  mapStyle: PropTypes.string, /** The Mapbox style. A string url to a MapboxGL style */
   visible: PropTypes.bool, /** Whether the map is visible */
+
+  onLoad: PropTypes.func, /** The onLoad callback for the map */
+  onError: PropTypes.func, /** The onError callback for the map */
 
   // Map view state
   width: PropTypes.number, /** The width of the map. */
@@ -49,10 +57,8 @@ const propTypes = {
   zoom: PropTypes.number, /** The tile zoom level of the map. */
   bearing: PropTypes.number, /** Specify the bearing of the viewport */
   pitch: PropTypes.number, /** Specify the pitch of the viewport */
-
   // Note: Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
-  altitude: PropTypes.number, /** Altitude of the viewport camera. Default 1.5 "screen heights" */
-  mapOptions: PropTypes.object /** Extra options to pass to Mapbox constructor. See #545. **/
+  altitude: PropTypes.number /** Altitude of the viewport camera. Default 1.5 "screen heights" */
 };
 
 const defaultProps = {
@@ -60,27 +66,66 @@ const defaultProps = {
   mapboxApiAccessToken: getAccessToken(),
   preserveDrawingBuffer: false,
   attributionControl: true,
-  preventStyleDiffing: false,
-  onLoad: noop,
-  onError: noop,
   reuseMaps: false,
-  transformRequest: null,
-
+  mapOptions: {},
   mapStyle: 'mapbox://styles/mapbox/light-v8',
+
   visible: true,
 
-  bearing: 0,
-  pitch: 0,
-  altitude: 1.5,
+  onLoad: noop,
+  onError: noop,
 
   width: 0,
   height: 0,
+  longitude: 0,
+  latitude: 0,
+  zoom: 0,
+  bearing: 0,
+  pitch: 0
+};
 
-  mapOptions: {}
+type MapboxGL = {
+  version: string,
+  accessToken: string,
+  Map: Function
+};
+
+export type ViewState = {
+  longitude: number,
+  latitude: number,
+  zoom: number,
+  bearing: number,
+  pitch: number,
+  altitude?: number
+};
+
+type Props = {
+  mapboxgl?: MapboxGL,
+  container: any,
+  gl?: any,
+  mapboxApiAccessToken: string,
+  attributionControl: boolean,
+  preserveDrawingBuffer: boolean,
+  onLoad: Function,
+  onError: Function,
+  reuseMaps: boolean,
+  transformRequest?: Function,
+  mapStyle: any,
+  visible: boolean,
+  width: number,
+  height: number,
+  viewState?: ViewState,
+  longitude: number,
+  latitude: number,
+  zoom: number,
+  bearing: number,
+  pitch: number,
+  altitude?: number,
+  mapOptions: any
 };
 
 // Try to get access token from URL, env, local storage or config
-export function getAccessToken() {
+export function getAccessToken() : string {
   let accessToken = null;
 
   if (typeof window !== 'undefined' && window.location) {
@@ -93,7 +138,8 @@ export function getAccessToken() {
     accessToken = accessToken || process.env.MapboxAccessToken || process.env.REACT_APP_MAPBOX_ACCESS_TOKEN; // eslint-disable-line
   }
 
-  return accessToken || null;
+  // Prevents mapbox from throwing
+  return accessToken || 'no-token';
 }
 
 // Helper function to merge defaultProps and check prop types
@@ -111,33 +157,47 @@ function checkPropTypes(props, component = 'component') {
 // - Provides support for specifying tokens during development
 
 export default class Mapbox {
-  constructor(props) {
+
+  static initialized : boolean = false;
+  static propTypes : any = propTypes;
+  static defaultProps : any = defaultProps;
+  static savedMap : any = null;
+
+  constructor(props: Props) {
     if (!props.mapboxgl) {
       throw new Error('Mapbox not available');
     }
+
+    this.mapboxgl = props.mapboxgl;
 
     if (!Mapbox.initialized && console.debug) { // eslint-disable-line
       Mapbox.initialized = true;
 
       // Version detection using babel plugin
       /* global __VERSION__ */
+      // $FlowFixMe
       const VERSION = typeof __VERSION__ !== 'undefined' ? __VERSION__ : 'untranspiled source';
 
-      console.debug(`react-map-gl: ${VERSION} using mapbox-gl v${props.mapboxgl.version}`); // eslint-disable-line
+      console.debug(`react-map-gl: ${VERSION} using mapbox-gl v${this.mapboxgl.version}`); // eslint-disable-line
 
-      this._checkStyleSheet(props.mapboxgl.version);
+      this._checkStyleSheet(this.mapboxgl.version);
     }
 
-    this.props = {};
     this._initialize(props);
   }
+
+  mapboxgl : MapboxGL;
+  props : Props = defaultProps;
+  _map : any = null;
+  width : number = 0;
+  height : number = 0;
 
   finalize() {
     this._destroy();
     return this;
   }
 
-  setProps(props) {
+  setProps(props: Props) {
     this._update(this.props, props);
     return this;
   }
@@ -161,10 +221,10 @@ export default class Mapbox {
 
   // PRIVATE API
 
-  _create(props) {
+  _create(props: Props) {
     // Reuse a saved map, if available
     if (props.reuseMaps && Mapbox.savedMap) {
-      this._map = this.map = Mapbox.savedMap;
+      this._map = Mapbox.savedMap;
       // When reusing the saved map, we need to reparent the map(canvas) and other child nodes
       // intoto the new container from the props.
       // Step1: reparenting child nodes from old container to new container
@@ -190,14 +250,16 @@ export default class Mapbox {
         const getContext = HTMLCanvasElement.prototype.getContext;
         // Hijack canvas.getContext to return our own WebGLContext
         // This will be called inside the mapboxgl.Map constructor
+        // $FlowFixMe
         HTMLCanvasElement.prototype.getContext = () => {
           // Unhijack immediately
+          // $FlowFixMe
           HTMLCanvasElement.prototype.getContext = getContext;
           return props.gl;
         };
       }
 
-      const mapOptions = {
+      const mapOptions : any = {
         container: props.container,
         center: [0, 0],
         zoom: 8,
@@ -213,12 +275,12 @@ export default class Mapbox {
       if (props.transformRequest) {
         mapOptions.transformRequest = props.transformRequest;
       }
-      this._map = this.map = new props.mapboxgl.Map(
+      this._map = new this.mapboxgl.Map(
         Object.assign({}, mapOptions, props.mapOptions));
 
       // Attach optional onLoad function
-      this.map.once('load', props.onLoad);
-      this.map.on('error', props.onError);
+      this._map.once('load', props.onLoad);
+      this._map.on('error', props.onError);
     }
 
     return this;
@@ -237,21 +299,12 @@ export default class Mapbox {
     this._map = null;
   }
 
-  _initialize(props) {
+  _initialize(props: Props) {
     props = Object.assign({}, defaultProps, props);
     checkPropTypes(props, 'Mapbox');
 
-    // Make empty string pick up default prop
-    this.accessToken = props.mapboxApiAccessToken || defaultProps.mapboxApiAccessToken;
-
     // Creation only props
-    if (props.mapboxgl) {
-      if (!this.accessToken) {
-        props.mapboxgl.accessToken = 'no-token'; // Prevents mapbox from throwing
-      } else {
-        props.mapboxgl.accessToken = this.accessToken;
-      }
-    }
+    this.mapboxgl.accessToken = props.mapboxApiAccessToken || defaultProps.mapboxApiAccessToken;
 
     this._create(props);
 
@@ -259,13 +312,17 @@ export default class Mapbox {
     // This eliminates the timing issue between calling resize() and DOM update
     /* eslint-disable accessor-pairs */
     const {container} = props;
+    // $FlowFixMe
     Object.defineProperty(container, 'offsetWidth', {get: () => this.width});
+    // $FlowFixMe
     Object.defineProperty(container, 'clientWidth', {get: () => this.width});
+    // $FlowFixMe
     Object.defineProperty(container, 'offsetHeight', {get: () => this.height});
+    // $FlowFixMe
     Object.defineProperty(container, 'clientHeight', {get: () => this.height});
 
     // Disable outline style
-    const canvas = this.map.getCanvas();
+    const canvas = this._map.getCanvas();
     if (canvas) {
       canvas.style.outline = 'none';
     }
@@ -276,7 +333,7 @@ export default class Mapbox {
     this.props = props;
   }
 
-  _update(oldProps, newProps) {
+  _update(oldProps: Props, newProps: Props) {
     if (!this._map) {
       return;
     }
@@ -291,7 +348,7 @@ export default class Mapbox {
   }
 
   // Note: needs to be called after render (e.g. in componentDidUpdate)
-  _updateMapSize(oldProps, newProps) {
+  _updateMapSize(oldProps: any, newProps: Props) {
     const sizeChanged = oldProps.width !== newProps.width || oldProps.height !== newProps.height;
     if (sizeChanged) {
       this.width = newProps.width;
@@ -300,7 +357,7 @@ export default class Mapbox {
     }
   }
 
-  _updateMapViewport(oldProps, newProps) {
+  _updateMapViewport(oldProps: any, newProps: Props) {
     const oldViewState = this._getViewState(oldProps);
     const newViewState = this._getViewState(newProps);
 
@@ -322,19 +379,19 @@ export default class Mapbox {
     }
   }
 
-  _getViewState(props) {
+  _getViewState(props: Props) : ViewState {
     const {
       longitude,
       latitude,
       zoom,
-      pitch = 0,
-      bearing = 0,
+      pitch,
+      bearing,
       altitude = 1.5
     } = props.viewState || props;
     return {longitude, latitude, zoom, pitch, bearing, altitude};
   }
 
-  _checkStyleSheet(mapboxVersion = '0.47.0') {
+  _checkStyleSheet(mapboxVersion : string = '0.47.0') {
     if (typeof document === 'undefined') {
       return;
     }
@@ -361,18 +418,13 @@ export default class Mapbox {
     }
   }
 
-  _getMapboxViewStateProps(props) {
+  _getMapboxViewStateProps(props: Props) {
     const viewState = this._getViewState(props);
     return {
       center: [viewState.longitude, viewState.latitude],
       zoom: viewState.zoom,
       bearing: viewState.bearing,
-      pitch: viewState.pitch,
-      width: props.width,
-      height: props.height
+      pitch: viewState.pitch
     };
   }
 }
-
-Mapbox.propTypes = propTypes;
-Mapbox.defaultProps = defaultProps;

@@ -1,15 +1,18 @@
+// @flow
 /* global requestAnimationFrame, cancelAnimationFrame */
 import assert from './assert';
-import {LinearInterpolator} from './transition';
+import {TransitionInterpolator, LinearInterpolator} from './transition';
 import MapState from './map-state';
+
+import type {MapStateProps} from './map-state';
 
 const noop = () => {};
 
 // crops the old easing function from x0 to 1 where x0 is the interruption point
 // returns a new easing function with domain [0, 1] and range [0, 1]
-export function cropEasingFunction(easing, x0) {
+export function cropEasingFunction(easing: number => number, x0: number): number => number {
   const y0 = easing(x0);
-  return t => 1 / (1 - y0) * (easing(t * (1 - x0) + x0) - y0);
+  return (t: number) => 1 / (1 - y0) * (easing(t * (1 - x0) + x0) - y0);
 }
 
 export const TRANSITION_EVENTS = {
@@ -21,7 +24,7 @@ export const TRANSITION_EVENTS = {
 
 const DEFAULT_PROPS = {
   transitionDuration: 0,
-  transitionEasing: t => t,
+  transitionEasing: (t: number) => t,
   transitionInterpolator: new LinearInterpolator(),
   transitionInterruption: TRANSITION_EVENTS.BREAK,
   onTransitionStart: noop,
@@ -31,99 +34,125 @@ const DEFAULT_PROPS = {
   onStateChange: noop
 };
 
-const DEFAULT_STATE = {
-  animation: null,
-  propsInTransition: null,
-  startProps: null,
-  endProps: null
+export type ViewportProps = MapStateProps & {
+  onTransitionStart: Function,
+  onTransitionInterrupt: Function,
+  onTransitionEnd: Function,
+  onViewportChange: Function,
+  onStateChange: Function
+};
+
+type TransitionState = {
+  propsInTransition: any,
+  interactionState: any,
+  startProps: MapStateProps,
+  endProps: MapStateProps,
+
+  duration: number,
+  easing: number => number,
+  interpolator: TransitionInterpolator,
+  interruption: number,
+
+  startTime: number
 };
 
 export default class TransitionManager {
-  constructor(props) {
-    this.props = props;
-    this.state = DEFAULT_STATE;
 
-    this._onTransitionFrame = this._onTransitionFrame.bind(this);
+  static defaultProps = DEFAULT_PROPS;
+
+  constructor(props?: ViewportProps) {
+    if (props) {
+      this.props = props;
+    }
   }
+
+  props: ViewportProps;
+  state: TransitionState;
+
+  _animationFrame: ?AnimationFrameID = null;
 
   // Returns current transitioned viewport.
   getViewportInTransition() {
-    return this.state.propsInTransition;
+    return this._animationFrame ? this.state.propsInTransition : null;
   }
 
   // Process the viewport change, either ignore or trigger a new transiton.
   // Return true if a new transition is triggered, false otherwise.
-  processViewportChange(nextProps) {
-    let transitionTriggered = false;
+  processViewportChange(nextProps: ViewportProps) {
     const currentProps = this.props;
     // Set this.props here as '_triggerTransition' calls '_updateViewport' that uses this.props.
     this.props = nextProps;
 
-    if (!currentProps) {
+    // NOTE: Be cautious re-ordering statements in this function.
+    if (this._shouldIgnoreViewportChange(currentProps, nextProps)) {
       return false;
     }
 
-    // NOTE: Be cautious re-ordering statements in this function.
-    if (this._shouldIgnoreViewportChange(currentProps, nextProps)) {
-      return transitionTriggered;
-    }
-
-    const isTransitionInProgress = this._isTransitionInProgress();
-
     if (this._isTransitionEnabled(nextProps)) {
-      const startProps = Object.assign({}, currentProps,
-        this.state.interruption === TRANSITION_EVENTS.SNAP_TO_END ?
-          this.state.endProps : this.state.propsInTransition
-      );
+      const startProps = Object.assign({}, currentProps);
       const endProps = Object.assign({}, nextProps);
-      const currentTime = Date.now();
-      if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
-        const x0 = (currentTime - this.state.startTime) / this.state.duration;
-        endProps.transitionDuration =
-        this.state.duration - (currentTime - this.state.startTime);
-        endProps.transitionEasing = cropEasingFunction(this.state.easing, x0);
-        endProps.transitionInterpolator = startProps.transitionInterpolator;
-      }
-      if (isTransitionInProgress) {
+
+      if (this._isTransitionInProgress()) {
         currentProps.onTransitionInterrupt();
+
+        if (this.state.interruption === TRANSITION_EVENTS.SNAP_TO_END) {
+          Object.assign(startProps, this.state.endProps);
+        } else {
+          Object.assign(startProps, this.state.propsInTransition);
+        }
+
+        if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
+          const currentTime = Date.now();
+          const x0 = (currentTime - this.state.startTime) / this.state.duration;
+          endProps.transitionDuration =
+          this.state.duration - (currentTime - this.state.startTime);
+          endProps.transitionEasing = cropEasingFunction(this.state.easing, x0);
+          endProps.transitionInterpolator = startProps.transitionInterpolator;
+        }
       }
       endProps.onTransitionStart();
 
       this._triggerTransition(startProps, endProps);
 
-      transitionTriggered = true;
-    } else if (isTransitionInProgress) {
+      return true;
+    }
+
+    if (this._isTransitionInProgress()) {
       currentProps.onTransitionInterrupt();
       this._endTransition();
     }
 
-    return transitionTriggered;
+    return false;
   }
 
   // Helper methods
 
-  _isTransitionInProgress() {
-    return Boolean(this.state.propsInTransition);
+  _isTransitionInProgress(): boolean {
+    return Boolean(this._animationFrame);
   }
 
-  _isTransitionEnabled(props) {
+  _isTransitionEnabled(props: ViewportProps): boolean {
     return props.transitionDuration > 0 && Boolean(props.transitionInterpolator);
   }
 
-  _isUpdateDueToCurrentTransition(props) {
+  _isUpdateDueToCurrentTransition(props: ViewportProps): boolean {
     if (this.state.propsInTransition) {
       return this.state.interpolator.arePropsEqual(props, this.state.propsInTransition);
     }
     return false;
   }
 
-  _shouldIgnoreViewportChange(currentProps, nextProps) {
+  _shouldIgnoreViewportChange(currentProps: ViewportProps, nextProps: ViewportProps): boolean {
+    if (!currentProps) {
+      return true;
+    }
     if (this._isTransitionInProgress()) {
       // Ignore update if it is requested to be ignored
       return this.state.interruption === TRANSITION_EVENTS.IGNORE ||
         // Ignore update if it is due to current active transition.
         this._isUpdateDueToCurrentTransition(nextProps);
-    } else if (this._isTransitionEnabled(nextProps)) {
+    }
+    if (this._isTransitionEnabled(nextProps)) {
       // Ignore if none of the viewport props changed.
       return nextProps.transitionInterpolator.arePropsEqual(currentProps, nextProps);
     }
@@ -131,10 +160,12 @@ export default class TransitionManager {
     return true;
   }
 
-  _triggerTransition(startProps, endProps) {
+  _triggerTransition(startProps: ViewportProps, endProps: ViewportProps) {
     assert(this._isTransitionEnabled(endProps), 'Transition is not enabled');
 
-    cancelAnimationFrame(this.state.animation);
+    if (this._animationFrame) {
+      cancelAnimationFrame(this._animationFrame);
+    }
 
     const initialProps = endProps.transitionInterpolator.initializeProps(
       startProps,
@@ -168,15 +199,17 @@ export default class TransitionManager {
     this.props.onStateChange(interactionState);
   }
 
-  _onTransitionFrame() {
+  _onTransitionFrame = () => {
     // _updateViewport() may cancel the animation
-    this.state.animation = requestAnimationFrame(this._onTransitionFrame);
+    this._animationFrame = requestAnimationFrame(this._onTransitionFrame);
     this._updateViewport();
   }
 
   _endTransition() {
-    cancelAnimationFrame(this.state.animation);
-    this.state = DEFAULT_STATE;
+    if (this._animationFrame) {
+      cancelAnimationFrame(this._animationFrame);
+      this._animationFrame = null;
+    }
     this.props.onStateChange({
       inTransition: false,
       isZooming: false,
@@ -214,5 +247,3 @@ export default class TransitionManager {
     }
   }
 }
-
-TransitionManager.defaultProps = DEFAULT_PROPS;
