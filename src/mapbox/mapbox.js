@@ -33,7 +33,6 @@ const propTypes = {
   onLoad: PropTypes.func, /** The onLoad callback for the map */
   onError: PropTypes.func, /** The onError callback for the map */
   reuseMaps: PropTypes.bool,
-  reuseMap: PropTypes.bool,
   transformRequest: PropTypes.func, /** The transformRequest callback for the map */
 
   mapStyle: PropTypes.string, /** The Mapbox style. A string url to a MapboxGL style */
@@ -65,7 +64,6 @@ const defaultProps = {
   onLoad: noop,
   onError: noop,
   reuseMaps: false,
-  reuseMap: false,
   transformRequest: null,
 
   mapStyle: 'mapbox://styles/mapbox/light-v8',
@@ -165,7 +163,7 @@ export default class Mapbox {
 
   _create(props) {
     // Reuse a saved map, if available
-    if ((props.reuseMaps || props.reuseMap) && Mapbox.savedMap) {
+    if (props.reuseMaps && Mapbox.savedMap) {
       this._map = this.map = Mapbox.savedMap;
       // When reusing the saved map, we need to reparent the map(canvas) and other child nodes
       // intoto the new container from the props.
