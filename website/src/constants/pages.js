@@ -9,22 +9,30 @@ function getDocUrl(filename) {
 // mapping from file path in source to generated page url
 export const markdownFiles = {};
 
-function generatePath(tree, parentPath = '') {
+function generatePath(tree, parentPath = '', depth = 0) {
   if (Array.isArray(tree)) {
-    tree.forEach(branch => generatePath(branch, parentPath));
+    tree.forEach(branch => generatePath(branch, parentPath, depth));
+    return tree;
   }
+
+  tree.depth = depth;
   if (tree.name) {
-    tree.path = tree.name.match(/(GeoJSON|3D|API|([A-Z]|^)[a-z'0-9]+|\d+)/g)
-        .join('-')
-        .toLowerCase()
-        .replace(/[^\w-]/g, '');
+    tree.path = tree.name
+      .match(/(GeoJson|3D|API|HTML|SVG|[A-Z]?[a-z'0-9\.]+|\d+)/g)
+      .join('-')
+      .toLowerCase()
+      .replace(/[^\w-]/g, '');
   }
   if (tree.children) {
-    generatePath(tree.children, `${parentPath}/${tree.path}`);
+    generatePath(tree.children, `${parentPath}/${tree.path}`, depth + 1);
   }
   if (typeof tree.content === 'string') {
-    markdownFiles[tree.content] = `${parentPath}/${tree.path}`;
+    const i = tree.content.indexOf('docs/');
+    if (i >= 0) {
+      markdownFiles[tree.content.slice(i)] = `${parentPath}/${tree.path}`;
+    }
   }
+
   return tree;
 }
 
@@ -81,7 +89,7 @@ const docPages = {
       children: [
         {
           name: 'Custom Components',
-          content: getDocUrl('overlays/custom-components.md')
+          content: getDocUrl('advanced/custom-components.md')
         },
         {
           name: 'Custom Map Controller',
