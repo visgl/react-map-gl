@@ -1,7 +1,7 @@
 {
   "name": "react-map-gl",
   "description": "A React wrapper for MapboxGL-js and overlay API.",
-  "version": "4.0.0-beta.6",
+  "version": "4.0.0-beta.7",
   "keywords": [
     "mapbox",
     "mapbox-gl",
@@ -24,7 +24,8 @@
   },
   "files": [
     "src",
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "start": "(cd examples/main && (if [ ! -d 'node_modules' ]; then npm i; fi) && npm run start-local)",

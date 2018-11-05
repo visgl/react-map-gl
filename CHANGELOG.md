@@ -2,6 +2,12 @@
 
 # Version 4.0.0 Prereleases
 
+## 4.0.0-beta.7 (Nov 5, 2018)
+
+- New interruption mode: UPDATE (#631)
+- API audit round 2 (#652)
+- Set up flow (#651)
+
 ## 4.0.0-beta.6 (Nov 2, 2018)
 
 - Don't override visibility style when visible is true (#650)
