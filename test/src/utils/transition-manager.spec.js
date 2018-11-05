@@ -46,10 +46,9 @@ const TEST_CASES = [
 ];
 
 test('TransitionManager#constructor', t => {
-  const transitionManager = new TransitionManager({});
+  const transitionManager = new TransitionManager();
   t.ok(transitionManager, 'TransitionManager constructor does not throw errors');
-  t.ok(transitionManager.props, 'TransitionManager has props');
-  t.ok(transitionManager.state, 'TransitionManager has state');
+  t.notOk(transitionManager._isTransitionInProgress(), 'no transition in progress');
   t.end();
 });
 

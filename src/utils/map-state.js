@@ -1,5 +1,6 @@
 // @flow
 import WebMercatorViewport, {normalizeViewportProps} from 'viewport-mercator-project';
+import {TransitionInterpolator} from './transition';
 import {clamp} from 'math.gl';
 import assert from './assert';
 
@@ -30,10 +31,10 @@ type ViewportProps = {
   minZoom: number,
   maxPitch: number,
   minPitch: number,
-  transitionDuration?: number,
-  transitionEasing?: Function,
-  transitionInterpolator?: any,
-  transitionInterruption?: number
+  transitionDuration: number,
+  transitionEasing: number => number,
+  transitionInterpolator: TransitionInterpolator,
+  transitionInterruption: number
 };
 
 type InteractiveState = {
