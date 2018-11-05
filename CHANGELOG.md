@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# Version 4.0.0
+
+## 4.0.0 (Nov 5, 2018)
+
 # Version 4.0.0 Prereleases
 
 ## 4.0.0-beta.7 (Nov 5, 2018)
