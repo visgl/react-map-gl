@@ -1,6 +1,6 @@
 # react-map-gl v4.0
 
-Release date: TBD
+Release date: Nov 5, 2018
 
 ## Highlights
 
@@ -8,6 +8,8 @@ Release date: TBD
 - **React 16** Upgrade to React 16.3 context and ref patterns
 - **Babel 7** Upgrade build system to Babel 7, better support for tree-shaking
 - **Style diffing** Now use Mapbox's native style diffing. Immutable is no longer required.
+- **Draggable Markers** `Marker` component now supports a new prop `draggable`, along with callbacks `onDragStart`, `onDrag`, and `onDragEnd`.
+- **3d Popups** `Popup` component now supports a new prop `sortByDepth` to enable proper occlusion when multiple popups are used in a tilted map.
 - **Interaction states** `onViewportChange` is now called with richer descriptors of the user interaction, including `isPanning`, `isZooming` and `isRotating`.
 - **Interactive layers** Dropped the requirement for the deprecated `interactive` property on the layer styles. Use the `interactiveLayerIds` prop to specify which layers are clickable.
 - **New callback props** `InteractiveMap` supports more callbacks:
