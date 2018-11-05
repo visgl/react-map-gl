@@ -19,5 +19,5 @@ import ReactMapGL, {FlyToInterpolator} from 'react-map-gl';
 
 
 ## Source
-[viewport-fly-to-interpolator.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/utils/transition/viewport-fly-to-interpolator.js)
+[viewport-fly-to-interpolator.js](https://github.com/uber/react-map-gl/tree/4.0-release/src/utils/transition/viewport-fly-to-interpolator.js)
 
