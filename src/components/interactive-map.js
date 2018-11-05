@@ -227,7 +227,6 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   _eventManager : any;
   _width : number = 0;
   _height : number = 0;
-  /* global HTMLDivElement */
   _eventCanvasRef: { current: null | HTMLDivElement } = createRef();
   _staticMapRef: { current: null | StaticMap } = createRef();
 

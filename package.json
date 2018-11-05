@@ -65,6 +65,7 @@
     "eslint": "^3.0.0",
     "eslint-config-uber-es2015": "^3.0.0",
     "eslint-config-uber-jsx": "^3.0.0",
+    "eslint-plugin-flowtype": "^3.2.0",
     "eslint-plugin-react": "~6.7.0",
     "flow-bin": "^0.80.0",
     "gl": "^4.0.3",

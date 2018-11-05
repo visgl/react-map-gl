@@ -69,7 +69,6 @@ export default class TransitionManager {
   props: ViewportProps;
   state: TransitionState;
 
-  /* global AnimationFrameID */
   _animationFrame: ?AnimationFrameID = null;
 
   // Returns current transitioned viewport.

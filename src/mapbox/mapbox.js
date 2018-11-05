@@ -67,7 +67,6 @@ const defaultProps = {
   preserveDrawingBuffer: false,
   attributionControl: true,
   reuseMaps: false,
-  transformRequest: null,
   mapOptions: {},
   mapStyle: 'mapbox://styles/mapbox/light-v8',
 
@@ -110,7 +109,6 @@ type Props = {
   onLoad: Function,
   onError: Function,
   reuseMaps: boolean,
-  reuseMap: boolean,
   transformRequest?: Function,
   mapStyle: any,
   visible: boolean,
@@ -225,13 +223,8 @@ export default class Mapbox {
 
   _create(props: Props) {
     // Reuse a saved map, if available
-<<<<<<< HEAD
     if (props.reuseMaps && Mapbox.savedMap) {
-      this._map = this.map = Mapbox.savedMap;
-=======
-    if ((props.reuseMaps || props.reuseMap) && Mapbox.savedMap) {
       this._map = Mapbox.savedMap;
->>>>>>> add flow
       // When reusing the saved map, we need to reparent the map(canvas) and other child nodes
       // intoto the new container from the props.
       // Step1: reparenting child nodes from old container to new container

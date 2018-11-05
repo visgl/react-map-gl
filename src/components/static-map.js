@@ -165,7 +165,6 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
 
   _mapbox : any = null;
   _map : any = null;
-  /* global HTMLDivElement */
   _mapboxMapRef: { current: null | HTMLDivElement } = createRef();
   _queryParams : any = {};
   _width : number = 0;

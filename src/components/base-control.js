@@ -91,7 +91,6 @@ export default class BaseControl extends PureComponent<ControlProps> {
 
   _context: any = {};
   _events: any = null;
-  /* global HTMLDivElement */
   _containerRef: {current: null | HTMLDivElement} = createRef();
 
   _onScroll = (evt: MjolnirEvent) => {
