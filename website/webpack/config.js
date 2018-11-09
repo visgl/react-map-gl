@@ -1,23 +1,15 @@
 const {resolve} = require('path');
 const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-// Otherwise modules imported from outside this directory does not compile
-// Seems to be a Babel bug
-// https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
 const BABEL_CONFIG = {
   presets: [
-    'es2015',
-    'react',
-    'stage-2'
-  ].map(function configMap(name) {
-    return require.resolve(`babel-preset-${name}`);
-  }),
+    '@babel/env',
+    '@babel/react',
+    '@babel/flow'
+  ],
   plugins: [
-    'transform-decorators-legacy'
-  ].map(function configMap(name) {
-    return require.resolve(`babel-plugin-${name}`);
-  })
+    '@babel/proposal-class-properties'
+  ]
 };
 
 module.exports = {
@@ -26,15 +18,31 @@ module.exports = {
 
   module: {
     rules: [{
+      // Compile ES2015 using bable
       test: /\.js$/,
-      exclude: [/node_modules/],
-      use: [{
-        loader: 'babel-loader',
-        options: BABEL_CONFIG
-      }]
+      exclude: /node_modules/,
+      use: [
+        {
+          loader: 'babel-loader',
+          options: BABEL_CONFIG
+        }
+      ]
     }, {
-      test: /\.scss$/,
-      loaders: ['style-loader', 'css-loader', 'sass-loader', 'autoprefixer-loader']
+      test: /\.s?css$/,
+      use: [
+        {
+          loader: 'style-loader'
+        },
+        {
+          loader: 'css-loader'
+        },
+        {
+          loader: 'sass-loader',
+          options: {
+            includePaths: ['./node_modules', '.']
+          }
+        }
+      ]
     }, {
       test: /\.(eot|svg|ttf|woff|woff2|gif|jpe?g|png)$/,
       loader: 'url-loader'
@@ -62,21 +70,7 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.EnvironmentPlugin(['MapboxAccessToken']),
-    new CopyWebpackPlugin([
-      // This will copy the contents to the distribution bundle folder
-      {
-        from: '../docs',
-        to: 'docs'
-      },
-      {
-        from: '../examples/data',
-        to: 'data'
-      },
-      {
-        from: './src/static'
-      }
-    ])
+    new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]
 
 };

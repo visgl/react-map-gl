@@ -1,8 +1,11 @@
 const webpack = require('webpack');
+const {resolve} = require('path');
 
 const config = require('./config');
 
 module.exports = Object.assign(config, {
+
+  mode: 'development',
 
   entry: [
     'webpack-hot-middleware/client',
@@ -11,14 +14,14 @@ module.exports = Object.assign(config, {
 
   devServer: {
     port: 3000,
-    progress: true
+    progress: true,
+    contentBase: resolve(__dirname, '../src/static')
   },
 
   devtool: 'cheap-source-maps',
 
   plugins: config.plugins.concat([
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.HotModuleReplacementPlugin()
   ])
 
 });
