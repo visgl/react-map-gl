@@ -1,6 +1,5 @@
 /* global window */
 import React, {PureComponent} from 'react';
-import autobind from 'react-autobind';
 import {BaseControl} from 'react-map-gl';
 
 export default class InfoPanel extends BaseControl {
@@ -16,15 +15,14 @@ export default class InfoPanel extends BaseControl {
     super(props);
     this.state = {hasFocus: false};
     this._blurTimer = null;
-    autobind(this);
   }
 
-  _onFocus() {
+  _onFocus = () => {
     window.clearTimeout(this._blurTimer);
     this.setState({hasFocus: true});
   }
 
-  _onBlur() {
+  _onBlur = () => {
     // New focus is not yet available when blur event fires.
     // Wait a bit and if no onfocus event is fired, remove focus
     this._blurTimer = window.setTimeout(() => {
@@ -32,7 +30,7 @@ export default class InfoPanel extends BaseControl {
     }, 1);
   }
 
-  _render() {
+  _render = () => {
     const {hasFocus} = this.state;
 
     return (
