@@ -4,7 +4,7 @@ import assert from './assert';
 // MAPBOX LIMITS
 export const MAPBOX_LIMITS = {
   minZoom: 0,
-  maxZoom: 20,
+  maxZoom: 24,
   minPitch: 0,
   maxPitch: 60
 };
