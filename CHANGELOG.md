@@ -2,6 +2,10 @@
 
 # Version 4.0.0
 
+## 4.0.1 (Nov 14, 2018)
+
+- Bump maxZoom support to 24 (#659)
+
 ## 4.0.0 (Nov 5, 2018)
 
 # Version 4.0.0 Prereleases
@@ -70,6 +74,33 @@
 - Add drag and drop support for Marker (#576)
 
 # Version 3.3.0
+
+## 3.3.9 (Nov 14, 2018)
+
+- Bump maxZoom support to 24 (#659)
+
+## 3.3.8 (Oct 26, 2018)
+
+- Add support for Create React App access token environment variable (#633)
+
+## 3.3.7 (Oct 18, 2018)
+
+- Fix double-click zoom transition (#625)
+
+## 3.3.6 (Oct 15, 2018)
+
+- `mapbox-gl` v0.50 (#618)
+- Remove `bower` dependency (#615)
+
+## 3.3.5 (Sep 26, 2018)
+
+- Fix auto stylesheet detection (#601)
+
+## 3.3.4 (Aug 4, 2018)
+
+- Add `fitBounds` util to docs (#563)
+- add disableTokenWarning prop (#564)
+- fix capture* props for overlay components (#565)
 
 ## 3.3.3 (Aug 3, 2018)
 

@@ -148,7 +148,7 @@ Whether the map is visible. Unmounting and re-mounting a Mapbox instance is know
 
 An object that specifies bounds for viewport props with `min*`, `max*` keys. If the viewport props are outside of these constraints, the Mapbox map is automatically hidden. 
 
-Default: `{ minZoom: 0, maxZoom: 20, minPitch: 0, maxPitch: 60 }`
+Default: `{ minZoom: 0, maxZoom: 24, minPitch: 0, maxPitch: 60 }`
 
 
 ### Callbacks

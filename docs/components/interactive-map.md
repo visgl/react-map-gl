@@ -82,7 +82,7 @@ The default implementation of `getCursor` returns `'pointer'` if `isHovering`, `
 
 ### Interaction Options
 
-##### `maxZoom` {Number} [default: 20]
+##### `maxZoom` {Number} [default: 24]
 
 Max zoom level.
 
