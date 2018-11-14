@@ -265,6 +265,7 @@ export default class Mapbox {
         zoom: 8,
         pitch: 0,
         bearing: 0,
+        maxZoom: 24,
         style: props.mapStyle,
         interactive: false,
         trackResize: false,
