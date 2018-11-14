@@ -2,6 +2,10 @@
 
 # Version 3.3.0
 
+## 3.3.9 (Nov 14, 2018)
+
+- Bump maxZoom support to 24 (#659)
+
 ## 3.3.8 (Oct 26, 2018)
 
 - Add support for Create React App access token environment variable (#633)

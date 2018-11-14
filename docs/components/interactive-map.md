@@ -55,7 +55,7 @@ The object passed to the callback contains viewport properties such as `longitud
 Note:
 * Even if the newer `onViewStateChange` callback is supplied, the `onViewportChange` callback will still be called if supplied.
 
-##### `maxZoom` {Number} [default: 20]
+##### `maxZoom` {Number} [default: 24]
 
 Max zoom level.
 
