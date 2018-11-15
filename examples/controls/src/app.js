@@ -57,6 +57,7 @@ export default class App extends Component {
         anchor="top"
         longitude={popupInfo.longitude}
         latitude={popupInfo.latitude}
+        closeOnClick={false}
         onClose={() => this.setState({popupInfo: null})} >
         <CityInfo info={popupInfo} />
       </Popup>
