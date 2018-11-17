@@ -2,6 +2,10 @@
 
 # Version 4.0.0
 
+## 4.0.2 (Nov 16, 2018)
+
+- Fix popup bug when closeOnClick is off (#660)
+
 ## 4.0.1 (Nov 14, 2018)
 
 - Bump maxZoom support to 24 (#659)
