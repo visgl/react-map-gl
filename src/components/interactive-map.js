@@ -191,6 +191,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     this._eventManager = new EventManager(null, {
       touchAction: props.touchAction
     });
+
+    this._generateInteractiveContext(false);
   }
 
   state : State = {
@@ -219,12 +221,17 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     this._setControllerProps(this.props);
   }
 
-  componentWillUpdate(nextProps : InteractiveMapProps) {
+  componentWillUpdate(nextProps : InteractiveMapProps, nextState : State) {
     this._setControllerProps(nextProps);
+
+    if (nextState.isDragging !== this.state.isDragging) {
+      this._generateInteractiveContext(nextState.isDragging);
+    }
   }
 
   _controller : MapController;
   _eventManager : any;
+  _interactiveContext : { isDragging: boolean, eventManager: any };
   _width : number = 0;
   _height : number = 0;
   _eventCanvasRef: { current: null | HTMLDivElement } = createRef();
@@ -282,6 +289,13 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     if (onInteractionStateChange) {
       onInteractionStateChange(interactionState);
     }
+  }
+
+  _generateInteractiveContext(isDragging : boolean) {
+    this._interactiveContext = {
+      isDragging,
+      eventManager: this._eventManager
+    };
   }
 
   _onResize = ({width, height} : {width : number, height : number}) => {
@@ -414,12 +428,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
       height,
       cursor: getCursor(this.state)
     });
-    const interactiveContext = {
-      isDragging: this.state.isDragging,
-      eventManager: this._eventManager
-    };
 
-    return createElement(InteractiveContext.Provider, {value: interactiveContext},
+    return createElement(InteractiveContext.Provider, {value: this._interactiveContext},
       createElement('div', {
         key: 'event-canvas',
         ref: this._eventCanvasRef,
