@@ -170,6 +170,11 @@ type State = {
   isHovering: boolean
 };
 
+type InteractiveContextProps = {
+  isDragging: boolean,
+  eventManager: any
+};
+
 export default class InteractiveMap extends PureComponent<InteractiveMapProps, State> {
 
   static supported() {
@@ -190,6 +195,11 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
 
     this._eventManager = new EventManager(null, {
       touchAction: props.touchAction
+    });
+
+    this._updateInteractiveContext({
+      isDragging: false,
+      eventManager: this._eventManager
     });
   }
 
@@ -219,12 +229,17 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     this._setControllerProps(this.props);
   }
 
-  componentWillUpdate(nextProps : InteractiveMapProps) {
+  componentWillUpdate(nextProps : InteractiveMapProps, nextState : State) {
     this._setControllerProps(nextProps);
+
+    if (nextState.isDragging !== this.state.isDragging) {
+      this._updateInteractiveContext({isDragging: nextState.isDragging});
+    }
   }
 
   _controller : MapController;
   _eventManager : any;
+  _interactiveContext : InteractiveContextProps;
   _width : number = 0;
   _height : number = 0;
   _eventCanvasRef: { current: null | HTMLDivElement } = createRef();
@@ -282,6 +297,10 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     if (onInteractionStateChange) {
       onInteractionStateChange(interactionState);
     }
+  }
+
+  _updateInteractiveContext(updatedContext : $Shape<InteractiveContextProps>) {
+    this._interactiveContext = Object.assign({}, this._interactiveContext, updatedContext);
   }
 
   _onResize = ({width, height} : {width : number, height : number}) => {
@@ -414,12 +433,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
       height,
       cursor: getCursor(this.state)
     });
-    const interactiveContext = {
-      isDragging: this.state.isDragging,
-      eventManager: this._eventManager
-    };
 
-    return createElement(InteractiveContext.Provider, {value: interactiveContext},
+    return createElement(InteractiveContext.Provider, {value: this._interactiveContext},
       createElement('div', {
         key: 'event-canvas',
         ref: this._eventCanvasRef,
