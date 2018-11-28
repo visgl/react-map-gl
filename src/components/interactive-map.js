@@ -170,6 +170,11 @@ type State = {
   isHovering: boolean
 };
 
+type InteractiveContextProps = {
+  isDragging: boolean,
+  eventManager: any
+};
+
 export default class InteractiveMap extends PureComponent<InteractiveMapProps, State> {
 
   static supported() {
@@ -192,7 +197,10 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
       touchAction: props.touchAction
     });
 
-    this._generateInteractiveContext(false);
+    this._updateInteractiveContext({
+      isDragging: false,
+      eventManager: this._eventManager
+    });
   }
 
   state : State = {
@@ -225,13 +233,13 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     this._setControllerProps(nextProps);
 
     if (nextState.isDragging !== this.state.isDragging) {
-      this._generateInteractiveContext(nextState.isDragging);
+      this._updateInteractiveContext({isDragging: nextState.isDragging});
     }
   }
 
   _controller : MapController;
   _eventManager : any;
-  _interactiveContext : { isDragging: boolean, eventManager: any };
+  _interactiveContext : InteractiveContextProps;
   _width : number = 0;
   _height : number = 0;
   _eventCanvasRef: { current: null | HTMLDivElement } = createRef();
@@ -291,11 +299,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     }
   }
 
-  _generateInteractiveContext(isDragging : boolean) {
-    this._interactiveContext = {
-      isDragging,
-      eventManager: this._eventManager
-    };
+  _updateInteractiveContext(updatedContext : $Shape<InteractiveContextProps>) {
+    this._interactiveContext = Object.assign({}, this._interactiveContext, updatedContext);
   }
 
   _onResize = ({width, height} : {width : number, height : number}) => {
