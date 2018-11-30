@@ -1,7 +1,7 @@
 // @flow
 import WebMercatorViewport, {normalizeViewportProps} from 'viewport-mercator-project';
 import {TransitionInterpolator} from './transition';
-import {clamp} from 'math.gl';
+import {clamp} from './math-utils';
 import assert from './assert';
 
 // MAPBOX LIMITS
