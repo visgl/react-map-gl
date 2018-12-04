@@ -385,8 +385,8 @@ export default class Mapbox {
       longitude,
       latitude,
       zoom,
-      pitch,
-      bearing,
+      pitch = 0,
+      bearing = 0,
       altitude = 1.5
     } = props.viewState || props;
     return {longitude, latitude, zoom, pitch, bearing, altitude};
