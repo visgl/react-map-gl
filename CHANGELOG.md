@@ -2,6 +2,11 @@
 
 # Version 4.0.0
 
+## 4.0.3 (Dec 4, 2018)
+
+- Cache the interactive context to prevent context thrashing (#664)
+- Remove math.gl from dependencies (#666)
+
 ## 4.0.2 (Nov 16, 2018)
 
 - Fix popup bug when closeOnClick is off (#660)
