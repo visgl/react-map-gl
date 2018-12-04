@@ -1,5 +1,5 @@
 import test from 'tape-catch';
-import {equals} from 'math.gl';
+import {equals} from '../../test-utils';
 import TransitionManager from 'react-map-gl/utils/transition-manager';
 import {cropEasingFunction} from 'react-map-gl/utils/transition-manager';
 import {TRANSITION_EVENTS} from 'react-map-gl/utils/transition-manager';

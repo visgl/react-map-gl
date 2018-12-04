@@ -1,3 +1,4 @@
+const EPSILON = 1e-12;
 
 // Discard precision errors for comparison
 export function toLowPrecision(input, precision = 11) {
@@ -22,4 +23,8 @@ export function isSameLocation(lngLat1, lngLat2) {
   const lng2 = toLowPrecision(lngLat2[0]);
   const lat2 = toLowPrecision(lngLat2[1]);
   return ((lng1 - lng2) % 360) === 0 && lat1 === lat2;
+}
+
+export function equals(a, b) {
+  return Math.abs(a - b) < EPSILON;
 }

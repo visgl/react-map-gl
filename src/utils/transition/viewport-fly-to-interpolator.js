@@ -4,7 +4,7 @@ import TransitionInterpolator from './transition-interpolator';
 
 import {flyToViewport} from 'viewport-mercator-project';
 import {isValid, getEndValueByShortestPath} from './transition-utils';
-import {lerp} from 'math.gl';
+import {lerp} from '../math-utils';
 
 import type {MapStateProps} from '../map-state';
 
