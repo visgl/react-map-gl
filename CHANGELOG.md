@@ -2,6 +2,11 @@
 
 # Version 4.0.0
 
+## 4.0.4 (Dec 4, 2018)
+
+- Bump mapbox dependency to 0.51 (#670)
+- Fix crash when `viewState` does not contain pitch or bearing (#671)
+
 ## 4.0.3 (Dec 4, 2018)
 
 - Cache the interactive context to prevent context thrashing (#664)
