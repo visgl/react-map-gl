@@ -1,5 +1,5 @@
 // @flow
-import {equals} from 'math.gl';
+import {equals} from '../math-utils';
 import assert from '../assert';
 
 export default class TransitionInterpolator {
