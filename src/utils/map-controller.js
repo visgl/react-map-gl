@@ -73,12 +73,13 @@ export default class MapController {
   };
   _events: any = {};
   _transitionManager: TransitionManager = new TransitionManager();
+  _handleEvent: Function;
 
   /**
    * Callback for events
    * @param {hammer.Event} event
    */
-  handleEvent = (event: MjolnirEvent) => {
+  handleEvent(event: MjolnirEvent) {
     this.mapState = this.getMapState();
 
     switch (event.type) {
@@ -204,14 +205,18 @@ export default class MapController {
   }
 
   toggleEvents(eventNames: Array<string>, enabled: boolean) {
+    // Bind the method here instead of in the constructor, so that inherited classes
+    // do not have to do binding themselves
+    this._handleEvent = this._handleEvent || this.handleEvent.bind(this);
+
     if (this.eventManager) {
       eventNames.forEach(eventName => {
         if (this._events[eventName] !== enabled) {
           this._events[eventName] = enabled;
           if (enabled) {
-            this.eventManager.on(eventName, this.handleEvent);
+            this.eventManager.on(eventName, this._handleEvent);
           } else {
-            this.eventManager.off(eventName, this.handleEvent);
+            this.eventManager.off(eventName, this._handleEvent);
           }
         }
       });
