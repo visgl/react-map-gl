@@ -74,11 +74,15 @@ export default class MapController {
   _events: any = {};
   _transitionManager: TransitionManager = new TransitionManager();
 
+  constructor() {
+    (this:any).handleEvent = this.handleEvent.bind(this);
+  }
+
   /**
    * Callback for events
    * @param {hammer.Event} event
    */
-  handleEvent = (event: MjolnirEvent) => {
+  handleEvent(event: MjolnirEvent) {
     this.mapState = this.getMapState();
 
     switch (event.type) {
