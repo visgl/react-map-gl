@@ -2,6 +2,10 @@
 
 # Version 4.0.0
 
+## 4.0.5 (Dec 6, 2018)
+
+- Fix map controller class extensibility (#674)
+
 ## 4.0.4 (Dec 4, 2018)
 
 - Bump mapbox dependency to 0.51 (#670)
