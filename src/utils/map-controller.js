@@ -73,7 +73,10 @@ export default class MapController {
   };
   _events: any = {};
   _transitionManager: TransitionManager = new TransitionManager();
-  _handleEvent: Function;
+
+  constructor() {
+    (this:any).handleEvent = this.handleEvent.bind(this);
+  }
 
   /**
    * Callback for events
@@ -205,18 +208,14 @@ export default class MapController {
   }
 
   toggleEvents(eventNames: Array<string>, enabled: boolean) {
-    // Bind the method here instead of in the constructor, so that inherited classes
-    // do not have to do binding themselves
-    this._handleEvent = this._handleEvent || this.handleEvent.bind(this);
-
     if (this.eventManager) {
       eventNames.forEach(eventName => {
         if (this._events[eventName] !== enabled) {
           this._events[eventName] = enabled;
           if (enabled) {
-            this.eventManager.on(eventName, this._handleEvent);
+            this.eventManager.on(eventName, this.handleEvent);
           } else {
-            this.eventManager.off(eventName, this._handleEvent);
+            this.eventManager.off(eventName, this.handleEvent);
           }
         }
       });
