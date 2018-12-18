@@ -1,4 +1,4 @@
-const EPSILON = 1e-12;
+const EPSILON = 1e-9;
 
 // Discard precision errors for comparison
 export function toLowPrecision(input, precision = 11) {
