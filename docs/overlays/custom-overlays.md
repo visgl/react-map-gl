@@ -10,11 +10,12 @@ import PropTypes from 'prop-types';
 import {BaseControl} from 'react-map-gl';
 
 class MyCustomOverlay extends BaseControl {
-  render() {
-    const {viewport} = this.context;
+  // Instead of implementing render(), implement _render()
+  _render() {
+    const {viewport} = this._context;
     // draw something
-    // _onContainerLoad registers event listeners for map interactions
-    return <div ref={this._onContainerLoad} />;
+    // _containerRef registers event listeners for map interactions
+    return <div ref={this._containerRef} />;
   }
 }
 ```
