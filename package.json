@@ -28,7 +28,7 @@
     "README.md"
   ],
   "scripts": {
-    "start": "(cd examples/main && (if [ ! -d 'node_modules' ]; then npm i; fi) && npm run start-local)",
+    "start": "(cd examples/main && npm i && npm run start-local)",
     "build": "./scripts/build.sh && ./scripts/collect-metrics.sh",
     "typecheck": "flow check",
     "preversion": "npm run test",
