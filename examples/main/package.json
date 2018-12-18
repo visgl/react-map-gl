@@ -6,6 +6,7 @@
     "start-local": "webpack-dev-server --env.local --progress --hot --open"
   },
   "dependencies": {
+    "@turf/bbox": "^6.0.1",
     "d3-array": "^1.0.1",
     "d3-color": "^1.0.1",
     "d3-random": "^1.0.2",

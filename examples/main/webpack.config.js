@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const BABEL_CONFIG = {
   presets: [
-    '@babel/env',
+    ['@babel/env', {shippedProposals: true}],
     '@babel/react'
   ],
   plugins: [
