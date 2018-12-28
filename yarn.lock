@@ -5499,10 +5499,10 @@ just-extend@^1.1.27:
   resolved "https://registry.yarnpkg.com/just-extend/-/just-extend-1.1.27.tgz#ec6e79410ff914e472652abfa0e603c03d60e905"
   integrity sha512-mJVp13Ix6gFo3SBAy9U/kL+oeZqzlYYYLQBwXVBlVzIsZwBqGREnOro24oC/8s8aox+rJhtZ2DiQof++IrkA+g==
 
-kdbush@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/kdbush/-/kdbush-2.0.1.tgz#90c6128e3001ac68c550d7c9e2f222c0269666f1"
-  integrity sha512-9KqSdmWCkBIisFIGclT0FRagKhI7IVbMyUjsxCFG0Ly1Dg6whlxJ7b9lrq8ifk3X/fGeJzok1R75LQfZTfA5zQ==
+kdbush@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/kdbush/-/kdbush-3.0.0.tgz#f8484794d47004cc2d85ed3a79353dbe0abc2bf0"
+  integrity sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew==
 
 keyv@3.0.0:
   version "3.0.0"
@@ -5806,10 +5806,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-mapbox-gl@~0.51.0:
-  version "0.51.0"
-  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-0.51.0.tgz#2d521574408951ac848a436ceabca69a795a4897"
-  integrity sha512-ToV6WJIgdLIKSwLO13pRf5EMeVx4gjdO10akFFxGVwYO/G1nCIZOurKFPIEXbAg0zmZXJD+55HbOIg+AbJICpQ==
+mapbox-gl@~0.52.0:
+  version "0.52.0"
+  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-0.52.0.tgz#a43b61caa339ae28e43c87ecfbe9ce4032795859"
+  integrity sha512-jiZMGI7LjBNiSwYpFA3drzbZXrgEGERGJRpNS95t5BLZoc8Z+ggOOI1Fz2X+zLlh1j32iNDtf4j6En+caWwYiQ==
   dependencies:
     "@mapbox/geojson-types" "^1.0.2"
     "@mapbox/jsonlint-lines-primitives" "^2.0.2"
@@ -5832,7 +5832,7 @@ mapbox-gl@~0.51.0:
     potpack "^1.0.1"
     quickselect "^1.0.0"
     rw "^1.3.3"
-    supercluster "^4.1.1"
+    supercluster "^5.0.0"
     tinyqueue "^1.1.0"
     vt-pbf "^3.0.1"
 
@@ -8456,12 +8456,12 @@ strip-json-comments@~2.0.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
 
-supercluster@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/supercluster/-/supercluster-4.1.1.tgz#cf13c3b28a3fb3db5290bfad7f524e244bd4ce78"
-  integrity sha512-sF0FfUOPFp96DKzwWFLeQOEqqKu2PpcesxAFeFsknA/q7g7igVVn/p3NI2XHEghNSyDAqunKNKqAbqNO8+7NDQ==
+supercluster@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/supercluster/-/supercluster-5.0.0.tgz#2a5a9b1ffbd0d6180dea10039d78b5d95fdb8f27"
+  integrity sha512-9eeD5Q3908+tqdz+wYHHzi5mLKgnqtpO5mrjUfqr67UmGuOwBtVoQ9pJJrfcVHwMwC0wEBvfNRF9PgFOZgsOpw==
   dependencies:
-    kdbush "^2.0.1"
+    kdbush "^3.0.0"
 
 supports-color@^2.0.0:
   version "2.0.0"
