@@ -2,6 +2,10 @@
 
 # Version 4.0.0
 
+## 4.0.6 (Dec 27, 2018)
+
+- Update mapbox-gl to 0.52.0 (#684)
+
 ## 4.0.5 (Dec 6, 2018)
 
 - Fix map controller class extensibility (#674)
