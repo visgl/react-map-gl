@@ -2,6 +2,11 @@
 
 # Version 4.0.0
 
+## 4.0.7 (Jan 11, 2018)
+
+- Remove passive listener console warning in Chrome (#689)
+- Disable console logging of package version (#688)
+
 ## 4.0.6 (Dec 27, 2018)
 
 - Update mapbox-gl to 0.52.0 (#684)
