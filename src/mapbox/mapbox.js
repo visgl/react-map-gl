@@ -170,15 +170,13 @@ export default class Mapbox {
 
     this.mapboxgl = props.mapboxgl;
 
-    if (!Mapbox.initialized && console.debug) { // eslint-disable-line
+    if (!Mapbox.initialized) {
       Mapbox.initialized = true;
 
       // Version detection using babel plugin
-      /* global __VERSION__ */
       // $FlowFixMe
-      const VERSION = typeof __VERSION__ !== 'undefined' ? __VERSION__ : 'untranspiled source';
-
-      console.debug(`react-map-gl: ${VERSION} using mapbox-gl v${this.mapboxgl.version}`); // eslint-disable-line
+      // const VERSION = typeof __VERSION__ !== 'undefined' ? __VERSION__ : 'untranspiled source';
+      // TODO - expose version for debug
 
       this._checkStyleSheet(this.mapboxgl.version);
     }
