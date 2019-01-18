@@ -28,16 +28,7 @@ const propTypes = Object.assign({}, DraggableControl.propTypes, {
   // Longitude of the anchor point
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
-  latitude: PropTypes.number.isRequired,
-  // Offset from the left
-  offsetLeft: PropTypes.number,
-  // Offset from the top
-  offsetTop: PropTypes.number,
-  // Drag and Drop props
-  draggable: PropTypes.bool,
-  onDrag: PropTypes.func,
-  onDragEnd: PropTypes.func,
-  onDragStart: PropTypes.func
+  latitude: PropTypes.number.isRequired
 });
 
 const defaultProps = Object.assign({}, DraggableControl.defaultProps, {
@@ -58,18 +49,33 @@ export default class Marker extends DraggableControl {
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
-  _render() {
-    const {className, longitude, latitude, offsetLeft, offsetTop} = this.props;
+  _getPosition(): [number, number] {
+    const {longitude, latitude, offsetLeft, offsetTop} = this.props;
     const {dragPos, dragOffset} = this.state;
 
-    const [x, y] = dragPos ?
-      this._getDraggedPosition(dragPos, dragOffset) :
-      this._context.viewport.project([longitude, latitude]);
+    // If dragging, just return the current drag position
+    if (dragPos) {
+      return this._getDraggedPosition(dragPos, dragOffset);
+    }
+
+    // Otherwise return the projected lat/lng with offset
+    let [x, y] = this._context.viewport.project([longitude, latitude]);
+    x += offsetLeft;
+    y += offsetTop;
+    return [x, y];
+  }
+
+  _render() {
+    const {className, draggable} = this.props;
+    const {dragPos} = this.state;
+
+    const [x, y] = this._getPosition();
 
     const containerStyle = {
       position: 'absolute',
-      left: x + offsetLeft,
-      top: y + offsetTop
+      left: x,
+      top: y,
+      cursor: draggable ? (dragPos ? 'grabbing' : 'grab') : 'auto'
     };
 
     return createElement('div', {

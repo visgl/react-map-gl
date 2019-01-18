@@ -81,6 +81,8 @@ export default class App extends Component {
         <Marker 
           longitude={marker.longitude}
           latitude={marker.latitude}
+          offsetTop={-20}
+          offsetLeft={-10}
           draggable
           onDragStart={this._onMarkerDragStart}
           onDrag={this._onMarkerDrag}
