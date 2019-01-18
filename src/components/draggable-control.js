@@ -20,16 +20,25 @@
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
 
+import type {MjolnirEvent} from 'mjolnir.js';
+
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   draggable: PropTypes.bool,
   onDrag: PropTypes.func,
   onDragEnd: PropTypes.func,
-  onDragStart: PropTypes.func
+  onDragStart: PropTypes.func,
+  // Offset from the left
+  offsetLeft: PropTypes.number,
+  // Offset from the top
+  offsetTop: PropTypes.number
 });
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   draggable: false
 });
+
+export type Coordinate = [number, number];
+export type Offset = [number, number];
 
 export default class DraggableControl extends BaseControl {
 
@@ -74,7 +83,7 @@ export default class DraggableControl extends BaseControl {
     this._dragEvents = null;
   }
 
-  _getDragEventPosition(event) {
+  _getDragEventPosition(event: MjolnirEvent): Coordinate {
     const {offsetCenter: {x, y}} = event;
     return [x, y];
   }
@@ -83,26 +92,27 @@ export default class DraggableControl extends BaseControl {
    * Returns offset of top-left of marker from drag start event
    * (used for positioning marker relative to next mouse coordinates)
    */
-  _getDragEventOffset(event) {
+  _getDragEventOffset(event: MjolnirEvent): Offset {
     const {center: {x, y}} = event;
     const rect = this._containerRef.current.getBoundingClientRect();
     return [rect.left - x, rect.top - y];
   }
 
-  _getDraggedPosition(dragPos, dragOffset) {
+  _getDraggedPosition(dragPos: Coordinate, dragOffset: Offset): Coordinate {
     return [
       dragPos[0] + dragOffset[0],
       dragPos[1] + dragOffset[1]
     ];
   }
 
-  _getDragLngLat(dragPos, dragOffset) {
-    return this._context.viewport.unproject(
-      this._getDraggedPosition(dragPos, dragOffset)
-    );
+  _getDragLngLat(dragPos: Coordinate, dragOffset: Offset): Coordinate {
+    const {offsetLeft, offsetTop} = this.props;
+    const [x, y] = this._getDraggedPosition(dragPos, dragOffset);
+    // Unproject x/y value while respecting offset coordinates
+    return this._context.viewport.unproject([x - offsetLeft, y - offsetTop]);
   }
 
-  _onDragStart = (event) => {
+  _onDragStart = (event: MjolnirEvent) => {
     const {draggable, captureDrag} = this.props;
     if (draggable || captureDrag) {
       event.stopPropagation();
@@ -122,7 +132,7 @@ export default class DraggableControl extends BaseControl {
     }
   }
 
-  _onDrag = (event) => {
+  _onDrag = (event: MjolnirEvent) => {
     event.stopPropagation();
 
     const dragPos = this._getDragEventPosition(event);
@@ -134,7 +144,7 @@ export default class DraggableControl extends BaseControl {
     }
   }
 
-  _onDragEnd = (event) => {
+  _onDragEnd = (event: MjolnirEvent) => {
     const {dragPos, dragOffset} = this.state;
 
     event.stopPropagation();
@@ -147,10 +157,9 @@ export default class DraggableControl extends BaseControl {
     }
   }
 
-  _onDragCancel = (event) => {
+  _onDragCancel = (event: MjolnirEvent) => {
     event.stopPropagation();
     this.setState({dragPos: null, dragOffset: null});
     this._removeDragEvents();
   }
-
 }
