@@ -18,7 +18,7 @@ export default class Pin extends PureComponent {
       <svg 
         height={size}
         viewBox="0 0 24 24"
-        style={{...pinStyle, transform: `translate(${-size / 2}px,${-size}px)`}}
+        style={pinStyle}
       >
         <path d={ICON}/>
       </svg>
