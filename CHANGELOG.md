@@ -2,6 +2,10 @@
 
 # Version 4.0.0
 
+## 4.0.8 (Jan 18, 2019)
+
+- Fix dragging marker with offset (#693)
+
 ## 4.0.7 (Jan 11, 2018)
 
 - Remove passive listener console warning in Chrome (#689)
