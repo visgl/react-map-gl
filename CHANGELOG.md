@@ -2,6 +2,10 @@
 
 # Version 4.0.0
 
+## 4.0.9 (Jan 20, 2019)
+
+- Reverse polarity of compass bearing rotation (#694)
+
 ## 4.0.8 (Jan 18, 2019)
 
 - Fix dragging marker with offset (#693)
