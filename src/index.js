@@ -28,6 +28,7 @@ export {default as BaseControl} from './components/base-control';
 export {default as Marker} from './components/marker';
 export {default as Popup} from './components/popup';
 export {default as NavigationControl} from './components/navigation-control';
+export {default as FullscreenControl} from './components/fullscreen-control';
 
 // Overlays
 export {default as CanvasOverlay} from './overlays/canvas-overlay';

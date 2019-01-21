@@ -18,7 +18,8 @@ import type {MjolnirEvent} from 'mjolnir.js';
 
 export const InteractiveContext = createContext({
   eventManager: null,
-  isDragging: false
+  isDragging: false,
+  mapContainer: null
 });
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
@@ -173,7 +174,8 @@ type State = {
 
 type InteractiveContextProps = {
   isDragging: boolean,
-  eventManager: any
+  eventManager: any,
+  mapContainer: null | HTMLDivElement
 };
 
 export default class InteractiveMap extends PureComponent<InteractiveMapProps, State> {
@@ -216,7 +218,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   componentDidMount() {
     const eventManager = this._eventManager;
 
-    eventManager.setElement(this._eventCanvasRef.current);
+    const mapContainer = this._eventCanvasRef.current;
+    eventManager.setElement(mapContainer);
     // Register additional event handlers for click and hover
     eventManager.on({
       pointerdown: this._onPointerDown,
@@ -230,6 +233,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     });
 
     this._setControllerProps(this.props);
+
+    this._updateInteractiveContext({mapContainer});
   }
 
   componentWillUpdate(nextProps : InteractiveMapProps, nextState : State) {
