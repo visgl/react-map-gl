@@ -35,8 +35,6 @@ export default class App extends Component {
     this._handleChangeAllDay = this._handleChangeAllDay.bind(this);
   }
 
-  // _mkHeatmapSource = (features) => ({ type: "geojson", data: this._mkFeatureCollection(features) });
-
   _mkFeatureCollection = (features) => ({ "type": "FeatureCollection", features});
 
   _filterFeaturesByDay = time => {
@@ -119,12 +117,8 @@ export default class App extends Component {
 
   _handleMapLoaded = event => {
     const map = this._getMap();
-    // map.addSource(HEATMAP_SOURCE_ID, this._mkHeatmapSource(EARTHQUAKES.features));
     map.addSource(HEATMAP_SOURCE_ID, { type: "geojson", data: EARTHQUAKES});
     map.addLayer(this._mkHeatmapLayer("heatmap-layer", HEATMAP_SOURCE_ID));
-
-    console.log("source", this._getMap().getSource(HEATMAP_SOURCE_ID));
-
   }
 
   _handleChangeDay = time => {
@@ -135,7 +129,6 @@ export default class App extends Component {
 
   _handleChangeAllDay = allDay => {
     this.setState({allDay});
-    console.log("value", allDay);
     this._setMapData( allDay ? EARTHQUAKES.features : this._filterFeaturesByDay(this.state.selectedTime) );
 
   }
