@@ -3,13 +3,9 @@ import PropTypes from 'prop-types';
 import BaseControl from './base-control';
 
 import MapState from '../utils/map-state';
-import TransitionManager from '../utils/transition-manager';
+import {LINEAR_TRANSITION_PROPS} from '../utils/map-controller';
 
 import deprecateWarn from '../utils/deprecate-warn';
-
-const LINEAR_TRANSITION_PROPS = Object.assign({}, TransitionManager.defaultProps, {
-  transitionDuration: 300
-});
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className

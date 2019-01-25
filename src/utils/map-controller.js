@@ -28,9 +28,9 @@ import type {MjolnirEvent} from 'mjolnir.js';
 const NO_TRANSITION_PROPS = {
   transitionDuration: 0
 };
-const LINEAR_TRANSITION_PROPS = {
+export const LINEAR_TRANSITION_PROPS = {
   transitionDuration: 300,
-  transitionEasing: t => t,
+  transitionEasing: (t: number) => t,
   transitionInterpolator: new LinearInterpolator(),
   transitionInterruption: TRANSITION_EVENTS.BREAK
 };
