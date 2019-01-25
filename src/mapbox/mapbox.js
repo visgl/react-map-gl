@@ -236,13 +236,18 @@ export default class Mapbox {
       this._map._container = newContainer;
       Mapbox.savedMap = null;
 
-      // Update style
+      // Update style and call onload again
       if (props.mapStyle) {
         this._map.setStyle(props.mapStyle);
-      }
 
-      // TODO - need to call onload again, need to track with Promise?
-      props.onLoad();
+        // call onload event handler after style fully loaded when style needs update
+        this._map.once('style.load', props.onLoad);
+      } else {
+        props.onLoad({
+          type: 'load',
+          target: this._map
+        });
+      }
     } else {
       if (props.gl) {
         const getContext = HTMLCanvasElement.prototype.getContext;
