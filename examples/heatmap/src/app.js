@@ -2,8 +2,8 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
-import EARTHQUAKES from '../../data/earthquakes.json';
 import ControlPanel from './control-panel';
+import {json as requestJson} from 'd3-request';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 const HEATMAP_SOURCE_ID = "earthquakes-source";
@@ -13,9 +13,7 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
-
-    this.endTime = EARTHQUAKES.features[0].properties.time;
-    this.startTime = EARTHQUAKES.features[EARTHQUAKES.features.length - 1].properties.time;
+    var current = new Date().getTime();
 
     this.state = {
       viewport: {
@@ -26,7 +24,10 @@ export default class App extends Component {
         pitch: 0
       },
       allDay: true,
-      selectedTime: this.endTime
+      startTime: current,
+      endTime: current,
+      selectedTime: current,
+      earthquakes: null
     };
 
     this._mapRef = React.createRef();
@@ -37,12 +38,12 @@ export default class App extends Component {
 
   _mkFeatureCollection = (features) => ({ "type": "FeatureCollection", features});
 
-  _filterFeaturesByDay = time => {
+  _filterFeaturesByDay = (features, time) => {
     const date = new Date(time);
     const year = date.getFullYear();
     const month = date.getMonth();
     const day = date.getDate();
-    return EARTHQUAKES.features
+    return features
       .filter(feature => {
         const featureDate = new Date(feature.properties.time);
         return featureDate.getFullYear() == year
@@ -117,20 +118,38 @@ export default class App extends Component {
 
   _handleMapLoaded = event => {
     const map = this._getMap();
-    map.addSource(HEATMAP_SOURCE_ID, { type: "geojson", data: EARTHQUAKES});
-    map.addLayer(this._mkHeatmapLayer("heatmap-layer", HEATMAP_SOURCE_ID));
+
+    requestJson('https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson', (error, response) => {
+      if (!error) {
+        // Note: In a real application you would do a validation of JSON data before doing anything with it,
+        // but for demonstration purposes we ingore this part here and just trying to select needed data...
+        const features = response.features;
+        const endTime = features[0].properties.time;
+        const startTime = features[features.length - 1].properties.time;
+
+        this.setState({ earthquakes: response, endTime, startTime, selectedTime: endTime });
+        map.addSource(HEATMAP_SOURCE_ID, { type: "geojson", data: response});
+        map.addLayer(this._mkHeatmapLayer("heatmap-layer", HEATMAP_SOURCE_ID));
+      }
+    });
   }
 
   _handleChangeDay = time => {
     this.setState({selectedTime: time});
-    const features = this._filterFeaturesByDay(time);
-    this._setMapData(features);
+    if (this.state.earthquakes !== null && this.state.earthquakes.features) {
+      const features = this._filterFeaturesByDay(this.state.earthquakes.features, time);
+      this._setMapData(features);
+    }
   }
 
   _handleChangeAllDay = allDay => {
     this.setState({allDay});
-    this._setMapData( allDay ? EARTHQUAKES.features : this._filterFeaturesByDay(this.state.selectedTime) );
-
+    if (this.state.earthquakes !== null && this.state.earthquakes.features) {
+      this._setMapData( allDay
+          ? this.state.earthquakes.features
+          : this._filterFeaturesByDay(this.state.earthquakes.features, this.state.selectedTime)
+        );
+    }
   }
 
   _setMapData = features => {
@@ -140,7 +159,7 @@ export default class App extends Component {
 
   render() {
 
-    const {viewport, allDay, selectedTime} = this.state;
+    const {viewport, allDay, selectedTime, startTime, endTime} = this.state;
 
     return (
       <div style={{height: '100%'}}>
@@ -155,8 +174,8 @@ export default class App extends Component {
           onLoad={this._handleMapLoaded}
           />
           <ControlPanel
-            startTime={this.startTime}
-            endTime={this.endTime}
+            startTime={startTime}
+            endTime={endTime}
             selectedTime={selectedTime}
             allDay={allDay}
             onChangeDay={this._handleChangeDay}
