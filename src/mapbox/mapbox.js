@@ -236,17 +236,22 @@ export default class Mapbox {
       this._map._container = newContainer;
       Mapbox.savedMap = null;
 
-      // Update style and call onload again
+      // Step3: update style and call onload again
+      const fireLoadEvent = () => props.onLoad({
+        type: 'load',
+        target: this._map
+      });
+
       if (props.mapStyle) {
-        this._map.setStyle(props.mapStyle);
+        this._map.setStyle(props.mapStyle, {
+          diff: true
+        });
 
         // call onload event handler after style fully loaded when style needs update
-        this._map.once('style.load', props.onLoad);
+        (this._map.isStyleLoaded() ?
+          fireLoadEvent() : this._map.once('styledata', fireLoadEvent))();
       } else {
-        props.onLoad({
-          type: 'load',
-          target: this._map
-        });
+        fireLoadEvent();
       }
     } else {
       if (props.gl) {
