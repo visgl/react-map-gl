@@ -25,6 +25,12 @@ import {document} from '../utils/globals';
 
 function noop() {}
 
+function defaultOnError(event?: { error: any }) {
+  if (event) {
+    console.error(event.error); // eslint-disable-line
+  }
+}
+
 const propTypes = {
   // Creation parameters
   container: PropTypes.object, /** The container to have the map. */
@@ -73,7 +79,7 @@ const defaultProps = {
   visible: true,
 
   onLoad: noop,
-  onError: noop,
+  onError: defaultOnError,
 
   width: 0,
   height: 0,
