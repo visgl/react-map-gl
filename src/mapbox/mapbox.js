@@ -218,7 +218,7 @@ export default class Mapbox {
   }
 
   // PRIVATE API
-
+  // eslint-disable-next-line max-statements
   _create(props: Props) {
     // Reuse a saved map, if available
     if (props.reuseMaps && Mapbox.savedMap) {
@@ -248,8 +248,11 @@ export default class Mapbox {
         });
 
         // call onload event handler after style fully loaded when style needs update
-        (this._map.isStyleLoaded() ?
-          fireLoadEvent() : this._map.once('styledata', fireLoadEvent))();
+        if (this._map.isStyleLoaded()) {
+          fireLoadEvent();
+        } else {
+          this._map.once('styledata', fireLoadEvent);
+        }
       } else {
         fireLoadEvent();
       }
