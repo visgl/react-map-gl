@@ -398,8 +398,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     if (!this.state.isDragging) {
       const {onHover, interactiveLayerIds} = this.props;
       let features;
+      event = this._normalizeEvent(event);
       if (this.state.isLoaded && (interactiveLayerIds || onHover)) {
-        event = this._normalizeEvent(event);
         features = this._getFeatures({pos: event.point, radius: this.props.clickRadius});
       }
       if (onHover) {
