@@ -16,6 +16,7 @@ import Interaction from '../../interaction/src/app';
 import Layers from '../../layers/src/app';
 import ViewportAnimation from '../../viewport-animation/src/app';
 import ZoomToBounds from '../../zoom-to-bounds/src/app';
+import ReuseMap from '../../reuse-map/src/app';
 
 export const BASIC_EXAMPLES = 'basicExamples';
 export const STANDALONE_EXAMPLES = 'standalonExamples';
@@ -73,6 +74,11 @@ export const standaloneExamples = [
     path: 'zoom-to-bounds',
     name: 'Zoom To Bounds',
     component: ZoomToBounds
+  },
+  {
+    path: 'reuse-map',
+    name: 'ReuseMaps',
+    component: ReuseMap
   }
 ];
 
