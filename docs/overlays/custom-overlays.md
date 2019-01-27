@@ -20,7 +20,7 @@ class MyCustomOverlay extends BaseControl {
 }
 ```
 
-Here's an example of using the [ScatterplotOverlay](https://github.com/uber/react-map-gl/blob/master/examples/additional-overlays/scatterplot-overlay.js):
+Here's an example of using the [ScatterplotOverlay](https://github.com/uber/react-map-gl/blob/master/examples/additional-overlays/src/scatterplot-overlay.js):
 
 ```jsx
 <MapGL {...viewport} mapStyle={mapStyle}>

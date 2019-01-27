@@ -17,6 +17,7 @@ import Layers from '../../layers/src/app';
 import ViewportAnimation from '../../viewport-animation/src/app';
 import ZoomToBounds from '../../zoom-to-bounds/src/app';
 import ReuseMap from '../../reuse-map/src/app';
+import Heatmap from '../../heatmap/src/app';
 
 export const BASIC_EXAMPLES = 'basicExamples';
 export const STANDALONE_EXAMPLES = 'standalonExamples';
@@ -76,9 +77,15 @@ export const standaloneExamples = [
     component: ZoomToBounds
   },
   {
+<<<<<<< HEAD
     path: 'reuse-map',
     name: 'ReuseMaps',
     component: ReuseMap
+=======
+    path: 'heatmap',
+    name: 'Heatmap',
+    component: Heatmap
+>>>>>>> upstream/master
   }
 ];
 

@@ -166,6 +166,7 @@ type InteractiveMapProps = StaticMapProps & {
 };
 
 type State = {
+  isLoaded: boolean,
   isDragging: boolean,
   isHovering: boolean
 };
@@ -204,6 +205,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   }
 
   state : State = {
+    // Whether mapbox styles have finished loading
+    isLoaded: false,
     // Whether the cursor is down
     isDragging: false,
     // Whether the cursor is over a clickable feature
@@ -347,6 +350,11 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     return event;
   }
 
+  _onLoad = (event : MapEvent) => {
+    this.setState({isLoaded: true});
+    this.props.onLoad(event);
+  }
+
   _onEvent = (callbackName : string, event : MapEvent) => {
     const func = this.props[callbackName];
     if (func) {
@@ -390,8 +398,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     if (!this.state.isDragging) {
       const {onHover, interactiveLayerIds} = this.props;
       let features;
-      if (interactiveLayerIds || onHover) {
-        event = this._normalizeEvent(event);
+      event = this._normalizeEvent(event);
+      if (this.state.isLoaded && (interactiveLayerIds || onHover)) {
         features = this._getFeatures({pos: event.point, radius: this.props.clickRadius});
       }
       if (onHover) {
@@ -446,6 +454,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
             height: '100%',
             style: null,
             onResize: this._onResize,
+            onLoad: this._onLoad,
             ref: this._staticMapRef,
             children: this.props.children
           }
