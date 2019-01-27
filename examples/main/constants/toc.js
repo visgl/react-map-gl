@@ -77,15 +77,14 @@ export const standaloneExamples = [
     component: ZoomToBounds
   },
   {
-<<<<<<< HEAD
     path: 'reuse-map',
     name: 'ReuseMaps',
     component: ReuseMap
-=======
+  },
+  {
     path: 'heatmap',
     name: 'Heatmap',
     component: Heatmap
->>>>>>> upstream/master
   }
 ];
 
