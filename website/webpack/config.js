@@ -54,9 +54,13 @@ module.exports = {
   },
 
   resolve: {
+    modules: [
+      // Always resolve module to root dependencies first
+      resolve('../node_modules'),
+      resolve('./node_modules')
+    ],
     alias: {
-      react: resolve('../node_modules/react'),
-      'react-dom': resolve('../node_modules/react-dom'),
+      'gl-matrix': resolve('./node_modules/gl-matrix'),
       'react-map-gl': resolve('../src'),
       '../utils/mapboxgl': resolve('../node_modules/mapbox-gl/dist/mapbox-gl-dev.js'),
     }
