@@ -19,8 +19,8 @@ export default class BartMap extends Component {
 
   _onViewportChange = viewState => this.setState({viewState});
 
-  // eslint-disable-next-line no-alert
-  _onMapLoad = (event) => alert('Fire MapGL onLoad event');
+  // eslint-disable-next-line
+  _onMapLoad = (event) => console.log(event);
 
   _renderMarker(station, i) {
     const {name, coordinates} = station;
