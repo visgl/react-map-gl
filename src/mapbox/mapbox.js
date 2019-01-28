@@ -224,7 +224,7 @@ export default class Mapbox {
   }
 
   // PRIVATE API
-
+  // eslint-disable-next-line max-statements
   _create(props: Props) {
     // Reuse a saved map, if available
     if (props.reuseMaps && Mapbox.savedMap) {
@@ -242,13 +242,26 @@ export default class Mapbox {
       this._map._container = newContainer;
       Mapbox.savedMap = null;
 
-      // Update style
-      if (props.mapStyle) {
-        this._map.setStyle(props.mapStyle);
-      }
+      // Step3: update style and call onload again
+      const fireLoadEvent = () => props.onLoad({
+        type: 'load',
+        target: this._map
+      });
 
-      // TODO - need to call onload again, need to track with Promise?
-      props.onLoad();
+      if (props.mapStyle) {
+        this._map.setStyle(props.mapStyle, {
+          diff: true
+        });
+
+        // call onload event handler after style fully loaded when style needs update
+        if (this._map.isStyleLoaded()) {
+          fireLoadEvent();
+        } else {
+          this._map.once('styledata', fireLoadEvent);
+        }
+      } else {
+        fireLoadEvent();
+      }
     } else {
       if (props.gl) {
         const getContext = HTMLCanvasElement.prototype.getContext;
