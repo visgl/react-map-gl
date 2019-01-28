@@ -7,7 +7,6 @@ body {
   height: 100vh;
 }
 
-
 .control-panel {
   position: absolute;
   top: 0;
@@ -24,20 +23,16 @@ body {
   text-transform: uppercase;
 }
 
-h3 { padding: 0; margin: 0; }
-
 label {
-  display: block;
-}
-
-input {
+  display: inline-block;
   width: 150px;
 }
 
-input:disabled {
+input {
+  margin-left: 20px;
+}
+
+.input.disabled {
   opacity: .5;
   cursor: not-allowed;
-}
-label.disabled {
-  opacity: .5;
 }
