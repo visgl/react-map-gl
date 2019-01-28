@@ -174,6 +174,7 @@ export default class App extends Component {
           onLoad={this._handleMapLoaded}
           />
           <ControlPanel
+            containerComponent={this.props.containerComponent}
             startTime={startTime}
             endTime={endTime}
             selectedTime={selectedTime}

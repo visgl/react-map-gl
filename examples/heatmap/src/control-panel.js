@@ -1,5 +1,7 @@
 import React, {PureComponent} from 'react';
 
+const defaultContainer = ({children}) => <div className="control-panel">{children}</div>;
+
 export default class ControlPanel extends PureComponent {
   render() {
     const {startTime, endTime, onChangeDay, allDay, onChangeAllDay, selectedTime} = this.props;
@@ -18,24 +20,26 @@ export default class ControlPanel extends PureComponent {
       return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
     }
 
+    const Container = this.props.containerComponent || defaultContainer;
+
     return (
-      <div className="control-panel">
+      <Container>
         <h3>Heatmap</h3>
         <p>Map showing earthquakes
           <br />
           from <b>{formatTime(startTime)}</b> to <b>{formatTime(endTime)}</b>.
         </p>
         <hr />
-        <label>
-          All Days:
+        <div className="input">
+          <label>All Days</label>
           <input type="checkbox"
             name="allday"
             checked={allDay}
             onChange={evt => onChangeAllDay(evt.target.checked)}
             />
-        </label>
-        <label className={ allDay ? 'disabled' : ''}>
-          Each Day: {formatTime(selectedTime)}
+        </div>
+        <div className={`input ${allDay ? 'disabled' : ''}`}>
+          <label>Each Day: {formatTime(selectedTime)}</label>
           <input
             type="range"
             disabled={allDay}
@@ -44,13 +48,13 @@ export default class ControlPanel extends PureComponent {
             step={1}
             onChange={_onChangeDay}
             />
-          </label>
+        </div>
         < hr />
         <p>Data source: <a href="https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson">earthquakes.geojson</a></p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/3.2-release/examples/heatmap" target="_new">View Code ↗</a>
+          <a href="https://github.com/uber/react-map-gl/tree/4.0-release/examples/heatmap" target="_new">View Code ↗</a>
         </div>
-      </div>
+      </Container>
     );
   }
 }
