@@ -19,6 +19,9 @@ export default class BartMap extends Component {
 
   _onViewportChange = viewState => this.setState({viewState});
 
+  // eslint-disable-next-line no-alert
+  _onMapLoad = (event) => alert('Fire MapGL onLoad event');
+
   _renderMarker(station, i) {
     const {name, coordinates} = station;
     return (
@@ -40,6 +43,7 @@ export default class BartMap extends Component {
         width="100%"
         height="100%"
         onViewportChange={this._onViewportChange}
+        onLoad={this._onMapLoad}
 
         reuseMaps={true}
       >
