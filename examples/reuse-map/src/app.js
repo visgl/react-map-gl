@@ -29,12 +29,15 @@ export default class App extends Component {
   render() {
     const {showMap, mapStyleLight} = this.state;
     const mapStyle = mapStyleLight ? LIGHT_STYLE : DARK_STYLE;
-    console.warn(mapStyle);
+    if (showMap) {
+      console.warn(mapStyle);
+    }
     return (
       <div style={{height: '100%'}}>
-        <div onClick={this._toggleMap.bind(this)}>
+        <button style={{position: 'fixed', zIndex: 1}}
+          onClick={this._toggleMap.bind(this)}>
           Toggle Map
-        </div>
+        </button>
         {showMap && <BartMap mapStyle={mapStyle}/>}
       </div>
     );

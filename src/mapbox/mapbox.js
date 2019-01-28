@@ -224,44 +224,45 @@ export default class Mapbox {
   }
 
   // PRIVATE API
-  // eslint-disable-next-line max-statements
+  _reuse(props: Props) {
+    this._map = Mapbox.savedMap;
+    // When reusing the saved map, we need to reparent the map(canvas) and other child nodes
+    // intoto the new container from the props.
+    // Step1: reparenting child nodes from old container to new container
+    const oldContainer = this._map.getContainer();
+    const newContainer = props.container;
+    newContainer.classList.add('mapboxgl-map');
+    while (oldContainer.childNodes.length > 0) {
+      newContainer.appendChild(oldContainer.childNodes[0]);
+    }
+    // Step2: replace the internal container with new container from the react component
+    this._map._container = newContainer;
+    Mapbox.savedMap = null;
+
+    // Step3: update style and call onload again
+    const fireLoadEvent = () => props.onLoad({
+      type: 'load',
+      target: this._map
+    });
+
+    if (props.mapStyle) {
+      this._map.setStyle(props.mapStyle, {
+        diff: true
+      });
+    }
+
+    // call onload event handler after style fully loaded when style needs update
+    if (this._map.isStyleLoaded()) {
+      fireLoadEvent();
+    } else {
+      this._map.once('styledata', fireLoadEvent);
+    }
+  }
+
   _create(props: Props) {
     // Reuse a saved map, if available
     if (props.reuseMaps && Mapbox.savedMap) {
-      this._map = Mapbox.savedMap;
-      // When reusing the saved map, we need to reparent the map(canvas) and other child nodes
-      // intoto the new container from the props.
-      // Step1: reparenting child nodes from old container to new container
-      const oldContainer = this._map.getContainer();
-      const newContainer = props.container;
-      newContainer.classList.add('mapboxgl-map');
-      while (oldContainer.childNodes.length > 0) {
-        newContainer.appendChild(oldContainer.childNodes[0]);
-      }
-      // Step2: replace the internal container with new container from the react component
-      this._map._container = newContainer;
-      Mapbox.savedMap = null;
-
-      // Step3: update style and call onload again
-      const fireLoadEvent = () => props.onLoad({
-        type: 'load',
-        target: this._map
-      });
-
-      if (props.mapStyle) {
-        this._map.setStyle(props.mapStyle, {
-          diff: true
-        });
-
-        // call onload event handler after style fully loaded when style needs update
-        if (this._map.isStyleLoaded()) {
-          fireLoadEvent();
-        } else {
-          this._map.once('styledata', fireLoadEvent);
-        }
-      } else {
-        fireLoadEvent();
-      }
+      this._reuse(props);
     } else {
       if (props.gl) {
         const getContext = HTMLCanvasElement.prototype.getContext;
