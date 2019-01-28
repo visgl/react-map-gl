@@ -2,6 +2,13 @@
 
 # Version 4.0.0
 
+## 4.0.10 (Jan 28, 2019)
+
+- Remove excessive fields from NavigationControl's callback argument (#702)
+- Default onError handler to console.error (#706)
+- Don't query interactive layer ids before map has loaded (#708)
+- Fix onLoad event calling when reuseMaps is set to true (#704)
+
 ## 4.0.9 (Jan 20, 2019)
 
 - Reverse polarity of compass bearing rotation (#694)
