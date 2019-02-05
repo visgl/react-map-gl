@@ -211,11 +211,22 @@ export default class Mapbox {
   // (e.g. until "componentDidUpdate")
   resize() {
     this._map.resize();
-    // map render will throw error if style is not loaded
-    if (this._map.isStyleLoaded()) {
-      this._map._render();
-    }
     return this;
+  }
+
+  // Force redraw the map now. Typically resize() and jumpTo() is reflected in the next
+  // render cycle, which is managed by Mapbox's animation loop.
+  // This removes the synchronization issue caused by requestAnimationFrame.
+  redraw() {
+    const map = this._map;
+    // map render will throw error if style is not loaded
+    if (map.isStyleLoaded()) {
+      map._render();
+      if (map._frame) {
+        map._frame.cancel();
+        map._frame = null;
+      }
+    }
   }
 
   // External apps can access map this way
@@ -360,8 +371,12 @@ export default class Mapbox {
     newProps = Object.assign({}, this.props, newProps);
     checkPropTypes(newProps, 'Mapbox');
 
-    this._updateMapViewport(oldProps, newProps);
-    this._updateMapSize(oldProps, newProps);
+    const viewportChanged = this._updateMapViewport(oldProps, newProps);
+    const sizeChanged = this._updateMapSize(oldProps, newProps);
+
+    if (viewportChanged || sizeChanged) {
+      this.redraw();
+    }
 
     this.props = newProps;
   }
@@ -374,6 +389,7 @@ export default class Mapbox {
       this.height = newProps.height;
       this.resize();
     }
+    return sizeChanged;
   }
 
   _updateMapViewport(oldProps: any, newProps: Props) {
@@ -396,6 +412,7 @@ export default class Mapbox {
         this._map.transform.altitude = newViewState.altitude;
       }
     }
+    return viewportChanged;
   }
 
   _getViewState(props: Props) : ViewState {
