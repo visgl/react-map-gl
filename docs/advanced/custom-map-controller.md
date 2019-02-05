@@ -11,7 +11,7 @@ This custom map control must offer the following interface:
   const mapController = new MyMapController();
 
   render() {
-    return <ReactMapGL mapController={mapController} ... />;
+    return <ReactMapGL controller={mapController} ... />;
   }
 ```
 
