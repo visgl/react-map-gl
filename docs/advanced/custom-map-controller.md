@@ -2,7 +2,7 @@
 
 ## Overriding The Default Map Controller
 
-To change the default behavior of map interaction, you can provide a custom map control to the `mapController` prop of `InteractiveMap`.
+To change the default behavior of map interaction, you can provide a custom map control to the `controller` prop of `InteractiveMap`.
 
 This custom map control must offer the following interface:
 - `setOptions(options)` - called by `InteractiveMap` when props change.
