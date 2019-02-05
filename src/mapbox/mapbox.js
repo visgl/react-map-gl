@@ -222,6 +222,7 @@ export default class Mapbox {
     // map render will throw error if style is not loaded
     if (map.isStyleLoaded()) {
       map._render();
+      // cancel the scheduled update
       if (map._frame) {
         map._frame.cancel();
         map._frame = null;
