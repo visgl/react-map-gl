@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {PureComponent, createElement, createContext, createRef} from 'react';
+import {PureComponent, createElement, createRef} from 'react';
 import PropTypes from 'prop-types';
 
 import {normalizeStyle} from '../utils/style-utils';
@@ -30,6 +30,7 @@ import Mapbox from '../mapbox/mapbox';
 import mapboxgl from '../utils/mapboxgl';
 import {checkVisibilityConstraints} from '../utils/map-constraints';
 import {MAPBOX_LIMITS} from '../utils/map-state';
+import MapContext from './map-context';
 
 import type {ViewState} from '../mapbox/mapbox';
 import type {Node} from 'react';
@@ -38,11 +39,6 @@ import type {Node} from 'react';
 const TOKEN_DOC_URL = 'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
 const NO_TOKEN_WARNING = 'A valid API access token is required to use Mapbox data';
 /* eslint-disable max-len */
-
-export const StaticContext = createContext({
-  viewport: null,
-  map: null
-});
 
 function noop() {}
 
@@ -272,13 +268,16 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
       mapContainer: this._mapContainerRef.current
     };
 
-    return createElement(StaticContext.Provider, {value: staticContext},
-      createElement('div', {
-        key: 'map-overlays',
-        className: 'overlays',
-        style: CONTAINER_STYLE,
-        children: this.props.children
-      })
+    return createElement(MapContext.Consumer, null, interactiveContext =>
+      createElement(MapContext.Provider,
+        {value: Object.assign(staticContext, interactiveContext)},
+        createElement('div', {
+          key: 'map-overlays',
+          className: 'overlays',
+          style: CONTAINER_STYLE,
+          children: this.props.children
+        })
+      )
     );
   }
 

@@ -5,8 +5,7 @@ import WebMercatorViewport from 'viewport-mercator-project';
 import sinon from 'sinon';
 import test from 'tape-catch';
 
-import {StaticContext} from 'react-map-gl/components/static-map';
-import {InteractiveContext} from 'react-map-gl/components/interactive-map';
+import {_MapContext as MapContext} from 'react-map-gl';
 
 const mockStaticContext = {
   viewport: new WebMercatorViewport({
@@ -17,17 +16,17 @@ const mockStaticContext = {
     zoom: 14
   })
 };
-const mockInteractiveContext = {
+const mockInteractiveContext = Object.assign({}, mockStaticContext, {
   eventManager: {
     on: sinon.spy(),
     off: sinon.spy()
   }
-};
+});
 
 test('Marker#renders children', t => {
   t.ok(Marker, 'Marker is defined');
 
-  const staticUsage = React.createElement(StaticContext.Provider,
+  const staticUsage = React.createElement(MapContext.Provider,
     {value: mockStaticContext},
     React.createElement(
       Marker,
@@ -38,9 +37,16 @@ test('Marker#renders children', t => {
       React.createElement('div', {className: 'test-marker'}, ['hello'])
     )
   );
-  const interactiveUsage = React.createElement(InteractiveContext.Provider,
+  const interactiveUsage = React.createElement(MapContext.Provider,
     {value: mockInteractiveContext},
-    [staticUsage]
+    React.createElement(
+      Marker,
+      {
+        latitude: 37,
+        longitude: -122
+      },
+      React.createElement('div', {className: 'test-marker'}, ['hello'])
+    )
   );
 
   const result = ReactTestRenderer.create(staticUsage);
