@@ -98,8 +98,12 @@ export default class FullscreenControl extends BaseControl {
   }
 
   _render() {
+    if (!this.state.showButton) {
+      return null;
+    }
+
     const {className} = this.props;
-    const {isFullscreen, showButton} = this.state;
+    const {isFullscreen} = this.state;
 
     const type = isFullscreen ? 'shrink' : 'fullscreen';
 
@@ -107,7 +111,7 @@ export default class FullscreenControl extends BaseControl {
       className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
       ref: this._containerRef
     }, [
-      showButton && this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen)
+      this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen)
     ]);
   }
 }
