@@ -1,0 +1,8 @@
+body {
+  margin: 0;
+  background: #000;
+}
+#map {
+  width: 100vw;
+  height: 100vh;
+}

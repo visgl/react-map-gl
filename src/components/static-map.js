@@ -166,6 +166,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
   _mapbox : any = null;
   _map : any = null;
   _mapboxMapRef: { current: null | HTMLDivElement } = createRef();
+  _mapContainerRef: { current: null | HTMLDivElement } = createRef();
   _queryParams : any = {};
   _width : number = 0;
   _height : number = 0;
@@ -267,7 +268,8 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
         width,
         height
       })),
-      map: this._map
+      map: this._map,
+      mapContainer: this._mapContainerRef.current
     };
 
     return createElement(StaticContext.Provider, {value: staticContext},
@@ -294,6 +296,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     return createElement('div', {
       key: 'map-container',
       style: mapContainerStyle,
+      ref: this._mapContainerRef,
       children: [
         createElement('div', {
           key: 'map-mapbox',
