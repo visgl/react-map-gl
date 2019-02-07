@@ -18,8 +18,7 @@ import type {MjolnirEvent} from 'mjolnir.js';
 
 export const InteractiveContext = createContext({
   eventManager: null,
-  isDragging: false,
-  mapContainer: null
+  isDragging: false
 });
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
