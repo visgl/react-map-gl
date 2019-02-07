@@ -1,5 +1,5 @@
 // @flow
-import {PureComponent, createElement, createContext, createRef} from 'react';
+import {PureComponent, createElement, createRef} from 'react';
 import PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -7,6 +7,7 @@ import {MAPBOX_LIMITS} from '../utils/map-state';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import TransitionManager from '../utils/transition-manager';
+import MapContext from './map-context';
 
 import {EventManager} from 'mjolnir.js';
 import MapController from '../utils/map-controller';
@@ -15,11 +16,6 @@ import deprecateWarn from '../utils/deprecate-warn';
 import type {ViewState} from '../mapbox/mapbox';
 import type {StaticMapProps} from './static-map';
 import type {MjolnirEvent} from 'mjolnir.js';
-
-export const InteractiveContext = createContext({
-  eventManager: null,
-  isDragging: false
-});
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -446,7 +442,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
       cursor: getCursor(this.state)
     });
 
-    return createElement(InteractiveContext.Provider, {value: this._interactiveContext},
+    return createElement(MapContext.Provider, {value: this._interactiveContext},
       createElement('div', {
         key: 'event-canvas',
         ref: this._eventCanvasRef,
