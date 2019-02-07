@@ -20,8 +20,7 @@
 // THE SOFTWARE.
 import {PureComponent, createElement, createRef} from 'react';
 import PropTypes from 'prop-types';
-import {InteractiveContext} from './interactive-map';
-import {StaticContext} from './static-map';
+import MapContext from './map-context';
 
 import type {MjolnirEvent} from 'mjolnir.js';
 
@@ -132,15 +131,10 @@ export default class BaseControl extends PureComponent<ControlProps> {
 
   render() {
     return (
-      createElement(InteractiveContext.Consumer, null,
-        (interactiveContext) => {
-          // Save event manager
-          return createElement(StaticContext.Consumer, null,
-            (staticContext) => {
-              this._context = Object.assign({}, interactiveContext, staticContext);
-              return this._render();
-            }
-          );
+      createElement(MapContext.Consumer, null,
+        context => {
+          this._context = context;
+          return this._render();
         }
       )
     );
