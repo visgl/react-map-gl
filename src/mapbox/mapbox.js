@@ -224,6 +224,13 @@ export default class Mapbox {
   }
 
   // PRIVATE API
+  _fireLoadEvent = () => {
+    this.props.onLoad({
+      type: 'load',
+      target: this._map
+    });
+  };
+
   _reuse(props: Props) {
     this._map = Mapbox.savedMap;
     // When reusing the saved map, we need to reparent the map(canvas) and other child nodes
@@ -240,11 +247,6 @@ export default class Mapbox {
     Mapbox.savedMap = null;
 
     // Step3: update style and call onload again
-    const fireLoadEvent = () => props.onLoad({
-      type: 'load',
-      target: this._map
-    });
-
     if (props.mapStyle) {
       this._map.setStyle(props.mapStyle, {
         diff: true
@@ -253,9 +255,9 @@ export default class Mapbox {
 
     // call onload event handler after style fully loaded when style needs update
     if (this._map.isStyleLoaded()) {
-      fireLoadEvent();
+      this._fireLoadEvent();
     } else {
-      this._map.once('styledata', fireLoadEvent);
+      this._map.once('styledata', this._fireLoadEvent);
     }
   }
 
@@ -312,9 +314,16 @@ export default class Mapbox {
 
     if (!Mapbox.savedMap) {
       Mapbox.savedMap = this._map;
+
+      // deregister the mapbox event listeners
+      this._map.off('load', this.props.onLoad);
+      this._map.off('error', this.props.onError);
+      this._map.off('styledata', this._fireLoadEvent);
+
     } else {
       this._map.remove();
     }
+
     this._map = null;
   }
 
