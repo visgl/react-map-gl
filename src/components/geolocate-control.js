@@ -73,10 +73,18 @@ export default class GeolocateControl extends BaseControl {
     });
   }
 
+  componentDidUpdate() {
+    // MapboxGeolocateControl needs manipulate the style of Marker's container
+    const markerRef = this._markerRef.current;
+    if (this._mapboxGeolocateControl && markerRef) {
+      this._mapboxGeolocateControl._dotElement = markerRef._containerRef.current;
+    }
+  }
+
   componentWillUnmount() {
     // re-implement MapboxGeolocateControl's _onRemove
     // clear the geolocation watch if exists
-    const geolocationWatchID = this._mapboxGeolocateControl._geolocateButton;
+    const geolocationWatchID = this._mapboxGeolocateControl._geolocationWatchID;
     if (geolocationWatchID !== undefined) {
       window.navigator.geolocation.clearWatch(geolocationWatchID);
       this._mapboxGeolocateControl._geolocationWatchID = undefined;
@@ -182,7 +190,7 @@ export default class GeolocateControl extends BaseControl {
       return null;
     }
 
-    const marker = createElement(Marker, {
+    return createElement(Marker, {
       key: 'location-maker',
       ref: this._markerRef,
       className: 'mapboxgl-user-location-dot',
@@ -192,12 +200,6 @@ export default class GeolocateControl extends BaseControl {
       captureDrag: false,
       captureDoubleClick: false
     });
-
-    // MapboxGeolocateControl needs manipulate the style of Marker's container
-    const markerRef = this._markerRef.current;
-    this._mapboxGeolocateControl._dotElement = markerRef && markerRef._containerRef.current;
-
-    return marker;
   };
 
   _render() {
