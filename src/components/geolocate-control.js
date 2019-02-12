@@ -185,8 +185,9 @@ export default class GeolocateControl extends BaseControl {
   };
 
   _renderMarker = () => {
+    const {showUserLocation} = this.props;
     const {markerPosition} = this.state;
-    if (!markerPosition) {
+    if (!showUserLocation || !markerPosition) {
       return null;
     }
 
@@ -207,7 +208,7 @@ export default class GeolocateControl extends BaseControl {
       return null;
     }
 
-    const {className, showUserLocation} = this.props;
+    const {className} = this.props;
     return createElement(
       'div',
       {
@@ -216,7 +217,7 @@ export default class GeolocateControl extends BaseControl {
         onContextMenu: e => e.preventDefault()
       },
       [
-        showUserLocation && this._renderMarker(),
+        this._renderMarker(),
         this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)
       ]
     );

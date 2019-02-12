@@ -4,7 +4,7 @@ let supported;
 export function isGeolocationSupported() {
   // not necessary to check again
   if (supported !== undefined) {
-    return Promise.resolve(() => supported);
+    return Promise.resolve(supported);
   }
 
   if (window.navigator.permissions !== undefined) {
@@ -19,6 +19,6 @@ export function isGeolocationSupported() {
   }
 
   supported = Boolean(window.navigator.geolocation);
-  return Promise.resolve(() => supported);
+  return Promise.resolve(supported);
 }
 
