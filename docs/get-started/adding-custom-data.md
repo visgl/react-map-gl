@@ -26,7 +26,7 @@ const mapStyle = fromJS({
             source: 'points',
             paint: {
                 'circle-color': '#f00',
-                'circle-radius': '4'
+                'circle-radius': 4
             }
         }
     ]
