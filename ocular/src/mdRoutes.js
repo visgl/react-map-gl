@@ -36,6 +36,11 @@ export default [
             component: require('../../examples/geojson-animation/src/app').default
           },
           {
+            path: 'locateUser',
+            name: 'Locate User',
+            component: require('../../examples/locate-user/src/app').default
+          },
+          {
             path: 'interactionExample',
             name: 'Limit Map Interaction',
             component: require('../../examples/interaction/src/app').default
@@ -155,6 +160,10 @@ export default [
           {
             name: 'Navigation Control',
             markdownUrl: makeUrl('docs/components/navigation-control.md')
+          },
+          {
+            name: 'Geolocate Control',
+            markdownUrl: makeUrl('docs/components/geolocate-control.md')
           },
           {
             name: 'Popup',
