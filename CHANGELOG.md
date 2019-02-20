@@ -2,6 +2,12 @@
 
 # Version 4.0.0
 
+## 4.0.11 (Feb 20, 2019)
+
+- Consolidate InteractiveContext and StaticContext into one (#718)
+- Deregister mapbox events listeners when destroy map (#723)
+- Force map rerender synchronously after props update (#720)
+
 ## 4.0.10 (Jan 28, 2019)
 
 - Remove excessive fields from NavigationControl's callback argument (#702)
