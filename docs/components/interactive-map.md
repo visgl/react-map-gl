@@ -253,7 +253,11 @@ Called when the map is hovered over with mouse (not pressed). Receives a [Pointe
 
 ##### `onClick` {Function}
 
-Called when the map is clicked. Receives a [PointerEvent](/docs/components/pointer-event.md) object.
+Called when the map is single clicked. Receives a [PointerEvent](/docs/components/pointer-event.md) object. This event is not fired on double click therefore there may be a delay between pointer up and the event.
+
+##### `onNativeClick` {Function}
+
+Called when the map is clicked. Receives a [PointerEvent](/docs/components/pointer-event.md) object. This event is fired twice on double click.
 
 ##### `onDblClick` {Function}
 

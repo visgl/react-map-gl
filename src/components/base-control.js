@@ -74,8 +74,9 @@ export default class BaseControl extends PureComponent<ControlProps> {
       this._events = {
         wheel: this._onScroll,
         panstart: this._onDragStart,
+        anyclick: this._onClick,
         click: this._onClick,
-        pointerup: this._onPointerUp
+        dblclick: this._onDblClick
       };
       eventManager.on(this._events, ref);
     }
@@ -104,18 +105,9 @@ export default class BaseControl extends PureComponent<ControlProps> {
     }
   }
 
-  _onPointerUp = (evt: MjolnirEvent) => {
+  _onDblClick = (evt: MjolnirEvent) => {
     if (this.props.captureDoubleClick) {
-      const {eventManager} = this._context;
-      const {options: {enable}} = eventManager.manager.get('doubletap');
-      // Temporarily disable doubletap
-      if (enable) {
-        eventManager._toggleRecognizer('doubletap', false);
-        /* global setTimeout */
-        setTimeout(() => {
-          eventManager._toggleRecognizer('doubletap', true);
-        }, 0);
-      }
+      evt.stopPropagation();
     }
   }
 
