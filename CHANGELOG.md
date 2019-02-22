@@ -2,6 +2,11 @@
 
 # Version 4.0.0
 
+## 4.0.12 (Feb 22, 2019)
+
+- add onNativeClick callback (#733)
+- fix synchronous redraw (#736)
+
 ## 4.0.11 (Feb 20, 2019)
 
 - Consolidate InteractiveContext and StaticContext into one (#718)
