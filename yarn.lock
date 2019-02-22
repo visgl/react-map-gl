@@ -6087,10 +6087,10 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
-mjolnir.js@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/mjolnir.js/-/mjolnir.js-2.0.3.tgz#2354d31bc966a13f18d3bc350d5491acfb562914"
-  integrity sha512-3AvoMwJCR3m9QQYzsE+D+LWZ9N2uWbl7prixSJGRZNOpaagRgiXJeVvDEHTiXAGmNhdn/VAtgWrx3lpdrj2sIQ==
+mjolnir.js@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/mjolnir.js/-/mjolnir.js-2.1.0.tgz#e8a4727e86d8f9352d6b6fe9cdc6faab0dcff15e"
+  integrity sha512-XVvwByhXGvgWJs/mFsekE1cmg3l/KrRIqaJ5oO5DFEyG//NbQssPIuFOjKrZYQ4rFkRZRq+FN4EcecUPSGR89g==
   dependencies:
     "@babel/runtime" "^7.0.0"
     hammerjs "^2.0.8"
