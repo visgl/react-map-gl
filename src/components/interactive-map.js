@@ -109,6 +109,7 @@ const defaultProps = Object.assign({},
     onViewStateChange: null,
     onViewportChange: null,
     onClick: null,
+    onNativeClick: null,
     onHover: null,
     onContextMenu: event => event.preventDefault(),
 
@@ -142,6 +143,7 @@ type InteractiveMapProps = StaticMapProps & {
   onInteractionStateChange: Function,
   onHover: Function,
   onClick: Function,
+  onNativeClick: Function,
   onDblClick: Function,
   onContextMenu: Function,
   onMouseDown: Function,
@@ -154,6 +156,20 @@ type InteractiveMapProps = StaticMapProps & {
   onMouseLeave: Function,
   onMouseOut: Function,
   onWheel: Function,
+
+  transitionDuration: number,
+  transitionInterpolator: any,
+  transitionInterruption: number,
+  transitionEasing: Function,
+
+  scrollZoom: boolean,
+  dragPan: boolean,
+  dragRotate: boolean,
+  doubleClickZoom: boolean,
+  touchZoom: boolean,
+  touchRotate: boolean,
+  keyboard: boolean,
+
   touchAction: string,
   clickRadius: number,
   interactiveLayerIds: Array<string>,
@@ -220,6 +236,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
       pointerup: this._onPointerUp,
       pointerleave: this._onEvent.bind(this, 'onMouseOut'),
       click: this._onClick,
+      anyclick: this._onClick,
       dblclick: this._onEvent.bind(this, 'onDblClick'),
       wheel: this._onEvent.bind(this, 'onWheel'),
       contextmenu: this._onEvent.bind(this, 'onContextMenu')
@@ -421,11 +438,39 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   }
 
   _onClick = (event : MapEvent) => {
-    if (this.props.onClick) {
+    const {onClick, onNativeClick, onDblClick, doubleClickZoom} = this.props;
+    let callbacks = [];
+    const isDoubleClickEnabled = onDblClick || doubleClickZoom;
+
+    // `click` is only fired on single click. `anyclick` is fired twice if double clicking.
+    // `click` has a delay period after pointer up that prevents it from firing when
+    // double clicking. `anyclick` is always fired immediately after pointer up.
+    // If double click is turned off by the user, we want to immediately fire the
+    // onClick event. Otherwise, we wait to make sure it's a single click.
+    switch (event.type) {
+    case 'anyclick':
+      callbacks.push(onNativeClick);
+      if (!isDoubleClickEnabled) {
+        callbacks.push(onClick);
+      }
+      break;
+
+    case 'click':
+      if (isDoubleClickEnabled) {
+        callbacks.push(onClick);
+      }
+      break;
+
+    default:
+    }
+
+    callbacks = callbacks.filter(Boolean);
+
+    if (callbacks.length) {
       event = this._normalizeEvent(event);
       // backward compatibility: v3 `onClick` interface
       event.features = this._getFeatures({pos: event.point, radius: this.props.clickRadius});
-      this.props.onClick(event);
+      callbacks.forEach(cb => cb(event));
     }
   }
 
