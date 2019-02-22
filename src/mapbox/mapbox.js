@@ -221,12 +221,13 @@ export default class Mapbox {
     const map = this._map;
     // map render will throw error if style is not loaded
     if (map.isStyleLoaded()) {
-      map._render();
       // cancel the scheduled update
       if (map._frame) {
         map._frame.cancel();
         map._frame = null;
       }
+      // the order is important - render() may schedule another update
+      map._render();
     }
   }
 
