@@ -51,7 +51,8 @@ const BROWSER_CONFIG = {
           loader: 'babel-loader',
           options: {
             presets: [
-              '@babel/flow'
+              '@babel/flow',
+              '@babel/preset-env'
             ],
             plugins: [
               '@babel/proposal-class-properties'

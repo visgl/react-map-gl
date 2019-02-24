@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "@turf/helpers": "^6.1.4",
     "mapbox-gl": "~0.53.0",
     "mjolnir.js": "^2.1.0",
     "prop-types": "^15.5.7",
@@ -57,6 +58,7 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "babel-eslint": "^6.0.0",
     "babel-loader": "^8.0.0",

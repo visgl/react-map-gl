@@ -77,7 +77,7 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
 ### Production Release
 
 1. Log into an authorized [npmjs.com](https://www.npmjs.com/) account. You can use [npmrc](https://www.npmjs.com/package/npmrc) to manage multiple npm profiles.
-2. Make sure both the `master` and the release branch are up to daate:
+2. Make sure both the `master` and the release branch are up to date:
 
     ```bash
     $ git checkout master

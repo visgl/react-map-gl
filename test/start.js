@@ -1,6 +1,7 @@
 // Launch script for various Node test configurations
 require('@babel/register')({
-  presets: ['@babel/flow']
+  presets: ['@babel/flow', '@babel/react'],
+  plugins: ['@babel/proposal-class-properties']
 });
 require('../aliases');
 

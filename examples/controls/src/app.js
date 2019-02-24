@@ -46,7 +46,7 @@ export default class App extends Component {
 
   _renderCityMarker = (city, index) => {
     return (
-      <Marker 
+      <Marker
         key={`marker-${index}`}
         longitude={city.longitude}
         latitude={city.latitude} >

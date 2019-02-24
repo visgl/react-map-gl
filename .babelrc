@@ -3,7 +3,8 @@
     "es5": {
       "presets": [
         ["@babel/env", {modules: 'commonjs'}],
-        "@babel/flow"
+        "@babel/flow",
+        "@babel/react"
       ],
       "plugins": [
         "@babel/transform-runtime",
@@ -14,7 +15,8 @@
     "esm": {
       "presets": [
         ["@babel/env", {modules: false}],
-        "@babel/flow"
+        "@babel/flow",
+        "@babel/react"
       ],
       "plugins": [
         ["@babel/transform-runtime", { useESModules: true }],
@@ -35,7 +37,8 @@
           },
           "modules": false
         }],
-        "@babel/flow"
+        "@babel/flow",
+        "@babel/react"
       ],
       "plugins": [
         ["@babel/transform-runtime", { useESModules: true }],
@@ -45,7 +48,10 @@
     },
     "test": {
       "presets": [
-        ["@babel/env", {modules: 'commonjs'}]
+        [
+          "@babel/env", {modules: 'commonjs'},
+          "@babel/react"
+        ]
       ],
       "plugins": [
         "istanbul",
