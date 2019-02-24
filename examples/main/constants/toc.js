@@ -10,7 +10,6 @@ import Filter from '../../filter/src/app';
 import Controls from '../../controls/src/app';
 import CustomCursor from '../../custom-cursor/src/app';
 import DraggableMarker from '../../draggable-markers/src/app';
-import FullscreenMap from '../../fullscreen-map/src/app';
 import GeoJson from '../../geojson/src/app';
 import GeoJsonAnimation from '../../geojson-animation/src/app';
 import LocateUser from '../../locate-user/src/app';
@@ -86,11 +85,6 @@ export const standaloneExamples = [
     path: 'heatmap',
     name: 'Heatmap',
     component: Heatmap
-  },
-  {
-    path: 'fullscreenMapExample',
-    name: 'Fullscreen Map',
-    component: FullscreenMap
   }
 ];
 
