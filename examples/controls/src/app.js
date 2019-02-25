@@ -1,4 +1,3 @@
-/* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Marker, Popup, NavigationControl, FullscreenControl} from 'react-map-gl';
@@ -11,7 +10,7 @@ import CITIES from '../../data/cities.json';
 
 const TOKEN = ''; // Set your mapbox token here
 
-const fullscreenStyle = {
+const fullscreenControlStyle = {
   position: 'absolute',
   top: 0,
   left: 0,
@@ -88,7 +87,7 @@ export default class App extends Component {
 
         {this._renderPopup()}
 
-        <div className="fullscreen" style={fullscreenStyle}>
+        <div className="fullscreen" style={fullscreenControlStyle}>
           <FullscreenControl />
         </div>
         <div className="nav" style={navStyle}>
