@@ -2,6 +2,10 @@
 
 # Version 4.0.0
 
+## 4.0.13 (Feb 25, 2019)
+
+- Bump mapbox-gl to 0.53 (#739)
+
 ## 4.0.12 (Feb 22, 2019)
 
 - add onNativeClick callback (#733)
