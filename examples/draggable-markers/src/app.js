@@ -1,7 +1,6 @@
-/* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Marker, Popup, NavigationControl} from 'react-map-gl';
+import MapGL, {Marker, NavigationControl} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
 import Pin from './pin';
