@@ -257,26 +257,26 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     } = dimensions;
     this._updateMapSize(width, height);
 
-    const staticContext = {
-      // $FlowFixMe
-      viewport: new WebMercatorViewport(Object.assign({}, this.props, this.props.viewState, {
-        width,
-        height
-      })),
-      map: this._map
-    };
+    return createElement(MapContext.Consumer, null, interactiveContext => {
+      const context = Object.assign({}, interactiveContext, {
+        // $FlowFixMe
+        viewport: new WebMercatorViewport(Object.assign({}, this.props, this.props.viewState, {
+          width,
+          height
+        })),
+        map: this._map
+      });
 
-    return createElement(MapContext.Consumer, null, interactiveContext =>
-      createElement(MapContext.Provider,
-        {value: Object.assign(staticContext, interactiveContext)},
+      return createElement(MapContext.Provider,
+        {value: context},
         createElement('div', {
           key: 'map-overlays',
           className: 'overlays',
           style: CONTAINER_STYLE,
           children: this.props.children
         })
-      )
-    );
+      );
+    });
   }
 
   render() {
