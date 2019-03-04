@@ -2,6 +2,10 @@
 
 # Version 4.0.0
 
+## 4.0.14 (Mar 4, 2019)
+
+- Fix static context bug (#749)
+
 ## 4.0.13 (Feb 25, 2019)
 
 - Bump mapbox-gl to 0.53 (#739)
