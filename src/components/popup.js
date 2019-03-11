@@ -141,7 +141,8 @@ export default class Popup extends BaseControl {
       evt.stopPropagation();
     }
 
-    if (this.props.closeOnClick || evt.target.className === 'mapboxgl-popup-close-button') {
+    if (evt.type === 'click' &&
+      (this.props.closeOnClick || evt.target.className === 'mapboxgl-popup-close-button')) {
       this.props.onClose();
     }
   }
