@@ -5,8 +5,6 @@ Release date: TBD
 ## Highlights
 
 - **New Components**: [`FullscreenControl`](/#/Documentation/api-reference/fullscreen-control.md), [`GeolocateControl`](/#/Documentation/api-reference/geolocate-control.md) have been added to  to provide better React parity with the `Mapbox GL JS` API.
-- **Examples**: Added `heatmap` and `GeolocateControl` examples. Updated existing examples to reflect the changes. 
-- **mapbox-gl 0.53.0**
 - **New callback props** `InteractiveMap` supports more callbacks:
   + `onNativeClick`
 
