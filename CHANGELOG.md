@@ -2,6 +2,10 @@
 
 # Version 4.0.0
 
+## 4.0.15 (Mar 12, 2019)
+
+- Fix: popup close button click event propagates to map (#751)
+
 ## 4.0.14 (Mar 4, 2019)
 
 - Fix static context bug (#749)
