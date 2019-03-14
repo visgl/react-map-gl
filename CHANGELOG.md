@@ -1,5 +1,86 @@
 # CHANGELOG
 
+# Version 4.1
+
+## 4.1.0 (Mar 14, 2019)
+
+- add fullscreen support (#696)
+- add geolocate control (#724)
+- move FullscreenControl example to examples/controls (#740)
+
+# Version 4.0.0
+
+## 4.0.15 (Mar 12, 2019)
+
+- Fix: popup close button click event propagates to map (#751)
+
+## 4.0.14 (Mar 4, 2019)
+
+- Fix static context bug (#749)
+
+## 4.0.13 (Feb 25, 2019)
+
+- Bump mapbox-gl to 0.53 (#739)
+
+## 4.0.12 (Feb 22, 2019)
+
+- add onNativeClick callback (#733)
+- fix synchronous redraw (#736)
+
+## 4.0.11 (Feb 20, 2019)
+
+- Consolidate InteractiveContext and StaticContext into one (#718)
+- Deregister mapbox events listeners when destroy map (#723)
+- Force map rerender synchronously after props update (#720)
+
+## 4.0.10 (Jan 28, 2019)
+
+- Remove excessive fields from NavigationControl's callback argument (#702)
+- Default onError handler to console.error (#706)
+- Don't query interactive layer ids before map has loaded (#708)
+- Fix onLoad event calling when reuseMaps is set to true (#704)
+
+## 4.0.9 (Jan 20, 2019)
+
+- Reverse polarity of compass bearing rotation (#694)
+
+## 4.0.8 (Jan 18, 2019)
+
+- Fix dragging marker with offset (#693)
+
+## 4.0.7 (Jan 11, 2018)
+
+- Remove passive listener console warning in Chrome (#689)
+- Disable console logging of package version (#688)
+
+## 4.0.6 (Dec 27, 2018)
+
+- Update mapbox-gl to 0.52.0 (#684)
+
+## 4.0.5 (Dec 6, 2018)
+
+- Fix map controller class extensibility (#674)
+
+## 4.0.4 (Dec 4, 2018)
+
+- Bump mapbox dependency to 0.51 (#670)
+- Fix crash when `viewState` does not contain pitch or bearing (#671)
+
+## 4.0.3 (Dec 4, 2018)
+
+- Cache the interactive context to prevent context thrashing (#664)
+- Remove math.gl from dependencies (#666)
+
+## 4.0.2 (Nov 16, 2018)
+
+- Fix popup bug when closeOnClick is off (#660)
+
+## 4.0.1 (Nov 14, 2018)
+
+- Bump maxZoom support to 24 (#659)
+
+## 4.0.0 (Nov 5, 2018)
+
 # Version 4.0.0 Prereleases
 
 ## 4.0.0-beta.7 (Nov 5, 2018)
@@ -66,6 +147,33 @@
 - Add drag and drop support for Marker (#576)
 
 # Version 3.3.0
+
+## 3.3.9 (Nov 14, 2018)
+
+- Bump maxZoom support to 24 (#659)
+
+## 3.3.8 (Oct 26, 2018)
+
+- Add support for Create React App access token environment variable (#633)
+
+## 3.3.7 (Oct 18, 2018)
+
+- Fix double-click zoom transition (#625)
+
+## 3.3.6 (Oct 15, 2018)
+
+- `mapbox-gl` v0.50 (#618)
+- Remove `bower` dependency (#615)
+
+## 3.3.5 (Sep 26, 2018)
+
+- Fix auto stylesheet detection (#601)
+
+## 3.3.4 (Aug 4, 2018)
+
+- Add `fitBounds` util to docs (#563)
+- add disableTokenWarning prop (#564)
+- fix capture* props for overlay components (#565)
 
 ## 3.3.3 (Aug 3, 2018)
 
