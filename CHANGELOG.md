@@ -2,11 +2,14 @@
 
 # Version 4.1
 
+## 4.1.1 (Mar 14, 2019)
+
+- Fix mapbox export warning (#757)
+
 ## 4.1.0 (Mar 14, 2019)
 
 - add fullscreen support (#696)
 - add geolocate control (#724)
-- move FullscreenControl example to examples/controls (#740)
 
 # Version 4.0.0
 
