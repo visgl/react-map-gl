@@ -72,4 +72,4 @@ Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to 
 
 ## Source
 
-[geolocate-control.js](https://github.com/uber/react-map-gl/tree/master/src/components/geolocate-control.js)
+[geolocate-control.js](https://github.com/uber/react-map-gl/tree/4.1-release/src/components/geolocate-control.js)

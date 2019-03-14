@@ -64,7 +64,7 @@ export default class StyleControls extends PureComponent {
         <h3>Custom Cursor</h3>
         <p>Customize the cursor based on interactivity.</p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/3.2-release/examples/custom-cursor" target="_new">
+          <a href="https://github.com/uber/react-map-gl/tree/4.1-release/examples/custom-cursor" target="_new">
             View Code ↗
           </a>
         </div>

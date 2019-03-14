@@ -29,5 +29,5 @@ Stop propagation of dblclick event to the map component. Can be used to stop map
 
 
 ## Source
-[canvas-overlay.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/overlays/canvas-overlay.js)
+[canvas-overlay.js](https://github.com/uber/react-map-gl/tree/4.1-release/src/overlays/canvas-overlay.js)
 

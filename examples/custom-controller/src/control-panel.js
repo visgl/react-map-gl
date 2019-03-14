@@ -27,7 +27,7 @@ export default class ControlPanel extends PureComponent {
         <h3>Custom Controller</h3>
         <p>Override default event handling logic.</p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/4.0-release/examples/custom-controller" target="_new">
+          <a href="https://github.com/uber/react-map-gl/tree/4.1-release/examples/custom-controller" target="_new">
             View Code ↗
           </a>
         </div>
