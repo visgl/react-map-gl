@@ -3,7 +3,7 @@ import {createElement, createRef} from 'react';
 import PropTypes from 'prop-types';
 import WebMercatorViewport from 'viewport-mercator-project';
 
-import {GeolocateControl as MapboxGeolocateControl, LngLat} from '../utils/mapboxgl';
+import mapboxgl from '../utils/mapboxgl';
 
 import BaseControl from './base-control';
 import Marker from './marker';
@@ -111,7 +111,7 @@ export default class GeolocateControl extends BaseControl {
       }
     );
 
-    this._mapboxGeolocateControl = new MapboxGeolocateControl(controlOptions);
+    this._mapboxGeolocateControl = new mapboxgl.GeolocateControl(controlOptions);
 
     // the following re-implement MapboxGeolocateControl's _setupUI
     // replace mapbox internal prop
@@ -138,7 +138,7 @@ export default class GeolocateControl extends BaseControl {
   };
 
   _getBounds = position => {
-    const center = new LngLat(
+    const center = new mapboxgl.LngLat(
       position.coords.longitude,
       position.coords.latitude
     );
