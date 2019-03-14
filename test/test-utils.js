@@ -25,6 +25,6 @@ export function isSameLocation(lngLat1, lngLat2) {
   return ((lng1 - lng2) % 360) === 0 && lat1 === lat2;
 }
 
-export function equals(a, b) {
-  return Math.abs(a - b) < EPSILON;
+export function equals(a, b, epsilon = EPSILON) {
+  return Math.abs(a - b) < epsilon;
 }
