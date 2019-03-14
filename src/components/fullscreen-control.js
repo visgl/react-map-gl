@@ -22,7 +22,7 @@ import {document} from '../utils/globals';
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
 import {createElement} from 'react';
-import {FullscreenControl as MapboxFullscreenControl} from '../utils/mapboxgl';
+import mapboxgl from '../utils/mapboxgl';
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
@@ -57,7 +57,7 @@ export default class FullscreenControl extends BaseControl {
   componentDidMount() {
     const container = this.props.container || this._context.mapContainer;
 
-    this._mapboxFullscreenControl = new MapboxFullscreenControl({container});
+    this._mapboxFullscreenControl = new mapboxgl.FullscreenControl({container});
 
     this.setState({showButton: this._mapboxFullscreenControl._checkFullscreenSupport()});
 
