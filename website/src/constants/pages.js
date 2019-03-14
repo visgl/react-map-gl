@@ -3,7 +3,7 @@ import ExamplesComponent from '../components/examples';
 import PagesComponent from '../components/page';
 
 function getDocUrl(filename) {
-  return `docs/${filename}`;
+  return `https://raw.githubusercontent.com/uber/react-map-gl/4.1-release/docs/${filename}`;
 }
 
 // mapping from file path in source to generated page url
