@@ -52,7 +52,7 @@ export default class ControlPanel extends PureComponent {
         < hr />
         <p>Data source: <a href="https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson">earthquakes.geojson</a></p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/4.0-release/examples/heatmap" target="_new">View Code ↗</a>
+          <a href="https://github.com/uber/react-map-gl/tree/4.1-release/examples/heatmap" target="_new">View Code ↗</a>
         </div>
       </Container>
     );

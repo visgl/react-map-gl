@@ -330,5 +330,5 @@ Inherit the following methods from [StaticMap](/docs/components/static-map.md):
 
 
 ## Source
-[interactive-map.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/interactive-map.js)
+[interactive-map.js](https://github.com/uber/react-map-gl/tree/4.1-release/src/components/interactive-map.js)
 
