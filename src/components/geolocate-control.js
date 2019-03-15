@@ -133,6 +133,25 @@ export default class GeolocateControl extends BaseControl {
     this._mapboxGeolocateControl._updateCamera = this._updateCamera;
 
     this._mapboxGeolocateControl._setup = true;
+
+    // when the camera is changed (and it's not as a result of the Geolocation Control) change
+    // the watch mode to background watch, so that the marker is updated but not the camera.
+    if (this._mapboxGeolocateControl.options.trackUserLocation) {
+      this._context.eventManager.on('panstart', event => {
+        if (
+          !event.geolocateSource &&
+          this._mapboxGeolocateControl._watchState === 'ACTIVE_LOCK'
+        ) {
+          this._mapboxGeolocateControl._watchState = 'BACKGROUND';
+          this._mapboxGeolocateControl._geolocateButton.classList.add(
+            'mapboxgl-ctrl-geolocate-background'
+          );
+          this._mapboxGeolocateControl._geolocateButton.classList.remove(
+            'mapboxgl-ctrl-geolocate-active'
+          );
+        }
+      });
+    }
   };
 
   _onClickGeolocate = () => {
