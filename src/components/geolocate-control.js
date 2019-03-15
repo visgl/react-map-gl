@@ -32,7 +32,9 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Callbacks fired when the user interacted with the map. The object passed to the callbacks
   // contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
   onViewStateChange: PropTypes.func,
-  onViewportChange: PropTypes.func
+  onViewportChange: PropTypes.func,
+
+  onGeolocate: PropTypes.func
 });
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
@@ -47,7 +49,9 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
 
   // viewport handlers
   onViewStateChange: () => {},
-  onViewportChange: () => {}
+  onViewportChange: () => {},
+
+  onGeolocate: () => {}
 });
 
 export default class GeolocateControl extends BaseControl {
@@ -71,6 +75,9 @@ export default class GeolocateControl extends BaseControl {
     isGeolocationSupported().then(result => {
       this.setState({supportsGeolocation: result});
       this._setupMapboxGeolocateControl(result);
+      this._mapboxGeolocateControl.on('geolocate', event =>
+        this.props.onGeolocate(event.coords)
+      );
     });
   }
 
