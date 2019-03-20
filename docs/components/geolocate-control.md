@@ -54,19 +54,19 @@ A Geolocation API [PositionOptions](https://developer.mozilla.org/en-US/docs/Web
 
 ##### `fitBoundsOptions` {Object} - default: `{maxZoom: 15}`
 
-A  [fitBounds](https://docs.mapbox.com/mapbox-gl-js/api/#map#fitbounds) options object to use when the map is panned and zoomed to the user's location. The default is to use a  maxZoom of 15 to limit how far the map will zoom in for very accurate locations.
+A [fitBounds](https://docs.mapbox.com/mapbox-gl-js/api/#map#fitbounds) options object to use when the map is panned and zoomed to the user's location. The default is to use a  maxZoom of 15 to limit how far the map will zoom in for very accurate locations.
 
 ##### `trackUserLocation` {Boolean} - default: `false`
 
-If  true the Geolocate Control becomes a toggle button and when active the map will receive updates to the user's location as it changes.
+If true the Geolocate Control becomes a toggle button and when active the map will receive updates to the user's location as it changes.
 
 ##### `showUserLocation` {Boolean} - default: `true`
 
 By default a dot will be shown on the map at the user's location. Set to false to disable.
 
-##### `containerStyle` {Object} - default: `{position: absolute, top: 0, right: 0, margin: 10}`
+##### `style` {Object} - default: `{position: absolute, top: 0, right: 0, margin: 10}`
 
-[React style object](https://reactjs.org/docs/dom-elements.html#style) will be applied to Geolocate control button.
+A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to Geolocate control button.
 
 ## Styling
 

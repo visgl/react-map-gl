@@ -22,7 +22,7 @@ const LINEAR_TRANSITION_PROPS = Object.assign(
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
   className: PropTypes.string,
-  containerStyle: PropTypes.object,
+  style: PropTypes.object,
 
   // mapbox geolocate options
   // https://docs.mapbox.com/mapbox-gl-js/api/#geolocatecontrol
@@ -39,7 +39,7 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
-  containerStyle: {
+  style: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -216,13 +216,13 @@ export default class GeolocateControl extends BaseControl {
       return null;
     }
 
-    const {className, containerStyle} = this.props;
+    const {className, style} = this.props;
     return createElement('div', {id: 'geolocate-control'}, [
       this._renderMarker(),
       createElement('div', {
         className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
         ref: this._containerRef,
-        style: containerStyle,
+        style,
         onContextMenu: e => e.preventDefault()
       }, this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)
     )]
