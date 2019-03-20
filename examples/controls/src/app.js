@@ -46,7 +46,7 @@ export default class App extends Component {
 
   _renderCityMarker = (city, index) => {
     return (
-      <Marker 
+      <Marker
         key={`marker-${index}`}
         longitude={city.longitude}
         latitude={city.latitude} >
@@ -59,11 +59,13 @@ export default class App extends Component {
     const {popupInfo} = this.state;
 
     return popupInfo && (
-      <Popup tipSize={5}
+      <Popup
+        tipSize={5}
         anchor="top"
         longitude={popupInfo.longitude}
         latitude={popupInfo.latitude}
-        closeOnClick={false}
+        closeOnClick={true}
+        captureClick={false}
         onClose={() => this.setState({popupInfo: null})} >
         <CityInfo info={popupInfo} />
       </Popup>

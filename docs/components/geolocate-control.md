@@ -28,13 +28,11 @@ class Map extends Component {
     const {viewport} = this.state;
     return (
       <ReactMapGL {...viewport} onViewportChange={updateViewport}>
-        <div style={{ position: "absolute", right: 0 }}>
-          <GeolocateControl 
-            positionOptions={{enableHighAccuracy: true}}
-            trackUserLocation={true}
-            onViewportChange={this._updateViewport}
-          />
-        </div>
+        <GeolocateControl 
+          positionOptions={{enableHighAccuracy: true}}
+          trackUserLocation={true}
+          onViewportChange={this._updateViewport}
+        />
       </ReactMapGL>
     );
   }
@@ -65,6 +63,10 @@ If  true the Geolocate Control becomes a toggle button and when active the map w
 ##### `showUserLocation` {Boolean} - default: `true`
 
 By default a dot will be shown on the map at the user's location. Set to false to disable.
+
+##### `containerStyle` {Object} - default: `{position: absolute, top: 0, right: 0, margin: 10}`
+
+[React style object](https://reactjs.org/docs/dom-elements.html#style) will be applied to Geolocate control button.
 
 ## Styling
 

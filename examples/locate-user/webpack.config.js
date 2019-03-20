@@ -22,8 +22,6 @@ const config = {
     app: resolve('./src/app.js')
   },
 
-  devtool: 'source-map',
-
   output: {
     library: 'App'
   },
