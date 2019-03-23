@@ -64,9 +64,11 @@ If true the Geolocate Control becomes a toggle button and when active the map wi
 
 By default a dot will be shown on the map at the user's location. Set to false to disable.
 
-##### `style` {Object} - default: `{position: absolute, top: 0, right: 0, margin: 10}`
+##### `style` {Object} - default: `{}` 
 
 A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to Geolocate control button.
+
+Check [`locate user`](https://github.com/uber/react-map-gl/blob/master/examples/locate-user/src/app.js) example for basic styling.
 
 ## Styling
 

@@ -4,6 +4,13 @@ import MapGL, {GeolocateControl} from 'react-map-gl';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
+const geolocateStyle = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  margin: 10
+};
+
 export default class App extends Component {
 
   state = {
@@ -30,6 +37,7 @@ export default class App extends Component {
         onViewportChange={this._onViewportChange}
         mapboxApiAccessToken={MAPBOX_TOKEN}>
         <GeolocateControl
+          style={geolocateStyle}
           onViewportChange={this._onViewportChange}
           positionOptions={{enableHighAccuracy: true}}
           trackUserLocation={true}

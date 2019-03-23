@@ -39,12 +39,7 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
-  style: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    margin: '10px'
-  },
+  style: {},
 
   // mapbox geolocate options
   positionOptions: null,
@@ -217,7 +212,7 @@ export default class GeolocateControl extends BaseControl {
     }
 
     const {className, style} = this.props;
-    return createElement('div', {id: 'geolocate-control'}, [
+    return createElement('div', null, [
       this._renderMarker(),
       createElement('div', {
         className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
