@@ -31,6 +31,8 @@ const LOCAL_DEVELOPMENT_CONFIG = {
     }
   },
 
+  devtool: 'source-map',
+
   resolve: {
     alias: {
       // Imports the react-map-gl library from the src directory in this repo
@@ -60,6 +62,7 @@ function addLocalDevSettings(config) {
   config.resolve = config.resolve || {};
   config.resolve.alias = Object.assign({}, config.resolve.alias, LOCAL_DEVELOPMENT_CONFIG.resolve.alias);
   config.module.rules = config.module.rules.concat(LOCAL_DEVELOPMENT_CONFIG.module.rules);
+  config.devtool = LOCAL_DEVELOPMENT_CONFIG.devtool;
   return config;
 }
 

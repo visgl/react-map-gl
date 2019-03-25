@@ -28,13 +28,11 @@ class Map extends Component {
     const {viewport} = this.state;
     return (
       <ReactMapGL {...viewport} onViewportChange={updateViewport}>
-        <div style={{ position: "absolute", right: 0 }}>
-          <GeolocateControl 
-            positionOptions={{enableHighAccuracy: true}}
-            trackUserLocation={true}
-            onViewportChange={this._updateViewport}
-          />
-        </div>
+        <GeolocateControl 
+          positionOptions={{enableHighAccuracy: true}}
+          trackUserLocation={true}
+          onViewportChange={this._updateViewport}
+        />
       </ReactMapGL>
     );
   }
@@ -56,15 +54,21 @@ A Geolocation API [PositionOptions](https://developer.mozilla.org/en-US/docs/Web
 
 ##### `fitBoundsOptions` {Object} - default: `{maxZoom: 15}`
 
-A  [fitBounds](https://docs.mapbox.com/mapbox-gl-js/api/#map#fitbounds) options object to use when the map is panned and zoomed to the user's location. The default is to use a  maxZoom of 15 to limit how far the map will zoom in for very accurate locations.
+A [fitBounds](https://docs.mapbox.com/mapbox-gl-js/api/#map#fitbounds) options object to use when the map is panned and zoomed to the user's location. The default is to use a  maxZoom of 15 to limit how far the map will zoom in for very accurate locations.
 
 ##### `trackUserLocation` {Boolean} - default: `false`
 
-If  true the Geolocate Control becomes a toggle button and when active the map will receive updates to the user's location as it changes.
+If true the Geolocate Control becomes a toggle button and when active the map will receive updates to the user's location as it changes.
 
 ##### `showUserLocation` {Boolean} - default: `true`
 
 By default a dot will be shown on the map at the user's location. Set to false to disable.
+
+##### `style` {Object} - default: `{}` 
+
+A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to Geolocate control button.
+
+Check [`locate user`](https://github.com/uber/react-map-gl/blob/master/examples/locate-user/src/app.js) example for basic styling.
 
 ## Styling
 
