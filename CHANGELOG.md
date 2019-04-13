@@ -2,6 +2,11 @@
 
 # Version 4.1
 
+## 4.1.2 (Apr 12, 2019)
+
+- Fix geolocate control marker styling (#764)
+- Fix synchronous redraw bug (#772)
+
 ## 4.1.1 (Mar 14, 2019)
 
 - Fix mapbox export warning (#757)
