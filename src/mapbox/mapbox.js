@@ -48,7 +48,7 @@ const propTypes = {
   ]), /** The Mapbox style. A string url to a MapboxGL style */
 
   visible: PropTypes.bool, /** Whether the map is visible */
-  asyncRender: PropTypes.bool, /** Whether the map should manage its own render cycle */
+  asyncRender: PropTypes.bool, /** Whether mapbox should manage its own render cycle */
 
   onLoad: PropTypes.func, /** The onLoad callback for the map */
   onError: PropTypes.func, /** The onError callback for the map */
