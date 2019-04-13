@@ -48,6 +48,7 @@ const propTypes = {
   ]), /** The Mapbox style. A string url to a MapboxGL style */
 
   visible: PropTypes.bool, /** Whether the map is visible */
+  asyncRender: PropTypes.bool, /** Whether mapbox should manage its own render cycle */
 
   onLoad: PropTypes.func, /** The onLoad callback for the map */
   onError: PropTypes.func, /** The onError callback for the map */
@@ -77,6 +78,7 @@ const defaultProps = {
   mapStyle: 'mapbox://styles/mapbox/light-v8',
 
   visible: true,
+  asyncRender: false,
 
   onLoad: noop,
   onError: defaultOnError,
@@ -118,6 +120,7 @@ type Props = {
   transformRequest?: Function,
   mapStyle: any,
   visible: boolean,
+  asyncRender: boolean,
   width: number,
   height: number,
   viewState?: ViewState,
@@ -219,8 +222,10 @@ export default class Mapbox {
   // This removes the synchronization issue caused by requestAnimationFrame.
   redraw() {
     const map = this._map;
-    // map render will throw error if style is not loaded
-    if (map.isStyleLoaded()) {
+    // map._render will throw error if style does not exist
+    // https://github.com/mapbox/mapbox-gl-js/blob/fb9fc316da14e99ff4368f3e4faa3888fb43c513
+    //   /src/ui/map.js#L1834
+    if (map.style) {
       // cancel the scheduled update
       if (map._frame) {
         map._frame.cancel();
@@ -385,7 +390,7 @@ export default class Mapbox {
     const viewportChanged = this._updateMapViewport(oldProps, newProps);
     const sizeChanged = this._updateMapSize(oldProps, newProps);
 
-    if (viewportChanged || sizeChanged) {
+    if (!newProps.asyncRender && (viewportChanged || sizeChanged)) {
       this.redraw();
     }
 
@@ -416,7 +421,7 @@ export default class Mapbox {
       newViewState.altitude !== oldViewState.altitude;
 
     if (viewportChanged) {
-      this._map.jumpTo(this._getMapboxViewStateProps(newProps));
+      this._map.jumpTo(this._viewStateToMapboxProps(newViewState));
 
       // TODO - jumpTo doesn't handle altitude
       if (newViewState.altitude !== oldViewState.altitude) {
@@ -465,8 +470,7 @@ export default class Mapbox {
     }
   }
 
-  _getMapboxViewStateProps(props: Props) {
-    const viewState = this._getViewState(props);
+  _viewStateToMapboxProps(viewState: ViewState) {
     return {
       center: [viewState.longitude, viewState.latitude],
       zoom: viewState.zoom,
