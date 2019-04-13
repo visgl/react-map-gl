@@ -136,6 +136,12 @@ Note: Either the `viewState`, or the `latitude`, `longitude` and `zoom` properti
 
 ### Render Options
 
+##### `asyncRender` {Bool} - default: `false`
+
+If `true`, let Mapbox manage its own render cycle. This is the behavior prior to v4.1.
+
+If `false`, force Mapbox canvas to redraw with DOM updates. This will make the map synchronize better with other controls during prop-driven viewport changes.
+
 ##### `style` {Object}
 
 The CSS style of the map container.
