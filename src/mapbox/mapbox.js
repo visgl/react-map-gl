@@ -95,7 +95,7 @@ const defaultProps = {
 type MapboxGL = {
   version: string,
   accessToken: string,
-  config: Object,
+  baseApiUrl: string,
   Map: Function
 };
 
@@ -350,7 +350,7 @@ export default class Mapbox {
 
     // Creation only props
     this.mapboxgl.accessToken = props.mapboxApiAccessToken || defaultProps.mapboxApiAccessToken;
-    this.mapboxgl.config.API_URL = props.mapboxApiUrl;
+    this.mapboxgl.baseApiUrl = props.mapboxApiUrl;
 
     this._create(props);
 
