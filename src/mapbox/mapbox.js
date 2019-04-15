@@ -37,6 +37,7 @@ const propTypes = {
   gl: PropTypes.object, /** External WebGLContext to use */
 
   mapboxApiAccessToken: PropTypes.string, /** Mapbox API access token for Mapbox tiles/styles. */
+  mapboxApiUrl: PropTypes.string,
   attributionControl: PropTypes.bool, /** Show attribution control or not. */
   preserveDrawingBuffer: PropTypes.bool, /** Useful when you want to export the canvas as a PNG. */
   reuseMaps: PropTypes.bool,
@@ -71,6 +72,7 @@ const propTypes = {
 const defaultProps = {
   container: document.body,
   mapboxApiAccessToken: getAccessToken(),
+  mapboxApiUrl: 'https://api.mapbox.com',
   preserveDrawingBuffer: false,
   attributionControl: true,
   reuseMaps: false,
@@ -95,6 +97,7 @@ const defaultProps = {
 type MapboxGL = {
   version: string,
   accessToken: string,
+  baseApiUrl: string,
   Map: Function
 };
 
@@ -112,6 +115,7 @@ type Props = {
   container: any,
   gl?: any,
   mapboxApiAccessToken: string,
+  mapboxApiUrl: string,
   attributionControl: boolean,
   preserveDrawingBuffer: boolean,
   onLoad: Function,
@@ -351,6 +355,7 @@ export default class Mapbox {
 
     // Creation only props
     this.mapboxgl.accessToken = props.mapboxApiAccessToken || defaultProps.mapboxApiAccessToken;
+    this.mapboxgl.baseApiUrl = props.mapboxApiUrl;
 
     this._create(props);
 
