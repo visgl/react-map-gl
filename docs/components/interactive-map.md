@@ -37,6 +37,7 @@ Inherit the following props from [StaticMap](/docs/components/static-map.md):
 - `disableTokenWarning` {Bool}
 - `gl` {WebGLContext}
 - `mapboxApiAccessToken` {String}
+- `mapboxApiUrl` {String}
 - `mapOptions` {Object}
 - `preserveDrawingBuffer` {Bool}
 - `preventStyleDiffing` {Bool}
