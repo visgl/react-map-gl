@@ -125,8 +125,9 @@ export default class Example extends Component {
         onClick={ this._onClickFeatures }
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
-        preventStyleDiffing={ false }>
-
+        preventStyleDiffing={ false }
+        mapboxApiAccessToken="<YOUR TOKEN HERE>"
+      >
         <ScatterplotOverlay
           { ...viewport }
           locations={ locations }
@@ -134,7 +135,7 @@ export default class Example extends Component {
           globalOpacity={ 1 }
           compositeOperation="screen"/>
 
-        <DeckGL {...viewport} layers={[
+        <DeckGL viewState={viewport} layers={[
           new ArcLayer({
             data: [{sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.45669, 37.781]}],
             strokeWidth: 4,

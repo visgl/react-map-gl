@@ -9,7 +9,7 @@
     "d3-color": "^1.0.1",
     "d3-random": "^1.0.2",
     "d3-scale": "^1.0.3",
-    "deck.gl": "^6.0.0",
+    "deck.gl": "^7.0.0",
     "probe.gl": "2.0.0-beta.1",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",

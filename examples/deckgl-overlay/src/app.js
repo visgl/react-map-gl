@@ -14,7 +14,7 @@ export default class App extends Component {
         zoom: 11,
         bearing: 0,
         pitch: 30
-      },
+      }
     };
   }
 
@@ -31,9 +31,10 @@ export default class App extends Component {
         width="100%"
         height="100%"
         maxPitch={85}
-        onViewportChange={ this._onViewportChange } >
-
-        <DeckGL {...viewport} layers={[
+        onViewportChange={ this._onViewportChange }
+        mapboxApiAccessToken="<YOUR TOKEN HERE>"
+      >
+        <DeckGL viewState={viewport} layers={[
           new ArcLayer({
             data: [
               {sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.45669, 37.781]}
