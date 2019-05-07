@@ -19,11 +19,13 @@
 // THE SOFTWARE.
 
 // Registers an alias for this module
-const path = require('path');
+const {resolve} = require('path');
 
 const ALIASES = {
-  'react-map-gl/test': path.resolve('./test'),
-  'react-map-gl': path.resolve('./src')
+  'react-map-gl/test': resolve('./test'),
+  'react-map-gl': resolve('./src'),
+  'mapbox-gl$': resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js'),
+  webworkify: 'webworkify-webpack-dropin'
 };
 
 if (module.require) {

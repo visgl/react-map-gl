@@ -1,3 +1,4 @@
+/* global document */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
@@ -5,19 +6,17 @@ import MapGL from 'react-map-gl';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 class Root extends Component {
-
   state = {
     viewport: {
       latitude: 37.785164,
       longitude: -122.41669,
-      zoom: 16.140440,
+      zoom: 16.14044,
       bearing: -20.55991,
-      pitch: 60,
+      pitch: 60
     }
-  }
+  };
 
   render() {
-
     const {viewport} = this.state;
 
     return (
@@ -30,10 +29,9 @@ class Root extends Component {
         perspectiveEnabled
         width="100vw"
         height="100vh"
-      </MapGL>
+      />
     );
   }
-
 }
 
 const root = document.createElement('div');

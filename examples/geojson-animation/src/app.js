@@ -13,7 +13,6 @@ const MAPBOX_TOKEN = ''; // Set your mapbox token here
 let animation = null;
 
 export default class App extends Component {
-
   state = {
     mapStyle: defaultMapStyle,
     viewport: {
@@ -36,7 +35,7 @@ export default class App extends Component {
   _animatePoint = () => {
     this._updatePointData(pointOnCircle({center: [-100, 0], angle: Date.now() / 1000, radius: 20}));
     animation = window.requestAnimationFrame(this._animatePoint);
-  }
+  };
 
   _updatePointData = pointData => {
     let {mapStyle} = this.state;
@@ -51,12 +50,11 @@ export default class App extends Component {
     mapStyle = mapStyle.setIn(['sources', 'point', 'data'], pointData);
 
     this.setState({mapStyle});
-  }
+  };
 
   _onViewportChange = viewport => this.setState({viewport});
 
   render() {
-
     const {viewport, mapStyle} = this.state;
 
     return (
@@ -66,14 +64,14 @@ export default class App extends Component {
         height="100%"
         mapStyle={mapStyle}
         onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN} >
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+      >
         <ControlPanel containerComponent={this.props.containerComponent} />
       </MapGL>
     );
   }
-
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

@@ -1,4 +1,3 @@
-/* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Popup} from 'react-map-gl';
@@ -9,7 +8,6 @@ import {defaultMapStyle, highlightLayerIndex} from './map-style.js';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
-
   state = {
     mapStyle: defaultMapStyle,
     viewport: {
@@ -56,7 +54,6 @@ export default class App extends Component {
   }
 
   render() {
-
     const {viewport, mapStyle} = this.state;
 
     return (
@@ -67,15 +64,15 @@ export default class App extends Component {
         mapStyle={mapStyle}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         onViewportChange={this._onViewportChange}
-        onHover={this._onHover} >
-        { this._renderPopup() }
+        onHover={this._onHover}
+      >
+        {this._renderPopup()}
         <ControlPanel containerComponent={this.props.containerComponent} />
       </MapGL>
     );
   }
-
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

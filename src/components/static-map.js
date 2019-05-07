@@ -36,7 +36,8 @@ import type {ViewState} from '../mapbox/mapbox';
 import type {Node} from 'react';
 
 /* eslint-disable max-len */
-const TOKEN_DOC_URL = 'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
+const TOKEN_DOC_URL =
+  'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
 const NO_TOKEN_WARNING = 'A valid API access token is required to use Mapbox data';
 /* eslint-disable max-len */
 
@@ -119,10 +120,10 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     return mapboxgl && mapboxgl.supported();
   }
 
-  static propTypes : any = propTypes;
-  static defaultProps : StaticMapProps = defaultProps;
+  static propTypes: any = propTypes;
+  static defaultProps: StaticMapProps = defaultProps;
 
-  state : State = {
+  state: State = {
     accessTokenInvalid: false
   };
 
@@ -133,18 +134,20 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     const {mapStyle} = this.props;
 
     // $FlowFixMe
-    this._mapbox = new Mapbox(Object.assign({}, this.props, {
-      mapboxgl, // Handle to mapbox-gl library
-      width: this._width,
-      height: this._height,
-      container: this._mapboxMapRef.current,
-      onError: this._mapboxMapError,
-      mapStyle: normalizeStyle(mapStyle)
-    }));
+    this._mapbox = new Mapbox(
+      Object.assign({}, this.props, {
+        mapboxgl, // Handle to mapbox-gl library
+        width: this._width,
+        height: this._height,
+        container: this._mapboxMapRef.current,
+        onError: this._mapboxMapError,
+        mapStyle: normalizeStyle(mapStyle)
+      })
+    );
     this._map = this._mapbox.getMap();
   }
 
-  componentDidUpdate(prevProps : StaticMapProps) {
+  componentDidUpdate(prevProps: StaticMapProps) {
     if (this._mapbox) {
       this._updateMapStyle(prevProps, this.props);
       this._updateMapProps(this.props);
@@ -159,34 +162,34 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     }
   }
 
-  _mapbox : any = null;
-  _map : any = null;
-  _mapboxMapRef: { current: null | HTMLDivElement } = createRef();
-  _mapContainerRef: { current: null | HTMLDivElement } = createRef();
-  _queryParams : any = {};
-  _width : number = 0;
-  _height : number = 0;
+  _mapbox: any = null;
+  _map: any = null;
+  _mapboxMapRef: {current: null | HTMLDivElement} = createRef();
+  _mapContainerRef: {current: null | HTMLDivElement} = createRef();
+  _queryParams: any = {};
+  _width: number = 0;
+  _height: number = 0;
 
   // External apps can access map this way
   getMap = () => {
     return this._map;
-  }
+  };
 
   /** Uses Mapbox's
-    * queryRenderedFeatures API to find features at point or in a bounding box.
-    * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
-    * To query only some of the layers, set the `interactive` property in the
-    * layer style to `true`.
-    * @param {[Number, Number]|[[Number, Number], [Number, Number]]} geometry -
-    *   Point or an array of two points defining the bounding box
-    * @param {Object} options - query options
-    */
-  queryRenderedFeatures = (geometry : any, options : any = {}) => {
+   * queryRenderedFeatures API to find features at point or in a bounding box.
+   * https://www.mapbox.com/mapbox-gl-js/api/#Map#queryRenderedFeatures
+   * To query only some of the layers, set the `interactive` property in the
+   * layer style to `true`.
+   * @param {[Number, Number]|[[Number, Number], [Number, Number]]} geometry -
+   *   Point or an array of two points defining the bounding box
+   * @param {Object} options - query options
+   */
+  queryRenderedFeatures = (geometry: any, options: any = {}) => {
     return this._map.queryRenderedFeatures(geometry, options);
-  }
+  };
 
   // Note: needs to be called after render (e.g. in componentDidUpdate)
-  _updateMapSize(width : number, height : number) {
+  _updateMapSize(width: number, height: number) {
     if (this._width !== width || this._height !== height) {
       this._width = width;
       this._height = height;
@@ -194,40 +197,44 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     }
   }
 
-  _updateMapStyle(oldProps : StaticMapProps, newProps : StaticMapProps) {
+  _updateMapStyle(oldProps: StaticMapProps, newProps: StaticMapProps) {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
     if (mapStyle !== oldMapStyle) {
-      this._map.setStyle(normalizeStyle(mapStyle), {diff: !this.props.preventStyleDiffing});
+      this._map.setStyle(normalizeStyle(mapStyle), {
+        diff: !this.props.preventStyleDiffing
+      });
     }
   }
 
-  _updateMapProps(props : StaticMapProps) {
+  _updateMapProps(props: StaticMapProps) {
     if (!this._mapbox) {
       return;
     }
-    this._mapbox.setProps(Object.assign({}, props, {
-      width: this._width,
-      height: this._height
-    }));
+    this._mapbox.setProps(
+      Object.assign({}, props, {
+        width: this._width,
+        height: this._height
+      })
+    );
   }
 
   // Handle map error
-  _mapboxMapError = (evt : {
+  _mapboxMapError = (evt: {
     error?: {
       message: string,
       status: number
     },
     status: number
   }) => {
-    const statusCode = evt.error && evt.error.status || evt.status;
+    const statusCode = (evt.error && evt.error.status) || evt.status;
     if (statusCode === UNAUTHORIZED_ERROR_CODE && !this.state.accessTokenInvalid) {
       // Mapbox throws unauthorized error - invalid token
       console.error(NO_TOKEN_WARNING); // eslint-disable-line
       this.setState({accessTokenInvalid: true});
     }
     this.props.onError(evt);
-  }
+  };
 
   _renderNoTokenWarning() {
     if (this.state.accessTokenInvalid && !this.props.disableTokenWarning) {
@@ -236,40 +243,35 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
         left: 0,
         top: 0
       };
-      return (
-        createElement('div', {key: 'warning', id: 'no-token-warning', style}, [
-          createElement('h3', {key: 'header'}, NO_TOKEN_WARNING),
-          createElement('div', {key: 'text'}, 'For information on setting up your basemap, read'),
-          createElement('a', {key: 'link', href: TOKEN_DOC_URL}, 'Note on Map Tokens')
-        ])
-      );
+      return createElement('div', {key: 'warning', id: 'no-token-warning', style}, [
+        createElement('h3', {key: 'header'}, NO_TOKEN_WARNING),
+        createElement('div', {key: 'text'}, 'For information on setting up your basemap, read'),
+        createElement('a', {key: 'link', href: TOKEN_DOC_URL}, 'Note on Map Tokens')
+      ]);
     }
 
     return null;
   }
 
-  _renderOverlays(dimensions : {
-    width?: number,
-    height?: number
-  }) {
-    const {
-      width = Number(this.props.width),
-      height = Number(this.props.height)
-    } = dimensions;
+  _renderOverlays(dimensions: {width?: number, height?: number}) {
+    const {width = Number(this.props.width), height = Number(this.props.height)} = dimensions;
     this._updateMapSize(width, height);
 
     return createElement(MapContext.Consumer, null, interactiveContext => {
       const context = Object.assign({}, interactiveContext, {
         // $FlowFixMe
-        viewport: new WebMercatorViewport(Object.assign({}, this.props, this.props.viewState, {
-          width,
-          height
-        })),
+        viewport: new WebMercatorViewport(
+          Object.assign({}, this.props, this.props.viewState, {
+            width,
+            height
+          })
+        ),
         map: this._map,
         mapContainer: interactiveContext.mapContainer || this._mapContainerRef.current
       });
 
-      return createElement(MapContext.Provider,
+      return createElement(
+        MapContext.Provider,
         {value: context},
         createElement('div', {
           key: 'map-overlays',
@@ -283,9 +285,13 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
 
   render() {
     const {className, width, height, style, visibilityConstraints} = this.props;
-    const mapContainerStyle = Object.assign({position: 'relative'}, style, {width, height});
+    const mapContainerStyle = Object.assign({position: 'relative'}, style, {
+      width,
+      height
+    });
 
-    const visible = this.props.visible &&
+    const visible =
+      this.props.visible &&
       checkVisibilityConstraints(this.props.viewState || this.props, visibilityConstraints);
 
     const mapStyle = Object.assign({}, CONTAINER_STYLE, {
@@ -305,12 +311,16 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
         }),
         // AutoSizer is a pure component and does not rerender when map props change
         // rebind the callback so that it's triggered every render pass
-        createElement(AutoSizer, {
-          key: 'autosizer',
-          disableWidth: Number.isFinite(width),
-          disableHeight: Number.isFinite(height),
-          onResize: this.props.onResize
-        }, this._renderOverlays.bind(this)),
+        createElement(
+          AutoSizer,
+          {
+            key: 'autosizer',
+            disableWidth: Number.isFinite(width),
+            disableHeight: Number.isFinite(height),
+            onResize: this.props.onResize
+          },
+          this._renderOverlays.bind(this)
+        ),
         this._renderNoTokenWarning()
       ]
     });

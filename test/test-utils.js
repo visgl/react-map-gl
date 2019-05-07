@@ -22,7 +22,7 @@ export function isSameLocation(lngLat1, lngLat2) {
   const lat1 = toLowPrecision(lngLat1[1]);
   const lng2 = toLowPrecision(lngLat2[0]);
   const lat2 = toLowPrecision(lngLat2[1]);
-  return ((lng1 - lng2) % 360) === 0 && lat1 === lat2;
+  return (lng1 - lng2) % 360 === 0 && lat1 === lat2;
 }
 
 export function equals(a, b, epsilon = EPSILON) {

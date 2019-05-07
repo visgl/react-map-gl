@@ -17,7 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {PureComponent, createElement} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 import Immutable from 'immutable';
@@ -49,12 +49,15 @@ const defaultProps = {
 };
 
 export default class ScatterplotOverlay extends PureComponent {
-
   /* eslint-disable max-statements */
   _redraw = ({width, height, ctx, isDragging, project, unproject}) => {
     const {
-      dotRadius, dotFill, compositeOperation,
-      renderWhileDragging, locations, lngLatAccessor
+      dotRadius,
+      dotFill,
+      compositeOperation,
+      renderWhileDragging,
+      locations,
+      lngLatAccessor
     } = this.props;
 
     ctx.clearRect(0, 0, width, height);
@@ -64,10 +67,11 @@ export default class ScatterplotOverlay extends PureComponent {
       for (const location of locations) {
         const pixel = project(lngLatAccessor(location));
         const pixelRounded = [round(pixel[0], 1), round(pixel[1], 1)];
-        if (pixelRounded[0] + dotRadius >= 0 &&
-            pixelRounded[0] - dotRadius < width &&
-            pixelRounded[1] + dotRadius >= 0 &&
-            pixelRounded[1] - dotRadius < height
+        if (
+          pixelRounded[0] + dotRadius >= 0 &&
+          pixelRounded[0] - dotRadius < width &&
+          pixelRounded[1] + dotRadius >= 0 &&
+          pixelRounded[1] - dotRadius < height
         ) {
           ctx.fillStyle = dotFill;
           ctx.beginPath();
@@ -76,7 +80,7 @@ export default class ScatterplotOverlay extends PureComponent {
         }
       }
     }
-  }
+  };
   /* eslint-enable max-statements */
 
   render() {

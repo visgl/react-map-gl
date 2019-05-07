@@ -31,7 +31,6 @@ const propTypes = {
 };
 
 export default class ClickExample extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -63,7 +62,8 @@ export default class ClickExample extends Component {
         {...viewport}
         scrollZoom={false}
         onViewportChange={this._onViewportChange}
-        onClick={this._onClick} />
+        onClick={this._onClick}
+      />
     );
   }
 }

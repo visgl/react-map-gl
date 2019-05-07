@@ -1,7 +1,6 @@
 import React, {PureComponent} from 'react';
 
 export default class CityInfo extends PureComponent {
-
   render() {
     const {info} = this.props;
     const displayName = `${info.city}, ${info.state}`;
@@ -9,8 +8,11 @@ export default class CityInfo extends PureComponent {
     return (
       <div>
         <div>
-          {displayName} | <a target="_new"
-          href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${displayName}`}>
+          {displayName} |{' '}
+          <a
+            target="_new"
+            href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${displayName}`}
+          >
             Wikipedia
           </a>
         </div>

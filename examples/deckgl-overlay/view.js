@@ -34,10 +34,14 @@ import CITIES from './data/cities.json';
 const location = CITIES[0];
 
 // Example data.
-const locations = Immutable.fromJS(new Array(4000).fill(0).map(() => [
-  location.longitude + Math.random() * 0.01,
-  location.latitude + Math.random() * 0.01
-]));
+const locations = Immutable.fromJS(
+  new Array(4000)
+    .fill(0)
+    .map(() => [
+      location.longitude + Math.random() * 0.01,
+      location.latitude + Math.random() * 0.01
+    ])
+);
 
 function buildStyle({fill = 'red', stroke = 'blue'}) {
   return Immutable.fromJS({
@@ -56,7 +60,8 @@ function buildStyle({fill = 'red', stroke = 'blue'}) {
         type: 'fill',
         paint: {'fill-color': fill, 'fill-opacity': 0.4},
         interactive: true
-      }, {
+      },
+      {
         id: 'geojson-polygon-stroke',
         source: 'my-geojson-polygon-source',
         type: 'line',
@@ -73,7 +78,6 @@ const propTypes = {
 };
 
 export default class Example extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -92,15 +96,18 @@ export default class Example extends Component {
   componentWillMount() {
     const colors = ['red', 'green', 'blue'];
     let i = 0;
-    window.setInterval(function interval() {
-      this.setState({
-        mapStyle: buildStyle({
-          stroke: colors[i % colors.length],
-          fill: colors[(i + 1) % colors.length]
-        })
-      });
-      i = i + 1;
-    }.bind(this), 2000);
+    window.setInterval(
+      function interval() {
+        this.setState({
+          mapStyle: buildStyle({
+            stroke: colors[i % colors.length],
+            fill: colors[(i + 1) % colors.length]
+          })
+        });
+        i = i + 1;
+      }.bind(this),
+      2000
+    );
   }
 
   _onViewportChange(opt) {
@@ -119,30 +126,38 @@ export default class Example extends Component {
     };
     return (
       <InteractiveMap
-        { ...viewport }
+        {...viewport}
         maxPitch={85}
-        onViewportChange={ this._onViewportChange }
-        onClick={ this._onClickFeatures }
+        onViewportChange={this._onViewportChange}
+        onClick={this._onClickFeatures}
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
-        preventStyleDiffing={ false }>
-
+        preventStyleDiffing={false}
+      >
         <ScatterplotOverlay
-          { ...viewport }
-          locations={ locations }
-          dotRadius={ 2 }
-          globalOpacity={ 1 }
-          compositeOperation="screen"/>
+          {...viewport}
+          locations={locations}
+          dotRadius={2}
+          globalOpacity={1}
+          compositeOperation="screen"
+        />
 
-        <DeckGL {...viewport} layers={[
-          new ArcLayer({
-            data: [{sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.45669, 37.781]}],
-            strokeWidth: 4,
-            getSourceColor: x => [0, 0, 255],
-            getTargetColor: x => [0, 255, 0]
-          })
-        ]}/>
-
+        <DeckGL
+          {...viewport}
+          layers={[
+            new ArcLayer({
+              data: [
+                {
+                  sourcePosition: [-122.41669, 37.7853],
+                  targetPosition: [-122.45669, 37.781]
+                }
+              ],
+              strokeWidth: 4,
+              getSourceColor: x => [0, 0, 255],
+              getTargetColor: x => [0, 255, 0]
+            })
+          ]}
+        />
       </InteractiveMap>
     );
   }

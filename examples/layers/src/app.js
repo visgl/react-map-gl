@@ -1,4 +1,3 @@
-/* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
@@ -7,7 +6,6 @@ import ControlPanel from './control-panel';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
-
   state = {
     mapStyle: '',
     viewport: {
@@ -17,14 +15,13 @@ export default class App extends Component {
       bearing: 0,
       pitch: 0
     }
-  }
+  };
 
   _onViewportChange = viewport => this.setState({viewport});
 
   _onStyleChange = mapStyle => this.setState({mapStyle});
 
   render() {
-
     const {viewport, mapStyle} = this.state;
 
     return (
@@ -34,16 +31,17 @@ export default class App extends Component {
         height="100%"
         mapStyle={mapStyle}
         onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN} >
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+      >
         <ControlPanel
           containerComponent={this.props.containerComponent}
-          onChange={this._onStyleChange} />
+          onChange={this._onStyleChange}
+        />
       </MapGL>
     );
   }
-
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

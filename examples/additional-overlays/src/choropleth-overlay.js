@@ -30,8 +30,8 @@ const propTypes = {
   renderWhileDragging: PropTypes.bool.isRequired,
   globalOpacity: PropTypes.number.isRequired,
   /**
-    * An Immutable List of feature objects.
-    */
+   * An Immutable List of feature objects.
+   */
   features: PropTypes.instanceOf(Immutable.List),
   /* eslint-disable react/forbid-prop-types */
   colorDomain: PropTypes.array,
@@ -48,7 +48,6 @@ const defaultProps = {
 };
 
 export default class ChoroplethOverlay extends PureComponent {
-
   _redraw = ({width, height, ctx, isDragging, project, unproject}) => {
     ctx.clearRect(0, 0, width, height);
 
@@ -61,18 +60,20 @@ export default class ChoroplethOverlay extends PureComponent {
 
     if (this.props.renderWhileDragging || !isDragging) {
       const transform = geoTransform({point: projectPoint});
-      const path = geoPath().projection(transform).context(ctx);
+      const path = geoPath()
+        .projection(transform)
+        .context(ctx);
       this._drawFeatures(ctx, path);
     }
-  }
+  };
 
   _drawFeatures(ctx, path) {
     const {features} = this.props;
     if (!features) {
       return;
     }
-    const colorDomain = this.props.colorDomain ||
-      extent(features.toArray(), this.props.valueAccessor);
+    const colorDomain =
+      this.props.colorDomain || extent(features.toArray(), this.props.valueAccessor);
 
     const colorScale = scaleLinear()
       .domain(colorDomain)

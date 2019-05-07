@@ -57,7 +57,6 @@ export type ControlProps = {
  * recalculate the marker's position when the parent re-renders.
  */
 export default class BaseControl extends PureComponent<ControlProps> {
-
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
@@ -97,38 +96,34 @@ export default class BaseControl extends PureComponent<ControlProps> {
     if (this.props.captureScroll) {
       evt.stopPropagation();
     }
-  }
+  };
 
   _onDragStart = (evt: MjolnirEvent) => {
     if (this.props.captureDrag) {
       evt.stopPropagation();
     }
-  }
+  };
 
   _onDblClick = (evt: MjolnirEvent) => {
     if (this.props.captureDoubleClick) {
       evt.stopPropagation();
     }
-  }
+  };
 
   _onClick = (evt: MjolnirEvent) => {
     if (this.props.captureClick) {
       evt.stopPropagation();
     }
-  }
+  };
 
   _render() {
     throw new Error('_render() not implemented');
   }
 
   render() {
-    return (
-      createElement(MapContext.Consumer, null,
-        context => {
-          this._context = context;
-          return this._render();
-        }
-      )
-    );
+    return createElement(MapContext.Consumer, null, context => {
+      this._context = context;
+      return this._render();
+    });
   }
 }

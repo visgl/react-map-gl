@@ -16,7 +16,8 @@ mapStyle.sources.counties = {
 
 // Insert custom layers before city labels
 mapStyle.layers.splice(
-  mapStyle.layers.findIndex(layer => layer.id === 'place_label_city'), 0,
+  mapStyle.layers.findIndex(layer => layer.id === 'place_label_city'),
+  0,
   // Counties polygons
   {
     id: 'counties',
@@ -44,7 +45,8 @@ mapStyle.layers.splice(
   }
 );
 
-export const highlightLayerIndex =
-  mapStyle.layers.findIndex(layer => layer.id === 'counties-highlighted');
+export const highlightLayerIndex = mapStyle.layers.findIndex(
+  layer => layer.id === 'counties-highlighted'
+);
 
 export const defaultMapStyle = fromJS(mapStyle);

@@ -34,11 +34,9 @@ test('Marker#renders children', t => {
     },
     React.createElement('div', {className: 'test-marker'}, ['hello'])
   );
-  const staticUsage = React.createElement(MapContext.Provider,
-    {value: mockStaticContext},
-    marker
-  );
-  const interactiveUsage = React.createElement(MapContext.Provider,
+  const staticUsage = React.createElement(MapContext.Provider, {value: mockStaticContext}, marker);
+  const interactiveUsage = React.createElement(
+    MapContext.Provider,
     {value: mockInteractiveContext},
     marker
   );

@@ -1,4 +1,4 @@
-/* global window, document */
+/* global document */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
@@ -6,7 +6,6 @@ import MapGL from 'react-map-gl';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 class Root extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +20,6 @@ class Root extends Component {
   }
 
   render() {
-
     const {viewport} = this.state;
 
     return (
@@ -32,10 +30,10 @@ class Root extends Component {
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={v => this.setState({viewport: v})}
         preventStyleDiffing={false}
-        mapboxApiAccessToken={MAPBOX_TOKEN} />
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+      />
     );
   }
-
 }
 
 render(<Root />, document.body.appendChild(document.createElement('div')));
