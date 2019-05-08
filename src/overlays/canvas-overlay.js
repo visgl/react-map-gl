@@ -66,27 +66,27 @@ export default class CanvasOverlay extends BaseControl {
     });
 
     ctx.restore();
-  }
+  };
 
   _render() {
     const pixelRatio = window.devicePixelRatio || 1;
-    const {viewport: {width, height}} = this._context;
+    const {
+      viewport: {width, height}
+    } = this._context;
     this._redraw();
 
-    return (
-      createElement('canvas', {
-        ref: this._containerRef,
-        width: width * pixelRatio,
-        height: height * pixelRatio,
-        style: {
-          width: `${width}px`,
-          height: `${height}px`,
-          position: 'absolute',
-          left: 0,
-          top: 0
-        }
-      })
-    );
+    return createElement('canvas', {
+      ref: this._containerRef,
+      width: width * pixelRatio,
+      height: height * pixelRatio,
+      style: {
+        width: `${width}px`,
+        height: `${height}px`,
+        position: 'absolute',
+        left: 0,
+        top: 0
+      }
+    });
   }
 }
 

@@ -3,8 +3,8 @@ import {getDynamicPosition, ANCHOR_POSITION} from 'react-map-gl/utils/dynamic-po
 
 const ANCHORS = Object.keys(ANCHOR_POSITION);
 
- // * @param {String} anchor - type of the anchor, one of 'top', 'bottom',
- //    'left', 'right', 'top-left', 'top-right', 'bottom-left' , and  'bottom-right'
+// * @param {String} anchor - type of the anchor, one of 'top', 'bottom',
+//    'left', 'right', 'top-left', 'top-right', 'bottom-left' , and  'bottom-right'
 
 const TEST_CASES = [
   {
@@ -72,16 +72,16 @@ const TEST_CASES = [
     },
     expected: (input, output) => {
       switch (input) {
-      case 'top':
-      case 'top-left':
-        return output === 'top-right';
-      case 'left':
-        return output === 'right';
-      case 'bottom':
-      case 'bottom-left':
-        return output === 'bottom-right';
-      default:
-        return input === output;
+        case 'top':
+        case 'top-left':
+          return output === 'top-right';
+        case 'left':
+          return output === 'right';
+        case 'bottom':
+        case 'bottom-left':
+          return output === 'bottom-right';
+        default:
+          return input === output;
       }
     },
     message: 'Left border'
@@ -97,16 +97,16 @@ const TEST_CASES = [
     },
     expected: (input, output) => {
       switch (input) {
-      case 'top':
-      case 'top-right':
-        return output === 'top-left';
-      case 'right':
-        return output === 'left';
-      case 'bottom':
-      case 'bottom-right':
-        return output === 'bottom-left';
-      default:
-        return input === output;
+        case 'top':
+        case 'top-right':
+          return output === 'top-left';
+        case 'right':
+          return output === 'left';
+        case 'bottom':
+        case 'bottom-right':
+          return output === 'bottom-left';
+        default:
+          return input === output;
       }
     },
     message: 'Right border'
@@ -122,16 +122,16 @@ const TEST_CASES = [
     },
     expected: (input, output) => {
       switch (input) {
-      case 'left':
-      case 'top-left':
-        return output === 'bottom-left';
-      case 'top':
-        return output === 'bottom';
-      case 'right':
-      case 'top-right':
-        return output === 'bottom-right';
-      default:
-        return input === output;
+        case 'left':
+        case 'top-left':
+          return output === 'bottom-left';
+        case 'top':
+          return output === 'bottom';
+        case 'right':
+        case 'top-right':
+          return output === 'bottom-right';
+        default:
+          return input === output;
       }
     },
     message: 'Top border'
@@ -147,16 +147,16 @@ const TEST_CASES = [
     },
     expected: (input, output) => {
       switch (input) {
-      case 'left':
-      case 'bottom-left':
-        return output === 'top-left';
-      case 'bottom':
-        return output === 'top';
-      case 'right':
-      case 'bottom-right':
-        return output === 'top-right';
-      default:
-        return input === output;
+        case 'left':
+        case 'bottom-left':
+          return output === 'top-left';
+        case 'bottom':
+          return output === 'top';
+        case 'right':
+        case 'bottom-right':
+          return output === 'top-right';
+        default:
+          return input === output;
       }
     },
     message: 'Bottom border'
@@ -165,7 +165,6 @@ const TEST_CASES = [
 
 test('getDynamicPosition', t => {
   TEST_CASES.forEach(testCase => {
-
     ANCHORS.forEach(anchor => {
       const params = Object.assign({anchor}, testCase.opts);
       const result = getDynamicPosition(params);

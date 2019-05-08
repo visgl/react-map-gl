@@ -7,13 +7,16 @@ export default class ControlPanel extends PureComponent {
   _formatSettingName(name) {
     return name.match(camelPattern).join(' ');
   }
-  
+
   _renderCheckbox(name, value) {
     return (
       <div key={name} className="input">
         <label>{this._formatSettingName(name)}</label>
-        <input type="checkbox" checked={value}
-          onChange={evt => this.props.onChange(name, evt.target.checked)} />
+        <input
+          type="checkbox"
+          checked={value}
+          onChange={evt => this.props.onChange(name, evt.target.checked)}
+        />
       </div>
     );
   }
@@ -27,7 +30,10 @@ export default class ControlPanel extends PureComponent {
         <h3>Custom Controller</h3>
         <p>Override default event handling logic.</p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/4.0-release/examples/custom-controller" target="_new">
+          <a
+            href="https://github.com/uber/react-map-gl/tree/4.0-release/examples/custom-controller"
+            target="_new"
+          >
             View Code ↗
           </a>
         </div>

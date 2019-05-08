@@ -15,7 +15,6 @@ const navStyle = {
 };
 
 export default class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -28,45 +27,44 @@ export default class App extends Component {
       },
       marker: {
         latitude: 37.785164,
-        longitude: -100,
+        longitude: -100
       },
       events: {}
     };
   }
 
-  _updateViewport = (viewport) => {
+  _updateViewport = viewport => {
     this.setState({viewport});
-  }
+  };
 
   _logDragEvent(name, event) {
     this.setState({
       events: {
         ...this.state.events,
-        [name]: event.lngLat,
+        [name]: event.lngLat
       }
-    })
+    });
   }
 
-  _onMarkerDragStart = (event) => {
+  _onMarkerDragStart = event => {
     this._logDragEvent('onDragStart', event);
   };
 
-  _onMarkerDrag = (event) => {
+  _onMarkerDrag = event => {
     this._logDragEvent('onDrag', event);
   };
 
-  _onMarkerDragEnd = (event) => {
+  _onMarkerDragEnd = event => {
     this._logDragEvent('onDragEnd', event);
     this.setState({
       marker: {
         longitude: event.lngLat[0],
-        latitude: event.lngLat[1],
+        latitude: event.lngLat[1]
       }
     });
   };
 
   render() {
-
     const {viewport, marker} = this.state;
 
     return (
@@ -76,8 +74,9 @@ export default class App extends Component {
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._updateViewport}
-        mapboxApiAccessToken={TOKEN} >
-        <Marker 
+        mapboxApiAccessToken={TOKEN}
+      >
+        <Marker
           longitude={marker.longitude}
           latitude={marker.latitude}
           offsetTop={-20}
@@ -85,7 +84,8 @@ export default class App extends Component {
           draggable
           onDragStart={this._onMarkerDragStart}
           onDrag={this._onMarkerDrag}
-          onDragEnd={this._onMarkerDragEnd} >
+          onDragEnd={this._onMarkerDragEnd}
+        >
           <Pin size={20} />
         </Marker>
 
@@ -100,9 +100,8 @@ export default class App extends Component {
       </MapGL>
     );
   }
-
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

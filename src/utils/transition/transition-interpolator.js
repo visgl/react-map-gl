@@ -3,7 +3,6 @@ import {equals} from '../math-utils';
 import assert from '../assert';
 
 export default class TransitionInterpolator {
-
   propNames: Array<string> = [];
 
   /**
@@ -13,7 +12,7 @@ export default class TransitionInterpolator {
    * @returns {bool} - true if two props are equivalent
    */
   arePropsEqual(currentProps: any, nextProps: any): boolean {
-    for (const key of (this.propNames || [])) {
+    for (const key of this.propNames || []) {
       if (!equals(currentProps[key], nextProps[key])) {
         return false;
       }
@@ -28,7 +27,10 @@ export default class TransitionInterpolator {
    * @returns {Object} {start, end} - start and end props to be passed
    *   to `interpolateProps`
    */
-  initializeProps(startProps: any, endProps: any): {
+  initializeProps(
+    startProps: any,
+    endProps: any
+  ): {
     start: any,
     end: any
   } {
@@ -45,5 +47,4 @@ export default class TransitionInterpolator {
   interpolateProps(startProps: any, endProps: any, t: number): any {
     assert(false, 'interpolateProps is not implemented');
   }
-
 }

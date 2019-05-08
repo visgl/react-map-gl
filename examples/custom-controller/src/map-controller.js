@@ -1,7 +1,6 @@
 import {MapController} from 'react-map-gl';
 
 export default class MyMapController extends MapController {
-
   // register custom events
   events = ['press'];
 

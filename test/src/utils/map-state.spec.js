@@ -56,7 +56,6 @@ test('MapState - Constructor', t => {
 });
 
 test('MapState - Low zoom', t => {
-
   const viewport = new MapState({
     width: 800,
     height: 600,
@@ -83,17 +82,20 @@ test('MapState - Pan', t => {
       .pan({pos: POS_END, startPos: POS_START})
       .getViewportProps();
 
-    t.ok(toLowPrecision(viewport1.longitude) !== toLowPrecision(viewport.longitude) ||
-      toLowPrecision(viewport1.latitude) !== toLowPrecision(viewport.latitude),
-      'Map center has changed');
-    t.ok(viewport1.longitude < 180 &&
-      viewport1.longitude >= -180, 'Longitude is within bounds');
-    t.ok(viewport1.latitude <= 90 &&
-      viewport1.latitude >= -90, 'Latitude is within bounds');
-    t.ok(isSameLocation(
-      new WebMercatorViewport(viewport).unproject(POS_START),
-      new WebMercatorViewport(viewport1).unproject(POS_END)),
-      'Location under the pointer remains the same');
+    t.ok(
+      toLowPrecision(viewport1.longitude) !== toLowPrecision(viewport.longitude) ||
+        toLowPrecision(viewport1.latitude) !== toLowPrecision(viewport.latitude),
+      'Map center has changed'
+    );
+    t.ok(viewport1.longitude < 180 && viewport1.longitude >= -180, 'Longitude is within bounds');
+    t.ok(viewport1.latitude <= 90 && viewport1.latitude >= -90, 'Latitude is within bounds');
+    t.ok(
+      isSameLocation(
+        new WebMercatorViewport(viewport).unproject(POS_START),
+        new WebMercatorViewport(viewport1).unproject(POS_END)
+      ),
+      'Location under the pointer remains the same'
+    );
 
     // chained panning
     const viewport2 = new MapState(viewport)
@@ -103,9 +105,11 @@ test('MapState - Pan', t => {
       .panEnd()
       .getViewportProps();
 
-    t.ok(toLowPrecision(viewport1.longitude) === toLowPrecision(viewport2.longitude) &&
-      toLowPrecision(viewport1.latitude) === toLowPrecision(viewport2.latitude),
-      'Consistent result');
+    t.ok(
+      toLowPrecision(viewport1.longitude) === toLowPrecision(viewport2.longitude) &&
+        toLowPrecision(viewport1.latitude) === toLowPrecision(viewport2.latitude),
+      'Consistent result'
+    );
   });
 
   // insufficient arguments
@@ -127,14 +131,19 @@ test('MapState - Rotate', t => {
       .rotateEnd()
       .getViewportProps();
 
-    t.ok(toLowPrecision(viewport1.bearing) !== toLowPrecision(viewport.bearing || 0),
-      'Bearing has changed');
-    t.ok(toLowPrecision(viewport1.pitch) !== toLowPrecision(viewport.pitch || 0),
-      'Pitch has changed');
-    t.ok(viewport1.pitch <= viewport1.maxPitch &&
-      viewport1.pitch >= viewport1.minPitch, 'Pitch is within bounds');
-    t.ok(viewport1.bearing < 180 &&
-      viewport1.bearing >= -180, 'Bearing is within bounds');
+    t.ok(
+      toLowPrecision(viewport1.bearing) !== toLowPrecision(viewport.bearing || 0),
+      'Bearing has changed'
+    );
+    t.ok(
+      toLowPrecision(viewport1.pitch) !== toLowPrecision(viewport.pitch || 0),
+      'Pitch has changed'
+    );
+    t.ok(
+      viewport1.pitch <= viewport1.maxPitch && viewport1.pitch >= viewport1.minPitch,
+      'Pitch is within bounds'
+    );
+    t.ok(viewport1.bearing < 180 && viewport1.bearing >= -180, 'Bearing is within bounds');
 
     // chained rotating
     const viewport2 = new MapState(viewport)
@@ -144,24 +153,32 @@ test('MapState - Rotate', t => {
       .rotateEnd()
       .getViewportProps();
 
-    t.ok(toLowPrecision(viewport1.pitch) === toLowPrecision(viewport2.pitch) &&
-      toLowPrecision(viewport1.bearing) === toLowPrecision(viewport2.bearing),
-      'Consistent result');
+    t.ok(
+      toLowPrecision(viewport1.pitch) === toLowPrecision(viewport2.pitch) &&
+        toLowPrecision(viewport1.bearing) === toLowPrecision(viewport2.bearing),
+      'Consistent result'
+    );
 
     // out of bounds arguments
     const state = new MapState(viewport).rotateStart({});
 
-    t.is(state.rotate({deltaScaleY: 2}).getViewportProps().pitch,
+    t.is(
+      state.rotate({deltaScaleY: 2}).getViewportProps().pitch,
       viewport.maxPitch || MAPBOX_LIMITS.maxPitch,
-      'Capped at max pitch');
+      'Capped at max pitch'
+    );
 
-    t.is(state.rotate({deltaScaleY: -2}).getViewportProps().pitch,
+    t.is(
+      state.rotate({deltaScaleY: -2}).getViewportProps().pitch,
       viewport.minPitch || MAPBOX_LIMITS.minPitch,
-      'Capped at min pitch');
+      'Capped at min pitch'
+    );
 
-    t.is(state.rotate({deltaScaleX: 2}).getViewportProps().bearing,
+    t.is(
+      state.rotate({deltaScaleX: 2}).getViewportProps().bearing,
       viewport.bearing || 0,
-      'Big delta X is fine');
+      'Big delta X is fine'
+    );
   });
 
   t.end();
@@ -179,14 +196,18 @@ test('MapState - Zoom', t => {
       .zoom({pos: POS_END, startPos: POS_START, scale: SCALE})
       .getViewportProps();
 
-    t.ok(toLowPrecision(viewport1.zoom) !== toLowPrecision(viewport.zoom),
-      'Zoom has changed');
-    t.ok(viewport1.zoom <= viewport1.maxZoom &&
-      viewport1.zoom >= viewport1.minZoom, 'Zoom is within bounds');
-    t.ok(isSameLocation(
-      new WebMercatorViewport(viewport).unproject(POS_START),
-      new WebMercatorViewport(viewport1).unproject(POS_END)),
-      'Location under the pointer remains the same');
+    t.ok(toLowPrecision(viewport1.zoom) !== toLowPrecision(viewport.zoom), 'Zoom has changed');
+    t.ok(
+      viewport1.zoom <= viewport1.maxZoom && viewport1.zoom >= viewport1.minZoom,
+      'Zoom is within bounds'
+    );
+    t.ok(
+      isSameLocation(
+        new WebMercatorViewport(viewport).unproject(POS_START),
+        new WebMercatorViewport(viewport1).unproject(POS_END)
+      ),
+      'Location under the pointer remains the same'
+    );
 
     // chained panning
     const viewport2 = new MapState(viewport)
@@ -196,10 +217,12 @@ test('MapState - Zoom', t => {
       .zoomEnd()
       .getViewportProps();
 
-    t.ok(toLowPrecision(viewport1.longitude) === toLowPrecision(viewport2.longitude) &&
-      toLowPrecision(viewport1.latitude) === toLowPrecision(viewport2.latitude) &&
-      toLowPrecision(viewport1.zoom) === toLowPrecision(viewport2.zoom),
-      'Consistent result');
+    t.ok(
+      toLowPrecision(viewport1.longitude) === toLowPrecision(viewport2.longitude) &&
+        toLowPrecision(viewport1.latitude) === toLowPrecision(viewport2.latitude) &&
+        toLowPrecision(viewport1.zoom) === toLowPrecision(viewport2.zoom),
+      'Consistent result'
+    );
   });
 
   // argument out of bounds

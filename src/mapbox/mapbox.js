@@ -25,7 +25,7 @@ import {document} from '../utils/globals';
 
 function noop() {}
 
-function defaultOnError(event?: { error: any }) {
+function defaultOnError(event?: {error: any}) {
   if (event) {
     console.error(event.error); // eslint-disable-line
   }
@@ -33,38 +33,38 @@ function defaultOnError(event?: { error: any }) {
 
 const propTypes = {
   // Creation parameters
-  container: PropTypes.object, /** The container to have the map. */
-  gl: PropTypes.object, /** External WebGLContext to use */
+  container: PropTypes.object /** The container to have the map. */,
+  gl: PropTypes.object /** External WebGLContext to use */,
 
-  mapboxApiAccessToken: PropTypes.string, /** Mapbox API access token for Mapbox tiles/styles. */
+  mapboxApiAccessToken: PropTypes.string /** Mapbox API access token for Mapbox tiles/styles. */,
   mapboxApiUrl: PropTypes.string,
-  attributionControl: PropTypes.bool, /** Show attribution control or not. */
-  preserveDrawingBuffer: PropTypes.bool, /** Useful when you want to export the canvas as a PNG. */
+  attributionControl: PropTypes.bool /** Show attribution control or not. */,
+  preserveDrawingBuffer: PropTypes.bool /** Useful when you want to export the canvas as a PNG. */,
   reuseMaps: PropTypes.bool,
-  transformRequest: PropTypes.func, /** The transformRequest callback for the map */
-  mapOptions: PropTypes.object, /** Extra options to pass to Mapbox constructor. See #545. **/
+  transformRequest: PropTypes.func /** The transformRequest callback for the map */,
+  mapOptions: PropTypes.object /** Extra options to pass to Mapbox constructor. See #545. **/,
   mapStyle: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.object
-  ]), /** The Mapbox style. A string url to a MapboxGL style */
+  ]) /** The Mapbox style. A string url to a MapboxGL style */,
 
-  visible: PropTypes.bool, /** Whether the map is visible */
-  asyncRender: PropTypes.bool, /** Whether mapbox should manage its own render cycle */
+  visible: PropTypes.bool /** Whether the map is visible */,
+  asyncRender: PropTypes.bool /** Whether mapbox should manage its own render cycle */,
 
-  onLoad: PropTypes.func, /** The onLoad callback for the map */
-  onError: PropTypes.func, /** The onError callback for the map */
+  onLoad: PropTypes.func /** The onLoad callback for the map */,
+  onError: PropTypes.func /** The onError callback for the map */,
 
   // Map view state
-  width: PropTypes.number, /** The width of the map. */
-  height: PropTypes.number, /** The height of the map. */
+  width: PropTypes.number /** The width of the map. */,
+  height: PropTypes.number /** The height of the map. */,
 
-  viewState: PropTypes.object, /** object containing lng/lat/zoom/bearing/pitch */
+  viewState: PropTypes.object /** object containing lng/lat/zoom/bearing/pitch */,
 
-  longitude: PropTypes.number, /** The longitude of the center of the map. */
-  latitude: PropTypes.number, /** The latitude of the center of the map. */
-  zoom: PropTypes.number, /** The tile zoom level of the map. */
-  bearing: PropTypes.number, /** Specify the bearing of the viewport */
-  pitch: PropTypes.number, /** Specify the pitch of the viewport */
+  longitude: PropTypes.number /** The longitude of the center of the map. */,
+  latitude: PropTypes.number /** The latitude of the center of the map. */,
+  zoom: PropTypes.number /** The tile zoom level of the map. */,
+  bearing: PropTypes.number /** Specify the bearing of the viewport */,
+  pitch: PropTypes.number /** Specify the pitch of the viewport */,
   // Note: Non-public API, see https://github.com/mapbox/mapbox-gl-js/issues/1137
   altitude: PropTypes.number /** Altitude of the viewport camera. Default 1.5 "screen heights" */
 };
@@ -138,7 +138,7 @@ type Props = {
 };
 
 // Try to get access token from URL, env, local storage or config
-export function getAccessToken() : string {
+export function getAccessToken(): string {
   let accessToken = null;
 
   if (typeof window !== 'undefined' && window.location) {
@@ -148,7 +148,8 @@ export function getAccessToken() : string {
 
   if (!accessToken && typeof process !== 'undefined') {
     // Note: This depends on bundler plugins (e.g. webpack) importing environment correctly
-    accessToken = accessToken || process.env.MapboxAccessToken || process.env.REACT_APP_MAPBOX_ACCESS_TOKEN; // eslint-disable-line
+    accessToken =
+      accessToken || process.env.MapboxAccessToken || process.env.REACT_APP_MAPBOX_ACCESS_TOKEN; // eslint-disable-line
   }
 
   // Prevents mapbox from throwing
@@ -170,11 +171,10 @@ function checkPropTypes(props, component = 'component') {
 // - Provides support for specifying tokens during development
 
 export default class Mapbox {
-
-  static initialized : boolean = false;
-  static propTypes : any = propTypes;
-  static defaultProps : any = defaultProps;
-  static savedMap : any = null;
+  static initialized: boolean = false;
+  static propTypes: any = propTypes;
+  static defaultProps: any = defaultProps;
+  static savedMap: any = null;
 
   constructor(props: Props) {
     if (!props.mapboxgl) {
@@ -197,11 +197,11 @@ export default class Mapbox {
     this._initialize(props);
   }
 
-  mapboxgl : MapboxGL;
-  props : Props = defaultProps;
-  _map : any = null;
-  width : number = 0;
-  height : number = 0;
+  mapboxgl: MapboxGL;
+  props: Props = defaultProps;
+  _map: any = null;
+  width: number = 0;
+  height: number = 0;
 
   finalize() {
     this._destroy();
@@ -301,7 +301,7 @@ export default class Mapbox {
         };
       }
 
-      const mapOptions : any = {
+      const mapOptions: any = {
         container: props.container,
         center: [0, 0],
         zoom: 8,
@@ -318,8 +318,7 @@ export default class Mapbox {
       if (props.transformRequest) {
         mapOptions.transformRequest = props.transformRequest;
       }
-      this._map = new this.mapboxgl.Map(
-        Object.assign({}, mapOptions, props.mapOptions));
+      this._map = new this.mapboxgl.Map(Object.assign({}, mapOptions, props.mapOptions));
 
       // Attach optional onLoad function
       this._map.once('load', props.onLoad);
@@ -341,7 +340,6 @@ export default class Mapbox {
       this._map.off('load', this.props.onLoad);
       this._map.off('error', this.props.onError);
       this._map.off('styledata', this._fireLoadEvent);
-
     } else {
       this._map.remove();
     }
@@ -368,9 +366,13 @@ export default class Mapbox {
     // $FlowFixMe
     Object.defineProperty(container, 'clientWidth', {get: () => this.width});
     // $FlowFixMe
-    Object.defineProperty(container, 'offsetHeight', {get: () => this.height});
+    Object.defineProperty(container, 'offsetHeight', {
+      get: () => this.height
+    });
     // $FlowFixMe
-    Object.defineProperty(container, 'clientHeight', {get: () => this.height});
+    Object.defineProperty(container, 'clientHeight', {
+      get: () => this.height
+    });
 
     // Disable outline style
     const canvas = this._map.getCanvas();
@@ -436,19 +438,13 @@ export default class Mapbox {
     return viewportChanged;
   }
 
-  _getViewState(props: Props) : ViewState {
-    const {
-      longitude,
-      latitude,
-      zoom,
-      pitch = 0,
-      bearing = 0,
-      altitude = 1.5
-    } = props.viewState || props;
+  _getViewState(props: Props): ViewState {
+    const {longitude, latitude, zoom, pitch = 0, bearing = 0, altitude = 1.5} =
+      props.viewState || props;
     return {longitude, latitude, zoom, pitch, bearing, altitude};
   }
 
-  _checkStyleSheet(mapboxVersion : string = '0.47.0') {
+  _checkStyleSheet(mapboxVersion: string = '0.47.0') {
     if (typeof document === 'undefined') {
       return;
     }
@@ -466,8 +462,10 @@ export default class Mapbox {
         const link = document.createElement('link');
         link.setAttribute('rel', 'stylesheet');
         link.setAttribute('type', 'text/css');
-        link.setAttribute('href',
-          `https://api.tiles.mapbox.com/mapbox-gl-js/v${mapboxVersion}/mapbox-gl.css`);
+        link.setAttribute(
+          'href',
+          `https://api.tiles.mapbox.com/mapbox-gl-js/v${mapboxVersion}/mapbox-gl.css`
+        );
         document.head.append(link);
       }
     } catch (error) {

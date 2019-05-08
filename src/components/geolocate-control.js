@@ -1,3 +1,5 @@
+// @flow
+
 /* global window */
 import {createElement, createRef} from 'react';
 import PropTypes from 'prop-types';
@@ -11,13 +13,9 @@ import MapState from '../utils/map-state';
 import TransitionManager from '../utils/transition-manager';
 import {isGeolocationSupported} from '../utils/geolocate-utils';
 
-const LINEAR_TRANSITION_PROPS = Object.assign(
-  {},
-  TransitionManager.defaultProps,
-  {
-    transitionDuration: 500
-  }
-);
+const LINEAR_TRANSITION_PROPS = Object.assign({}, TransitionManager.defaultProps, {
+  transitionDuration: 500
+});
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
@@ -65,9 +63,9 @@ export default class GeolocateControl extends BaseControl {
     };
   }
 
-  _containerRef: { current: null | HTMLDivElement } = createRef();
-  _geolocateButtonRef: { current: null | HTMLDivElement } = createRef();
-  _markerRef: { current: null | HTMLDivElement } = createRef();
+  _containerRef: {current: null | HTMLDivElement} = createRef();
+  _geolocateButtonRef: {current: null | HTMLDivElement} = createRef();
+  _markerRef: {current: null | HTMLDivElement} = createRef();
 
   componentDidMount() {
     isGeolocationSupported().then(result => {
@@ -94,7 +92,7 @@ export default class GeolocateControl extends BaseControl {
     }
   }
 
-  _setupMapboxGeolocateControl = (supportsGeolocation) => {
+  _setupMapboxGeolocateControl = supportsGeolocation => {
     if (!supportsGeolocation) {
       /* eslint-disable no-console, no-undef */
       console.warn(
@@ -141,17 +139,11 @@ export default class GeolocateControl extends BaseControl {
   };
 
   _getBounds = position => {
-    const center = new mapboxgl.LngLat(
-      position.coords.longitude,
-      position.coords.latitude
-    );
+    const center = new mapboxgl.LngLat(position.coords.longitude, position.coords.latitude);
     const radius = position.coords.accuracy;
     const bounds = center.toBounds(radius);
 
-    return [
-      [bounds._ne.lng, bounds._ne.lat],
-      [bounds._sw.lng, bounds._sw.lat]
-    ];
+    return [[bounds._ne.lng, bounds._ne.lat], [bounds._sw.lng, bounds._sw.lat]];
   };
 
   _updateCamera = position => {
@@ -160,13 +152,13 @@ export default class GeolocateControl extends BaseControl {
     const bounds = this._getBounds(position);
     const {longitude, latitude, zoom} = new WebMercatorViewport(viewport).fitBounds(bounds);
 
-    const newViewState = Object.assign({}, viewport, {longitude, latitude, zoom});
+    const newViewState = Object.assign({}, viewport, {
+      longitude,
+      latitude,
+      zoom
+    });
     const mapState = new MapState(newViewState);
-    const viewState = Object.assign(
-      {},
-      mapState.getViewportProps(),
-      LINEAR_TRANSITION_PROPS
-    );
+    const viewState = Object.assign({}, mapState.getViewportProps(), LINEAR_TRANSITION_PROPS);
 
     // Call new style callback
     this.props.onViewStateChange({viewState});
@@ -214,13 +206,16 @@ export default class GeolocateControl extends BaseControl {
     const {className, style} = this.props;
     return createElement('div', null, [
       this._renderMarker(),
-      createElement('div', {
-        className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
-        ref: this._containerRef,
-        style,
-        onContextMenu: e => e.preventDefault()
-      }, this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)
-    )]
-    );
+      createElement(
+        'div',
+        {
+          className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
+          ref: this._containerRef,
+          style,
+          onContextMenu: e => e.preventDefault()
+        },
+        this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)
+      )
+    ]);
   }
 }

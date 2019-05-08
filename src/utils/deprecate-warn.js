@@ -10,11 +10,11 @@ const DEPRECATED_PROPS = [
   {old: 'mapControls', new: 'controller'}
 ];
 
-function getDeprecatedText(name : string) : string {
+function getDeprecatedText(name: string): string {
   return `react-map-gl: \`${name}\` is removed.`;
 }
 
-function getNewText(name : string) : string {
+function getNewText(name: string): string {
   return `Use \`${name}\` instead.`;
 }
 
@@ -25,7 +25,7 @@ function getNewText(name : string) : string {
  */
 export default function checkDeprecatedProps(props: any = {}) {
   /* eslint-disable no-console, no-undef */
-  DEPRECATED_PROPS.forEach((depProp) => {
+  DEPRECATED_PROPS.forEach(depProp => {
     if (props.hasOwnProperty(depProp.old)) {
       let warnMessage = getDeprecatedText(depProp.old);
       if (depProp.new) {

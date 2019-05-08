@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 // React Map Components
-export {default as default} from './components/interactive-map';
+export {default} from './components/interactive-map';
 export {default as InteractiveMap} from './components/interactive-map';
 export {default as StaticMap} from './components/static-map';
 

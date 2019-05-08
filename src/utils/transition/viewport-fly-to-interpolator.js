@@ -18,9 +18,8 @@ const LINEARLY_INTERPOLATED_PROPS = ['bearing', 'pitch'];
  * mapbox-gl-js flyTo : https://www.mapbox.com/mapbox-gl-js/api/#map#flyto.
  * It implements “Smooth and efficient zooming and panning.” algorithm by
  * "Jarke J. van Wijk and Wim A.A. Nuij"
-*/
+ */
 export default class ViewportFlyToInterpolator extends TransitionInterpolator {
-
   propNames = VIEWPORT_TRANSITION_PROPS;
 
   initializeProps(startProps: MapStateProps, endProps: MapStateProps) {
@@ -59,5 +58,4 @@ export default class ViewportFlyToInterpolator extends TransitionInterpolator {
 
     return viewport;
   }
-
 }

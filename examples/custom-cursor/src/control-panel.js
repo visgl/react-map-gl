@@ -1,5 +1,4 @@
 import React, {PureComponent} from 'react';
-import MAP_STYLE from '../../map-style-basic-v8.json';
 
 // Layer id patterns by category
 const layerSelector = {
@@ -21,7 +20,6 @@ function getLayerFilter(categories, layerId) {
 }
 
 export default class StyleControls extends PureComponent {
-
   state = {
     categories: {
       parks: true,
@@ -37,7 +35,10 @@ export default class StyleControls extends PureComponent {
   }
 
   _onToggleLayer(name, event) {
-    const categories = {...this.state.categories, [name]: event.target.checked};
+    const categories = {
+      ...this.state.categories,
+      [name]: event.target.checked
+    };
     this.setState({categories});
 
     const filter = getLayerFilter.bind(null, categories);
@@ -50,8 +51,11 @@ export default class StyleControls extends PureComponent {
     return (
       <div key={name} className="input">
         <label>{name}</label>
-        <input type="checkbox" checked={categories[name]}
-          onChange={this._onToggleLayer.bind(this, name)} />
+        <input
+          type="checkbox"
+          checked={categories[name]}
+          onChange={this._onToggleLayer.bind(this, name)}
+        />
       </div>
     );
   }
@@ -64,13 +68,16 @@ export default class StyleControls extends PureComponent {
         <h3>Custom Cursor</h3>
         <p>Customize the cursor based on interactivity.</p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/3.2-release/examples/custom-cursor" target="_new">
+          <a
+            href="https://github.com/uber/react-map-gl/tree/3.2-release/examples/custom-cursor"
+            target="_new"
+          >
             View Code ↗
           </a>
         </div>
         <hr />
         <p>Clickable layers</p>
-        { Object.keys(layerSelector).map(name => this._renderLayerControl(name)) }
+        {Object.keys(layerSelector).map(name => this._renderLayerControl(name))}
       </Container>
     );
   }

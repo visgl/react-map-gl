@@ -9,13 +9,12 @@ function round5(value) {
 }
 
 export default class ControlPanel extends PureComponent {
-  renderEvent = (eventName) => {
+  renderEvent = eventName => {
     const {events = {}} = this.props;
     const lngLat = events[eventName];
     return (
       <div key={eventName}>
-        <strong>{eventName}:</strong>{' '}
-        {lngLat ? lngLat.map(round5).join(', ') : <em>null</em>}
+        <strong>{eventName}:</strong> {lngLat ? lngLat.map(round5).join(', ') : <em>null</em>}
       </div>
     );
   };
@@ -26,9 +25,7 @@ export default class ControlPanel extends PureComponent {
       <Container>
         <h3>Draggable Marker</h3>
         <p>Try dragging the marker to another location.</p>
-        <div>
-          {eventNames.map(this.renderEvent)}
-        </div>
+        <div>{eventNames.map(this.renderEvent)}</div>
         {/* TODO add a "View Code" link here when we know the release */}
       </Container>
     );

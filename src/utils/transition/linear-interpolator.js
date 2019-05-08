@@ -18,18 +18,19 @@ type TransitionProps = MapStateProps & {
 
 /**
  * Performs linear interpolation of two viewports.
-*/
+ */
 export default class LinearInterpolator extends TransitionInterpolator {
-
   /**
    * @param opts {Object}
    *  - opts.transitionProps {Array}] - list of props to apply linear transition to.
    *  - opts.around {Array} - a screen point to zoom/rotate around
    */
-  constructor(opts: {
-    transitionProps?: Array<string>,
-    around?: Array<number>
-  } = {}) {
+  constructor(
+    opts: {
+      transitionProps?: Array<string>,
+      around?: Array<number>
+    } = {}
+  ) {
     super();
 
     if (Array.isArray(opts)) {
@@ -84,17 +85,17 @@ export default class LinearInterpolator extends TransitionInterpolator {
 
     if (endProps.around) {
       // zoom around provided point
-      const [longitude, latitude] = new WebMercatorViewport(Object.assign({}, endProps, viewport))
-        .getMapCenterByLngLatPosition({
-          lngLat: endProps.aroundLngLat,
-          // anchor point in current screen coordinates
-          pos: lerp(startProps.around, endProps.around, t)
-        });
+      const [longitude, latitude] = new WebMercatorViewport(
+        Object.assign({}, endProps, viewport)
+      ).getMapCenterByLngLatPosition({
+        lngLat: endProps.aroundLngLat,
+        // anchor point in current screen coordinates
+        pos: lerp(startProps.around, endProps.around, t)
+      });
       viewport.longitude = longitude;
       viewport.latitude = latitude;
     }
 
     return viewport;
   }
-
 }

@@ -40,7 +40,6 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
 });
 
 export default class FullscreenControl extends BaseControl {
-
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
@@ -57,9 +56,13 @@ export default class FullscreenControl extends BaseControl {
   componentDidMount() {
     const container = this.props.container || this._context.mapContainer;
 
-    this._mapboxFullscreenControl = new mapboxgl.FullscreenControl({container});
+    this._mapboxFullscreenControl = new mapboxgl.FullscreenControl({
+      container
+    });
 
-    this.setState({showButton: this._mapboxFullscreenControl._checkFullscreenSupport()});
+    this.setState({
+      showButton: this._mapboxFullscreenControl._checkFullscreenSupport()
+    });
 
     document.addEventListener(
       this._mapboxFullscreenControl._fullscreenchange,
@@ -107,11 +110,13 @@ export default class FullscreenControl extends BaseControl {
 
     const type = isFullscreen ? 'shrink' : 'fullscreen';
 
-    return createElement('div', {
-      className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
-      ref: this._containerRef
-    }, [
-      this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen)
-    ]);
+    return createElement(
+      'div',
+      {
+        className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
+        ref: this._containerRef
+      },
+      [this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen)]
+    );
   }
 }

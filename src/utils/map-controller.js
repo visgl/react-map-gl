@@ -53,7 +53,6 @@ const EVENT_TYPES = {
  * A class that handles events and updates mercator style viewport parameters
  */
 export default class MapController {
-
   events: Array<string> = [];
   mapState: MapState;
   onViewportChange: Function;
@@ -75,7 +74,7 @@ export default class MapController {
   _transitionManager: TransitionManager = new TransitionManager();
 
   constructor() {
-    (this:any).handleEvent = this.handleEvent.bind(this);
+    (this: any).handleEvent = this.handleEvent.bind(this);
   }
 
   /**
@@ -86,40 +85,41 @@ export default class MapController {
     this.mapState = this.getMapState();
 
     switch (event.type) {
-    case 'panstart':
-      return this._onPanStart(event);
-    case 'panmove':
-      return this._onPan(event);
-    case 'panend':
-      return this._onPanEnd(event);
-    case 'pinchstart':
-      return this._onPinchStart(event);
-    case 'pinchmove':
-      return this._onPinch(event);
-    case 'pinchend':
-      return this._onPinchEnd(event);
-    case 'doubletap':
-      return this._onDoubleTap(event);
-    case 'wheel':
-      return this._onWheel(event);
-    case 'keydown':
-      return this._onKeyDown(event);
-    default:
-      return false;
+      case 'panstart':
+        return this._onPanStart(event);
+      case 'panmove':
+        return this._onPan(event);
+      case 'panend':
+        return this._onPanEnd(event);
+      case 'pinchstart':
+        return this._onPinchStart(event);
+      case 'pinchmove':
+        return this._onPinch(event);
+      case 'pinchend':
+        return this._onPinchEnd(event);
+      case 'doubletap':
+        return this._onDoubleTap(event);
+      case 'wheel':
+        return this._onWheel(event);
+      case 'keydown':
+        return this._onKeyDown(event);
+      default:
+        return false;
     }
   }
 
   /* Event utils */
   // Event object: http://hammerjs.github.io/api/#event-object
   getCenter(event: MjolnirEvent): Array<number> {
-    const {offsetCenter: {x, y}} = event;
+    const {
+      offsetCenter: {x, y}
+    } = event;
     return [x, y];
   }
 
   isFunctionKeyPressed(event: MjolnirEvent): boolean {
     const {srcEvent} = event;
-    return Boolean(srcEvent.metaKey || srcEvent.altKey ||
-      srcEvent.ctrlKey || srcEvent.shiftKey);
+    return Boolean(srcEvent.metaKey || srcEvent.altKey || srcEvent.ctrlKey || srcEvent.shiftKey);
   }
 
   setState = (newState: any) => {
@@ -127,7 +127,7 @@ export default class MapController {
     if (this.onStateChange) {
       this.onStateChange(this._state);
     }
-  }
+  };
 
   /* Callback util */
   // formats map state and invokes callback function
@@ -135,8 +135,9 @@ export default class MapController {
     const oldViewport = this.mapState ? this.mapState.getViewportProps() : {};
     const newViewport = Object.assign({}, newMapState.getViewportProps(), extraProps);
 
-    const viewStateChanged =
-      Object.keys(newViewport).some(key => oldViewport[key] !== newViewport[key]);
+    const viewStateChanged = Object.keys(newViewport).some(
+      key => oldViewport[key] !== newViewport[key]
+    );
 
     // viewState has changed
     if (viewStateChanged) {
@@ -179,9 +180,11 @@ export default class MapController {
 
     this.mapStateProps = options;
     // Update transition
-    this._transitionManager.processViewportChange(Object.assign({}, options, {
-      onStateChange: this.setState
-    }));
+    this._transitionManager.processViewportChange(
+      Object.assign({}, options, {
+        onStateChange: this.setState
+      })
+    );
 
     if (this.eventManager !== eventManager) {
       // EventManager has changed
@@ -233,8 +236,9 @@ export default class MapController {
 
   // Default handler for the `panmove` event.
   _onPan(event: MjolnirEvent) {
-    return this.isFunctionKeyPressed(event) || event.rightButton ?
-      this._onPanRotate(event) : this._onPanMove(event);
+    return this.isFunctionKeyPressed(event) || event.rightButton
+      ? this._onPanRotate(event)
+      : this._onPanMove(event);
   }
 
   // Default handler for the `panend` event.
@@ -278,7 +282,7 @@ export default class MapController {
     if (deltaY > 0) {
       if (Math.abs(height - startY) > PITCH_MOUSE_THRESHOLD) {
         // Move from 0 to -1 as we drag upwards
-        deltaScaleY = deltaY / (startY - height) * PITCH_ACCEL;
+        deltaScaleY = (deltaY / (startY - height)) * PITCH_ACCEL;
       }
     } else if (deltaY < 0) {
       if (startY > PITCH_MOUSE_THRESHOLD) {
@@ -342,7 +346,9 @@ export default class MapController {
     if (this.touchRotate) {
       const {rotation} = event;
       const {startPinchRotation} = this._state;
-      newMapState = newMapState.rotate({deltaScaleX: -(rotation - startPinchRotation) / 180});
+      newMapState = newMapState.rotate({
+        deltaScaleX: -(rotation - startPinchRotation) / 180
+      });
     }
 
     this.updateViewport(newMapState, NO_TRANSITION_PROPS, {
@@ -376,9 +382,12 @@ export default class MapController {
     const isZoomOut = this.isFunctionKeyPressed(event);
 
     const newMapState = this.mapState.zoom({pos, scale: isZoomOut ? 0.5 : 2});
-    this.updateViewport(newMapState, Object.assign({}, LINEAR_TRANSITION_PROPS, {
-      transitionInterpolator: new LinearInterpolator({around: pos})
-    }));
+    this.updateViewport(
+      newMapState,
+      Object.assign({}, LINEAR_TRANSITION_PROPS, {
+        transitionInterpolator: new LinearInterpolator({around: pos})
+      })
+    );
     return true;
   }
 
@@ -393,50 +402,54 @@ export default class MapController {
     let newMapState;
 
     switch (event.srcEvent.keyCode) {
-    case 189: // -
-      if (funcKey) {
-        newMapState = this.getMapState({zoom: mapStateProps.zoom - 2});
-      } else {
-        newMapState = this.getMapState({zoom: mapStateProps.zoom - 1});
-      }
-      break;
-    case 187: // +
-      if (funcKey) {
-        newMapState = this.getMapState({zoom: mapStateProps.zoom + 2});
-      } else {
-        newMapState = this.getMapState({zoom: mapStateProps.zoom + 1});
-      }
-      break;
-    case 37: // left
-      if (funcKey) {
-        newMapState = this.getMapState({bearing: mapStateProps.bearing - 15});
-      } else {
-        newMapState = this.mapState.pan({pos: [100, 0], startPos: [0, 0]});
-      }
-      break;
-    case 39: // right
-      if (funcKey) {
-        newMapState = this.getMapState({bearing: mapStateProps.bearing + 15});
-      } else {
-        newMapState = this.mapState.pan({pos: [-100, 0], startPos: [0, 0]});
-      }
-      break;
-    case 38: // up
-      if (funcKey) {
-        newMapState = this.getMapState({pitch: mapStateProps.pitch + 10});
-      } else {
-        newMapState = this.mapState.pan({pos: [0, 100], startPos: [0, 0]});
-      }
-      break;
-    case 40: // down
-      if (funcKey) {
-        newMapState = this.getMapState({pitch: mapStateProps.pitch - 10});
-      } else {
-        newMapState = this.mapState.pan({pos: [0, -100], startPos: [0, 0]});
-      }
-      break;
-    default:
-      return false;
+      case 189: // -
+        if (funcKey) {
+          newMapState = this.getMapState({zoom: mapStateProps.zoom - 2});
+        } else {
+          newMapState = this.getMapState({zoom: mapStateProps.zoom - 1});
+        }
+        break;
+      case 187: // +
+        if (funcKey) {
+          newMapState = this.getMapState({zoom: mapStateProps.zoom + 2});
+        } else {
+          newMapState = this.getMapState({zoom: mapStateProps.zoom + 1});
+        }
+        break;
+      case 37: // left
+        if (funcKey) {
+          newMapState = this.getMapState({
+            bearing: mapStateProps.bearing - 15
+          });
+        } else {
+          newMapState = this.mapState.pan({pos: [100, 0], startPos: [0, 0]});
+        }
+        break;
+      case 39: // right
+        if (funcKey) {
+          newMapState = this.getMapState({
+            bearing: mapStateProps.bearing + 15
+          });
+        } else {
+          newMapState = this.mapState.pan({pos: [-100, 0], startPos: [0, 0]});
+        }
+        break;
+      case 38: // up
+        if (funcKey) {
+          newMapState = this.getMapState({pitch: mapStateProps.pitch + 10});
+        } else {
+          newMapState = this.mapState.pan({pos: [0, 100], startPos: [0, 0]});
+        }
+        break;
+      case 40: // down
+        if (funcKey) {
+          newMapState = this.getMapState({pitch: mapStateProps.pitch - 10});
+        } else {
+          newMapState = this.mapState.pan({pos: [0, -100], startPos: [0, 0]});
+        }
+        break;
+      default:
+        return false;
     }
     return this.updateViewport(newMapState, LINEAR_TRANSITION_PROPS);
   }

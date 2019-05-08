@@ -37,27 +37,30 @@ const defaultProps = {
 export default class HTMLOverlay extends BaseControl {
   _render() {
     const {viewport, isDragging} = this._context;
-    const style = Object.assign({
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      width: viewport.width,
-      height: viewport.height
-    }, this.props.style);
+    const style = Object.assign(
+      {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: viewport.width,
+        height: viewport.height
+      },
+      this.props.style
+    );
 
-    return (
-      createElement('div', {
+    return createElement(
+      'div',
+      {
         ref: this._containerRef,
         style
       },
-        this.props.redraw({
-          width: viewport.width,
-          height: viewport.height,
-          isDragging,
-          project: viewport.project.bind(viewport),
-          unproject: viewport.unproject.bind(viewport)
-        })
-      )
+      this.props.redraw({
+        width: viewport.width,
+        height: viewport.height,
+        isDragging,
+        project: viewport.project.bind(viewport),
+        unproject: viewport.unproject.bind(viewport)
+      })
     );
   }
 }
