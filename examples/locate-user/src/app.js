@@ -12,7 +12,6 @@ const geolocateStyle = {
 };
 
 export default class App extends Component {
-
   state = {
     viewport: {
       latitude: 37.8,
@@ -35,7 +34,8 @@ export default class App extends Component {
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN}>
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+      >
         <GeolocateControl
           style={geolocateStyle}
           positionOptions={{enableHighAccuracy: true}}
@@ -44,9 +44,8 @@ export default class App extends Component {
       </MapGL>
     );
   }
-
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

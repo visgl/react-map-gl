@@ -1,3 +1,4 @@
+// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -41,11 +42,10 @@ export type Coordinate = [number, number];
 export type Offset = [number, number];
 
 export default class DraggableControl extends BaseControl {
-
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
     this.state = {
       dragPos: null,
@@ -84,7 +84,9 @@ export default class DraggableControl extends BaseControl {
   }
 
   _getDragEventPosition(event: MjolnirEvent): Coordinate {
-    const {offsetCenter: {x, y}} = event;
+    const {
+      offsetCenter: {x, y}
+    } = event;
     return [x, y];
   }
 
@@ -93,16 +95,15 @@ export default class DraggableControl extends BaseControl {
    * (used for positioning marker relative to next mouse coordinates)
    */
   _getDragEventOffset(event: MjolnirEvent): Offset {
-    const {center: {x, y}} = event;
+    const {
+      center: {x, y}
+    } = event;
     const rect = this._containerRef.current.getBoundingClientRect();
     return [rect.left - x, rect.top - y];
   }
 
   _getDraggedPosition(dragPos: Coordinate, dragOffset: Offset): Coordinate {
-    return [
-      dragPos[0] + dragOffset[0],
-      dragPos[1] + dragOffset[1]
-    ];
+    return [dragPos[0] + dragOffset[0], dragPos[1] + dragOffset[1]];
   }
 
   _getDragLngLat(dragPos: Coordinate, dragOffset: Offset): Coordinate {
@@ -130,7 +131,7 @@ export default class DraggableControl extends BaseControl {
       event.lngLat = this._getDragLngLat(dragPos, dragOffset);
       this.props.onDragStart(event);
     }
-  }
+  };
 
   _onDrag = (event: MjolnirEvent) => {
     event.stopPropagation();
@@ -142,7 +143,7 @@ export default class DraggableControl extends BaseControl {
       event.lngLat = this._getDragLngLat(dragPos, this.state.dragOffset);
       this.props.onDrag(event);
     }
-  }
+  };
 
   _onDragEnd = (event: MjolnirEvent) => {
     const {dragPos, dragOffset} = this.state;
@@ -155,11 +156,11 @@ export default class DraggableControl extends BaseControl {
       event.lngLat = this._getDragLngLat(dragPos, dragOffset);
       this.props.onDragEnd(event);
     }
-  }
+  };
 
   _onDragCancel = (event: MjolnirEvent) => {
     event.stopPropagation();
     this.setState({dragPos: null, dragOffset: null});
     this._removeDragEvents();
-  }
+  };
 }

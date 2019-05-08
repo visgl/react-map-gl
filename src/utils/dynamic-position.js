@@ -27,13 +27,17 @@ const ANCHOR_TYPES = Object.keys(ANCHOR_POSITION);
  * @returns {String} position - one of 'top', 'bottom',
     'left', 'right', 'top-left', 'top-right', 'bottom-left' , and  'bottom-right'
  */
+// eslint-disable-next-line complexity
 export function getDynamicPosition({
-  x, y,
-  width, height,
-  selfWidth, selfHeight,
+  x,
+  y,
+  width,
+  height,
+  selfWidth,
+  selfHeight,
   anchor,
   padding = 0
-} : {
+}: {
   x: number,
   y: number,
   width: number,
@@ -42,7 +46,7 @@ export function getDynamicPosition({
   selfHeight: number,
   anchor: string,
   padding: number
-}) : string {
+}): string {
   let {x: anchorX, y: anchorY} = ANCHOR_POSITION[anchor];
 
   // anchorY: top - 0, center - 0.5, bottom - 1
@@ -92,8 +96,10 @@ export function getDynamicPosition({
   }
 
   // Find the name of the new anchor position
-  return ANCHOR_TYPES.find((positionType) => {
-    const anchorPosition = ANCHOR_POSITION[positionType];
-    return anchorPosition.x === anchorX && anchorPosition.y === anchorY;
-  }) || anchor;
+  return (
+    ANCHOR_TYPES.find(positionType => {
+      const anchorPosition = ANCHOR_POSITION[positionType];
+      return anchorPosition.x === anchorX && anchorPosition.y === anchorY;
+    }) || anchor
+  );
 }

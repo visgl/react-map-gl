@@ -1,4 +1,3 @@
-/* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import DeckGL, {ArcLayer} from 'deck.gl';
@@ -14,41 +13,46 @@ export default class App extends Component {
         zoom: 11,
         bearing: 0,
         pitch: 30
-      },
+      }
     };
   }
 
-  _onViewportChange = (viewport) => {
+  _onViewportChange = viewport => {
     this.setState({viewport});
-  }
+  };
 
   render() {
     const {viewport} = this.state;
 
     return (
       <MapGL
-        { ...viewport }
+        {...viewport}
         width="100%"
         height="100%"
         maxPitch={85}
-        onViewportChange={ this._onViewportChange } >
-
-        <DeckGL {...viewport} layers={[
-          new ArcLayer({
-            data: [
-              {sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.45669, 37.781]}
-            ],
-            strokeWidth: 4,
-            getSourceColor: x => [0, 0, 255],
-            getTargetColor: x => [0, 255, 0]
-          })
-        ]}/>
-
+        onViewportChange={this._onViewportChange}
+      >
+        <DeckGL
+          {...viewport}
+          layers={[
+            new ArcLayer({
+              data: [
+                {
+                  sourcePosition: [-122.41669, 37.7853],
+                  targetPosition: [-122.45669, 37.781]
+                }
+              ],
+              strokeWidth: 4,
+              getSourceColor: x => [0, 0, 255],
+              getTargetColor: x => [0, 255, 0]
+            })
+          ]}
+        />
       </MapGL>
     );
   }
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

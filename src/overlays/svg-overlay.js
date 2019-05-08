@@ -37,27 +37,30 @@ const defaultProps = {
 export default class SVGOverlay extends BaseControl {
   _render() {
     const {viewport, isDragging} = this._context;
-    const style = Object.assign({
-      position: 'absolute',
-      left: 0,
-      top: 0
-    }, this.props.style);
+    const style = Object.assign(
+      {
+        position: 'absolute',
+        left: 0,
+        top: 0
+      },
+      this.props.style
+    );
 
-    return (
-      createElement('svg', {
+    return createElement(
+      'svg',
+      {
         width: viewport.width,
         height: viewport.height,
         ref: this._containerRef,
         style
       },
-        this.props.redraw({
-          width: viewport.width,
-          height: viewport.height,
-          isDragging,
-          project: viewport.project.bind(viewport),
-          unproject: viewport.unproject.bind(viewport)
-        })
-      )
+      this.props.redraw({
+        width: viewport.width,
+        height: viewport.height,
+        isDragging,
+        project: viewport.project.bind(viewport),
+        unproject: viewport.unproject.bind(viewport)
+      })
     );
   }
 }

@@ -12,14 +12,8 @@ const LIB_DIR = resolve(__dirname, '..');
 const SRC_DIR = resolve(LIB_DIR, './src');
 
 const BABEL_CONFIG = {
-  presets: [
-    '@babel/env',
-    '@babel/react',
-    '@babel/flow'
-  ],
-  plugins: [
-    '@babel/proposal-class-properties'
-  ]
+  presets: ['@babel/env', '@babel/react', '@babel/flow'],
+  plugins: ['@babel/proposal-class-properties']
 };
 
 // Support for hot reloading changes
@@ -42,25 +36,31 @@ const LOCAL_DEVELOPMENT_CONFIG = {
     }
   },
   module: {
-    rules: [{
-      // Compile ES2015 using babel
-      test: /\.js$/,
-      include: [SRC_DIR],
-      use: [{
-        loader: 'babel-loader',
-        options: BABEL_CONFIG
-      }]
-    }]
+    rules: [
+      {
+        // Compile ES2015 using babel
+        test: /\.js$/,
+        include: [SRC_DIR],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: BABEL_CONFIG
+          }
+        ]
+      }
+    ]
   },
   // Optional: Enables reading mapbox token from environment variable
-  plugins: [
-    new webpack.EnvironmentPlugin(['MapboxAccessToken'])
-  ]
+  plugins: [new webpack.EnvironmentPlugin(['MapboxAccessToken'])]
 };
 
 function addLocalDevSettings(config) {
   config.resolve = config.resolve || {};
-  config.resolve.alias = Object.assign({}, config.resolve.alias, LOCAL_DEVELOPMENT_CONFIG.resolve.alias);
+  config.resolve.alias = Object.assign(
+    {},
+    config.resolve.alias,
+    LOCAL_DEVELOPMENT_CONFIG.resolve.alias
+  );
   config.module.rules = config.module.rules.concat(LOCAL_DEVELOPMENT_CONFIG.module.rules);
   config.devtool = LOCAL_DEVELOPMENT_CONFIG.devtool;
   return config;

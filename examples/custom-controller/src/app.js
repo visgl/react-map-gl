@@ -10,7 +10,6 @@ const customController = new MapController();
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
-
   state = {
     viewport: {
       latitude: 37.773,
@@ -24,7 +23,7 @@ export default class App extends Component {
       invertPan: false,
       longPress: false
     }
-  }
+  };
 
   _onViewportChange = viewport => this.setState({viewport});
 
@@ -35,7 +34,6 @@ export default class App extends Component {
   };
 
   render() {
-
     const {viewport, settings} = this.state;
 
     return (
@@ -47,18 +45,16 @@ export default class App extends Component {
         controller={customController}
         invertZoom={settings.invertZoom}
         invertPan={settings.invertPan}
-        onPress={settings.longPress ? () => window.alert('pressed') : null}
+        onPress={settings.longPress ? () => window.alert('pressed') : null} // eslint-disable-line no-alert
         onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN} >
-        <ControlPanel
-          settings={settings}
-          onChange={this._onSettingsChange} />
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+      >
+        <ControlPanel settings={settings} onChange={this._onSettingsChange} />
       </MapGL>
     );
   }
-
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

@@ -33,7 +33,6 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
  * implementing our own shouldComponentUpdate here.
  */
 export default class NavigationControl extends BaseControl {
-
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
@@ -61,15 +60,15 @@ export default class NavigationControl extends BaseControl {
 
   _onZoomIn = () => {
     this._updateViewport({zoom: this._context.viewport.zoom + 1});
-  }
+  };
 
   _onZoomOut = () => {
     this._updateViewport({zoom: this._context.viewport.zoom - 1});
-  }
+  };
 
   _onResetNorth = () => {
     this._updateViewport({bearing: 0, pitch: 0});
-  }
+  };
 
   _renderCompass() {
     const {bearing} = this._context.viewport;
@@ -93,14 +92,18 @@ export default class NavigationControl extends BaseControl {
   _render() {
     const {className, showCompass, showZoom} = this.props;
 
-    return createElement('div', {
-      className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
-      ref: this._containerRef
-    }, [
-      showZoom && this._renderButton('zoom-in', 'Zoom In', this._onZoomIn),
-      showZoom && this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut),
-      showCompass &&
-        this._renderButton('compass', 'Reset North', this._onResetNorth, this._renderCompass())
-    ]);
+    return createElement(
+      'div',
+      {
+        className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
+        ref: this._containerRef
+      },
+      [
+        showZoom && this._renderButton('zoom-in', 'Zoom In', this._onZoomIn),
+        showZoom && this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut),
+        showCompass &&
+          this._renderButton('compass', 'Reset North', this._onResetNorth, this._renderCompass())
+      ]
+    );
   }
 }

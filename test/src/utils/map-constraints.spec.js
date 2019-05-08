@@ -29,8 +29,11 @@ const TEST_CASES = [
 
 test('checkVisibilityConstraints', t => {
   TEST_CASES.forEach(testCase => {
-    t.is(checkVisibilityConstraints(testCase.props, testCase.constraints), testCase.result,
-      'Returns expected result');
+    t.is(
+      checkVisibilityConstraints(testCase.props, testCase.constraints),
+      testCase.result,
+      'Returns expected result'
+    );
   });
   t.end();
 });

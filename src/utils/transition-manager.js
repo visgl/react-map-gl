@@ -12,7 +12,7 @@ const noop = () => {};
 // returns a new easing function with domain [0, 1] and range [0, 1]
 export function cropEasingFunction(easing: number => number, x0: number): number => number {
   const y0 = easing(x0);
-  return (t: number) => 1 / (1 - y0) * (easing(t * (1 - x0) + x0) - y0);
+  return (t: number) => (1 / (1 - y0)) * (easing(t * (1 - x0) + x0) - y0);
 }
 
 export const TRANSITION_EVENTS = {
@@ -57,7 +57,6 @@ type TransitionState = {
 };
 
 export default class TransitionManager {
-
   static defaultProps = DEFAULT_PROPS;
 
   constructor(props?: ViewportProps, getTime: ?Function) {
@@ -106,8 +105,7 @@ export default class TransitionManager {
         if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
           const currentTime = this.time();
           const x0 = (currentTime - this.state.startTime) / this.state.duration;
-          endProps.transitionDuration =
-          this.state.duration - (currentTime - this.state.startTime);
+          endProps.transitionDuration = this.state.duration - (currentTime - this.state.startTime);
           endProps.transitionEasing = cropEasingFunction(this.state.easing, x0);
           endProps.transitionInterpolator = startProps.transitionInterpolator;
         }
@@ -150,9 +148,11 @@ export default class TransitionManager {
     }
     if (this._isTransitionInProgress()) {
       // Ignore update if it is requested to be ignored
-      return this.state.interruption === TRANSITION_EVENTS.IGNORE ||
+      return (
+        this.state.interruption === TRANSITION_EVENTS.IGNORE ||
         // Ignore update if it is due to current active transition.
-        this._isUpdateDueToCurrentTransition(nextProps);
+        this._isUpdateDueToCurrentTransition(nextProps)
+      );
     }
     if (this._isTransitionEnabled(nextProps)) {
       // Ignore if none of the viewport props changed.
@@ -169,18 +169,14 @@ export default class TransitionManager {
       cancelAnimationFrame(this._animationFrame);
     }
 
-    const initialProps = endProps.transitionInterpolator.initializeProps(
-      startProps,
-      endProps
-    );
+    const initialProps = endProps.transitionInterpolator.initializeProps(startProps, endProps);
 
     const interactionState = {
       inTransition: true,
       isZooming: startProps.zoom !== endProps.zoom,
-      isPanning: startProps.longitude !== endProps.longitude ||
-        startProps.latitude !== endProps.latitude,
-      isRotating: startProps.bearing !== endProps.bearing ||
-        startProps.pitch !== endProps.pitch
+      isPanning:
+        startProps.longitude !== endProps.longitude || startProps.latitude !== endProps.latitude,
+      isRotating: startProps.bearing !== endProps.bearing || startProps.pitch !== endProps.pitch
     };
 
     this.state = {
@@ -205,7 +201,7 @@ export default class TransitionManager {
     // _updateViewport() may cancel the animation
     this._animationFrame = requestAnimationFrame(this._onTransitionFrame);
     this._updateViewport();
-  }
+  };
 
   _endTransition() {
     if (this._animationFrame) {

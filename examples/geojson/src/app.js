@@ -1,4 +1,3 @@
-/* global window, fetch */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
@@ -12,7 +11,6 @@ import {json as requestJson} from 'd3-request';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
-
   state = {
     mapStyle: defaultMapStyle,
     year: 2015,
@@ -36,7 +34,6 @@ export default class App extends Component {
   }
 
   _loadData = data => {
-
     updatePercentiles(data, f => f.properties.income[this.state.year]);
 
     const mapStyle = defaultMapStyle
@@ -64,26 +61,30 @@ export default class App extends Component {
   _onViewportChange = viewport => this.setState({viewport});
 
   _onHover = event => {
-    const {features, srcEvent: {offsetX, offsetY}} = event;
+    const {
+      features,
+      srcEvent: {offsetX, offsetY}
+    } = event;
     const hoveredFeature = features && features.find(f => f.layer.id === 'data');
 
     this.setState({hoveredFeature, x: offsetX, y: offsetY});
   };
 
   _renderTooltip() {
-    const {hoveredFeature, year, x, y} = this.state;
+    const {hoveredFeature, x, y} = this.state;
 
-    return hoveredFeature && (
-      <div className="tooltip" style={{left: x, top: y}}>
-        <div>State: {hoveredFeature.properties.name}</div>
-        <div>Median Household Income: {hoveredFeature.properties.value}</div>
-        <div>Percentile: {hoveredFeature.properties.percentile / 8 * 100}</div>
-      </div>
+    return (
+      hoveredFeature && (
+        <div className="tooltip" style={{left: x, top: y}}>
+          <div>State: {hoveredFeature.properties.name}</div>
+          <div>Median Household Income: {hoveredFeature.properties.value}</div>
+          <div>Percentile: {(hoveredFeature.properties.percentile / 8) * 100}</div>
+        </div>
+      )
     );
   }
 
   render() {
-
     const {viewport, mapStyle} = this.state;
 
     return (
@@ -95,20 +96,21 @@ export default class App extends Component {
           mapStyle={mapStyle}
           onViewportChange={this._onViewportChange}
           mapboxApiAccessToken={MAPBOX_TOKEN}
-          onHover={this._onHover} >
-
+          onHover={this._onHover}
+        >
           {this._renderTooltip()}
-
         </MapGL>
 
-        <ControlPanel containerComponent={this.props.containerComponent}
-          settings={this.state} onChange={this._updateSettings} />
+        <ControlPanel
+          containerComponent={this.props.containerComponent}
+          settings={this.state}
+          onChange={this._updateSettings}
+        />
       </div>
     );
   }
-
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

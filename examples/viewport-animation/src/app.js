@@ -1,4 +1,3 @@
-/* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {FlyToInterpolator} from 'react-map-gl';
@@ -8,7 +7,6 @@ import ControlPanel from './control-panel';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
-
   state = {
     viewport: {
       latitude: 37.7751,
@@ -17,11 +15,12 @@ export default class App extends Component {
       bearing: 0,
       pitch: 0
     }
-  }
+  };
 
-  _onViewportChange = viewport => this.setState({
-    viewport: {...this.state.viewport, ...viewport}
-  });
+  _onViewportChange = viewport =>
+    this.setState({
+      viewport: {...this.state.viewport, ...viewport}
+    });
 
   _goToViewport = ({longitude, latitude}) => {
     this._onViewportChange({
@@ -34,7 +33,6 @@ export default class App extends Component {
   };
 
   render() {
-
     const {viewport, settings} = this.state;
 
     return (
@@ -47,15 +45,17 @@ export default class App extends Component {
           mapStyle="mapbox://styles/mapbox/dark-v9"
           onViewportChange={this._onViewportChange}
           dragToRotate={false}
-          mapboxApiAccessToken={MAPBOX_TOKEN} />
-        <ControlPanel containerComponent={this.props.containerComponent}
-          onViewportChange={this._goToViewport} />
+          mapboxApiAccessToken={MAPBOX_TOKEN}
+        />
+        <ControlPanel
+          containerComponent={this.props.containerComponent}
+          onViewportChange={this._goToViewport}
+        />
       </div>
     );
   }
-
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

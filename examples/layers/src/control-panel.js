@@ -27,7 +27,6 @@ const colorClass = {
 const defaultContainer = ({children}) => <div className="control-panel">{children}</div>;
 
 export default class StyleControls extends PureComponent {
-
   constructor(props) {
     super(props);
 
@@ -64,27 +63,29 @@ export default class StyleControls extends PureComponent {
   }
 
   _onVisibilityChange(name, event) {
-    const visibility = {...this.state.visibility, [name]: event.target.checked};
+    const visibility = {
+      ...this.state.visibility,
+      [name]: event.target.checked
+    };
     this.setState({visibility});
     this._updateMapStyle({...this.state, visibility});
   }
 
   _updateMapStyle({visibility, color}) {
-
     const layers = this._defaultLayers
-    .filter(layer => {
-      const id = layer.get('id');
-      return categories.every(name => visibility[name] || !layerSelector[name].test(id));
-    })
-    .map(layer => {
-      const id = layer.get('id');
-      const type = layer.get('type');
-      const category = categories.find(name => layerSelector[name].test(id));
-      if (category && colorClass[type]) {
-        return layer.setIn(['paint', colorClass[type]], color[category]);
-      }
-      return layer;
-    });
+      .filter(layer => {
+        const id = layer.get('id');
+        return categories.every(name => visibility[name] || !layerSelector[name].test(id));
+      })
+      .map(layer => {
+        const id = layer.get('id');
+        const type = layer.get('type');
+        const category = categories.find(name => layerSelector[name].test(id));
+        if (category && colorClass[type]) {
+          return layer.setIn(['paint', colorClass[type]], color[category]);
+        }
+        return layer;
+      });
 
     this.props.onChange(defaultMapStyle.set('layers', layers));
   }
@@ -95,10 +96,17 @@ export default class StyleControls extends PureComponent {
     return (
       <div key={name} className="input">
         <label>{name}</label>
-        <input type="checkbox" checked={visibility[name]}
-          onChange={this._onVisibilityChange.bind(this, name)} />
-        <input type="color" value={color[name]} disabled={!visibility[name]}
-          onChange={this._onColorChange.bind(this, name)} />
+        <input
+          type="checkbox"
+          checked={visibility[name]}
+          onChange={this._onVisibilityChange.bind(this, name)}
+        />
+        <input
+          type="color"
+          value={color[name]}
+          disabled={!visibility[name]}
+          onChange={this._onColorChange.bind(this, name)}
+        />
       </div>
     );
   }
@@ -111,12 +119,15 @@ export default class StyleControls extends PureComponent {
         <h3>Dynamic Styling</h3>
         <p>Dynamically show/hide map layers and change color with Immutable map style.</p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/4.1-release/examples/layers" target="_new">
+          <a
+            href="https://github.com/uber/react-map-gl/tree/4.1-release/examples/layers"
+            target="_new"
+          >
             View Code ↗
           </a>
         </div>
         <hr />
-        { categories.map(name => this._renderLayerControl(name)) }
+        {categories.map(name => this._renderLayerControl(name))}
       </Container>
     );
   }

@@ -32,7 +32,6 @@ const propTypes = {
 };
 
 export default class NotInteractiveExample extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -45,7 +44,7 @@ export default class NotInteractiveExample extends Component {
   }
 
   render() {
-    return <StaticMap { ...this.state.viewport } { ...this.props }/>;
+    return <StaticMap {...this.state.viewport} {...this.props} />;
   }
 }
 

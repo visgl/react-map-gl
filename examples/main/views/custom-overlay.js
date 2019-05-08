@@ -39,12 +39,12 @@ const wiggle = (function _wiggle() {
   return function __wiggle(scale) {
     return normal() * scale;
   };
-}());
+})();
 
 // Example data.
-const locations = Immutable.fromJS(range(30).map(
-  () => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)]
-));
+const locations = Immutable.fromJS(
+  range(30).map(() => [location.longitude + wiggle(0.01), location.latitude + wiggle(0.01)])
+);
 
 const propTypes = {
   width: PropTypes.number.isRequired,
@@ -112,32 +112,34 @@ export default class CustomOverlayExample extends Component {
       fill: 'rgba(0, 0, 0, 0)'
     };
     return (
-      <g style={ {
-        pointerEvents: 'all',
-        cursor: 'pointer'
-      } }>
+      <g
+        style={{
+          pointerEvents: 'all',
+          cursor: 'pointer'
+        }}
+      >
         <circle
-          key={ 0 }
-          style={ {...style, stroke: alphaify('#1FBAD6', 0.8)} }
-          r={ 10 }
-          transform={ svgTransform([{translate: p1}]) }
-          onClick={ () => {
+          key={0}
+          style={{...style, stroke: alphaify('#1FBAD6', 0.8)}}
+          r={10}
+          transform={svgTransform([{translate: p1}])}
+          onClick={() => {
             const windowAlert = window.alert;
             windowAlert('center');
-          } }/>
-        {
-          locations.map((loc, index) =>
-            <circle
-              key={ index + 1 }
-              style={ style }
-              r={ 6 }
-              transform={ svgTransform([{translate: opt.project(loc.toArray())}]) }
-              onClick={ () => {
-                const windowAlert = window.alert;
-                windowAlert(`dot ${index}`);
-              } }/>
-          )
-        }
+          }}
+        />
+        {locations.map((loc, index) => (
+          <circle
+            key={index + 1}
+            style={style}
+            r={6}
+            transform={svgTransform([{translate: opt.project(loc.toArray())}])}
+            onClick={() => {
+              const windowAlert = window.alert;
+              windowAlert(`dot ${index}`);
+            }}
+          />
+        ))}
       </g>
     );
   }
@@ -145,9 +147,9 @@ export default class CustomOverlayExample extends Component {
   render() {
     const viewport = {...this.state.viewport, ...this.props};
     return (
-      <MapGL { ...viewport } scrollZoom={false} onViewportChange={ this._onViewportChange }>
-        <CanvasOverlay redraw={ this._redrawCanvasOverlay }/>
-        <SVGOverlay redraw={ this._redrawSVGOverlay }/>
+      <MapGL {...viewport} scrollZoom={false} onViewportChange={this._onViewportChange}>
+        <CanvasOverlay redraw={this._redrawCanvasOverlay} />
+        <SVGOverlay redraw={this._redrawSVGOverlay} />
       </MapGL>
     );
   }

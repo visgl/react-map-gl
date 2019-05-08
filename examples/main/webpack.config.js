@@ -4,13 +4,8 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const BABEL_CONFIG = {
-  presets: [
-    ['@babel/env', {shippedProposals: true}],
-    '@babel/react'
-  ],
-  plugins: [
-    '@babel/proposal-class-properties'
-  ]
+  presets: [['@babel/env', {shippedProposals: true}], '@babel/react'],
+  plugins: ['@babel/proposal-class-properties']
 };
 
 const config = {
@@ -27,27 +22,29 @@ const config = {
       warnings: false
     },
 
-    contentBase: [
-      __dirname,
-      resolve(__dirname, '../')
-    ]
+    contentBase: [__dirname, resolve(__dirname, '../')]
   },
 
   devtool: 'source-maps',
 
   module: {
-    rules: [{
-      // Compile ES2015 using babel
-      test: /\.js$/,
-      exclude: [/node_modules/],
-      use: [{
-        loader: 'babel-loader',
-        options: BABEL_CONFIG
-      }]
-    }, {
-      test: /\.scss$/,
-      loaders: ['style-loader', 'css-loader', 'sass-loader']
-    }]
+    rules: [
+      {
+        // Compile ES2015 using babel
+        test: /\.js$/,
+        exclude: [/node_modules/],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: BABEL_CONFIG
+          }
+        ]
+      },
+      {
+        test: /\.scss$/,
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
   },
 
   resolve: {
@@ -66,5 +63,5 @@ const config = {
 };
 
 // Enables bundling against src in this repo rather than the installed version
-module.exports = (env) => env && env.local ?
-  require('../webpack.config.local')(config)(env) : config;
+module.exports = env =>
+  env && env.local ? require('../webpack.config.local')(config)(env) : config;

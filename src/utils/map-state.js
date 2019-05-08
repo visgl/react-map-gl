@@ -45,16 +45,16 @@ type InteractiveState = {
   startZoom?: number
 };
 
-export type MapStateProps = ViewportProps & InteractiveState & {
-  altitude?: number,
-  maxZoom?: number,
-  minZoom?: number,
-  maxPitch?: number,
-  minPitch?: number,
-};
+export type MapStateProps = ViewportProps &
+  InteractiveState & {
+    altitude?: number,
+    maxZoom?: number,
+    minZoom?: number,
+    maxPitch?: number,
+    minPitch?: number
+  };
 
 export default class MapState {
-
   constructor({
     /** Mapbox viewport properties */
     /** The width of the viewport */
@@ -153,7 +153,7 @@ export default class MapState {
    * Start panning
    * @param {[Number, Number]} pos - position on screen where the pointer grabs
    */
-  panStart({pos} : {pos: Array<number>}) {
+  panStart({pos}: {pos: Array<number>}) {
     return this._getUpdatedMapState({
       startPanLngLat: this._unproject(pos)
     });
@@ -165,14 +165,17 @@ export default class MapState {
    * @param {[Number, Number], optional} startPos - where the pointer grabbed at
    *   the start of the operation. Must be supplied of `panStart()` was not called
    */
-  pan({pos, startPos} : {pos: Array<number>, startPos?: Array<number>}) {
+  pan({pos, startPos}: {pos: Array<number>, startPos?: Array<number>}) {
     const startPanLngLat = this._interactiveState.startPanLngLat || this._unproject(startPos);
 
     if (!startPanLngLat) {
       return this;
     }
 
-    const [longitude, latitude] = this._calculateNewLngLat({startPanLngLat, pos});
+    const [longitude, latitude] = this._calculateNewLngLat({
+      startPanLngLat,
+      pos
+    });
 
     return this._getUpdatedMapState({
       longitude,
@@ -194,7 +197,7 @@ export default class MapState {
    * Start rotating
    * @param {[Number, Number]} pos - position on screen where the center is
    */
-  rotateStart({pos} : {pos: Array<number>}) {
+  rotateStart({pos}: {pos: Array<number>}) {
     return this._getUpdatedMapState({
       startBearing: this._viewportProps.bearing,
       startPitch: this._viewportProps.pitch
@@ -208,8 +211,7 @@ export default class MapState {
    * @param {Number} deltaScaleY - a number between [-1, 1] specifying the
    *   change to pitch. -1 sets to minPitch and 1 sets to maxPitch.
    */
-  rotate({deltaScaleX = 0, deltaScaleY = 0} : {deltaScaleX?: number, deltaScaleY?: number}) {
-
+  rotate({deltaScaleX = 0, deltaScaleY = 0}: {deltaScaleX?: number, deltaScaleY?: number}) {
     const {startBearing, startPitch} = this._interactiveState;
 
     if (!Number.isFinite(startBearing) || !Number.isFinite(startPitch)) {
@@ -244,7 +246,7 @@ export default class MapState {
    * Start zooming
    * @param {[Number, Number]} pos - position on screen where the center is
    */
-  zoomStart({pos} : {pos: Array<number>}) {
+  zoomStart({pos}: {pos: Array<number>}) {
     return this._getUpdatedMapState({
       startZoomLngLat: this._unproject(pos),
       startZoom: this._viewportProps.zoom
@@ -259,7 +261,7 @@ export default class MapState {
    * @param {Number} scale - a number between [0, 1] specifying the accumulated
    *   relative scale.
    */
-  zoom({pos, startPos, scale} : {pos: Array<number>, startPos?: Array<number>, scale: number}) {
+  zoom({pos, startPos, scale}: {pos: Array<number>, startPos?: Array<number>, scale: number}) {
     assert(scale > 0, '`scale` must be a positive number');
 
     // Make sure we zoom around the current mouse position rather than map center
@@ -277,14 +279,15 @@ export default class MapState {
     }
 
     // take the start lnglat and put it where the mouse is down.
-    assert(startZoomLngLat, '`startZoomLngLat` prop is required ' +
-      'for zoom behavior to calculate where to position the map.');
+    assert(
+      startZoomLngLat,
+      '`startZoomLngLat` prop is required ' +
+        'for zoom behavior to calculate where to position the map.'
+    );
 
     const zoom = this._calculateNewZoom({scale, startZoom: startZoom || 0});
 
-    const zoomedViewport = new WebMercatorViewport(
-      Object.assign({}, this._viewportProps, {zoom})
-    );
+    const zoomedViewport = new WebMercatorViewport(Object.assign({}, this._viewportProps, {zoom}));
     // $FlowFixMe
     const [longitude, latitude] = zoomedViewport.getMapCenterByLngLatPosition({
       lngLat: startZoomLngLat,
@@ -337,12 +340,18 @@ export default class MapState {
   }
 
   // Calculate a new lnglat based on pixel dragging position
-  _calculateNewLngLat({startPanLngLat, pos}: {
+  _calculateNewLngLat({
+    startPanLngLat,
+    pos
+  }: {
     startPanLngLat: Array<number>,
     pos: Array<number>
   }): Array<number> {
     const viewport = new WebMercatorViewport(this._viewportProps);
-    return viewport.getMapCenterByLngLatPosition({lngLat: startPanLngLat, pos});
+    return viewport.getMapCenterByLngLatPosition({
+      lngLat: startPanLngLat,
+      pos
+    });
   }
 
   // Calculates new zoom
@@ -353,7 +362,12 @@ export default class MapState {
   }
 
   // Calculates a new pitch and bearing from a position (coming from an event)
-  _calculateNewPitchAndBearing({deltaScaleX, deltaScaleY, startBearing, startPitch} : {
+  _calculateNewPitchAndBearing({
+    deltaScaleX,
+    deltaScaleY,
+    startBearing,
+    startPitch
+  }: {
     deltaScaleX: number,
     deltaScaleY: number,
     startBearing: number,
@@ -380,5 +394,4 @@ export default class MapState {
       bearing
     };
   }
-
 }

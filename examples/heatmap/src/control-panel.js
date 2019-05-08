@@ -5,38 +5,40 @@ const defaultContainer = ({children}) => <div className="control-panel">{childre
 export default class ControlPanel extends PureComponent {
   render() {
     const {startTime, endTime, onChangeDay, allDay, onChangeAllDay, selectedTime} = this.props;
-    const day = 24*60*60*1000;
+    const day = 24 * 60 * 60 * 1000;
     const days = Math.round((endTime - startTime) / day);
 
     const _onChangeDay = evt => {
       const daysToAdd = evt.target.value;
       // add selected days to start time to calculate new time
-      const newTime = startTime + (daysToAdd * day);
+      const newTime = startTime + daysToAdd * day;
       onChangeDay(newTime);
-    }
+    };
 
     const formatTime = time => {
       const date = new Date(time);
-      return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
-    }
+      return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    };
 
     const Container = this.props.containerComponent || defaultContainer;
 
     return (
       <Container>
         <h3>Heatmap</h3>
-        <p>Map showing earthquakes
+        <p>
+          Map showing earthquakes
           <br />
           from <b>{formatTime(startTime)}</b> to <b>{formatTime(endTime)}</b>.
         </p>
         <hr />
         <div className="input">
           <label>All Days</label>
-          <input type="checkbox"
+          <input
+            type="checkbox"
             name="allday"
             checked={allDay}
             onChange={evt => onChangeAllDay(evt.target.checked)}
-            />
+          />
         </div>
         <div className={`input ${allDay ? 'disabled' : ''}`}>
           <label>Each Day: {formatTime(selectedTime)}</label>
@@ -47,12 +49,22 @@ export default class ControlPanel extends PureComponent {
             max={days}
             step={1}
             onChange={_onChangeDay}
-            />
+          />
         </div>
-        < hr />
-        <p>Data source: <a href="https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson">earthquakes.geojson</a></p>
+        <hr />
+        <p>
+          Data source:{' '}
+          <a href="https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson">
+            earthquakes.geojson
+          </a>
+        </p>
         <div className="source-link">
-          <a href="https://github.com/uber/react-map-gl/tree/4.1-release/examples/heatmap" target="_new">View Code ↗</a>
+          <a
+            href="https://github.com/uber/react-map-gl/tree/4.0-release/examples/heatmap"
+            target="_new"
+          >
+            View Code ↗
+          </a>
         </div>
       </Container>
     );
