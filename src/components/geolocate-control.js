@@ -75,12 +75,6 @@ export default class GeolocateControl extends BaseControl {
     isGeolocationSupported().then(result => {
       this.setState({supportsGeolocation: result});
       this._setupMapboxGeolocateControl(result);
-
-      if (this._mapboxGeolocateControl) {
-        this._mapboxGeolocateControl.on('geolocate', event =>
-          this.props.onGeolocate(event.coords)
-        );
-      }
     });
   }
 
@@ -130,6 +124,9 @@ export default class GeolocateControl extends BaseControl {
 
     // replace mapbox internal UI elements
     this._mapboxGeolocateControl._geolocateButton = this._geolocateButtonRef.current;
+    if (this._mapboxGeolocateControl.options.trackUserLocation) {
+      this._mapboxGeolocateControl._geolocateButton.setAttribute('aria-pressed', 'false');
+    }
 
     // replace mapbox internal methods
     this._mapboxGeolocateControl._updateMarker = this._updateMarker;
@@ -152,6 +149,8 @@ export default class GeolocateControl extends BaseControl {
         }
       });
     }
+
+    this._mapboxGeolocateControl.on('geolocate', event => this.props.onGeolocate(event.coords));
   };
 
   _onClickGeolocate = () => {
