@@ -34,7 +34,7 @@ export default class App extends Component {
         mapboxApiAccessToken="<YOUR TOKEN HERE>"
       >
         <DeckGL
-          {...viewport}
+          viewState={viewport}
           layers={[
             new ArcLayer({
               data: [
