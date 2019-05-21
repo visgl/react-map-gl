@@ -214,13 +214,17 @@ export default class GeolocateControl extends BaseControl {
     const {className, style} = this.props;
     return createElement('div', null, [
       this._renderMarker(),
-      createElement('div', {
-        className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
-        ref: this._containerRef,
-        style,
-        onContextMenu: e => e.preventDefault()
-      }, this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)
-    )]
-    );
+      createElement(
+        'div',
+        {
+          key: 'geolocate-control',
+          className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
+          ref: this._containerRef,
+          style,
+          onContextMenu: e => e.preventDefault()
+        },
+        this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)
+      )
+    ]);
   }
 }
