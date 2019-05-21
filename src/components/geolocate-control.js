@@ -209,6 +209,7 @@ export default class GeolocateControl extends BaseControl {
       createElement(
         'div',
         {
+          key: 'geolocate-control',
           className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
           ref: this._containerRef,
           style,
