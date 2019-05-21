@@ -133,6 +133,7 @@ export default class Example extends Component {
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
         preventStyleDiffing={false}
+        mapboxApiAccessToken="<YOUR TOKEN HERE>"
       >
         <ScatterplotOverlay
           {...viewport}
@@ -143,7 +144,7 @@ export default class Example extends Component {
         />
 
         <DeckGL
-          {...viewport}
+          viewState={viewport}
           layers={[
             new ArcLayer({
               data: [

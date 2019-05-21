@@ -31,9 +31,10 @@ export default class App extends Component {
         height="100%"
         maxPitch={85}
         onViewportChange={this._onViewportChange}
+        mapboxApiAccessToken="<YOUR TOKEN HERE>"
       >
         <DeckGL
-          {...viewport}
+          viewState={viewport}
           layers={[
             new ArcLayer({
               data: [
