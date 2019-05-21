@@ -2,8 +2,8 @@
   <a href="https://npmjs.org/package/react-map-gl">
     <img src="https://img.shields.io/npm/v/react-map-gl.svg?style=flat-square" alt="version" />
   </a>
-  <a href="https://travis-ci.org/uber/react-map-gl">
-    <img src="https://img.shields.io/travis/uber/react-map-gl/master.svg?style=flat-square" alt="build" />
+  <a href="https://travis-ci.com/uber/react-map-gl">
+    <img src="https://api.travis-ci.com/uber/react-map-gl.svg?branch=master" alt="build" />
   </a>
   <a href="https://npmjs.org/package/react-map-gl">
     <img src="https://img.shields.io/npm/dm/react-map-gl.svg?style=flat-square" alt="downloads" />

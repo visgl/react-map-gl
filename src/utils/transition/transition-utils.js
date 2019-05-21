@@ -22,9 +22,9 @@ export function getEndValueByShortestPath(
   propName: string,
   startValue: number,
   endValue: number
-) : number {
+): number {
   if (isWrappedAngularProp(propName) && Math.abs(endValue - startValue) > 180) {
-    endValue = (endValue < 0) ? endValue + 360 : endValue - 360;
+    endValue = endValue < 0 ? endValue + 360 : endValue - 360;
   }
   return endValue;
 }

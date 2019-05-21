@@ -47,7 +47,8 @@ function buildStyle({fill = 'red', stroke = 'blue'}) {
         type: 'fill',
         paint: {'fill-color': fill, 'fill-opacity': 0.4},
         interactive: true
-      }, {
+      },
+      {
         id: 'geojson-polygon-stroke',
         source: 'my-geojson-polygon-source',
         type: 'line',
@@ -64,7 +65,6 @@ const propTypes = {
 };
 
 export default class StyleDiffingExample extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -83,15 +83,18 @@ export default class StyleDiffingExample extends Component {
   componentWillMount() {
     const colors = ['red', 'green', 'blue'];
     let i = 0;
-    this._intervalId = window.setInterval(function interval() {
-      this.setState({
-        mapStyle: buildStyle({
-          stroke: colors[i % colors.length],
-          fill: colors[(i + 1) % colors.length]
-        })
-      });
-      i = i + 1;
-    }.bind(this), 2000);
+    this._intervalId = window.setInterval(
+      function interval() {
+        this.setState({
+          mapStyle: buildStyle({
+            stroke: colors[i % colors.length],
+            fill: colors[(i + 1) % colors.length]
+          })
+        });
+        i = i + 1;
+      }.bind(this),
+      2000
+    );
   }
 
   componentWillUnmount() {
@@ -115,13 +118,14 @@ export default class StyleDiffingExample extends Component {
     };
     return (
       <MapGL
-        { ...viewport }
+        {...viewport}
         scrollZoom={false}
-        onViewportChange={ this._onViewportChange }
-        onClick={ this._onClick }
+        onViewportChange={this._onViewportChange}
+        onClick={this._onClick}
         // setting to `true` should cause the map to flicker because all sources
         // and layers need to be reloaded without diffing enabled.
-        preventStyleDiffing={ false }/>
+        preventStyleDiffing={false}
+      />
     );
   }
 }

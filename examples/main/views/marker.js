@@ -29,7 +29,6 @@ const propTypes = {
 };
 
 export default class MainExample extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -49,22 +48,20 @@ export default class MainExample extends Component {
   _renderMarker(station, i) {
     const {name, coordinates} = station;
     return (
-      <Marker key={i} longitude={coordinates[0]} latitude={coordinates[1]} >
-        <div className="station"><span>{name}</span></div>
+      <Marker key={i} longitude={coordinates[0]} latitude={coordinates[1]}>
+        <div className="station">
+          <span>{name}</span>
+        </div>
       </Marker>
     );
   }
 
   render() {
-
     const viewport = {...this.state.viewport, ...this.props};
 
     return (
-      <MapGL
-        {...viewport}
-        dragRotate={false}
-        onViewportChange={this._onViewportChange} >
-        { bartStations.map(this._renderMarker) }
+      <MapGL {...viewport} dragRotate={false} onViewportChange={this._onViewportChange}>
+        {bartStations.map(this._renderMarker)}
       </MapGL>
     );
   }

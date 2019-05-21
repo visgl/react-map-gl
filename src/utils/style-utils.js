@@ -1,8 +1,10 @@
 // @flow
-type MapboxStyle = string | {
-  toJS?: Function,
-  layers: Array<any>
-};
+type MapboxStyle =
+  | string
+  | {
+      toJS?: Function,
+      layers: Array<any>
+    };
 
 // Prepare a map style object for diffing
 // If immutable - convert to plain object

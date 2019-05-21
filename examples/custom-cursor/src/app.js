@@ -8,7 +8,6 @@ import MAP_STYLE from '../../map-style-basic-v8.json';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
-
   state = {
     mapStyle: '',
     viewport: {
@@ -19,7 +18,7 @@ export default class App extends Component {
       pitch: 0
     },
     interactiveLayerIds: []
-  }
+  };
 
   _onViewportChange = viewport => this.setState({viewport});
 
@@ -29,11 +28,11 @@ export default class App extends Component {
     });
   };
 
-  _onClick = (event) => {
+  _onClick = event => {
     const feature = event.features && event.features[0];
 
     if (feature) {
-      window.alert(`Clicked layer ${feature.layer.id}`);
+      window.alert(`Clicked layer ${feature.layer.id}`); // eslint-disable-line no-alert
     }
   };
 
@@ -42,7 +41,6 @@ export default class App extends Component {
   };
 
   render() {
-
     const {viewport, interactiveLayerIds} = this.state;
 
     return (
@@ -56,16 +54,17 @@ export default class App extends Component {
         getCursor={this._getCursor}
         interactiveLayerIds={interactiveLayerIds}
         onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN} >
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+      >
         <ControlPanel
           containerComponent={this.props.containerComponent}
-          onChange={this._onInteractiveLayersChange} />
+          onChange={this._onInteractiveLayersChange}
+        />
       </MapGL>
     );
   }
-
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

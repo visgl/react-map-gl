@@ -1,4 +1,3 @@
-/* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Marker} from 'react-map-gl';
@@ -11,7 +10,6 @@ const MAPBOX_TOKEN = ''; // Set your mapbox token here
 import MARKER_STYLE from './marker-style';
 
 export default class App extends Component {
-
   state = {
     viewport: {
       latitude: 37.729,
@@ -34,28 +32,35 @@ export default class App extends Component {
       minPitch: 0,
       maxPitch: 85
     }
-  }
+  };
 
   _onViewportChange = viewport => this.setState({viewport});
 
   _onInteractionStateChange = interactionState => this.setState({interactionState});
 
-  _onSettingChange = (name, value) => this.setState({
-    settings: {...this.state.settings, [name]: value}
-  });
+  _onSettingChange = (name, value) =>
+    this.setState({
+      settings: {...this.state.settings, [name]: value}
+    });
 
   _renderMarker(station, i) {
     const {name, coordinates} = station;
     return (
-      <Marker key={i} longitude={coordinates[0]} latitude={coordinates[1]}
-        captureDrag={false} captureDoubleClick={false}>
-        <div className="station"><span>{name}</span></div>
+      <Marker
+        key={i}
+        longitude={coordinates[0]}
+        latitude={coordinates[1]}
+        captureDrag={false}
+        captureDoubleClick={false}
+      >
+        <div className="station">
+          <span>{name}</span>
+        </div>
       </Marker>
     );
   }
 
   render() {
-
     const {viewport, settings, interactionState} = this.state;
 
     return (
@@ -67,19 +72,21 @@ export default class App extends Component {
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
         onInteractionStateChange={this._onInteractionStateChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN} >
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+      >
         <style>{MARKER_STYLE}</style>
-        { bartStations.map(this._renderMarker) }
-        <ControlPanel containerComponent={this.props.containerComponent}
+        {bartStations.map(this._renderMarker)}
+        <ControlPanel
+          containerComponent={this.props.containerComponent}
           settings={settings}
           interactionState={{...interactionState}}
-          onChange={this._onSettingChange} />
+          onChange={this._onSettingChange}
+        />
       </MapGL>
     );
   }
-
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }

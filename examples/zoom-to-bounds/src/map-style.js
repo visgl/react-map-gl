@@ -13,23 +13,26 @@ mapStyle.sources['sf-neighborhoods'] = {
   data: SF_NEIGHBORHOODS
 };
 
-mapStyle.layers.push({
-  id: 'sf-neighborhoods-fill',
-  source: 'sf-neighborhoods',
-  type: 'fill',
-  paint: {
-    'fill-outline-color': '#0040c8',
-    'fill-color': '#fff',
-    'fill-opacity': 0
+mapStyle.layers.push(
+  {
+    id: 'sf-neighborhoods-fill',
+    source: 'sf-neighborhoods',
+    type: 'fill',
+    paint: {
+      'fill-outline-color': '#0040c8',
+      'fill-color': '#fff',
+      'fill-opacity': 0
+    }
+  },
+  {
+    id: 'sf-neighborhoods-outline',
+    source: 'sf-neighborhoods',
+    type: 'line',
+    paint: {
+      'line-width': 2,
+      'line-color': '#0080ef'
+    }
   }
-}, {
-  id: 'sf-neighborhoods-outline',
-  source: 'sf-neighborhoods',
-  type: 'line',
-  paint: {
-    'line-width': 2,
-    'line-color': '#0080ef'
-  }
-});
+);
 
 export default mapStyle;

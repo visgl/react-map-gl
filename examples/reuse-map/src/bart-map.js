@@ -6,7 +6,6 @@ import bartStations from '../../data/bart-station.json';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class BartMap extends Component {
-
   state = {
     viewState: {
       latitude: 37.729,
@@ -20,13 +19,15 @@ export default class BartMap extends Component {
   _onViewportChange = viewState => this.setState({viewState});
 
   // eslint-disable-next-line
-  _onMapLoad = (event) => console.log(event);
+  _onMapLoad = event => console.log(event);
 
   _renderMarker(station, i) {
     const {name, coordinates} = station;
     return (
-      <Marker key={i} longitude={coordinates[0]} latitude={coordinates[1]} >
-        <div className="station"><span>{name}</span></div>
+      <Marker key={i} longitude={coordinates[0]} latitude={coordinates[1]}>
+        <div className="station">
+          <span>{name}</span>
+        </div>
       </Marker>
     );
   }
@@ -39,17 +40,14 @@ export default class BartMap extends Component {
         {...viewState}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         mapStyle={mapStyle}
-
         width="100%"
         height="100%"
         onViewportChange={this._onViewportChange}
         onLoad={this._onMapLoad}
-
         reuseMaps={true}
       >
-        { bartStations.map(this._renderMarker) }
+        {bartStations.map(this._renderMarker)}
       </MapGL>
     );
   }
-
 }

@@ -60,17 +60,16 @@ export default class RouteOverlayExample extends Component {
 
   _renderRoute(points, index) {
     return (
-      <g style={ {pointerEvents: 'click', cursor: 'pointer'} }>
-        <g
-          style={ {pointerEvents: 'visibleStroke'} }
-          onClick={ () => windowAlert(`route ${index}`) }>
+      <g style={{pointerEvents: 'click', cursor: 'pointer'}}>
+        <g style={{pointerEvents: 'visibleStroke'}} onClick={() => windowAlert(`route ${index}`)}>
           <path
-            style={ {
+            style={{
               fill: 'none',
               stroke: alphaify(color(index), 0.7),
               strokeWidth: 6
-            } }
-            d={ `M${points.join('L')}` }/>
+            }}
+            d={`M${points.join('L')}`}
+          />
         </g>
       </g>
     );
@@ -79,14 +78,10 @@ export default class RouteOverlayExample extends Component {
   _redrawSVGOverlay({project}) {
     return (
       <g>
-        {
-          ROUTES.map((route, index) => {
-            const points = route.coordinates.map(project).map(
-              p => [round(p[0], 1), round(p[1], 1)]
-            );
-            return <g key={ index }>{ this._renderRoute(points, index) }</g>;
-          })
-        }
+        {ROUTES.map((route, index) => {
+          const points = route.coordinates.map(project).map(p => [round(p[0], 1), round(p[1], 1)]);
+          return <g key={index}>{this._renderRoute(points, index)}</g>;
+        })}
       </g>
     );
   }
@@ -96,7 +91,9 @@ export default class RouteOverlayExample extends Component {
     ROUTES.map((route, index) =>
       route.coordinates.map(project).forEach((p, i) => {
         const point = [round(p[0], 1), round(p[1], 1)];
-        ctx.fillStyle = rgb(color(index)).brighter(1).toString();
+        ctx.fillStyle = rgb(color(index))
+          .brighter(1)
+          .toString();
         ctx.beginPath();
         ctx.arc(point[0], point[1], 2, 0, Math.PI * 2);
         ctx.fill();
@@ -110,9 +107,9 @@ export default class RouteOverlayExample extends Component {
       ...this.props
     };
     return (
-      <MapGL { ...viewport } scrollZoom={false} onViewportChange={ this._onViewportChange }>
-        <SVGOverlay redraw={ this._redrawSVGOverlay }/>,
-        <CanvasOverlay redraw={ this._redrawCanvasOverlay }/>
+      <MapGL {...viewport} scrollZoom={false} onViewportChange={this._onViewportChange}>
+        <SVGOverlay redraw={this._redrawSVGOverlay} />,
+        <CanvasOverlay redraw={this._redrawCanvasOverlay} />
       </MapGL>
     );
   }

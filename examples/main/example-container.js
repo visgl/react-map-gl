@@ -22,7 +22,6 @@
 import React, {Component} from 'react';
 
 export default class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -34,12 +33,13 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    window.onresize = () => this.setState({
-      viewport: {
-        width: window.innerWidth - 240,
-        height: window.innerHeight
-      }
-    });
+    window.onresize = () =>
+      this.setState({
+        viewport: {
+          width: window.innerWidth - 240,
+          height: window.innerHeight
+        }
+      });
   }
 
   componentWillUnmount() {
@@ -56,5 +56,4 @@ export default class App extends Component {
       </div>
     );
   }
-
 }

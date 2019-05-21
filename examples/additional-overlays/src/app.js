@@ -32,12 +32,11 @@ import CITIES from '../../data/cities.json';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-const ZIPCODES = Immutable.fromJS(ZIPCODES_SF.features)
-  .map(f => f.setIn(['properties', 'value'], Math.random() * 1000));
-
-const CITY_LOCATIONS = Immutable.fromJS(
-  CITIES.map(c => [c.longitude, c.latitude])
+const ZIPCODES = Immutable.fromJS(ZIPCODES_SF.features).map(f =>
+  f.setIn(['properties', 'value'], Math.random() * 1000)
 );
+
+const CITY_LOCATIONS = Immutable.fromJS(CITIES.map(c => [c.longitude, c.latitude]));
 
 export default class App extends Component {
   constructor(props) {
@@ -56,33 +55,36 @@ export default class App extends Component {
   }
 
   render() {
-    const {viewport, draggablePoints} = this.state;
+    const {viewport} = this.state;
 
     return (
       <MapGL
         {...viewport}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={v => this.setState({viewport: v})}
-        mapboxApiAccessToken={MAPBOX_TOKEN} >
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+      >
+        <ChoroplethOverlay
+          key="choropleth"
+          globalOpacity={0.8}
+          colorDomain={[0, 500, 1000]}
+          colorRange={['#31a354', '#addd8e', '#f7fcb9']}
+          renderWhileDragging={false}
+          features={ZIPCODES}
+        />
 
-        <ChoroplethOverlay key="choropleth"
-          globalOpacity={ 0.8 }
-          colorDomain={ [0, 500, 1000] }
-          colorRange={ ['#31a354', '#addd8e', '#f7fcb9'] }
-          renderWhileDragging={ false }
-          features={ ZIPCODES } />
-
-        <ScatterplotOverlay key="scatterplot"
+        <ScatterplotOverlay
+          key="scatterplot"
           locations={CITY_LOCATIONS}
           dotRadius={10}
           globalOpacity={0.8}
           compositeOperation="lighter"
           dotFill="#00a8fe"
-          renderWhileDragging={true} />
-
+          renderWhileDragging={true}
+        />
       </MapGL>
     );
   }
 }
 
-ReactDOM.render(<App/>, document.body.appendChild(document.createElement('div')));
+ReactDOM.render(<App />, document.body.appendChild(document.createElement('div')));

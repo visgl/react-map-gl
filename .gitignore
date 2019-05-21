@@ -10,5 +10,6 @@ package-lock.json
 */**/package-lock.json
 yarn-error.log
 .DS_Store
+.reify-cache
 
 .idea

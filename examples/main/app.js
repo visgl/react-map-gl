@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+/* global document */
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import TOC from './constants/toc';
@@ -30,7 +31,6 @@ const DEFAULT_ACTIVE_ID = TOC[0].children[0].path;
 const DEFAULT_ACTIVE_COMPONENT = TOC[0].children[0].component;
 
 export default class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -48,19 +48,16 @@ export default class App extends Component {
     return (
       <div className="gallery-wrapper flexbox--row" style={{paddingTop: 0}}>
         <div className="flexbox-item">
-          <TableOfContents
-            onChange={this._onTocChange.bind(this)}
-            activeId={activeExampleId} />
+          <TableOfContents onChange={this._onTocChange.bind(this)} activeId={activeExampleId} />
         </div>
         <ExampleContainer component={exampleComponent} />
       </div>
     );
   }
-
 }
 
 App.defaultProps = {
   disablePadding: true
 };
 
-ReactDOM.render(<App/>, document.body.appendChild(document.createElement('div')));
+ReactDOM.render(<App />, document.body.appendChild(document.createElement('div')));

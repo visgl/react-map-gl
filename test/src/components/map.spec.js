@@ -1,5 +1,4 @@
 /* global setTimeout, clearTimeout */
-// import InteractiveMap from 'react-map-gl';
 import MapGL, {InteractiveMap} from 'react-map-gl';
 import {createElement} from 'react';
 import ReactTestUtils from 'react-test-renderer/shallow';
@@ -108,7 +107,7 @@ TEST_CASES.forEach(testCase => {
       // The "Mapbox API access token required" warning is rendered with a <h3 />
       const warning = result.root.findAllByType('h3');
       if (testCase.shouldLoad) {
-        t.notOk(warning.length, 'shouldn\'t show warning');
+        t.notOk(warning.length, "shouldn't show warning");
       } else {
         t.ok(warning.length, 'should show warning');
       }
@@ -130,9 +129,9 @@ TEST_CASES.forEach(testCase => {
 
     function onTimeout() {
       if (testCase.shouldLoad) {
-        t.fail('onLoad wasn\'t called');
+        t.fail("onLoad wasn't called");
       } else {
-        t.pass('onLoad wasn\'t called');
+        t.pass("onLoad wasn't called");
       }
       checkRenderResult();
       t.end();

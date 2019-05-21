@@ -74,7 +74,6 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
  * recalculate the popup's position when the parent re-renders.
  */
 export default class Popup extends BaseControl {
-
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
@@ -97,14 +96,18 @@ export default class Popup extends BaseControl {
     const content = this._contentRef.current;
 
     if (content) {
-      return dynamicPosition ? getDynamicPosition({
-        x, y, anchor,
-        padding: tipSize,
-        width: viewport.width,
-        height: viewport.height,
-        selfWidth: content.clientWidth,
-        selfHeight: content.clientHeight
-      }) : anchor;
+      return dynamicPosition
+        ? getDynamicPosition({
+            x,
+            y,
+            anchor,
+            padding: tipSize,
+            width: viewport.width,
+            height: viewport.height,
+            selfWidth: content.clientWidth,
+            selfHeight: content.clientHeight
+          })
+        : anchor;
     }
 
     return anchor;
@@ -136,16 +139,18 @@ export default class Popup extends BaseControl {
     return style;
   }
 
-  _onClick = (evt) => {
+  _onClick = evt => {
     if (this.props.captureClick) {
       evt.stopPropagation();
     }
 
-    if (evt.type === 'click' &&
-      (this.props.closeOnClick || evt.target.className === 'mapboxgl-popup-close-button')) {
+    if (
+      evt.type === 'click' &&
+      (this.props.closeOnClick || evt.target.className === 'mapboxgl-popup-close-button')
+    ) {
       this.props.onClose();
     }
-  }
+  };
 
   _renderTip(positionType) {
     const {tipSize} = this.props;
@@ -162,19 +167,28 @@ export default class Popup extends BaseControl {
     // If eventManager does not exist (using with static map), listen to React event
     const onClick = this._context.eventManager ? null : this._onClick;
 
-    return createElement('div', {
-      key: 'content',
-      ref: this._contentRef,
-      className: 'mapboxgl-popup-content',
-      onClick
-    }, [
-      closeButton && createElement('button', {
-        key: 'close-button',
-        className: 'mapboxgl-popup-close-button',
-        type: 'button'
-      }, '×'),
-      children
-    ]);
+    return createElement(
+      'div',
+      {
+        key: 'content',
+        ref: this._contentRef,
+        className: 'mapboxgl-popup-content',
+        onClick
+      },
+      [
+        closeButton &&
+          createElement(
+            'button',
+            {
+              key: 'close-button',
+              className: 'mapboxgl-popup-close-button',
+              type: 'button'
+            },
+            '×'
+          ),
+        children
+      ]
+    );
   }
 
   _render() {
@@ -185,14 +199,14 @@ export default class Popup extends BaseControl {
     const positionType = this._getPosition(x, y);
     const containerStyle = this._getContainerStyle(x, y, z, positionType);
 
-    return createElement('div', {
-      className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`,
-      style: containerStyle,
-      ref: this._containerRef
-    }, [
-      this._renderTip(positionType),
-      this._renderContent()
-    ]);
+    return createElement(
+      'div',
+      {
+        className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`,
+        style: containerStyle,
+        ref: this._containerRef
+      },
+      [this._renderTip(positionType), this._renderContent()]
+    );
   }
-
 }

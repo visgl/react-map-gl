@@ -21,4 +21,3 @@ export function isGeolocationSupported() {
   supported = Boolean(window.navigator.geolocation);
   return Promise.resolve(supported);
 }
-
