@@ -360,18 +360,20 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
     for (let mode in testCase.shouldChange) {
       mode = parseInt(mode);
       let transitionProps;
-      let time = [0, 0];
+      let time = 0;
       const transitionManager = new TransitionManager(
         Object.assign({}, TransitionManager.defaultProps, testCase.initialProps, {
           transitionInterruption: mode
-        })
+        }),
+        // Override current time getter
+        () => time
       );
 
       testCase.input.forEach((props, i) => {
         transitionProps = Object.assign({}, TransitionManager.defaultProps, props, {
           transitionInterruption: mode
         });
-        time[i] = Date.now();
+        time = i * 100;
         transitionManager.processViewportChange(transitionProps);
       });
       // testing interpolator
@@ -384,7 +386,7 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
       // testing duration
       const testDuration =
         mode === TRANSITION_EVENTS.UPDATE
-          ? testCase.input[ti].transitionDuration - (time[1] - time[0])
+          ? testCase.input[ti].transitionDuration - 100
           : testCase.input[ti].transitionDuration;
       t.is(
         equals(transitionManager.state.duration, testDuration, 1e-7),
@@ -395,7 +397,7 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
       // testing easing function
       let testEasingFunc = testCase.input[ti].transitionEasing;
       if (mode === TRANSITION_EVENTS.UPDATE) {
-        const completion = (time[1] - time[0]) / testCase.input[ti].transitionDuration;
+        const completion = 100 / testCase.input[ti].transitionDuration;
         testEasingFunc = cropEasingFunction(testCase.input[ti].transitionEasing, completion);
       }
 
@@ -404,6 +406,9 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
         testCase.shouldChange[mode].transitionEasing,
         'transitionEasing match'
       );
+
+      // Clean up
+      transitionManager._endTransition();
     }
   });
   t.end();
