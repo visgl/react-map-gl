@@ -356,6 +356,8 @@ function compareFunc(func1, func2, step) {
 }
 
 test('TransitionManager#TRANSITION_EVENTS', t => {
+  const UPDATE_INTERVAL = 100;
+
   TEST_CASES_EVENTS.forEach((testCase, ti) => {
     for (let mode in testCase.shouldChange) {
       mode = parseInt(mode);
@@ -373,7 +375,7 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
         transitionProps = Object.assign({}, TransitionManager.defaultProps, props, {
           transitionInterruption: mode
         });
-        time = i * 100;
+        time = i * UPDATE_INTERVAL;
         transitionManager.processViewportChange(transitionProps);
       });
       // testing interpolator
@@ -386,7 +388,7 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
       // testing duration
       const testDuration =
         mode === TRANSITION_EVENTS.UPDATE
-          ? testCase.input[ti].transitionDuration - 100
+          ? testCase.input[ti].transitionDuration - UPDATE_INTERVAL
           : testCase.input[ti].transitionDuration;
       t.is(
         equals(transitionManager.state.duration, testDuration, 1e-7),
@@ -397,7 +399,7 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
       // testing easing function
       let testEasingFunc = testCase.input[ti].transitionEasing;
       if (mode === TRANSITION_EVENTS.UPDATE) {
-        const completion = 100 / testCase.input[ti].transitionDuration;
+        const completion = UPDATE_INTERVAL / testCase.input[ti].transitionDuration;
         testEasingFunc = cropEasingFunction(testCase.input[ti].transitionEasing, completion);
       }
 
@@ -407,7 +409,8 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
         'transitionEasing match'
       );
 
-      // Clean up
+      // We provided an external timer so the animation never ends.
+      // The test cannot end if there is a pending animation frame requested.
       transitionManager._endTransition();
     }
   });
