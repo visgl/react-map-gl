@@ -3,9 +3,7 @@
 # Version 4.1
 
 ## 4.1.3 (May 29, 2019)
-- Fix transition manager tests (#798)
 - Fix geolocate control missing key warning (#789)
-- typo in doc (#783)
 - Custom mapbox server (#769)
 
 ## 4.1.2 (Apr 12, 2019)
