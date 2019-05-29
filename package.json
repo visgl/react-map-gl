@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "@mapbox/mapbox-gl-style-spec": "^13.7.0",
     "mapbox-gl": "~0.53.0",
     "mjolnir.js": "^2.1.0",
     "prop-types": "^15.7.2",

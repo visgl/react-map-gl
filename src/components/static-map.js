@@ -18,6 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+/* global window */
 import {PureComponent, createElement, createRef} from 'react';
 import PropTypes from 'prop-types';
 
@@ -31,6 +32,7 @@ import mapboxgl from '../utils/mapboxgl';
 import {checkVisibilityConstraints} from '../utils/map-constraints';
 import {MAPBOX_LIMITS} from '../utils/map-state';
 import MapContext from './map-context';
+import {diff as diffStyles} from '@mapbox/mapbox-gl-style-spec';
 
 import type {ViewState} from '../mapbox/mapbox';
 import type {Node} from 'react';
@@ -61,6 +63,8 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
   onResize: PropTypes.func,
   /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */
   preventStyleDiffing: PropTypes.bool,
+  /** There are known issues with mapbox style diffing using { diff: true }. This option behaves much better. */
+  customStyleDiffing: PropTypes.bool,
   /** Hide invalid token warning even if request fails */
   disableTokenWarning: PropTypes.bool,
   /** Whether the map is visible */
@@ -78,6 +82,7 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
 
 const defaultProps = Object.assign({}, Mapbox.defaultProps, {
   preventStyleDiffing: false,
+  customStyleDiffing: false,
   disableTokenWarning: false,
   visible: true,
   onResize: noop,
@@ -91,6 +96,7 @@ export type StaticMapProps = {
   width: number | string,
   height: number | string,
   preventStyleDiffing: boolean,
+  customStyleDiffing: Boolean,
   disableTokenWarning: false,
   visible: boolean,
   className: string,
@@ -133,6 +139,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     }
     const {mapStyle} = this.props;
 
+    this._lastAppliedStyle = mapStyle;
     // $FlowFixMe
     this._mapbox = new Mapbox(
       Object.assign({}, this.props, {
@@ -164,6 +171,8 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
 
   _mapbox: any = null;
   _map: any = null;
+  _mapCheckLoadedInterval: IntervalID | null;
+  _lastAppliedStyle: mixed;
   _mapboxMapRef: {current: null | HTMLDivElement} = createRef();
   _mapContainerRef: {current: null | HTMLDivElement} = createRef();
   _queryParams: any = {};
@@ -197,14 +206,56 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     }
   }
 
+  _tryToApplyLatestMapChanges() {
+    if (this.props.mapStyle === this._lastAppliedStyle) {
+      return;
+    }
+    if (this._map.loaded()) {
+      const previousStyle = normalizeStyle(this._lastAppliedStyle);
+      const latestStyle = normalizeStyle(this.props.mapStyle);
+      const hasUrl = typeof previousStyle === 'string' || typeof latestStyle === 'string';
+      const changes = hasUrl ? [] : diffStyles(previousStyle, latestStyle);
+      const unknownCommand = changes.find(change => {
+        return !this._map[change.command] && !this._map.style[change.command];
+      });
+      if (hasUrl || unknownCommand) {
+        this._map.setStyle(latestStyle);
+      } else {
+        changes.forEach(change => {
+          if (this._map[change.command]) {
+            this._map[change.command](...change.args);
+          } else if (this._map.style[change.command]) {
+            this._map.style[change.command](...change.args);
+          }
+        });
+      }
+      this._lastAppliedStyle = this.props.mapStyle;
+
+      if (this._mapCheckLoadedInterval !== null) {
+        window.clearInterval(this._mapCheckLoadedInterval);
+      }
+      this._mapCheckLoadedInterval = null;
+    } else if (typeof this._mapCheckLoadedInterval !== 'number') {
+      this._mapCheckLoadedInterval = window.setInterval(
+        this._tryToApplyLatestMapChanges.bind(this),
+        50
+      );
+    }
+  }
+
   _updateMapStyle(oldProps: StaticMapProps, newProps: StaticMapProps) {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
-    if (mapStyle !== oldMapStyle) {
+    if (mapStyle === oldMapStyle) {
+      return;
+    }
+    if (!this.props.customStyleDiffing || !oldMapStyle) {
       this._map.setStyle(normalizeStyle(mapStyle), {
         diff: !this.props.preventStyleDiffing
       });
+      return;
     }
+    this._tryToApplyLatestMapChanges();
   }
 
   _updateMapProps(props: StaticMapProps) {
