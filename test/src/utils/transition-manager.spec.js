@@ -274,35 +274,59 @@ function compareFunc(func1, func2, step){
 }
 
 test('TransitionManager#TRANSITION_EVENTS', t => {
+  const UPDATE_INTERVAL = 100;
+
   TEST_CASES_EVENTS.forEach((testCase, ti) => {
     for (let mode in testCase.shouldChange) {
       mode = parseInt(mode);
       let transitionProps;
-      let time = [0, 0];
-      const transitionManager = new TransitionManager(Object.assign({}, TransitionManager.defaultProps, testCase.initialProps, {transitionInterruption: mode}));
+      let time = 0;
+      const transitionManager = new TransitionManager(
+        Object.assign({}, TransitionManager.defaultProps, testCase.initialProps, {
+          transitionInterruption: mode
+        }),
+        // Override current time getter
+        () => time
+      );
 
       testCase.input.forEach((props, i) => {
-        transitionProps = Object.assign({}, TransitionManager.defaultProps, props, {transitionInterruption: mode});
-        time[i] = Date.now();
+        transitionProps = Object.assign({}, TransitionManager.defaultProps, props, {
+          transitionInterruption: mode
+        });
+        time = i * UPDATE_INTERVAL;
         transitionManager.processViewportChange(transitionProps);
       });
       // testing interpolator
       t.is(transitionManager.state.interpolator === testCase.input[ti].transitionInterpolator, testCase.shouldChange[mode].transitionInterpolator, 'transitionInterpolator match');
 
       // testing duration
-      const testDuration = mode === TRANSITION_EVENTS.UPDATE ?
-        testCase.input[ti].transitionDuration - (time[1] - time[0]) : testCase.input[ti].transitionDuration;
-      t.is(equals(transitionManager.state.duration, testDuration, 1e-7), testCase.shouldChange[mode].transitionDuration, 'transitionDuration match');
+      const testDuration =
+        mode === TRANSITION_EVENTS.UPDATE
+          ? testCase.input[ti].transitionDuration - UPDATE_INTERVAL
+          : testCase.input[ti].transitionDuration;
+      t.is(
+        equals(transitionManager.state.duration, testDuration, 1e-7),
+        testCase.shouldChange[mode].transitionDuration,
+        'transitionDuration match'
+      );
 
       // testing easing function
       let testEasingFunc = testCase.input[ti].transitionEasing;
-      if(mode === TRANSITION_EVENTS.UPDATE) {
-        const completion = (time[1] - time[0]) / testCase.input[ti].transitionDuration;
+      if (mode === TRANSITION_EVENTS.UPDATE) {
+        const completion = UPDATE_INTERVAL / testCase.input[ti].transitionDuration;
         testEasingFunc = cropEasingFunction(testCase.input[ti].transitionEasing, completion);
       }
 
-      t.is(compareFunc(transitionManager.state.easing, testEasingFunc, 0.1), testCase.shouldChange[mode].transitionEasing, 'transitionEasing match');
-    };
+      t.is(
+        compareFunc(transitionManager.state.easing, testEasingFunc, 0.1),
+        testCase.shouldChange[mode].transitionEasing,
+        'transitionEasing match'
+      );
+
+      // We provided an external timer so the animation never ends.
+      // The test cannot end if there is a pending animation frame requested.
+      transitionManager._endTransition();
+    }
   });
   t.end();
 });
