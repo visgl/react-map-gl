@@ -32,7 +32,7 @@ class Map extends Component {
 
 Accepts all the options of [Mapbox GeolocatControl](https://docs.mapbox.com/mapbox-gl-js/api/#geolocatecontrol).
 
-##### `onViewportChange` {Function}
+##### `onViewportChange` {Function, optional}
 
 Callback when the user interaction with this control requests a viewport update. If provided, will be called instead of the containing [InteractiveMap](/docs/components/interactive-map.md)'s `onViewportChange`.
 
