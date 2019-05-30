@@ -146,6 +146,10 @@ const docPages = {
           content: getDocUrl('components/fullscreen-control.md')
         },
         {
+          name: 'GeolocateControl',
+          content: getDocUrl('components/geolocate-control.md')
+        },
+        {
           name: 'PointerEvent',
           content: getDocUrl('components/pointer-event.md')
         },
