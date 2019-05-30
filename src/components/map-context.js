@@ -11,6 +11,8 @@ export default createContext({
   mapContainer: null,
 
   /* Interactive-only context */
+  onViewportChange: null,
+  onViewStateChange: null,
 
   // EventManager instance
   eventManager: null,

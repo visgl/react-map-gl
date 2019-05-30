@@ -90,7 +90,7 @@ export default class App extends Component {
           <FullscreenControl />
         </div>
         <div className="nav" style={navStyle}>
-          <NavigationControl onViewportChange={this._updateViewport} />
+          <NavigationControl />
         </div>
 
         <ControlPanel containerComponent={this.props.containerComponent} />

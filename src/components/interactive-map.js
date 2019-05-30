@@ -286,6 +286,11 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     });
 
     this._controller.setOptions(props);
+
+    this._updateInteractiveContext({
+      onViewStateChange: props.onViewStateChange,
+      onViewportChange: props.onViewportChange
+    });
   }
 
   _getFeatures({pos, radius}: {pos: Array<number>, radius: number}) {

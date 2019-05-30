@@ -7,31 +7,20 @@ import React, { Component } from "react";
 import ReactMapGL, {GeolocateControl} from "react-map-gl";
 
 class Map extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      viewport: {
-        width: 800,
-        height: 600,
-        longitude: -122.45,
-        latitude: 37.78,
-        zoom: 14
-      }
-    }
-  }
-  
-  _updateViewport = (viewport) => {
-    this.setState({viewport});
+  state = {
+    viewport: {longitude: -122.45, latitude: 37.78, zoom: 14}
   }
   
   render() {
     const {viewport} = this.state;
     return (
-      <ReactMapGL {...viewport} onViewportChange={updateViewport}>
+      <ReactMapGL {...viewport}
+        width="100vw"
+        height="100vh"
+        onViewportChange={viewport => this.setState({viewport})}>
         <GeolocateControl 
           positionOptions={{enableHighAccuracy: true}}
           trackUserLocation={true}
-          onViewportChange={this._updateViewport}
         />
       </ReactMapGL>
     );
@@ -41,12 +30,11 @@ class Map extends Component {
 
 ## Properties
 
-##### `onViewportChange` {Function}
-
-Callback when the viewport needs to be updated. See [InteractiveMap](/docs/components/interactive-map.md).
-
-
 Accepts all the options of [Mapbox GeolocatControl](https://docs.mapbox.com/mapbox-gl-js/api/#geolocatecontrol).
+
+##### `onViewportChange` {Function, optional}
+
+Callback when the user interaction with this control requests a viewport update. If provided, will be called instead of the containing [InteractiveMap](/docs/components/interactive-map.md)'s `onViewportChange`.
 
 ##### `positionOptions` {Object} - default: `{enableHighAccuracy:false, timeout:6000}`
 

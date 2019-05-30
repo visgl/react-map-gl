@@ -7,6 +7,8 @@ import {LINEAR_TRANSITION_PROPS} from '../utils/map-controller';
 
 import deprecateWarn from '../utils/deprecate-warn';
 
+const noop = () => {};
+
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
   className: PropTypes.string,
@@ -22,8 +24,6 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
-  onViewStateChange: () => {},
-  onViewportChange: () => {},
   showCompass: true,
   showZoom: true
 });
@@ -47,11 +47,15 @@ export default class NavigationControl extends BaseControl {
     const mapState = new MapState(Object.assign({}, viewport, opts));
     const viewState = Object.assign({}, mapState.getViewportProps(), LINEAR_TRANSITION_PROPS);
 
+    const onViewportChange = this.props.onViewportChange || this._context.onViewportChange || noop;
+    const onViewStateChange =
+      this.props.onViewStateChange || this._context.onViewStateChange || noop;
+
     // Call new style callback
-    this.props.onViewStateChange({viewState});
+    onViewStateChange({viewState});
 
     // Call old style callback
-    this.props.onViewportChange(viewState);
+    onViewportChange(viewState);
   }
 
   _onZoomIn = () => {
