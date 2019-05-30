@@ -19,6 +19,8 @@ const LINEAR_TRANSITION_PROPS = Object.assign(
   }
 );
 
+const noop = () => {};
+
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
   className: PropTypes.string,
@@ -45,11 +47,7 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   positionOptions: null,
   fitBoundsOptions: null,
   trackUserLocation: false,
-  showUserLocation: true,
-
-  // viewport handlers
-  onViewStateChange: () => {},
-  onViewportChange: () => {}
+  showUserLocation: true
 });
 
 export default class GeolocateControl extends BaseControl {
@@ -168,11 +166,15 @@ export default class GeolocateControl extends BaseControl {
       LINEAR_TRANSITION_PROPS
     );
 
+    const onViewportChange = this.props.onViewportChange || this._context.onViewportChange || noop;
+    const onViewStateChange =
+      this.props.onViewStateChange || this._context.onViewStateChange || noop;
+
     // Call new style callback
-    this.props.onViewStateChange({viewState});
+    onViewStateChange({viewState});
 
     // Call old style callback
-    this.props.onViewportChange(viewState);
+    onViewportChange(viewState);
   };
 
   _renderButton = (type, label, callback, children) => {
