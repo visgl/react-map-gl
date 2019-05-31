@@ -13,7 +13,8 @@ const config = {
 
   entry: {
     test: 'test/src/index.js',
-    'test-browser': 'test/browser.js'
+    'test-browser': 'test/browser.js',
+    size: 'test/size/import-nothing.js'
   }
 };
 

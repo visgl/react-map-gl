@@ -12,7 +12,12 @@ addons:
     - libosmesa6
     - libxi-dev
 node_js:
-  - '8'
+  - '10'
+install:
+  - yarn bootstrap
 before_script:
   - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
-  - npm run build
+script:
+  - npm run test ci
+after_success:
+  - cat coverage/lcov.info | coveralls
