@@ -1,3 +1,5 @@
+// @flow
+
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,6 +24,8 @@ import {createElement} from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from '../components/base-control';
 
+import type {BaseControlProps} from '../components/base-control';
+
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   redraw: PropTypes.func.isRequired,
   style: PropTypes.object
@@ -34,7 +38,15 @@ const defaultProps = {
   captureDoubleClick: false
 };
 
-export default class SVGOverlay extends BaseControl {
+export type SVGOverlayProps = BaseControlProps & {
+  redraw: Function,
+  style?: Object
+};
+
+export default class SVGOverlay extends BaseControl<SVGOverlayProps, *, Element> {
+  static propTypes = propTypes;
+  static defaultProps = defaultProps;
+
   _render() {
     const {viewport, isDragging} = this._context;
     const style = Object.assign(
@@ -64,7 +76,3 @@ export default class SVGOverlay extends BaseControl {
     );
   }
 }
-
-SVGOverlay.displayName = 'SVGOverlay';
-SVGOverlay.propTypes = propTypes;
-SVGOverlay.defaultProps = defaultProps;

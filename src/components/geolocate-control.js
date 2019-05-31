@@ -13,6 +13,8 @@ import MapState from '../utils/map-state';
 import TransitionManager from '../utils/transition-manager';
 import {isGeolocationSupported} from '../utils/geolocate-utils';
 
+import type {BaseControlProps} from './base-control';
+
 const LINEAR_TRANSITION_PROPS = Object.assign({}, TransitionManager.defaultProps, {
   transitionDuration: 500
 });
@@ -48,22 +50,47 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   showUserLocation: true
 });
 
-export default class GeolocateControl extends BaseControl {
+export type GeolocateControlProps = BaseControlProps & {
+  className: string,
+  style: Object,
+  positionOptions: any,
+  fitBoundsOptions: any,
+  trackUserLocation: boolean,
+  showUserLocation: boolean,
+  onViewStateChange?: Function,
+  onViewportChange?: Function
+};
+
+type Coordinate = {
+  longitude: number,
+  latitude: number,
+  accuracy: number
+};
+type Position = {
+  coords: Coordinate
+};
+type State = {
+  supportsGeolocation: boolean,
+  markerPosition: ?Coordinate
+};
+
+export default class GeolocateControl extends BaseControl<
+  GeolocateControlProps,
+  State,
+  HTMLDivElement
+> {
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
-  constructor(props) {
-    super(props);
+  state = {
+    supportsGeolocation: false,
+    markerPosition: null
+  };
 
-    this.state = {
-      supportsGeolocation: null,
-      markerPosition: null
-    };
-  }
+  _mapboxGeolocateControl: any = null;
 
-  _containerRef: {current: null | HTMLDivElement} = createRef();
-  _geolocateButtonRef: {current: null | HTMLDivElement} = createRef();
-  _markerRef: {current: null | HTMLDivElement} = createRef();
+  _geolocateButtonRef: {current: null | HTMLButtonElement} = createRef();
+  _markerRef: {current: null | Marker} = createRef();
 
   componentDidMount() {
     isGeolocationSupported().then(result => {
@@ -90,7 +117,7 @@ export default class GeolocateControl extends BaseControl {
     }
   }
 
-  _setupMapboxGeolocateControl = supportsGeolocation => {
+  _setupMapboxGeolocateControl = (supportsGeolocation: boolean) => {
     if (!supportsGeolocation) {
       /* eslint-disable no-console, no-undef */
       console.warn(
@@ -130,13 +157,13 @@ export default class GeolocateControl extends BaseControl {
     return this._mapboxGeolocateControl.trigger();
   };
 
-  _updateMarker = position => {
+  _updateMarker = (position: Position) => {
     if (position) {
       this.setState({markerPosition: position.coords});
     }
   };
 
-  _getBounds = position => {
+  _getBounds = (position: Position) => {
     const center = new mapboxgl.LngLat(position.coords.longitude, position.coords.latitude);
     const radius = position.coords.accuracy;
     const bounds = center.toBounds(radius);
@@ -144,7 +171,7 @@ export default class GeolocateControl extends BaseControl {
     return [[bounds._ne.lng, bounds._ne.lat], [bounds._sw.lng, bounds._sw.lat]];
   };
 
-  _updateCamera = position => {
+  _updateCamera = (position: Position) => {
     const {viewport} = this._context;
 
     const bounds = this._getBounds(position);
@@ -169,15 +196,14 @@ export default class GeolocateControl extends BaseControl {
     onViewportChange(viewState);
   };
 
-  _renderButton = (type, label, callback, children) => {
+  _renderButton = (type: string, label: string, callback: Function) => {
     return createElement('button', {
       key: type,
       className: `mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`,
       ref: this._geolocateButtonRef,
       type: 'button',
       title: label,
-      onClick: callback,
-      children
+      onClick: callback
     });
   };
 
@@ -188,6 +214,7 @@ export default class GeolocateControl extends BaseControl {
       return null;
     }
 
+    // $FlowFixMe
     return createElement(Marker, {
       key: 'location-maker',
       ref: this._markerRef,

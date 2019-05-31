@@ -11,6 +11,8 @@ export const ANCHOR_POSITION = {
   right: {x: 1, y: 0.5}
 };
 
+export type PositionType = $Keys<typeof ANCHOR_POSITION>;
+
 const ANCHOR_TYPES = Object.keys(ANCHOR_POSITION);
 
 /**
@@ -44,9 +46,9 @@ export function getDynamicPosition({
   height: number,
   selfWidth: number,
   selfHeight: number,
-  anchor: string,
+  anchor: PositionType,
   padding: number
-}): string {
+}): PositionType {
   let {x: anchorX, y: anchorY} = ANCHOR_POSITION[anchor];
 
   // anchorY: top - 0, center - 0.5, bottom - 1

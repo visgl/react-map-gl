@@ -22,6 +22,8 @@ import {createElement} from 'react';
 import PropTypes from 'prop-types';
 import DraggableControl from './draggable-control';
 
+import type {DraggableControlProps} from './draggable-control';
+
 const propTypes = Object.assign({}, DraggableControl.propTypes, {
   // Custom className
   className: PropTypes.string,
@@ -32,10 +34,14 @@ const propTypes = Object.assign({}, DraggableControl.propTypes, {
 });
 
 const defaultProps = Object.assign({}, DraggableControl.defaultProps, {
-  className: '',
-  offsetLeft: 0,
-  offsetTop: 0
+  className: ''
 });
+
+export type MarkerProps = DraggableControlProps & {
+  className: string,
+  longitude: number,
+  latitude: number
+};
 
 /*
  * PureComponent doesn't update when context changes.
@@ -44,7 +50,7 @@ const defaultProps = Object.assign({}, DraggableControl.defaultProps, {
  * is almost always triggered by a viewport change, we almost definitely need to
  * recalculate the marker's position when the parent re-renders.
  */
-export default class Marker extends DraggableControl {
+export default class Marker extends DraggableControl<MarkerProps> {
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
@@ -53,7 +59,7 @@ export default class Marker extends DraggableControl {
     const {dragPos, dragOffset} = this.state;
 
     // If dragging, just return the current drag position
-    if (dragPos) {
+    if (dragPos && dragOffset) {
       return this._getDraggedPosition(dragPos, dragOffset);
     }
 
