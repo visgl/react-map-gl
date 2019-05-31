@@ -1,6 +1,16 @@
+# react-map-gl v5.0
+
+Release date: May 31, 2019
+
+## What's Changed
+
+The only change between the 5.0 release and the latest 4.1 release is Mapbox GL JS v1.0. By using this version, you opt into Mapbox's new pricing model, which bills per map load instead of map views. 5.0.x and 4.1.x will continue to update in parallel with otherwise identical features until November 2019 when Mapbox moves all users of 0.xx to a new pricing scheme. For more details, see mapbox's [changelog](https://github.com/mapbox/mapbox-gl-js/releases/tag/v1.0.0) and [blog post](https://blog.mapbox.com/new-pricing-46b7c26166e7). 
+
+Alongside Mapbox GL JS's new milestone, we have relaxed the `mapbox-gl` dependency from locking minor release (`~0.53.0`) to major release (`^1.0.0`). This will allow developers to upgrade faster without waiting for a new release from react-map-gl.
+
 # react-map-gl v4.1
 
-Release date: TBD 
+Release date: Mar 14, 2019 
 
 ## Highlights
 
@@ -98,11 +108,11 @@ Release date: July 27th, 2017
 
 ### [InteractiveMap (New, MapGL replacement)](/#/Documentation/api-reference/interactive-map)
 
-This is a wrapper on top of `StaticMap`. It takes all the props of `StaticMap` and additional ones such as `onViewportChange`, `scrollZoom`, `dragRotate`, etc. to control interactivity on the map. See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/interactive-map.js) for more information.
+This is a wrapper on top of `StaticMap`. It takes all the props of `StaticMap` and additional ones such as `onViewportChange`, `scrollZoom`, `dragRotate`, etc. to control interactivity on the map. See [Source Code](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/interactive-map.js) for more information.
 
 ### [StaticMap (New)](/#/Documentation/api-reference/static-map)
 
-This is the React wrapper around `Mapbox GL JS` and takes in viewport properties such as `width`, `height`, `latitude`, `longitude`. Style diffing and updating logic also live here. See [Source Code](https://github.com/uber/react-map-gl/blob/master/src/components/static-map.js) for more information.
+This is the React wrapper around `Mapbox GL JS` and takes in viewport properties such as `width`, `height`, `latitude`, `longitude`. Style diffing and updating logic also live here. See [Source Code](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/static-map.js) for more information.
 
 ### Overlays
 
