@@ -2,6 +2,7 @@ dist/
 dist-es6/
 
 node_modules
+.nyc_output/
 coverage
 npm-debug.log
 
