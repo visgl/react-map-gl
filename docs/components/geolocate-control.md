@@ -56,7 +56,7 @@ By default a dot will be shown on the map at the user's location. Set to false t
 
 A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to Geolocate control button.
 
-Check [`locate user`](https://github.com/uber/react-map-gl/blob/master/examples/locate-user/src/app.js) example for basic styling.
+Check [`locate user`](https://github.com/uber/react-map-gl/tree/5.0-release/examples/locate-user/src/app.js) example for basic styling.
 
 ## Styling
 
@@ -64,4 +64,4 @@ Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to 
 
 ## Source
 
-[geolocate-control.js](https://github.com/uber/react-map-gl/tree/master/src/components/geolocate-control.js)
+[geolocate-control.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/geolocate-control.js)

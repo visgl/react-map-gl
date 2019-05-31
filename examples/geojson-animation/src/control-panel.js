@@ -12,7 +12,7 @@ export default class ControlPanel extends PureComponent {
         <p>Render animation by updating GeoJSON data source.</p>
         <div className="source-link">
           <a
-            href="https://github.com/uber/react-map-gl/tree/3.2-release/examples/geojson-animation"
+            href="https://github.com/uber/react-map-gl/tree/5.0-release/examples/geojson-animation"
             target="_new"
           >
             View Code ↗
