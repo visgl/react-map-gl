@@ -42,7 +42,8 @@
     "test-browser": "ocular-test browser",
     "test-dist": "ocular-test dist",
     "metrics": "ocular-metrics",
-    "lint-yarn": "!(grep -q unpm.u yarn.lock) || (echo 'Please rebuild yarn file using public npmrc' && false)"
+    "lint-yarn": "!(grep -q unpm.u yarn.lock) || (echo 'Please rebuild yarn file using public npmrc' && false)",
+    "update-release-branch": "scripts/update-release-branch.sh"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
