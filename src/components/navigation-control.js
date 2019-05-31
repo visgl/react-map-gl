@@ -1,3 +1,4 @@
+// @flow
 import {createElement} from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
@@ -6,6 +7,8 @@ import MapState from '../utils/map-state';
 import {LINEAR_TRANSITION_PROPS} from '../utils/map-controller';
 
 import deprecateWarn from '../utils/deprecate-warn';
+
+import type {BaseControlProps} from './base-control';
 
 const noop = () => {};
 
@@ -28,21 +31,41 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   showZoom: true
 });
 
+export type NavigationControlProps = BaseControlProps & {
+  className: string,
+  onViewStateChange?: Function,
+  onViewportChange?: Function,
+  showCompass: boolean,
+  showZoom: boolean
+};
+
+type ViewportProps = {
+  longitude: number,
+  latitude: number,
+  zoom: number,
+  pitch: number,
+  bearing: number
+};
+
 /*
  * PureComponent doesn't update when context changes, so
  * implementing our own shouldComponentUpdate here.
  */
-export default class NavigationControl extends BaseControl {
+export default class NavigationControl extends BaseControl<
+  NavigationControlProps,
+  *,
+  HTMLDivElement
+> {
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
-  constructor(props) {
+  constructor(props: NavigationControlProps) {
     super(props);
     // Check for deprecated props
     deprecateWarn(props);
   }
 
-  _updateViewport(opts) {
+  _updateViewport(opts: $Shape<ViewportProps>) {
     const {viewport} = this._context;
     const mapState = new MapState(Object.assign({}, viewport, opts));
     const viewState = Object.assign({}, mapState.getViewportProps(), LINEAR_TRANSITION_PROPS);
@@ -78,7 +101,7 @@ export default class NavigationControl extends BaseControl {
     });
   }
 
-  _renderButton(type, label, callback, children) {
+  _renderButton(type: string, label: string, callback: Function, children: any) {
     return createElement('button', {
       key: type,
       className: `mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`,

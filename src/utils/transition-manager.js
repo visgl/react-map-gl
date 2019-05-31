@@ -68,6 +68,7 @@ export default class TransitionManager {
 
   props: ViewportProps;
   state: TransitionState;
+  time: () => number;
 
   _animationFrame: ?AnimationFrameID = null;
 

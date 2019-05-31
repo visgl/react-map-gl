@@ -16,6 +16,7 @@ import deprecateWarn from '../utils/deprecate-warn';
 import type {ViewState} from '../mapbox/mapbox';
 import type {StaticMapProps} from './static-map';
 import type {MjolnirEvent} from 'mjolnir.js';
+import type {MapContextProps} from './map-context';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -99,7 +100,13 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   controller: PropTypes.instanceOf(MapController)
 });
 
-const getDefaultCursor = ({isDragging, isHovering}) =>
+type State = {
+  isLoaded: boolean,
+  isDragging: boolean,
+  isHovering: boolean
+};
+
+const getDefaultCursor = ({isDragging, isHovering}: State) =>
   isDragging ? 'grabbing' : isHovering ? 'pointer' : 'grab';
 
 const defaultProps = Object.assign(
@@ -113,7 +120,7 @@ const defaultProps = Object.assign(
     onClick: null,
     onNativeClick: null,
     onHover: null,
-    onContextMenu: event => event.preventDefault(),
+    onContextMenu: (event: MouseEvent) => event.preventDefault(),
 
     scrollZoom: true,
     dragPan: true,
@@ -139,7 +146,7 @@ type MapEvent = MjolnirEvent & {
   features: ?Array<any>
 };
 
-type InteractiveMapProps = StaticMapProps & {
+export type InteractiveMapProps = StaticMapProps & {
   onViewStateChange: Function,
   onViewportChange: Function,
   onInteractionStateChange: Function,
@@ -177,18 +184,6 @@ type InteractiveMapProps = StaticMapProps & {
   interactiveLayerIds: Array<string>,
   getCursor: Function,
   controller: MapController
-};
-
-type State = {
-  isLoaded: boolean,
-  isDragging: boolean,
-  isHovering: boolean
-};
-
-type InteractiveContextProps = {
-  isDragging: boolean,
-  eventManager: any,
-  mapContainer: null | HTMLDivElement
 };
 
 export default class InteractiveMap extends PureComponent<InteractiveMapProps, State> {
@@ -260,7 +255,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
 
   _controller: MapController;
   _eventManager: any;
-  _interactiveContext: InteractiveContextProps;
+  _interactiveContext: MapContextProps;
   _width: number = 0;
   _height: number = 0;
   _eventCanvasRef: {current: null | HTMLDivElement} = createRef();
@@ -325,7 +320,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     }
   };
 
-  _updateInteractiveContext(updatedContext: $Shape<InteractiveContextProps>) {
+  _updateInteractiveContext(updatedContext: $Shape<MapContextProps>) {
     this._interactiveContext = Object.assign({}, this._interactiveContext, updatedContext);
   }
 
@@ -363,8 +358,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     } = event;
     const pos = [x, y];
 
-    // $FlowFixMe
     const viewport = new WebMercatorViewport(
+      // $FlowFixMe
       Object.assign({}, this.props, {
         width: this._width,
         height: this._height

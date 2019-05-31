@@ -1,3 +1,4 @@
+// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,6 +24,8 @@ import PropTypes from 'prop-types';
 import BaseControl from '../components/base-control';
 import {window} from '../utils/globals';
 
+import type {BaseControlProps} from '../components/base-control';
+
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   redraw: PropTypes.func.isRequired
 });
@@ -34,14 +37,23 @@ const defaultProps = {
   captureDoubleClick: false
 };
 
-export default class CanvasOverlay extends BaseControl {
-  constructor(props) {
-    super(props);
-  }
+export type CanvasOverlayProps = BaseControlProps & {
+  redraw: Function
+};
+
+export default class CanvasOverlay extends BaseControl<CanvasOverlayProps, *, HTMLCanvasElement> {
+  static propTypes = propTypes;
+  static defaultProps = defaultProps;
+
+  _canvas: ?HTMLCanvasElement;
+  _ctx: any;
 
   componentDidMount() {
-    this._canvas = this._containerRef.current;
-    this._ctx = this._canvas.getContext('2d');
+    const canvas = this._containerRef.current;
+    if (canvas) {
+      this._canvas = canvas;
+      this._ctx = canvas.getContext('2d');
+    }
     this._redraw();
   }
 
@@ -89,7 +101,3 @@ export default class CanvasOverlay extends BaseControl {
     });
   }
 }
-
-CanvasOverlay.displayName = 'CanvasOverlay';
-CanvasOverlay.propTypes = propTypes;
-CanvasOverlay.defaultProps = defaultProps;
