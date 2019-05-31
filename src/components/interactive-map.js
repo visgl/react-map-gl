@@ -186,7 +186,9 @@ type State = {
 type InteractiveContextProps = {
   isDragging: boolean,
   eventManager: any,
-  mapContainer: null | HTMLDivElement
+  mapContainer: null | HTMLDivElement,
+  onViewStateChange: ?Function,
+  onViewportChange: ?Function
 };
 
 export default class InteractiveMap extends PureComponent<InteractiveMapProps, State> {

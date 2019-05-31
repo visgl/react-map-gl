@@ -2,6 +2,9 @@
 
 # Version 4.1
 
+## 4.1.4 (May 31, 2019)
+- Pass callbacks via MapContext (#799)
+
 ## 4.1.3 (May 29, 2019)
 - Fix geolocate control missing key warning (#789)
 - Custom mapbox server (#769)
