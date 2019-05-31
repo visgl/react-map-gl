@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "mapbox-gl": "~0.53.0",
+    "mapbox-gl": "^1.0.0",
     "mjolnir.js": "^2.1.0",
     "prop-types": "^15.7.2",
     "react-virtualized-auto-sizer": "^1.0.2",
