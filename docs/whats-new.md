@@ -4,7 +4,7 @@ Release date: May 31, 2019
 
 ## What's Changed
 
-The only change between the 5.0 release and the latest 4.1 release is Mapbox GL JS v1.0. By using this version, you opt into Mapbox's new pricing model. 5.0.x and 4.1.x will continue to update in parallel with otherwise identical features until Mapbox deprecates 0.xx in November. For more details, see [mapbox's release notes](https://github.com/mapbox/mapbox-gl-js/releases/tag/v1.0.0).
+The only change between the 5.0 release and the latest 4.1 release is Mapbox GL JS v1.0. By using this version, you opt into Mapbox's new pricing model, which bills per map load instead of map views. 5.0.x and 4.1.x will continue to update in parallel with otherwise identical features until November 2019 when Mapbox moves all users of 0.xx to a new pricing scheme. For more details, see mapbox's [changelog](https://github.com/mapbox/mapbox-gl-js/releases/tag/v1.0.0) and [blog post](https://blog.mapbox.com/new-pricing-46b7c26166e7). 
 
 Alongside Mapbox GL JS's new milestone, we have relaxed the `mapbox-gl` dependency from locking minor release (`~0.53.0`) to major release (`^1.0.0`). This will allow developers to upgrade faster without waiting for a new release from react-map-gl.
 
