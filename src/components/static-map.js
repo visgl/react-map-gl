@@ -33,7 +33,6 @@ import {MAPBOX_LIMITS} from '../utils/map-state';
 import MapContext from './map-context';
 
 import type {ViewState} from '../mapbox/mapbox';
-import type {Node} from 'react';
 
 /* eslint-disable max-len */
 const TOKEN_DOC_URL =
@@ -91,12 +90,12 @@ export type StaticMapProps = {
   width: number | string,
   height: number | string,
   preventStyleDiffing: boolean,
-  disableTokenWarning: false,
+  disableTokenWarning: boolean,
   visible: boolean,
   className: string,
   style: any,
   visibilityConstraints: any,
-  children?: Node,
+  children?: any,
   onLoad: Function,
   onError: Function,
   onResize: Function,
@@ -133,8 +132,8 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     }
     const {mapStyle} = this.props;
 
-    // $FlowFixMe
     this._mapbox = new Mapbox(
+      // $FlowFixMe
       Object.assign({}, this.props, {
         mapboxgl, // Handle to mapbox-gl library
         width: this._width,
@@ -259,8 +258,8 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
 
     return createElement(MapContext.Consumer, null, interactiveContext => {
       const context = Object.assign({}, interactiveContext, {
-        // $FlowFixMe
         viewport: new WebMercatorViewport(
+          // $FlowFixMe
           Object.assign({}, this.props, this.props.viewState, {
             width,
             height

@@ -36,8 +36,8 @@
     "lint": "ocular-lint",
     "cover": "ocular-test cover",
     "publish": "ocular-publish",
-    "test": "ocular-test",
-    "test-fast": "ocular-test fast",
+    "test": "flow check && ocular-test",
+    "test-fast": "flow check && ocular-test fast",
     "metrics": "ocular-metrics",
     "update-release-branch": "scripts/update-release-branch.sh"
   },

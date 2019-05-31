@@ -12,6 +12,7 @@ declare module 'mjolnir.js' {
 
   declare type MjolnirEvent = {
     type: string,
+    center: {x: number, y: number},
     offsetCenter: {x: number, y: number},
     deltaX: number,
     deltaY: number,
@@ -23,6 +24,7 @@ declare module 'mjolnir.js' {
     rightButton: boolean,
     stopPropagation: Function,
     preventDefault: Function,
+    target: HTMLElement,
     srcEvent: any
   };
 }
