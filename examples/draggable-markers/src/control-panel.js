@@ -26,7 +26,12 @@ export default class ControlPanel extends PureComponent {
         <h3>Draggable Marker</h3>
         <p>Try dragging the marker to another location.</p>
         <div>{eventNames.map(this.renderEvent)}</div>
-        {/* TODO add a "View Code" link here when we know the release */}
+        <a
+          href="https://github.com/uber/react-map-gl/tree/5.0-release/examples/draggable-markers"
+          target="_new"
+        >
+          View Code ↗
+        </a>
       </Container>
     );
   }
