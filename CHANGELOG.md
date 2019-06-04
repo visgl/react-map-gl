@@ -4,8 +4,6 @@
 
 ## 5.0.1 (June 4, 2019)
 - bump mjolnir version (#812)
-- Fix draggable-markers code link (#813)
-- fix publish script (#809)
 
 ## 5.0.0 (May 31, 2019)
 - Update mapbox-gl to 1.0.0 (#795)
