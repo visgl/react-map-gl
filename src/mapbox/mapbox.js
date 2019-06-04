@@ -22,7 +22,6 @@
 /* global window, process, HTMLCanvasElement */
 import PropTypes from 'prop-types';
 import {document} from '../utils/globals';
-import {normalizeStyle} from '../utils/style-utils';
 
 function noop() {}
 
@@ -271,7 +270,7 @@ export default class Mapbox {
 
     // Step3: update style and call onload again
     if (props.mapStyle) {
-      this._map.setStyle(normalizeStyle(props.mapStyle), {
+      this._map.setStyle(props.mapStyle, {
         diff: false
       });
     }
