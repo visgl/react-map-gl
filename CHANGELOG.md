@@ -4,6 +4,7 @@
 
 ## 4.1.5 (June 4, 2019)
 - bump mjolnir version (#812)
+- Bump mapbox
 
 ## 4.1.4 (May 31, 2019)
 - Pass callbacks via MapContext (#799)
