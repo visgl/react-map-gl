@@ -271,7 +271,9 @@ export default class Mapbox {
     // Step3: update style and call onload again
     if (props.mapStyle) {
       this._map.setStyle(props.mapStyle, {
-        diff: true
+        // From the user's perspective, there's no "diffing" on initialization
+        // We always rebuild the style from scratch when creating a new Mapbox instance
+        diff: false
       });
     }
 
