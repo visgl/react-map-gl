@@ -2,9 +2,12 @@
 
 # Version 4.1
 
+## 4.1.6 (June 4, 2019)
+- Fix style diff warning when reusing map (#816)
+
 ## 4.1.5 (June 4, 2019)
 - bump mjolnir version (#812)
-- Bump mapbox
+- mapbox-gl 0.54
 
 ## 4.1.4 (May 31, 2019)
 - Pass callbacks via MapContext (#799)
