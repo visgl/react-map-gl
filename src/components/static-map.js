@@ -275,7 +275,10 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
         createElement('div', {
           key: 'map-overlays',
           className: 'overlays',
-          style: CONTAINER_STYLE,
+          style: {
+            ...CONTAINER_STYLE,
+            overflow: 'visible'
+          },
           children: this.props.children
         })
       );
