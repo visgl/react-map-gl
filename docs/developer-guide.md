@@ -9,7 +9,7 @@ Set up locally:
 ```bash
 $ git clone https://github.com/uber/react-map-gl.git
 $ cd react-map-gl
-$ yarn
+$ yarn bootstrap
 $ npm run start
 ```
 
@@ -19,10 +19,16 @@ Test:
 $ npm run test
 ```
 
-Test in browser (includes additional render tests):
+Test in Node:
 
 ```bash
-$ npm run test-browser
+$ npm run test node
+```
+
+Test in browser (can use Chrome dev tools for debugging):
+
+```bash
+$ npm run test browser
 ```
 
 ## Pull Requests
@@ -34,11 +40,11 @@ Generally speaking, all PRs are open against the `master` branch, unless the fea
 ### PR Checklist
 
 - [ ] Tests
-  + `npm run test` and `npm run test-browser` must both be successful.
+  + `npm run test` must be successful.
   + New code should be covered by unit tests whenever possible.
 - [ ] Documentation
   + If public APIs are added/modified, update component documentation in `docs/api-reference`.
-  + Breaking changes must be added to `docs/upgrade-guide.md`.
+  + Breaking changes and deprecations must be added to `docs/upgrade-guide.md`.
   + Noteworthy new features should be added to `docs/whats-new.md`.
 - [ ] Description on GitHub
   + Link to relevant issue.
@@ -63,9 +69,8 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
 
 > NOTE: for authorized team members only
 
-- [ ] Push to new `<latest>-release` branch
-- [ ] Update the dependencies of examples to the latest minor/major version
-- [ ] Update the links in all documentation to point to the new branch
+- [ ] Push to new `<latest>-release` branch. `<latest>` represents a minor release number, e.g. `3.3`, `4.0`.
+- [ ] Run `npm run update-release-branch <latest>` to upate the dependencies of examples to the latest version, and the links in all documentation to point to the new branch
 - [ ] Publish new minor release
 - [ ] Publish website
 
@@ -77,7 +82,7 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
 ### Production Release
 
 1. Log into an authorized [npmjs.com](https://www.npmjs.com/) account. You can use [npmrc](https://www.npmjs.com/package/npmrc) to manage multiple npm profiles.
-2. Make sure both the `master` and the release branch are up to daate:
+2. Make sure both the `master` and the release branch are up to date:
 
     ```bash
     $ git checkout master
@@ -114,7 +119,7 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
     $ git cherry-pick 1238140a
     ```
 
-    And add its commit message to CHANGELOG.md:
+    If the commit affects code that is published to npm, add its commit message to CHANGELOG.md:
 
     ```
     ## 3.3.4 (Aug 4, 2018)
@@ -122,21 +127,29 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
     - fix capture* props for overlay components (#565)
     ```
 
-5. Commit the changelog:
+  Examples of changes that are published:
+
+    - A change anywhere in `src`
+    - A change in Babel config
+    - A change in `README.md`
+    - A change in `package.json`'s user-facing fields, e.g. `file`, `main`, `browser`, `dependencies`, `peerDependencies`
+
+  Examples of changes that are not published:
+
+    - A change in `docs`
+    - Improvement of an example
+    - Adding a new lint rule
+    - Adding a new npm script
+
+5. Include the changelog in the version commit, and publish:
 
     ```bash
     $ git add .
-    $ git commit -m "3.3.4 Changelog"
-    ```
-
-6. Bump version and publish:
-
-    ```bash
-    $ npm version patch
+    # This will bump version to the next patch release, commit, tag and publish:
     $ npm run publish-prod
     ```
 
-7. If the new patch release fixes a bug on the website, republish the website.
+6. If the new patch release fixes a bug on the website, republish the website.
 
 
 ### Beta Release
@@ -168,17 +181,16 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
     $ git log --since="`git show -s --format=%ci a05d2305`"
     ```
 
-4. And add new commit messages to CHANGELOG.md.
+4. If a commit affects code that is published to npm, add its commit message to CHANGELOG.md.
 
-5. Manually bump the version in `package.json` to the next pre-release version.
+5. If some beta version has been published for the target release (e.g. `4.0.0-alpha.1`), do not make changes to `package.json`. Otherwise, manually bump the version in `package.json` to the appropriate pre-release version (e.g. `4.1.0-alpha.0`).
 
-6. Commit and publish:
+6. Include the changelog in the version commit, and publish:
 
     ```bash
     $ git add .
-    $ git commit -m "4.0.0-alpha.2"
+    # This will bump version to the next pre-release, commit, tag and publish:
     $ npm run publish-beta
-    $ git push
     ```
 
 ### Website
@@ -190,7 +202,13 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
     $ git pull
     ```
 
-2. Test the website:
+2. Make sure you have the correct Mapbox token:
+
+    ```bash
+    $ echo $MapboxAccessToken
+    ```
+
+3. Test the website:
 
     ```bash
     $ cd website
@@ -198,7 +216,7 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
     $ yarn start
     ```
 
-3. Build and publish the website:
+4. Build and publish the website:
 
     ```bash
     $ yarn build
