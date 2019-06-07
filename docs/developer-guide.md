@@ -40,11 +40,11 @@ Generally speaking, all PRs are open against the `master` branch, unless the fea
 ### PR Checklist
 
 - [ ] Tests
-  + `npm run test` must both be run successfully.
+  + `npm run test` must be successful.
   + New code should be covered by unit tests whenever possible.
 - [ ] Documentation
   + If public APIs are added/modified, update component documentation in `docs/api-reference`.
-  + Breaking changes must be added to `docs/upgrade-guide.md`.
+  + Breaking changes and deprecations must be added to `docs/upgrade-guide.md`.
   + Noteworthy new features should be added to `docs/whats-new.md`.
 - [ ] Description on GitHub
   + Link to relevant issue.
