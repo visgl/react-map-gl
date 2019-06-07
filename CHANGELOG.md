@@ -2,6 +2,9 @@
 
 # Version 4.1
 
+## 4.1.7 (June 6, 2019)
+- Fix popup styling (#818)
+
 ## 4.1.6 (June 4, 2019)
 - Fix style diff warning when reusing map (#816)
 
