@@ -139,8 +139,8 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
       left: x + offsetLeft,
       top: y + offsetTop,
       transform: `translate(${-anchorPosition.x * 100}%, ${-anchorPosition.y * 100}%)`,
-      display: 'block',
-      zIndex: 0
+      display: undefined,
+      zIndex: undefined
     };
 
     if (!sortByDepth) {
