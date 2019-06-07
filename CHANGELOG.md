@@ -2,6 +2,13 @@
 
 # Version 5.0
 
+## 5.0.3 (June 6, 2019)
+- Fix popup styling (#818)
+
+## 5.0.2 (June 4, 2019)
+- Fix style diff warning when reusing map (#816)
+- Update ocular-dev-tools (#815)
+
 ## 5.0.1 (June 4, 2019)
 - bump mjolnir version (#812)
 
