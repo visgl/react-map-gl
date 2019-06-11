@@ -81,6 +81,7 @@ export default class App extends Component {
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._updateViewport}
         mapboxApiAccessToken={TOKEN}
+        style={{overflow: 'hidden'}}
       >
         {CITIES.map(this._renderCityMarker)}
 

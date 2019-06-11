@@ -51,6 +51,11 @@ const CONTAINER_STYLE = {
   overflow: 'hidden'
 };
 
+const OVERLAY_CONTAINER_STYLE = {
+  ...CONTAINER_STYLE,
+  overflow: 'visible'
+};
+
 const propTypes = Object.assign({}, Mapbox.propTypes, {
   /** The dimensions of the map **/
   width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -275,10 +280,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
         createElement('div', {
           key: 'map-overlays',
           className: 'overlays',
-          style: {
-            ...CONTAINER_STYLE,
-            overflow: 'visible'
-          },
+          style: OVERLAY_CONTAINER_STYLE,
           children: this.props.children
         })
       );
@@ -287,10 +289,16 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
 
   render() {
     const {className, width, height, style, visibilityConstraints} = this.props;
-    const mapContainerStyle = Object.assign({position: 'relative'}, style, {
-      width,
-      height
-    });
+    const mapContainerStyle = Object.assign(
+      {
+        position: 'relative'
+      },
+      style,
+      {
+        width,
+        height
+      }
+    );
 
     const visible =
       this.props.visible &&
