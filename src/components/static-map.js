@@ -289,16 +289,10 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
 
   render() {
     const {className, width, height, style, visibilityConstraints} = this.props;
-    const mapContainerStyle = Object.assign(
-      {
-        position: 'relative'
-      },
-      style,
-      {
-        width,
-        height
-      }
-    );
+    const mapContainerStyle = Object.assign({position: 'relative', overflow: 'inherit'}, style, {
+      width,
+      height
+    });
 
     const visible =
       this.props.visible &&

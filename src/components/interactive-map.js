@@ -493,7 +493,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   render() {
     const {width, height, style, getCursor} = this.props;
 
-    const eventCanvasStyle = Object.assign({position: 'relative'}, style, {
+    const eventCanvasStyle = Object.assign({position: 'relative', overflow: 'hidden'}, style, {
       width,
       height,
       cursor: getCursor(this.state)
