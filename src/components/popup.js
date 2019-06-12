@@ -40,6 +40,8 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   offsetLeft: PropTypes.number,
   // Offset from the top
   offsetTop: PropTypes.number,
+  // Custom CSS for the container
+  style: PropTypes.object,
   // Size of the tip
   tipSize: PropTypes.number,
   // Whether to show close button
@@ -61,6 +63,7 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   altitude: 0,
   offsetLeft: 0,
   offsetTop: 0,
+  style: {},
   tipSize: 10,
   anchor: 'bottom',
   dynamicPosition: true,
@@ -77,6 +80,7 @@ export type PopupProps = BaseControlProps & {
   altitude: number,
   offsetLeft: number,
   offsetTop: number,
+  style: Object,
   tipSize: number,
   closeButton: boolean,
   closeOnClick: boolean,
@@ -139,8 +143,10 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
       left: x + offsetLeft,
       top: y + offsetTop,
       transform: `translate(${-anchorPosition.x * 100}%, ${-anchorPosition.y * 100}%)`,
+      minWidth: 150,
       display: undefined,
-      zIndex: undefined
+      zIndex: undefined,
+      ...this.props.style
     };
 
     if (!sortByDepth) {
