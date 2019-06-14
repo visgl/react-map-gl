@@ -48,9 +48,6 @@ Offset of the anchor from the left in pixels, negative number indicates left.
 ##### `offsetTop` {Number} - default: `0`
 Offset of the anchor from the top in pixels, negative number indicates up.
 
-##### `maxWidth` {Number} - default: `240`
-A number that sets the CSS property of the popup's maxWidth in pixels, e.g. 300
-
 ##### `closeButton` {Boolean} - default: `true`
 If `true`, a close button will appear in the top right corner of the popup.
 

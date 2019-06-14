@@ -40,8 +40,6 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   offsetLeft: PropTypes.number,
   // Offset from the top
   offsetTop: PropTypes.number,
-  // A number that sets the CSS property of the popup's maxWidth in pixels
-  maxWidth: PropTypes.number,
   // Size of the tip
   tipSize: PropTypes.number,
   // Whether to show close button
@@ -65,7 +63,6 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   offsetTop: 0,
   tipSize: 10,
   anchor: 'bottom',
-  maxWidth: 240,
   dynamicPosition: true,
   sortByDepth: false,
   closeButton: true,
@@ -80,7 +77,6 @@ export type PopupProps = BaseControlProps & {
   altitude: number,
   offsetLeft: number,
   offsetTop: number,
-  maxWidth: number,
   tipSize: number,
   closeButton: boolean,
   closeOnClick: boolean,
@@ -135,7 +131,7 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
 
   _getContainerStyle(x: number, y: number, z: number, positionType: PositionType) {
     const {viewport} = this._context;
-    const {maxWidth, offsetLeft, offsetTop, sortByDepth} = this.props;
+    const {offsetLeft, offsetTop, sortByDepth} = this.props;
     const anchorPosition = ANCHOR_POSITION[positionType];
     const left = x + offsetLeft;
     const top = y + offsetTop;
@@ -145,7 +141,6 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
         translate(${-anchorPosition.x * 100}%, ${-anchorPosition.y * 100}%)
         translate(${left}px, ${top}px)
       `,
-      maxWidth,
       display: undefined,
       zIndex: undefined
     };
