@@ -63,7 +63,6 @@ export default class App extends Component {
           latitude={popupInfo.latitude}
           closeOnClick={false}
           onClose={() => this.setState({popupInfo: null})}
-          maxWidth={500}
         >
           <CityInfo info={popupInfo} />
         </Popup>
