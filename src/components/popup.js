@@ -133,12 +133,14 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
     const {viewport} = this._context;
     const {offsetLeft, offsetTop, sortByDepth} = this.props;
     const anchorPosition = ANCHOR_POSITION[positionType];
-
+    const left = x + offsetLeft;
+    const top = y + offsetTop;
     const style = {
       position: 'absolute',
-      left: x + offsetLeft,
-      top: y + offsetTop,
-      transform: `translate(${-anchorPosition.x * 100}%, ${-anchorPosition.y * 100}%)`,
+      transform: `
+        translate(${-anchorPosition.x * 100}%, ${-anchorPosition.y * 100}%)
+        translate(${left}px, ${top}px)
+      `,
       display: undefined,
       zIndex: undefined
     };
