@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const getWebpackConfig = require('ocular-dev-tools/config/webpack.config');
 
 const BABEL_CONFIG = {
@@ -19,6 +20,12 @@ module.exports = env => {
       }
     ]
   });
+
+  config.plugins = (config.plugins || []).concat([
+    new webpack.DefinePlugin({
+      __MAPBOX_TOKEN__: JSON.stringify(process.env.MapboxAccessToken) // eslint-disable-line
+    })
+  ]);
 
   return config;
 };
