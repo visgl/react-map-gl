@@ -25,7 +25,7 @@ function sleep(delay) {
   });
 }
 
-function runTestCase({Component = MapGL, threshold = 0.999, props, goldenImage}) {
+function runTestCase({Component = MapGL, threshold = 0.99, props, goldenImage}) {
   const container = document.createElement('div');
   container.style.width = `${WIDTH}px`;
   container.style.height = `${HEIGHT}px`;
