@@ -19,7 +19,13 @@ function getBoundingBoxInPage(domElement) {
   };
 }
 
-function runTestCase({Component = MapGL, threshold = 0.995, props, goldenImage}) {
+function sleep(delay) {
+  return new Promise(resolve => {
+    window.setTimeout(resolve, delay);
+  });
+}
+
+function runTestCase({Component = MapGL, threshold = 0.999, props, goldenImage}) {
   const container = document.createElement('div');
   container.style.width = `${WIDTH}px`;
   container.style.height = `${HEIGHT}px`;
@@ -29,14 +35,18 @@ function runTestCase({Component = MapGL, threshold = 0.995, props, goldenImage})
 
   return new Promise((resolve, reject) => {
     const onLoad = () => {
-      window
-        .browserTestDriver_captureAndDiffScreen({
-          threshold,
-          goldenImage,
-          region: getBoundingBoxInPage(container),
-          // Uncomment to save screenshot
-          saveOnFail: true
-        })
+      // Wait for mapbox's animation to finish
+      sleep(500)
+        .then(() =>
+          window.browserTestDriver_captureAndDiffScreen({
+            threshold,
+            goldenImage,
+            region: getBoundingBoxInPage(container),
+            tolerance: 0.05
+            // Uncomment to save screenshot
+            // , saveOnFail: true
+          })
+        )
         .then(result => {
           // clean up
           unmountComponentAtNode(container);

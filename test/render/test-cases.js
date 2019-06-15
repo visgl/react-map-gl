@@ -18,7 +18,6 @@ export default [
       latitude: 37.78,
       zoom: 12.5
     },
-    threshold: 0.97,
     goldenImage: 'test/render/golden-images/basic-map.png'
   },
   {
@@ -41,7 +40,6 @@ export default [
       latitude: 37.78,
       zoom: 12.5
     },
-    threshold: 0.97,
     goldenImage: 'test/render/golden-images/uber-map.png'
   },
   {
@@ -75,10 +73,7 @@ export default [
         <Popup key="0" longitude={-122.4} latitude={37.78}>
           This is the center
         </Popup>,
-        <Popup key="1" longitude={-122.42} latitude={37.792} closeButton={false}>
-          This is the top-left corner
-        </Popup>,
-        <Popup key="2" longitude={-122.4} latitude={37.779} closeButton={false} anchor="top-right">
+        <Popup key="1" longitude={-122.4} latitude={37.779} closeButton={false} anchor="top-right">
           Custom anchor
         </Popup>
       ]
