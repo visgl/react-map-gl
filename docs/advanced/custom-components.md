@@ -28,7 +28,7 @@ class CustomMarker extends BaseControl {
 
     return (
       <div ref={this._containerRef}
-        style={markerStyle} />
+        style={markerStyle} >
         ({longitude}, {latitude})
       </div>
     );
