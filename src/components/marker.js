@@ -42,7 +42,7 @@ const defaultProps = Object.assign({}, DraggableControl.defaultProps, {
 
 export type MarkerProps = DraggableControlProps & {
   className: string,
-  id:, string,
+  id: string,
   longitude: number,
   latitude: number
 };
