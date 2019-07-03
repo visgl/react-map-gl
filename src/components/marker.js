@@ -27,6 +27,8 @@ import type {DraggableControlProps} from './draggable-control';
 const propTypes = Object.assign({}, DraggableControl.propTypes, {
   // Custom className
   className: PropTypes.string,
+  // Custom ID
+  id: PropTypes.string,
   // Longitude of the anchor point
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
@@ -34,11 +36,13 @@ const propTypes = Object.assign({}, DraggableControl.propTypes, {
 });
 
 const defaultProps = Object.assign({}, DraggableControl.defaultProps, {
-  className: ''
+  className: '',
+  id: ''
 });
 
 export type MarkerProps = DraggableControlProps & {
   className: string,
+  id:, string,
   longitude: number,
   latitude: number
 };
@@ -71,7 +75,7 @@ export default class Marker extends DraggableControl<MarkerProps> {
   }
 
   _render() {
-    const {className, draggable} = this.props;
+    const {className, id, draggable} = this.props;
     const {dragPos} = this.state;
 
     const [x, y] = this._getPosition();
@@ -85,6 +89,7 @@ export default class Marker extends DraggableControl<MarkerProps> {
 
     return createElement('div', {
       className: `mapboxgl-marker ${className}`,
+      id: `${id}`,
       ref: this._containerRef,
       style: containerStyle,
       children: this.props.children
