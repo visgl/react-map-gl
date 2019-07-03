@@ -22,6 +22,7 @@
 import MapState from './map-state';
 import {LinearInterpolator} from './transition';
 import TransitionManager, {TRANSITION_EVENTS} from './transition-manager';
+import debounce from './debounce';
 
 import type {MjolnirEvent} from 'mjolnir.js';
 
@@ -75,6 +76,7 @@ export default class MapController {
 
   constructor() {
     (this: any).handleEvent = this.handleEvent.bind(this);
+    (this: any)._onWheelEnd = debounce(this._onWheelEnd, 100);
   }
 
   /**
@@ -316,9 +318,13 @@ export default class MapController {
 
     const newMapState = this.mapState.zoom({pos, scale});
     this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isZooming: true});
-    // This is a one-off event, state should not persist
-    this.setState({isZooming: false});
+    // Wheel events are discrete, let's wait a little before resetting isZooming
+    this._onWheelEnd();
     return true;
+  }
+
+  _onWheelEnd() {
+    this.setState({isZooming: false});
   }
 
   // Default handler for the `pinchstart` event.
