@@ -6,6 +6,7 @@ export default function debounce(func, delay) {
   let timeout;
 
   const executeNow = () => {
+    timeout = null;
     return func.apply(_this, _arguments);
   };
 
