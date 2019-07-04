@@ -105,7 +105,7 @@ export default class App extends Component {
       (error, response) => {
         if (!error) {
           // Note: In a real application you would do a validation of JSON data before doing anything with it,
-          // but for demonstration purposes we ingore this part here and just trying to select needed data...
+          // but for demonstration purposes we ignore this part here and just try to select needed data...
           const features = response.features;
           const endTime = features[0].properties.time;
           const startTime = features[features.length - 1].properties.time;
