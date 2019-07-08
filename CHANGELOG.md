@@ -2,6 +2,9 @@
 
 # Version 5.0
 
+## 5.0.4 (July 8, 2019)
+- Fix interaction state when using mouse wheel (#840)
+
 ## 5.0.3 (June 6, 2019)
 - Fix popup styling (#818)
 
