@@ -2,6 +2,9 @@
 
 # Version 4.1
 
+## 4.1.8 (July 8, 2019)
+- Fix interaction state when using mouse wheel (#840)
+
 ## 4.1.7 (June 6, 2019)
 - Fix popup styling (#818)
 
