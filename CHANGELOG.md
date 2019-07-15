@@ -2,7 +2,10 @@
 
 # Version 5.0
 
-## 5.0.5 (July 15, 2019)
+## 5.0.7 (July 16, 2019)
+- Remove event manager properly on unmount (#847)
+
+## 5.0.6 (July 15, 2019)
 - Bump mjolnir (#839)
 - Fix compressed popup when reaching right bound of map (#823)
 
