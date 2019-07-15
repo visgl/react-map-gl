@@ -2,6 +2,12 @@
 
 # Version 4.1
 
+## 4.1.9 (July 15, 2019)
+- Fix typo in heatmap example (#841)
+- Bump mjolnir (#839)
+- Trailing slash causing error (#832)
+- Fix compressed popup when reaching right bound of map (#823)
+
 ## 4.1.8 (July 8, 2019)
 - Fix interaction state when using mouse wheel (#840)
 
