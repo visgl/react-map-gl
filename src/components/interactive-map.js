@@ -253,6 +253,10 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     }
   }
 
+  componentWillUnmount() {
+    this._eventManager.destroy();
+  }
+
   _controller: MapController;
   _eventManager: any;
   _interactiveContext: MapContextProps;
