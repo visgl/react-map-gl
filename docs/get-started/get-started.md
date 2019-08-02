@@ -45,7 +45,7 @@ The current mapbox-gl release requires its stylesheet be included at all times. 
 You may add the stylesheet to the head of your page:
 ```html
 <!-- index.html -->
-<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.0/mapbox-gl.css' rel='stylesheet' />
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
 ```
 
 Or embed it in your app by using - [browserify-css](https://www.npmjs.com/package/browserify-css)
