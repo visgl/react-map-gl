@@ -2,6 +2,21 @@ import test from 'tape-catch';
 import {ViewportFlyToInterpolator} from 'react-map-gl/utils/transition';
 import {toLowPrecision} from 'react-map-gl/test/test-utils';
 
+const START_PROPS = {
+  width: 800,
+  height: 600,
+  longitude: -122.45,
+  latitude: 37.78,
+  zoom: 12
+};
+
+const END_PROPS = {
+  width: 800,
+  height: 600,
+  longitude: -74,
+  latitude: 40.7,
+  zoom: 11
+};
 /* eslint-disable max-len */
 const TEST_CASES = [
   {
@@ -12,20 +27,8 @@ const TEST_CASES = [
   },
   {
     title: 'optional prop fallback',
-    startProps: {
-      width: 800,
-      height: 600,
-      longitude: -122.45,
-      latitude: 37.78,
-      zoom: 12
-    },
-    endProps: {
-      width: 800,
-      height: 600,
-      longitude: -74,
-      latitude: 40.7,
-      zoom: 11
-    },
+    startProps: START_PROPS,
+    endProps: END_PROPS,
     expect: {
       start: {
         width: 800,
@@ -136,7 +139,32 @@ const TEST_CASES = [
 ];
 /* eslint-enable max-len */
 
-test('LinearInterpolator#initializeProps', t => {
+const DURATION_TEST_CASES = [
+  {
+    title: 'fixed duration',
+    endProps: {transitionDuration: 100},
+    expected: 100
+  },
+  {
+    title: 'auto duration',
+    endProps: {transitionDuration: 'auto'},
+    expected: 7325.794
+  },
+  {
+    title: 'high speed',
+    opts: {speed: 10},
+    endProps: {transitionDuration: 'auto'},
+    expected: 879.0953
+  },
+  {
+    title: 'high curve',
+    opts: {curve: 8},
+    endProps: {transitionDuration: 'auto'},
+    expected: 2016.924
+  }
+];
+
+test('ViewportFlyToInterpolator#initializeProps', t => {
   const interpolator = new ViewportFlyToInterpolator();
 
   TEST_CASES.forEach(testCase => {
@@ -152,7 +180,7 @@ test('LinearInterpolator#initializeProps', t => {
   t.end();
 });
 
-test('LinearInterpolator#interpolateProps', t => {
+test('ViewportFlyToInterpolator#interpolateProps', t => {
   const interpolator = new ViewportFlyToInterpolator();
 
   TEST_CASES.filter(testCase => testCase.transition).forEach(testCase => {
@@ -166,5 +194,20 @@ test('LinearInterpolator#interpolateProps', t => {
     });
   });
 
+  t.end();
+});
+
+test('ViewportFlyToInterpolator#getDuration', t => {
+  DURATION_TEST_CASES.forEach(testCase => {
+    const interpolator = new ViewportFlyToInterpolator(testCase.opts);
+    t.equal(
+      toLowPrecision(
+        interpolator.getDuration(START_PROPS, Object.assign({}, END_PROPS, testCase.endProps)),
+        7
+      ),
+      testCase.expected,
+      `${testCase.title}: should receive correct duration`
+    );
+  });
   t.end();
 });
