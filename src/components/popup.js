@@ -164,11 +164,18 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
       evt.stopPropagation();
     }
 
-    if (
-      evt.type === 'click' &&
-      (this.props.closeOnClick || evt.target.className === 'mapboxgl-popup-close-button')
-    ) {
+    if (this.props.closeOnClick || evt.target.className === 'mapboxgl-popup-close-button') {
       this.props.onClose();
+
+      const {eventManager} = this._context;
+      if (eventManager) {
+        // Using with InteractiveMap
+        // After we call `onClose` on `anyclick`, this component will be unmounted
+        // at which point we unregister the event listeners and stop blocking propagation.
+        // Then after a short delay a `click` event will fire
+        // Attach a one-time event listener here to prevent it from triggering `onClick` of the base map
+        eventManager.once('click', e => e.stopPropagation(), evt.target);
+      }
     }
   };
 
