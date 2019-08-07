@@ -2,6 +2,10 @@
 
 # Version 4.1
 
+## 4.1.11 (Aug 7, 2019)
+- Add pinchcancel handler (#859)
+- fix delay after clicking close button (#857)
+
 ## 4.1.10 (July 15, 2019)
 - Remove event manager properly on unmount (#847)
 
