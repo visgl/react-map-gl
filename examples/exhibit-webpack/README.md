@@ -9,5 +9,5 @@ equivalent due to some incompatibilities with mapbox-gl, but has been kept at a
 strict minimum.
 
 You should keep in mind that it is a development configuration, and probably
-should be tweaked a bit for production optimization, there is plenty ressources
-on the subject and are not in the scope of this example.
+should be tweaked a bit for production optimization. There are plenty of resources
+on the subject and it is not in the scope of this example.
