@@ -44,7 +44,7 @@ const ZOOM_ACCEL = 0.01;
 const EVENT_TYPES = {
   WHEEL: ['wheel'],
   PAN: ['panstart', 'panmove', 'panend'],
-  PINCH: ['pinchstart', 'pinchmove', 'pinchend'],
+  PINCH: ['pinchstart', 'pinchmove', 'pinchend', 'pinchcancel'],
   DOUBLE_TAP: ['doubletap'],
   KEYBOARD: ['keydown']
 };
@@ -97,6 +97,7 @@ export default class MapController {
         return this._onPinchStart(event);
       case 'pinchmove':
         return this._onPinch(event);
+      case 'pinchcancel':
       case 'pinchend':
         return this._onPinchEnd(event);
       case 'doubletap':
