@@ -2,6 +2,10 @@
 
 # Version 5.0
 
+## 5.0.8 (Aug 07, 2019)
+- Add pinchcancel handler (#859)
+- fix delay after clicking close button (#857)
+
 ## 5.0.7 (July 16, 2019)
 - Remove event manager properly on unmount (#847)
 
