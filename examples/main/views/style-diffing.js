@@ -80,7 +80,7 @@ export default class StyleDiffingExample extends Component {
     this._onClick = this._onClick.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const colors = ['red', 'green', 'blue'];
     let i = 0;
     this._intervalId = window.setInterval(
