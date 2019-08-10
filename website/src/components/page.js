@@ -14,7 +14,7 @@ class Page extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const {route} = nextProps;
     if (this.props.route !== route) {
       this.setState({
