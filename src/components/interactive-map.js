@@ -245,7 +245,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     this._updateInteractiveContext({mapContainer});
   }
 
-  componentWillUpdate(nextProps: InteractiveMapProps, nextState: State) {
+  UNSAFE_componentWillUpdate(nextProps: InteractiveMapProps, nextState: State) {
     this._setControllerProps(nextProps);
 
     if (nextState.isDragging !== this.state.isDragging) {
