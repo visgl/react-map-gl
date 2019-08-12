@@ -2,6 +2,11 @@
 
 # Version 4.1
 
+## 4.1.12 (Aug 12, 2019)
+
+- React 16.9.0 deprecated lifecycles (#861)
+- remove deprecated react lifecycle methods (#863)
+
 ## 4.1.11 (Aug 7, 2019)
 - Add pinchcancel handler (#859)
 - fix delay after clicking close button (#857)
