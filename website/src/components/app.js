@@ -8,7 +8,7 @@ import '../stylesheets/main.scss';
 
 class App extends Component {
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.location !== nextProps.location) {
       this.props.setHeaderOpacity(1);
       this.props.toggleMenu(false);

@@ -89,7 +89,7 @@ export default class MarkdownPage extends PureComponent {
     this._jumpTo(this.props.query.section);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.content !== this.props.content) {
       this.setState({
         html: renderMarkdown(nextProps.content)
