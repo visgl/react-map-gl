@@ -32,7 +32,7 @@ export default class App extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     window.onresize = () =>
       this.setState({
         viewport: {
