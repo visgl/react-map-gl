@@ -245,14 +245,6 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     this._updateInteractiveContext({mapContainer});
   }
 
-  UNSAFE_componentWillUpdate(nextProps: InteractiveMapProps, nextState: State) {
-    this._setControllerProps(nextProps);
-
-    if (nextState.isDragging !== this.state.isDragging) {
-      this._updateInteractiveContext({isDragging: nextState.isDragging});
-    }
-  }
-
   componentWillUnmount() {
     this._eventManager.destroy();
   }
@@ -286,10 +278,11 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
 
     this._controller.setOptions(props);
 
-    this._updateInteractiveContext({
-      onViewStateChange: props.onViewStateChange,
-      onViewportChange: props.onViewportChange
-    });
+    // Pass callbacks via MapContext
+    // Do not create a new context object because these do not affect render
+    const context = this._interactiveContext;
+    context.onViewportChange = props.onViewportChange;
+    context.onViewStateChange = props.onViewStateChange;
   }
 
   _getFeatures({pos, radius}: {pos: Array<number>, radius: number}) {
@@ -315,6 +308,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   _onInteractionStateChange = (interactionState: InteractionState) => {
     const {isDragging = false} = interactionState;
     if (isDragging !== this.state.isDragging) {
+      this._updateInteractiveContext({isDragging});
       this.setState({isDragging});
     }
 
@@ -495,6 +489,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   };
 
   render() {
+    this._setControllerProps(this.props);
+
     const {width, height, style, getCursor} = this.props;
 
     const eventCanvasStyle = Object.assign({position: 'relative'}, style, {
