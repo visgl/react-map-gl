@@ -2,7 +2,7 @@
 
 # Version 5.0
 
-## 5.0.9 (Aug 12, 2019)
+## 5.0.10 (Aug 13, 2019)
 - React 16.9.0 deprecated lifecycles (#861)
 - remove deprecated react lifecycle methods (#863)
 
