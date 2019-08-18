@@ -18,6 +18,7 @@ import Layers from '../../layers/src/app';
 import ViewportAnimation from '../../viewport-animation/src/app';
 import ZoomToBounds from '../../zoom-to-bounds/src/app';
 import Heatmap from '../../heatmap/src/app';
+import DrawPolygon from '../../draw-polygon/src/app';
 
 export const BASIC_EXAMPLES = 'basicExamples';
 export const STANDALONE_EXAMPLES = 'standalonExamples';
@@ -85,6 +86,11 @@ export const standaloneExamples = [
     path: 'heatmap',
     name: 'Heatmap',
     component: Heatmap
+  },
+  {
+    path: 'drawPolygon',
+    name: 'DrawPolygon',
+    component: DrawPolygon
   }
 ];
 
