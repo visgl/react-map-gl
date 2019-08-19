@@ -8,17 +8,16 @@
     "react-dom": "^16.3.0",
     "react-map-gl": "^5.0.0",
     "react-map-gl-draw": "^0.14.9",
+    "styled-components": "^4.3.2",
     "@turf/area": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
-    "@babel/plugin-proposal-export-default-from": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.0",
-    "styled-components": "^4.3.2",
-    "webpack": "^4.39.2",
+    "webpack": "^4.20.0",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.0"
   },
