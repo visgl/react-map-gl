@@ -195,7 +195,8 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
         key="content"
         ref={this._contentRef}
         className="mapboxgl-popup-content"
-        onClick={onClick}>
+        onClick={onClick}
+      >
         {closeButton && (
           <button key="close-button" className="mapboxgl-popup-close-button" type="button">
             ×
@@ -218,7 +219,8 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
       <div
         className={`mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`}
         style={containerStyle}
-        ref={this._containerRef}>
+        ref={this._containerRef}
+      >
         {this._renderTip(positionType)}
         {this._renderContent()}
       </div>

@@ -87,7 +87,8 @@ export default class Marker extends DraggableControl<MarkerProps> {
       <div
         className={`mapboxgl-marker ${className}`}
         ref={this._containerRef}
-        style={containerStyle}>
+        style={containerStyle}
+      >
         {this.props.children}
       </div>
     );

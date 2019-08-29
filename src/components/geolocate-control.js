@@ -245,7 +245,8 @@ export default class GeolocateControl extends BaseControl<
           className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`}
           ref={this._containerRef}
           style={style}
-          onContextMenu={e => e.preventDefault()}>
+          onContextMenu={e => e.preventDefault()}
+        >
           {this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)}
         </div>
       </div>

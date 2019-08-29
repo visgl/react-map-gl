@@ -107,7 +107,8 @@ export default class NavigationControl extends BaseControl<
         className={`mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`}
         type="button"
         title={label}
-        onClick={callback}>
+        onClick={callback}
+      >
         {children}
       </button>
     );

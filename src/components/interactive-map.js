@@ -509,7 +509,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
             style={null}
             onResize={this._onResize}
             onLoad={this._onLoad}
-            ref={this._staticMapRef}>
+            ref={this._staticMapRef}
+          >
             {this.props.children}
           </StaticMap>
         </div>

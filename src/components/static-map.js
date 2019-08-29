@@ -311,7 +311,8 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
           key="autosizer"
           disableWidth={Number.isFinite(width)}
           disableHeight={Number.isFinite(height)}
-          onResize={this.props.onResize}>
+          onResize={this.props.onResize}
+        >
           {this._renderOverlays.bind(this)}
         </AutoSizer>
         {this._renderNoTokenWarning()}
