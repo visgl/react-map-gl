@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {createElement} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from '../components/base-control';
 import {window} from '../utils/globals';
@@ -87,17 +87,19 @@ export default class CanvasOverlay extends BaseControl<CanvasOverlayProps, *, HT
     } = this._context;
     this._redraw();
 
-    return createElement('canvas', {
-      ref: this._containerRef,
-      width: width * pixelRatio,
-      height: height * pixelRatio,
-      style: {
-        width: `${width}px`,
-        height: `${height}px`,
-        position: 'absolute',
-        left: 0,
-        top: 0
-      }
-    });
+    return (
+      <canvas
+        ref={this._containerRef}
+        width={width * pixelRatio}
+        height={height * pixelRatio}
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+          position: 'absolute',
+          left: 0,
+          top: 0
+        }}
+      />
+    );
   }
 }

@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {createElement} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from '../components/base-control';
 
@@ -60,19 +60,16 @@ export default class HTMLOverlay extends BaseControl<HTMLOverlayProps, *, HTMLDi
       this.props.style
     );
 
-    return createElement(
-      'div',
-      {
-        ref: this._containerRef,
-        style
-      },
-      this.props.redraw({
-        width: viewport.width,
-        height: viewport.height,
-        isDragging,
-        project: viewport.project.bind(viewport),
-        unproject: viewport.unproject.bind(viewport)
-      })
+    return (
+      <div ref={this._containerRef} style={style}>
+        {this.props.redraw({
+          width: viewport.width,
+          height: viewport.height,
+          isDragging,
+          project: viewport.project.bind(viewport),
+          unproject: viewport.unproject.bind(viewport)
+        })}
+      </div>
     );
   }
 }
