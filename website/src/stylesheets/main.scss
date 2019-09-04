@@ -2,6 +2,7 @@
 @import 'markdown';
 @import 'mixins';
 @import 'icon';
+@import 'fontface';
 
 $primary: #4DC19C;
 $secondary: #BEE4BF;
@@ -16,10 +17,14 @@ $topbar-height: 64px;
 @import 'gallery';
 
 body {
-  font-family: ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif !important;
+  font-family: "UberMove", "Helvetica Neue", Helvetica, sans-serif !important;
   font-size: 12px;
   line-height: 1.833;
   overflow-y: auto;
+}
+
+p, li, td, th {
+  font-family: "UberMoveText";
 }
 
 * {
