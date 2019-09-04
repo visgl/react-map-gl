@@ -39,6 +39,7 @@
     "publish-prod": "ocular-publish prod",
     "publish-beta": "ocular-publish beta",
     "test": "flow check && ocular-test",
+    "test-only": "ocular-test",
     "test-fast": "flow check && ocular-test fast",
     "metrics": "ocular-metrics",
     "update-release-branch": "scripts/update-release-branch.sh"
@@ -49,7 +50,7 @@
     "mjolnir.js": "^2.2.0",
     "prop-types": "^15.7.2",
     "react-virtualized-auto-sizer": "^1.0.2",
-    "viewport-mercator-project": "^6.1.0"
+    "viewport-mercator-project": "^6.3.0-alpha.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.4",

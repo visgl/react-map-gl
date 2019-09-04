@@ -1,6 +1,7 @@
 // @flow
 import {equals} from '../math-utils';
 import assert from '../assert';
+import type {MapStateProps} from '../map-state';
 
 export default class TransitionInterpolator {
   propNames: Array<string> = [];

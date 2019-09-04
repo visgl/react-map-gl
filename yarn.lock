@@ -9392,10 +9392,10 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-viewport-mercator-project@^6.1.0:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/viewport-mercator-project/-/viewport-mercator-project-6.1.1.tgz#d7b2cb3cb772b819f1daab17cf4019102a9102a6"
-  integrity sha512-nI0GEmXnESwZxWSJuaQkdCnvOv6yckUfqqFbNB8KWVbQY3eUExVM4ZziqCVVs5mNznLjDF1auj6HLW5D5DKcng==
+viewport-mercator-project@^6.3.0-alpha.0:
+  version "6.3.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/viewport-mercator-project/-/viewport-mercator-project-6.3.0-alpha.0.tgz#d72e4dcfc281870a80afaf356327db48e52898f0"
+  integrity sha512-ZMaJC0wt12/j9LHE9WFCVvwxJ8xK9iklGHCwHiwZZ52iwwMoEQW9QeSpi/dx5PfrfekaCFn4lkpQtEamLqNSBQ==
   dependencies:
     "@babel/runtime" "^7.0.0"
     gl-matrix "^3.0.0"
