@@ -37,7 +37,7 @@ export default class ViewportFlyToInterpolator extends TransitionInterpolator {
 
   /**
    * @param props {Object}
-   - `props.curve` (Number, optional, default: 1.414) - The zooming "curve" that will occur along the flight path, .
+   - `props.curve` (Number, optional, default: 1.414) - The zooming "curve" that will occur along the flight path.
    - `props.speed` (Number, optional, default: 1.2) - The average speed of the animation defined in relation to `options.curve`, it linearly affects the duration, higher speed returns smaller durations and vice versa.
    - `props.screenSpeed` (Number, optional) - The average speed of the animation measured in screenfuls per second. Similar to `opts.speed` it linearly affects the duration,  when specified `opts.speed` is ignored.
    - `props.maxDuration` (Number, optional) - Maximum duration in milliseconds, if calculated duration exceeds this value, `0` is returned.

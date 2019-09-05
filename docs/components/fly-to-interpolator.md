@@ -19,7 +19,11 @@ import ReactMapGL, {FlyToInterpolator} from 'react-map-gl';
 
 Parameters:
 - `options` {Object} (optional)
-  + `speed` {Number} (optional, default 1.2) - Controls the `transitionDuration` calculated when it is set to `auto`, higher speed results in shorter duration and vice versa.
+  + `curve` (Number, optional, default: 1.414) - The zooming "curve" that will occur along the flight path.
+  - `speed` (Number, optional, default: 1.2) - The average speed of the animation defined in relation to `options.curve`, it linearly affects the duration, higher speed returns smaller durations and vice versa.
+  - `screenSpeed` (Number, optional) - The average speed of the animation measured in screenfuls per second. Similar to `opts.speed` it linearly affects the duration,  when specified `opts.speed` is ignored.
+  - `maxDuration` (Number, optional) - Maximum duration in milliseconds, if calculated duration exceeds this value, `0` is returned.
+
 
 
 ## Source
