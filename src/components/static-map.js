@@ -78,6 +78,7 @@ const propTypes = Object.assign({}, Mapbox.propTypes, {
 const defaultProps = Object.assign({}, Mapbox.defaultProps, {
   preventStyleDiffing: false,
   disableTokenWarning: false,
+  updateMapStyle: true,
   visible: true,
   onResize: noop,
   className: '',
@@ -107,7 +108,8 @@ export type StaticMapProps = {
   zoom: number,
   bearing: number,
   pitch: number,
-  altitude?: number
+  altitude?: number,
+  updateMapStyle: Boolean
 };
 
 type State = {
@@ -147,7 +149,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
   }
 
   componentDidUpdate(prevProps: StaticMapProps) {
-    if (this._mapbox) {
+    if (this._mapbox && this.props.updateMapStyle) {
       this._updateMapStyle(prevProps, this.props);
       this._updateMapProps(this.props);
     }
@@ -199,7 +201,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
   _updateMapStyle(oldProps: StaticMapProps, newProps: StaticMapProps) {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
-    if (mapStyle !== oldMapStyle) {
+    if (mapStyle !== oldMapStyle || !oldProps.updateMapStyle) {
       this._map.setStyle(normalizeStyle(mapStyle), {
         diff: !this.props.preventStyleDiffing
       });
