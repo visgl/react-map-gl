@@ -84,16 +84,14 @@ export default class TransitionManager {
     // Set this.props here as '_triggerTransition' calls '_updateViewport' that uses this.props.
     this.props = nextProps;
 
-    // update transitionDuration for `auto` mode
-    const endProps = this._normalizeNextProps(nextProps, currentProps);
-
     // NOTE: Be cautious re-ordering statements in this function.
-    if (this._shouldIgnoreViewportChange(currentProps, endProps)) {
+    if (this._shouldIgnoreViewportChange(currentProps, nextProps)) {
       return false;
     }
 
-    if (this._isTransitionEnabled(endProps)) {
+    if (this._isTransitionEnabled(nextProps)) {
       const startProps = Object.assign({}, currentProps);
+      const endProps = Object.assign({}, nextProps);
 
       if (this._isTransitionInProgress()) {
         currentProps.onTransitionInterrupt();
@@ -134,7 +132,10 @@ export default class TransitionManager {
   }
 
   _isTransitionEnabled(props: ViewportProps): boolean {
-    return props.transitionDuration > 0 && Boolean(props.transitionInterpolator);
+    const {transitionDuration, transitionInterpolator} = props;
+    return (
+      (transitionDuration > 0 || transitionDuration === 'auto') && Boolean(transitionInterpolator)
+    );
   }
 
   _isUpdateDueToCurrentTransition(props: ViewportProps): boolean {
@@ -144,7 +145,7 @@ export default class TransitionManager {
     return false;
   }
 
-  _normalizeNextProps(nextProps: ViewportProps, startProps: ViewportProps): ViewportProps {
+  _normalizeEndProps(nextProps: ViewportProps, startProps: ViewportProps): ViewportProps {
     const endProps = Object.assign({}, nextProps);
     const {transitionInterpolator} = nextProps;
     if (transitionInterpolator) {
@@ -180,6 +181,9 @@ export default class TransitionManager {
     if (this._animationFrame) {
       cancelAnimationFrame(this._animationFrame);
     }
+
+    // update transitionDuration for `auto` mode
+    endProps = this._normalizeEndProps(endProps, startProps);
 
     const initialProps = endProps.transitionInterpolator.initializeProps(startProps, endProps);
 

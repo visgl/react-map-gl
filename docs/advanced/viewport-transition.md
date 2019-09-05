@@ -112,7 +112,7 @@ Remarks:
   + `transitionEasing`
   + `transitionInterruption`
 - The default interaction/transition behavior can always be intercepted and overwritten in the handler for `onViewportChange`. However, if a transition is in progress, the properties that are being transitioned (e.g. longitude and latitude) should not be manipulated, otherwise the change will be interpreted as an interruption of the transition.
-- When using `FlyToInterpolator` for `transitionInterpolator`, `transitionDuration` can be set to `auto` where actual duration is auto calculated based on start and end viewports and is linear to the distance between them. This duration can be further customized using `speed` parameter to `FlyToInterpolator` constructor.
+- When using `FlyToInterpolator` for `transitionInterpolator`, `transitionDuration` can be set to `'auto'` where actual duration is auto calculated based on start and end viewports and is linear to the distance between them. This duration can be further customized using `speed` parameter to `FlyToInterpolator` constructor.
 
 
 ## Transition Interpolators
