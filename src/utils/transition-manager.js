@@ -145,16 +145,6 @@ export default class TransitionManager {
     return false;
   }
 
-  _normalizeEndProps(nextProps: ViewportProps, startProps: ViewportProps): ViewportProps {
-    const endProps = Object.assign({}, nextProps);
-    const {transitionInterpolator} = nextProps;
-    if (transitionInterpolator) {
-      const transitionDuration = transitionInterpolator.getDuration(startProps, nextProps);
-      Object.assign(endProps, {transitionDuration});
-    }
-    return endProps;
-  }
-
   _shouldIgnoreViewportChange(currentProps: ViewportProps, nextProps: ViewportProps): boolean {
     if (!currentProps) {
       return true;
@@ -182,8 +172,9 @@ export default class TransitionManager {
       cancelAnimationFrame(this._animationFrame);
     }
 
-    // update transitionDuration for `auto` mode
-    endProps = this._normalizeEndProps(endProps, startProps);
+    // update transitionDuration for 'auto' mode
+    const {transitionInterpolator} = endProps;
+    const duration = transitionInterpolator.getDuration(startProps, endProps);
 
     const initialProps = endProps.transitionInterpolator.initializeProps(startProps, endProps);
 
@@ -197,7 +188,7 @@ export default class TransitionManager {
 
     this.state = {
       // Save current transition props
-      duration: endProps.transitionDuration,
+      duration,
       easing: endProps.transitionEasing,
       interpolator: endProps.transitionInterpolator,
       interruption: endProps.transitionInterruption,

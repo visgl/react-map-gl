@@ -90,7 +90,7 @@ export default class ViewportFlyToInterpolator extends TransitionInterpolator {
   // computes the transition duration
   getDuration(startProps: MapStateProps, endProps: MapStateProps) {
     let {transitionDuration} = endProps;
-    if (typeof transitionDuration === 'string' && transitionDuration === 'auto') {
+    if (transitionDuration === 'auto') {
       // auto calculate duration based on start and end props
       transitionDuration = getFlyToDuration(startProps, endProps, this.props);
     }
