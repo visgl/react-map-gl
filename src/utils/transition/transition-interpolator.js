@@ -1,6 +1,7 @@
 // @flow
 import {equals} from '../math-utils';
 import assert from '../assert';
+import type {MapStateProps} from '../map-state';
 
 export default class TransitionInterpolator {
   propNames: Array<string> = [];
@@ -46,5 +47,15 @@ export default class TransitionInterpolator {
    */
   interpolateProps(startProps: any, endProps: any, t: number): any {
     assert(false, 'interpolateProps is not implemented');
+  }
+
+  /**
+   * Returns transition duration
+   * @param startProps {object} - a list of starting viewport props
+   * @param endProps {object} - a list of target viewport props
+   * @returns {Number} - transition duration in milliseconds
+   */
+  getDuration(startProps: MapStateProps, endProps: MapStateProps) {
+    return endProps.transitionDuration;
   }
 }

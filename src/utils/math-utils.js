@@ -1,11 +1,12 @@
 // @flow
-const EPSILON = 1e-9;
+const EPSILON = 1e-7;
 
 // Returns true if value is either an array or a typed array
 function isArray(value: any): boolean {
   return Array.isArray(value) || ArrayBuffer.isView(value);
 }
 
+// TODO: use math.gl
 export function equals(a: any, b: any): boolean {
   if (a === b) {
     return true;
