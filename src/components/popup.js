@@ -20,8 +20,9 @@
 // THE SOFTWARE.
 import {createElement, createRef} from 'react';
 import PropTypes from 'prop-types';
-import BaseControl from './base-control';
+import type {MjolnirEvent} from 'mjolnir.js';
 
+import BaseControl from './base-control';
 import {getDynamicPosition, ANCHOR_POSITION} from '../utils/dynamic-position';
 
 import type {BaseControlProps} from './base-control';
@@ -159,7 +160,7 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
     return style;
   }
 
-  _onClick = evt => {
+  _onClick = (evt: MjolnirEvent) => {
     if (this.props.captureClick) {
       evt.stopPropagation();
     }

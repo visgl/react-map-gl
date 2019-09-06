@@ -48,7 +48,7 @@
     "mjolnir.js": "^2.2.0",
     "prop-types": "^15.7.2",
     "react-virtualized-auto-sizer": "^1.0.2",
-    "viewport-mercator-project": "^6.1.0"
+    "viewport-mercator-project": "^6.2.1"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.4",

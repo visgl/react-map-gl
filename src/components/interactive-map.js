@@ -39,7 +39,7 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
 
   /** Viewport transition **/
   // transition duration for viewport change
-  transitionDuration: PropTypes.number,
+  transitionDuration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   // TransitionInterpolator instance, can be used to perform custom transitions.
   transitionInterpolator: PropTypes.object,
   // type of interruption of current transition on update.

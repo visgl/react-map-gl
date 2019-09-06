@@ -48,7 +48,7 @@ const TEST_CASES = [
         zoom: 12,
         pitch: 0,
         bearing: 0,
-        transitionDuration: 200
+        transitionDuration: 'auto'
       },
       // transitionDuration is 0
       {
@@ -109,9 +109,21 @@ const TEST_CASES = [
         pitch: 0,
         bearing: 0,
         transitionDuration: 200
+      },
+      // viewport change interrupting transition
+      {
+        width: 100,
+        height: 100,
+        longitude: -122.45,
+        latitude: 37.78,
+        zoom: 12,
+        pitch: 0,
+        bearing: 0,
+        transitionInterpolator: new ViewportFlyToInterpolator({speed: 50}),
+        transitionDuration: 'auto'
       }
     ],
-    expect: [true, true]
+    expect: [true, true, true]
   }
 ];
 
@@ -185,8 +197,8 @@ test('TransitionManager#callbacks', t => {
   });
 
   setTimeout(() => {
-    t.is(startCount, 2, 'onTransitionStart() called twice');
-    t.is(interruptCount, 1, 'onTransitionInterrupt() called once');
+    t.is(startCount, 3, 'onTransitionStart() called twice');
+    t.is(interruptCount, 2, 'onTransitionInterrupt() called once');
     t.is(endCount, 1, 'onTransitionEnd() called once');
     t.ok(updateCount > 2, 'onViewportChange() called');
     t.end();
@@ -414,5 +426,38 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
       transitionManager._endTransition();
     }
   });
+  t.end();
+});
+
+test('TransitionManager#auto#duration', t => {
+  const mergeProps = props => Object.assign({}, TransitionManager.defaultProps, props);
+  const initialProps = {
+    width: 100,
+    height: 100,
+    longitude: -122.45,
+    latitude: 37.78,
+    zoom: 12,
+    pitch: 0,
+    bearing: 0,
+    transitionDuration: 200
+  };
+  const transitionManager = new TransitionManager(mergeProps(initialProps));
+  transitionManager.processViewportChange(
+    mergeProps({
+      width: 100,
+      height: 100,
+      longitude: -100.45, // changed
+      latitude: 37.78,
+      zoom: 12,
+      pitch: 0,
+      bearing: 0,
+      transitionInterpolator: new ViewportFlyToInterpolator(),
+      transitionDuration: 'auto'
+    })
+  );
+  t.ok(
+    Number.isFinite(transitionManager.state.duration) && transitionManager.state.duration > 0,
+    'should set duraiton when using "auto" mode'
+  );
   t.end();
 });

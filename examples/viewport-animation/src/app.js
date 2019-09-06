@@ -27,8 +27,8 @@ export default class App extends Component {
       longitude,
       latitude,
       zoom: 11,
-      transitionInterpolator: new FlyToInterpolator(),
-      transitionDuration: 3000
+      transitionInterpolator: new FlyToInterpolator({speed: 2}),
+      transitionDuration: 'auto'
     });
   };
 
