@@ -1,5 +1,5 @@
 // @flow
-import {createElement} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
 
@@ -95,38 +95,35 @@ export default class NavigationControl extends BaseControl<
 
   _renderCompass() {
     const {bearing} = this._context.viewport;
-    return createElement('span', {
-      className: 'mapboxgl-ctrl-compass-arrow',
-      style: {transform: `rotate(${-bearing}deg)`}
-    });
+    return (
+      <span className="mapboxgl-ctrl-compass-arrow" style={{transform: `rotate(${-bearing}deg)`}} />
+    );
   }
 
   _renderButton(type: string, label: string, callback: Function, children: any) {
-    return createElement('button', {
-      key: type,
-      className: `mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`,
-      type: 'button',
-      title: label,
-      onClick: callback,
-      children
-    });
+    return (
+      <button
+        key={type}
+        className={`mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`}
+        type="button"
+        title={label}
+        onClick={callback}
+      >
+        {children}
+      </button>
+    );
   }
 
   _render() {
     const {className, showCompass, showZoom} = this.props;
 
-    return createElement(
-      'div',
-      {
-        className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
-        ref: this._containerRef
-      },
-      [
-        showZoom && this._renderButton('zoom-in', 'Zoom In', this._onZoomIn),
-        showZoom && this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut),
-        showCompass &&
-          this._renderButton('compass', 'Reset North', this._onResetNorth, this._renderCompass())
-      ]
+    return (
+      <div className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`} ref={this._containerRef}>
+        {showZoom && this._renderButton('zoom-in', 'Zoom In', this._onZoomIn)}
+        {showZoom && this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut)}
+        {showCompass &&
+          this._renderButton('compass', 'Reset North', this._onResetNorth, this._renderCompass())}
+      </div>
     );
   }
 }

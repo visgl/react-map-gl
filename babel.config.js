@@ -4,7 +4,7 @@ const getBabelConfig = require('ocular-dev-tools/config/babel.config');
 module.exports = api => {
   const config = getBabelConfig(api);
 
-  config.presets = (config.presets || []).concat('@babel/flow');
+  config.presets = (config.presets || []).concat(['@babel/flow', '@babel/preset-react']);
   config.plugins = (config.plugins || []).concat('@babel/proposal-class-properties');
 
   return config;

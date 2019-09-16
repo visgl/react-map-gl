@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {createElement, createRef} from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import type {MjolnirEvent} from 'mjolnir.js';
 
@@ -183,11 +183,7 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
   _renderTip(positionType: PositionType) {
     const {tipSize} = this.props;
 
-    return createElement('div', {
-      key: 'tip',
-      className: 'mapboxgl-popup-tip',
-      style: {borderWidth: tipSize}
-    });
+    return <div key="tip" className="mapboxgl-popup-tip" style={{borderWidth: tipSize}} />;
   }
 
   _renderContent() {
@@ -195,27 +191,20 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
     // If eventManager does not exist (using with static map), listen to React event
     const onClick = this._context.eventManager ? null : this._onClick;
 
-    return createElement(
-      'div',
-      {
-        key: 'content',
-        ref: this._contentRef,
-        className: 'mapboxgl-popup-content',
-        onClick
-      },
-      [
-        closeButton &&
-          createElement(
-            'button',
-            {
-              key: 'close-button',
-              className: 'mapboxgl-popup-close-button',
-              type: 'button'
-            },
-            '×'
-          ),
-        children
-      ]
+    return (
+      <div
+        key="content"
+        ref={this._contentRef}
+        className="mapboxgl-popup-content"
+        onClick={onClick}
+      >
+        {closeButton && (
+          <button key="close-button" className="mapboxgl-popup-close-button" type="button">
+            ×
+          </button>
+        )}
+        {children}
+      </div>
     );
   }
 
@@ -227,14 +216,15 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
     const positionType = this._getPosition(x, y);
     const containerStyle = this._getContainerStyle(x, y, z, positionType);
 
-    return createElement(
-      'div',
-      {
-        className: `mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`,
-        style: containerStyle,
-        ref: this._containerRef
-      },
-      [this._renderTip(positionType), this._renderContent()]
+    return (
+      <div
+        className={`mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`}
+        style={containerStyle}
+        ref={this._containerRef}
+      >
+        {this._renderTip(positionType)}
+        {this._renderContent()}
+      </div>
     );
   }
 }

@@ -1,7 +1,7 @@
 // @flow
 
 /* global window */
-import {createElement, createRef} from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import WebMercatorViewport from 'viewport-mercator-project';
 
@@ -197,14 +197,16 @@ export default class GeolocateControl extends BaseControl<
   };
 
   _renderButton = (type: string, label: string, callback: Function) => {
-    return createElement('button', {
-      key: type,
-      className: `mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`,
-      ref: this._geolocateButtonRef,
-      type: 'button',
-      title: label,
-      onClick: callback
-    });
+    return (
+      <button
+        key={type}
+        className={`mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`}
+        ref={this._geolocateButtonRef}
+        type="button"
+        title={label}
+        onClick={callback}
+      />
+    );
   };
 
   _renderMarker = () => {
@@ -214,17 +216,19 @@ export default class GeolocateControl extends BaseControl<
       return null;
     }
 
-    // $FlowFixMe
-    return createElement(Marker, {
-      key: 'location-maker',
-      ref: this._markerRef,
-      className: 'mapboxgl-user-location-dot',
-      longitude: markerPosition.longitude,
-      latitude: markerPosition.latitude,
-      onContextMenu: e => e.preventDefault(),
-      captureDrag: false,
-      captureDoubleClick: false
-    });
+    return (
+      // $FlowFixMe
+      <Marker
+        key="location-maker"
+        ref={this._markerRef}
+        className="mapboxgl-user-location-dot"
+        longitude={markerPosition.longitude}
+        latitude={markerPosition.latitude}
+        onContextMenu={e => e.preventDefault()}
+        captureDrag={false}
+        captureDoubleClick={false}
+      />
+    );
   };
 
   _render() {
@@ -233,19 +237,19 @@ export default class GeolocateControl extends BaseControl<
     }
 
     const {className, style} = this.props;
-    return createElement('div', null, [
-      this._renderMarker(),
-      createElement(
-        'div',
-        {
-          key: 'geolocate-control',
-          className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
-          ref: this._containerRef,
-          style,
-          onContextMenu: e => e.preventDefault()
-        },
-        this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)
-      )
-    ]);
+    return (
+      <div>
+        {this._renderMarker()}
+        <div
+          key="geolocate-control"
+          className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`}
+          ref={this._containerRef}
+          style={style}
+          onContextMenu={e => e.preventDefault()}
+        >
+          {this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)}
+        </div>
+      </div>
+    );
   }
 }
