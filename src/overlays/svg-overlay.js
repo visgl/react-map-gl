@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {createElement} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from '../components/base-control';
 
@@ -58,21 +58,16 @@ export default class SVGOverlay extends BaseControl<SVGOverlayProps, *, Element>
       this.props.style
     );
 
-    return createElement(
-      'svg',
-      {
-        width: viewport.width,
-        height: viewport.height,
-        ref: this._containerRef,
-        style
-      },
-      this.props.redraw({
-        width: viewport.width,
-        height: viewport.height,
-        isDragging,
-        project: viewport.project.bind(viewport),
-        unproject: viewport.unproject.bind(viewport)
-      })
+    return (
+      <svg width={viewport.width} height={viewport.height} ref={this._containerRef} style={style}>
+        {this.props.redraw({
+          width: viewport.width,
+          height: viewport.height,
+          isDragging,
+          project: viewport.project.bind(viewport),
+          unproject: viewport.unproject.bind(viewport)
+        })}
+      </svg>
     );
   }
 }

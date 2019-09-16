@@ -1,6 +1,6 @@
 /* global setTimeout, clearTimeout */
 import MapGL, {InteractiveMap} from 'react-map-gl';
-import {createElement} from 'react';
+import React from 'react';
 import ReactTestUtils from 'react-test-renderer/shallow';
 import ReactTestRenderer from 'react-test-renderer';
 import sinon from 'sinon';
@@ -81,7 +81,7 @@ const TEST_CASES = [
 test('InteractiveMap#default export', t => {
   t.ok(MapGL, 'InteractiveMap is defined');
 
-  const map = createElement(MapGL, defaultProps);
+  const map = <MapGL {...defaultProps} />;
   const result = ReactTestUtils.createRenderer().render(map);
 
   t.ok(result, 'InteractiveMap rendered');
@@ -91,7 +91,7 @@ test('InteractiveMap#default export', t => {
 test('InteractiveMap#named export', t => {
   t.ok(InteractiveMap, 'InteractiveMap is defined');
 
-  const map = createElement(InteractiveMap, defaultProps);
+  const map = <InteractiveMap {...defaultProps} />;
   const result = ReactTestUtils.createRenderer().render(map);
 
   t.ok(result, 'InteractiveMap rendered');
@@ -139,7 +139,7 @@ TEST_CASES.forEach(testCase => {
 
     const props = Object.assign({}, testCase.props, {onLoad});
 
-    const map = createElement(InteractiveMap, props);
+    const map = <InteractiveMap {...props} />;
 
     result = ReactTestRenderer.create(map);
 
@@ -157,8 +157,8 @@ TEST_CASES.forEach(testCase => {
 // children are no longer rendered on first pass due to auto sizer
 test.skip('Interactive map renders children on first render', t => {
   const childComponent = sinon.spy(() => null);
-  const child = createElement(childComponent);
-  const map = createElement(InteractiveMap, defaultProps, child);
+  const child = <childComponent />;
+  const map = <InteractiveMap {...defaultProps}>{child}</InteractiveMap>;
   try {
     const result = ReactTestRenderer.create(map);
     // Unmount the component to avoid creating too many maps
@@ -178,7 +178,7 @@ test('Interactive map#call transformRequest callback when provided', t => {
 
   const props = Object.assign({}, defaultProps, {transformRequest});
 
-  const map = createElement(InteractiveMap, props);
+  const map = <InteractiveMap {...props} />;
 
   // const result = ReactTestUtils.createRenderer().render(map);
   const result = ReactTestRenderer.create(map);

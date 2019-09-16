@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {createElement} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import DraggableControl from './draggable-control';
 
@@ -83,11 +83,14 @@ export default class Marker extends DraggableControl<MarkerProps> {
       cursor: draggable ? (dragPos ? 'grabbing' : 'grab') : 'auto'
     };
 
-    return createElement('div', {
-      className: `mapboxgl-marker ${className}`,
-      ref: this._containerRef,
-      style: containerStyle,
-      children: this.props.children
-    });
+    return (
+      <div
+        className={`mapboxgl-marker ${className}`}
+        ref={this._containerRef}
+        style={containerStyle}
+      >
+        {this.props.children}
+      </div>
+    );
   }
 }
