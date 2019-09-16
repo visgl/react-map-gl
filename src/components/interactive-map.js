@@ -1,5 +1,5 @@
 // @flow
-import {PureComponent, createElement, createRef} from 'react';
+import React, {PureComponent, createRef} from 'react';
 import PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -499,29 +499,22 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
       cursor: getCursor(this.state)
     });
 
-    return createElement(
-      MapContext.Provider,
-      {value: this._interactiveContext},
-      createElement(
-        'div',
-        {
-          key: 'event-canvas',
-          ref: this._eventCanvasRef,
-          style: eventCanvasStyle
-        },
-        createElement(
-          StaticMap,
-          Object.assign({}, this.props, {
-            width: '100%',
-            height: '100%',
-            style: null,
-            onResize: this._onResize,
-            onLoad: this._onLoad,
-            ref: this._staticMapRef,
-            children: this.props.children
-          })
-        )
-      )
+    return (
+      <MapContext.Provider value={this._interactiveContext}>
+        <div key="event-canvas" ref={this._eventCanvasRef} style={eventCanvasStyle}>
+          <StaticMap
+            {...this.props}
+            width="100%"
+            height="100%"
+            style={null}
+            onResize={this._onResize}
+            onLoad={this._onLoad}
+            ref={this._staticMapRef}
+          >
+            {this.props.children}
+          </StaticMap>
+        </div>
+      </MapContext.Provider>
     );
   }
 }

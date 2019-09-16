@@ -23,7 +23,7 @@
 import {document} from '../utils/globals';
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
-import {createElement} from 'react';
+import React from 'react';
 import mapboxgl from '../utils/mapboxgl';
 
 import type {BaseControlProps} from './base-control';
@@ -106,13 +106,15 @@ export default class FullscreenControl extends BaseControl<
   };
 
   _renderButton(type: string, label: string, callback: Function) {
-    return createElement('button', {
-      key: type,
-      className: `mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`,
-      type: 'button',
-      title: label,
-      onClick: callback
-    });
+    return (
+      <button
+        key={type}
+        className={`mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`}
+        type="button"
+        title={label}
+        onClick={callback}
+      />
+    );
   }
 
   _render() {
@@ -125,13 +127,10 @@ export default class FullscreenControl extends BaseControl<
 
     const type = isFullscreen ? 'shrink' : 'fullscreen';
 
-    return createElement(
-      'div',
-      {
-        className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
-        ref: this._containerRef
-      },
-      [this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen)]
+    return (
+      <div className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`} ref={this._containerRef}>
+        {this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen)}
+      </div>
     );
   }
 }

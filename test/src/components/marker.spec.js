@@ -26,19 +26,14 @@ const mockInteractiveContext = Object.assign({}, mockStaticContext, {
 test('Marker#renders children', t => {
   t.ok(Marker, 'Marker is defined');
 
-  const marker = React.createElement(
-    Marker,
-    {
-      latitude: 37,
-      longitude: -122
-    },
-    React.createElement('div', {className: 'test-marker'}, ['hello'])
+  const marker = (
+    <Marker latitude={37} longitude={-122}>
+      <div className="test-marker">hello</div>
+    </Marker>
   );
-  const staticUsage = React.createElement(MapContext.Provider, {value: mockStaticContext}, marker);
-  const interactiveUsage = React.createElement(
-    MapContext.Provider,
-    {value: mockInteractiveContext},
-    marker
+  const staticUsage = <MapContext.Provider value={mockStaticContext}>{marker}</MapContext.Provider>;
+  const interactiveUsage = (
+    <MapContext.Provider value={mockInteractiveContext}>{marker}</MapContext.Provider>
   );
 
   const result = ReactTestRenderer.create(staticUsage);
