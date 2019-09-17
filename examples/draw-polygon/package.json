@@ -1,8 +1,7 @@
 {
   "scripts": {
     "start": "webpack-dev-server --progress --hot --open",
-    "start-local": "webpack-dev-server --env.local --progress --hot --open",
-    "start-local-draw": "webpack-dev-server --env.draw --progress --hot --open"
+    "start-local": "webpack-dev-server --env.local --progress --hot --open"
   },
   "dependencies": {
     "@turf/area": "^6.0.1",
