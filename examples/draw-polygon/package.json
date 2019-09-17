@@ -1,14 +1,15 @@
 {
   "scripts": {
     "start": "webpack-dev-server --progress --hot --open",
-    "start-local": "webpack-dev-server --env.local --progress --hot --open"
+    "start-local": "webpack-dev-server --env.local --progress --hot --open",
+    "start-local-draw": "webpack-dev-server --env.draw --progress --hot --open"
   },
   "dependencies": {
     "@turf/area": "^6.0.1",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
     "react-map-gl": "^5.0.0",
-    "react-map-gl-draw": "^0.14.10",
+    "react-map-gl-draw": "^0.15.0",
     "styled-components": "^4.3.2"
   },
   "devDependencies": {
