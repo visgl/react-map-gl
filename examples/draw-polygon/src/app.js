@@ -11,6 +11,7 @@ const TOKEN = ''; // Set your mapbox token here
 export default class App extends Component {
   constructor(props) {
     super(props);
+    this._editorRef = null;
     this.state = {
       viewport: {
         longitude: -91.874,
@@ -18,43 +19,31 @@ export default class App extends Component {
         zoom: 12
       },
       mode: EditorModes.READ_ONLY,
-      features: [],
-      selectedFeatureId: null
+      selectedFeatureIndex: null
     };
-    this._mapRef = null;
   }
 
   _updateViewport = viewport => {
     this.setState({viewport});
   };
 
-  _onSelect = ({selectedFeatureId}) => {
-    this.setState({selectedFeatureId});
+  _onSelect = options => {
+    this.setState({selectedFeatureIndex: options && options.selectedFeatureIndex});
   };
 
   _onDelete = () => {
-    const selectedIndex = this._getSelectedFeatureIndex();
-    if (selectedIndex >= 0) {
-      const newFeatures = [...this.state.features];
-      newFeatures.splice(selectedIndex, 1);
-      this.setState({features: newFeatures, selectedFeatureId: null});
+    const selectedIndex = this.state.selectedFeatureIndex;
+    if (selectedIndex !== null && selectedIndex >= 0) {
+      this._editorRef.deleteFeatures(selectedIndex);
     }
   };
 
-  _onUpdate = features => {
-    this.setState({
-      features,
-      mode: EditorModes.EDITING
-    });
-  };
-
-  _getSelectedFeatureIndex = () => {
-    const {selectedFeatureId} = this.state;
-    if (selectedFeatureId === null || selectedFeatureId === undefined) {
-      return -1;
+  _onUpdate = ({editType}) => {
+    if (editType === 'addFeature') {
+      this.setState({
+        mode: EditorModes.EDITING
+      });
     }
-
-    return this.state.features.findIndex(f => f.properties.id === selectedFeatureId);
   };
 
   _renderDrawTools = () => {
@@ -78,9 +67,9 @@ export default class App extends Component {
   };
 
   _renderControlPanel = () => {
-    const features = this.state.features;
-    let featureIndex = this._getSelectedFeatureIndex();
-    if (featureIndex < 0) {
+    const features = this._editorRef && this._editorRef.getFeatures();
+    let featureIndex = this.state.selectedFeatureIndex;
+    if (featureIndex === null) {
       featureIndex = features.length - 1;
     }
     const polygon = features && features.length ? features[featureIndex] : null;
@@ -88,11 +77,10 @@ export default class App extends Component {
   };
 
   render() {
-    const {viewport, mode, selectedFeatureId, features} = this.state;
+    const {viewport, mode} = this.state;
     return (
       <MapGL
         {...viewport}
-        ref={_ => (this._mapRef = _)}
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/satellite-v9"
@@ -100,16 +88,15 @@ export default class App extends Component {
         onViewportChange={this._updateViewport}
       >
         <Editor
+          ref={_ => (this._editorRef = _)}
           style={{width: '100%', height: '100%'}}
           clickRadius={12}
           mode={mode}
-          features={features}
-          selectedFeatureId={selectedFeatureId}
           onSelect={this._onSelect}
           onUpdate={this._onUpdate}
-          getEditHandleShape={'circle'}
-          getFeatureStyle={getFeatureStyle}
-          getEditHandleStyle={getEditHandleStyle}
+          editHandleShape={'circle'}
+          featureStyle={getFeatureStyle}
+          editHandleStyle={getEditHandleStyle}
         />
         {this._renderDrawTools()}
         {this._renderControlPanel()}
