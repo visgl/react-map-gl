@@ -69,7 +69,7 @@ export default class App extends Component {
   _renderControlPanel = () => {
     const features = this._editorRef && this._editorRef.getFeatures();
     let featureIndex = this.state.selectedFeatureIndex;
-    if (featureIndex === null) {
+    if (features && featureIndex === null) {
       featureIndex = features.length - 1;
     }
     const polygon = features && features.length ? features[featureIndex] : null;
