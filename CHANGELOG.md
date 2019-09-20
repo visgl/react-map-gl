@@ -2,6 +2,10 @@
 
 # Version 5.0
 
+## 5.0.11 (Sep 20, 2019)
+- Add babel react preset and migrate react components to jsx (#875)
+- Viewport flyTo Interpolation: add support for auto duration and other options. (#866)
+
 ## 5.0.10 (Aug 13, 2019)
 - React 16.9.0 deprecated lifecycles (#861)
 - remove deprecated react lifecycle methods (#863)
