@@ -109,7 +109,8 @@ export default class Layer<Props: LayerProps> extends PureComponent<Props> {
 
   _createLayer() {
     const map = this._map;
-    const options = Object.assign({id: this.id}, this.props);
+    const options = Object.assign({}, this.props);
+    options.id = this.id;
     delete options.beforeId;
 
     if (map.style._loaded) {
