@@ -2,9 +2,11 @@
 
 # Version 4.1
 
-## 4.1.13 (Sept 23, 2019)
+## 4.1.14 (Sept 23, 2019)
 - Add babel react preset and migrate react components to jsx (#875)
 - Viewport flyTo Interpolation: add support for auto duration and other options. (#866)
+
+## 4.1.13 (Aug 20, 2019)
 
 ## 4.1.12 (Aug 12, 2019)
 
