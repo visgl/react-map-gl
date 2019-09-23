@@ -89,7 +89,7 @@ export default class App extends Component {
           mapboxApiAccessToken={MAPBOX_TOKEN}
           onHover={this._onHover}
         >
-          <Source id="stateIncome" type="geojson" data={data}>
+          <Source type="geojson" data={data}>
             <Layer {...dataLayer} />
           </Source>
           {this._renderTooltip()}

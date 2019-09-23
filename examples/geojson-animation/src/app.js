@@ -9,7 +9,6 @@ import {pointOnCircle} from './utils';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 const pointLayer = {
-  id: 'point',
   type: 'circle',
   paint: {
     'circle-radius': 10,
@@ -61,7 +60,7 @@ export default class App extends Component {
         mapboxApiAccessToken={MAPBOX_TOKEN}
       >
         {pointData && (
-          <Source id="point" type="geojson" data={pointData}>
+          <Source type="geojson" data={pointData}>
             <Layer {...pointLayer} />
           </Source>
         )}

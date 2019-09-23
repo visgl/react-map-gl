@@ -104,7 +104,7 @@ export default class App extends Component {
           mapboxApiAccessToken={MAPBOX_TOKEN}
         >
           {data && (
-            <Source id="earthquakes" type="geojson" data={data}>
+            <Source type="geojson" data={data}>
               <Layer {...heatmapLayer} />
             </Source>
           )}

@@ -67,7 +67,7 @@ export default class App extends Component {
         onHover={this._onHover}
         interactiveLayerIds={['counties']}
       >
-        <Source id="counties" type="vector" url="mapbox://mapbox.82pkq93d">
+        <Source type="vector" url="mapbox://mapbox.82pkq93d">
           <Layer beforeId="waterway-label" {...countiesLayer} />
           <Layer beforeId="waterway-label" {...highlightLayer} filter={filter} />
         </Source>
