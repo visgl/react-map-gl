@@ -26,22 +26,24 @@ import assert from '../utils/assert';
 import type {MapContextProps} from './map-context';
 
 const propTypes = {
-  id: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
+  id: PropTypes.string
 };
 
 type SourceProps = {
-  id: string,
+  id?: string,
   type: string,
   children?: any
 };
+
+let sourceCounter = 0;
 
 export default class Source<Props: SourceProps> extends PureComponent<Props> {
   static propTypes = propTypes;
 
   constructor(props: Props) {
     super(props);
-    this.id = props.id;
+    this.id = props.id || `jsx-source-${sourceCounter++}`;
     this.type = props.type;
   }
 
@@ -71,8 +73,8 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
   /* eslint-disable complexity */
   _updateSource() {
     const {_sourceOptions: sourceOptions, props} = this;
-    assert(props.id === this.id, 'source id cannot change');
-    assert(props.type === this.type, 'source type cannot change');
+    assert(!props.id || props.id === this.id, 'source id changed');
+    assert(props.type === this.type, 'source type changed');
 
     let changedKey = null;
     let changedKeyCount = 0;

@@ -27,16 +27,16 @@ import deepEqual from '../utils/deep-equal';
 import type {MapContextProps} from './map-context';
 
 const propTypes = {
-  id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  source: PropTypes.string.isRequired,
+  id: PropTypes.string,
+  source: PropTypes.string,
   beforeId: PropTypes.string
 };
 
 type LayerProps = {
-  id: string,
+  id?: string,
   type: string,
-  source: string,
+  source?: string,
   beforeId?: string,
   layout: any,
   paint: any,
@@ -80,12 +80,14 @@ function diffLayerStyles(map: any, id: string, props: LayerProps, prevProps: Lay
 }
 /* eslint-enable complexity */
 
+let layerCounter = 0;
+
 export default class Layer<Props: LayerProps> extends PureComponent<Props> {
   static propTypes = propTypes;
 
   constructor(props: Props) {
     super(props);
-    this.id = props.id;
+    this.id = props.id || `jsx-layer-${layerCounter++}`;
     this.type = props.type;
   }
 
@@ -107,7 +109,7 @@ export default class Layer<Props: LayerProps> extends PureComponent<Props> {
 
   _createLayer() {
     const map = this._map;
-    const options = Object.assign({}, this.props);
+    const options = Object.assign({id: this.id}, this.props);
     delete options.beforeId;
 
     if (map.style._loaded) {
@@ -120,8 +122,9 @@ export default class Layer<Props: LayerProps> extends PureComponent<Props> {
 
   /* eslint-disable complexity */
   _updateLayer(prevProps: LayerProps) {
-    assert(this.id === this.props.id, 'layer id cannot change');
-    assert(this.type === this.props.type, 'layer type cannot change');
+    const {props} = this;
+    assert(!props.id || props.id === this.id, 'layer id changed');
+    assert(props.type === this.type, 'layer type changed');
 
     const map = this._map;
 
@@ -131,7 +134,7 @@ export default class Layer<Props: LayerProps> extends PureComponent<Props> {
     }
 
     try {
-      diffLayerStyles(map, this.id, this.props, prevProps);
+      diffLayerStyles(map, this.id, props, prevProps);
     } catch (error) {
       console.warn(error); // eslint-disable-line
     }
