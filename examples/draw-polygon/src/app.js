@@ -49,7 +49,7 @@ export default class App extends Component {
   _renderDrawTools = () => {
     // copy from mapbox
     return (
-      <div className="mapboxgl-ctrl-top-right">
+      <div className="mapboxgl-ctrl-top-left">
         <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
           <button
             className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"

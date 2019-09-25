@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import area from '@turf/area';
 const defaultContainer = ({children}) => (
-  <div className="mapboxgl-ctrl-top-left control-panel">{children}</div>
+  <div className="control-panel">{children}</div>
 );
 
 export default class ControlPanel extends PureComponent {
