@@ -1,20 +1,24 @@
 /* global window */
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL from 'react-map-gl';
+import MapGL, {Source, Layer} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
-import {defaultMapStyle, pointLayer} from './map-style.js';
 import {pointOnCircle} from './utils';
-import {fromJS} from 'immutable';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-let animation = null;
+const pointLayer = {
+  type: 'circle',
+  paint: {
+    'circle-radius': 10,
+    'circle-color': '#007cbf'
+  }
+};
 
 export default class App extends Component {
   state = {
-    mapStyle: defaultMapStyle,
+    pointData: null,
     viewport: {
       latitude: 0,
       longitude: -100,
@@ -25,47 +29,41 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    animation = window.requestAnimationFrame(this._animatePoint);
+    this._animatePoint();
   }
 
   componentWillUnmount() {
-    window.cancelAnimationFrame(animation);
+    window.cancelAnimationFrame(this.animation);
   }
 
+  animation = null;
+
   _animatePoint = () => {
-    this._updatePointData(pointOnCircle({center: [-100, 0], angle: Date.now() / 1000, radius: 20}));
-    animation = window.requestAnimationFrame(this._animatePoint);
-  };
-
-  _updatePointData = pointData => {
-    let {mapStyle} = this.state;
-    if (!mapStyle.hasIn(['sources', 'point'])) {
-      mapStyle = mapStyle
-        // Add geojson source to map
-        .setIn(['sources', 'point'], fromJS({type: 'geojson'}))
-        // Add point layer to map
-        .set('layers', mapStyle.get('layers').push(pointLayer));
-    }
-    // Update data source
-    mapStyle = mapStyle.setIn(['sources', 'point', 'data'], pointData);
-
-    this.setState({mapStyle});
+    this.setState({
+      pointData: pointOnCircle({center: [-100, 0], angle: Date.now() / 1000, radius: 20})
+    });
+    this.animation = window.requestAnimationFrame(this._animatePoint);
   };
 
   _onViewportChange = viewport => this.setState({viewport});
 
   render() {
-    const {viewport, mapStyle} = this.state;
+    const {viewport, pointData} = this.state;
 
     return (
       <MapGL
         {...viewport}
         width="100%"
         height="100%"
-        mapStyle={mapStyle}
+        mapStyle="mapbox://styles/mapbox/light-v9"
         onViewportChange={this._onViewportChange}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       >
+        {pointData && (
+          <Source type="geojson" data={pointData}>
+            <Layer {...pointLayer} />
+          </Source>
+        )}
         <ControlPanel containerComponent={this.props.containerComponent} />
       </MapGL>
     );
