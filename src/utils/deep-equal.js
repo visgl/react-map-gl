@@ -18,9 +18,19 @@ export default function deepEqual(a: ?mixed, b: ?mixed): boolean {
       }
     }
     return true;
+  } else if (Array.isArray(b)) {
+    return false;
   }
   if (typeof a === 'object' && typeof b === 'object') {
-    for (const key in a) {
+    const aKeys = Object.keys(a);
+    const bKeys = Object.keys(b);
+    if (aKeys.length !== bKeys.length) {
+      return false;
+    }
+    for (const key of aKeys) {
+      if (!b.hasOwnProperty(key)) {
+        return false;
+      }
       if (!deepEqual(a[key], b[key])) {
         return false;
       }

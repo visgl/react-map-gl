@@ -63,7 +63,6 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
   _createSource() {
     const map = this._map;
     if (map.style._loaded) {
-      // console.log('adding source');
       map.addSource(this.id, this._sourceOptions);
     } else {
       map.once('styledata', () => this.forceUpdate());
