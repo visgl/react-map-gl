@@ -47,6 +47,8 @@ type ViewportProps = {
   bearing: number
 };
 
+type Callers = 'zoom-in' | 'zoom-out' | 'compass';
+
 /*
  * PureComponent doesn't update when context changes, so
  * implementing our own shouldComponentUpdate here.
@@ -65,7 +67,7 @@ export default class NavigationControl extends BaseControl<
     deprecateWarn(props);
   }
 
-  _updateViewport(opts: $Shape<ViewportProps>) {
+  _updateViewport(opts: $Shape<ViewportProps>, caller: Callers) {
     const {viewport} = this._context;
     const mapState = new MapState(Object.assign({}, viewport, opts));
     const viewState = Object.assign({}, mapState.getViewportProps(), LINEAR_TRANSITION_PROPS);
@@ -75,22 +77,22 @@ export default class NavigationControl extends BaseControl<
       this.props.onViewStateChange || this._context.onViewStateChange || noop;
 
     // Call new style callback
-    onViewStateChange({viewState});
+    onViewStateChange({viewState}, caller);
 
     // Call old style callback
-    onViewportChange(viewState);
+    onViewportChange(viewState, caller);
   }
 
   _onZoomIn = () => {
-    this._updateViewport({zoom: this._context.viewport.zoom + 1});
+    this._updateViewport({zoom: this._context.viewport.zoom + 1}, 'zoom-in');
   };
 
   _onZoomOut = () => {
-    this._updateViewport({zoom: this._context.viewport.zoom - 1});
+    this._updateViewport({zoom: this._context.viewport.zoom - 1}, 'zoom-out');
   };
 
   _onResetNorth = () => {
-    this._updateViewport({bearing: 0, pitch: 0});
+    this._updateViewport({bearing: 0, pitch: 0}, 'compass');
   };
 
   _renderCompass() {
