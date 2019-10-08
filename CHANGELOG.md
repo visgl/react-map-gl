@@ -2,6 +2,11 @@
 
 # Version 4.1
 
+## 4.1.16 (Oct 8, 2019)
+- Use JSX sources/layers in examples (PR 2/2) (#897)
+- Add React Source and Layer components (PR 1/2) (#896)
+- Fix draw polygon example styling (#899)
+
 ## 4.1.15 (Sept 23, 2019)
 - Add babel react preset and migrate react components to jsx (#875)
 
