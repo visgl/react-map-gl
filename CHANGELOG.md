@@ -2,6 +2,10 @@
 
 # Version 5.0
 
+## 5.0.12 (Oct 8, 2019)
+- Use JSX sources/layers in examples (PR 2/2) (#897)
+- Add React Source and Layer components (PR 1/2) (#896)
+
 ## 5.0.11 (Sep 20, 2019)
 - Add babel react preset and migrate react components to jsx (#875)
 - Viewport flyTo Interpolation: add support for auto duration and other options. (#866)
