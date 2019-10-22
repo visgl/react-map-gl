@@ -110,11 +110,13 @@ export default class GeolocateControl extends BaseControl<
   componentWillUnmount() {
     // re-implement MapboxGeolocateControl's _onRemove
     // clear the geolocation watch if exists
+    if(this._mapboxGeolocateControl){
     const geolocationWatchID = this._mapboxGeolocateControl._geolocationWatchID;
     if (geolocationWatchID !== undefined) {
       window.navigator.geolocation.clearWatch(geolocationWatchID);
       this._mapboxGeolocateControl._geolocationWatchID = undefined;
     }
+  }
   }
 
   _setupMapboxGeolocateControl = (supportsGeolocation: boolean) => {
