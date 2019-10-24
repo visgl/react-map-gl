@@ -48,8 +48,24 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
   }
 
   componentWillUnmount() {
-    this._map.removeSource(this.id);
-  }
+    if (!this._map || !this._map.getStyle()) {
+      return;
+    }
+
+    const { id } = this.props;
+    if (this._map.getSource(id)) {
+      const { layers } = this._map.getStyle();
+      if (layers) {
+        for (let i = 0; i <= layers.length; i++) {
+          if (layers[i].source === id) {
+            this._map.removeLayer(layers[i].id);
+          }
+        }
+      }
+    }
+
+    this._map.removeSource(id);
+  };
 
   id: string;
   type: string;
