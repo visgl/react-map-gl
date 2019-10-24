@@ -54,14 +54,7 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
 
     const {id} = this.props;
     if (this._map.getSource(id)) {
-      const {layers} = this._map.getStyle();
-      if (layers) {
-        for (let i = 0; i <= layers.length; i++) {
-          if (layers[i].source === id) {
-            this._map.removeLayer(layers[i].id);
-          }
-        }
-      }
+      this._removeLayers();
     }
 
     this._map.removeSource(id);
@@ -74,6 +67,20 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
 
   getSource() {
     return this._map.getSource(this.id);
+  }
+
+  _removeLayers() {
+    const {layers} = this._map.getStyle();
+    if (layers) {
+      return;
+    }
+
+    const {id} = this.props;
+    for (let i = 0; i <= layers.length; i++) {
+      if (layers[i].source === id) {
+        this._map.removeLayer(layers[i].id);
+      }
+    }
   }
 
   _createSource() {
