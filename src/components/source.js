@@ -52,9 +52,9 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
       return;
     }
 
-    const { id } = this.props;
+    const {id} = this.props;
     if (this._map.getSource(id)) {
-      const { layers } = this._map.getStyle();
+      const {layers} = this._map.getStyle();
       if (layers) {
         for (let i = 0; i <= layers.length; i++) {
           if (layers[i].source === id) {
@@ -65,7 +65,7 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
     }
 
     this._map.removeSource(id);
-  };
+  }
 
   id: string;
   type: string;
