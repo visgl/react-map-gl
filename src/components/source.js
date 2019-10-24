@@ -71,7 +71,7 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
 
   _removeLayers() {
     const {layers} = this._map.getStyle();
-    if (layers) {
+    if (!layers) {
       return;
     }
 
