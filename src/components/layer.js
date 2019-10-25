@@ -100,7 +100,13 @@ export default class Layer<Props: LayerProps> extends PureComponent<Props> {
   }
 
   componentWillUnmount() {
-    this._map.removeLayer(this.id);
+    if (!this._map || !this._map.getStyle()) {
+      return;
+    }
+
+    if (this._map.getLayer(this.id)) {
+      this._map.removeLayer(this.id);
+    }
   }
 
   id: string;
