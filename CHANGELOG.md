@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# Version 5.1
+
+## 5.1.0 (Oct 28, 2019)
+- fixed issue 192:fixed geolocate control bug (#914)
+- Viewport flyTo Interpolation: add support for auto duration and other options. (#866)
+
 # Version 5.0
 
 ## 5.0.0 (May 31, 2019)
