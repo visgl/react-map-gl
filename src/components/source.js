@@ -107,7 +107,7 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
       source.setCoordinates(sourceOptions.coordinates);
     } else {
       map.removeSource(this.id);
-      map.addSource(sourceOptions);
+      map.addSource(this.id, sourceOptions);
     }
   }
   /* eslint-enable complexity */
