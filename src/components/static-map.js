@@ -199,7 +199,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
   _updateMapStyle(oldProps: StaticMapProps, newProps: StaticMapProps) {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
-    if (mapStyle !== oldMapStyle) {
+    if (mapStyle !== oldMapStyle && mapStyle) {
       this._map.setStyle(normalizeStyle(mapStyle), {
         diff: !this.props.preventStyleDiffing
       });

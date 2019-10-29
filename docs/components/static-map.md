@@ -83,11 +83,15 @@ Expected to return an object with a `url` property and optionally `headers` and 
 
 ### Map State
 
-##### `mapStyle` {String | Object | Immutable.Map}
+##### `mapStyle` {String | Object | Immutable.Map} - default: `'mapbox://styles/mapbox/light-v8'`
 
 The Mapbox style. A string url or a
 [MapboxGL style](https://www.mapbox.com/mapbox-gl-style-spec/#layer-interactive)
 object (regular JS object or Immutable.Map).
+
+Whenever the `mapStyle` prop changes, the component will attempt to update the style of the underlying Mapbox map. The behavior can be further customized with the `preventStyleDiffing` prop.
+
+`mapStyle` is ignored when explicitly set to `null`.
 
 ##### `width` {Number | String} (required)
 
