@@ -6,6 +6,8 @@ type MapboxStyle =
       layers: Array<any>
     };
 
+const refProps = ['type', 'source', 'source-layer', 'minzoom', 'maxzoom', 'filter', 'layout'];
+
 // Prepare a map style object for diffing
 // If immutable - convert to plain object
 // Work around some issues in the styles that would fail Mapbox's diffing
@@ -19,46 +21,37 @@ export function normalizeStyle(style: ?MapboxStyle): ?MapboxStyle {
   if (style.toJS) {
     style = style.toJS();
   }
-  const layerIndex = style.layers.reduce(
-    (accum, current) => Object.assign(accum, {[current.id]: current}),
-    {}
-  );
+  const layerIndex = {};
 
-  style.layers = style.layers.map(layer => {
-    layer = Object.assign({}, layer);
+  for (const layer of style.layers) {
+    layerIndex[layer.id] = layer;
+  }
 
-    // Breaks style diffing :(
-    delete layer.interactive;
-
+  const layers = style.layers.map(layer => {
     const layerRef = layerIndex[layer.ref];
+    let normalizedLayer = null;
+
+    if ('interactive' in layer) {
+      normalizedLayer = {...layer};
+      // Breaks style diffing :(
+      delete normalizedLayer.interactive;
+    }
+
     // Style diffing doesn't work with refs so expand them out manually before diffing.
     if (layerRef) {
-      delete layer.ref;
-      if (layerRef.type !== undefined) {
-        layer.type = layerRef.type;
-      }
-      if (layerRef.source !== undefined) {
-        layer.source = layerRef.source;
-      }
-      if (layerRef['source-layer'] !== undefined) {
-        layer['source-layer'] = layerRef['source-layer'];
-      }
-      if (layerRef.minzoom !== undefined) {
-        layer.minzoom = layerRef.minzoom;
-      }
-      if (layerRef.maxzoom !== undefined) {
-        layer.maxzoom = layerRef.maxzoom;
-      }
-      if (layerRef.filter !== undefined) {
-        layer.filter = layerRef.filter;
-      }
-      if (layerRef.layout !== undefined) {
-        layer.layout = layer.layout || {};
-        layer.layout = Object.assign({}, layer.layout, layerRef.layout);
+      normalizedLayer = normalizedLayer || {...layer};
+      delete normalizedLayer.ref;
+      // https://github.com/mapbox/mapbox-gl-js/blob/master/src/style-spec/deref.js
+      for (const propName of refProps) {
+        if (propName in layerRef) {
+          normalizedLayer[propName] = layerRef[propName];
+        }
       }
     }
-    return layer;
+
+    return normalizedLayer || layer;
   });
 
-  return style;
+  // Do not mutate the style object provided by the user
+  return {...style, layers};
 }
