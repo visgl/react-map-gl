@@ -2,10 +2,86 @@
 
 # Version 5.0
 
+## 5.0.12 (Oct 8, 2019)
+- Use JSX sources/layers in examples (PR 2/2) (#897)
+- Add React Source and Layer components (PR 1/2) (#896)
+
+## 5.0.11 (Sep 20, 2019)
+- Add babel react preset and migrate react components to jsx (#875)
+
+## 5.0.10 (Aug 13, 2019)
+- React 16.9.0 deprecated lifecycles (#861)
+- remove deprecated react lifecycle methods (#863)
+
+## 5.0.8 (Aug 07, 2019)
+- Add pinchcancel handler (#859)
+- fix delay after clicking close button (#857)
+
+## 5.0.7 (July 16, 2019)
+- Remove event manager properly on unmount (#847)
+
+## 5.0.6 (July 15, 2019)
+- Bump mjolnir (#839)
+- Fix compressed popup when reaching right bound of map (#823)
+
+## 5.0.4 (July 8, 2019)
+- Fix interaction state when using mouse wheel (#840)
+
+## 5.0.3 (June 6, 2019)
+- Fix popup styling (#818)
+
+## 5.0.2 (June 4, 2019)
+- Fix style diff warning when reusing map (#816)
+
+## 5.0.1 (June 4, 2019)
+- bump mjolnir version (#812)
+
 ## 5.0.0 (May 31, 2019)
 - Update mapbox-gl to 1.0.0 (#795)
 
 # Version 4.1
+
+## 4.1.16 (Oct 8, 2019)
+- Use JSX sources/layers in examples (PR 2/2) (#897)
+- Add React Source and Layer components (PR 1/2) (#896)
+- Fix draw polygon example styling (#899)
+
+## 4.1.15 (Sept 23, 2019)
+- Add babel react preset and migrate react components to jsx (#875)
+
+## 4.1.14 (Sept 23, 2019)
+- Viewport flyTo Interpolation: add support for auto duration and other options. (#866)
+
+## 4.1.13 (Aug 20, 2019)
+
+## 4.1.12 (Aug 12, 2019)
+
+- React 16.9.0 deprecated lifecycles (#861)
+- remove deprecated react lifecycle methods (#863)
+
+## 4.1.11 (Aug 7, 2019)
+- Add pinchcancel handler (#859)
+- fix delay after clicking close button (#857)
+
+## 4.1.10 (July 15, 2019)
+- Remove event manager properly on unmount (#847)
+
+## 4.1.9 (July 15, 2019)
+- Bump mjolnir (#839)
+- Fix compressed popup when reaching right bound of map (#823)
+
+## 4.1.8 (July 8, 2019)
+- Fix interaction state when using mouse wheel (#840)
+
+## 4.1.7 (June 6, 2019)
+- Fix popup styling (#818)
+
+## 4.1.6 (June 4, 2019)
+- Fix style diff warning when reusing map (#816)
+
+## 4.1.5 (June 4, 2019)
+- bump mjolnir version (#812)
+- mapbox-gl 0.54
 
 ## 4.1.4 (May 31, 2019)
 - Pass callbacks via MapContext (#799)
