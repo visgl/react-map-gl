@@ -48,7 +48,12 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
   }
 
   componentWillUnmount() {
-    this._map.removeSource(this.id);
+    /* global requestAnimationFrame */
+    // Do not remove source immediately because the
+    // dependent <Layer>s' componentWillUnmount() might not have been called
+    // Removing source before dependent layers will throw error
+    // TODO - find a more robust solution
+    requestAnimationFrame(() => this._map.removeSource(this.id));
   }
 
   id: string;
