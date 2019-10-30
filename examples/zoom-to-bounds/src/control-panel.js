@@ -12,7 +12,7 @@ export default class ControlPanel extends PureComponent {
         <p>Click on a San Fransisco Neighborhood to zoom in.</p>
         <div className="source-link">
           <a
-            href="https://github.com/uber/react-map-gl/tree/5.0-release/examples/zoom-to-bounds"
+            href="https://github.com/uber/react-map-gl/tree/5.1-release/examples/zoom-to-bounds"
             target="_new"
           >
             View Code ↗

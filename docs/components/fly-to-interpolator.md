@@ -27,4 +27,4 @@ Parameters:
 
 
 ## Source
-[viewport-fly-to-interpolator.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/utils/transition/viewport-fly-to-interpolator.js)
+[viewport-fly-to-interpolator.js](https://github.com/uber/react-map-gl/tree/5.1-release/src/utils/transition/viewport-fly-to-interpolator.js)

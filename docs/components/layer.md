@@ -53,5 +53,5 @@ Note that layers are added by the order that they mount. They are *NOT* reordere
 `source` is required by some layer types in the Mapbox style specification. If `<Layer>` is used as the child of a [Source](/docs/components/source.md) component, this prop will be overwritten by the id of the parent source.
 
 ## Source
-[layer.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/layer.js)
+[layer.js](https://github.com/uber/react-map-gl/tree/5.1-release/src/components/layer.js)
 
