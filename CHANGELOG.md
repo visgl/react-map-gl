@@ -1,5 +1,12 @@
 # CHANGELOG
 
+# Version 5.1
+
+## 5.1.0 (Oct 30, 2019)
+- Avoid mutating style objects during normalization (#926)
+- Fix crash during Source component removal (#928)
+- Ignore empty mapStyle (#927)
+
 # Version 5.0
 
 ## 5.0.12 (Oct 8, 2019)
