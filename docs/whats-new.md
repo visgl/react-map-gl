@@ -5,7 +5,7 @@ Release date: Oct 30, 2019
 ## Highlights
 
 - **New Components**: [`Layer`](/#/Documentation/api-reference/layer) and [`Source`](/#/Documentation/api-reference/source) have been added to provide better React parity with the `Mapbox GL JS` API.
-- **New props**: Add support for auto duration and other customized options for [`FlyToInterpolator`](/#/Documentation/api-reference/fly-to-interpolator).
+- **Viewport transition**: `transitionDuration` can be set to `'auto'` when using [`FlyToInterpolator`](/#/Documentation/api-reference/fly-to-interpolator).
 - **New Example**: Add an [example](https://uber.github.io/react-map-gl/#/Examples/draw-polygon) with drawing library [react-map-gl-draw](https://github.com/uber/nebula.gl/tree/master/modules/react-map-gl-draw).
 
 # react-map-gl v5.0
