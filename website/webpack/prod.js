@@ -1,5 +1,6 @@
-const config = require('./config');
+const webpack = require('webpack');
 const {resolve} = require('path');
+const config = require('./config');
 
 module.exports = Object.assign(config, {
 
@@ -16,5 +17,11 @@ module.exports = Object.assign(config, {
       'react-map-gl': resolve('../src'),
       '../utils/mapboxgl': resolve('../node_modules/mapbox-gl'),
     }
-  }
+  },
+
+  plugins: config.plugins.concat([
+    new webpack.DefinePlugin({
+      DOCS_DIR: JSON.stringify('https://raw.githubusercontent.com/uber/react-map-gl/master')
+    })
+  ])
 });

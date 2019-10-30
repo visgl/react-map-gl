@@ -3,7 +3,9 @@ import ExamplesComponent from '../components/examples';
 import PagesComponent from '../components/page';
 
 function getDocUrl(filename) {
-  return `docs/${filename}`;
+  // DOCS_DIR specified in webpack config file
+  // eslint-disable-next-line no-undef
+  return `${DOCS_DIR}/docs/${filename}`;
 }
 
 // mapping from file path in source to generated page url
@@ -164,13 +166,10 @@ const docPages = {
         {
           name: 'SVGOverlay',
           content: getDocUrl('overlays/svg-overlay.md')
-        },
+        }
       ]
     }
   ])
 };
 
-export const Pages = [
-  examplePages,
-  docPages
-];
+export const Pages = [examplePages, docPages];
