@@ -1,3 +1,13 @@
+# react-map-gl v5.1
+
+Release date: Oct 30, 2019
+
+## Highlights
+
+- **New Components**: [`Layer`](/#/Documentation/api-reference/layer) and [`Source`](/#/Documentation/api-reference/source) have been added to provide better React parity with the `Mapbox GL JS` API.
+- **Viewport transition**: `transitionDuration` can be set to `'auto'` when using [`FlyToInterpolator`](/#/Documentation/api-reference/fly-to-interpolator).
+- **New Example**: Add an [example](https://uber.github.io/react-map-gl/#/Examples/draw-polygon) with drawing library [react-map-gl-draw](https://github.com/uber/nebula.gl/tree/master/modules/react-map-gl-draw).
+
 # react-map-gl v5.0
 
 Release date: May 31, 2019
@@ -14,7 +24,7 @@ Release date: Mar 14, 2019
 
 ## Highlights
 
-- **New Components**: [`FullscreenControl`](/#/Documentation/api-reference/fullscreen-control.md), [`GeolocateControl`](/#/Documentation/api-reference/geolocate-control.md) have been added to provide better React parity with the `Mapbox GL JS` API.
+- **New Components**: [`FullscreenControl`](/#/Documentation/api-reference/fullscreen-control), [`GeolocateControl`](/#/Documentation/api-reference/geolocate-control) have been added to provide better React parity with the `Mapbox GL JS` API.
 - **New callback props** `InteractiveMap` supports more callbacks:
   + `onNativeClick`
 
