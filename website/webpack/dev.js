@@ -16,5 +16,10 @@ module.exports = Object.assign(config, {
 
   devtool: 'cheap-source-maps',
 
-  plugins: config.plugins.concat([new webpack.HotModuleReplacementPlugin()])
+  plugins: config.plugins.concat([
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      DOCS_DIR: JSON.stringify('.')
+    })
+  ])
 });
