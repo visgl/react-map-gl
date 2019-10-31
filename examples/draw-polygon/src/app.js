@@ -73,12 +73,7 @@ export default class App extends Component {
       featureIndex = features.length - 1;
     }
     const polygon = features && features.length ? features[featureIndex] : null;
-    return (
-      <ControlPanel
-        containerComponent={this.props.containerComponent}
-        polygon={polygon}
-      />
-    );
+    return <ControlPanel containerComponent={this.props.containerComponent} polygon={polygon} />;
   };
 
   render() {
@@ -111,5 +106,5 @@ export default class App extends Component {
 }
 
 export function renderToDom(container) {
-  render(<App/>, container);
+  render(<App />, container);
 }
