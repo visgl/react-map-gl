@@ -53,7 +53,13 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
     // dependent <Layer>s' componentWillUnmount() might not have been called
     // Removing source before dependent layers will throw error
     // TODO - find a more robust solution
-    requestAnimationFrame(() => this._map.removeSource(this.id));
+    const map = this._map;
+    if (map) {
+      map.off('styledata', this._updateSource);
+      if (map.style) {
+        requestAnimationFrame(() => map.removeSource(this.id));
+      }
+    }
   }
 
   id: string;
@@ -62,23 +68,27 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
   _sourceOptions: any = {};
 
   getSource() {
-    return this._map.getSource(this.id);
+    const map = this._map;
+    return map && map.style && map.getSource(this.id);
   }
 
-  _createSource() {
+  _createSource(sourceOptions: any) {
     const map = this._map;
-    if (map.style._loaded) {
-      map.addSource(this.id, this._sourceOptions);
-    } else {
-      map.once('styledata', () => this.forceUpdate());
+    if (map.style && map.style._loaded) {
+      map.addSource(this.id, sourceOptions);
     }
   }
 
   /* eslint-disable complexity */
-  _updateSource() {
+  _updateSource = () => {
+    const {type, _map: map} = this;
+    if (!map) {
+      return;
+    }
+
     const {_sourceOptions: sourceOptions, props} = this;
     assert(!props.id || props.id === this.id, 'source id changed');
-    assert(props.type === this.type, 'source type changed');
+    assert(props.type === type, 'source type changed');
 
     let changedKey = null;
     let changedKeyCount = 0;
@@ -91,10 +101,9 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
       }
     }
 
-    const {type, _map: map} = this;
     const source = this.getSource();
     if (!source) {
-      this._createSource();
+      this._createSource(sourceOptions);
       return;
     }
     if (!changedKeyCount) {
@@ -114,11 +123,14 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
       map.removeSource(this.id);
       map.addSource(this.id, sourceOptions);
     }
-  }
+  };
   /* eslint-enable complexity */
 
   _render(context: MapContextProps) {
-    this._map = context.map;
+    if (!this._map) {
+      this._map = context.map;
+      this._map.on('styledata', this._updateSource);
+    }
     this._updateSource();
     return React.Children.map(this.props.children, child =>
       cloneElement(child, {
