@@ -92,58 +92,76 @@ export default class Layer<Props: LayerProps> extends PureComponent<Props> {
   }
 
   componentDidMount() {
-    this._createLayer();
+    this._updateLayer();
   }
 
-  componentDidUpdate(prevProps: LayerProps) {
-    this._updateLayer(prevProps);
+  componentDidUpdate() {
+    this._updateLayer();
   }
 
   componentWillUnmount() {
-    this._map.removeLayer(this.id);
+    const map = this._map;
+    if (map) {
+      map.off('styledata', this._updateLayer);
+      if (map.style) {
+        map.removeLayer(this.id);
+      }
+    }
   }
 
   id: string;
   type: string;
   _map: any = null;
+  _layerOptions: any = {};
+
+  getLayer() {
+    const map = this._map;
+    return map && map.style && map.getLayer(this.id);
+  }
 
   _createLayer() {
     const map = this._map;
-    const options = Object.assign({}, this.props);
-    options.id = this.id;
-    delete options.beforeId;
 
-    if (map.style._loaded) {
-      // console.log('adding layer');
+    if (map.style && map.style._loaded) {
+      const options = Object.assign({}, this.props);
+      options.id = this.id;
+      delete options.beforeId;
+
       map.addLayer(options, this.props.beforeId);
-    } else {
-      map.once('styledata', () => this.forceUpdate());
+      this._layerOptions = options;
     }
   }
 
   /* eslint-disable complexity */
-  _updateLayer(prevProps: LayerProps) {
-    const {props} = this;
+  _updateLayer = () => {
+    const map = this._map;
+    if (!map) {
+      return;
+    }
+
+    const {props, _layerOptions: layerOptions} = this;
     assert(!props.id || props.id === this.id, 'layer id changed');
     assert(props.type === this.type, 'layer type changed');
 
-    const map = this._map;
-
-    if (!map.getLayer(this.id)) {
+    if (!this.getLayer()) {
       this._createLayer();
       return;
     }
 
     try {
-      diffLayerStyles(map, this.id, props, prevProps);
+      diffLayerStyles(map, this.id, props, layerOptions);
+      Object.assign(layerOptions, props);
     } catch (error) {
       console.warn(error); // eslint-disable-line
     }
-  }
+  };
   /* eslint-disable complexity */
 
   _render(context: MapContextProps) {
-    this._map = context.map;
+    if (!this._map) {
+      this._map = context.map;
+      this._map.on('styledata', this._updateLayer);
+    }
     return null;
   }
 
