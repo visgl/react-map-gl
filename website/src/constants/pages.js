@@ -128,6 +128,10 @@ const docPages = {
           content: getDocUrl('components/interactive-map.md')
         },
         {
+          name: 'Layer',
+          content: getDocUrl('components/layer.md')
+        },
+        {
           name: 'LinearInterpolator',
           content: getDocUrl('components/linear-interpolator.md')
         },
@@ -158,6 +162,10 @@ const docPages = {
         {
           name: 'Popup',
           content: getDocUrl('components/popup.md')
+        },
+        {
+          name: 'Source',
+          content: getDocUrl('components/source.md')
         },
         {
           name: 'StaticMap',
