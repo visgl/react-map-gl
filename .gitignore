@@ -9,5 +9,6 @@ npm-debug.log
 */**/package-lock.json
 yarn-error.log
 .DS_Store
+.nyc_output/
 
 .idea
