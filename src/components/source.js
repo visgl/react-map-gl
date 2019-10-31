@@ -123,7 +123,7 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
       map.removeSource(this.id);
       map.addSource(this.id, sourceOptions);
     }
-  }
+  };
   /* eslint-enable complexity */
 
   _render(context: MapContextProps) {

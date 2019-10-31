@@ -154,7 +154,7 @@ export default class Layer<Props: LayerProps> extends PureComponent<Props> {
     } catch (error) {
       console.warn(error); // eslint-disable-line
     }
-  }
+  };
   /* eslint-disable complexity */
 
   _render(context: MapContextProps) {
