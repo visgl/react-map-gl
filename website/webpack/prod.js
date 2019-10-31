@@ -3,7 +3,6 @@ const {resolve} = require('path');
 const config = require('./config');
 
 module.exports = Object.assign(config, {
-
   mode: 'production',
 
   output: {
@@ -15,7 +14,7 @@ module.exports = Object.assign(config, {
     modules: config.resolve.modules,
     alias: {
       'react-map-gl': resolve('../src'),
-      '../utils/mapboxgl': resolve('../node_modules/mapbox-gl'),
+      '../utils/mapboxgl': resolve('../node_modules/mapbox-gl')
     }
   },
 
