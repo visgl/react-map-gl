@@ -21,7 +21,7 @@ module.exports = Object.assign(config, {
 
   plugins: config.plugins.concat([
     new webpack.DefinePlugin({
-      DOCS_DIR: JSON.stringify('https://raw.githubusercontent.com/uber/react-map-gl/master')
+      DOCS_DIR: JSON.stringify('https://raw.githubusercontent.com/uber/react-map-gl/5.1-release')
     })
   ])
 });

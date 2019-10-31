@@ -2,6 +2,9 @@
 
 # Version 5.1
 
+## 5.1.1 (Oct 31, 2019)
+- Fix more crashes when source/layer components are removed (#933)
+
 ## 5.1.0 (Oct 30, 2019)
 - Avoid mutating style objects during normalization (#926)
 - Fix crash during Source component removal (#928)
