@@ -141,6 +141,10 @@ export default class GeolocateControl extends BaseControl<
 
     this._mapboxGeolocateControl = new mapboxgl.GeolocateControl(controlOptions);
 
+    if (this._context) {
+      this._mapboxGeolocateControl._map = this._context.map
+    }
+
     // the following re-implement MapboxGeolocateControl's _setupUI
     // replace mapbox internal prop
     this._mapboxGeolocateControl._watchState = 'OFF';

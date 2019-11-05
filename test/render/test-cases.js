@@ -1,6 +1,6 @@
 /* global __MAPBOX_TOKEN__ */
 import React from 'react';
-import {StaticMap, NavigationControl, Popup, Source, Layer} from 'react-map-gl';
+import {StaticMap, NavigationControl, GeolocateControl, Popup, Source, Layer} from 'react-map-gl';
 
 const EMPTY_MAP_STYLE = {
   version: 8,
@@ -54,7 +54,7 @@ export default [
       bearing: 30,
       children: (
         <div style={{position: 'absolute', left: 10, top: 10}}>
-          <NavigationControl />
+          <NavigationControl/>
         </div>
       )
     },
@@ -95,7 +95,7 @@ export default [
           type="geojson"
           data={{type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.78]}}}
         >
-          <Layer type="circle" paint={{'circle-radius': 10, 'circle-color': '#08f'}} />
+          <Layer type="circle" paint={{'circle-radius': 10, 'circle-color': '#08f'}}/>
         </Source>
       ]
     },
@@ -116,7 +116,7 @@ export default [
           type="geojson"
           data={{type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.78]}}}
         >
-          <Layer type="circle" paint={{'circle-radius': 10, 'circle-color': '#08f'}} />
+          <Layer type="circle" paint={{'circle-radius': 10, 'circle-color': '#08f'}}/>
         </Source>
       ]
     },
@@ -134,5 +134,25 @@ export default [
       children: []
     },
     goldenImage: 'test/render/golden-images/basic-map.png'
+  },
+  {
+    title: 'GeolocateControl',
+    Component: StaticMap,
+    props: {
+      mapboxApiAccessToken: __MAPBOX_TOKEN__,
+      mapStyle: EMPTY_MAP_STYLE,
+      longitude: -122.4,
+      latitude: 37.78,
+      zoom: 12.5,
+      bearing: 30,
+      children: (
+        <GeolocateControl
+          style={{position: 'absolute', left: 10, top: 10}}
+          positionOptions={{enableHighAccuracy: true}}
+          trackUserLocation={true}
+        />
+      )
+    },
+    goldenImage: 'test/render/golden-images/geolocate-control.png'
   }
 ];

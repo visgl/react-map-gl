@@ -21,5 +21,5 @@ enableDOMLogging({
   })
 });
 
-require('./src/utils');
+// require('./src/utils');
 require('./render');
