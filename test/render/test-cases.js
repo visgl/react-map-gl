@@ -54,7 +54,7 @@ export default [
       bearing: 30,
       children: (
         <div style={{position: 'absolute', left: 10, top: 10}}>
-          <NavigationControl/>
+          <NavigationControl />
         </div>
       )
     },
@@ -95,7 +95,7 @@ export default [
           type="geojson"
           data={{type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.78]}}}
         >
-          <Layer type="circle" paint={{'circle-radius': 10, 'circle-color': '#08f'}}/>
+          <Layer type="circle" paint={{'circle-radius': 10, 'circle-color': '#08f'}} />
         </Source>
       ]
     },
@@ -116,7 +116,7 @@ export default [
           type="geojson"
           data={{type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.78]}}}
         >
-          <Layer type="circle" paint={{'circle-radius': 10, 'circle-color': '#08f'}}/>
+          <Layer type="circle" paint={{'circle-radius': 10, 'circle-color': '#08f'}} />
         </Source>
       ]
     },

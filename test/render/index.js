@@ -44,7 +44,7 @@ function runTestCase({Component = MapGL, threshold = 0.99, props, goldenImage}) 
             region: getBoundingBoxInPage(container),
             tolerance: 0.05
             // Uncomment to save screenshot
-            , saveOnFail: true
+            // , saveOnFail: true
           })
         )
         .then(result => {
