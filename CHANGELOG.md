@@ -2,6 +2,12 @@
 
 # Version 5.0
 
+## 5.1.1 (Oct 31, 2019)
+???
+
+## 5.1.0 (Oct 30, 2019) 
+???
+
 ## 5.0.12 (Oct 8, 2019)
 - Use JSX sources/layers in examples (PR 2/2) (#897)
 - Add React Source and Layer components (PR 1/2) (#896)
