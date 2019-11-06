@@ -129,6 +129,15 @@ export default class GeolocateControl extends BaseControl<
       return;
     }
 
+    if (!this._context || !this._context.map) {
+      /* eslint-disable no-console, no-undef */
+      console.warn(
+        'Mapbox map is not initialized.'
+      );
+      /* eslint-enable no-console, no-undef */
+      return;
+    }
+
     const controlOptions = {};
     ['positionOptions', 'fitBoundsOptions', 'trackUserLocation', 'showUserLocation'].forEach(
       prop => {
@@ -140,10 +149,7 @@ export default class GeolocateControl extends BaseControl<
     );
 
     this._mapboxGeolocateControl = new mapboxgl.GeolocateControl(controlOptions);
-
-    if (this._context) {
-      this._mapboxGeolocateControl._map = this._context.map;
-    }
+    this._mapboxGeolocateControl._map = this._context.map;
 
     // the following re-implement MapboxGeolocateControl's _setupUI
     // replace mapbox internal prop
