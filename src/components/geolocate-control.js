@@ -131,9 +131,7 @@ export default class GeolocateControl extends BaseControl<
 
     if (!this._context || !this._context.map) {
       /* eslint-disable no-console, no-undef */
-      console.warn(
-        'Mapbox map is not initialized.'
-      );
+      console.warn('Mapbox map is not initialized.');
       /* eslint-enable no-console, no-undef */
       return;
     }
