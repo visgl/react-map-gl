@@ -156,6 +156,7 @@ export default class GeolocateControl extends BaseControl<
   };
 
   _onClickGeolocate = () => {
+    this._mapboxGeolocateControl._map = this._context.map;
     return this._mapboxGeolocateControl.trigger();
   };
 
