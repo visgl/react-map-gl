@@ -1,6 +1,8 @@
 # CHANGELOG
 
 # Version 5.1
+## 5.1.2 (Nov 8, 2019)
+- Fix geolocate control crash (#934)
 
 ## 5.1.1 (Oct 31, 2019)
 - Fix more crashes when source/layer components are removed (#933)
