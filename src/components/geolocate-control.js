@@ -130,7 +130,7 @@ export default class GeolocateControl extends BaseControl<
     }
 
     const controlOptions = {};
-    ['positionOptions', 'fitBoundsOptions', 'trackUserLocation', 'showUserLocation'].forEach(
+    ['positionOptions', 'fitBoundsOptions', 'trackUserLocation'].forEach(
       prop => {
         // For null option, use Mapbox default value
         if (prop in this.props && this.props[prop] !== null) {
@@ -213,9 +213,8 @@ export default class GeolocateControl extends BaseControl<
   };
 
   _renderMarker = () => {
-    const {showUserLocation} = this.props;
     const {markerPosition} = this.state;
-    if (!showUserLocation || !markerPosition) {
+    if (!markerPosition) {
       return null;
     }
 
@@ -224,7 +223,7 @@ export default class GeolocateControl extends BaseControl<
       <Marker
         key="location-maker"
         ref={this._markerRef}
-        className="mapboxgl-user-location-dot"
+        className={'mapboxgl-user-location-dot'}
         longitude={markerPosition.longitude}
         latitude={markerPosition.latitude}
         onContextMenu={e => e.preventDefault()}
