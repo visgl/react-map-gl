@@ -39,7 +39,7 @@ export default class App extends Component {
         <GeolocateControl
           style={geolocateStyle}
           positionOptions={{enableHighAccuracy: true}}
-          // trackUserLocation={true}
+          trackUserLocation={true}
         />
       </MapGL>
     );

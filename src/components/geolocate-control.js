@@ -47,7 +47,7 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   positionOptions: null,
   fitBoundsOptions: null,
   trackUserLocation: false,
-  showUserLocation: false
+  showUserLocation: true
 });
 
 export type GeolocateControlProps = BaseControlProps & {
@@ -231,7 +231,7 @@ export default class GeolocateControl extends BaseControl<
       <Marker
         key="location-maker"
         ref={this._markerRef}
-        className={'mapboxgl-user-location-dot'}
+        className="mapboxgl-user-location-dot"
         longitude={markerPosition.longitude}
         latitude={markerPosition.latitude}
         onContextMenu={e => e.preventDefault()}
