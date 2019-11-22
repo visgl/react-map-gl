@@ -1,6 +1,11 @@
 # CHANGELOG
 
 # Version 5.1
+
+## 5.1.3 (Nov 22, 2019)
+- Remove overwritten dotElement from geolocate control (#944)
+- Fix geolocate control crash: disable Mapbox's showUserLocation marker (#943)
+
 ## 5.1.2 (Nov 8, 2019)
 - Fix geolocate control crash (#934)
 
