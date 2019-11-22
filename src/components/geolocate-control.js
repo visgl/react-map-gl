@@ -96,7 +96,6 @@ export default class GeolocateControl extends BaseControl<
   _mapboxGeolocateControl: any = null;
 
   _geolocateButtonRef: {current: null | HTMLButtonElement} = createRef();
-  _markerRef: {current: null | Marker} = createRef();
 
   componentDidMount() {
     isGeolocationSupported().then(result => {
@@ -227,7 +226,6 @@ export default class GeolocateControl extends BaseControl<
       // $FlowFixMe
       <Marker
         key="location-maker"
-        ref={this._markerRef}
         className="mapboxgl-user-location-dot"
         longitude={markerPosition.longitude}
         latitude={markerPosition.latitude}
