@@ -73,6 +73,12 @@ type State = {
   supportsGeolocation: boolean,
   markerPosition: ?Coordinate
 };
+type GeolocateControlOptions = {
+  positionOptions?: any,
+  fitBoundsOptions?: any,
+  trackUserLocation?: boolean,
+  showUserLocation?: boolean
+};
 
 export default class GeolocateControl extends BaseControl<
   GeolocateControlProps,
@@ -129,16 +135,17 @@ export default class GeolocateControl extends BaseControl<
       return;
     }
 
-    const controlOptions = {};
+    // For null option, use Mapbox default value
+    const controlOptions: GeolocateControlOptions = {
+      // disable showUserLocation to avoid Mapbox accessing marker before rendering
+      showUserLocation: false
+    };
     ['positionOptions', 'fitBoundsOptions', 'trackUserLocation'].forEach(prop => {
-      // For null option, use Mapbox default value
       if (prop in this.props && this.props[prop] !== null) {
         controlOptions[prop] = this.props[prop];
       }
     });
 
-    // disable showUserLocation to avoid Mapbox accessing marker before rendering
-    controlOptions.showUserLocation = false;
     this._mapboxGeolocateControl = new mapboxgl.GeolocateControl(controlOptions);
 
     // the following re-implement MapboxGeolocateControl's _setupUI
@@ -159,9 +166,7 @@ export default class GeolocateControl extends BaseControl<
     this._mapboxGeolocateControl._map = this._context.map;
 
     if (this.props.showUserLocation) {
-      this._mapboxGeolocateControl.on('geolocate', position => {
-        this._updateMarker(position);
-      });
+      this._mapboxGeolocateControl.on('geolocate', this._updateMarker);
     }
 
     return this._mapboxGeolocateControl.trigger();
