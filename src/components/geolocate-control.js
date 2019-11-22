@@ -105,14 +105,6 @@ export default class GeolocateControl extends BaseControl<
     });
   }
 
-  componentDidUpdate() {
-    // MapboxGeolocateControl needs manipulate the style of Marker's container
-    const markerRef = this._markerRef.current;
-    if (this._mapboxGeolocateControl && markerRef) {
-      this._mapboxGeolocateControl._dotElement = markerRef._containerRef.current;
-    }
-  }
-
   componentWillUnmount() {
     // re-implement MapboxGeolocateControl's _onRemove
     // clear the geolocation watch if exists
