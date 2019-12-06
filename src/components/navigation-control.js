@@ -96,8 +96,16 @@ export default class NavigationControl extends BaseControl<
   _renderCompass() {
     const {bearing} = this._context.viewport;
     return (
-      <span className="mapboxgl-ctrl-compass-arrow" style={{transform: `rotate(${-bearing}deg)`}} />
+      <span
+        className="mapboxgl-ctrl-icon"
+        aria-hidden="true"
+        style={{transform: `rotate(${-bearing}deg)`}}
+      />
     );
+  }
+
+  _renderIcon() {
+    return <span className="mapboxgl-ctrl-icon" aria-hidden="true" />;
   }
 
   _renderButton(type: string, label: string, callback: Function, children: any) {
@@ -119,8 +127,9 @@ export default class NavigationControl extends BaseControl<
 
     return (
       <div className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`} ref={this._containerRef}>
-        {showZoom && this._renderButton('zoom-in', 'Zoom In', this._onZoomIn)}
-        {showZoom && this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut)}
+        {showZoom && this._renderButton('zoom-in', 'Zoom In', this._onZoomIn, this._renderIcon())}
+        {showZoom &&
+          this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut, this._renderIcon())}
         {showCompass &&
           this._renderButton('compass', 'Reset North', this._onResetNorth, this._renderCompass())}
       </div>

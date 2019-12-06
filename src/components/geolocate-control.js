@@ -211,7 +211,9 @@ export default class GeolocateControl extends BaseControl<
         type="button"
         title={label}
         onClick={callback}
-      />
+      >
+        <span className="mapboxgl-ctrl-icon" aria-hidden="true" />
+      </button>
     );
   };
 
