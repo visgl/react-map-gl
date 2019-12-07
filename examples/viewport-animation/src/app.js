@@ -44,7 +44,7 @@ export default class App extends Component {
           height="100%"
           mapStyle="mapbox://styles/mapbox/dark-v9"
           onViewportChange={this._onViewportChange}
-          dragToRotate={false}
+          dragRotate={false}
           mapboxApiAccessToken={MAPBOX_TOKEN}
         />
         <ControlPanel
