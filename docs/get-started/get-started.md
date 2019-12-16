@@ -12,29 +12,24 @@ npm install --save react-map-gl
 ## Example
 
 ```js
-import {Component} from 'react';
+import React, { useState } from 'react';
 import ReactMapGL from 'react-map-gl';
 
-class Map extends Component {
+function Map() {
+  const [viewport, setViewport] = useState({
+    width: 400,
+    height: 400,
+    latitude: 37.7577,
+    longitude: -122.4376,
+    zoom: 8
+  });
 
-  state = {
-    viewport: {
-      width: 400,
-      height: 400,
-      latitude: 37.7577,
-      longitude: -122.4376,
-      zoom: 8
-    }
-  };
-
-  render() {
-    return (
-      <ReactMapGL
-        {...this.state.viewport}
-        onViewportChange={(viewport) => this.setState({viewport})}
-      />
-    );
-  }
+  return (
+    <ReactMapGL
+      {...viewport}
+      onViewportChange={viewport => setViewport(viewport)}
+    />
+  );
 }
 ```
 
