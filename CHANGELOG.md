@@ -2,6 +2,9 @@
 
 # Version 5.1
 
+## 5.1.4 (Dec 16, 2019)
+- Fix TransitionManager when used with deck.gl's interpolators (#956)
+
 ## 5.1.3 (Nov 22, 2019)
 - Remove overwritten dotElement from geolocate control (#944)
 - Fix geolocate control crash: disable Mapbox's showUserLocation marker (#943)
