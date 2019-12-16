@@ -35,7 +35,7 @@ export default [
     title: 'Custom tile server',
     props: {
       mapboxApiAccessToken: '',
-      mapStyle: 'https://d3dt5tsgfu6lcf.cloudfront.net/style/tools/web',
+      mapStyle: 'http://localhost:5000/test/data/style.json',
       longitude: -122.4,
       latitude: 37.78,
       zoom: 12.5
