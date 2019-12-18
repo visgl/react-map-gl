@@ -22,13 +22,20 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Show/hide compass button
   showCompass: PropTypes.bool,
   // Show/hide zoom buttons
-  showZoom: PropTypes.bool
+  showZoom: PropTypes.bool,
+  // Custom labels assigned to the controls
+  zoomInLabel: PropTypes.string,
+  zoomOutLabel: PropTypes.string,
+  compassLabel: PropTypes.string
 });
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
   showCompass: true,
-  showZoom: true
+  showZoom: true,
+  zoomInLabel: 'Zoom In',
+  zoomOutLabel: 'Zoom Out',
+  compassLabel: 'Reset North'
 });
 
 export type NavigationControlProps = BaseControlProps & {
@@ -36,7 +43,10 @@ export type NavigationControlProps = BaseControlProps & {
   onViewStateChange?: Function,
   onViewportChange?: Function,
   showCompass: boolean,
-  showZoom: boolean
+  showZoom: boolean,
+  zoomInLabel: string,
+  zoomOutLabel: string,
+  compassLabel: string
 };
 
 type ViewportProps = {
@@ -115,14 +125,14 @@ export default class NavigationControl extends BaseControl<
   }
 
   _render() {
-    const {className, showCompass, showZoom} = this.props;
+    const {className, showCompass, showZoom, zoomInLabel, zoomOutLabel, compassLabel} = this.props;
 
     return (
       <div className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`} ref={this._containerRef}>
-        {showZoom && this._renderButton('zoom-in', 'Zoom In', this._onZoomIn)}
-        {showZoom && this._renderButton('zoom-out', 'Zoom Out', this._onZoomOut)}
+        {showZoom && this._renderButton('zoom-in', zoomInLabel, this._onZoomIn)}
+        {showZoom && this._renderButton('zoom-out', zoomOutLabel, this._onZoomOut)}
         {showCompass &&
-          this._renderButton('compass', 'Reset North', this._onResetNorth, this._renderCompass())}
+          this._renderButton('compass', compassLabel, this._onResetNorth, this._renderCompass())}
       </div>
     );
   }

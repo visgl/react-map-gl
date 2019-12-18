@@ -51,6 +51,15 @@ Stop propagation of click event to the map component. Can be used to stop map fr
 ##### `captureDoubleClick` {Boolean} - default: `true`
 Stop propagation of dblclick event to the map component. Can be used to stop map from zooming when this component is double clicked.
 
+##### `zoomInLabel` {String} - default: `Zoom In`
+Label applied to the zoom in control button.
+
+##### `zoomOutLabel` {String} - default: `Zoom Out`
+Label applied to the zoom out control button.
+
+##### `compassLabel` {String} - default: `Reset North`
+Label applied to the compass control button.
+
 ## Styling
 
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.

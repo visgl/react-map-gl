@@ -58,6 +58,10 @@ A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied
 
 Check [`locate user`](https://github.com/uber/react-map-gl/tree/5.1-release/examples/locate-user/src/app.js) example for basic styling.
 
+##### `label` {String} - default: `Geolocate`
+
+Label applied to the Geolocate control button.
+
 ## Styling
 
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.
