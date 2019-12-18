@@ -25,6 +25,8 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
   className: PropTypes.string,
   style: PropTypes.object,
+  // Custom label assigned to the control
+  label: PropTypes.string,
 
   // mapbox geolocate options
   // https://docs.mapbox.com/mapbox-gl-js/api/#geolocatecontrol
@@ -42,6 +44,7 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
   style: {},
+  label: 'Geolocate',
 
   // mapbox geolocate options
   positionOptions: null,
@@ -53,6 +56,7 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
 export type GeolocateControlProps = BaseControlProps & {
   className: string,
   style: Object,
+  label: string,
   positionOptions: any,
   fitBoundsOptions: any,
   trackUserLocation: boolean,
@@ -241,7 +245,7 @@ export default class GeolocateControl extends BaseControl<
       return null;
     }
 
-    const {className, style} = this.props;
+    const {className, style, label} = this.props;
     return (
       <div>
         {this._renderMarker()}
@@ -252,7 +256,7 @@ export default class GeolocateControl extends BaseControl<
           style={style}
           onContextMenu={e => e.preventDefault()}
         >
-          {this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)}
+          {this._renderButton('geolocate', label, this._onClickGeolocate)}
         </div>
       </div>
     );
