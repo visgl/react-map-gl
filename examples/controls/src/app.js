@@ -35,6 +35,8 @@ export default class App extends Component {
         bearing: 0,
         pitch: 0
       },
+      // Perf: the markers never change, avoid rerender when interacting with the map
+      markers: CITIES.map(this._renderCityMarker),
       popupInfo: null
     };
   }
@@ -71,7 +73,7 @@ export default class App extends Component {
   }
 
   render() {
-    const {viewport} = this.state;
+    const {viewport, markers} = this.state;
 
     return (
       <MapGL
@@ -82,7 +84,7 @@ export default class App extends Component {
         onViewportChange={this._updateViewport}
         mapboxApiAccessToken={TOKEN}
       >
-        {CITIES.map(this._renderCityMarker)}
+        {markers}
 
         {this._renderPopup()}
 

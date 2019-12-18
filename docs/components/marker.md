@@ -21,6 +21,41 @@ class Map extends Component {
 }
 ```
 
+Performance notes: if a large number of markers are needed, it's generally favorable to cache the `<Marker>` nodes, so that we don't rerender them when the viewport changes.
+
+```js
+import React, {Component} from 'react';
+import ReactMapGL, {Marker} from 'react-map-gl';
+
+const CITIES = [...];
+
+// React.memo ensures that the markers are only rerendered when data changes
+const Markers = React.memo(({data}) => 
+  data.map(
+    city => <Marker key={city.name} longitude={city.longitude} latitude={city.latitude} ><img src="pin.png" /></Marker>
+  )
+);
+
+class Map extends Component {
+  state = {
+    viewport: {
+      latitude: 37.78,
+      longitude: -122.41,
+      zoom: 8
+    }
+  };
+
+  render() {
+    return (
+      <ReactMapGL {...this.state.viewport} onViewportChange={viewport => this.setState({viewport})}>
+        <Markers data={CITIES} />
+      </ReactMapGL>
+    );
+  }
+}
+```
+
+
 ## Properties
 
 ##### `latitude` {Number} (required)
