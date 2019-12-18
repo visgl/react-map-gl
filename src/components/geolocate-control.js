@@ -162,6 +162,7 @@ export default class GeolocateControl extends BaseControl<
 
     if (this.props.showUserLocation) {
       this._mapboxGeolocateControl.on('geolocate', this._updateMarker);
+      this._mapboxGeolocateControl.on('trackuserlocationend', this._updateMarker);
     }
 
     return this._mapboxGeolocateControl.trigger();
