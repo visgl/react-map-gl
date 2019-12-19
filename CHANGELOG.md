@@ -2,6 +2,11 @@
 
 # Version 5.1
 
+## 5.1.5 (Dec 18, 2019)
+- marker component perf (#949)
+- Allow customizing labels in NavigationControl and GeolocateControl (#959)
+- Remove marker when GeolocateControl is disabled (#960)
+
 ## 5.1.4 (Dec 16, 2019)
 - Fix TransitionManager when used with deck.gl's interpolators (#956)
 

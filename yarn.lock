@@ -6268,9 +6268,9 @@ map-visit@^1.0.0:
     object-visit "^1.0.0"
 
 mapbox-gl@^1.0.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-1.6.0.tgz#f5f6040476a6514712229d057888dd8c25927672"
-  integrity sha512-eCHiC8mDa/pOxSi7Z4s4qFWYN8h2uV3zXn6Yf8znbjlMNuYeusV8o3NZb/3rkL6m6gh+UJJL7KTUAc3tedMblA==
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-1.6.1.tgz#bc9beb2d7d6464b0d281a225a3f23bd3a84d9f49"
+  integrity sha512-qUvu8c/WX0woSLj8M64eK8351th4RI2+grGJ0ZlFb5ELEJNTb4SqMX/4uxRkb5d1euh2U72+AML1QOZjQnUPUw==
   dependencies:
     "@mapbox/geojson-rewind" "^0.4.0"
     "@mapbox/geojson-types" "^1.0.2"
