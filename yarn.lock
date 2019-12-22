@@ -9688,7 +9688,7 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-viewport-mercator-project@^7.0.0:
+viewport-mercator-project@>=6.2.1:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/viewport-mercator-project/-/viewport-mercator-project-7.0.0.tgz#a46973a85712d71bdc0755b8d2db80debbde7b76"
   integrity sha512-mjXPVKrqg672yxmbYV9qcwczay4p/gsMvxpQPtZtA6N3YDmYBzX2enDvW4b1bk6dKUCM8hc6xi26INoaLLncKw==
