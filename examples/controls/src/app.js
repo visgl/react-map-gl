@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Marker, Popup, NavigationControl, FullscreenControl} from 'react-map-gl';
+import MapGL, {Popup, NavigationControl, FullscreenControl} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
-import CityPin from './city-pin';
+import Pins from './pins';
 import CityInfo from './city-info';
 
 import CITIES from '../../data/cities.json';
@@ -35,8 +35,6 @@ export default class App extends Component {
         bearing: 0,
         pitch: 0
       },
-      // Perf: the markers never change, avoid rerender when interacting with the map
-      markers: CITIES.map(this._renderCityMarker),
       popupInfo: null
     };
   }
@@ -45,12 +43,8 @@ export default class App extends Component {
     this.setState({viewport});
   };
 
-  _renderCityMarker = (city, index) => {
-    return (
-      <Marker key={`marker-${index}`} longitude={city.longitude} latitude={city.latitude}>
-        <CityPin size={20} onClick={() => this.setState({popupInfo: city})} />
-      </Marker>
-    );
+  _onClickMarker = city => {
+    this.setState({popupInfo: city});
   };
 
   _renderPopup() {
@@ -73,7 +67,7 @@ export default class App extends Component {
   }
 
   render() {
-    const {viewport, markers} = this.state;
+    const {viewport} = this.state;
 
     return (
       <MapGL
@@ -84,7 +78,7 @@ export default class App extends Component {
         onViewportChange={this._updateViewport}
         mapboxApiAccessToken={TOKEN}
       >
-        {markers}
+        <Pins data={CITIES} onClick={this._onClickMarker} />
 
         {this._renderPopup()}
 
