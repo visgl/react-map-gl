@@ -24,19 +24,22 @@ class Map extends Component {
 Performance notes: if a large number of markers are needed, it's generally favorable to cache the `<Marker>` nodes, so that we don't rerender them when the viewport changes.
 
 ```js
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import ReactMapGL, {Marker} from 'react-map-gl';
 
 const CITIES = [...];
 
-// React.memo ensures that the markers are only rerendered when data changes
-const Markers = React.memo(({data}) => 
-  data.map(
-    city => <Marker key={city.name} longitude={city.longitude} latitude={city.latitude} ><img src="pin.png" /></Marker>
-  )
-);
+// PureComponent ensures that the markers are only rerendered when data changes
+class Markers extends PureComponent {
+  render() {
+    const {data} = this.props;
+    return data.map(
+      city => <Marker key={city.name} longitude={city.longitude} latitude={city.latitude} ><img src="pin.png" /></Marker>
+    )
+  }
+}
 
-class Map extends Component {
+class Map extends PureComponent {
   state = {
     viewport: {
       latitude: 37.78,
