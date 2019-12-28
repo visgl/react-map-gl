@@ -33,7 +33,7 @@ test('compareVersions', t => {
       version1: '1.6',
       version2: '1.6.1',
       expected: -1
-    },
+    }
   ];
 
   for (const testCase of TEST_CASES) {
