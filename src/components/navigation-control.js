@@ -7,6 +7,7 @@ import MapState from '../utils/map-state';
 import {LINEAR_TRANSITION_PROPS} from '../utils/map-controller';
 
 import deprecateWarn from '../utils/deprecate-warn';
+import {compareVersions} from '../utils/version';
 
 import type {BaseControlProps} from './base-control';
 
@@ -75,6 +76,8 @@ export default class NavigationControl extends BaseControl<
     deprecateWarn(props);
   }
 
+  _uiVersion: string;
+
   _updateViewport(opts: $Shape<ViewportProps>) {
     const {viewport} = this._context;
     const mapState = new MapState(Object.assign({}, viewport, opts));
@@ -105,8 +108,12 @@ export default class NavigationControl extends BaseControl<
 
   _renderCompass() {
     const {bearing} = this._context.viewport;
-    return (
-      <span className="mapboxgl-ctrl-compass-arrow" style={{transform: `rotate(${-bearing}deg)`}} />
+    const style = {transform: `rotate(${-bearing}deg)`};
+
+    return this._uiVersion === '1.6' ? (
+      <span className="mapboxgl-ctrl-icon" aria-hidden="true" style={style} />
+    ) : (
+      <span className="mapboxgl-ctrl-compass-arrow" style={style} />
     );
   }
 
@@ -119,13 +126,18 @@ export default class NavigationControl extends BaseControl<
         title={label}
         onClick={callback}
       >
-        {children}
+        {children || <span className="mapboxgl-ctrl-icon" aria-hidden="true" />}
       </button>
     );
   }
 
   _render() {
     const {className, showCompass, showZoom, zoomInLabel, zoomOutLabel, compassLabel} = this.props;
+
+    if (!this._uiVersion) {
+      const mapboxVersion = this._context.map.version;
+      this._uiVersion = compareVersions(mapboxVersion, '1.6.0') >= 0 ? '1.6' : 'legacy';
+    }
 
     return (
       <div className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`} ref={this._containerRef}>

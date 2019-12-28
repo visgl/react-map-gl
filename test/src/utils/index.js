@@ -6,3 +6,4 @@ import './transition-manager.spec';
 import './debounce.spec';
 import './deep-equal.spec';
 import './style-utils.spec';
+import './version.spec';
