@@ -66,7 +66,8 @@ export type GeolocateControlProps = BaseControlProps & {
   trackUserLocation: boolean,
   showUserLocation: boolean,
   onViewStateChange?: Function,
-  onViewportChange?: Function
+  onViewportChange?: Function,
+  onGeolocate?: Function
 };
 
 type Coordinate = {
@@ -179,7 +180,7 @@ export default class GeolocateControl extends BaseControl<
       });
     }
 
-    this._mapboxGeolocateControl.on('geolocate', event => this.props.onGeolocate(event.coords));
+    this._mapboxGeolocateControl.on('geolocate', this.props.onGeolocate);
   };
 
   _onClickGeolocate = () => {
