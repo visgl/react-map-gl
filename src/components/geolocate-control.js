@@ -154,7 +154,10 @@ export default class GeolocateControl extends BaseControl<
 
     // replace mapbox internal UI elements
     this._mapboxGeolocateControl._geolocateButton = this._geolocateButtonRef.current;
-    if (this._mapboxGeolocateControl.options.trackUserLocation) {
+    if (
+      this._mapboxGeolocateControl.options.trackUserLocation &&
+      this._mapboxGeolocateControl._geolocateButton
+    ) {
       this._mapboxGeolocateControl._geolocateButton.setAttribute('aria-pressed', 'false');
     }
 
