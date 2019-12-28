@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Popup} from 'react-map-gl';
+import MapGL, {Popup, Source, Layer} from 'react-map-gl';
 import ControlPanel from './control-panel';
 
-import {defaultMapStyle, highlightLayerIndex} from './map-style.js';
+import {countiesLayer, highlightLayer} from './map-style.js';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
   state = {
-    mapStyle: defaultMapStyle,
+    filter: ['in', 'COUNTY', ''],
     viewport: {
       latitude: 38.88,
       longitude: -98,
@@ -27,7 +27,7 @@ export default class App extends Component {
     let countyName = '';
     let hoverInfo = null;
 
-    const county = event.features && event.features.find(f => f.layer.id === 'counties');
+    const county = event.features[0];
     if (county) {
       hoverInfo = {
         lngLat: event.lngLat,
@@ -36,7 +36,7 @@ export default class App extends Component {
       countyName = county.properties.COUNTY;
     }
     this.setState({
-      mapStyle: defaultMapStyle.setIn(['layers', highlightLayerIndex, 'filter', 2], countyName),
+      filter: ['in', 'COUNTY', countyName],
       hoverInfo
     });
   };
@@ -54,18 +54,23 @@ export default class App extends Component {
   }
 
   render() {
-    const {viewport, mapStyle} = this.state;
+    const {viewport, filter} = this.state;
 
     return (
       <MapGL
         {...viewport}
         width="100%"
         height="100%"
-        mapStyle={mapStyle}
+        mapStyle="mapbox://styles/mapbox/light-v9"
         mapboxApiAccessToken={MAPBOX_TOKEN}
         onViewportChange={this._onViewportChange}
         onHover={this._onHover}
+        interactiveLayerIds={['counties']}
       >
+        <Source type="vector" url="mapbox://mapbox.82pkq93d">
+          <Layer beforeId="waterway-label" {...countiesLayer} />
+          <Layer beforeId="waterway-label" {...highlightLayer} filter={filter} />
+        </Source>
         {this._renderPopup()}
         <ControlPanel containerComponent={this.props.containerComponent} />
       </MapGL>

@@ -31,5 +31,5 @@ class Map extends Component {
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.
 
 ## Source
-[fullscreen-control.js](https://github.com/uber/react-map-gl/tree/master/src/components/fullscreen-control.js)
+[fullscreen-control.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/fullscreen-control.js)
 

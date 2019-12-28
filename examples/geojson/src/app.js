@@ -1,18 +1,16 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL from 'react-map-gl';
+import MapGL, {Source, Layer} from 'react-map-gl';
 import ControlPanel from './control-panel';
 
-import {defaultMapStyle, dataLayer} from './map-style.js';
+import {dataLayer} from './map-style.js';
 import {updatePercentiles} from './utils';
-import {fromJS} from 'immutable';
 import {json as requestJson} from 'd3-request';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default class App extends Component {
   state = {
-    mapStyle: defaultMapStyle,
     year: 2015,
     data: null,
     hoveredFeature: null,
@@ -35,25 +33,18 @@ export default class App extends Component {
 
   _loadData = data => {
     updatePercentiles(data, f => f.properties.income[this.state.year]);
-
-    const mapStyle = defaultMapStyle
-      // Add geojson source to map
-      .setIn(['sources', 'incomeByState'], fromJS({type: 'geojson', data}))
-      // Add point layer to map
-      .set('layers', defaultMapStyle.get('layers').push(dataLayer));
-
-    this.setState({data, mapStyle});
+    this.setState({data});
   };
 
   _updateSettings = (name, value) => {
     if (name === 'year') {
       this.setState({year: value});
 
-      const {data, mapStyle} = this.state;
+      const {data} = this.state;
       if (data) {
         updatePercentiles(data, f => f.properties.income[value]);
-        const newMapStyle = mapStyle.setIn(['sources', 'incomeByState', 'data'], fromJS(data));
-        this.setState({mapStyle: newMapStyle});
+        // trigger update
+        this.setState({data: {...data}});
       }
     }
   };
@@ -85,7 +76,7 @@ export default class App extends Component {
   }
 
   render() {
-    const {viewport, mapStyle} = this.state;
+    const {viewport, data} = this.state;
 
     return (
       <div style={{height: '100%'}}>
@@ -93,11 +84,14 @@ export default class App extends Component {
           {...viewport}
           width="100%"
           height="100%"
-          mapStyle={mapStyle}
+          mapStyle="mapbox://styles/mapbox/light-v9"
           onViewportChange={this._onViewportChange}
           mapboxApiAccessToken={MAPBOX_TOKEN}
           onHover={this._onHover}
         >
+          <Source type="geojson" data={data}>
+            <Layer {...dataLayer} />
+          </Source>
           {this._renderTooltip()}
         </MapGL>
 

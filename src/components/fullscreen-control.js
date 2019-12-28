@@ -1,3 +1,5 @@
+// @flow
+
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,8 +23,10 @@
 import {document} from '../utils/globals';
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
-import {createElement} from 'react';
+import React from 'react';
 import mapboxgl from '../utils/mapboxgl';
+
+import type {BaseControlProps} from './base-control';
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
@@ -39,19 +43,30 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   container: null
 });
 
-export default class FullscreenControl extends BaseControl {
+export type FullscreenControlProps = BaseControlProps & {
+  className: string,
+  container: ?HTMLElement
+};
+
+type State = {
+  isFullscreen: boolean,
+  showButton: boolean
+};
+
+export default class FullscreenControl extends BaseControl<
+  FullscreenControlProps,
+  State,
+  HTMLDivElement
+> {
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
-  constructor(props) {
-    super(props);
+  state = {
+    isFullscreen: false,
+    showButton: false
+  };
 
-    this._mapboxFullscreenControl = null;
-
-    this.state = {
-      isFullscreen: false
-    };
-  }
+  _mapboxFullscreenControl: any = null;
 
   componentDidMount() {
     const container = this.props.container || this._context.mapContainer;
@@ -60,6 +75,7 @@ export default class FullscreenControl extends BaseControl {
       container
     });
 
+    // eslint-disable-next-line
     this.setState({
       showButton: this._mapboxFullscreenControl._checkFullscreenSupport()
     });
@@ -89,15 +105,16 @@ export default class FullscreenControl extends BaseControl {
     this._mapboxFullscreenControl._onClickFullscreen();
   };
 
-  _renderButton(type, label, callback, children) {
-    return createElement('button', {
-      key: type,
-      className: `mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`,
-      type: 'button',
-      title: label,
-      onClick: callback,
-      children
-    });
+  _renderButton(type: string, label: string, callback: Function) {
+    return (
+      <button
+        key={type}
+        className={`mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`}
+        type="button"
+        title={label}
+        onClick={callback}
+      />
+    );
   }
 
   _render() {
@@ -110,13 +127,10 @@ export default class FullscreenControl extends BaseControl {
 
     const type = isFullscreen ? 'shrink' : 'fullscreen';
 
-    return createElement(
-      'div',
-      {
-        className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
-        ref: this._containerRef
-      },
-      [this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen)]
+    return (
+      <div className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`} ref={this._containerRef}>
+        {this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen)}
+      </div>
     );
   }
 }

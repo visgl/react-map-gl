@@ -1,5 +1,192 @@
 # CHANGELOG
 
+# Version 5.1
+
+## 5.1.1 (Oct 31, 2019)
+- Fix more crashes when source/layer components are removed (#933)
+
+## 5.1.0 (Oct 30, 2019)
+- Avoid mutating style objects during normalization (#926)
+- Fix crash during Source component removal (#928)
+- Ignore empty mapStyle (#927)
+
+# Version 5.0
+
+## 5.0.12 (Oct 8, 2019)
+- Use JSX sources/layers in examples (PR 2/2) (#897)
+- Add React Source and Layer components (PR 1/2) (#896)
+
+## 5.0.11 (Sep 20, 2019)
+- Add babel react preset and migrate react components to jsx (#875)
+
+## 5.0.10 (Aug 13, 2019)
+- React 16.9.0 deprecated lifecycles (#861)
+- remove deprecated react lifecycle methods (#863)
+
+## 5.0.8 (Aug 07, 2019)
+- Add pinchcancel handler (#859)
+- fix delay after clicking close button (#857)
+
+## 5.0.7 (July 16, 2019)
+- Remove event manager properly on unmount (#847)
+
+## 5.0.6 (July 15, 2019)
+- Bump mjolnir (#839)
+- Fix compressed popup when reaching right bound of map (#823)
+
+## 5.0.4 (July 8, 2019)
+- Fix interaction state when using mouse wheel (#840)
+
+## 5.0.3 (June 6, 2019)
+- Fix popup styling (#818)
+
+## 5.0.2 (June 4, 2019)
+- Fix style diff warning when reusing map (#816)
+
+## 5.0.1 (June 4, 2019)
+- bump mjolnir version (#812)
+
+## 5.0.0 (May 31, 2019)
+- Update mapbox-gl to 1.0.0 (#795)
+
+# Version 4.1
+
+## 4.1.16 (Oct 8, 2019)
+- Use JSX sources/layers in examples (PR 2/2) (#897)
+- Add React Source and Layer components (PR 1/2) (#896)
+- Fix draw polygon example styling (#899)
+
+## 4.1.15 (Sept 23, 2019)
+- Add babel react preset and migrate react components to jsx (#875)
+
+## 4.1.14 (Sept 23, 2019)
+- Viewport flyTo Interpolation: add support for auto duration and other options. (#866)
+
+## 4.1.13 (Aug 20, 2019)
+
+## 4.1.12 (Aug 12, 2019)
+
+- React 16.9.0 deprecated lifecycles (#861)
+- remove deprecated react lifecycle methods (#863)
+
+## 4.1.11 (Aug 7, 2019)
+- Add pinchcancel handler (#859)
+- fix delay after clicking close button (#857)
+
+## 4.1.10 (July 15, 2019)
+- Remove event manager properly on unmount (#847)
+
+## 4.1.9 (July 15, 2019)
+- Bump mjolnir (#839)
+- Fix compressed popup when reaching right bound of map (#823)
+
+## 4.1.8 (July 8, 2019)
+- Fix interaction state when using mouse wheel (#840)
+
+## 4.1.7 (June 6, 2019)
+- Fix popup styling (#818)
+
+## 4.1.6 (June 4, 2019)
+- Fix style diff warning when reusing map (#816)
+
+## 4.1.5 (June 4, 2019)
+- bump mjolnir version (#812)
+- mapbox-gl 0.54
+
+## 4.1.4 (May 31, 2019)
+- Pass callbacks via MapContext (#799)
+
+## 4.1.3 (May 29, 2019)
+- Fix geolocate control missing key warning (#789)
+- Custom mapbox server (#769)
+
+## 4.1.2 (Apr 12, 2019)
+
+- Fix geolocate control marker styling (#764)
+- Fix synchronous redraw bug (#772)
+
+## 4.1.1 (Mar 14, 2019)
+
+- Fix mapbox export warning (#757)
+
+## 4.1.0 (Mar 14, 2019)
+
+- add fullscreen support (#696)
+- add geolocate control (#724)
+
+# Version 4.0.0
+
+## 4.0.15 (Mar 12, 2019)
+
+- Fix: popup close button click event propagates to map (#751)
+
+## 4.0.14 (Mar 4, 2019)
+
+- Fix static context bug (#749)
+
+## 4.0.13 (Feb 25, 2019)
+
+- Bump mapbox-gl to 0.53 (#739)
+
+## 4.0.12 (Feb 22, 2019)
+
+- add onNativeClick callback (#733)
+- fix synchronous redraw (#736)
+
+## 4.0.11 (Feb 20, 2019)
+
+- Consolidate InteractiveContext and StaticContext into one (#718)
+- Deregister mapbox events listeners when destroy map (#723)
+- Force map rerender synchronously after props update (#720)
+
+## 4.0.10 (Jan 28, 2019)
+
+- Remove excessive fields from NavigationControl's callback argument (#702)
+- Default onError handler to console.error (#706)
+- Don't query interactive layer ids before map has loaded (#708)
+- Fix onLoad event calling when reuseMaps is set to true (#704)
+
+## 4.0.9 (Jan 20, 2019)
+
+- Reverse polarity of compass bearing rotation (#694)
+
+## 4.0.8 (Jan 18, 2019)
+
+- Fix dragging marker with offset (#693)
+
+## 4.0.7 (Jan 11, 2018)
+
+- Remove passive listener console warning in Chrome (#689)
+- Disable console logging of package version (#688)
+
+## 4.0.6 (Dec 27, 2018)
+
+- Update mapbox-gl to 0.52.0 (#684)
+
+## 4.0.5 (Dec 6, 2018)
+
+- Fix map controller class extensibility (#674)
+
+## 4.0.4 (Dec 4, 2018)
+
+- Bump mapbox dependency to 0.51 (#670)
+- Fix crash when `viewState` does not contain pitch or bearing (#671)
+
+## 4.0.3 (Dec 4, 2018)
+
+- Cache the interactive context to prevent context thrashing (#664)
+- Remove math.gl from dependencies (#666)
+
+## 4.0.2 (Nov 16, 2018)
+
+- Fix popup bug when closeOnClick is off (#660)
+
+## 4.0.1 (Nov 14, 2018)
+
+- Bump maxZoom support to 24 (#659)
+
+## 4.0.0 (Nov 5, 2018)
+
 # Version 4.0.0 Prereleases
 
 ## 4.0.0-beta.7 (Nov 5, 2018)

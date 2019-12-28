@@ -27,8 +27,8 @@ export default class App extends Component {
       longitude,
       latitude,
       zoom: 11,
-      transitionInterpolator: new FlyToInterpolator(),
-      transitionDuration: 3000
+      transitionInterpolator: new FlyToInterpolator({speed: 2}),
+      transitionDuration: 'auto'
     });
   };
 
@@ -44,7 +44,7 @@ export default class App extends Component {
           height="100%"
           mapStyle="mapbox://styles/mapbox/dark-v9"
           onViewportChange={this._onViewportChange}
-          dragToRotate={false}
+          dragRotate={false}
           mapboxApiAccessToken={MAPBOX_TOKEN}
         />
         <ControlPanel

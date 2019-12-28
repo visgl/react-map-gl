@@ -3,7 +3,9 @@ import ExamplesComponent from '../components/examples';
 import PagesComponent from '../components/page';
 
 function getDocUrl(filename) {
-  return `docs/${filename}`;
+  // DOCS_DIR specified in webpack config file
+  // eslint-disable-next-line no-undef
+  return `${DOCS_DIR}/docs/${filename}`;
 }
 
 // mapping from file path in source to generated page url
@@ -126,6 +128,10 @@ const docPages = {
           content: getDocUrl('components/interactive-map.md')
         },
         {
+          name: 'Layer',
+          content: getDocUrl('components/layer.md')
+        },
+        {
           name: 'LinearInterpolator',
           content: getDocUrl('components/linear-interpolator.md')
         },
@@ -146,6 +152,10 @@ const docPages = {
           content: getDocUrl('components/fullscreen-control.md')
         },
         {
+          name: 'GeolocateControl',
+          content: getDocUrl('components/geolocate-control.md')
+        },
+        {
           name: 'PointerEvent',
           content: getDocUrl('components/pointer-event.md')
         },
@@ -154,19 +164,20 @@ const docPages = {
           content: getDocUrl('components/popup.md')
         },
         {
+          name: 'Source',
+          content: getDocUrl('components/source.md')
+        },
+        {
           name: 'StaticMap',
           content: getDocUrl('components/static-map.md')
         },
         {
           name: 'SVGOverlay',
           content: getDocUrl('overlays/svg-overlay.md')
-        },
+        }
       ]
     }
   ])
 };
 
-export const Pages = [
-  examplePages,
-  docPages
-];
+export const Pages = [examplePages, docPages];

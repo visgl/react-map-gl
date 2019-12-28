@@ -1,5 +1,5 @@
 // @flow
-import {PureComponent, createElement, createRef} from 'react';
+import React, {PureComponent, createRef} from 'react';
 import PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -16,6 +16,7 @@ import deprecateWarn from '../utils/deprecate-warn';
 import type {ViewState} from '../mapbox/mapbox';
 import type {StaticMapProps} from './static-map';
 import type {MjolnirEvent} from 'mjolnir.js';
+import type {MapContextProps} from './map-context';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -38,7 +39,7 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
 
   /** Viewport transition **/
   // transition duration for viewport change
-  transitionDuration: PropTypes.number,
+  transitionDuration: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   // TransitionInterpolator instance, can be used to perform custom transitions.
   transitionInterpolator: PropTypes.object,
   // type of interruption of current transition on update.
@@ -99,7 +100,13 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   controller: PropTypes.instanceOf(MapController)
 });
 
-const getDefaultCursor = ({isDragging, isHovering}) =>
+type State = {
+  isLoaded: boolean,
+  isDragging: boolean,
+  isHovering: boolean
+};
+
+const getDefaultCursor = ({isDragging, isHovering}: State) =>
   isDragging ? 'grabbing' : isHovering ? 'pointer' : 'grab';
 
 const defaultProps = Object.assign(
@@ -113,7 +120,7 @@ const defaultProps = Object.assign(
     onClick: null,
     onNativeClick: null,
     onHover: null,
-    onContextMenu: event => event.preventDefault(),
+    onContextMenu: (event: MouseEvent) => event.preventDefault(),
 
     scrollZoom: true,
     dragPan: true,
@@ -139,7 +146,7 @@ type MapEvent = MjolnirEvent & {
   features: ?Array<any>
 };
 
-type InteractiveMapProps = StaticMapProps & {
+export type InteractiveMapProps = StaticMapProps & {
   onViewStateChange: Function,
   onViewportChange: Function,
   onInteractionStateChange: Function,
@@ -177,18 +184,6 @@ type InteractiveMapProps = StaticMapProps & {
   interactiveLayerIds: Array<string>,
   getCursor: Function,
   controller: MapController
-};
-
-type State = {
-  isLoaded: boolean,
-  isDragging: boolean,
-  isHovering: boolean
-};
-
-type InteractiveContextProps = {
-  isDragging: boolean,
-  eventManager: any,
-  mapContainer: null | HTMLDivElement
 };
 
 export default class InteractiveMap extends PureComponent<InteractiveMapProps, State> {
@@ -250,17 +245,13 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     this._updateInteractiveContext({mapContainer});
   }
 
-  componentWillUpdate(nextProps: InteractiveMapProps, nextState: State) {
-    this._setControllerProps(nextProps);
-
-    if (nextState.isDragging !== this.state.isDragging) {
-      this._updateInteractiveContext({isDragging: nextState.isDragging});
-    }
+  componentWillUnmount() {
+    this._eventManager.destroy();
   }
 
   _controller: MapController;
   _eventManager: any;
-  _interactiveContext: InteractiveContextProps;
+  _interactiveContext: MapContextProps;
   _width: number = 0;
   _height: number = 0;
   _eventCanvasRef: {current: null | HTMLDivElement} = createRef();
@@ -286,6 +277,12 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     });
 
     this._controller.setOptions(props);
+
+    // Pass callbacks via MapContext
+    // Do not create a new context object because these do not affect render
+    const context = this._interactiveContext;
+    context.onViewportChange = props.onViewportChange;
+    context.onViewStateChange = props.onViewStateChange;
   }
 
   _getFeatures({pos, radius}: {pos: Array<number>, radius: number}) {
@@ -311,6 +308,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   _onInteractionStateChange = (interactionState: InteractionState) => {
     const {isDragging = false} = interactionState;
     if (isDragging !== this.state.isDragging) {
+      this._updateInteractiveContext({isDragging});
       this.setState({isDragging});
     }
 
@@ -320,7 +318,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     }
   };
 
-  _updateInteractiveContext(updatedContext: $Shape<InteractiveContextProps>) {
+  _updateInteractiveContext(updatedContext: $Shape<MapContextProps>) {
     this._interactiveContext = Object.assign({}, this._interactiveContext, updatedContext);
   }
 
@@ -358,8 +356,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     } = event;
     const pos = [x, y];
 
-    // $FlowFixMe
     const viewport = new WebMercatorViewport(
+      // $FlowFixMe
       Object.assign({}, this.props, {
         width: this._width,
         height: this._height
@@ -491,6 +489,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   };
 
   render() {
+    this._setControllerProps(this.props);
+
     const {width, height, style, getCursor} = this.props;
 
     const eventCanvasStyle = Object.assign({position: 'relative'}, style, {
@@ -499,29 +499,22 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
       cursor: getCursor(this.state)
     });
 
-    return createElement(
-      MapContext.Provider,
-      {value: this._interactiveContext},
-      createElement(
-        'div',
-        {
-          key: 'event-canvas',
-          ref: this._eventCanvasRef,
-          style: eventCanvasStyle
-        },
-        createElement(
-          StaticMap,
-          Object.assign({}, this.props, {
-            width: '100%',
-            height: '100%',
-            style: null,
-            onResize: this._onResize,
-            onLoad: this._onLoad,
-            ref: this._staticMapRef,
-            children: this.props.children
-          })
-        )
-      )
+    return (
+      <MapContext.Provider value={this._interactiveContext}>
+        <div key="event-canvas" ref={this._eventCanvasRef} style={eventCanvasStyle}>
+          <StaticMap
+            {...this.props}
+            width="100%"
+            height="100%"
+            style={null}
+            onResize={this._onResize}
+            onLoad={this._onLoad}
+            ref={this._staticMapRef}
+          >
+            {this.props.children}
+          </StaticMap>
+        </div>
+      </MapContext.Provider>
     );
   }
 }

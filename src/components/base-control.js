@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {PureComponent, createElement, createRef} from 'react';
+import React, {PureComponent, createRef} from 'react';
 import PropTypes from 'prop-types';
 import MapContext from './map-context';
 
@@ -42,11 +42,12 @@ const defaultProps = {
   captureDoubleClick: true
 };
 
-export type ControlProps = {
+export type BaseControlProps = {
   captureScroll: boolean,
   captureDrag: boolean,
   captureClick: boolean,
-  captureDoubleClick: boolean
+  captureDoubleClick: boolean,
+  children?: any
 };
 
 /*
@@ -56,7 +57,11 @@ export type ControlProps = {
  * is almost always triggered by a viewport change, we almost definitely need to
  * recalculate the marker's position when the parent re-renders.
  */
-export default class BaseControl extends PureComponent<ControlProps> {
+export default class BaseControl<
+  Props: BaseControlProps,
+  State: any,
+  ContainerType: Element
+> extends PureComponent<Props, State> {
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
@@ -90,7 +95,7 @@ export default class BaseControl extends PureComponent<ControlProps> {
 
   _context: any = {};
   _events: any = null;
-  _containerRef: {current: null | HTMLDivElement} = createRef();
+  _containerRef: {current: null | ContainerType} = createRef();
 
   _onScroll = (evt: MjolnirEvent) => {
     if (this.props.captureScroll) {
@@ -121,9 +126,13 @@ export default class BaseControl extends PureComponent<ControlProps> {
   }
 
   render() {
-    return createElement(MapContext.Consumer, null, context => {
-      this._context = context;
-      return this._render();
-    });
+    return (
+      <MapContext.Consumer>
+        {context => {
+          this._context = context;
+          return this._render();
+        }}
+      </MapContext.Consumer>
+    );
   }
 }

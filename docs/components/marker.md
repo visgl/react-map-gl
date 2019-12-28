@@ -21,6 +21,44 @@ class Map extends Component {
 }
 ```
 
+Performance notes: if a large number of markers are needed, it's generally favorable to cache the `<Marker>` nodes, so that we don't rerender them when the viewport changes.
+
+```js
+import React, {PureComponent} from 'react';
+import ReactMapGL, {Marker} from 'react-map-gl';
+
+const CITIES = [...];
+
+// PureComponent ensures that the markers are only rerendered when data changes
+class Markers extends PureComponent {
+  render() {
+    const {data} = this.props;
+    return data.map(
+      city => <Marker key={city.name} longitude={city.longitude} latitude={city.latitude} ><img src="pin.png" /></Marker>
+    )
+  }
+}
+
+class Map extends PureComponent {
+  state = {
+    viewport: {
+      latitude: 37.78,
+      longitude: -122.41,
+      zoom: 8
+    }
+  };
+
+  render() {
+    return (
+      <ReactMapGL {...this.state.viewport} onViewportChange={viewport => this.setState({viewport})}>
+        <Markers data={CITIES} />
+      </ReactMapGL>
+    );
+  }
+}
+```
+
+
 ## Properties
 
 ##### `latitude` {Number} (required)
@@ -76,5 +114,5 @@ Stop propagation of dblclick event to the map component. Can be used to stop map
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.
 
 ## Source
-[marker.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/marker.js)
+[marker.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/marker.js)
 

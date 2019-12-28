@@ -28,7 +28,7 @@ class CustomMarker extends BaseControl {
 
     return (
       <div ref={this._containerRef}
-        style={markerStyle} />
+        style={markerStyle} >
         ({longitude}, {latitude})
       </div>
     );
@@ -78,4 +78,4 @@ Implement this method to render the content of this component. `this._context` i
 
 
 ## Source
-[base-control.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/base-control.js)
+[base-control.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/base-control.js)

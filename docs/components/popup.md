@@ -8,12 +8,23 @@ import {Component} from 'react';
 import ReactMapGL, {Popup} from 'react-map-gl';
 
 class Map extends Component {
+  state = {
+    showPopup: true
+  };
+
   render() {
+    const {showPopup} = this.state;
     return (
       <ReactMapGL latitude={37.78} longitude={-122.41} zoom={8}>
-        <Popup latitude={37.78} longitude={-122.41} closeButton={true} closeOnClick={false} anchor="top">
+        {showPopup && <Popup
+          latitude={37.78}
+          longitude={-122.41}
+          closeButton={true}
+          closeOnClick={false}
+          onClose={() => this.setState({showPopup: false})}
+          anchor="top" >
           <div>You are here</div>
-        </Popup>
+        </Popup>}
       </ReactMapGL>
     );
   }
@@ -77,5 +88,5 @@ Stop propagation of dblclick event to the map component. Can be used to stop map
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.
 
 ## Source
-[popup.js](https://github.com/uber/react-map-gl/tree/3.2-release/src/components/popup.js)
+[popup.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/popup.js)
 

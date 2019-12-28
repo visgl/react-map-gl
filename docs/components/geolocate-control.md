@@ -7,31 +7,20 @@ import React, { Component } from "react";
 import ReactMapGL, {GeolocateControl} from "react-map-gl";
 
 class Map extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      viewport: {
-        width: 800,
-        height: 600,
-        longitude: -122.45,
-        latitude: 37.78,
-        zoom: 14
-      }
-    }
-  }
-  
-  _updateViewport = (viewport) => {
-    this.setState({viewport});
+  state = {
+    viewport: {longitude: -122.45, latitude: 37.78, zoom: 14}
   }
   
   render() {
     const {viewport} = this.state;
     return (
-      <ReactMapGL {...viewport} onViewportChange={updateViewport}>
+      <ReactMapGL {...viewport}
+        width="100vw"
+        height="100vh"
+        onViewportChange={viewport => this.setState({viewport})}>
         <GeolocateControl 
           positionOptions={{enableHighAccuracy: true}}
           trackUserLocation={true}
-          onViewportChange={this._updateViewport}
         />
       </ReactMapGL>
     );
@@ -41,12 +30,11 @@ class Map extends Component {
 
 ## Properties
 
-##### `onViewportChange` {Function}
-
-Callback when the viewport needs to be updated. See [InteractiveMap](/docs/components/interactive-map.md).
-
-
 Accepts all the options of [Mapbox GeolocatControl](https://docs.mapbox.com/mapbox-gl-js/api/#geolocatecontrol).
+
+##### `onViewportChange` {Function, optional}
+
+Callback when the user interaction with this control requests a viewport update. If provided, will be called instead of the containing [InteractiveMap](/docs/components/interactive-map.md)'s `onViewportChange`.
 
 ##### `positionOptions` {Object} - default: `{enableHighAccuracy:false, timeout:6000}`
 
@@ -68,7 +56,11 @@ By default a dot will be shown on the map at the user's location. Set to false t
 
 A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to Geolocate control button.
 
-Check [`locate user`](https://github.com/uber/react-map-gl/blob/master/examples/locate-user/src/app.js) example for basic styling.
+Check [`locate user`](https://github.com/uber/react-map-gl/tree/5.0-release/examples/locate-user/src/app.js) example for basic styling.
+
+##### `label` {String} - default: `Geolocate`
+
+Label applied to the Geolocate control button.
 
 ## Styling
 
@@ -76,4 +68,4 @@ Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to 
 
 ## Source
 
-[geolocate-control.js](https://github.com/uber/react-map-gl/tree/master/src/components/geolocate-control.js)
+[geolocate-control.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/geolocate-control.js)

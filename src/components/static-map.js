@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {PureComponent, createElement, createRef} from 'react';
+import React, {PureComponent, createRef} from 'react';
 import PropTypes from 'prop-types';
 
 import {normalizeStyle} from '../utils/style-utils';
@@ -33,7 +33,6 @@ import {MAPBOX_LIMITS} from '../utils/map-state';
 import MapContext from './map-context';
 
 import type {ViewState} from '../mapbox/mapbox';
-import type {Node} from 'react';
 
 /* eslint-disable max-len */
 const TOKEN_DOC_URL =
@@ -91,12 +90,12 @@ export type StaticMapProps = {
   width: number | string,
   height: number | string,
   preventStyleDiffing: boolean,
-  disableTokenWarning: false,
+  disableTokenWarning: boolean,
   visible: boolean,
   className: string,
   style: any,
   visibilityConstraints: any,
-  children?: Node,
+  children?: any,
   onLoad: Function,
   onError: Function,
   onResize: Function,
@@ -133,8 +132,8 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     }
     const {mapStyle} = this.props;
 
-    // $FlowFixMe
     this._mapbox = new Mapbox(
+      // $FlowFixMe
       Object.assign({}, this.props, {
         mapboxgl, // Handle to mapbox-gl library
         width: this._width,
@@ -200,7 +199,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
   _updateMapStyle(oldProps: StaticMapProps, newProps: StaticMapProps) {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
-    if (mapStyle !== oldMapStyle) {
+    if (mapStyle !== oldMapStyle && mapStyle) {
       this._map.setStyle(normalizeStyle(mapStyle), {
         diff: !this.props.preventStyleDiffing
       });
@@ -243,11 +242,15 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
         left: 0,
         top: 0
       };
-      return createElement('div', {key: 'warning', id: 'no-token-warning', style}, [
-        createElement('h3', {key: 'header'}, NO_TOKEN_WARNING),
-        createElement('div', {key: 'text'}, 'For information on setting up your basemap, read'),
-        createElement('a', {key: 'link', href: TOKEN_DOC_URL}, 'Note on Map Tokens')
-      ]);
+      return (
+        <div key="warning" id="no-token-warning" style={style}>
+          <h3 key="header">NO_TOKEN_WARNING</h3>
+          <div key="text">For information on setting up your basemap, read</div>
+          <a key="link" href={TOKEN_DOC_URL}>
+            Note on Map Tokens
+          </a>
+        </div>
+      );
     }
 
     return null;
@@ -257,30 +260,31 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     const {width = Number(this.props.width), height = Number(this.props.height)} = dimensions;
     this._updateMapSize(width, height);
 
-    return createElement(MapContext.Consumer, null, interactiveContext => {
-      const context = Object.assign({}, interactiveContext, {
-        // $FlowFixMe
-        viewport: new WebMercatorViewport(
-          Object.assign({}, this.props, this.props.viewState, {
-            width,
-            height
-          })
-        ),
-        map: this._map,
-        mapContainer: interactiveContext.mapContainer || this._mapContainerRef.current
-      });
-
-      return createElement(
-        MapContext.Provider,
-        {value: context},
-        createElement('div', {
-          key: 'map-overlays',
-          className: 'overlays',
-          style: CONTAINER_STYLE,
-          children: this.props.children
-        })
-      );
-    });
+    return (
+      <MapContext.Consumer>
+        {interactiveContext => {
+          const context = {
+            ...interactiveContext,
+            // $FlowFixMe
+            viewport: new WebMercatorViewport({
+              ...this.props,
+              ...this.props.viewState,
+              width,
+              height
+            }),
+            map: this._map,
+            mapContainer: interactiveContext.mapContainer || this._mapContainerRef.current
+          };
+          return (
+            <MapContext.Provider value={context}>
+              <div key="map-overlays" className="overlays" style={CONTAINER_STYLE}>
+                {this.props.children}
+              </div>
+            </MapContext.Provider>
+          );
+        }}
+      </MapContext.Consumer>
+    );
   }
 
   render() {
@@ -298,31 +302,21 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
       visibility: visible ? 'inherit' : 'hidden'
     });
 
-    return createElement('div', {
-      key: 'map-container',
-      style: mapContainerStyle,
-      ref: this._mapContainerRef,
-      children: [
-        createElement('div', {
-          key: 'map-mapbox',
-          ref: this._mapboxMapRef,
-          style: mapStyle,
-          className
-        }),
-        // AutoSizer is a pure component and does not rerender when map props change
-        // rebind the callback so that it's triggered every render pass
-        createElement(
-          AutoSizer,
-          {
-            key: 'autosizer',
-            disableWidth: Number.isFinite(width),
-            disableHeight: Number.isFinite(height),
-            onResize: this.props.onResize
-          },
-          this._renderOverlays.bind(this)
-        ),
-        this._renderNoTokenWarning()
-      ]
-    });
+    return (
+      <div key="map-container" style={mapContainerStyle} ref={this._mapContainerRef}>
+        <div key="map-mapbox" ref={this._mapboxMapRef} style={mapStyle} className={className} />
+        {/* AutoSizer is a pure component and does not rerender when map props change */}
+        {/* rebind the callback so that it's triggered every render pass */}
+        <AutoSizer
+          key="autosizer"
+          disableWidth={Number.isFinite(width)}
+          disableHeight={Number.isFinite(height)}
+          onResize={this.props.onResize}
+        >
+          {this._renderOverlays.bind(this)}
+        </AutoSizer>
+        {this._renderNoTokenWarning()}
+      </div>
+    );
   }
 }

@@ -59,14 +59,16 @@ type TransitionState = {
 export default class TransitionManager {
   static defaultProps = DEFAULT_PROPS;
 
-  constructor(props?: ViewportProps) {
+  constructor(props?: ViewportProps, getTime: Function) {
     if (props) {
       this.props = props;
     }
+    this.time = getTime || Date.now;
   }
 
   props: ViewportProps;
   state: TransitionState;
+  time: () => number;
 
   _animationFrame: ?AnimationFrameID = null;
 
@@ -101,7 +103,7 @@ export default class TransitionManager {
         }
 
         if (this.state.interruption === TRANSITION_EVENTS.UPDATE) {
-          const currentTime = Date.now();
+          const currentTime = this.time();
           const x0 = (currentTime - this.state.startTime) / this.state.duration;
           endProps.transitionDuration = this.state.duration - (currentTime - this.state.startTime);
           endProps.transitionEasing = cropEasingFunction(this.state.easing, x0);
@@ -130,7 +132,10 @@ export default class TransitionManager {
   }
 
   _isTransitionEnabled(props: ViewportProps): boolean {
-    return props.transitionDuration > 0 && Boolean(props.transitionInterpolator);
+    const {transitionDuration, transitionInterpolator} = props;
+    return (
+      (transitionDuration > 0 || transitionDuration === 'auto') && Boolean(transitionInterpolator)
+    );
   }
 
   _isUpdateDueToCurrentTransition(props: ViewportProps): boolean {
@@ -167,6 +172,12 @@ export default class TransitionManager {
       cancelAnimationFrame(this._animationFrame);
     }
 
+    // update transitionDuration for 'auto' mode
+    const {transitionInterpolator} = endProps;
+    const duration = transitionInterpolator.getDuration
+      ? transitionInterpolator.getDuration(startProps, endProps)
+      : endProps.transitionDuration;
+
     const initialProps = endProps.transitionInterpolator.initializeProps(startProps, endProps);
 
     const interactionState = {
@@ -179,12 +190,12 @@ export default class TransitionManager {
 
     this.state = {
       // Save current transition props
-      duration: endProps.transitionDuration,
+      duration,
       easing: endProps.transitionEasing,
       interpolator: endProps.transitionInterpolator,
       interruption: endProps.transitionInterruption,
 
-      startTime: Date.now(),
+      startTime: this.time(),
       startProps: initialProps.start,
       endProps: initialProps.end,
       animation: null,
@@ -216,7 +227,7 @@ export default class TransitionManager {
 
   _updateViewport() {
     // NOTE: Be cautious re-ordering statements in this function.
-    const currentTime = Date.now();
+    const currentTime = this.time();
     const {startTime, duration, easing, interpolator, startProps, endProps} = this.state;
     let shouldEnd = false;
     let t = (currentTime - startTime) / duration;

@@ -38,7 +38,6 @@ export default class App extends Component {
       >
         <GeolocateControl
           style={geolocateStyle}
-          onViewportChange={this._onViewportChange}
           positionOptions={{enableHighAccuracy: true}}
           trackUserLocation={true}
         />

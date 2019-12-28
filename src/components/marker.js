@@ -18,9 +18,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {createElement} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import DraggableControl from './draggable-control';
+
+import type {DraggableControlProps} from './draggable-control';
 
 const propTypes = Object.assign({}, DraggableControl.propTypes, {
   // Custom className
@@ -32,10 +34,14 @@ const propTypes = Object.assign({}, DraggableControl.propTypes, {
 });
 
 const defaultProps = Object.assign({}, DraggableControl.defaultProps, {
-  className: '',
-  offsetLeft: 0,
-  offsetTop: 0
+  className: ''
 });
+
+export type MarkerProps = DraggableControlProps & {
+  className: string,
+  longitude: number,
+  latitude: number
+};
 
 /*
  * PureComponent doesn't update when context changes.
@@ -44,16 +50,18 @@ const defaultProps = Object.assign({}, DraggableControl.defaultProps, {
  * is almost always triggered by a viewport change, we almost definitely need to
  * recalculate the marker's position when the parent re-renders.
  */
-export default class Marker extends DraggableControl {
+export default class Marker extends DraggableControl<MarkerProps> {
   static propTypes = propTypes;
   static defaultProps = defaultProps;
+
+  _control: any = null;
 
   _getPosition(): [number, number] {
     const {longitude, latitude, offsetLeft, offsetTop} = this.props;
     const {dragPos, dragOffset} = this.state;
 
     // If dragging, just return the current drag position
-    if (dragPos) {
+    if (dragPos && dragOffset) {
       return this._getDraggedPosition(dragPos, dragOffset);
     }
 
@@ -65,23 +73,41 @@ export default class Marker extends DraggableControl {
   }
 
   _render() {
-    const {className, draggable} = this.props;
-    const {dragPos} = this.state;
-
     const [x, y] = this._getPosition();
+    const transform = `translate(${x}px, ${y}px)`;
+    const div = this._containerRef.current;
 
-    const containerStyle = {
-      position: 'absolute',
-      left: x,
-      top: y,
-      cursor: draggable ? (dragPos ? 'grabbing' : 'grab') : 'auto'
-    };
+    if (this._control && div) {
+      // Perf: avoid rerendering if only the viewport changed
+      div.style.transform = transform;
+    } else {
+      const {className, draggable} = this.props;
+      const {dragPos} = this.state;
 
-    return createElement('div', {
-      className: `mapboxgl-marker ${className}`,
-      ref: this._containerRef,
-      style: containerStyle,
-      children: this.props.children
-    });
+      const containerStyle = {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        transform,
+        cursor: draggable ? (dragPos ? 'grabbing' : 'grab') : 'auto'
+      };
+
+      this._control = (
+        <div
+          className={`mapboxgl-marker ${className}`}
+          ref={this._containerRef}
+          style={containerStyle}
+        >
+          {this.props.children}
+        </div>
+      );
+    }
+    return this._control;
+  }
+
+  render() {
+    // invalidate cached element
+    this._control = null;
+    return super.render();
   }
 }

@@ -1,7 +1,7 @@
 // @flow
 
 /* global window */
-import {createElement, createRef} from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import WebMercatorViewport from 'viewport-mercator-project';
 
@@ -13,14 +13,20 @@ import MapState from '../utils/map-state';
 import TransitionManager from '../utils/transition-manager';
 import {isGeolocationSupported} from '../utils/geolocate-utils';
 
+import type {BaseControlProps} from './base-control';
+
 const LINEAR_TRANSITION_PROPS = Object.assign({}, TransitionManager.defaultProps, {
   transitionDuration: 500
 });
+
+const noop = () => {};
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Custom className
   className: PropTypes.string,
   style: PropTypes.object,
+  // Custom label assigned to the control
+  label: PropTypes.string,
 
   // mapbox geolocate options
   // https://docs.mapbox.com/mapbox-gl-js/api/#geolocatecontrol
@@ -40,6 +46,7 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
   style: {},
+  label: 'Geolocate',
 
   // mapbox geolocate options
   positionOptions: null,
@@ -47,29 +54,56 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   trackUserLocation: false,
   showUserLocation: true,
 
-  // viewport handlers
-  onViewStateChange: () => {},
-  onViewportChange: () => {},
-
   onGeolocate: () => {}
 });
 
-export default class GeolocateControl extends BaseControl {
+export type GeolocateControlProps = BaseControlProps & {
+  className: string,
+  style: Object,
+  label: string,
+  positionOptions: any,
+  fitBoundsOptions: any,
+  trackUserLocation: boolean,
+  showUserLocation: boolean,
+  onViewStateChange?: Function,
+  onViewportChange?: Function
+};
+
+type Coordinate = {
+  longitude: number,
+  latitude: number,
+  accuracy: number
+};
+type Position = {
+  coords: Coordinate
+};
+type State = {
+  supportsGeolocation: boolean,
+  markerPosition: ?Coordinate
+};
+type GeolocateControlOptions = {
+  positionOptions?: any,
+  fitBoundsOptions?: any,
+  trackUserLocation?: boolean,
+  showUserLocation?: boolean
+};
+
+export default class GeolocateControl extends BaseControl<
+  GeolocateControlProps,
+  State,
+  HTMLDivElement
+> {
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
-  constructor(props) {
-    super(props);
+  state = {
+    supportsGeolocation: false,
+    markerPosition: null
+  };
 
-    this.state = {
-      supportsGeolocation: null,
-      markerPosition: null
-    };
-  }
+  _mapboxGeolocateControl: any = null;
 
-  _containerRef: {current: null | HTMLDivElement} = createRef();
-  _geolocateButtonRef: {current: null | HTMLDivElement} = createRef();
-  _markerRef: {current: null | HTMLDivElement} = createRef();
+  _geolocateButtonRef: {current: null | HTMLButtonElement} = createRef();
 
   componentDidMount() {
     isGeolocationSupported().then(result => {
@@ -78,25 +112,19 @@ export default class GeolocateControl extends BaseControl {
     });
   }
 
-  componentDidUpdate() {
-    // MapboxGeolocateControl needs manipulate the style of Marker's container
-    const markerRef = this._markerRef.current;
-    if (this._mapboxGeolocateControl && markerRef) {
-      this._mapboxGeolocateControl._dotElement = markerRef._containerRef.current;
-    }
-  }
-
   componentWillUnmount() {
     // re-implement MapboxGeolocateControl's _onRemove
     // clear the geolocation watch if exists
-    const geolocationWatchID = this._mapboxGeolocateControl._geolocationWatchID;
-    if (geolocationWatchID !== undefined) {
-      window.navigator.geolocation.clearWatch(geolocationWatchID);
-      this._mapboxGeolocateControl._geolocationWatchID = undefined;
+    if (this._mapboxGeolocateControl) {
+      const geolocationWatchID = this._mapboxGeolocateControl._geolocationWatchID;
+      if (geolocationWatchID !== undefined) {
+        window.navigator.geolocation.clearWatch(geolocationWatchID);
+        this._mapboxGeolocateControl._geolocationWatchID = undefined;
+      }
     }
   }
 
-  _setupMapboxGeolocateControl = supportsGeolocation => {
+  _setupMapboxGeolocateControl = (supportsGeolocation: boolean) => {
     if (!supportsGeolocation) {
       /* eslint-disable no-console, no-undef */
       console.warn(
@@ -106,15 +134,16 @@ export default class GeolocateControl extends BaseControl {
       return;
     }
 
-    const controlOptions = {};
-    ['positionOptions', 'fitBoundsOptions', 'trackUserLocation', 'showUserLocation'].forEach(
-      prop => {
-        // For null option, use Mapbox default value
-        if (prop in this.props && this.props[prop] !== null) {
-          controlOptions[prop] = this.props[prop];
-        }
+    // For null option, use Mapbox default value
+    const controlOptions: GeolocateControlOptions = {
+      // disable showUserLocation to avoid Mapbox accessing marker before rendering
+      showUserLocation: false
+    };
+    ['positionOptions', 'fitBoundsOptions', 'trackUserLocation'].forEach(prop => {
+      if (prop in this.props && this.props[prop] !== null) {
+        controlOptions[prop] = this.props[prop];
       }
-    );
+    });
 
     this._mapboxGeolocateControl = new mapboxgl.GeolocateControl(controlOptions);
 
@@ -154,16 +183,23 @@ export default class GeolocateControl extends BaseControl {
   };
 
   _onClickGeolocate = () => {
+    this._mapboxGeolocateControl._map = this._context.map;
+
+    if (this.props.showUserLocation) {
+      this._mapboxGeolocateControl.on('geolocate', this._updateMarker);
+      this._mapboxGeolocateControl.on('trackuserlocationend', this._updateMarker);
+    }
+
     return this._mapboxGeolocateControl.trigger();
   };
 
-  _updateMarker = position => {
+  _updateMarker = (position: Position) => {
     if (position) {
       this.setState({markerPosition: position.coords});
     }
   };
 
-  _getBounds = position => {
+  _getBounds = (position: Position) => {
     const center = new mapboxgl.LngLat(position.coords.longitude, position.coords.latitude);
     const radius = position.coords.accuracy;
     const bounds = center.toBounds(radius);
@@ -171,7 +207,7 @@ export default class GeolocateControl extends BaseControl {
     return [[bounds._ne.lng, bounds._ne.lat], [bounds._sw.lng, bounds._sw.lat]];
   };
 
-  _updateCamera = position => {
+  _updateCamera = (position: Position) => {
     const {viewport} = this._context;
 
     const bounds = this._getBounds(position);
@@ -185,42 +221,49 @@ export default class GeolocateControl extends BaseControl {
     const mapState = new MapState(newViewState);
     const viewState = Object.assign({}, mapState.getViewportProps(), LINEAR_TRANSITION_PROPS);
 
+    const onViewportChange = this.props.onViewportChange || this._context.onViewportChange || noop;
+    const onViewStateChange =
+      this.props.onViewStateChange || this._context.onViewStateChange || noop;
+
     // Call new style callback
-    this.props.onViewStateChange({viewState});
+    onViewStateChange({viewState});
 
     // Call old style callback
-    this.props.onViewportChange(viewState);
+    onViewportChange(viewState);
   };
 
-  _renderButton = (type, label, callback, children) => {
-    return createElement('button', {
-      key: type,
-      className: `mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`,
-      ref: this._geolocateButtonRef,
-      type: 'button',
-      title: label,
-      onClick: callback,
-      children
-    });
+  _renderButton = (type: string, label: string, callback: Function) => {
+    return (
+      <button
+        key={type}
+        className={`mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`}
+        ref={this._geolocateButtonRef}
+        type="button"
+        title={label}
+        onClick={callback}
+      />
+    );
   };
 
   _renderMarker = () => {
-    const {showUserLocation} = this.props;
     const {markerPosition} = this.state;
-    if (!showUserLocation || !markerPosition) {
+    const {showUserLocation} = this.props;
+    if (!markerPosition || !showUserLocation) {
       return null;
     }
 
-    return createElement(Marker, {
-      key: 'location-maker',
-      ref: this._markerRef,
-      className: 'mapboxgl-user-location-dot',
-      longitude: markerPosition.longitude,
-      latitude: markerPosition.latitude,
-      onContextMenu: e => e.preventDefault(),
-      captureDrag: false,
-      captureDoubleClick: false
-    });
+    return (
+      // $FlowFixMe
+      <Marker
+        key="location-maker"
+        className="mapboxgl-user-location-dot"
+        longitude={markerPosition.longitude}
+        latitude={markerPosition.latitude}
+        onContextMenu={e => e.preventDefault()}
+        captureDrag={false}
+        captureDoubleClick={false}
+      />
+    );
   };
 
   _render() {
@@ -228,19 +271,20 @@ export default class GeolocateControl extends BaseControl {
       return null;
     }
 
-    const {className, style} = this.props;
-    return createElement('div', null, [
-      this._renderMarker(),
-      createElement(
-        'div',
-        {
-          className: `mapboxgl-ctrl mapboxgl-ctrl-group ${className}`,
-          ref: this._containerRef,
-          style,
-          onContextMenu: e => e.preventDefault()
-        },
-        this._renderButton('geolocate', 'Geolocate', this._onClickGeolocate)
-      )
-    ]);
+    const {className, style, label} = this.props;
+    return (
+      <div>
+        {this._renderMarker()}
+        <div
+          key="geolocate-control"
+          className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`}
+          ref={this._containerRef}
+          style={style}
+          onContextMenu={e => e.preventDefault()}
+        >
+          {this._renderButton('geolocate', label, this._onClickGeolocate)}
+        </div>
+      </div>
+    );
   }
 }
