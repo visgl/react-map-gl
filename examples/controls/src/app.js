@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Popup, NavigationControl, FullscreenControl} from 'react-map-gl';
+import MapGL, {Popup, NavigationControl, FullscreenControl, ScaleControl} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
 import Pins from './pins';
@@ -20,6 +20,13 @@ const fullscreenControlStyle = {
 const navStyle = {
   position: 'absolute',
   top: 36,
+  left: 0,
+  padding: '10px'
+};
+
+const scaleControlStyle = {
+  position: 'absolute',
+  bottom: 36,
   left: 0,
   padding: '10px'
 };
@@ -82,11 +89,14 @@ export default class App extends Component {
 
         {this._renderPopup()}
 
-        <div className="fullscreen" style={fullscreenControlStyle}>
+        <div style={fullscreenControlStyle}>
           <FullscreenControl />
         </div>
-        <div className="nav" style={navStyle}>
+        <div style={navStyle}>
           <NavigationControl />
+        </div>
+        <div style={scaleControlStyle}>
+          <ScaleControl />
         </div>
 
         <ControlPanel containerComponent={this.props.containerComponent} />

@@ -56,7 +56,7 @@ const docPages = {
           content: getDocUrl('README.md')
         },
         {
-          name: 'What\'s New',
+          name: "What's New",
           content: getDocUrl('whats-new.md')
         },
         {
@@ -162,6 +162,10 @@ const docPages = {
         {
           name: 'Popup',
           content: getDocUrl('components/popup.md')
+        },
+        {
+          name: 'ScaleControl',
+          content: getDocUrl('components/scale-control.md')
         },
         {
           name: 'Source',
