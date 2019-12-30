@@ -10,7 +10,7 @@ class Map extends Component {
   state = {
     viewport: {longitude: -122.45, latitude: 37.78, zoom: 14}
   }
-  
+
   render() {
     const {viewport} = this.state;
     return (
@@ -18,7 +18,7 @@ class Map extends Component {
         width="100vw"
         height="100vh"
         onViewportChange={viewport => this.setState({viewport})}>
-        <GeolocateControl 
+        <GeolocateControl
           positionOptions={{enableHighAccuracy: true}}
           trackUserLocation={true}
         />
@@ -36,6 +36,10 @@ Accepts all the options of [Mapbox GeolocatControl](https://docs.mapbox.com/mapb
 
 Callback when the user interaction with this control requests a viewport update. If provided, will be called instead of the containing [InteractiveMap](/docs/components/interactive-map.md)'s `onViewportChange`.
 
+##### `onGeolocate` {Function, optional}
+
+Callback when Geolocation API position updates. It is called with a Geolocation API [PositionOptions](https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions) object.
+
 ##### `positionOptions` {Object} - default: `{enableHighAccuracy:false, timeout:6000}`
 
 A Geolocation API [PositionOptions](https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions) object.
@@ -52,7 +56,7 @@ If true the Geolocate Control becomes a toggle button and when active the map wi
 
 By default a dot will be shown on the map at the user's location. Set to false to disable.
 
-##### `style` {Object} - default: `{}` 
+##### `style` {Object} - default: `{}`
 
 A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to Geolocate control button.
 
