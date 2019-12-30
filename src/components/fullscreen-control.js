@@ -113,7 +113,9 @@ export default class FullscreenControl extends BaseControl<
         type="button"
         title={label}
         onClick={callback}
-      />
+      >
+        <span className="mapboxgl-ctrl-icon" aria-hidden="true" />
+      </button>
     );
   }
 
