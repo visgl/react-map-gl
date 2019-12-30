@@ -58,6 +58,14 @@ type ViewportProps = {
   bearing: number
 };
 
+// Mapbox version flags. CSS classes were changed in certain versions.
+const VERSION_LEGACY = 1;
+const VERSION_1_6 = 2;
+
+function getUIVersion(mapboxVersion: string): number {
+  return compareVersions(mapboxVersion, '1.6.0') >= 0 ? VERSION_1_6 : VERSION_LEGACY;
+}
+
 /*
  * PureComponent doesn't update when context changes, so
  * implementing our own shouldComponentUpdate here.
@@ -76,7 +84,7 @@ export default class NavigationControl extends BaseControl<
     deprecateWarn(props);
   }
 
-  _uiVersion: string;
+  _uiVersion: number;
 
   _updateViewport(opts: $Shape<ViewportProps>) {
     const {viewport} = this._context;
@@ -110,7 +118,7 @@ export default class NavigationControl extends BaseControl<
     const {bearing} = this._context.viewport;
     const style = {transform: `rotate(${-bearing}deg)`};
 
-    return this._uiVersion === '1.6' ? (
+    return this._uiVersion === VERSION_1_6 ? (
       <span className="mapboxgl-ctrl-icon" aria-hidden="true" style={style} />
     ) : (
       <span className="mapboxgl-ctrl-compass-arrow" style={style} />
@@ -135,8 +143,7 @@ export default class NavigationControl extends BaseControl<
     const {className, showCompass, showZoom, zoomInLabel, zoomOutLabel, compassLabel} = this.props;
 
     if (!this._uiVersion) {
-      const mapboxVersion = this._context.map.version;
-      this._uiVersion = compareVersions(mapboxVersion, '1.6.0') >= 0 ? '1.6' : 'legacy';
+      this._uiVersion = getUIVersion(this._context.map.version);
     }
 
     return (
