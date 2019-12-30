@@ -2,6 +2,13 @@
 
 # Version 5.1
 
+## 5.1.6 (Dec 30, 2019)
+- Upgrade viewport-mercator-project (#961)
+- Fix control icons when used with mapbox-gl@>=1.6 (#967)
+- Add ScaleControl (#966)
+- Enhance GeolocateControl component (#761)
+- Fix React state update warning (#968)
+
 ## 5.1.5 (Dec 18, 2019)
 - marker component perf (#949)
 - Allow customizing labels in NavigationControl and GeolocateControl (#959)
