@@ -38,7 +38,9 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   // Callbacks fired when the user interacted with the map. The object passed to the callbacks
   // contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
   onViewStateChange: PropTypes.func,
-  onViewportChange: PropTypes.func
+  onViewportChange: PropTypes.func,
+
+  onGeolocate: PropTypes.func
 });
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
@@ -50,7 +52,9 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   positionOptions: null,
   fitBoundsOptions: null,
   trackUserLocation: false,
-  showUserLocation: true
+  showUserLocation: true,
+
+  onGeolocate: () => {}
 });
 
 export type GeolocateControlProps = BaseControlProps & {
@@ -62,7 +66,8 @@ export type GeolocateControlProps = BaseControlProps & {
   trackUserLocation: boolean,
   showUserLocation: boolean,
   onViewStateChange?: Function,
-  onViewportChange?: Function
+  onViewportChange?: Function,
+  onGeolocate?: Function
 };
 
 type Coordinate = {
@@ -149,12 +154,36 @@ export default class GeolocateControl extends BaseControl<
 
     // replace mapbox internal UI elements
     this._mapboxGeolocateControl._geolocateButton = this._geolocateButtonRef.current;
+    if (
+      this._mapboxGeolocateControl.options.trackUserLocation &&
+      this._mapboxGeolocateControl._geolocateButton
+    ) {
+      this._mapboxGeolocateControl._geolocateButton.setAttribute('aria-pressed', 'false');
+    }
 
     // replace mapbox internal methods
     this._mapboxGeolocateControl._updateMarker = this._updateMarker;
     this._mapboxGeolocateControl._updateCamera = this._updateCamera;
 
     this._mapboxGeolocateControl._setup = true;
+
+    // when the camera is changed (and it's not as a result of the Geolocation Control) change
+    // the watch mode to background watch, so that the marker is updated but not the camera.
+    if (this._mapboxGeolocateControl.options.trackUserLocation) {
+      this._context.eventManager.on('panstart', () => {
+        if (this._mapboxGeolocateControl._watchState === 'ACTIVE_LOCK') {
+          this._mapboxGeolocateControl._watchState = 'BACKGROUND';
+          this._mapboxGeolocateControl._geolocateButton.classList.add(
+            'mapboxgl-ctrl-geolocate-background'
+          );
+          this._mapboxGeolocateControl._geolocateButton.classList.remove(
+            'mapboxgl-ctrl-geolocate-active'
+          );
+        }
+      });
+    }
+
+    this._mapboxGeolocateControl.on('geolocate', this.props.onGeolocate);
   };
 
   _onClickGeolocate = () => {
