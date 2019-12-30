@@ -32,6 +32,7 @@ export {default as Popup} from './components/popup';
 export {default as FullscreenControl} from './components/fullscreen-control';
 export {default as GeolocateControl} from './components/geolocate-control';
 export {default as NavigationControl} from './components/navigation-control';
+export {default as ScaleControl} from './components/scale-control';
 
 // Overlays
 export {default as CanvasOverlay} from './overlays/canvas-overlay';
