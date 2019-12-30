@@ -135,7 +135,7 @@ export default class MapController {
   /* Callback util */
   // formats map state and invokes callback function
   updateViewport(newMapState: MapState, extraProps: any = {}, extraState: any = {}) {
-    const oldViewport = this.mapState ? this.mapState.getViewportProps() : {};
+    const oldViewport = this.mapState ? this.mapState.getViewportProps() : this.mapStateProps;
     const newViewport = Object.assign({}, newMapState.getViewportProps(), extraProps);
 
     const viewStateChanged = Object.keys(newViewport).some(
@@ -176,12 +176,14 @@ export default class MapController {
     this.onViewportChange = onViewportChange;
     this.onStateChange = onStateChange;
 
-    if (!this.mapStateProps || this.mapStateProps.height !== options.height) {
+    const dimensionChanged = !this.mapStateProps || this.mapStateProps.height !== options.height;
+
+    this.mapStateProps = options;
+
+    if (dimensionChanged) {
       // Dimensions changed, normalize the props
       this.updateViewport(new MapState(options));
     }
-
-    this.mapStateProps = options;
     // Update transition
     this._transitionManager.processViewportChange(
       Object.assign({}, options, {
