@@ -245,6 +245,10 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     this._updateInteractiveContext({mapContainer});
   }
 
+  componentDidUpdate() {
+    this._setControllerProps(this.props);
+  }
+
   componentWillUnmount() {
     this._eventManager.destroy();
   }
@@ -489,8 +493,6 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   };
 
   render() {
-    this._setControllerProps(this.props);
-
     const {width, height, style, getCursor} = this.props;
 
     const eventCanvasStyle = Object.assign({position: 'relative'}, style, {
