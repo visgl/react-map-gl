@@ -29,7 +29,9 @@ export default class App extends Component {
     const mapboxSource = this._sourceRef.current.getSource();
 
     mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
-      if (err) return;
+      if (err) {
+        return;
+      }
 
       this._onViewportChange({
         ...this.state.viewport,
