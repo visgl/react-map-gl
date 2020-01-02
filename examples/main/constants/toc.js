@@ -12,6 +12,7 @@ import CustomCursor from '../../custom-cursor/src/app';
 import DraggableMarker from '../../draggable-markers/src/app';
 import GeoJson from '../../geojson/src/app';
 import GeoJsonAnimation from '../../geojson-animation/src/app';
+import Clusters from '../../clusters/src/app';
 import LocateUser from '../../locate-user/src/app';
 import Interaction from '../../interaction/src/app';
 import Layers from '../../layers/src/app';
@@ -56,6 +57,11 @@ export const standaloneExamples = [
     path: 'geojsonAnimationExample',
     name: 'GeoJSON Animation',
     component: GeoJsonAnimation
+  },
+  {
+    path: 'clustersExample',
+    name: 'Clusters',
+    component: Clusters
   },
   {
     path: 'locateUserExample',
