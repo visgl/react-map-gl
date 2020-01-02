@@ -21,10 +21,6 @@ const config = {
     library: 'App'
   },
 
-  devServer: {
-    contentBase: [__dirname, resolve(__dirname, '../')]
-  },
-
   module: {
     rules: [
       {

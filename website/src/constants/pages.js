@@ -1,4 +1,4 @@
-import {standaloneExamples} from '../../../examples/main/constants/toc';
+import standaloneExamples from './examples';
 import ExamplesComponent from '../components/examples';
 import PagesComponent from '../components/page';
 
