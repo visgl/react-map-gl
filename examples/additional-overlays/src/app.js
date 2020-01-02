@@ -27,8 +27,8 @@ import Immutable from 'immutable';
 import ScatterplotOverlay from './scatterplot-overlay';
 import ChoroplethOverlay from './choropleth-overlay';
 
-import ZIPCODES_SF from '../../data/feature-example-sf.json';
-import CITIES from '../../data/cities.json';
+import ZIPCODES_SF from '../../.data/feature-example-sf.json';
+import CITIES from '../../.data/cities.json';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 

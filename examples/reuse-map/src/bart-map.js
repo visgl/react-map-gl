@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import MapGL, {Marker} from '../../../src';
 
-import bartStations from '../../data/bart-station.json';
+import bartStations from '../../.data/bart-station.json';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
