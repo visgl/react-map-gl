@@ -2,6 +2,10 @@
 
 # Version 5.1
 
+## 5.1.7 (Jan 2, 2020)
+- Fix flyToInterpolator crash when transitioning to the same viewport center (#975)
+- Fix NavigationControl crash when used with external context (#974)
+
 ## 5.1.6 (Dec 30, 2019)
 - Upgrade viewport-mercator-project (#961)
 - Fix control icons when used with mapbox-gl@>=1.6 (#967)
