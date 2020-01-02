@@ -17,10 +17,6 @@ const config = {
     app: resolve('./src/app.js')
   },
 
-  devServer: {
-    contentBase: [resolve(__dirname), resolve(__dirname, './static')]
-  },
-
   output: {
     library: 'App'
   },
