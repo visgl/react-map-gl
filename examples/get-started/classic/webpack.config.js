@@ -1,4 +1,3 @@
-const resolve = require('path').resolve;
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -6,7 +5,7 @@ module.exports = {
   mode: 'development',
 
   entry: {
-    app: resolve('./app.js')
+    app: './app.js'
   },
 
   devtool: 'source-map',
@@ -16,7 +15,6 @@ module.exports = {
       {
         // Compile ES2015 using babel
         test: /\.js$/,
-        include: [resolve('.')],
         exclude: [/node_modules/],
         use: [
           {

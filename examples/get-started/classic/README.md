@@ -2,7 +2,7 @@
   <img src="https://avatars3.githubusercontent.com/u/2105791?v=3&s=200" />
 </div>
 
-## Exhibits: Webpack
+## react-map-gl example with React Component
 
 The configuration showcased here is a bit less straightforward than its browserify
 equivalent due to some incompatibilities with mapbox-gl, but has been kept at a
