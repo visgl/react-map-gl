@@ -60,6 +60,7 @@ module.exports = {
       resolve('./node_modules')
     ],
     alias: {
+      'website-examples': resolve('../examples'),
       'gl-matrix': resolve('./node_modules/gl-matrix'),
       'react-map-gl': resolve('../src'),
       '../utils/mapboxgl': resolve('../node_modules/mapbox-gl/dist/mapbox-gl-dev.js'),

@@ -1,5 +1,4 @@
 import MAP_STYLE from '../../map-style-basic-v8.json';
-import SF_NEIGHBORHOODS from '../../data/feature-example-sf.json';
 
 // Make a copy of the map style
 const mapStyle = {
@@ -10,7 +9,8 @@ const mapStyle = {
 
 mapStyle.sources['sf-neighborhoods'] = {
   type: 'geojson',
-  data: SF_NEIGHBORHOODS
+  data:
+    'https://raw.githubusercontent.com/uber/react-map-gl/master/examples/.data/feature-example-sf.json'
 };
 
 mapStyle.layers.push(

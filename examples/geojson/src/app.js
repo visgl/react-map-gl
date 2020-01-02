@@ -24,11 +24,14 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    requestJson('data/us-income.geojson', (error, response) => {
-      if (!error) {
-        this._loadData(response);
+    requestJson(
+      'https://raw.githubusercontent.com/uber/react-map-gl/master/examples/.data/us-income.geojson',
+      (error, response) => {
+        if (!error) {
+          this._loadData(response);
+        }
       }
-    });
+    );
   }
 
   _loadData = data => {
