@@ -3,7 +3,7 @@
 
 ## Installation
 
-Using `react-map-gl` requires `node >= v4` and `react >= 15.4`.
+Using `react-map-gl` requires `node >= v4` and `react >= 16.3`.
 
 ```sh
 npm install --save react-map-gl
@@ -27,11 +27,13 @@ function Map() {
   return (
     <ReactMapGL
       {...viewport}
-      onViewportChange={viewport => setViewport(viewport)}
+      onViewportChange={setViewport}
     />
   );
 }
 ```
+
+See full project setup in [get-started examples](https://github.com/uber/react-map-gl/tree/master/examples/get-started)
 
 ## Styling
 
@@ -43,10 +45,11 @@ You may add the stylesheet to the head of your page:
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v<YOUR_MAPBOX_VERSION>/mapbox-gl.css' rel='stylesheet' />
 ```
 
-Find out your mapbox version by running yarn list mapbox-gl or npm ls mapbox-gl.
+Find out your mapbox version by running `yarn list mapbox-gl` or `npm ls mapbox-gl`.
 
 Or embed it in your app by using - [browserify-css](https://www.npmjs.com/package/browserify-css)
 with Browserify or - [css-loader](https://webpack.github.io/docs/stylesheets.html) with Webpack:
+
 ```js
 // app.js
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -62,4 +65,4 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 * `create-react-app-typescript` - react-map-gl is compatible with [create-react-app-typescript](https://github.com/wmonk/create-react-app-typescript). You can see an example [here](https://github.com/zackhsi/react-map-gl-typescript).
 
-There's many other ready-to-run [examples](https://github.com/uber/react-map-gl/tree/5.0-release/examples) you can take a look at if you need more inspiration.
+There's many other ready-to-run [examples](https://github.com/uber/react-map-gl/tree/master/examples) you can take a look at if you need more inspiration.
