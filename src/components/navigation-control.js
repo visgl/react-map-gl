@@ -143,7 +143,9 @@ export default class NavigationControl extends BaseControl<
     const {className, showCompass, showZoom, zoomInLabel, zoomOutLabel, compassLabel} = this.props;
 
     if (!this._uiVersion) {
-      this._uiVersion = getUIVersion(this._context.map.version);
+      // map may not exist if context is provided by user application (e.g. DeckGL)
+      const {map} = this._context;
+      this._uiVersion = getUIVersion(map && map.version);
     }
 
     return (
