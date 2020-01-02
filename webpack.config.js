@@ -27,5 +27,10 @@ module.exports = env => {
     })
   ]);
 
+  if (env.mode === 'size') {
+    // Only measure self bundle size
+    config.externals = ['mapbox-gl'];
+  }
+
   return config;
 };
