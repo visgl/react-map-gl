@@ -10,8 +10,8 @@ class Root extends Component {
     super(props);
     this.state = {
       viewport: {
-        latitude: 37.785164,
-        longitude: -122.41669,
+        latitude: 37.8,
+        longitude: -122.4,
         zoom: 14,
         bearing: 0,
         pitch: 0
@@ -20,20 +20,18 @@ class Root extends Component {
   }
 
   render() {
-    const {viewport} = this.state;
-
     return (
       <MapGL
-        {...viewport}
+        {...this.state.viewport}
         width="100vw"
         height="100vh"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={v => this.setState({viewport: v})}
-        preventStyleDiffing={false}
+        onViewportChange={viewport => this.setState({viewport})}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
     );
   }
 }
 
+document.body.style.margin = 0;
 render(<Root />, document.body.appendChild(document.createElement('div')));

@@ -3,7 +3,7 @@
 
 ## Installation
 
-Using `react-map-gl` requires `node >= v4` and `react >= 15.4`.
+Using `react-map-gl` requires `node >= v4` and `react >= 16.3`.
 
 ```sh
 npm install --save react-map-gl
@@ -12,31 +12,28 @@ npm install --save react-map-gl
 ## Example
 
 ```js
-import {Component} from 'react';
+import React, {useState} from 'react';
 import ReactMapGL from 'react-map-gl';
 
-class Map extends Component {
+function Map() {
+  const [viewport, setViewport] = useState({
+    width: 400,
+    height: 400,
+    latitude: 37.7577,
+    longitude: -122.4376,
+    zoom: 8
+  });
 
-  state = {
-    viewport: {
-      width: 400,
-      height: 400,
-      latitude: 37.7577,
-      longitude: -122.4376,
-      zoom: 8
-    }
-  };
-
-  render() {
-    return (
-      <ReactMapGL
-        {...this.state.viewport}
-        onViewportChange={(viewport) => this.setState({viewport})}
-      />
-    );
-  }
+  return (
+    <ReactMapGL
+      {...viewport}
+      onViewportChange={setViewport}
+    />
+  );
 }
 ```
+
+See full project setup in [get-started examples](https://github.com/uber/react-map-gl/tree/master/examples/get-started)
 
 ## Styling
 
@@ -48,10 +45,11 @@ You may add the stylesheet to the head of your page:
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v<YOUR_MAPBOX_VERSION>/mapbox-gl.css' rel='stylesheet' />
 ```
 
-Find out your mapbox version by running yarn list mapbox-gl or npm ls mapbox-gl.
+Find out your mapbox version by running `yarn list mapbox-gl` or `npm ls mapbox-gl`.
 
 Or embed it in your app by using - [browserify-css](https://www.npmjs.com/package/browserify-css)
 with Browserify or - [css-loader](https://webpack.github.io/docs/stylesheets.html) with Webpack:
+
 ```js
 // app.js
 import 'mapbox-gl/dist/mapbox-gl.css';
