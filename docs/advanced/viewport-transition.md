@@ -55,7 +55,7 @@ See [viewport animation](#examples/viewport-animation) for a complete example.
 You can use the `WebMercatorViewport` utility to find the target viewport that fits around a lngLat bounding box:
 
 ```js
-import WebMercatorViewport from 'viewport-mercator-project';
+import {WebMercatorViewport} from 'react-map-gl';
 ```
 
 ```js
@@ -78,7 +78,7 @@ import WebMercatorViewport from 'viewport-mercator-project';
     };
 ```
 
-[Documentation of WebMercatorViewport](https://uber-common.github.io/viewport-mercator-project/#/documentation/api-reference/webmercatorviewport)
+[Documentation of WebMercatorViewport](https://uber.github.io/react-map-gl/#/documentation/api-reference/web-mercator-viewport)
 
 
 ## InteractiveMap's Transition Props
