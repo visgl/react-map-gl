@@ -1,5 +1,7 @@
 # Navigation Control
 
+![Since v3.0](https://img.shields.io/badge/since-v3.0-green)
+
 This is a React equivalent of Mapbox's [NavigationControl](https://www.mapbox.com/mapbox-gl-js/api/#navigationcontrol),
 which provides zoom buttons and a compass button.
 

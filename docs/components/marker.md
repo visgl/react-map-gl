@@ -1,5 +1,7 @@
 # Marker Control
 
+![Since v3.0](https://img.shields.io/badge/since-v3.0-green)
+
 This is a React equivalent of Mapbox's
 [Marker Control](https://www.mapbox.com/mapbox-gl-js/api/#marker), which can
 be used to render custom icons at specific locations on the map.

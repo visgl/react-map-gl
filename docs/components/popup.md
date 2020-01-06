@@ -1,5 +1,7 @@
 # Popup Control
 
+![Since v3.0](https://img.shields.io/badge/since-v3.0-green)
+
 This is a React equivalent of Mapbox's [Popup Control](https://www.mapbox.com/mapbox-gl-js/api/#popup), which can be used to
 show tooltip popups with custom HTML content at specific locations on the map.
 

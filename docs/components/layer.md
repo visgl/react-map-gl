@@ -1,5 +1,7 @@
 # Layer
 
+![Since v5.1](https://img.shields.io/badge/since-v5.1-green)
+
 This component allows apps to create a [map layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/#layers) using React.
 
 ```js

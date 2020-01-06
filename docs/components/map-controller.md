@@ -1,5 +1,7 @@
 # MapController
 
+![Since v4.0](https://img.shields.io/badge/since-v4.0-green)
+
 The easiest way to create a custom map control is to extend the default `MapController` class.
 
 ## Properties

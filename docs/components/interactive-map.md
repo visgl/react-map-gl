@@ -1,5 +1,7 @@
 # InteractiveMap
 
+![Since v3.0](https://img.shields.io/badge/since-v3.0-green)
+
 This component renders `MapboxGL` and provides full interactivity support.
 It uses `StaticMap` underneath to render the final map component.
 This is the `default` exported component from `ReactMapGL`.

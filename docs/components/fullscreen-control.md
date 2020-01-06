@@ -1,5 +1,7 @@
 # Fullscreen Control
 
+![Since v4.1](https://img.shields.io/badge/since-v4.1-green)
+
 This is a React equivalent of Mapbox's [FullscreenControl](https://www.mapbox.com/mapbox-gl-js/api/#fullscreencontrol).
 
 ```js
