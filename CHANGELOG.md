@@ -2,6 +2,32 @@
 
 # Version 5.1
 
+## 5.1.7 (Jan 2, 2020)
+- Fix flyToInterpolator crash when transitioning to the same viewport center (#975)
+- Fix NavigationControl crash when used with external context (#974)
+
+## 5.1.6 (Dec 30, 2019)
+- Upgrade viewport-mercator-project (#961)
+- Fix control icons when used with mapbox-gl@>=1.6 (#967)
+- Add ScaleControl (#966)
+- Enhance GeolocateControl component (#761)
+- Fix React state update warning (#968)
+
+## 5.1.5 (Dec 18, 2019)
+- marker component perf (#949)
+- Allow customizing labels in NavigationControl and GeolocateControl (#959)
+- Remove marker when GeolocateControl is disabled (#960)
+
+## 5.1.4 (Dec 16, 2019)
+- Fix TransitionManager when used with deck.gl's interpolators (#956)
+
+## 5.1.3 (Nov 22, 2019)
+- Remove overwritten dotElement from geolocate control (#944)
+- Fix geolocate control crash: disable Mapbox's showUserLocation marker (#943)
+
+## 5.1.2 (Nov 8, 2019)
+- Fix geolocate control crash (#934)
+
 ## 5.1.1 (Oct 31, 2019)
 - Fix more crashes when source/layer components are removed (#933)
 

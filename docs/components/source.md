@@ -49,5 +49,5 @@ Unique identifier of the source. If not provided, a default id will be assigned.
 Type of the source.
 
 ## Source
-[source.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/source.js)
+[source.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/components/source.js)
 

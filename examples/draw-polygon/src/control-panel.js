@@ -17,7 +17,7 @@ export default class ControlPanel extends PureComponent {
           </p>
         )}
         <a
-          href="https://github.com/uber/react-map-gl/tree/master/examples/draw-polygon"
+          href="https://github.com/uber/react-map-gl/tree/5.2-release/examples/draw-polygon"
           target="_new"
         >
           View Code ↗

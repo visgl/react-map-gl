@@ -37,4 +37,4 @@ Unit of the distance, one of `'imperial'`, `'metric'` or `'nautical'`.
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.
 
 ## Source
-[scale-control.js](https://github.com/uber/react-map-gl/tree/5.1-release/src/components/scale-control.js)
+[scale-control.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/components/scale-control.js)

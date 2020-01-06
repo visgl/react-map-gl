@@ -67,5 +67,5 @@ Label applied to the compass control button.
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.
 
 ## Source
-[navigation-control.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/navigation-control.js)
+[navigation-control.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/components/navigation-control.js)
 

@@ -116,5 +116,5 @@ Stop propagation of dblclick event to the map component. Can be used to stop map
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.
 
 ## Source
-[marker.js](https://github.com/uber/react-map-gl/tree/5.0-release/src/components/marker.js)
+[marker.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/components/marker.js)
 
