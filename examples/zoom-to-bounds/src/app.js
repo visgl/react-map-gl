@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL, {LinearInterpolator} from 'react-map-gl';
-import WebMercatorViewport from 'viewport-mercator-project';
+import MapGL, {LinearInterpolator, WebMercatorViewport} from 'react-map-gl';
 import bbox from '@turf/bbox';
 
 import ControlPanel from './control-panel';

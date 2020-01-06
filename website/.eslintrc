@@ -5,7 +5,8 @@
   ],
   "extends": [
     "eslint-config-uber-jsx",
-    "eslint-config-uber-es2015"
+    "eslint-config-uber-es2015",
+    "prettier"
   ],
   "overrides": [{
     "files": ["webpack/*.js"],

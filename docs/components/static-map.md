@@ -202,7 +202,7 @@ Parameters:
 You can use the `WebMercatorViewport` utility to find the target viewport that fits around a lngLat bounding box:
 
 ```js
-import WebMercatorViewport from 'viewport-mercator-project';
+import {WebMercatorViewport} from 'react-map-gl';
 
 const viewport = new WebMercatorViewport({width: 800, height: 600})
     .fitBounds([[-122.4, 37.7], [-122.5, 37.8]], {
@@ -220,7 +220,7 @@ const viewport = new WebMercatorViewport({width: 800, height: 600})
  */
 ```
 
-[Documentation of WebMercatorViewport](https://uber-common.github.io/viewport-mercator-project/#/documentation/api-reference/webmercatorviewport)
+[Documentation of WebMercatorViewport](https://uber.github.io/react-map-gl/#/documentation/api-reference/web-mercator-viewport)
 
 
 ## Source

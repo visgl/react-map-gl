@@ -135,7 +135,8 @@ export default class MapController {
   /* Callback util */
   // formats map state and invokes callback function
   updateViewport(newMapState: MapState, extraProps: any = {}, extraState: any = {}) {
-    const oldViewport = this.mapState ? this.mapState.getViewportProps() : this.mapStateProps;
+    // Always trigger callback on initial update (resize)
+    const oldViewport = this.mapState ? this.mapState.getViewportProps() : {};
     const newViewport = Object.assign({}, newMapState.getViewportProps(), extraProps);
 
     const viewStateChanged = Object.keys(newViewport).some(

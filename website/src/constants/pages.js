@@ -178,6 +178,12 @@ const docPages = {
         {
           name: 'SVGOverlay',
           content: getDocUrl('overlays/svg-overlay.md')
+        },
+        {
+          name: 'WebMercatorViewport',
+          // External content
+          content:
+            'https://raw.githubusercontent.com/uber-web/math.gl/master/modules/web-mercator/docs/api-reference/web-mercator-viewport.md'
         }
       ]
     }
