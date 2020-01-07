@@ -1,5 +1,7 @@
 # LinearInterpolator
 
+![Since v3.2](https://img.shields.io/badge/since-v3.2-green)
+
 Implements the `TransitionInterpolator` interface. Designed to use with the `transitionInterpolator` prop of [InteractiveMap](/docs/components/interactive-map.md).
 
 Interpolates all viewport props linearly. This interpolator offers similar behavior to Mapbox's `easeTo` when combined with a `transitionEasing` function. You may optionally limit the transition to selected viewport props, for example `new LinearInterpolator(['pitch', 'bearing'])` animates pitch and bearing while the user is still allowed to pan and zoom.

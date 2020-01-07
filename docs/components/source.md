@@ -1,5 +1,7 @@
 # Source
 
+![Since v5.1](https://img.shields.io/badge/since-v5.1-green)
+
 This component allows apps to create a [map source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources) using React. It may contain [Layer](/docs/components/layer.md) components as children.
 
 ```js

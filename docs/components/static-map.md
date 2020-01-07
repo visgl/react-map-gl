@@ -1,5 +1,7 @@
 # StaticMap
 
+![Since v3.0](https://img.shields.io/badge/since-v3.0-green)
+
 The simplest `React` wrapper around `MapboxGL`. This is designed to be completely
 static, and should be used to render a map with no interactivity. For a component
 that supports full user interactivity, see [InteractiveMap](/docs/components/interactive-map.md).

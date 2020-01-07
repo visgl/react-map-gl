@@ -1,3 +1,15 @@
+# react-map-gl v5.2
+
+Release date: Jan 6, 2019
+
+## Highlights
+
+- **New Components**: [`ScaleControl`](/docs/components/scale-control.md)
+- **NavigationControl**: new `label` prop
+- **GeolocateControl**: new `label`, `onGeolocate` props
+- **New Export**: `WebMercatorViewport` is re-exported from the `viewport-mercator-project` library for ease of use. It's recommended to import it from `react-map-gl` instead to avoid future dependency change.
+- **New Example**: [Clusters](https://uber.github.io/react-map-gl/#/Examples/clusters)
+
 # react-map-gl v5.1
 
 Release date: Oct 30, 2019

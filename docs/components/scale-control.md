@@ -1,5 +1,7 @@
 # Scale Control
 
+![Since v5.2](https://img.shields.io/badge/since-v5.2-green)
+
 This is a React equivalent of Mapbox's [ScaleControl](https://docs.mapbox.com/mapbox-gl-js/api/#scalecontrol).
 
 ```js

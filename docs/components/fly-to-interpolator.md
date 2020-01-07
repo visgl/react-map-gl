@@ -1,5 +1,7 @@
 # FlyToInterpolator
 
+![Since v3.2](https://img.shields.io/badge/since-v3.2-green)
+
 Implements the `TransitionInterpolator` interface. Designed to use with the `transitionInterpolator` prop of [InteractiveMap](/docs/components/interactive-map.md).
 
 This interpolator offers similar behavior to Mapbox's `flyTo` method.
