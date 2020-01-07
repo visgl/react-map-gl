@@ -9,7 +9,7 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack/dev --open",
     "build-clean": "rm -rf ./dist && mkdir dist",
-    "build-copy": "cp -r ../examples/data dist && cp -r ./src/static/* dist",
+    "build-copy": "cp -r ./src/static/* dist",
     "build-script": "webpack -p --config webpack/prod",
     "build": "npm run build-clean && npm run build-script && npm run build-copy",
     "lint": "eslint src --ignore-pattern workers"
@@ -17,9 +17,6 @@
   "dependencies": {
     "@turf/area": "^6.0.1",
     "@turf/bbox": "^6.0.1",
-    "d3-array": "^1.2.0",
-    "d3-color": "^1.0.1",
-    "d3-random": "^1.1.0",
     "d3-request": "^1.0.5",
     "d3-scale": "^1.0.6",
     "gl-matrix": "^3.0.0",
