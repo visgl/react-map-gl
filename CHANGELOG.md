@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# Version 5.2
+
+## 5.2.0 (Jan 6, 2020)
+
+- Export WebMercatorViewport (#979)
+
 # Version 5.1
 
 ## 5.1.7 (Jan 2, 2020)
