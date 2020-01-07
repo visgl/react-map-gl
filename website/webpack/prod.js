@@ -13,10 +13,9 @@ module.exports = Object.assign(config, {
 
   resolve: {
     modules: config.resolve.modules,
-    alias: {
-      'react-map-gl': resolve('../src'),
+    alias: Object.assign({}, config.resolve.alias, {
       '../utils/mapboxgl': resolve('../node_modules/mapbox-gl'),
-    }
+    })
   },
 
   plugins: config.plugins.concat([
