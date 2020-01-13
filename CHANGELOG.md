@@ -2,6 +2,10 @@
 
 # Version 5.2
 
+## 5.2.1 (Jan 12, 2020)
+
+- Deep compare source props (#985)
+
 ## 5.2.0 (Jan 6, 2020)
 
 - Export WebMercatorViewport (#979)
