@@ -22,6 +22,7 @@ import React, {PureComponent, cloneElement} from 'react';
 import PropTypes from 'prop-types';
 import MapContext from './map-context';
 import assert from '../utils/assert';
+import deepEqual from '../utils/deep-equal';
 
 import type {MapContextProps} from './map-context';
 
@@ -90,11 +91,11 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
     assert(!props.id || props.id === this.id, 'source id changed');
     assert(props.type === type, 'source type changed');
 
-    let changedKey = null;
+    let changedKey = '';
     let changedKeyCount = 0;
 
     for (const key in props) {
-      if (key !== 'children' && key !== 'id' && sourceOptions[key] !== props[key]) {
+      if (key !== 'children' && key !== 'id' && !deepEqual(sourceOptions[key], props[key])) {
         sourceOptions[key] = props[key];
         changedKey = key;
         changedKeyCount++;
@@ -120,8 +121,8 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
     ) {
       source.setCoordinates(sourceOptions.coordinates);
     } else {
-      map.removeSource(this.id);
-      map.addSource(this.id, sourceOptions);
+      // eslint-disable-next-line
+      console.warn(`Unable to update <Source> prop: ${changedKey}`);
     }
   };
   /* eslint-enable complexity */
