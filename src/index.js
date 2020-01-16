@@ -47,6 +47,7 @@ export {
   ViewportFlyToInterpolator as FlyToInterpolator
 } from './utils/transition';
 export {default as MapController} from './utils/map-controller';
+export {default as MapState} from './utils/map-state';
 export {WebMercatorViewport} from 'viewport-mercator-project';
 
 // Experimental Features (May change in minor version bumps, use at your own risk)
