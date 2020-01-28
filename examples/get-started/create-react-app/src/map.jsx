@@ -3,8 +3,7 @@ import MapGL, {NavigationControl, FullscreenControl} from 'react-map-gl';
 import './map.css';
 
 // Insert your Mapbox API key here
-const API_KEY =
-  'pk.eyJ1IjoieHl6enkiLCJhIjoiY2p1dm01OHF0MDM0dzRkbXdxaTlpdTU5YSJ9.i_TMCxFAFsBTL2ZgM8mK9g';
+const API_KEY = '';
 
 class Map extends Component {
   state = {
