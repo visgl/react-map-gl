@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import MapGL, { NavigationControl, FullscreenControl } from 'react-map-gl';
+import React, {Component} from 'react';
+import MapGL, {NavigationControl, FullscreenControl} from 'react-map-gl';
 import './map.css';
 
 // Insert your Mapbox API key here
@@ -13,12 +13,11 @@ class Map extends Component {
       zoom: 3.5,
       bearing: 0,
       pitch: 0
-    },
-    popupInfo: null
+    }
   };
 
   updateViewport = viewport => {
-    this.setState({ viewport });
+    this.setState({viewport});
   };
 
   render() {
@@ -28,7 +27,7 @@ class Map extends Component {
         width="100%"
         height="100vh"
         mapboxApiAccessToken={API_KEY}
-        onViewportChange={viewport => this.setState({ viewport })}
+        onViewportChange={viewport => this.updateViewport(viewport)}
         mapStyle="mapbox://styles/mapbox/light-v9"
         className="map"
       >
