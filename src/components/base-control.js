@@ -82,7 +82,7 @@ export default class BaseControl<
         click: this._onClick,
         dblclick: this._onDblClick
       };
-      eventManager.on(this._events, ref);
+      eventManager.watch(this._events, ref);
     }
   }
 
