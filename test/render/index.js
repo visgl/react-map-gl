@@ -85,7 +85,7 @@ test('Render test', async t => {
       error = err;
     }
 
-    if (testCase.ror) {
+    if (testCase.mapError) {
       t.ok(error && testCase.mapError.test(error.message), 'Map should throw error');
     } else if (error) {
       t.fail(error.message);
