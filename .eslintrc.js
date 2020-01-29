@@ -3,12 +3,12 @@ module.exports = {
   parser: 'babel-eslint',
   plugins: ['flowtype', 'react'],
   extends: ['uber-jsx', 'uber-es2015', 'prettier', 'prettier/react', 'prettier/flowtype', 'plugin:import/errors', 'plugin:flowtype/recommended'],
-  overrides: {
+  overrides: [{
     files: ['*.spec.js', 'webpack.config.js', '**/bundle/*.js'],
     rules: {
       'import/no-extraneous-dependencies': 0
     }
-  },
+  }],
   settings: {
     'import/core-modules': [
       'math.gl',
