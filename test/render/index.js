@@ -1,5 +1,5 @@
 /* global window, document */
-import test from 'tape-catch';
+import test from 'tape-promise/tape';
 import React from 'react';
 import MapGL from 'react-map-gl';
 import {render, unmountComponentAtNode} from 'react-dom';
@@ -19,13 +19,7 @@ function getBoundingBoxInPage(domElement) {
   };
 }
 
-function sleep(delay) {
-  return new Promise(resolve => {
-    window.setTimeout(resolve, delay);
-  });
-}
-
-function runTestCase({Component = MapGL, threshold = 0.99, props, goldenImage}) {
+async function runTestCase({Component = MapGL, props}) {
   const container = document.createElement('div');
   container.style.width = `${WIDTH}px`;
   container.style.height = `${HEIGHT}px`;
@@ -34,37 +28,24 @@ function runTestCase({Component = MapGL, threshold = 0.99, props, goldenImage}) 
   document.body.append(container);
 
   return new Promise((resolve, reject) => {
-    const onLoad = () => {
+    const unmount = () => {
+      unmountComponentAtNode(container);
+      container.remove();
+    };
+    const onLoad = ({target}) => {
       // Wait for mapbox's animation to finish
-      sleep(500)
-        .then(() =>
-          window.browserTestDriver_captureAndDiffScreen({
-            threshold,
-            goldenImage,
-            region: getBoundingBoxInPage(container),
-            tolerance: 0.05
-            // Uncomment to save screenshot
-            // , saveOnFail: true
-          })
-        )
-        .then(result => {
-          // clean up
-          unmountComponentAtNode(container);
-          container.remove();
-
-          if (result.error) {
-            reject(result.error);
-          } else {
-            resolve(result);
-          }
-        });
+      target.once('idle', () =>
+        resolve({
+          map: target,
+          boundingBox: getBoundingBoxInPage(container),
+          unmount
+        })
+      );
     };
 
     const onError = evt => {
       // clean up
-      unmountComponentAtNode(container);
-      container.remove();
-
+      unmount();
       reject(evt.error);
     };
 
@@ -75,35 +56,43 @@ function runTestCase({Component = MapGL, threshold = 0.99, props, goldenImage}) 
   });
 }
 
-test('Render test', t => {
+test('Render test', async t => {
   // Default tape test timeout is 500ms - allow enough time for render and screenshot
   t.timeoutAfter(TEST_CASES.length * 4000);
 
-  let testCaseIndex = 0;
-
-  function nextTestCase() {
-    const testCase = TEST_CASES[testCaseIndex];
-    if (!testCase) {
-      t.end();
-      return;
-    }
+  for (const testCase of TEST_CASES) {
     t.comment(testCase.title);
-    runTestCase(testCase)
-      .then(result => {
-        t.ok(result.success, `Render test matched ${result.matchPercentage}`);
-      })
-      .catch(error => {
-        if (testCase.mapError) {
-          t.ok(testCase.mapError.test(error.message), 'Map should throw error');
-        } else {
-          t.fail(error.message);
-        }
-      })
-      .finally(() => {
-        testCaseIndex++;
-        nextTestCase();
+
+    const {threshold = 0.99, goldenImage} = testCase;
+    let result;
+    let error;
+
+    try {
+      const {boundingBox, unmount} = await runTestCase(testCase);
+
+      result = await window.browserTestDriver_captureAndDiffScreen({
+        threshold,
+        goldenImage,
+        region: boundingBox,
+        tolerance: 0.05
+        // Uncomment to save screenshot
+        // , saveOnFail: true
       });
+
+      error = result.error;
+      unmount();
+    } catch (err) {
+      error = err;
+    }
+
+    if (testCase.mapError) {
+      t.ok(error && testCase.mapError.test(error.message), 'Map should throw error');
+    } else if (error) {
+      t.fail(error.message);
+    } else {
+      t.ok(result && result.success, `Render test matched ${result.matchPercentage}`);
+    }
   }
 
-  nextTestCase();
+  t.end();
 });
