@@ -2,6 +2,13 @@
 
 # Version 5.2
 
+## 5.2.2 (Feb 3, 2020)
+
+- Bump mjolnir.js dependency (#990)
+- Re-export setRTLTextPlugin plugin (#1010)
+- Fix GeolocateControl error when used with StaticMap (#1012)
+- Fix issue where adding popup enables double click recognizer (#1013)
+
 ## 5.2.1 (Jan 12, 2020)
 
 - Deep compare source props (#985)
