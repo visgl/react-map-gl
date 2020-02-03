@@ -146,52 +146,48 @@ export default class GeolocateControl extends BaseControl<
       }
     });
 
-    this._mapboxGeolocateControl = new mapboxgl.GeolocateControl(controlOptions);
+    const control = new mapboxgl.GeolocateControl(controlOptions);
+    this._mapboxGeolocateControl = control;
 
     // the following re-implement MapboxGeolocateControl's _setupUI
     // replace mapbox internal prop
-    this._mapboxGeolocateControl._watchState = 'OFF';
+    control._watchState = 'OFF';
 
     // replace mapbox internal UI elements
-    this._mapboxGeolocateControl._geolocateButton = this._geolocateButtonRef.current;
-    if (
-      this._mapboxGeolocateControl.options.trackUserLocation &&
-      this._mapboxGeolocateControl._geolocateButton
-    ) {
-      this._mapboxGeolocateControl._geolocateButton.setAttribute('aria-pressed', 'false');
+    control._geolocateButton = this._geolocateButtonRef.current;
+    if (control.options.trackUserLocation && control._geolocateButton) {
+      control._geolocateButton.setAttribute('aria-pressed', 'false');
     }
 
     // replace mapbox internal methods
-    this._mapboxGeolocateControl._updateMarker = this._updateMarker;
-    this._mapboxGeolocateControl._updateCamera = this._updateCamera;
+    control._updateMarker = this._updateMarker;
+    control._updateCamera = this._updateCamera;
 
-    this._mapboxGeolocateControl._setup = true;
+    control._setup = true;
 
     // when the camera is changed (and it's not as a result of the Geolocation Control) change
     // the watch mode to background watch, so that the marker is updated but not the camera.
-    if (this._mapboxGeolocateControl.options.trackUserLocation) {
-      this._context.eventManager.on('panstart', () => {
-        if (this._mapboxGeolocateControl._watchState === 'ACTIVE_LOCK') {
-          this._mapboxGeolocateControl._watchState = 'BACKGROUND';
-          this._mapboxGeolocateControl._geolocateButton.classList.add(
-            'mapboxgl-ctrl-geolocate-background'
-          );
-          this._mapboxGeolocateControl._geolocateButton.classList.remove(
-            'mapboxgl-ctrl-geolocate-active'
-          );
+    const {eventManager} = this._context;
+    if (control.options.trackUserLocation && eventManager) {
+      eventManager.on('panstart', () => {
+        if (control._watchState === 'ACTIVE_LOCK') {
+          control._watchState = 'BACKGROUND';
+          control._geolocateButton.classList.add('mapboxgl-ctrl-geolocate-background');
+          control._geolocateButton.classList.remove('mapboxgl-ctrl-geolocate-active');
         }
       });
     }
 
-    this._mapboxGeolocateControl.on('geolocate', this.props.onGeolocate);
+    control.on('geolocate', this.props.onGeolocate);
   };
 
   _onClickGeolocate = () => {
-    this._mapboxGeolocateControl._map = this._context.map;
+    const control = this._mapboxGeolocateControl;
+    control._map = this._context.map;
 
     if (this.props.showUserLocation) {
-      this._mapboxGeolocateControl.on('geolocate', this._updateMarker);
-      this._mapboxGeolocateControl.on('trackuserlocationend', this._updateMarker);
+      control.on('geolocate', this._updateMarker);
+      control.on('trackuserlocationend', this._updateMarker);
     }
 
     return this._mapboxGeolocateControl.trigger();
