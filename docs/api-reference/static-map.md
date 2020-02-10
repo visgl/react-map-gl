@@ -266,4 +266,4 @@ const viewport = new WebMercatorViewport({width: 800, height: 600})
 
 ## Source
 
-[static-map.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/api-reference/static-map.js)
+[static-map.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/components/static-map.js)
