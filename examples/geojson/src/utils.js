@@ -6,9 +6,16 @@ export function updatePercentiles(featureCollection, accessor) {
   const scale = scaleQuantile()
     .domain(features.map(accessor))
     .range(range(9));
-  features.forEach(f => {
-    const value = accessor(f);
-    f.properties.value = value;
-    f.properties.percentile = scale(value);
-  });
+  return {
+    type: 'FeatureCollection',
+    features: features.map(f => {
+      const value = accessor(f);
+      const properties = {
+        ...f.properties,
+        value,
+        percentile: scale(value)
+      };
+      return {...f, properties};
+    })
+  };
 }
