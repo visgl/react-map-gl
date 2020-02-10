@@ -128,7 +128,7 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
   /* eslint-enable complexity */
 
   _render(context: MapContextProps) {
-    if (!this._map) {
+    if (!this._map && context.map) {
       this._map = context.map;
       this._map.on('styledata', this._updateSource);
     }
