@@ -12,14 +12,12 @@
 
 <h1 align="center">react-map-gl | <a href="https://uber.github.io/react-map-gl">Docs</a></h1>
 
-<h5 align="center">
-React Components Suite for <a href="https://github.com/mapbox/mapbox-gl-js">Mapbox GL JS</a>.
-</h5>
+react-map-gl is a suite of [React](http://facebook.github.io/react/) components for
+[Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js).
 
-In addition to exposing MapboxGL functionality to React apps, react-map-gl also integrates seamlessly with [deck.gl](https://uber.github.io/deck.gl).
+Mapbox GL JS is an awesome library for making modern web maps. It is beautiful, efficient (WebGL-powered), and fully open source. You may load map data from Mapbox's own service, which is free until a certain level of traffic is exceeded; or you can create and host your own map data using one of the many [open source tools](https://github.com/mapbox/awesome-vector-tiles).
 
-### Before You Begin
-This library provides convenient wrappers around initializing and (to some degree) tracking the state of a Mapbox WebGL map. Because most of the functionality of Mapbox's JS API depends on the use of HTML5 canvases and WebGL, which React is not built to manipulate, the React component does not mirror all the functionality of Mapbox GL JS's Map class. You may access the native Mapbox API exposed by the `getMap()` function in this library. However, proceed with caution as calling the native APIs may break the connection between the React layer props and the underlying map state.
+See our [Design Philosophy](docs/README.md#design-philosophy).
 
 ### Installation
 
@@ -58,7 +56,7 @@ class Map extends Component {
 }
 ```
 
-### About Mapbox Tokens
+### Using Mapbox Tokens
 
 To show maps from a service such as Mapbox you will need to register on their website in order to retrieve an access token required by the map component, which will be used to identify you and start serving up map tiles. The service will be free until a certain level of traffic is exceeded.
 
@@ -70,6 +68,12 @@ There are several ways to provide a token to your app, as showcased in some of t
 * Provide `mapboxApiUrl` prop to the map component to override the default mapbox API URL
 
 But we would recommend using something like [dotenv](https://github.com/motdotla/dotenv) and put your key in an untracked `.env` file, that will then expose it as a `process.env` variable, with much less leaking risks.
+
+
+### Limitations
+
+This library provides convenient wrappers around initializing and (to some degree) tracking the state of a Mapbox WebGL map. Because most of the functionality of Mapbox's JS API depends on the use of HTML5 canvases and WebGL, which React is not built to manipulate, the React component does not mirror all the functionality of Mapbox GL JS's Map class. You may access the native Mapbox API exposed by the `getMap()` function in this library. However, proceed with caution as calling the native APIs may break the connection between the React layer props and the underlying map state.
+
 
 ### Contribute
 

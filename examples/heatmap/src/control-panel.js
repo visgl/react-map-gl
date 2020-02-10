@@ -1,7 +1,5 @@
 import React, {PureComponent} from 'react';
 
-const defaultContainer = ({children}) => <div className="control-panel">{children}</div>;
-
 export default class ControlPanel extends PureComponent {
   render() {
     const {startTime, endTime, onChangeDay, allDay, onChangeAllDay, selectedTime} = this.props;
@@ -20,10 +18,8 @@ export default class ControlPanel extends PureComponent {
       return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
     };
 
-    const Container = this.props.containerComponent || defaultContainer;
-
     return (
-      <Container>
+      <div className="control-panel">
         <h3>Heatmap</h3>
         <p>
           Map showing earthquakes
@@ -66,7 +62,7 @@ export default class ControlPanel extends PureComponent {
             View Code ↗
           </a>
         </div>
-      </Container>
+      </div>
     );
   }
 }

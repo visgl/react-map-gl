@@ -1,8 +1,8 @@
 # Custom Components
 
-[Marker](/docs/components/marker.md),
-[Popup](/docs/components/popup.md), and
-[NavigationControl](/docs/components/navigation-control.md)
+[Marker](/docs/api-reference/marker.md),
+[Popup](/docs/api-reference/popup.md), and
+[NavigationControl](/docs/api-reference/navigation-control.md)
 all extend the `BaseControl` React component. You may also create your own map control components.
 
 ## Example
@@ -78,4 +78,4 @@ Implement this method to render the content of this component. `this._context` i
 
 
 ## Source
-[base-control.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/components/base-control.js)
+[base-control.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/api-reference/base-control.js)

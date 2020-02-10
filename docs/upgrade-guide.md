@@ -92,7 +92,7 @@ import MapGL, {SVGOverlay} from 'react-map-gl';
 
 // v0.6
 import MapGL from 'react-map-gl';
-import SVGOverlay from 'react-map-gl/src/overlays/svg-overlay';.
+import SVGOverlay from 'react-map-gl/src/api-reference/svg-overlay';.
 ```
 
 * **Map State** - The map state reported by `onViewportChanged` will now contain additional state fields (tracking not only `pitch` and `bearing` needed for perspective mode, but also transient information about how the projection is being changed by the user).

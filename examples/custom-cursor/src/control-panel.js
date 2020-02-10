@@ -8,8 +8,6 @@ const layerSelector = {
   labels: /label|place|poi/
 };
 
-const defaultContainer = ({children}) => <div className="control-panel">{children}</div>;
-
 function getLayerFilter(categories, layerId) {
   for (const key in categories) {
     if (categories[key] && layerSelector[key].test(layerId)) {
@@ -61,10 +59,8 @@ export default class StyleControls extends PureComponent {
   }
 
   render() {
-    const Container = this.props.containerComponent || defaultContainer;
-
     return (
-      <Container>
+      <div className="control-panel">
         <h3>Custom Cursor</h3>
         <p>Customize the cursor based on interactivity.</p>
         <div className="source-link">
@@ -78,7 +74,7 @@ export default class StyleControls extends PureComponent {
         <hr />
         <p>Clickable layers</p>
         {Object.keys(layerSelector).map(name => this._renderLayerControl(name))}
-      </Container>
+      </div>
     );
   }
 }

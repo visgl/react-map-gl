@@ -1,13 +1,9 @@
 import React, {PureComponent} from 'react';
 
-const defaultContainer = ({children}) => <div className="control-panel">{children}</div>;
-
 export default class ControlPanel extends PureComponent {
   render() {
-    const Container = this.props.containerComponent || defaultContainer;
-
     return (
-      <Container>
+      <div className="control-panel">
         <h3>Animated GeoJSON</h3>
         <p>Render animation by updating GeoJSON data source.</p>
         <div className="source-link">
@@ -18,7 +14,7 @@ export default class ControlPanel extends PureComponent {
             View Code ↗
           </a>
         </div>
-      </Container>
+      </div>
     );
   }
 }
