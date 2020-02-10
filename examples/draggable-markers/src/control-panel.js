@@ -1,7 +1,5 @@
 import React, {PureComponent} from 'react';
 
-const defaultContainer = ({children}) => <div className="control-panel">{children}</div>;
-
 const eventNames = ['onDragStart', 'onDrag', 'onDragEnd'];
 
 function round5(value) {
@@ -20,19 +18,20 @@ export default class ControlPanel extends PureComponent {
   };
 
   render() {
-    const Container = this.props.containerComponent || defaultContainer;
     return (
-      <Container>
+      <div className="control-panel">
         <h3>Draggable Marker</h3>
         <p>Try dragging the marker to another location.</p>
         <div>{eventNames.map(this.renderEvent)}</div>
-        <a
-          href="https://github.com/uber/react-map-gl/tree/5.2-release/examples/draggable-markers"
-          target="_new"
-        >
-          View Code ↗
-        </a>
-      </Container>
+        <div className="source-link">
+          <a
+            href="https://github.com/uber/react-map-gl/tree/5.2-release/examples/draggable-markers"
+            target="_new"
+          >
+            View Code ↗
+          </a>
+        </div>
+      </div>
     );
   }
 }

@@ -38,7 +38,7 @@ const mapStyle = fromJS({
 
 For details about data sources and layer configuration, check out the [Mapbox style specification](https://www.mapbox.com/mapbox-gl-js/style-spec).
 
-For dynamically updating data and layers, check out the [GeoJSON](#examples/geojson) and [GeoJSON animation](#examples/geojson-animation) examples.
+For dynamically updating data and layers, check out the [GeoJSON](http://uber.github.io/react-map-gl/examples/geojson) and [GeoJSON animation](http://uber.github.io/react-map-gl/examples/geojson-animation) examples.
 
 
 ## Overlays

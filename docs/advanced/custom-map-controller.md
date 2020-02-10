@@ -16,7 +16,7 @@ This custom map control must offer the following interface:
 ```
 
 
-Documentation of [the MapController class](/docs/components/map-controller.md).
+Documentation of [the MapController class](/docs/api-reference/map-controller.md).
 
 
 ## Examples

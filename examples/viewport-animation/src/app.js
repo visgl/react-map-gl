@@ -27,7 +27,7 @@ export default class App extends Component {
       longitude,
       latitude,
       zoom: 11,
-      transitionInterpolator: new FlyToInterpolator({speed: 2}),
+      transitionInterpolator: new FlyToInterpolator({speed: 1.2}),
       transitionDuration: 'auto'
     });
   };
@@ -42,7 +42,7 @@ export default class App extends Component {
           {...settings}
           width="100%"
           height="100%"
-          mapStyle="mapbox://styles/mapbox/dark-v9"
+          mapStyle="mapbox://styles/mapbox/light-v9"
           onViewportChange={this._onViewportChange}
           dragRotate={false}
           mapboxApiAccessToken={MAPBOX_TOKEN}

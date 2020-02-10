@@ -1,13 +1,9 @@
 import React, {PureComponent} from 'react';
 
-const defaultContainer = ({children}) => <div className="control-panel">{children}</div>;
-
 export default class ControlPanel extends PureComponent {
   render() {
-    const Container = this.props.containerComponent || defaultContainer;
-
     return (
-      <Container>
+      <div className="control-panel">
         <h3>Marker, Popup, NavigationControl and FullscreenControl </h3>
         <p>
           Map showing top 20 most populated cities of the United States. Click on a marker to learn
@@ -27,7 +23,7 @@ export default class ControlPanel extends PureComponent {
             View Code ↗
           </a>
         </div>
-      </Container>
+      </div>
     );
   }
 }
