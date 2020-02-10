@@ -1,46 +1,83 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>react-map-gl</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="react-map-gl is a suite of React components for Mapbox GL JS">
-
-    <link rel="icon" type="img/ico" href="favicon.ico">
-
-    <!-— facebook open graph tags -->
-    <meta property="og:url" content="https://uber.github.io/react-map-gl/" />
-    <meta property="og:title" content="React components for Mapbox GL JS" />
-    <meta property="og:description" content="react-map-gl is a suite of React components for Mapbox GL JS" />
-    <meta property="og:site_name" content="react-map-gl" />
-    <meta property="og:image" content="https://uber.github.io/deck.gl/images/trips-layer-unfurl-4.0.jpg" />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="800" />
-    <meta property="og:image:height" content="800" />
-
-    <!-— twitter card tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@uber">
-    <meta name="twitter:creator" content="@uber">
-    <meta name="twitter:title" content="React components for Mapbox GL JS">
-    <meta name="twitter:description" content="react-map-gl is a suite of React components for Mapbox GL JS">
-    <meta name="twitter:image" content="https://uber.github.io/deck.gl/images/trips-layer-unfurl-4.0.jpg" />
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-7157694-83', 'auto');
-      ga('send', 'pageview');
-    </script>
-
-    <!--use mapbox button icon css-->
-    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css" type="text/css">
-  </head>
-  <body>
-    <div id="app-content"></div>
-    <script type="text/javascript" src="main.js"></script>
-  </body>
-</html>
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><meta name="generator" content="Gatsby 2.18.25"/><title data-react-helmet="true">react-map-gl</title><link data-react-helmet="true" rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.css" type="text/css"/><link data-react-helmet="true" rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css" type="text/css"/><link data-react-helmet="true" rel="stylesheet" href="/react-map-gl/style.css" type="text/css"/><link data-react-helmet="true" rel="icon" type="img/ico" href="favicon.ico"/><meta data-react-helmet="true" name="description"/><meta data-react-helmet="true" name="image" content="NaN"/><meta data-react-helmet="true" property="og:url" content="NaN"/><meta data-react-helmet="true" property="og:title"/><meta data-react-helmet="true" property="og:description"/><meta data-react-helmet="true" property="og:image" content="NaN"/><meta data-react-helmet="true" property="fb:app_id" content=""/><meta data-react-helmet="true" name="twitter:card" content="summary_large_image"/><meta data-react-helmet="true" name="twitter:creator" content=""/><meta data-react-helmet="true" name="twitter:title"/><meta data-react-helmet="true" name="twitter:description"/><meta data-react-helmet="true" name="twitter:image" content="NaN"/><script data-react-helmet="true" type="application/ld+json">[{"@context":"http://schema.org","@type":"WebSite","url":null,"alternateName":""}]</script><style data-styled="bDuPoM jSLBtv RJnNb dyloyq duddkX cHaLri hUDXst fKpgxq iZhuWO ixcLqZ kUNTgu eTZWpm SJzLG bwWQsF gClZxo" data-styled-version="4.4.1">
+/* sc-component-id: header__HeaderContainer-sc-1hd3yin-1 */
+.bDuPoM{grid-column:1/3;grid-row:1/2;} @media screen and (max-width:600px){.bDuPoM{-webkit-order:1;-ms-flex-order:1;order:1;}}
+/* sc-component-id: body__BodyContainerFull-lvm4v2-0 */
+.jSLBtv{margin:0 auto;}
+/* sc-component-id: sc-global-495056895 */
+body{margin:0;overflow-x:hidden;} *{box-sizing:border-box;}
+/* sc-component-id: github-contributors__ContribContainer-sc-12w0yk9-0 */
+.eTZWpm{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;}
+/* sc-component-id: home__Banner-f9hbqs-0 */
+.RJnNb{position:relative;height:30rem;background:#333333;color:#FFFFFF;z-index:0;}
+/* sc-component-id: home__Container-f9hbqs-1 */
+.ixcLqZ{position:relative;padding:2rem 2rem 2rem 4rem;max-width:80rem;width:100%;height:100%;font:normal 16px/24px "Uber Move",Helvetica,Arial,sans-serif;margin:0;}
+/* sc-component-id: home__BannerContainer-f9hbqs-2 */
+.cHaLri{position:relative;padding:2rem 2rem 2rem 4rem;max-width:80rem;width:100%;height:100%;font:normal 16px/24px "Uber Move",Helvetica,Arial,sans-serif;margin:0;padding-top:192px;z-index:0;pointer-events:none;}
+/* sc-component-id: home__HeroExampleContainer-f9hbqs-3 */
+.dyloyq{position:absolute;top:0;left:0;right:0;bottom:0;z-index:-1;}
+/* sc-component-id: home__Section-f9hbqs-4 */
+.iZhuWO:nth-child(2n+1){background:#E8E8E8;}
+/* sc-component-id: home__ProjectName-f9hbqs-5 */
+.hUDXst{font-size:5em;line-height:1;text-transform:uppercase;-webkit-letter-spacing:4px;-moz-letter-spacing:4px;-ms-letter-spacing:4px;letter-spacing:4px;font-weight:700;margin:0;margin-bottom:16px;}
+/* sc-component-id: home__GetStartedLink-f9hbqs-6 */
+.fKpgxq{pointer-events:all;font-size:12px;line-height:44px;-webkit-letter-spacing:2px;-moz-letter-spacing:2px;-ms-letter-spacing:2px;letter-spacing:2px;font-weight:bold;margin:24px 0;padding:0 4rem;pointer-events:all;display:inline-block;-webkit-text-decoration:none;text-decoration:none;-webkit-transition:background-color 250ms ease-in,color 250ms ease-in;transition:background-color 250ms ease-in,color 250ms ease-in;border:solid 2px #276EF1;color:#FFFFFF;border-image:linear-gradient(to right,#276EF1 0%,#D2E0FC 100%);border-image-slice:2;} .fKpgxq:visited{color:#FFFFFF;} .fKpgxq:active{color:#FFFFFF;} .fKpgxq:hover{color:#FFFFFF;background-color:#276EF1;}
+/* sc-component-id: home__Footer-f9hbqs-7 */
+.SJzLG{position:absolute;bottom:-$footer-height;width:100%;z-index:2;background-image:url(data:image/gif;base64,R0lGODlhIAAgAKIAABUjMRYkMhclM0xXYU1YYgAAAAAAAAAAACwAAAAAIAAgAAADKjgjEP4wyklWmzg/IbTPwPWNZGmeaKqubOu+cCzPdG3feK7vfO//wKAwAQA7);background-size:32px;background-repeat:repeat;background-position:16px -8px;color:#FFFFFF;}
+/* sc-component-id: home__FooterText-f9hbqs-8 */
+.bwWQsF{font-size:12px;line-height:20px;font-weight:400;-webkit-letter-spacing:2px;-moz-letter-spacing:2px;-ms-letter-spacing:2px;letter-spacing:2px;opacity:0.4;margin-bottom:1rem;margin-right:1rem;}
+/* sc-component-id: home__FooterLogo-f9hbqs-9 */
+.gClZxo{max-height:32px;display:inline-block;}
+/* sc-component-id: home__Icon-sc-1jcekwk-0 */
+.kUNTgu{vertical-align:middle;width:36px;margin-right:8px;}
+/* sc-component-id: home__HeroExample-sc-1jcekwk-1 */
+.duddkX{background-image:url(images/hero.jpg);background-size:cover;background-position:center;height:100%;}</style><style type="text/css">
+    .anchor.before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateX(-100%);
+      padding-right: 4px;
+    }
+    .anchor.after {
+      display: inline-block;
+      padding-left: 4px;
+    }
+    h1 .anchor svg,
+    h2 .anchor svg,
+    h3 .anchor svg,
+    h4 .anchor svg,
+    h5 .anchor svg,
+    h6 .anchor svg {
+      visibility: hidden;
+    }
+    h1:hover .anchor svg,
+    h2:hover .anchor svg,
+    h3:hover .anchor svg,
+    h4:hover .anchor svg,
+    h5:hover .anchor svg,
+    h6:hover .anchor svg,
+    h1 .anchor:focus svg,
+    h2 .anchor:focus svg,
+    h3 .anchor:focus svg,
+    h4 .anchor:focus svg,
+    h5 .anchor:focus svg,
+    h6 .anchor:focus svg {
+      visibility: visible;
+    }
+  </style><script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      var hash = window.decodeURI(location.hash.replace('#', ''))
+      if (hash !== '') {
+        var element = document.getElementById(hash)
+        if (element) {
+          var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+          var clientTop = document.documentElement.clientTop || document.body.clientTop || 0
+          var offset = element.getBoundingClientRect().top + scrollTop - clientTop
+          // Wait for the browser to finish rendering before scrolling.
+          setTimeout((function() {
+            window.scrollTo(0, offset - 64)
+          }), 0)
+        }
+      }
+    })
+  </script><link as="script" rel="preload" href="/react-map-gl/webpack-runtime-7bb4a793dd08c19a1d8e.js"/><link as="script" rel="preload" href="/react-map-gl/app-a414266688039f7921e7.js"/><link as="script" rel="preload" href="/react-map-gl/commons-1a18a7edb09934892679.js"/><link as="script" rel="preload" href="/react-map-gl/component---src-home-js-5567f17f64fafd54b99f.js"/><link as="fetch" rel="preload" href="/react-map-gl/page-data/index/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div><div><div class="header__HeaderContainer-sc-1hd3yin-1 bDuPoM"><div></div></div><div class="body__BodyContainerFull-lvm4v2-0 jSLBtv"><main><section class="home__Banner-f9hbqs-0 RJnNb"><div class="home__HeroExampleContainer-f9hbqs-3 dyloyq"><div class="home__HeroExample-sc-1jcekwk-1 duddkX"></div></div><div class="home__Container-f9hbqs-1 home__BannerContainer-f9hbqs-2 cHaLri"><h1 class="home__ProjectName-f9hbqs-5 hUDXst">react-map-gl</h1><p>React wrapper for Mapbox GL JS</p><a class="home__GetStartedLink-f9hbqs-6 fKpgxq" href="/react-map-gl/docs/get-started/get-started">GET STARTED</a></div></section><section class="home__Section-f9hbqs-4 iZhuWO"><div class="home__Container-f9hbqs-1 ixcLqZ"><div><h2>react-map-gl makes using Mapbox GL JS in React applications easy.</h2><h3><img src="images/icon-react.svg" class="home__Icon-sc-1jcekwk-0 kUNTgu"/>React Integration</h3><p>Integration on browser and Node.js, exposing the full power of mapbox-gl.</p><h3><img src="images/icon-layers.svg" class="home__Icon-sc-1jcekwk-0 kUNTgu"/>Component Library</h3><p>react-map-gl comes with additional React components that synchronize with the map camera system. Use one of the supported overlays to visualize data, or build your own.</p><h3><img src="images/icon-high-precision.svg" class="home__Icon-sc-1jcekwk-0 kUNTgu"/>Part of Uber Visualization&#x27;s Framework Suite</h3><p>Use together with e.g. <a href="https://deck.gl/" target="_blank" rel="noopener noreferrer">deck.gl</a> to render performant and compelling 2D and 3D WebGL visualizations on top of your Mapbox GL JS based maps.</p></div></div></section><section class="home__Section-f9hbqs-4 iZhuWO"><div class="home__Container-f9hbqs-1 ixcLqZ"><h3>Contributors</h3><span>Join us!</span><div class="github-contributors__ContribContainer-sc-12w0yk9-0 eTZWpm"></div></div></section><footer class="home__Footer-f9hbqs-7 SJzLG"><div class="home__Container-f9hbqs-1 ixcLqZ"><div class="home__FooterText-f9hbqs-8 bwWQsF">Made by</div><img src="images/uber-logo.png" alt="logo" class="home__FooterLogo-f9hbqs-9 gClZxo"/></div></footer></main></div></div></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-a414266688039f7921e7.js"],"component---src-home-js":["/component---src-home-js-5567f17f64fafd54b99f.js"],"component---node-modules-gatsby-theme-ocular-src-react-templates-documentation-jsx":["/component---node-modules-gatsby-theme-ocular-src-react-templates-documentation-jsx-bc2b92ef9855af2673f6.js"],"component---node-modules-gatsby-theme-ocular-src-react-templates-examples-jsx":["/component---node-modules-gatsby-theme-ocular-src-react-templates-examples-jsx-ebadec786762b14117ce.js"],"component---examples-layers-src-app-js":["/component---examples-layers-src-app-js-0ca00b6efcf12c356533.js"],"component---examples-controls-src-app-js":["/component---examples-controls-src-app-js-9385631f409fcb6f6d30.js"],"component---examples-custom-cursor-src-app-js":["/component---examples-custom-cursor-src-app-js-e53df838b76b9e8a878d.js"],"component---examples-draggable-markers-src-app-js":["/component---examples-draggable-markers-src-app-js-ef2b15826e6c37659257.js"],"component---examples-geojson-src-app-js":["/component---examples-geojson-src-app-js-0febf6e932334bf369bf.js"],"component---examples-geojson-animation-src-app-js":["/component---examples-geojson-animation-src-app-js-4124fa82dc370367b642.js"],"component---examples-clusters-src-app-js":["/component---examples-clusters-src-app-js-d01467258de71693e0fa.js"],"component---examples-locate-user-src-app-js":["/component---examples-locate-user-src-app-js-7d9fccdd44147c143435.js"],"component---examples-interaction-src-app-js":["/component---examples-interaction-src-app-js-cc82d672cc2091e15622.js"],"component---examples-viewport-animation-src-app-js":["/component---examples-viewport-animation-src-app-js-1c97791be7a1455e6a31.js"],"component---examples-filter-src-app-js":["/component---examples-filter-src-app-js-6c8edb41435526128e70.js"],"component---examples-zoom-to-bounds-src-app-js":["/component---examples-zoom-to-bounds-src-app-js-3195e542ef4c2dd8d826.js"],"component---examples-heatmap-src-app-js":["/component---examples-heatmap-src-app-js-0525c25f5c4d5bd72dfe.js"],"component---examples-draw-polygon-src-app-js":["/component---examples-draw-polygon-src-app-js-0f17310fe89f108bbbae.js"],"component---node-modules-gatsby-theme-ocular-src-react-templates-search-jsx":["/component---node-modules-gatsby-theme-ocular-src-react-templates-search-jsx-b85c4e0d9b18863e5a9a.js"]};/*]]>*/</script><script src="/react-map-gl/component---src-home-js-5567f17f64fafd54b99f.js" async=""></script><script src="/react-map-gl/commons-1a18a7edb09934892679.js" async=""></script><script src="/react-map-gl/app-a414266688039f7921e7.js" async=""></script><script src="/react-map-gl/webpack-runtime-7bb4a793dd08c19a1d8e.js" async=""></script></body></html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><meta name="generator" content="Gatsby 2.18.25"/><title data-react-helmet="true">react-map-gl</title><link data-react-helmet="true" rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.css" type="text/css"/><link data-react-helmet="true" rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css" type="text/css"/><link data-react-helmet="true" rel="stylesheet" href="/react-map-gl/style.css" type="text/css"/><link data-react-helmet="true" rel="icon" type="img/ico" href="favicon.ico"/><meta data-react-helmet="true" name="description"/><meta data-react-helmet="true" name="image" content="NaN"/><meta data-react-helmet="true" property="og:url" content="NaN"/><meta data-react-helmet="true" property="og:title"/><meta data-react-helmet="true" property="og:description"/><meta data-react-helmet="true" property="og:image" content="NaN"/><meta data-react-helmet="true" property="fb:app_id" content=""/><meta data-react-helmet="true" name="twitter:card" content="summary_large_image"/><meta data-react-helmet="true" name="twitter:creator" content=""/><meta data-react-helmet="true" name="twitter:title"/><meta data-react-helmet="true" name="twitter:description"/><meta data-react-helmet="true" name="twitter:image" content="NaN"/><script data-react-helmet="true" type="application/ld+json">[{"@context":"http://schema.org","@type":"WebSite","url":null,"alternateName":""}]</script><style data-styled="gXXAFg bDuPoM eyqZow cWxAeV fybxvQ fCCoSo eFnCLU dMoLKk drnfrA hGwSqT dKqGOe" data-styled-version="4.4.1">
+/* sc-component-id: toc__TocChevron-c2gnov-0 */
+.eFnCLU{height:16px;width:16px;position:absolute;left:36px;top:20px;-webkit-transform:none;-ms-transform:none;transform:none;-webkit-transition:-webkit-transform 0.3s;-webkit-transition:transform 0.3s;transition:transform 0.3s;}
+/* sc-component-id: toc__TocEntry-c2gnov-1 */
+.fybxvQ{font:bold 14px/20px "Uber Move",Helvetica,Arial,sans-serif;border-top:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;color:#000000;cursor:pointer;margin:-0.5px 0;position:relative;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}.fCCoSo{font:bold 14px/20px "Uber Move",Helvetica,Arial,sans-serif;border-top:1px solid tranparent;border-bottom:1px solid tranparent;color:#666666;cursor:pointer;margin:-0.5px 0;position:relative;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+/* sc-component-id: toc__TocHeader-c2gnov-2 */
+.dMoLKk{display:block;padding:16px 16px 16px 60px;} .dMoLKk:hover{background:#F7F7F7;}
+/* sc-component-id: toc__TocLink-c2gnov-3 */
+.hGwSqT a{display:block;padding:16px 16px 16px 84px;color:#666666 !important;-webkit-text-decoration:none;text-decoration:none;} .hGwSqT:hover{background:#F7F7F7;}
+/* sc-component-id: toc__TocSubpages-c2gnov-4 */
+.drnfrA{list-style:none;margin:0;max-height:784px;overflow:hidden;padding:0;-webkit-transition:max-height 0.3s;transition:max-height 0.3s;}
+/* sc-component-id: toc__TocContainer-c2gnov-5 */
+@media screen and (min-width:600px){.cWxAeV{position:fixed;top:0;padding:64px 0;max-width:300px;height:100%;z-index:2;border-right:1px solid #CCCCCC;overflow-y:scroll;overflow-x:hidden;width:100%;}} @media screen and (max-width:600px){.cWxAeV{border-right:none;position:-webkit-sticky;position:sticky;padding:0 0;-webkit-transition:opacity 0.3s,-webkit-transform 0.3s;-webkit-transition:opacity 0.3s,transform 0.3s;transition:opacity 0.3s,transform 0.3s;opacity:0;max-height:0;overflow:hidden;-webkit-transform:translateY(30px);-ms-transform:translateY(30px);transform:translateY(30px);}}
+/* sc-component-id: toc__StyledTocToggle-c2gnov-6 */
+.eyqZow{font:normal 14px/20px "Uber Move",Helvetica,Arial,sans-serif;color:#FFFFFF;cursor:pointer;position:fixed;top:0;right:24px;line-height:64px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;z-index:10;display:none;} @media screen and (max-width:600px){.eyqZow{display:block;}}
+/* sc-component-id: header__HeaderContainer-sc-1hd3yin-1 */
+.bDuPoM{grid-column:1/3;grid-row:1/2;} @media screen and (max-width:600px){.bDuPoM{-webkit-order:1;-ms-flex-order:1;order:1;}}
+/* sc-component-id: body__BodyContainerToC-lvm4v2-1 */
+.dKqGOe{height:100%;width:100%;padding:64px 0 0 300px;-webkit-transform:scaleY(1);-ms-transform:scaleY(1);transform:scaleY(1);opacity:1;} @media screen and (max-width:600px){.dKqGOe{padding-left:0;-webkit-order:2;-ms-flex-order:2;order:2;-webkit-transition:opacity 0.3s;transition:opacity 0.3s;-webkit-transform:scaleY(1);-ms-transform:scaleY(1);transform:scaleY(1);opacity:1;}}
+/* sc-component-id: body__Body-lvm4v2-3 */
+.gXXAFg{height:100vh;}
+/* sc-component-id: sc-global-495056895 */
+body{margin:0;overflow-x:hidden;} *{box-sizing:border-box;}</style><style type="text/css">
+    .anchor.before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateX(-100%);
+      padding-right: 4px;
+    }
+    .anchor.after {
+      display: inline-block;
+      padding-left: 4px;
+    }
+    h1 .anchor svg,
+    h2 .anchor svg,
+    h3 .anchor svg,
+    h4 .anchor svg,
+    h5 .anchor svg,
+    h6 .anchor svg {
+      visibility: hidden;
+    }
+    h1:hover .anchor svg,
+    h2:hover .anchor svg,
+    h3:hover .anchor svg,
+    h4:hover .anchor svg,
+    h5:hover .anchor svg,
+    h6:hover .anchor svg,
+    h1 .anchor:focus svg,
+    h2 .anchor:focus svg,
+    h3 .anchor:focus svg,
+    h4 .anchor:focus svg,
+    h5 .anchor:focus svg,
+    h6 .anchor:focus svg {
+      visibility: visible;
+    }
+  </style><script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      var hash = window.decodeURI(location.hash.replace('#', ''))
+      if (hash !== '') {
+        var element = document.getElementById(hash)
+        if (element) {
+          var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+          var clientTop = document.documentElement.clientTop || document.body.clientTop || 0
+          var offset = element.getBoundingClientRect().top + scrollTop - clientTop
+          // Wait for the browser to finish rendering before scrolling.
+          setTimeout((function() {
+            window.scrollTo(0, offset - 64)
+          }), 0)
+        }
+      }
+    })
+  </script><link as="script" rel="preload" href="/react-map-gl/webpack-runtime-7bb4a793dd08c19a1d8e.js"/><link as="script" rel="preload" href="/react-map-gl/app-a414266688039f7921e7.js"/><link as="script" rel="preload" href="/react-map-gl/commons-1a18a7edb09934892679.js"/><link as="script" rel="preload" href="/react-map-gl/component---examples-geojson-animation-src-app-js-4124fa82dc370367b642.js"/><link as="fetch" rel="preload" href="/react-map-gl/page-data/examples/geojson-animation/page-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div><div><div class="body__Body-lvm4v2-3 gXXAFg"><div class="header__HeaderContainer-sc-1hd3yin-1 bDuPoM"><div></div></div><div class="toc__StyledTocToggle-c2gnov-6 eyqZow">Table of Contents</div><div class="toc__TocContainer-c2gnov-5 cWxAeV"><div><div title="Examples" class="toc__TocEntry-c2gnov-1 fybxvQ"><svg viewBox="0 0 24 24" class="toc__TocChevron-c2gnov-0 eFnCLU" width="24" height="24"><title>Chevron Down</title><path transform="rotate(270, 12, 12)" fill-rule="evenodd" clip-rule="evenodd" d="M9 12C9 12.2652 9.10536 12.5196 9.29289 12.7071L13.2929 16.7071C13.6834 17.0976 14.3166 17.0976 14.7071 16.7071C15.0976 16.3166 15.0976 15.6834 14.7071 15.2929L11.4142 12L14.7071 8.70711C15.0976 8.31658 15.0976 7.68342 14.7071 7.29289C14.3166 6.90237 13.6834 6.90237 13.2929 7.29289L9.29289 11.2929C9.10536 11.4804 9 11.7348 9 12Z"></path></svg><span class="toc__TocHeader-c2gnov-2 dMoLKk">Examples</span></div><ul class="toc__TocSubpages-c2gnov-4 drnfrA"><div><li><div title="Dynamic Styling" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Dynamic Styling" href="/react-map-gl/examples/layers">Dynamic Styling</a></div></div></li></div><div><li><div title="Markers &amp; Popups" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Markers &amp; Popups" href="/react-map-gl/examples/controls">Markers &amp; Popups</a></div></div></li></div><div><li><div title="Custom Cursor" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Custom Cursor" href="/react-map-gl/examples/custom-cursor">Custom Cursor</a></div></div></li></div><div><li><div title="Draggable Marker" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Draggable Marker" href="/react-map-gl/examples/draggable-markers">Draggable Marker</a></div></div></li></div><div><li><div title="GeoJSON" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="GeoJSON" href="/react-map-gl/examples/geojson">GeoJSON</a></div></div></li></div><div><li><div title="GeoJSON Animation" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a aria-current="page" title="GeoJSON Animation" class="" href="/react-map-gl/examples/geojson-animation">GeoJSON Animation</a></div></div></li></div><div><li><div title="Clusters" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Clusters" href="/react-map-gl/examples/clusters">Clusters</a></div></div></li></div><div><li><div title="Locate User" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Locate User" href="/react-map-gl/examples/locate-user">Locate User</a></div></div></li></div><div><li><div title="Limit Map Interaction" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Limit Map Interaction" href="/react-map-gl/examples/interaction">Limit Map Interaction</a></div></div></li></div><div><li><div title="Camera Transition" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Camera Transition" href="/react-map-gl/examples/viewport-animation">Camera Transition</a></div></div></li></div><div><li><div title="Highlight By Filter" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Highlight By Filter" href="/react-map-gl/examples/filter">Highlight By Filter</a></div></div></li></div><div><li><div title="Zoom To Bounds" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Zoom To Bounds" href="/react-map-gl/examples/zoom-to-bounds">Zoom To Bounds</a></div></div></li></div><div><li><div title="Heatmap" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="Heatmap" href="/react-map-gl/examples/heatmap">Heatmap</a></div></div></li></div><div><li><div title="DrawPolygon" class="toc__TocEntry-c2gnov-1 fCCoSo"><div class="toc__TocLink-c2gnov-3 hGwSqT"><a title="DrawPolygon" href="/react-map-gl/examples/draw-polygon">DrawPolygon</a></div></div></li></div></ul></div></div><div class="body__BodyContainerToC-lvm4v2-1 dKqGOe"><div style="position:relative;width:100%;height:100%;cursor:grab"><div style="position:relative;width:100%;height:100%"><div style="position:absolute;width:100%;height:100%;overflow:hidden;visibility:inherit" class=""></div><div style="overflow:visible;height:0;width:0"></div></div></div></div></div></div></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/examples/geojson-animation";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app-a414266688039f7921e7.js"],"component---src-home-js":["/component---src-home-js-5567f17f64fafd54b99f.js"],"component---node-modules-gatsby-theme-ocular-src-react-templates-documentation-jsx":["/component---node-modules-gatsby-theme-ocular-src-react-templates-documentation-jsx-bc2b92ef9855af2673f6.js"],"component---node-modules-gatsby-theme-ocular-src-react-templates-examples-jsx":["/component---node-modules-gatsby-theme-ocular-src-react-templates-examples-jsx-ebadec786762b14117ce.js"],"component---examples-layers-src-app-js":["/component---examples-layers-src-app-js-0ca00b6efcf12c356533.js"],"component---examples-controls-src-app-js":["/component---examples-controls-src-app-js-9385631f409fcb6f6d30.js"],"component---examples-custom-cursor-src-app-js":["/component---examples-custom-cursor-src-app-js-e53df838b76b9e8a878d.js"],"component---examples-draggable-markers-src-app-js":["/component---examples-draggable-markers-src-app-js-ef2b15826e6c37659257.js"],"component---examples-geojson-src-app-js":["/component---examples-geojson-src-app-js-0febf6e932334bf369bf.js"],"component---examples-geojson-animation-src-app-js":["/component---examples-geojson-animation-src-app-js-4124fa82dc370367b642.js"],"component---examples-clusters-src-app-js":["/component---examples-clusters-src-app-js-d01467258de71693e0fa.js"],"component---examples-locate-user-src-app-js":["/component---examples-locate-user-src-app-js-7d9fccdd44147c143435.js"],"component---examples-interaction-src-app-js":["/component---examples-interaction-src-app-js-cc82d672cc2091e15622.js"],"component---examples-viewport-animation-src-app-js":["/component---examples-viewport-animation-src-app-js-1c97791be7a1455e6a31.js"],"component---examples-filter-src-app-js":["/component---examples-filter-src-app-js-6c8edb41435526128e70.js"],"component---examples-zoom-to-bounds-src-app-js":["/component---examples-zoom-to-bounds-src-app-js-3195e542ef4c2dd8d826.js"],"component---examples-heatmap-src-app-js":["/component---examples-heatmap-src-app-js-0525c25f5c4d5bd72dfe.js"],"component---examples-draw-polygon-src-app-js":["/component---examples-draw-polygon-src-app-js-0f17310fe89f108bbbae.js"],"component---node-modules-gatsby-theme-ocular-src-react-templates-search-jsx":["/component---node-modules-gatsby-theme-ocular-src-react-templates-search-jsx-b85c4e0d9b18863e5a9a.js"]};/*]]>*/</script><script src="/react-map-gl/component---examples-geojson-animation-src-app-js-4124fa82dc370367b642.js" async=""></script><script src="/react-map-gl/commons-1a18a7edb09934892679.js" async=""></script><script src="/react-map-gl/app-a414266688039f7921e7.js" async=""></script><script src="/react-map-gl/webpack-runtime-7bb4a793dd08c19a1d8e.js" async=""></script></body></html>

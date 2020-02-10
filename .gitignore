@@ -3,6 +3,7 @@ dist-es6/
 
 node_modules
 coverage
+website
 npm-debug.log
 
 */**/yarn.lock
