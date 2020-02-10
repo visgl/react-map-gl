@@ -35,8 +35,9 @@ export default class App extends Component {
   }
 
   _loadData = data => {
-    updatePercentiles(data, f => f.properties.income[this.state.year]);
-    this.setState({data});
+    this.setState({
+      data: updatePercentiles(data, f => f.properties.income[this.state.year])
+    });
   };
 
   _updateSettings = (name, value) => {
@@ -45,9 +46,10 @@ export default class App extends Component {
 
       const {data} = this.state;
       if (data) {
-        updatePercentiles(data, f => f.properties.income[value]);
         // trigger update
-        this.setState({data: {...data}});
+        this.setState({
+          data: updatePercentiles(data, f => f.properties.income[value])
+        });
       }
     }
   };
