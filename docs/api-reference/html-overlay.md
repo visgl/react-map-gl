@@ -44,4 +44,4 @@ Stop propagation of dblclick event to the map component. Can be used to stop map
 
 ## Source
 
-[html-overlay.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/api-reference/html-overlay.js)
+[html-overlay.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/overlays/html-overlay.js)
