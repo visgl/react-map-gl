@@ -158,7 +158,7 @@ export default class Layer<Props: LayerProps> extends PureComponent<Props> {
   /* eslint-disable complexity */
 
   _render(context: MapContextProps) {
-    if (!this._map) {
+    if (!this._map && context.map) {
       this._map = context.map;
       this._map.on('styledata', this._updateLayer);
     }
