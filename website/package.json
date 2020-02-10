@@ -1,71 +1,31 @@
 {
-  "description": "Documentation Site for react-map-gl",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/uber/react-map-gl.git"
-  },
-  "main": "index.js",
+  "name": "react-map-gl-website",
   "scripts": {
-    "start": "webpack-dev-server --config webpack/dev --open",
-    "build-clean": "rm -rf ./dist && mkdir dist",
-    "build-copy": "cp -r ./src/static/* dist",
-    "build-script": "webpack -p --config webpack/prod",
-    "build": "npm run build-clean && npm run build-script && npm run build-copy",
-    "lint": "eslint src --ignore-pattern workers"
+    "start": "yarn clean && yarn develop",
+    "build": "(cd .. && yarn build) && yarn clean-examples && yarn clean && gatsby build --prefix-paths",
+    "clean": "rm -rf ./.cache ./public && yarn update-external-docs",
+    "clean-examples": "find ../examples -name node_modules -exec rm -r {} \\; || true",
+    "update-external-docs": "curl https://raw.githubusercontent.com/uber-web/math.gl/master/modules/web-mercator/docs/api-reference/web-mercator-viewport.md > ../docs/api-reference/web-mercator-viewport.md",
+    "develop": "yarn clean-examples && gatsby develop",
+    "serve": "gatsby serve",
+    "deploy": "NODE_DEBUG=gh-pages gh-pages -d public"
   },
   "dependencies": {
     "@turf/area": "^6.0.1",
     "@turf/bbox": "^6.0.1",
+    "d3-array": "^1.0.5",
     "d3-request": "^1.0.5",
     "d3-scale": "^1.0.6",
     "gl-matrix": "^3.0.0",
-    "highlight.js": "^9.7.0",
     "immutable": "^3.7.5",
-    "marked": "^0.3.6",
-    "prop-types": "^15.5.8",
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0",
-    "react-map-gl-draw": "^0.15.0",
-    "react-redux": "^4.4.5",
-    "react-router": "^3.2.0",
-    "redux": "^3.6.0",
-    "redux-actions": "^1.2.0",
-    "redux-thunk": "^2.1.0",
+    "react-map-gl-draw": "^0.17.2",
     "styled-components": "^4.3.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/preset-flow": "^7.0.0",
-    "css-loader": "^0.28.11",
-    "file-loader": "^0.9.0",
-    "node-sass": "^4.3.0",
-    "raw-loader": "^0.5.1",
-    "react-hot-loader": "next",
-    "sass-loader": "^7.0.1",
-    "style-loader": "^0.21.0",
-    "transform-loader": "^0.2.3",
-    "url-loader": "^0.5.7",
-    "webpack": "^4.20.0",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.0",
-    "webpack-hot-middleware": "^2.17.0",
-    "webworkify-webpack-dropin": "^1.1.9"
-  },
-  "resolutions": {
-    "@turf/difference": "6.0.1"
-  },
-  "babel": {
-    "env": {
-      "test": {
-        "plugins": [
-          "react-hot-loader/babel"
-        ]
-      }
-    }
+    "gatsby": "~2.18.0",
+    "gatsby-plugin-env-variables": "^1.0.1",
+    "gatsby-plugin-no-sourcemaps": "^2.1.1",
+    "gatsby-theme-ocular": "^1.2.0-beta.6",
+    "gh-pages": "^2.1.0"
   }
 }

@@ -94,7 +94,7 @@ export default class App extends Component {
     const {viewport, data, allDay, selectedTime, startTime, endTime} = this.state;
 
     return (
-      <div style={{height: '100%'}}>
+      <div style={{height: '100%', position: 'relative'}}>
         <MapGL
           {...viewport}
           width="100%"

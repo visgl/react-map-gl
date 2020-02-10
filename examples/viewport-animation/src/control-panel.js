@@ -2,8 +2,6 @@ import React, {PureComponent} from 'react';
 
 import CITIES from '../../.data/cities.json';
 
-const defaultContainer = ({children}) => <div className="control-panel">{children}</div>;
-
 export default class ControlPanel extends PureComponent {
   _renderButton = (city, index) => {
     return (
@@ -21,10 +19,8 @@ export default class ControlPanel extends PureComponent {
   };
 
   render() {
-    const Container = this.props.containerComponent || defaultContainer;
-
     return (
-      <Container>
+      <div className="control-panel">
         <h3>Camera Transition</h3>
         <p>Smooth animate of the viewport.</p>
         <div className="source-link">
@@ -38,7 +34,7 @@ export default class ControlPanel extends PureComponent {
         <hr />
 
         {CITIES.filter(city => city.state === 'California').map(this._renderButton)}
-      </Container>
+      </div>
     );
   }
 }
