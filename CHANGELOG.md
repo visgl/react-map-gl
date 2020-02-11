@@ -2,6 +2,10 @@
 
 # Version 5.2
 
+## 5.2.3 (Feb 10, 2020)
+
+- Sanity check in source/layer update (#1022)
+
 ## 5.2.2 (Feb 3, 2020)
 
 - Bump mjolnir.js dependency (#990)
