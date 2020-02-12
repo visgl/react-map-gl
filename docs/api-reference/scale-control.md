@@ -14,7 +14,7 @@ class Map extends Component {
     return (
       <ReactMapGL {...viewport} onViewportChange={updateViewport}>
         <div style={{position: 'absolute', bottom: 100, left: 20}}>
-          <ScaleControl maxWidth={100} unit="metric"}/>
+          <ScaleControl maxWidth={100} unit={"metric"}/>
         </div>
       </ReactMapGL>
     );
