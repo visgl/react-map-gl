@@ -2,7 +2,7 @@
 
 ## react-map-gl v5.2
 
-Release date: Jan 6, 2019
+Release date: Jan 6, 2020
 
 ### Highlights
 
