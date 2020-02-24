@@ -6,7 +6,8 @@ This is a React equivalent of Mapbox's [NavigationControl](https://www.mapbox.co
 which provides zoom buttons and a compass button.
 
 ```js
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import ReactMapGL, {NavigationControl} from 'react-map-gl';
 
 class Map extends Component {

@@ -12,7 +12,8 @@ npm install --save react-map-gl
 ## Example
 
 ```js
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import ReactMapGL from 'react-map-gl';
 
 function Map() {

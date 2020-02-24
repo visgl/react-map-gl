@@ -1,4 +1,5 @@
-import React, {PureComponent} from 'react';
+import * as React from 'react';
+import {PureComponent} from 'react';
 
 export default class CityInfo extends PureComponent {
   render() {

@@ -26,7 +26,8 @@ class Map extends Component {
 Performance notes: if a large number of markers are needed, it's generally favorable to cache the `<Marker>` nodes, so that we don't rerender them when the viewport changes.
 
 ```js
-import React, {PureComponent} from 'react';
+import * as React from 'react';
+import {PureComponent} from 'react';
 import ReactMapGL, {Marker} from 'react-map-gl';
 
 const CITIES = [...];

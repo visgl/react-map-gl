@@ -5,7 +5,8 @@
 This is a React equivalent of Mapbox's [GeolocateControl](https://www.mapbox.com/mapbox-gl-js/api/#geolocatecontrol).
 
 ```js
-import React, { Component } from "react";
+import * as React from 'react';
+import { Component } from "react";
 import ReactMapGL, {GeolocateControl} from "react-map-gl";
 
 class Map extends Component {

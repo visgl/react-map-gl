@@ -1,5 +1,6 @@
 /* global window */
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Source, Layer} from 'react-map-gl';
 

@@ -1,5 +1,6 @@
 /* global document */
-import React, {useState} from 'react';
+import * as React from 'react';
+import {useState} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 

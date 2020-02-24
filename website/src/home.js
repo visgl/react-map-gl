@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {Home} from 'gatsby-theme-ocular/components';
 import styled from 'styled-components';
 
