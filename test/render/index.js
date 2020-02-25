@@ -1,6 +1,6 @@
 /* global window, document */
 import test from 'tape-promise/tape';
-import React from 'react';
+import * as React from 'react';
 import MapGL from 'react-map-gl';
 import {render, unmountComponentAtNode} from 'react-dom';
 

@@ -18,7 +18,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import React, {PureComponent, createRef} from 'react';
+import * as React from 'react';
+import {PureComponent, createRef} from 'react';
 import PropTypes from 'prop-types';
 import MapContext from './map-context';
 

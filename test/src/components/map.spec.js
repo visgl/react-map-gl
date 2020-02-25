@@ -1,6 +1,6 @@
 /* global setTimeout, clearTimeout */
 import MapGL, {InteractiveMap} from 'react-map-gl';
-import React from 'react';
+import * as React from 'react';
 import ReactTestUtils from 'react-test-renderer/shallow';
 import ReactTestRenderer from 'react-test-renderer';
 import sinon from 'sinon';

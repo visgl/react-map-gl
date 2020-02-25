@@ -1,7 +1,8 @@
 // @flow
 
 /* global window */
-import React, {createRef} from 'react';
+import * as React from 'react';
+import {createRef} from 'react';
 import PropTypes from 'prop-types';
 import WebMercatorViewport from 'viewport-mercator-project';
 

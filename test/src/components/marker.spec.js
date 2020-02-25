@@ -1,5 +1,5 @@
 import {Marker} from 'react-map-gl';
-import React from 'react';
+import * as React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 import WebMercatorViewport from 'viewport-mercator-project';
 import sinon from 'sinon';

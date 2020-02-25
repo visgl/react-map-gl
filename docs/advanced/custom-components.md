@@ -10,7 +10,7 @@ all extend the `BaseControl` React component. You may also create your own map c
 The following component renders a label "(longitude, latitude)" at the given coordinate:
 
 ```js
-import React from 'react';
+import * as React from 'react';
 import {BaseControl} from 'react-map-gl';
 
 class CustomMarker extends BaseControl {

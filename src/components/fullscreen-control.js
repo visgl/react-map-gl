@@ -23,7 +23,7 @@
 import {document} from '../utils/globals';
 import PropTypes from 'prop-types';
 import BaseControl from './base-control';
-import React from 'react';
+import * as React from 'react';
 import mapboxgl from '../utils/mapboxgl';
 
 import type {BaseControlProps} from './base-control';

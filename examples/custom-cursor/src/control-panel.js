@@ -1,4 +1,5 @@
-import React, {PureComponent} from 'react';
+import * as React from 'react';
+import {PureComponent} from 'react';
 
 // Layer id patterns by category
 const layerSelector = {
