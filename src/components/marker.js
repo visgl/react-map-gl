@@ -21,6 +21,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import DraggableControl from './draggable-control';
+import {crispPixel} from '../utils/crisp-pixel';
 
 import type {DraggableControlProps} from './draggable-control';
 
@@ -74,7 +75,7 @@ export default class Marker extends DraggableControl<MarkerProps> {
 
   _render() {
     const [x, y] = this._getPosition();
-    const transform = `translate(${x}px, ${y}px)`;
+    const transform = `translate(${crispPixel(x)}px, ${crispPixel(y)}px)`;
     const div = this._containerRef.current;
 
     if (this._control && div) {

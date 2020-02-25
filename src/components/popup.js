@@ -26,6 +26,7 @@ import BaseControl from './base-control';
 import {getDynamicPosition, ANCHOR_POSITION} from '../utils/dynamic-position';
 
 import type {BaseControlProps} from './base-control';
+import {crispPercentage, crispPixel} from '../utils/crisp-pixel';
 import type {PositionType} from '../utils/dynamic-position';
 
 const propTypes = Object.assign({}, BaseControl.propTypes, {
@@ -136,11 +137,15 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
     const anchorPosition = ANCHOR_POSITION[positionType];
     const left = x + offsetLeft;
     const top = y + offsetTop;
+
+    const el = this._containerRef.current;
+    const xPercentage = crispPercentage(el, -anchorPosition.x * 100);
+    const yPercentage = crispPercentage(el, -anchorPosition.y * 100, 'y');
     const style = {
       position: 'absolute',
       transform: `
-        translate(${-anchorPosition.x * 100}%, ${-anchorPosition.y * 100}%)
-        translate(${left}px, ${top}px)
+        translate(${xPercentage}%, ${yPercentage}%)
+        translate(${crispPixel(left)}px, ${crispPixel(top)}px)
       `,
       display: undefined,
       zIndex: undefined
