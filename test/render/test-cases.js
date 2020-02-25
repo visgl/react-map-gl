@@ -1,5 +1,5 @@
 /* global __MAPBOX_TOKEN__ */
-import React from 'react';
+import * as React from 'react';
 import {StaticMap, NavigationControl, GeolocateControl, Popup, Source, Layer} from 'react-map-gl';
 
 const EMPTY_MAP_STYLE = {

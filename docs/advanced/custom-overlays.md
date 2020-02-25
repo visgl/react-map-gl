@@ -5,7 +5,7 @@ resuable overlays that others can include into their project. Overlays can acces
 the current viewport through the React [context](https://facebook.github.io/react/docs/context.html):
 
 ```js
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import {BaseControl} from 'react-map-gl';
 

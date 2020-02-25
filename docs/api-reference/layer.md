@@ -5,7 +5,7 @@
 This component allows apps to create a [map layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/#layers) using React.
 
 ```js
-import React from 'react';
+import * as React from 'react';
 import ReactMapGL, {Layer} from 'react-map-gl';
 
 const parkLayer = {

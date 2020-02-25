@@ -5,7 +5,7 @@
 This component allows apps to create a [map source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources) using React. It may contain [Layer](/docs/api-reference/layer.md) components as children.
 
 ```js
-import React from 'react';
+import * as React from 'react';
 import ReactMapGL, {Source, Layer} from 'react-map-gl';
 
 const geojson = {

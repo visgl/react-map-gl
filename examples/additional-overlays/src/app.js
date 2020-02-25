@@ -19,8 +19,9 @@
 // THE SOFTWARE.
 
 /* global document, window */
-import ReactDOM from 'react-dom';
-import React, {Component} from 'react';
+import * as ReactDOM from 'react-dom';
+import * as React from 'react';
+import {Component} from 'react';
 import MapGL from 'react-map-gl';
 import Immutable from 'immutable';
 

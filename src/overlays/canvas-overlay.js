@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import BaseControl from '../components/base-control';
 import {window} from '../utils/globals';

@@ -1,4 +1,5 @@
-import React, {PureComponent} from 'react';
+import * as React from 'react';
+import {PureComponent} from 'react';
 import {fromJS} from 'immutable';
 import MAP_STYLE from '../../map-style-basic-v8.json';
 
