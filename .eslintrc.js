@@ -13,7 +13,10 @@ module.exports = {
     'import/core-modules': [
       'math.gl',
       'viewport-mercator-project'
-    ]
+    ],
+    react: {
+      version: 'detect'
+    }
   },
   rules: {
     'guard-for-in': 0,
