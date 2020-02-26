@@ -5,6 +5,8 @@ const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) ||
 
 export const crispPixel = (size: number) => Math.round(size * pixelRatio) / pixelRatio;
 
+const offsetCache = new WeakMap();
+
 export const crispPercentage = (
   el: null | HTMLDivElement,
   percentage: number,
@@ -13,6 +15,11 @@ export const crispPercentage = (
   if (el === null) {
     return percentage;
   }
-  const origSize = dimension === 'x' ? el.offsetWidth : el.offsetHeight;
-  return (crispPixel((percentage / 100) * origSize) / origSize) * 100;
+  const offset = offsetCache.get(el) || {};
+  if (offset[dimension] === undefined) {
+    offset[dimension] = dimension === 'x' ? el.offsetWidth : el.offsetHeight;
+    offsetCache.set(el, offset);
+  }
+  const size = offset[dimension];
+  return (crispPixel((percentage / 100) * size) / size) * 100;
 };
