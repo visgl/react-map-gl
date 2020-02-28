@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "typecheck": "flow check",
-    "start": "(cd examples/main && yarn && yarn start-local)",
+    "start": "(cd examples/controls && yarn && yarn start-local)",
     "bootstrap": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn && ocular-bootstrap",
     "clean": "ocular-clean",
     "build": "ocular-clean && ocular-build",
@@ -70,7 +70,7 @@
     "flow-bin": "^0.98.1",
     "immutable": "^3.8.2",
     "jsdom": "^15.0.0",
-    "ocular-dev-tools": "^0.1.0",
+    "ocular-dev-tools": "^0.1.8",
     "pre-commit": "^1.2.2",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
