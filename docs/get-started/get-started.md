@@ -28,7 +28,7 @@ function Map() {
   return (
     <ReactMapGL
       {...viewport}
-      onViewportChange={setViewport}
+      onViewportChange={nextViewport => setViewport(nextViewport)}
     />
   );
 }
