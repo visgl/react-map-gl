@@ -37,7 +37,7 @@ import type {ViewState} from '../mapbox/mapbox';
 
 /* eslint-disable max-len */
 const TOKEN_DOC_URL =
-  'https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens';
+  'https://uber.github.io/react-map-gl/docs/get-started/mapbox-tokens';
 const NO_TOKEN_WARNING = 'A valid API access token is required to use Mapbox data';
 /* eslint-disable max-len */
 
