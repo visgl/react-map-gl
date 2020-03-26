@@ -6239,9 +6239,9 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-"mapbox-gl@https://github.com/GlobalFishingWatch/mapbox-gl-js.git#build":
+"mapbox-gl@https://github.com/GlobalFishingWatch/mapbox-gl-js.git#temporalgrid":
   version "1.9.0"
-  resolved "https://github.com/GlobalFishingWatch/mapbox-gl-js.git#a08fee6ddca9f4cab73430ca811da7fdb3998706"
+  resolved "https://github.com/GlobalFishingWatch/mapbox-gl-js.git#099233730c378953877911493ee566f36a278161"
   dependencies:
     "@mapbox/geojson-rewind" "^0.4.0"
     "@mapbox/geojson-types" "^1.0.2"
