@@ -10,7 +10,7 @@
   </a>
 </p>
 
-<h1 align="center">react-map-gl | <a href="https://uber.github.io/react-map-gl">Docs</a></h1>
+<h1 align="center">react-map-gl | <a href="https://visgl.github.io/react-map-gl">Docs</a></h1>
 
 react-map-gl is a suite of [React](http://facebook.github.io/react/) components for
 [Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js).
