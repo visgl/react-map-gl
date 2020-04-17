@@ -61,5 +61,5 @@ Note that layers are added by the order that they mount. They are *NOT* reordere
 
 ## Source
 
-[layer.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/components/layer.js)
+[layer.js](https://github.com/visgl/react-map-gl/tree/5.2-release/src/components/layer.js)
 
