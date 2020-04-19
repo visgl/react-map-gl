@@ -132,11 +132,11 @@ Release date: July 27th, 2017
 
 #### [InteractiveMap (New, MapGL replacement)](/docs/api-reference/interactive-map.md)
 
-This is a wrapper on top of `StaticMap`. It takes all the props of `StaticMap` and additional ones such as `onViewportChange`, `scrollZoom`, `dragRotate`, etc. to control interactivity on the map. See [Source Code](https://github.com/uber/react-map-gl/tree/3.0-release/src/components/interactive-map.js) for more information.
+This is a wrapper on top of `StaticMap`. It takes all the props of `StaticMap` and additional ones such as `onViewportChange`, `scrollZoom`, `dragRotate`, etc. to control interactivity on the map. See [Source Code](https://github.com/visgl/react-map-gl/tree/3.0-release/src/components/interactive-map.js) for more information.
 
 #### [StaticMap (New)](/docs/api-reference/static-map.md)
 
-This is the React wrapper around `Mapbox GL JS` and takes in viewport properties such as `width`, `height`, `latitude`, `longitude`. Style diffing and updating logic also live here. See [Source Code](https://github.com/uber/react-map-gl/tree/3.0-release/src/components/static-map.js) for more information.
+This is the React wrapper around `Mapbox GL JS` and takes in viewport properties such as `width`, `height`, `latitude`, `longitude`. Style diffing and updating logic also live here. See [Source Code](https://github.com/visgl/react-map-gl/tree/3.0-release/src/components/static-map.js) for more information.
 
 #### Overlays
 

@@ -417,7 +417,7 @@ Add babel transform-runtime to es5 build for IE11 support.
 
 ## Version 3.0.0 (July 27, 2017)
 
-This is a major release of the library. For more information, please see [What's new](https://github.com/uber/react-map-gl/blob/3.0-release/docs/whats-new.md) in latest documentation.
+This is a major release of the library. For more information, please see [What's new](https://github.com/visgl/react-map-gl/blob/3.0-release/docs/whats-new.md) in latest documentation.
 
 ## Version 2.0.2 (Feb 09, 2017)
 
@@ -538,7 +538,7 @@ This is a major release of the library. For more information, please see [What's
 **Limitations:** The existing overlays (HTMLOverlay, CanvasOverlay,
   SVGOverlay etc) do not currently support perspective mode.
   For a set of overlays that do support perspective mode, see
-  [deck.gl](https://github.com/uber/deck.gl)
+  [deck.gl](https://github.com/visgl/deck.gl)
 
 Note: The map state reported by onViewportChanged may now contain additional
 state fields (tracking not only pitch and bearing, but also transient

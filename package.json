@@ -11,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/uber/react-map-gl.git"
+    "url": "https://github.com/visgl/react-map-gl.git"
   },
   "license": "MIT",
   "main": "dist/es5/index.js",

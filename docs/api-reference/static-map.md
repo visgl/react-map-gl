@@ -63,7 +63,7 @@ Enables the use of private and country specific servers Mapbox servers, e.g. htt
 
 - default: `{}`
 
-> Non-public API, see https://github.com/uber/react-map-gl/issues/545
+> Non-public API, see https://github.com/visgl/react-map-gl/issues/545
 
 An object of additional options to be passed to Mapbox's [`Map` constructor](https://www.mapbox.com/mapbox-gl-js/api/#map). Options specified here
 will take precedence over those same options if set via props.
@@ -266,4 +266,4 @@ const viewport = new WebMercatorViewport({width: 800, height: 600})
 
 ## Source
 
-[static-map.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/components/static-map.js)
+[static-map.js](https://github.com/visgl/react-map-gl/tree/5.2-release/src/components/static-map.js)

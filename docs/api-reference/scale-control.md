@@ -42,4 +42,4 @@ Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to 
 
 ## Source
 
-[scale-control.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/components/scale-control.js)
+[scale-control.js](https://github.com/visgl/react-map-gl/tree/5.2-release/src/components/scale-control.js)

@@ -7,7 +7,7 @@ The dev tools are tested with Node 8.11.3 and yarn 1.7.0.
 Set up locally:
 
 ```bash
-$ git clone https://github.com/uber/react-map-gl.git
+$ git clone https://github.com/visgl/react-map-gl.git
 $ cd react-map-gl
 $ yarn bootstrap
 $ npm run start
@@ -113,7 +113,7 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
 
 4. Find out which new commits should be cherry-picked into the release branch.
 
-    If a commit is a bug fix for the current production release, or a minor, non-breaking new feature, it can be published as a patch. When in doubt, check the original PR's milestone label on GitHub. For example [#565](https://github.com/uber/react-map-gl/pull/565):
+    If a commit is a bug fix for the current production release, or a minor, non-breaking new feature, it can be published as a patch. When in doubt, check the original PR's milestone label on GitHub. For example [#565](https://github.com/visgl/react-map-gl/pull/565):
 
     ```bash
     $ git cherry-pick 1238140a

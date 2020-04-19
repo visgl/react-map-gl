@@ -57,7 +57,7 @@ export default class ControlPanel extends PureComponent {
         </p>
         <div className="source-link">
           <a
-            href="https://github.com/uber/react-map-gl/tree/5.2-release/examples/heatmap"
+            href="https://github.com/visgl/react-map-gl/tree/5.2-release/examples/heatmap"
             target="_new"
           >
             View Code ↗
