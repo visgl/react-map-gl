@@ -97,5 +97,5 @@ Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to 
 
 ## Source
 
-[navigation-control.js](https://github.com/uber/react-map-gl/tree/5.2-release/src/components/navigation-control.js)
+[navigation-control.js](https://github.com/visgl/react-map-gl/tree/5.2-release/src/components/navigation-control.js)
 
