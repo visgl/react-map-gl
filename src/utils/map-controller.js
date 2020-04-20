@@ -396,7 +396,8 @@ export default class MapController {
       newMapState,
       Object.assign({}, LINEAR_TRANSITION_PROPS, {
         transitionInterpolator: new LinearInterpolator({around: pos})
-      })
+      }),
+      {isZooming: true}
     );
     return true;
   }
