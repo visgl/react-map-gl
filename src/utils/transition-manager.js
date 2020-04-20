@@ -166,7 +166,7 @@ export default class TransitionManager {
   }
 
   _triggerTransition(startProps: ViewportProps, endProps: ViewportProps) {
-    assert(this._isTransitionEnabled(endProps), 'Transition is not enabled');
+    assert(this._isTransitionEnabled(endProps));
 
     if (this._animationFrame) {
       cancelAnimationFrame(this._animationFrame);
@@ -177,6 +177,10 @@ export default class TransitionManager {
     const duration = transitionInterpolator.getDuration
       ? transitionInterpolator.getDuration(startProps, endProps)
       : endProps.transitionDuration;
+
+    if (duration === 0) {
+      return;
+    }
 
     const initialProps = endProps.transitionInterpolator.initializeProps(startProps, endProps);
 
