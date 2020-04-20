@@ -15,7 +15,7 @@ type FlyToInterpolatorOpts = {
   curve?: number,
   speed?: number,
   screenSpeed?: number,
-  maxDuraiton?: number
+  maxDuration?: number
 };
 
 declare module 'viewport-mercator-project' {

@@ -2,6 +2,14 @@
 
 # Version 5.2
 
+## 5.2.4 (Apr 20, 2020)
+
+- Migrate to import * as React from 'react' (#1038)
+- Fix issue where translate by partial pixels causes blurry rendering (#1039)
+- Bump dev tools (#1040)
+- Correct interaction state on double click (#1081)
+- Fix edge case in transitionDuration:auto (#1080)
+
 ## 5.2.3 (Feb 10, 2020)
 
 - Sanity check in source/layer update (#1022)
