@@ -56,7 +56,7 @@ module.exports = {
 
         LINK_TO_GET_STARTED: '/docs/get-started/get-started',
 
-        ADDITIONAL_LINKS: [{name: 'Blog', href: 'http://medium.com/vis-gl'}],
+        ADDITIONAL_LINKS: [{name: 'Blog', href: 'http://medium.com/vis-gl', index: 1}],
 
         INDEX_PAGE_URL: resolve(__dirname, './src/home.js'),
 
