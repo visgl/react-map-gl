@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
-import {Editor, EditorModes} from 'react-map-gl-draw';
+import {Editor, DrawPolygonMode, EditingMode} from 'react-map-gl-draw';
 
 import ControlPanel from './control-panel';
 import {getFeatureStyle, getEditHandleStyle} from './style';
@@ -19,7 +19,7 @@ export default class App extends Component {
         latitude: 42.76,
         zoom: 12
       },
-      mode: EditorModes.READ_ONLY,
+      mode: null,
       selectedFeatureIndex: null
     };
   }
@@ -42,7 +42,7 @@ export default class App extends Component {
   _onUpdate = ({editType}) => {
     if (editType === 'addFeature') {
       this.setState({
-        mode: EditorModes.EDITING
+        mode: new EditingMode()
       });
     }
   };
@@ -55,7 +55,7 @@ export default class App extends Component {
           <button
             className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"
             title="Polygon tool (p)"
-            onClick={() => this.setState({mode: EditorModes.DRAW_POLYGON})}
+            onClick={() => this.setState({mode: new DrawPolygonMode()})}
           />
           <button
             className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_trash"
