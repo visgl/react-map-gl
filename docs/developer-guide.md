@@ -33,7 +33,7 @@ $ npm run test browser
 
 ## Pull Requests
 
-Any intended change to the code base must open a [pull request](https://help.github.com/articles/creating-a-pull-request/) and be approved. 
+Any intended change to the code base must open a [pull request](https://help.github.com/articles/creating-a-pull-request/) and be approved.
 
 Generally speaking, all PRs are open against the `master` branch, unless the feature being affected no longer exists on master.
 
@@ -213,20 +213,11 @@ Only the `master` branch and the `<latest>-release` branch are actively maintain
     ```bash
     $ cd website
     $ yarn
-    $ yarn start
+    $ yarn develop
     ```
 
 4. Build and publish the website:
 
     ```bash
-    $ yarn build
-    $ git checkout gh-pages
-    ```
-
-    Copy the content from `website/dist` to the root of the project. Commit with the corresponding release version:
-
-    ```bash
-    $ git add .
-    $ git commit -m "3.3.4"
-    $ git push
+    $ yarn deploy
     ```
