@@ -25,11 +25,11 @@ export default class App extends Component {
 
   _onClick = event => {
     const feature = event.features[0];
-    const clusterId = feature.properties.cluster_id;
+    const clusterId = feature ? feature.properties.cluster_id : null;
 
     const mapboxSource = this._sourceRef.current.getSource();
 
-    mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
+    clusterId && mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
       if (err) {
         return;
       }
