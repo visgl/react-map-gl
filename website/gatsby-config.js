@@ -25,9 +25,7 @@ module.exports = {
         PROJECT_ORG_LOGO: 'images/uber-logo.png',
         PROJECT_URL: 'https://github.com/visgl/',
         PROJECT_DESC: 'React wrapper for Mapbox GL JS',
-        // Enable publish to relative path react-map-gl for staging if needed
-        // PATH_PREFIX: '/react-map-gl/',
-        PATH_PREFIX: '/',
+        PATH_PREFIX: '/react-map-gl/',
 
         GA_TRACKING: null,
 
