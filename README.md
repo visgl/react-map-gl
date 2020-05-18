@@ -77,4 +77,4 @@ This library provides convenient wrappers around initializing and (to some degre
 
 ### Contribute
 
-See [developer guide](docs/developer-guide.md).
+See [contribution guide](/CONTRIBUTING.md).
