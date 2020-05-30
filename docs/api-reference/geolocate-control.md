@@ -83,7 +83,7 @@ Label applied to the Geolocate control button.
 
 - default: `false`
 
-Auto trigger geolocate on successful loading of component
+Auto trigger geolocate on successful mounting of component
 
 
 ## Styling
