@@ -102,7 +102,7 @@ export default [
         </Popup>
       ]
     },
-    threshold: 0.97,
+    threshold: 0.95,
     goldenImage: 'test/render/golden-images/popup.png'
   },
   {
