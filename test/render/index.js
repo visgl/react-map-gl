@@ -66,7 +66,7 @@ async function loadFont() {
   const face = await font.load();
   document.fonts.add(face);
   const stylesheet = document.createElement('style');
-  stylesheet.innerText = `.test-popup { font-family: Roboto; }`;
+  stylesheet.innerText = `.test-popup { font-family: Roboto; font-size: 16px; line-height: 1; }`;
   document.head.append(stylesheet);
 }
 
