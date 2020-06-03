@@ -8,8 +8,23 @@ const EMPTY_MAP_STYLE = {
   layers: []
 };
 
+const ALT_EMPTY_MAP_STYLE = {
+  version: 8,
+  sources: {},
+  layers: [
+    {
+      id: 'background',
+      type: 'background',
+      paint: {
+        'background-color': '#F6F046',
+        'background-opacity': 1
+      }
+    }
+  ]
+};
+
 export default [
-  {
+  __MAPBOX_TOKEN__ && {
     title: 'Basic map',
     props: {
       mapboxApiAccessToken: __MAPBOX_TOKEN__,
@@ -18,6 +33,7 @@ export default [
       latitude: 37.78,
       zoom: 12.5
     },
+    threshold: 0.97,
     goldenImage: 'test/render/golden-images/basic-map.png'
   },
   {
@@ -40,13 +56,14 @@ export default [
       latitude: 37.78,
       zoom: 12.5
     },
+    threshold: 0.97,
     goldenImage: 'test/render/golden-images/uber-map.png'
   },
   {
     title: 'NavigationControl',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: __MAPBOX_TOKEN__,
+      mapboxApiAccessToken: '',
       mapStyle: EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
@@ -64,27 +81,35 @@ export default [
     title: 'Popup',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: __MAPBOX_TOKEN__,
+      mapboxApiAccessToken: '',
       mapStyle: EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
       zoom: 12.5,
       children: [
-        <Popup key="0" longitude={-122.4} latitude={37.78}>
+        <Popup key="0" longitude={-122.4} latitude={37.78} className="test-popup">
           This is the center
         </Popup>,
-        <Popup key="1" longitude={-122.4} latitude={37.779} closeButton={false} anchor="top-right">
+        <Popup
+          key="1"
+          longitude={-122.4}
+          latitude={37.779}
+          closeButton={false}
+          anchor="top-right"
+          className="test-popup"
+        >
           Custom anchor
         </Popup>
       ]
     },
+    threshold: 0.95,
     goldenImage: 'test/render/golden-images/popup.png'
   },
   {
     title: 'JSX Source/Layer',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: __MAPBOX_TOKEN__,
+      mapboxApiAccessToken: '',
       mapStyle: EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
@@ -105,8 +130,8 @@ export default [
     title: 'JSX Source/Layer toggle style',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: __MAPBOX_TOKEN__,
-      mapStyle: 'mapbox://styles/mapbox/dark-v9',
+      mapboxApiAccessToken: '',
+      mapStyle: ALT_EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
       zoom: 12.5,
@@ -126,20 +151,20 @@ export default [
     title: 'JSX Source/Layer removal',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: __MAPBOX_TOKEN__,
-      mapStyle: 'mapbox://styles/mapbox/dark-v9',
+      mapboxApiAccessToken: '',
+      mapStyle: ALT_EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
       zoom: 12.5,
       children: []
     },
-    goldenImage: 'test/render/golden-images/basic-map.png'
+    goldenImage: 'test/render/golden-images/alt-empty-map.png'
   },
   {
     title: 'GeolocateControl',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: __MAPBOX_TOKEN__,
+      mapboxApiAccessToken: '',
       mapStyle: EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
@@ -155,4 +180,4 @@ export default [
     },
     goldenImage: 'test/render/golden-images/geolocate-control.png'
   }
-];
+].filter(Boolean);
