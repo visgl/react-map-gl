@@ -87,10 +87,17 @@ export default [
       latitude: 37.78,
       zoom: 12.5,
       children: [
-        <Popup key="0" longitude={-122.4} latitude={37.78}>
+        <Popup key="0" longitude={-122.4} latitude={37.78} className="test-popup">
           This is the center
         </Popup>,
-        <Popup key="1" longitude={-122.4} latitude={37.779} closeButton={false} anchor="top-right">
+        <Popup
+          key="1"
+          longitude={-122.4}
+          latitude={37.779}
+          closeButton={false}
+          anchor="top-right"
+          className="test-popup"
+        >
           Custom anchor
         </Popup>
       ]
