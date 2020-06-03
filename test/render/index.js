@@ -74,7 +74,8 @@ test('Render test', async t => {
         threshold,
         goldenImage,
         region: boundingBox,
-        tolerance: 0.05
+        tolerance: 0.05,
+        includeEmpty: false
         // Uncomment to save screenshot
         // , saveOnFail: true
       });

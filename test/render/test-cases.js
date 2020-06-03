@@ -33,7 +33,7 @@ export default [
       latitude: 37.78,
       zoom: 12.5
     },
-    threshold: 0.98,
+    threshold: 0.97,
     goldenImage: 'test/render/golden-images/basic-map.png'
   },
   {
@@ -56,7 +56,7 @@ export default [
       latitude: 37.78,
       zoom: 12.5
     },
-    threshold: 0.98,
+    threshold: 0.97,
     goldenImage: 'test/render/golden-images/uber-map.png'
   },
   {
@@ -95,6 +95,7 @@ export default [
         </Popup>
       ]
     },
+    threshold: 0.97,
     goldenImage: 'test/render/golden-images/popup.png'
   },
   {
