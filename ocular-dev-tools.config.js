@@ -11,6 +11,12 @@ const config = {
     'react-map-gl': resolve('./src')
   },
 
+  browserTest: {
+    browser: {
+      args: ['--font-render-hinting=none']
+    }
+  },
+
   entry: {
     test: 'test/src/index.js',
     'test-browser': 'test/browser.js',
