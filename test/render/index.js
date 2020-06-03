@@ -1,4 +1,4 @@
-/* global window, document */
+/* global window, document, FontFace */
 import test from 'tape-promise/tape';
 import * as React from 'react';
 import MapGL from 'react-map-gl';
@@ -56,9 +56,25 @@ async function runTestCase({Component = MapGL, props}) {
   });
 }
 
+// CI does not have the same default fonts as local boxes.
+async function loadFont() {
+  const font = new FontFace(
+    'Roboto',
+    'url(https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2)',
+    {style: 'normal', weight: 400}
+  );
+  const face = await font.load();
+  document.fonts.add(face);
+  const stylesheet = document.createElement('style');
+  stylesheet.innerText = `.test-popup { font-family: Roboto; font-size: 20px; line-height: 1; }`;
+  document.head.append(stylesheet);
+}
+
 test('Render test', async t => {
   // Default tape test timeout is 500ms - allow enough time for render and screenshot
   t.timeoutAfter(TEST_CASES.length * 4000);
+
+  await loadFont();
 
   for (const testCase of TEST_CASES) {
     t.comment(testCase.title);
@@ -74,7 +90,8 @@ test('Render test', async t => {
         threshold,
         goldenImage,
         region: boundingBox,
-        tolerance: 0.05
+        tolerance: 0.05,
+        includeEmpty: false
         // Uncomment to save screenshot
         // , saveOnFail: true
       });
