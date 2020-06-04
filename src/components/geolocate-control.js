@@ -28,6 +28,8 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   style: PropTypes.object,
   // Custom label assigned to the control
   label: PropTypes.string,
+  // Auto trigger instead of waiting for click
+  auto: PropTypes.bool,
 
   // mapbox geolocate options
   // https://docs.mapbox.com/mapbox-gl-js/api/#geolocatecontrol
@@ -48,6 +50,7 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
   style: {},
   label: 'Geolocate',
+  auto: false,
 
   // mapbox geolocate options
   positionOptions: null,
@@ -62,6 +65,7 @@ export type GeolocateControlProps = BaseControlProps & {
   className: string,
   style: Object,
   label: string,
+  auto: boolean,
   positionOptions: any,
   fitBoundsOptions: any,
   trackUserLocation: boolean,
@@ -111,7 +115,18 @@ export default class GeolocateControl extends BaseControl<
     isGeolocationSupported().then(result => {
       this.setState({supportsGeolocation: result});
       this._setupMapboxGeolocateControl(result);
+      if (this.props.auto) {
+        this._triggerGeolocate();
+      }
     });
+  }
+
+  componentDidUpdate(prevProps: GeolocateControlProps) {
+    // trigger geolocate when prop auto changes to true
+    // change to false has no effect
+    if (this.state.supportsGeolocation && !prevProps.auto && this.props.auto) {
+      this._triggerGeolocate();
+    }
   }
 
   componentWillUnmount() {
@@ -182,7 +197,7 @@ export default class GeolocateControl extends BaseControl<
     control.on('geolocate', this.props.onGeolocate);
   };
 
-  _onClickGeolocate = () => {
+  _triggerGeolocate = () => {
     const control = this._mapboxGeolocateControl;
     control._map = this._context.map;
 
@@ -285,7 +300,7 @@ export default class GeolocateControl extends BaseControl<
           style={style}
           onContextMenu={e => e.preventDefault()}
         >
-          {this._renderButton('geolocate', label, this._onClickGeolocate)}
+          {this._renderButton('geolocate', label, this._triggerGeolocate)}
         </div>
       </div>
     );
