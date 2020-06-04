@@ -58,9 +58,11 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
     const map = this._map;
     if (map) {
       map.off('styledata', this._updateSource);
-      if (map.style) {
-        requestAnimationFrame(() => map.removeSource(this.id));
-      }
+      requestAnimationFrame(() => {
+        if (map.style && map.style._loaded) {
+          map.removeSource(this.id);
+        }
+      });
     }
   }
 
