@@ -2,7 +2,12 @@
 
 # Version 5.2
 
-## 5.2.4 (Apr 20, 2020)
+## 5.2.6 (June 4, 2020)
+
+- [Geolocate] Auto trigger when component loads (#1116)
+- Check if map style is loaded before removing source or layer (#1123)
+
+## 5.2.5 (Apr 20, 2020)
 
 - Migrate to import * as React from 'react' (#1038)
 - Fix issue where translate by partial pixels causes blurry rendering (#1039)
