@@ -121,6 +121,14 @@ export default class GeolocateControl extends BaseControl<
     });
   }
 
+  componentDidUpdate(prevProps: GeolocateControlProps) {
+    // trigger geolocate when prop auto changes to true
+    // change to false has no effect
+    if (this.state.supportsGeolocation && !prevProps.auto && this.props.auto) {
+      this._triggerGeolocate();
+    }
+  }
+
   componentWillUnmount() {
     // re-implement MapboxGeolocateControl's _onRemove
     // clear the geolocation watch if exists
