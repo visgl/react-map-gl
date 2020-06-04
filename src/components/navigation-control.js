@@ -144,8 +144,9 @@ export default class NavigationControl extends BaseControl<
 
     if (!this._uiVersion) {
       // map may not exist if context is provided by user application (e.g. DeckGL)
+      // in which case we fallback to the most recent UI
       const {map} = this._context;
-      this._uiVersion = getUIVersion(map && map.version);
+      this._uiVersion = map ? getUIVersion(map.version) : VERSION_1_6;
     }
 
     return (
