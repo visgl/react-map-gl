@@ -104,7 +104,7 @@ export default class Layer<Props: LayerProps> extends PureComponent<Props> {
     const map = this._map;
     if (map) {
       map.off('styledata', this._updateLayer);
-      if (map.style) {
+      if (map.style && map.style._loaded) {
         map.removeLayer(this.id);
       }
     }
