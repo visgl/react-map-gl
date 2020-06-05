@@ -83,7 +83,7 @@ Label applied to the Geolocate control button.
 
 - default: `false`
 
-Auto trigger geolocate on successful mounting of component
+Programmatically triggers geolocate when set to true. Initializing the component with true triggers inside `componentDidMount` where as changing to true at a later point triggers inside `componentDidUpdate`. Initally setting as or changing to false has no effect.
 
 
 ## Styling
