@@ -1,7 +1,13 @@
 import * as React from 'react';
 import {Component} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Popup, NavigationControl, FullscreenControl, ScaleControl} from 'react-map-gl';
+import MapGL, {
+  Popup,
+  NavigationControl,
+  FullscreenControl,
+  ScaleControl,
+  GeolocateControl
+} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
 import Pins from './pins';
@@ -11,16 +17,23 @@ import CITIES from '../../.data/cities.json';
 
 const TOKEN = ''; // Set your mapbox token here
 
-const fullscreenControlStyle = {
+const geolocateStyle = {
   position: 'absolute',
   top: 0,
   left: 0,
   padding: '10px'
 };
 
-const navStyle = {
+const fullscreenControlStyle = {
   position: 'absolute',
   top: 36,
+  left: 0,
+  padding: '10px'
+};
+
+const navStyle = {
+  position: 'absolute',
+  top: 72,
   left: 0,
   padding: '10px'
 };
@@ -90,6 +103,9 @@ export default class App extends Component {
 
         {this._renderPopup()}
 
+        <div style={geolocateStyle}>
+          <GeolocateControl />
+        </div>
         <div style={fullscreenControlStyle}>
           <FullscreenControl />
         </div>
