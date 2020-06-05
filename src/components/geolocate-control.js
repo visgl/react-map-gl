@@ -115,7 +115,7 @@ export default class GeolocateControl extends BaseControl<
     isGeolocationSupported().then(result => {
       this.setState({supportsGeolocation: result});
       this._setupMapboxGeolocateControl(result);
-      if (this.props.auto) {
+      if (result && this.props.auto) {
         this._triggerGeolocate();
       }
     });
