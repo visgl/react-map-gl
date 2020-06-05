@@ -2,6 +2,11 @@
 
 # Version 5.2
 
+## 5.2.7 (June 5, 2020)
+
+- NavigationControl: fall back to the latest UI version (#1124)
+- [Geolocate] fix auto when location blocked (#1126)
+
 ## 5.2.6 (June 4, 2020)
 
 - [Geolocate] Auto trigger when component loads (#1116)
