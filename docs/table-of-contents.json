@@ -7,7 +7,7 @@
         { "entry": "docs" },
         { "entry": "docs/whats-new" },
         { "entry": "docs/upgrade-guide" },
-        { "entry": "CONTRIBUTING" }
+        { "entry": "docs/contributing" }
       ]
     },
     {

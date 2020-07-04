@@ -45,7 +45,7 @@ export default [
       latitude: 37.78,
       zoom: 12.5
     },
-    mapError: /Unauthorized/
+    mapError: /access token/
   },
   {
     title: 'Custom tile server',

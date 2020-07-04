@@ -27,7 +27,9 @@ module.exports.onCreateWebpackConfig = function onCreateWebpackConfigOverride(op
   }
 
   Object.assign(config.resolve.alias, {
-    'react-map-gl': resolve(__dirname, '../dist/es6')
+    'react-map-gl': resolve(__dirname, '../dist/es6'),
+    react: resolve('node_modules/react'),
+    'react-dom': resolve('node_modules/react-dom')
   }, dependencyAliases);
 
   // turf.js uses mjs

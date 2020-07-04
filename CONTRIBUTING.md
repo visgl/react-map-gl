@@ -1,4 +1,4 @@
-## Contributing to react-map-gl
+# Contributing to react-map-gl
 
 **Thanks for taking the time to contribute!**
 
