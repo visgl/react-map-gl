@@ -1,5 +1,46 @@
+@font-face {
+  font-family: 'UberMove';
+  src: url('https://d1a3f4spazzrp4.cloudfront.net/dotcom-assets/fonts/UberMove-Light.woff2')
+      format('woff2'),
+    url('https://d1a3f4spazzrp4.cloudfront.net/dotcom-assets/fonts/UberMove-Light.woff')
+      format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'UberMove';
+  src: url('https://d1a3f4spazzrp4.cloudfront.net/dotcom-assets/fonts/UberMove-Regular.woff2')
+      format('woff2'),
+    url('https://d1a3f4spazzrp4.cloudfront.net/dotcom-assets/fonts/UberMove-Regular.woff')
+      format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'UberMove';
+  src: url('https://d1a3f4spazzrp4.cloudfront.net/dotcom-assets/fonts/UberMove-Medium.woff2')
+      format('woff2'),
+    url('https://d1a3f4spazzrp4.cloudfront.net/dotcom-assets/fonts/UberMove-Medium.woff')
+      format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'UberMove';
+  src: url('https://d1a3f4spazzrp4.cloudfront.net/dotcom-assets/fonts/UberMove-Bold.woff2')
+      format('woff2'),
+    url('https://d1a3f4spazzrp4.cloudfront.net/dotcom-assets/fonts/UberMove-Bold.woff')
+      format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 .tooltip {
-  font-family: "Uber Move";
+  font-family: "UberMove";
   position: absolute;
   padding: 4px;
   background: rgba(0, 0, 0, 0.8);
@@ -12,7 +53,7 @@
 }
 
 .control-panel {
-  font-family: "Uber Move";
+  font-family: "UberMove";
   font-size: 14px;
   line-height: 18px;
   width: 284px;
@@ -55,7 +96,7 @@
 }
 .control-panel .source-link a {
   font-weight: bold;
-  color: $black-40;
+  color: #486865;
   font-size: 11px;
 }
 .control-panel .input {
@@ -72,7 +113,7 @@
   text-transform: uppercase;
   width: 50%;
   margin-right: 10%;
-  color: $black-40;
+  color: #486865;
   margin-bottom: 4px;
 }
 .control-panel .input input, .control-panel .input a {
@@ -91,10 +132,10 @@
 .control-panel .input input {
   border: solid 1px #ccc;
 }
-.control-panel .input input&:disabled {
-  background: $white;
+.control-panel .input input:disabled {
+  background: #fff;
 }
-.control-panel .input input&[type="checkbox"] {
+.control-panel .input input[type="checkbox"] {
   height: auto;
 }
 
@@ -105,6 +146,6 @@
   pointer-events: none;
   transition: opacity 200ms;
 }
-.control-panel .input&:hover .tooltip {
+.control-panel .input:hover .tooltip {
   opacity: 1;
 }

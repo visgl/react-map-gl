@@ -18,14 +18,16 @@
     "d3-scale": "^1.0.6",
     "gl-matrix": "^3.0.0",
     "immutable": "^3.7.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-map-gl-draw": "^0.17.2",
     "styled-components": "^4.3.2"
   },
   "devDependencies": {
-    "gatsby": "~2.20.24",
+    "gatsby": "^2.20.24",
     "gatsby-plugin-env-variables": "^1.0.1",
     "gatsby-plugin-no-sourcemaps": "^2.1.1",
-    "gatsby-theme-ocular": "^1.2.0-beta.6",
+    "gatsby-theme-ocular": "^1.2.1",
     "gh-pages": "^2.1.0"
   }
 }

@@ -80,7 +80,7 @@ There are a couple of [additional overlays](https://github.com/visgl/react-map-g
 
 Third party overlays can also be created. For example, the [heatmap-overlay](https://github.com/vicapow/react-map-gl-heatmap-overlay) uses [webgl-heatmap](https://github.com/vicapow/webgl-heatmap) to create geographic heatmaps.
 
-<img width=200 src="https://cloud.githubusercontent.com/assets/499192/11028150/33f34640-86bc-11e5-9678-3fa1798394d5.gif" />
+<img width="200" src="https://cloud.githubusercontent.com/assets/499192/11028150/33f34640-86bc-11e5-9678-3fa1798394d5.gif" />
 
 ```js
 import HeatmapOverlay from 'react-map-gl-heatmap-overlay';
