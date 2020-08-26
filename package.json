@@ -39,8 +39,13 @@
     "@types/mapbox-gl": "^2.6.0"
   },
   "peerDependencies": {
-    "mapbox-gl": "*",
-    "react": ">=16.3.0"
+    "react": ">=16.3.0",
+    "@babel/runtime": "^7.0.0",
+    "mapbox-gl": "https://github.com/BaseOperations/mapbox-gl-js",
+    "mjolnir.js": "^2.4.0",
+    "prop-types": "^15.7.2",
+    "react-virtualized-auto-sizer": "^1.0.2",
+    "viewport-mercator-project": "^6.2.3 || ^7.0.1"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.0.0",
