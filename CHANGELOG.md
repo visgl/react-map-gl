@@ -2,6 +2,10 @@
 
 # Version 5.2
 
+## 5.2.8 (Sep 1, 2020)
+
+- Always rerender overlay after map initialization (#1172)
+
 ## 5.2.7 (June 5, 2020)
 
 - NavigationControl: fall back to the latest UI version (#1124)
