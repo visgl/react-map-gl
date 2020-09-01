@@ -256,8 +256,8 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     return null;
   }
 
-  _renderOverlays(dimensions: {width?: number, height?: number}) {
-    const {width = Number(this.props.width), height = Number(this.props.height)} = dimensions;
+  _renderOverlays(dimensions: {width: number, height: number}) {
+    const {width, height} = dimensions;
     this._updateMapSize(width, height);
 
     return (
@@ -307,12 +307,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
         <div key="map-mapbox" ref={this._mapboxMapRef} style={mapStyle} className={className} />
         {/* AutoSizer is a pure component and does not rerender when map props change */}
         {/* rebind the callback so that it's triggered every render pass */}
-        <AutoSizer
-          key="autosizer"
-          disableWidth={Number.isFinite(width)}
-          disableHeight={Number.isFinite(height)}
-          onResize={this.props.onResize}
-        >
+        <AutoSizer key="autosizer" onResize={this.props.onResize}>
           {this._renderOverlays.bind(this)}
         </AutoSizer>
         {this._renderNoTokenWarning()}
