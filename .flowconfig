@@ -1,6 +1,6 @@
 [ignore]
 .*/examples/
-.*/node_modules/
+.*/node_modules/@mapbox
 
 [include]
 ./src/
