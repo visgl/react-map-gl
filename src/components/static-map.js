@@ -25,7 +25,7 @@ import PropTypes from 'prop-types';
 import {normalizeStyle} from '../utils/style-utils';
 
 import WebMercatorViewport from 'viewport-mercator-project';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import ResizeObserver from 'resize-observer-polyfill';
 
 import Mapbox from '../mapbox/mapbox';
 import mapboxgl from '../utils/mapboxgl';
@@ -144,6 +144,21 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
       })
     );
     this._map = this._mapbox.getMap();
+
+    const resizeObserver = new ResizeObserver(entries => {
+      if (entries[0].contentRect) {
+        const {width, height} = entries[0].contentRect;
+        this._width = width;
+        this._height = height;
+        this.props.onResize({width, height});
+        this.forceUpdate();
+      }
+    });
+    const container = this._mapContainerRef.current;
+    if (container) {
+      resizeObserver.observe(container);
+    }
+    this._resizeObserver = resizeObserver;
   }
 
   componentDidUpdate(prevProps: StaticMapProps) {
@@ -159,6 +174,9 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
       this._mapbox = null;
       this._map = null;
     }
+    if (this._resizeObserver) {
+      this._resizeObserver.disconnect();
+    }
   }
 
   _mapbox: any = null;
@@ -168,6 +186,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
   _queryParams: any = {};
   _width: number = 0;
   _height: number = 0;
+  _resizeObserver: null | ResizeObserver = null;
 
   // External apps can access map this way
   getMap = () => {
@@ -256,8 +275,12 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     return null;
   }
 
-  _renderOverlays(dimensions: {width: number, height: number}) {
-    const {width, height} = dimensions;
+  _renderOverlays() {
+    if (!this._map) {
+      return null;
+    }
+
+    const {_width: width, _height: height} = this;
     this._updateMapSize(width, height);
 
     return (
@@ -305,11 +328,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     return (
       <div key="map-container" style={mapContainerStyle} ref={this._mapContainerRef}>
         <div key="map-mapbox" ref={this._mapboxMapRef} style={mapStyle} className={className} />
-        {/* AutoSizer is a pure component and does not rerender when map props change */}
-        {/* rebind the callback so that it's triggered every render pass */}
-        <AutoSizer key="autosizer" onResize={this.props.onResize}>
-          {this._renderOverlays.bind(this)}
-        </AutoSizer>
+        {this._renderOverlays()}
         {this._renderNoTokenWarning()}
       </div>
     );
