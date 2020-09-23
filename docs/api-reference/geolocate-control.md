@@ -33,7 +33,7 @@ class Map extends Component {
 
 ## Properties
 
-Accepts all the options of [Mapbox GeolocatControl](https://docs.mapbox.com/mapbox-gl-js/api/#geolocatecontrol).
+Accepts all the options of [Mapbox GeolocateControl](https://docs.mapbox.com/mapbox-gl-js/api/#geolocatecontrol).
 
 ##### `onViewportChange` (Function, optional)
 
