@@ -54,20 +54,28 @@ function diffLayerStyles(map: any, id: string, props: LayerProps, prevProps: Lay
     map.moveLayer(id, beforeId);
   }
   if (layout !== prevProps.layout) {
-    const keys = new Set([...Object.keys(layout), ...Object.keys(prevProps.layout)]);
-    keys.forEach(key => {
+    for (const key in layout) {
       if (!deepEqual(layout[key], prevProps.layout[key])) {
         map.setLayoutProperty(id, key, layout[key]);
       }
-    });
+    }
+    for (const key in prevProps.layout) {
+      if (!layout.hasOwnProperty(key)) {
+        map.setLayoutProperty(id, key, undefined);
+      }
+    }
   }
   if (paint !== prevProps.paint) {
-    const keys = new Set([...Object.keys(paint), ...Object.keys(prevProps.paint)]);
-    keys.forEach(key => {
+    for (const key in paint) {
       if (!deepEqual(paint[key], prevProps.paint[key])) {
         map.setPaintProperty(id, key, paint[key]);
       }
-    });
+    }
+    for (const key in prevProps.paint) {
+      if (!paint.hasOwnProperty(key)) {
+        map.setPaintProperty(id, key, undefined);
+      }
+    }
   }
   if (!deepEqual(filter, prevProps.filter)) {
     map.setFilter(id, filter);
