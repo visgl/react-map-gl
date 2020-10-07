@@ -28,7 +28,17 @@ import deepEqual from '../utils/deep-equal';
 import type {MapContextProps} from './map-context';
 
 const propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.oneOf([
+    'fill',
+    'line',
+    'symbol',
+    'circle',
+    'fill-extrusion',
+    'raster',
+    'background',
+    'heatmap',
+    'hillshade'
+  ]).isRequired,
   id: PropTypes.string,
   source: PropTypes.string,
   beforeId: PropTypes.string
@@ -36,8 +46,17 @@ const propTypes = {
 
 type LayerProps = {
   id?: string,
-  type: string,
+  type: | 'fill'
+    | 'line'
+    | 'symbol'
+    | 'circle'
+    | 'fill-extrusion'
+    | 'raster'
+    | 'background'
+    | 'heatmap'
+    | 'hillshade',
   source?: string,
+  'source-layer'?: string,
   beforeId?: string,
   layout: any,
   paint: any,
