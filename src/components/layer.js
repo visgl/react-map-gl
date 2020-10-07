@@ -59,11 +59,21 @@ function diffLayerStyles(map: any, id: string, props: LayerProps, prevProps: Lay
         map.setLayoutProperty(id, key, layout[key]);
       }
     }
+    for (const key in prevProps.layout) {
+      if (!layout.hasOwnProperty(key)) {
+        map.setLayoutProperty(id, key, undefined);
+      }
+    }
   }
   if (paint !== prevProps.paint) {
     for (const key in paint) {
       if (!deepEqual(paint[key], prevProps.paint[key])) {
         map.setPaintProperty(id, key, paint[key]);
+      }
+    }
+    for (const key in prevProps.paint) {
+      if (!paint.hasOwnProperty(key)) {
+        map.setPaintProperty(id, key, undefined);
       }
     }
   }
