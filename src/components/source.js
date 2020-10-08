@@ -123,6 +123,19 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
       changedKey === 'coordinates'
     ) {
       source.setCoordinates(sourceOptions.coordinates);
+    } else if (type === 'vector' && source.setUrl) {
+      // Added in 1.12.0:
+      // vectorTileSource.setTiles
+      // vectorTileSource.setUrl
+      switch (changedKey) {
+        case 'url':
+          source.setUrl(sourceOptions.url);
+          break;
+        case 'tiles':
+          source.setTiles(sourceOptions.tiles);
+          break;
+        default:
+      }
     } else {
       // eslint-disable-next-line
       console.warn(`Unable to update <Source> prop: ${changedKey}`);
