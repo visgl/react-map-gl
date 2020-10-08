@@ -35,17 +35,20 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   // `container` is the [compatible DOM element](https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen#Compatible_elements)
   // which should be made full screen. By default, the map container element will be made full screen.
   /* eslint-enable max-len */
-  container: PropTypes.object
+  container: PropTypes.object,
+  label: PropTypes.string
 });
 
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
-  container: null
+  container: null,
+  label: 'Toggle fullscreen'
 });
 
 export type FullscreenControlProps = BaseControlProps & {
   className: string,
-  container: ?HTMLElement
+  container: ?HTMLElement,
+  label: string
 };
 
 type State = {
@@ -124,14 +127,14 @@ export default class FullscreenControl extends BaseControl<
       return null;
     }
 
-    const {className} = this.props;
+    const {className, label} = this.props;
     const {isFullscreen} = this.state;
 
     const type = isFullscreen ? 'shrink' : 'fullscreen';
 
     return (
       <div className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`} ref={this._containerRef}>
-        {this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen)}
+        {this._renderButton(type, label, this._onClickFullscreen)}
       </div>
     );
   }
