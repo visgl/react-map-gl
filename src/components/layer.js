@@ -27,17 +27,32 @@ import deepEqual from '../utils/deep-equal';
 
 import type {MapContextProps} from './map-context';
 
+const LAYER_TYPES = {
+  fill: 'fill',
+  line: 'line',
+  symbol: 'symbol',
+  circle: 'circle',
+  fillExtrusion: 'fill-extrusion',
+  raster: 'raster',
+  background: 'background',
+  heatmap: 'heatmap',
+  hillshade: 'hillshade'
+};
+
 const propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(Object.keys(LAYER_TYPES)).isRequired,
   id: PropTypes.string,
   source: PropTypes.string,
   beforeId: PropTypes.string
 };
 
+export type LayerTypes = $Keys<typeof LAYER_TYPES>;
+
 type LayerProps = {
   id?: string,
-  type: string,
+  type: LayerTypes,
   source?: string,
+  'source-layer'?: string,
   beforeId?: string,
   layout: any,
   paint: any,
