@@ -2,6 +2,14 @@
 
 # Version 5.2
 
+## 5.2.9 (Oct 7, 2020)
+
+- Fix for layout and paint diffing logic (#1194)
+- Add types for layer type and source-layer (#1192)
+- Support updating vector source (#1196)
+- Fix IE compatibility (#1195)
+- Add label prop to FullscreenControl (#1197)
+
 ## 5.2.8 (Sep 1, 2020)
 
 - Always rerender overlay after map initialization (#1172)
