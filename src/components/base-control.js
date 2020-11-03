@@ -43,7 +43,7 @@ const defaultProps = {
   captureDrag: true,
   captureClick: true,
   captureDoubleClick: true,
-  capturePointerMove: true
+  capturePointerMove: false
 };
 
 export type BaseControlProps = {
@@ -51,7 +51,7 @@ export type BaseControlProps = {
   captureDrag: boolean,
   captureClick: boolean,
   captureDoubleClick: boolean,
-  capturePointerMove: Boolean,
+  capturePointerMove: boolean,
   children?: any
 };
 
