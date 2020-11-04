@@ -33,14 +33,17 @@ const propTypes = {
   // Stop map click
   captureClick: PropTypes.bool,
   // Stop map double click
-  captureDoubleClick: PropTypes.bool
+  captureDoubleClick: PropTypes.bool,
+  // Stop map pointer move
+  capturePointerMove: PropTypes.bool
 };
 
 const defaultProps = {
   captureScroll: false,
   captureDrag: true,
   captureClick: true,
-  captureDoubleClick: true
+  captureDoubleClick: true,
+  capturePointerMove: false
 };
 
 export type BaseControlProps = {
@@ -48,6 +51,7 @@ export type BaseControlProps = {
   captureDrag: boolean,
   captureClick: boolean,
   captureDoubleClick: boolean,
+  capturePointerMove: boolean,
   children?: any
 };
 
@@ -81,7 +85,8 @@ export default class BaseControl<
         panstart: this._onDragStart,
         anyclick: this._onClick,
         click: this._onClick,
-        dblclick: this._onDblClick
+        dblclick: this._onDblClick,
+        pointermove: this._onPointerMove
       };
       eventManager.watch(this._events, ref);
     }
@@ -118,6 +123,12 @@ export default class BaseControl<
 
   _onClick = (evt: MjolnirEvent) => {
     if (this.props.captureClick) {
+      evt.stopPropagation();
+    }
+  };
+
+  _onPointerMove = (evt: MjolnirEvent) => {
+    if (this.props.capturePointerMove) {
       evt.stopPropagation();
     }
   };
