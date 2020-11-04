@@ -149,10 +149,13 @@ export default class Source<Props: SourceProps> extends PureComponent<Props> {
       this._map.on('styledata', this._updateSource);
     }
     this._updateSource();
-    return React.Children.map(this.props.children, child =>
-      cloneElement(child, {
-        source: this.id
-      })
+    return React.Children.map(
+      this.props.children,
+      child =>
+        child &&
+        cloneElement(child, {
+          source: this.id
+        })
     );
   }
 
