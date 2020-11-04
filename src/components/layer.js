@@ -32,7 +32,7 @@ const LAYER_TYPES = {
   line: 'line',
   symbol: 'symbol',
   circle: 'circle',
-  fillExtrusion: 'fill-extrusion',
+  'fill-extrusion': 'fill-extrusion',
   raster: 'raster',
   background: 'background',
   heatmap: 'heatmap',
