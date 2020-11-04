@@ -35,7 +35,8 @@ const defaultProps = {
   captureScroll: false,
   captureDrag: false,
   captureClick: false,
-  captureDoubleClick: false
+  captureDoubleClick: false,
+  capturePointerMove: false
 };
 
 export type SVGOverlayProps = BaseControlProps & {
