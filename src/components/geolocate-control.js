@@ -274,13 +274,13 @@ export default class GeolocateControl extends BaseControl<
       // $FlowFixMe
       <Marker
         key="location-maker"
-        className="mapboxgl-user-location-dot"
         longitude={markerPosition.longitude}
         latitude={markerPosition.latitude}
-        onContextMenu={e => e.preventDefault()}
         captureDrag={false}
         captureDoubleClick={false}
-      />
+      >
+        <div className="mapboxgl-user-location-dot" style={{transform: 'translate(-50%, -50%)'}} />
+      </Marker>
     );
   };
 
@@ -298,7 +298,6 @@ export default class GeolocateControl extends BaseControl<
           className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`}
           ref={this._containerRef}
           style={style}
-          onContextMenu={e => e.preventDefault()}
         >
           {this._renderButton('geolocate', label, this._triggerGeolocate)}
         </div>
