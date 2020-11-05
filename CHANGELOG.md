@@ -2,6 +2,13 @@
 
 # Version 5.2
 
+## 5.2.10 (Nov 5, 2020)
+
+- Use valid fill-extrusion value for layer type (#1199)
+- Add capturePointerMove to NavigationControl (#1215)
+- Fix user location dot offset (#1220)
+- Safety check before calling cloneElement (#1219)
+
 ## 5.2.9 (Oct 7, 2020)
 
 - Fix for layout and paint diffing logic (#1194)
