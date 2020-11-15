@@ -61,7 +61,7 @@ type LayerProps = {
   maxzoom?: number
 };
 
-/* eslint-disable complexity */
+/* eslint-disable complexity, max-statements */
 function diffLayerStyles(map: any, id: string, props: LayerProps, prevProps: LayerProps) {
   const {layout = {}, paint = {}, filter, minzoom, maxzoom, beforeId, ...otherProps} = props;
 
@@ -69,24 +69,26 @@ function diffLayerStyles(map: any, id: string, props: LayerProps, prevProps: Lay
     map.moveLayer(id, beforeId);
   }
   if (layout !== prevProps.layout) {
+    const prevLayout = prevProps.layout || {};
     for (const key in layout) {
-      if (!deepEqual(layout[key], prevProps.layout[key])) {
+      if (!deepEqual(layout[key], prevLayout[key])) {
         map.setLayoutProperty(id, key, layout[key]);
       }
     }
-    for (const key in prevProps.layout) {
+    for (const key in prevLayout) {
       if (!layout.hasOwnProperty(key)) {
         map.setLayoutProperty(id, key, undefined);
       }
     }
   }
   if (paint !== prevProps.paint) {
+    const prevPaint = prevProps.paint || {};
     for (const key in paint) {
-      if (!deepEqual(paint[key], prevProps.paint[key])) {
+      if (!deepEqual(paint[key], prevPaint[key])) {
         map.setPaintProperty(id, key, paint[key]);
       }
     }
-    for (const key in prevProps.paint) {
+    for (const key in prevPaint) {
       if (!paint.hasOwnProperty(key)) {
         map.setPaintProperty(id, key, undefined);
       }
@@ -104,7 +106,7 @@ function diffLayerStyles(map: any, id: string, props: LayerProps, prevProps: Lay
     }
   }
 }
-/* eslint-enable complexity */
+/* eslint-enable complexity, max-statements */
 
 let layerCounter = 0;
 
