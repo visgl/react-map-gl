@@ -72,7 +72,7 @@ export default class FullscreenControl extends BaseControl<
   _mapboxFullscreenControl: any = null;
 
   componentDidMount() {
-    const container = this.props.container || this._context.mapContainer;
+    const container = this.props.container || this._context.container;
 
     this._mapboxFullscreenControl = new mapboxgl.FullscreenControl({
       container

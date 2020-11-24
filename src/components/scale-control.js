@@ -45,11 +45,6 @@ export default class ScaleControl extends BaseControl<ScaleControlProps, *, HTML
   static defaultProps = defaultProps;
 
   componentDidMount() {
-    const mapboxScaleControl = new mapboxgl.ScaleControl();
-    mapboxScaleControl._map = this._context.map;
-    mapboxScaleControl._container = this._containerRef.current;
-    this._mapboxScaleControl = mapboxScaleControl;
-
     this._update();
   }
 
@@ -57,7 +52,17 @@ export default class ScaleControl extends BaseControl<ScaleControlProps, *, HTML
   _mapboxScaleControl: any = null;
 
   _update() {
-    const mapboxScaleControl = this._mapboxScaleControl;
+    let mapboxScaleControl = this._mapboxScaleControl;
+    if (!mapboxScaleControl) {
+      const map = this._context.map;
+      const container = this._containerRef.current;
+      if (map && container) {
+        mapboxScaleControl = new mapboxgl.ScaleControl();
+        mapboxScaleControl._map = map;
+        mapboxScaleControl._container = container;
+        this._mapboxScaleControl = mapboxScaleControl;
+      }
+    }
     if (mapboxScaleControl) {
       mapboxScaleControl.options = this.props;
       mapboxScaleControl._onMove();
