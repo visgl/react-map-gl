@@ -2,9 +2,8 @@
   <a href="https://npmjs.org/package/react-map-gl">
     <img src="https://img.shields.io/npm/v/react-map-gl.svg?style=flat-square" alt="version" />
   </a>
-  <a href="https://travis-ci.com/visgl/react-map-gl">
-    <img src="https://api.travis-ci.com/visgl/react-map-gl.svg?branch=master" alt="build" />
-  </a>
+  <a href="https://github.com/visgl/react-map-gl/actions?query=workflow%3Atest+branch%3Amaster">
+    <img src="https://github.com/visgl/react-map-gl/workflows/test/badge.svg?branch=master" alt="build" />
   <a href="https://npmjs.org/package/react-map-gl">
     <img src="https://img.shields.io/npm/dm/react-map-gl.svg?style=flat-square" alt="downloads" />
   </a>
