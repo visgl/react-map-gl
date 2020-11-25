@@ -1,19 +1,12 @@
 name: website
 
-on: [push]
-  # push:
-  #   branches:
-  #     - '*-release'
-  #   paths:
-  #     - 'docs/**'
-  #     - 'examples/**'
-  #     - 'src/**'
-  #     - 'website/**'
-  #     - 'package.json'
+on:
+  push:
+    branches:
+      - '*-release'
 
 jobs:
-
-  publish:
+  publish-website:
     runs-on: ubuntu-latest
 
     if: github.repository_owner == 'visgl'
@@ -45,3 +38,4 @@ jobs:
           cd website
           yarn
           yarn build
+          yarn deploy
