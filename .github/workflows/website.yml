@@ -1,0 +1,48 @@
+name: website
+
+on: [push]
+  # push:
+  #   branches:
+  #     - '*-release'
+  #   paths:
+  #     - 'docs/**'
+  #     - 'examples/**'
+  #     - 'src/**'
+  #     - 'website/**'
+  #     - 'package.json'
+
+jobs:
+
+  publish:
+    runs-on: ubuntu-latest
+
+    if: github.repository_owner == 'visgl'
+
+    env:
+      MapboxAccessToken: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2.1.1
+
+      - name: Get version
+        id: get-version
+        run: LATEST=$(npm show react-map-gl version | grep -o -E "^[0-9]+\.[0-9]+") && echo "::set-output name=latest::/${LATEST}-release"
+      
+      - name: Check version
+        if: !endsWith(github.ref, steps.check-version.outputs.latest)
+        run: |
+          echo "Website is only published from the latest release branch"
+          exit 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Build & deploy website
+        run: |
+          yarn bootstrap
+          cd website
+          yarn
+          yarn build
+          yarn deploy
