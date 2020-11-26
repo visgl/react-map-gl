@@ -19,17 +19,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
-import {createRef} from 'react';
+import {useRef, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import BaseControl from './base-control';
+import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
 
 import {getDynamicPosition, ANCHOR_POSITION} from '../utils/dynamic-position';
 
-import type {BaseControlProps} from './base-control';
+import type {MapControlProps} from './use-map-control';
 import {crispPercentage, crispPixel} from '../utils/crisp-pixel';
 import type {PositionType} from '../utils/dynamic-position';
+import type {WebMercatorViewport} from 'viewport-mercator-project';
 
-const propTypes = Object.assign({}, BaseControl.propTypes, {
+const propTypes = Object.assign({}, mapControlPropTypes, {
   // Custom className
   className: PropTypes.string,
   // Longitude of the anchor point
@@ -58,7 +59,7 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   onClose: PropTypes.func
 });
 
-const defaultProps = Object.assign({}, BaseControl.defaultProps, {
+const defaultProps = Object.assign({}, mapControlDefaultProps, {
   className: '',
   altitude: 0,
   offsetLeft: 0,
@@ -72,7 +73,7 @@ const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   onClose: () => {}
 });
 
-export type PopupProps = BaseControlProps & {
+export type PopupProps = MapControlProps & {
   className: string,
   longitude: number,
   latitude: number,
@@ -88,6 +89,85 @@ export type PopupProps = BaseControlProps & {
   onClose: Function
 };
 
+function getPosition(
+  props: PopupProps,
+  viewport: WebMercatorViewport,
+  el: null | HTMLElement,
+  [x, y]: [number, number]
+): PositionType {
+  const {anchor, dynamicPosition, tipSize} = props;
+
+  if (el) {
+    return dynamicPosition
+      ? getDynamicPosition({
+          x,
+          y,
+          anchor,
+          padding: tipSize,
+          width: viewport.width,
+          height: viewport.height,
+          selfWidth: el.clientWidth,
+          selfHeight: el.clientHeight
+        })
+      : anchor;
+  }
+
+  return anchor;
+}
+
+function getContainerStyle(
+  props: PopupProps,
+  viewport: WebMercatorViewport,
+  el: null | HTMLElement,
+  [x, y, z]: [number, number, number],
+  positionType: PositionType
+) {
+  const {offsetLeft, offsetTop, sortByDepth} = props;
+  const anchorPosition = ANCHOR_POSITION[positionType];
+  const left = x + offsetLeft;
+  const top = y + offsetTop;
+
+  const xPercentage = crispPercentage(el, -anchorPosition.x * 100);
+  const yPercentage = crispPercentage(el, -anchorPosition.y * 100, 'y');
+  const style = {
+    position: 'absolute',
+    transform: `
+      translate(${xPercentage}%, ${yPercentage}%)
+      translate(${crispPixel(left)}px, ${crispPixel(top)}px)
+    `,
+    display: undefined,
+    zIndex: undefined
+  };
+
+  if (!sortByDepth) {
+    return style;
+  }
+  if (z > 1 || z < -1 || x < 0 || x > viewport.width || y < 0 || y > viewport.height) {
+    // clipped
+    style.display = 'none';
+  } else {
+    // use z-index to rearrange components
+    style.zIndex = Math.floor(((1 - z) / 2) * 100000);
+  }
+
+  return style;
+}
+
+function onClick(evt, {props, context}) {
+  if (props.closeOnClick || evt.target.className === 'mapboxgl-popup-close-button') {
+    props.onClose();
+
+    if (context.eventManager) {
+      // Using with InteractiveMap
+      // After we call `onClose` on `anyclick`, this component will be unmounted
+      // at which point we unregister the event listeners and stop blocking propagation.
+      // Then after a short delay a `click` event will fire
+      // Attach a one-time event listener here to prevent it from triggering `onClick` of the base map
+      context.eventManager.once('click', e => e.stopPropagation(), evt.target);
+    }
+  }
+}
+
 /*
  * PureComponent doesn't update when context changes.
  * The only way is to implement our own shouldComponentUpdate here. Considering
@@ -95,114 +175,44 @@ export type PopupProps = BaseControlProps & {
  * is almost always triggered by a viewport change, we almost definitely need to
  * recalculate the popup's position when the parent re-renders.
  */
-export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
-  static propTypes = propTypes;
-  static defaultProps = defaultProps;
+function Popup(props: PopupProps) {
+  const contentRef = useRef<null | HTMLElement>(null);
+  const {context, containerRef} = useMapControl(props, {onClick});
+  const [, setLoaded] = useState(false);
 
-  _closeOnClick: boolean = false;
-  _contentRef: {current: null | HTMLDivElement} = createRef();
+  useEffect(
+    () => {
+      // Container just got a size, re-calculate position
+      setLoaded(true);
+    },
+    [contentRef.current]
+  );
 
-  componentDidMount() {
-    super.componentDidMount();
-    // Container just got a size, re-calculate position
-    this.forceUpdate();
-  }
+  const {viewport} = context;
+  const {className, longitude, latitude, altitude, tipSize, closeButton, children} = props;
 
-  _getPosition(x: number, y: number): PositionType {
-    const {viewport} = this._context;
-    const {anchor, dynamicPosition, tipSize} = this.props;
-    const content = this._contentRef.current;
+  const position = viewport.project([longitude, latitude, altitude]);
 
-    if (content) {
-      return dynamicPosition
-        ? getDynamicPosition({
-            x,
-            y,
-            anchor,
-            padding: tipSize,
-            width: viewport.width,
-            height: viewport.height,
-            selfWidth: content.clientWidth,
-            selfHeight: content.clientHeight
-          })
-        : anchor;
-    }
+  const positionType = getPosition(props, viewport, contentRef.current, position);
+  const containerStyle = getContainerStyle(
+    props,
+    viewport,
+    containerRef.current,
+    position,
+    positionType
+  );
 
-    return anchor;
-  }
+  // If eventManager does not exist (using with static map), listen to React event
+  const onReactClick = context.eventManager ? null : onClick;
 
-  _getContainerStyle(x: number, y: number, z: number, positionType: PositionType) {
-    const {viewport} = this._context;
-    const {offsetLeft, offsetTop, sortByDepth} = this.props;
-    const anchorPosition = ANCHOR_POSITION[positionType];
-    const left = x + offsetLeft;
-    const top = y + offsetTop;
-
-    const el = this._containerRef.current;
-    const xPercentage = crispPercentage(el, -anchorPosition.x * 100);
-    const yPercentage = crispPercentage(el, -anchorPosition.y * 100, 'y');
-    const style = {
-      position: 'absolute',
-      transform: `
-        translate(${xPercentage}%, ${yPercentage}%)
-        translate(${crispPixel(left)}px, ${crispPixel(top)}px)
-      `,
-      display: undefined,
-      zIndex: undefined
-    };
-
-    if (!sortByDepth) {
-      return style;
-    }
-    if (z > 1 || z < -1 || x < 0 || x > viewport.width || y < 0 || y > viewport.height) {
-      // clipped
-      style.display = 'none';
-    } else {
-      // use z-index to rearrange components
-      style.zIndex = Math.floor(((1 - z) / 2) * 100000);
-    }
-
-    return style;
-  }
-
-  _onClick = evt => {
-    if (this.props.captureClick) {
-      evt.stopPropagation();
-    }
-
-    if (this.props.closeOnClick || evt.target.className === 'mapboxgl-popup-close-button') {
-      this.props.onClose();
-
-      const {eventManager} = this._context;
-      if (eventManager) {
-        // Using with InteractiveMap
-        // After we call `onClose` on `anyclick`, this component will be unmounted
-        // at which point we unregister the event listeners and stop blocking propagation.
-        // Then after a short delay a `click` event will fire
-        // Attach a one-time event listener here to prevent it from triggering `onClick` of the base map
-        eventManager.once('click', e => e.stopPropagation(), evt.target);
-      }
-    }
-  };
-
-  _renderTip(positionType: PositionType) {
-    const {tipSize} = this.props;
-
-    return <div key="tip" className="mapboxgl-popup-tip" style={{borderWidth: tipSize}} />;
-  }
-
-  _renderContent() {
-    const {closeButton, children} = this.props;
-    // If eventManager does not exist (using with static map), listen to React event
-    const onClick = this._context.eventManager ? null : this._onClick;
-
-    return (
-      <div
-        key="content"
-        ref={this._contentRef}
-        className="mapboxgl-popup-content"
-        onClick={onClick}
-      >
+  return (
+    <div
+      className={`mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`}
+      style={containerStyle}
+      ref={containerRef}
+    >
+      <div key="tip" className="mapboxgl-popup-tip" style={{borderWidth: tipSize}} />
+      <div key="content" ref={contentRef} className="mapboxgl-popup-content" onClick={onReactClick}>
         {closeButton && (
           <button key="close-button" className="mapboxgl-popup-close-button" type="button">
             ×
@@ -210,26 +220,11 @@ export default class Popup extends BaseControl<PopupProps, *, HTMLDivElement> {
         )}
         {children}
       </div>
-    );
-  }
-
-  _render() {
-    const {className, longitude, latitude, altitude} = this.props;
-
-    const [x, y, z] = this._context.viewport.project([longitude, latitude, altitude]);
-
-    const positionType = this._getPosition(x, y);
-    const containerStyle = this._getContainerStyle(x, y, z, positionType);
-
-    return (
-      <div
-        className={`mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`}
-        style={containerStyle}
-        ref={this._containerRef}
-      >
-        {this._renderTip(positionType)}
-        {this._renderContent()}
-      </div>
-    );
-  }
+    </div>
+  );
 }
+
+Popup.propTypes = propTypes;
+Popup.defaultProps = defaultProps;
+
+export default Popup;
