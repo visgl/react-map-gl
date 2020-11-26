@@ -67,6 +67,12 @@ If true the Geolocate Control becomes a toggle button and when active the map wi
 
 By default a dot will be shown on the map at the user's location. Set to false to disable.
 
+##### `showAccuracyCircle` (Boolean)
+
+- default: `true`
+
+By default, if showUserLocation is `true` , a transparent circle will be drawn around the user location indicating the accuracy (95% confidence level) of the user's location. Set to `false` to disable. Always disabled when showUserLocation is `false`.
+
 ##### `style` (Object)
 
 A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to Geolocate control button.

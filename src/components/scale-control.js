@@ -19,63 +19,53 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import BaseControl from './base-control';
 import mapboxgl from '../utils/mapboxgl';
+import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
 
-import type {BaseControlProps} from './base-control';
+import type {MapControlProps} from './use-map-control';
 
-const propTypes = Object.assign({}, BaseControl.propTypes, {
+const propTypes = Object.assign({}, mapControlPropTypes, {
   maxWidth: PropTypes.number,
   unit: PropTypes.oneOf(['imperial', 'metric', 'nautical'])
 });
 
-const defaultProps = Object.assign({}, BaseControl.defaultProps, {
+const defaultProps = Object.assign({}, mapControlDefaultProps, {
   maxWidth: 100,
   unit: 'metric'
 });
 
-export type ScaleControlProps = BaseControlProps & {
+export type ScaleControlProps = MapControlProps & {
   maxWidth: number,
   unit: string
 };
 
-export default class ScaleControl extends BaseControl<ScaleControlProps, *, HTMLDivElement> {
-  static propTypes = propTypes;
-  static defaultProps = defaultProps;
+function ScaleControl(props: ScaleControlProps) {
+  const {context, containerRef} = useMapControl(props);
+  const [mapboxScaleControl, createMapboxScaleControl] = useState(null);
 
-  componentDidMount() {
-    this._update();
-  }
-
-  _control: any = null;
-  _mapboxScaleControl: any = null;
-
-  _update() {
-    let mapboxScaleControl = this._mapboxScaleControl;
-    if (!mapboxScaleControl) {
-      const map = this._context.map;
-      const container = this._containerRef.current;
-      if (map && container) {
-        mapboxScaleControl = new mapboxgl.ScaleControl();
-        mapboxScaleControl._map = map;
-        mapboxScaleControl._container = container;
-        this._mapboxScaleControl = mapboxScaleControl;
+  useEffect(
+    () => {
+      if (context.map) {
+        const control = new mapboxgl.ScaleControl();
+        control._map = context.map;
+        control._container = containerRef.current;
+        createMapboxScaleControl(control);
       }
-    }
-    if (mapboxScaleControl) {
-      mapboxScaleControl.options = this.props;
-      mapboxScaleControl._onMove();
-    }
+    },
+    [context.map]
+  );
+
+  if (mapboxScaleControl) {
+    mapboxScaleControl.options = props;
+    mapboxScaleControl._onMove();
   }
 
-  _render() {
-    this._control = this._control || (
-      <div ref={this._containerRef} className="mapboxgl-ctrl mapboxgl-ctrl-scale" />
-    );
-    // Likely viewport has changed
-    this._update();
-
-    return this._control;
-  }
+  return <div ref={containerRef} className="mapboxgl-ctrl mapboxgl-ctrl-scale" />;
 }
+
+ScaleControl.propTypes = propTypes;
+ScaleControl.defaultProps = defaultProps;
+
+export default ScaleControl;
