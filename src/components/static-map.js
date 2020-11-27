@@ -31,7 +31,7 @@ import Mapbox from '../mapbox/mapbox';
 import mapboxgl from '../utils/mapboxgl';
 import {checkVisibilityConstraints} from '../utils/map-constraints';
 import {MAPBOX_LIMITS} from '../utils/map-state';
-import MapContext from './map-context';
+import MapContext, {MapContextProvider} from './map-context';
 
 import type {ViewState} from '../mapbox/mapbox';
 
@@ -166,6 +166,10 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
       this._updateMapStyle(prevProps, this.props);
       this._updateMapProps(this.props);
     }
+
+    if (this._context && this._context.setMap && !this._context.map) {
+      this._context.setMap(this._map);
+    }
   }
 
   componentWillUnmount() {
@@ -187,6 +191,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
   _width: number = 0;
   _height: number = 0;
   _resizeObserver: null | ResizeObserver = null;
+  _context: any = null;
 
   // External apps can access map this way
   getMap = () => {
@@ -286,24 +291,28 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     return (
       <MapContext.Consumer>
         {interactiveContext => {
+          this._context = interactiveContext;
+
           const context = {
             ...interactiveContext,
-            // $FlowFixMe
-            viewport: new WebMercatorViewport({
-              ...this.props,
-              ...this.props.viewState,
-              width,
-              height
-            }),
+            viewport:
+              interactiveContext.viewport ||
+              // $FlowFixMe
+              new WebMercatorViewport({
+                ...this.props,
+                ...this.props.viewState,
+                width,
+                height
+              }),
             map: this._map,
-            mapContainer: interactiveContext.mapContainer || this._mapContainerRef.current
+            container: interactiveContext.container || this._mapContainerRef.current
           };
           return (
-            <MapContext.Provider value={context}>
+            <MapContextProvider value={context}>
               <div key="map-overlays" className="overlays" style={CONTAINER_STYLE}>
                 {this.props.children}
               </div>
-            </MapContext.Provider>
+            </MapContextProvider>
           );
         }}
       </MapContext.Consumer>

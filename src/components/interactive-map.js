@@ -210,7 +210,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
 
     this._updateInteractiveContext({
       isDragging: false,
-      eventManager: this._eventManager
+      eventManager: this._eventManager,
+      onViewportChange: this._onViewportChange
     });
   }
 
@@ -226,8 +227,8 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   componentDidMount() {
     const eventManager = this._eventManager;
 
-    const mapContainer = this._eventCanvasRef.current;
-    eventManager.setElement(mapContainer);
+    const container = this._eventCanvasRef.current;
+    eventManager.setElement(container);
     // Register additional event handlers for click and hover
     eventManager.on({
       pointerdown: this._onPointerDown,
@@ -243,7 +244,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
 
     this._setControllerProps(this.props);
 
-    this._updateInteractiveContext({mapContainer});
+    this._updateInteractiveContext({container});
   }
 
   componentDidUpdate() {
@@ -282,12 +283,6 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     });
 
     this._controller.setOptions(props);
-
-    // Pass callbacks via MapContext
-    // Do not create a new context object because these do not affect render
-    const context = this._interactiveContext;
-    context.onViewportChange = props.onViewportChange;
-    context.onViewStateChange = props.onViewStateChange;
   }
 
   _getFeatures({pos, radius}: {pos: Array<number>, radius: number}) {
