@@ -94,34 +94,25 @@ function getBounds(position: Position) {
   return [[bounds._ne.lng, bounds._ne.lat], [bounds._sw.lng, bounds._sw.lat]];
 }
 
-function setupMapboxGeolocateControl(context, props, geolocateButton) {
+function setupMapboxGeolocateControl(
+  context,
+  props: GeolocateControlProps,
+  geolocateButton: HTMLElement
+) {
   const control = new mapboxgl.GeolocateControl(props);
 
-  /* the following re-implement MapboxGeolocateControl's _setupUI */
+  // Dummy placeholders so that _setupUI does not crash
+  control._container = document.createElement('div');
+  control._map = {
+    on: () => {},
+    _getUIString: () => ''
+  };
+  control._setupUI(true);
 
-  // replace mapbox internal UI elements
+  // replace mapbox internal UI elements with ours
   control._geolocateButton = geolocateButton;
-  if (props.trackUserLocation) {
-    control._watchState = 'OFF';
-  }
-  if (props.showUserLocation) {
-    const dotElement = document.createElement('div');
-    dotElement.className = 'mapboxgl-user-location-dot';
-    control._dotElement = dotElement;
 
-    const circleElement = document.createElement('div');
-    circleElement.className = 'mapboxgl-user-location-accuracy-circle';
-    control._circleElement = circleElement;
-
-    control._userLocationDotMarker = new mapboxgl.Marker(dotElement);
-    control._accuracyCircleMarker = new mapboxgl.Marker({
-      element: circleElement,
-      pitchAlignment: 'map'
-    });
-  }
-
-  control._setup = true;
-
+  // From _setupUI
   // when the camera is changed (and it's not as a result of the Geolocation Control) change
   // the watch mode to background watch, so that the marker is updated but not the camera.
   const {eventManager} = context;
@@ -129,8 +120,8 @@ function setupMapboxGeolocateControl(context, props, geolocateButton) {
     eventManager.on('panstart', () => {
       if (control._watchState === 'ACTIVE_LOCK') {
         control._watchState = 'BACKGROUND';
-        control._geolocateButton.classList.add('mapboxgl-ctrl-geolocate-background');
-        control._geolocateButton.classList.remove('mapboxgl-ctrl-geolocate-active');
+        geolocateButton.classList.add('mapboxgl-ctrl-geolocate-background');
+        geolocateButton.classList.remove('mapboxgl-ctrl-geolocate-active');
       }
     });
   }
@@ -149,7 +140,7 @@ function triggerGeolocate(context, props, control) {
 
 function updateCamera(position: Position, {context, props}) {
   const bounds = getBounds(position);
-  const {longitude, latitude, zoom} = context.viewport.fitBounds(bounds);
+  const {longitude, latitude, zoom} = context.viewport.fitBounds(bounds, props.fitBoundsOptions);
 
   const newViewState = Object.assign({}, context.viewport, {
     longitude,
@@ -182,10 +173,12 @@ function GeolocateControl(props: GeolocateControlProps) {
     isGeolocationSupported().then(result => {
       setSupportsGeolocation(result);
 
-      control = setupMapboxGeolocateControl(context, props, geolocateButtonRef.current);
-      // Overwrite Mapbox's GeolocateControl internal method
-      control._updateCamera = (position: Position) => updateCamera(position, thisRef);
-      createMapboxGeolocateControl(control);
+      if (geolocateButtonRef.current) {
+        control = setupMapboxGeolocateControl(context, props, geolocateButtonRef.current);
+        // Overwrite Mapbox's GeolocateControl internal method
+        control._updateCamera = (position: Position) => updateCamera(position, thisRef);
+        createMapboxGeolocateControl(control);
+      }
     });
 
     return () => {
