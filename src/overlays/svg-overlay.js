@@ -22,11 +22,11 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import BaseControl from '../components/base-control';
+import useMapControl, {mapControlPropTypes} from '../components/use-map-control';
 
-import type {BaseControlProps} from '../components/base-control';
+import type {MapControlProps} from '../components/use-map-control';
 
-const propTypes = Object.assign({}, BaseControl.propTypes, {
+const propTypes = Object.assign({}, mapControlPropTypes, {
   redraw: PropTypes.func.isRequired,
   style: PropTypes.object
 });
@@ -39,36 +39,36 @@ const defaultProps = {
   capturePointerMove: false
 };
 
-export type SVGOverlayProps = BaseControlProps & {
+export type SVGOverlayProps = MapControlProps & {
   redraw: Function,
   style?: Object
 };
 
-export default class SVGOverlay extends BaseControl<SVGOverlayProps, *, Element> {
-  static propTypes = propTypes;
-  static defaultProps = defaultProps;
+function SVGOverlay(props: SVGOverlayProps) {
+  const {context, containerRef} = useMapControl(props);
+  const {viewport, isDragging} = context;
+  const style = {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    ...props.style
+  };
 
-  _render() {
-    const {viewport, isDragging} = this._context;
-    const style = Object.assign(
-      {
-        position: 'absolute',
-        left: 0,
-        top: 0
-      },
-      this.props.style
-    );
-
-    return (
-      <svg width={viewport.width} height={viewport.height} ref={this._containerRef} style={style}>
-        {this.props.redraw({
-          width: viewport.width,
-          height: viewport.height,
-          isDragging,
-          project: viewport.project.bind(viewport),
-          unproject: viewport.unproject.bind(viewport)
-        })}
-      </svg>
-    );
-  }
+  return (
+    // $FlowFixMe
+    <svg width={viewport.width} height={viewport.height} ref={containerRef} style={style}>
+      {props.redraw({
+        width: viewport.width,
+        height: viewport.height,
+        isDragging,
+        project: viewport.project,
+        unproject: viewport.unproject
+      })}
+    </svg>
+  );
 }
+
+SVGOverlay.propTypes = propTypes;
+SVGOverlay.defaultProps = defaultProps;
+
+export default SVGOverlay;

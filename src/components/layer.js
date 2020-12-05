@@ -18,14 +18,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import * as React from 'react';
-import {PureComponent} from 'react';
+import {useContext, useEffect, useMemo, useState, useRef} from 'react';
 import PropTypes from 'prop-types';
 import MapContext from './map-context';
 import assert from '../utils/assert';
 import deepEqual from '../utils/deep-equal';
-
-import type {MapContextProps} from './map-context';
 
 const LAYER_TYPES = {
   fill: 'fill',
@@ -54,8 +51,8 @@ type LayerProps = {
   source?: string,
   'source-layer'?: string,
   beforeId?: string,
-  layout: any,
-  paint: any,
+  layout?: any,
+  paint?: any,
   filter?: Array<mixed>,
   minzoom?: number,
   maxzoom?: number
@@ -106,94 +103,69 @@ function diffLayerStyles(map: any, id: string, props: LayerProps, prevProps: Lay
     }
   }
 }
+
+function createLayer(map, id, props) {
+  if (map.style && map.style._loaded) {
+    const options = {...props, id};
+    delete options.beforeId;
+
+    map.addLayer(options, props.beforeId);
+  }
+}
+
+function updateLayer(map, id, props, prevProps) {
+  assert(props.id === prevProps.id, 'layer id changed');
+  assert(props.type === prevProps.type, 'layer type changed');
+
+  try {
+    diffLayerStyles(map, id, props, prevProps);
+  } catch (error) {
+    console.warn(error); // eslint-disable-line
+  }
+}
 /* eslint-enable complexity, max-statements */
 
 let layerCounter = 0;
 
-export default class Layer<Props: LayerProps> extends PureComponent<Props> {
-  static propTypes = propTypes;
+function Layer(props: LayerProps) {
+  const context = useContext(MapContext);
+  const propsRef = useRef<LayerProps>({id: props.id, type: props.type});
+  const [, setStyleLoaded] = useState(0);
 
-  constructor(props: Props) {
-    super(props);
-    this.id = props.id || `jsx-layer-${layerCounter++}`;
-    this.type = props.type;
-  }
+  const id = useMemo(() => props.id || `jsx-layer-${layerCounter++}`, []);
+  const {map} = context;
 
-  componentDidMount() {
-    this._updateLayer();
-  }
+  useEffect(
+    () => {
+      if (map) {
+        const forceUpdate = () => setStyleLoaded(version => version + 1);
+        map.on('styledata', forceUpdate);
 
-  componentDidUpdate() {
-    this._updateLayer();
-  }
-
-  componentWillUnmount() {
-    const map = this._map;
-    if (map) {
-      map.off('styledata', this._updateLayer);
-      if (map.style && map.style._loaded) {
-        map.removeLayer(this.id);
+        return () => {
+          map.off('styledata', forceUpdate);
+          if (map.style && map.style._loaded) {
+            map.removeLayer(id);
+          }
+        };
       }
-    }
+      return undefined;
+    },
+    [map]
+  );
+
+  const layer = map && map.style && map.getLayer(id);
+  if (layer) {
+    updateLayer(map, id, props, propsRef.current);
+  } else {
+    createLayer(map, id, props);
   }
 
-  id: string;
-  type: string;
-  _map: any = null;
-  _layerOptions: any = {};
+  // Store last rendered props
+  propsRef.current = props;
 
-  getLayer() {
-    const map = this._map;
-    return map && map.style && map.getLayer(this.id);
-  }
-
-  _createLayer() {
-    const map = this._map;
-
-    if (map.style && map.style._loaded) {
-      const options = Object.assign({}, this.props);
-      options.id = this.id;
-      delete options.beforeId;
-
-      map.addLayer(options, this.props.beforeId);
-      this._layerOptions = options;
-    }
-  }
-
-  /* eslint-disable complexity */
-  _updateLayer = () => {
-    const map = this._map;
-    if (!map) {
-      return;
-    }
-
-    const {props, _layerOptions: layerOptions} = this;
-    assert(!props.id || props.id === this.id, 'layer id changed');
-    assert(props.type === this.type, 'layer type changed');
-
-    if (!this.getLayer()) {
-      this._createLayer();
-      return;
-    }
-
-    try {
-      diffLayerStyles(map, this.id, props, layerOptions);
-      Object.assign(layerOptions, props);
-    } catch (error) {
-      console.warn(error); // eslint-disable-line
-    }
-  };
-  /* eslint-disable complexity */
-
-  _render(context: MapContextProps) {
-    if (!this._map && context.map) {
-      this._map = context.map;
-      this._map.on('styledata', this._updateLayer);
-    }
-    return null;
-  }
-
-  render() {
-    return <MapContext.Consumer>{this._render.bind(this)}</MapContext.Consumer>;
-  }
+  return null;
 }
+
+Layer.propTypes = propTypes;
+
+export default Layer;
