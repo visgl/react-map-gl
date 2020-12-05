@@ -22,13 +22,15 @@
 
 import {document} from '../utils/globals';
 import PropTypes from 'prop-types';
-import BaseControl from './base-control';
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import mapboxgl from '../utils/mapboxgl';
 
-import type {BaseControlProps} from './base-control';
+import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
 
-const propTypes = Object.assign({}, BaseControl.propTypes, {
+import type {MapControlProps} from './use-map-control';
+
+const propTypes = Object.assign({}, mapControlPropTypes, {
   // Custom className
   className: PropTypes.string,
   /* eslint-disable max-len */
@@ -39,103 +41,76 @@ const propTypes = Object.assign({}, BaseControl.propTypes, {
   label: PropTypes.string
 });
 
-const defaultProps = Object.assign({}, BaseControl.defaultProps, {
+const defaultProps = Object.assign({}, mapControlDefaultProps, {
   className: '',
   container: null,
   label: 'Toggle fullscreen'
 });
 
-export type FullscreenControlProps = BaseControlProps & {
+export type FullscreenControlProps = MapControlProps & {
   className: string,
   container: ?HTMLElement,
   label: string
 };
 
-type State = {
-  isFullscreen: boolean,
-  showButton: boolean
-};
+function FullscreenControl(props: FullscreenControlProps) {
+  const {context, containerRef} = useMapControl(props);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+  const [mapboxFullscreenControl, createMapboxFullscreenControl] = useState(null);
 
-export default class FullscreenControl extends BaseControl<
-  FullscreenControlProps,
-  State,
-  HTMLDivElement
-> {
-  static propTypes = propTypes;
-  static defaultProps = defaultProps;
+  useEffect(() => {
+    const container = props.container || context.container;
 
-  state = {
-    isFullscreen: false,
-    showButton: false
+    const control = new mapboxgl.FullscreenControl({container});
+
+    createMapboxFullscreenControl(control);
+    setShowButton(control._checkFullscreenSupport());
+
+    const onFullscreenChange = () => {
+      const nextState = !control._fullscreen;
+      // this is a hack
+      // Mapbox use `_fullscreen` flag to toggle fullscreen mode
+      control._fullscreen = nextState;
+      setIsFullscreen(nextState);
+    };
+
+    document.addEventListener(control._fullscreenchange, onFullscreenChange);
+
+    return () => {
+      document.removeEventListener(control._fullscreenchange, onFullscreenChange);
+    };
+  }, []);
+
+  const onClickFullscreen = () => {
+    if (mapboxFullscreenControl) {
+      mapboxFullscreenControl._onClickFullscreen();
+    }
   };
 
-  _mapboxFullscreenControl: any = null;
-
-  componentDidMount() {
-    const container = this.props.container || this._context.container;
-
-    this._mapboxFullscreenControl = new mapboxgl.FullscreenControl({
-      container
-    });
-
-    // eslint-disable-next-line
-    this.setState({
-      showButton: this._mapboxFullscreenControl._checkFullscreenSupport()
-    });
-
-    document.addEventListener(
-      this._mapboxFullscreenControl._fullscreenchange,
-      this._onFullscreenChange
-    );
+  if (!showButton) {
+    return null;
   }
 
-  componentWillUnmount() {
-    document.removeEventListener(
-      this._mapboxFullscreenControl._fullscreenchange,
-      this._onFullscreenChange
-    );
-  }
+  const {className, label} = props;
+  const type = isFullscreen ? 'shrink' : 'fullscreen';
 
-  _onFullscreenChange = () => {
-    const nextState = !this._mapboxFullscreenControl._fullscreen;
-    // this is a hack
-    // Mapbox use `_fullscreen` flag to toggle fullscreen mode
-    this._mapboxFullscreenControl._fullscreen = nextState;
-    this.setState({isFullscreen: nextState});
-  };
-
-  _onClickFullscreen = () => {
-    this._mapboxFullscreenControl._onClickFullscreen();
-  };
-
-  _renderButton(type: string, label: string, callback: Function) {
-    return (
+  return (
+    <div className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`} ref={containerRef}>
       <button
         key={type}
         className={`mapboxgl-ctrl-icon mapboxgl-ctrl-${type}`}
         type="button"
         title={label}
-        onClick={callback}
+        onClick={onClickFullscreen}
       >
         <span className="mapboxgl-ctrl-icon" aria-hidden="true" />
       </button>
-    );
-  }
-
-  _render() {
-    if (!this.state.showButton) {
-      return null;
-    }
-
-    const {className, label} = this.props;
-    const {isFullscreen} = this.state;
-
-    const type = isFullscreen ? 'shrink' : 'fullscreen';
-
-    return (
-      <div className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`} ref={this._containerRef}>
-        {this._renderButton(type, label, this._onClickFullscreen)}
-      </div>
-    );
-  }
+    </div>
+  );
 }
+
+FullscreenControl.propTypes = propTypes;
+FullscreenControl.defaultProps = defaultProps;
+
+export default FullscreenControl;
