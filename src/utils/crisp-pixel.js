@@ -6,7 +6,7 @@ const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) ||
 export const crispPixel = (size: number) => Math.round(size * pixelRatio) / pixelRatio;
 
 export const crispPercentage = (
-  el: null | HTMLDivElement,
+  el: null | HTMLElement,
   percentage: number,
   dimension: 'x' | 'y' = 'x'
 ) => {

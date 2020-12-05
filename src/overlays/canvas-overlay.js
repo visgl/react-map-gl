@@ -20,13 +20,14 @@
 // THE SOFTWARE.
 
 import * as React from 'react';
+import {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import BaseControl from '../components/base-control';
 import {window} from '../utils/globals';
+import useMapControl, {mapControlPropTypes} from '../components/use-map-control';
 
-import type {BaseControlProps} from '../components/base-control';
+import type {MapControlProps} from '../components/use-map-control';
 
-const propTypes = Object.assign({}, BaseControl.propTypes, {
+const propTypes = Object.assign({}, mapControlPropTypes, {
   redraw: PropTypes.func.isRequired
 });
 
@@ -38,69 +39,55 @@ const defaultProps = {
   capturePointerMove: false
 };
 
-export type CanvasOverlayProps = BaseControlProps & {
+export type CanvasOverlayProps = MapControlProps & {
   redraw: Function
 };
 
-export default class CanvasOverlay extends BaseControl<CanvasOverlayProps, *, HTMLCanvasElement> {
-  static propTypes = propTypes;
-  static defaultProps = defaultProps;
+function CanvasOverlay(props: CanvasOverlayProps) {
+  const {context, containerRef} = useMapControl(props);
+  const [ctx, setDrawingContext] = useState(null);
 
-  _canvas: ?HTMLCanvasElement;
-  _ctx: any;
+  useEffect(() => {
+    // $FlowFixMe
+    setDrawingContext(containerRef.current.getContext('2d'));
+  }, []);
 
-  componentDidMount() {
-    const canvas = this._containerRef.current;
-    if (canvas) {
-      this._canvas = canvas;
-      this._ctx = canvas.getContext('2d');
-    }
-    this._redraw();
-  }
+  const pixelRatio = window.devicePixelRatio || 1;
+  const {viewport, isDragging} = context;
 
-  _redraw = () => {
-    const ctx = this._ctx;
-    if (!ctx) {
-      return;
-    }
-
-    const pixelRatio = window.devicePixelRatio || 1;
+  if (ctx) {
     ctx.save();
     ctx.scale(pixelRatio, pixelRatio);
 
-    const {viewport, isDragging} = this._context;
-    this.props.redraw({
+    props.redraw({
       width: viewport.width,
       height: viewport.height,
       ctx,
       isDragging,
-      project: viewport.project.bind(viewport),
-      unproject: viewport.unproject.bind(viewport)
+      project: viewport.project,
+      unproject: viewport.unproject
     });
 
     ctx.restore();
-  };
-
-  _render() {
-    const pixelRatio = window.devicePixelRatio || 1;
-    const {
-      viewport: {width, height}
-    } = this._context;
-    this._redraw();
-
-    return (
-      <canvas
-        ref={this._containerRef}
-        width={width * pixelRatio}
-        height={height * pixelRatio}
-        style={{
-          width: `${width}px`,
-          height: `${height}px`,
-          position: 'absolute',
-          left: 0,
-          top: 0
-        }}
-      />
-    );
   }
+
+  return (
+    <canvas
+      ref={containerRef}
+      width={viewport.width * pixelRatio}
+      height={viewport.height * pixelRatio}
+      style={{
+        width: `${viewport.width}px`,
+        height: `${viewport.height}px`,
+        position: 'absolute',
+        left: 0,
+        top: 0
+      }}
+    />
+  );
 }
+
+CanvasOverlay.propTypes = propTypes;
+CanvasOverlay.defaultProps = defaultProps;
+
+export default CanvasOverlay;

@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* global document, window */
+/* global document */
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import {Component} from 'react';
@@ -48,9 +48,7 @@ export default class App extends Component {
         longitude: -122.41669,
         zoom: 8,
         bearing: 0,
-        pitch: 0,
-        width: window.innerWidth,
-        height: window.innerHeight
+        pitch: 0
       }
     };
   }
@@ -61,6 +59,8 @@ export default class App extends Component {
     return (
       <MapGL
         {...viewport}
+        width="100vw"
+        height="100vh"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={v => this.setState({viewport: v})}
         mapboxApiAccessToken={MAPBOX_TOKEN}

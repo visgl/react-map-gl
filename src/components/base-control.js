@@ -20,118 +20,46 @@
 // THE SOFTWARE.
 import * as React from 'react';
 import {PureComponent, createRef} from 'react';
-import PropTypes from 'prop-types';
-import MapContext from './map-context';
+import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
 
 import type {MjolnirEvent} from 'mjolnir.js';
+import type {MapControlProps} from './use-map-control';
 
-const propTypes = {
-  /** Event handling */
-  captureScroll: PropTypes.bool,
-  // Stop map pan & rotate
-  captureDrag: PropTypes.bool,
-  // Stop map click
-  captureClick: PropTypes.bool,
-  // Stop map double click
-  captureDoubleClick: PropTypes.bool,
-  // Stop map pointer move
-  capturePointerMove: PropTypes.bool
-};
+export type BaseControlProps = MapControlProps;
 
-const defaultProps = {
-  captureScroll: false,
-  captureDrag: true,
-  captureClick: true,
-  captureDoubleClick: true,
-  capturePointerMove: false
-};
+function Control(props: any) {
+  const {instance} = props;
+  const {context, containerRef} = useMapControl(instance.props, props);
 
-export type BaseControlProps = {
-  captureScroll: boolean,
-  captureDrag: boolean,
-  captureClick: boolean,
-  captureDoubleClick: boolean,
-  capturePointerMove: boolean,
-  children?: any
-};
+  instance._context = context;
+  instance._containerRef = containerRef;
+
+  return instance._render();
+}
 
 /*
- * PureComponent doesn't update when context changes.
- * The only way is to implement our own shouldComponentUpdate here. Considering
- * the parent component (StaticMap or InteractiveMap) is pure, and map re-render
- * is almost always triggered by a viewport change, we almost definitely need to
- * recalculate the marker's position when the parent re-renders.
+ * This class is kept for backward compatibility
  */
 export default class BaseControl<
   Props: BaseControlProps,
   State: any,
   ContainerType: Element
 > extends PureComponent<Props, State> {
-  static propTypes = propTypes;
-  static defaultProps = defaultProps;
-
-  componentDidMount() {
-    const ref = this._containerRef.current;
-    if (!ref) {
-      return;
-    }
-
-    const {eventManager} = this._context;
-
-    // Return early if no eventManager is found
-    if (eventManager) {
-      this._events = {
-        wheel: this._onScroll,
-        panstart: this._onDragStart,
-        anyclick: this._onClick,
-        click: this._onClick,
-        dblclick: this._onDblClick,
-        pointermove: this._onPointerMove
-      };
-      eventManager.watch(this._events, ref);
-    }
-  }
-
-  componentWillUnmount() {
-    const {eventManager} = this._context;
-    if (eventManager && this._events) {
-      eventManager.off(this._events);
-    }
-  }
+  static propTypes = mapControlPropTypes;
+  static defaultProps = mapControlDefaultProps;
 
   _context: any = {};
-  _events: any = null;
   _containerRef: {current: null | ContainerType} = createRef();
 
-  _onScroll = (evt: MjolnirEvent) => {
-    if (this.props.captureScroll) {
-      evt.stopPropagation();
-    }
-  };
+  _onScroll = (evt: MjolnirEvent) => {};
 
-  _onDragStart = (evt: MjolnirEvent) => {
-    if (this.props.captureDrag) {
-      evt.stopPropagation();
-    }
-  };
+  _onDragStart = (evt: MjolnirEvent) => {};
 
-  _onDblClick = (evt: MjolnirEvent) => {
-    if (this.props.captureDoubleClick) {
-      evt.stopPropagation();
-    }
-  };
+  _onDblClick = (evt: MjolnirEvent) => {};
 
-  _onClick = (evt: MjolnirEvent) => {
-    if (this.props.captureClick) {
-      evt.stopPropagation();
-    }
-  };
+  _onClick = (evt: MjolnirEvent) => {};
 
-  _onPointerMove = (evt: MjolnirEvent) => {
-    if (this.props.capturePointerMove) {
-      evt.stopPropagation();
-    }
-  };
+  _onPointerMove = (evt: MjolnirEvent) => {};
 
   _render() {
     throw new Error('_render() not implemented');
@@ -139,12 +67,14 @@ export default class BaseControl<
 
   render() {
     return (
-      <MapContext.Consumer>
-        {context => {
-          this._context = context;
-          return this._render();
-        }}
-      </MapContext.Consumer>
+      <Control
+        instance={this}
+        onScroll={this._onScroll}
+        onDragStart={this._onDragStart}
+        onDblClick={this._onDblClick}
+        onClick={this._onClick}
+        onPointerMove={this._onPointerMove}
+      />
     );
   }
 }

@@ -22,11 +22,11 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import BaseControl from '../components/base-control';
+import useMapControl, {mapControlPropTypes} from '../components/use-map-control';
 
-import type {BaseControlProps} from '../components/base-control';
+import type {MapControlProps} from '../components/use-map-control';
 
-const propTypes = Object.assign({}, BaseControl.propTypes, {
+const propTypes = Object.assign({}, mapControlPropTypes, {
   redraw: PropTypes.func.isRequired,
   style: PropTypes.object
 });
@@ -39,38 +39,37 @@ const defaultProps = {
   capturePointerMove: false
 };
 
-export type HTMLOverlayProps = BaseControlProps & {
+export type HTMLOverlayProps = MapControlProps & {
   redraw: Function,
   style?: Object
 };
 
-export default class HTMLOverlay extends BaseControl<HTMLOverlayProps, *, HTMLDivElement> {
-  static propTypes = propTypes;
-  static defaultProps = defaultProps;
+function HTMLOverlay(props: HTMLOverlayProps) {
+  const {context, containerRef} = useMapControl(props);
+  const {viewport, isDragging} = context;
+  const style = {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: viewport.width,
+    height: viewport.height,
+    ...props.style
+  };
 
-  _render() {
-    const {viewport, isDragging} = this._context;
-    const style = Object.assign(
-      {
-        position: 'absolute',
-        left: 0,
-        top: 0,
+  return (
+    <div ref={containerRef} style={style}>
+      {props.redraw({
         width: viewport.width,
-        height: viewport.height
-      },
-      this.props.style
-    );
-
-    return (
-      <div ref={this._containerRef} style={style}>
-        {this.props.redraw({
-          width: viewport.width,
-          height: viewport.height,
-          isDragging,
-          project: viewport.project.bind(viewport),
-          unproject: viewport.unproject.bind(viewport)
-        })}
-      </div>
-    );
-  }
+        height: viewport.height,
+        isDragging,
+        project: viewport.project,
+        unproject: viewport.unproject
+      })}
+    </div>
+  );
 }
+
+HTMLOverlay.propTypes = propTypes;
+HTMLOverlay.defaultProps = defaultProps;
+
+export default HTMLOverlay;
