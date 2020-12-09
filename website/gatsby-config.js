@@ -39,7 +39,7 @@ module.exports = {
         // Should be like btoa('YourUsername:YourKey') and should be readonly.
         GITHUB_KEY: null,
 
-        HOME_PATH: '/',
+        HOME_PATH: '',
 
         PROJECTS: [
           {
