@@ -49,7 +49,9 @@ function createSource(map, id, props) {
     delete options.id;
     delete options.children;
     map.addSource(id, options);
+    return map.getSource(id);
   }
+  return null;
 }
 
 /* eslint-disable complexity */
@@ -135,11 +137,11 @@ function Source(props: SourceProps) {
     [map]
   );
 
-  const source = map && map.style && map.getSource(id);
+  let source = map && map.style && map.getSource(id);
   if (source) {
     updateSource(source, props, propsRef.current);
   } else {
-    createSource(map, id, props);
+    source = createSource(map, id, props);
   }
 
   return source
