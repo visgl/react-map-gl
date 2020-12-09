@@ -27,7 +27,7 @@
     "gatsby": "^2.20.24",
     "gatsby-plugin-env-variables": "^1.0.1",
     "gatsby-plugin-no-sourcemaps": "^2.1.1",
-    "gatsby-theme-ocular": "^1.2.1",
+    "gatsby-theme-ocular": "^1.2.3",
     "gh-pages": "^2.1.0"
   }
 }
