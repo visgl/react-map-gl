@@ -33,6 +33,19 @@ const TEST_CASES = [
   },
   {
     opts: {
+      height: 720,
+      padding: 10,
+      selfHeight: 589,
+      selfWidth: 620,
+      width: 1216,
+      x: 771.00000000002,
+      y: 400.9999999999942
+    },
+    expected: (input, output) => output === 'right',
+    message: 'Overwhelmingly large container'
+  },
+  {
+    opts: {
       x: 50,
       y: 50,
       width: 100,

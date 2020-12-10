@@ -71,10 +71,6 @@ export function getDynamicPosition({
     }
   }
 
-  // anchorX: left - 0, center - 0.5, right - 1
-  let left = x - anchorX * selfWidth;
-  let right = left + selfWidth;
-
   // If needed, adjust anchorX at 0.5 step between [0, 1]
   let xStep = 0.5;
   if (anchorY === 0.5) {
@@ -82,6 +78,10 @@ export function getDynamicPosition({
     anchorX = Math.floor(anchorX);
     xStep = 1;
   }
+
+  // anchorX: left - 0, center - 0.5, right - 1
+  let left = x - anchorX * selfWidth;
+  let right = left + selfWidth;
 
   if (left < padding) {
     // Left edge is outside, try move right
