@@ -3,9 +3,6 @@ import {getDynamicPosition, ANCHOR_POSITION} from 'react-map-gl/utils/dynamic-po
 
 const ANCHORS = Object.keys(ANCHOR_POSITION);
 
-// * @param {String} anchor - type of the anchor, one of 'top', 'bottom',
-//    'left', 'right', 'top-left', 'top-right', 'bottom-left' , and  'bottom-right'
-
 const TEST_CASES = [
   {
     opts: {
@@ -13,10 +10,10 @@ const TEST_CASES = [
       y: 0,
       width: 10,
       height: 10,
-      selfWidth: 20,
-      selfHeight: 20
+      selfWidth: 15,
+      selfHeight: 15
     },
-    expected: (input, output) => output === 'top-left',
+    expected: () => 'top-left',
     message: 'Very large content'
   },
   {
@@ -28,7 +25,7 @@ const TEST_CASES = [
       selfWidth: 20,
       selfHeight: 20
     },
-    expected: (input, output) => input === output,
+    expected: input => input,
     message: 'Very large container'
   },
   {
@@ -38,11 +35,11 @@ const TEST_CASES = [
       selfHeight: 589,
       selfWidth: 620,
       width: 1216,
-      x: 771.00000000002,
-      y: 400.9999999999942
+      x: 771,
+      y: 401
     },
-    expected: (input, output) => output === 'right',
-    message: 'Overwhelmingly large container'
+    expected: () => 'right',
+    message: 'Overwhelmingly large content'
   },
   {
     opts: {
@@ -54,7 +51,7 @@ const TEST_CASES = [
       selfHeight: 20,
       padding: 45
     },
-    expected: (input, output) => output === 'top-left',
+    expected: input => (input.endsWith('right') ? 'right' : 'left'),
     message: 'Very large padding'
   },
   {
@@ -66,129 +63,102 @@ const TEST_CASES = [
       selfWidth: 20,
       selfHeight: 20
     },
-    expected: (input, output) => {
-      if (input.endsWith('right')) {
-        return output === 'right';
-      }
-      return output === 'left';
-    },
+    expected: input => (input.endsWith('right') ? 'right' : 'left'),
     message: 'Very short container'
   },
   {
     opts: {
-      x: 10,
+      x: 5,
       y: 50,
       width: 100,
       height: 100,
       selfWidth: 20,
       selfHeight: 20
     },
-    expected: (input, output) => {
-      switch (input) {
-        case 'top':
-        case 'top-left':
-          return output === 'top-right';
-        case 'left':
-          return output === 'right';
-        case 'bottom':
-        case 'bottom-left':
-          return output === 'bottom-right';
-        default:
-          return input === output;
+    expected: input => {
+      if (input.startsWith('top')) {
+        return 'top-left';
       }
+      if (input.startsWith('bottom')) {
+        return 'bottom-left';
+      }
+      return 'left';
     },
     message: 'Left border'
   },
   {
     opts: {
-      x: 90,
+      x: 95,
       y: 50,
       width: 100,
       height: 100,
       selfWidth: 20,
       selfHeight: 20
     },
-    expected: (input, output) => {
-      switch (input) {
-        case 'top':
-        case 'top-right':
-          return output === 'top-left';
-        case 'right':
-          return output === 'left';
-        case 'bottom':
-        case 'bottom-right':
-          return output === 'bottom-left';
-        default:
-          return input === output;
+    expected: input => {
+      if (input.startsWith('top')) {
+        return 'top-right';
       }
+      if (input.startsWith('bottom')) {
+        return 'bottom-right';
+      }
+      return 'right';
     },
     message: 'Right border'
   },
   {
     opts: {
       x: 50,
-      y: 10,
+      y: 5,
       width: 100,
       height: 100,
       selfWidth: 20,
       selfHeight: 20
     },
-    expected: (input, output) => {
-      switch (input) {
-        case 'left':
-        case 'top-left':
-          return output === 'bottom-left';
-        case 'top':
-          return output === 'bottom';
-        case 'right':
-        case 'top-right':
-          return output === 'bottom-right';
-        default:
-          return input === output;
+    expected: input => {
+      if (input.endsWith('left')) {
+        return 'top-left';
       }
+      if (input.endsWith('right')) {
+        return 'top-right';
+      }
+      return 'top';
     },
     message: 'Top border'
   },
   {
     opts: {
       x: 50,
-      y: 90,
+      y: 95,
       width: 100,
       height: 100,
       selfWidth: 20,
       selfHeight: 20
     },
-    expected: (input, output) => {
-      switch (input) {
-        case 'left':
-        case 'bottom-left':
-          return output === 'top-left';
-        case 'bottom':
-          return output === 'top';
-        case 'right':
-        case 'bottom-right':
-          return output === 'top-right';
-        default:
-          return input === output;
+    expected: input => {
+      if (input.endsWith('left')) {
+        return 'bottom-left';
       }
+      if (input.endsWith('right')) {
+        return 'bottom-right';
+      }
+      return 'bottom';
     },
     message: 'Bottom border'
   }
 ];
 
 test('getDynamicPosition', t => {
-  TEST_CASES.forEach(testCase => {
-    ANCHORS.forEach(anchor => {
+  for (const testCase of TEST_CASES) {
+    t.comment(testCase.message);
+    for (const anchor of ANCHORS) {
       const params = Object.assign({anchor}, testCase.opts);
       const result = getDynamicPosition(params);
+      const expected = testCase.expected(anchor);
 
-      if (testCase.expected(result)) {
-        t.fail(`Incorrect position: gets '${result}' from ${JSON.stringify(params)}`);
-      }
-    });
-
-    t.pass(testCase.message);
-  });
+      t.is(result, expected, `Returns correct result for anchor '${anchor}'`);
+    }
+  }
 
   t.end();
 });
