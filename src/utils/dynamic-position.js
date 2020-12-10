@@ -29,7 +29,7 @@ const ANCHOR_TYPES = Object.keys(ANCHOR_POSITION);
  * @returns {String} position - one of 'top', 'bottom',
     'left', 'right', 'top-left', 'top-right', 'bottom-left' , and  'bottom-right'
  */
-// eslint-disable-next-line complexity
+// eslint-disable-next-line complexity,max-statements
 export function getDynamicPosition({
   x,
   y,
@@ -54,21 +54,23 @@ export function getDynamicPosition({
   // anchorY: top - 0, center - 0.5, bottom - 1
   let top = y - anchorY * selfHeight;
   let bottom = top + selfHeight;
-  // If needed, adjust anchorY at 0.5 step between [0, 1]
-  const yStep = 0.5;
+  let cutoffY = Math.max(0, padding - top) + Math.max(0, bottom - height + padding);
 
-  if (top < padding) {
-    // Top edge is outside, try move down
-    while (top < padding && anchorY >= yStep) {
-      anchorY -= yStep;
-      top += yStep * selfHeight;
+  if (cutoffY > 0) {
+    // Needs vertical adjustment
+    let bestAnchorY = anchorY;
+    let minCutoff = cutoffY;
+    // Test anchorY at 0.5 step between [0, 1]
+    for (anchorY = 0; anchorY <= 1; anchorY += 0.5) {
+      top = y - anchorY * selfHeight;
+      bottom = top + selfHeight;
+      cutoffY = Math.max(0, padding - top) + Math.max(0, bottom - height + padding);
+      if (cutoffY < minCutoff) {
+        minCutoff = cutoffY;
+        bestAnchorY = anchorY;
+      }
     }
-  } else if (bottom > height - padding) {
-    // bottom edge is outside, try move up
-    while (bottom > height - padding && anchorY <= 1 - yStep) {
-      anchorY += yStep;
-      bottom -= yStep * selfHeight;
-    }
+    anchorY = bestAnchorY;
   }
 
   // If needed, adjust anchorX at 0.5 step between [0, 1]
@@ -82,19 +84,23 @@ export function getDynamicPosition({
   // anchorX: left - 0, center - 0.5, right - 1
   let left = x - anchorX * selfWidth;
   let right = left + selfWidth;
+  let cutoffX = Math.max(0, padding - left) + Math.max(0, right - width + padding);
 
-  if (left < padding) {
-    // Left edge is outside, try move right
-    while (left < padding && anchorX >= xStep) {
-      anchorX -= xStep;
-      left += xStep * selfWidth;
+  if (cutoffX > 0) {
+    // Needs horizontal adjustment
+    let bestAnchorX = anchorX;
+    let minCutoff = cutoffX;
+    // Test anchorX at xStep between [0, 1]
+    for (anchorX = 0; anchorX <= 1; anchorX += xStep) {
+      left = x - anchorX * selfWidth;
+      right = left + selfWidth;
+      cutoffX = Math.max(0, padding - left) + Math.max(0, right - width + padding);
+      if (cutoffX < minCutoff) {
+        minCutoff = cutoffX;
+        bestAnchorX = anchorX;
+      }
     }
-  } else if (right > width - padding) {
-    // Right edge is outside, try move left
-    while (right > width - padding && anchorX <= 1 - xStep) {
-      anchorX += xStep;
-      right -= xStep * selfWidth;
-    }
+    anchorX = bestAnchorX;
   }
 
   // Find the name of the new anchor position
