@@ -92,7 +92,7 @@ There's many other ready-to-run [examples](https://github.com/visgl/react-map-gl
 
 ## Using with a mapbox-gl Fork
 
-Install react-map-gl along with your choice of fork along with react-map-gl, for example:
+Install your choice of fork along with react-map-gl, for example:
 
 ```bash
 npm i react-map-gl maplibre-gl
