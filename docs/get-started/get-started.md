@@ -95,7 +95,7 @@ There's many other ready-to-run [examples](https://github.com/visgl/react-map-gl
 Install react-map-gl along with your choice of fork along with react-map-gl, for example:
 
 ```bash
-npm -i react-map-gl maplibre-gl
+npm i react-map-gl maplibre-gl
 ```
 
 In your bundler's configuration, set the forked library to replace any reference from mapbox-gl. This can be done in Webpack with something like:
