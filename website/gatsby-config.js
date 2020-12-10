@@ -26,7 +26,7 @@ module.exports = {
         PROJECT_TYPE: 'github',
 
         PROJECT_NAME: 'react-map-gl',
-        PROJECT_ORG: 'uber',
+        PROJECT_ORG: 'visgl',
         PROJECT_ORG_LOGO: 'images/visgl-logo.png',
         PROJECT_URL: 'https://github.com/visgl/',
         PROJECT_DESC: 'React wrapper for Mapbox GL JS',
