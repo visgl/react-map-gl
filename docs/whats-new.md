@@ -10,7 +10,7 @@ Release date: Jan 6, 2020
 - **NavigationControl**: new `label` prop
 - **GeolocateControl**: new `label`, `onGeolocate`, `auto` props
 - **New Export**: `WebMercatorViewport` is re-exported from the `viewport-mercator-project` library for ease of use. It's recommended to import it from `react-map-gl` instead to avoid future dependency change.
-- **New Example**: [Clusters](https://uber.github.io/react-map-gl/examples/clusters)
+- **New Example**: [Clusters](https://visgl.github.io/react-map-gl/examples/clusters)
 
 ## react-map-gl v5.1
 
@@ -20,7 +20,7 @@ Release date: Oct 30, 2019
 
 - **New Components**: [`Layer`](/docs/api-reference/layer.md) and [`Source`](/docs/api-reference/source.md) have been added to provide better React parity with the `Mapbox GL JS` API.
 - **Viewport transition**: `transitionDuration` can be set to `'auto'` when using [`FlyToInterpolator`](/docs/api-reference/fly-to-interpolator.md).
-- **New Example**: Add an [example](https://uber.github.io/react-map-gl/examples/draw-polygon) with drawing library [react-map-gl-draw](https://github.com/uber/nebula.gl/tree/master/modules/react-map-gl-draw).
+- **New Example**: Add an [example](https://visgl.github.io/react-map-gl/examples/draw-polygon) with drawing library [react-map-gl-draw](https://github.com/uber/nebula.gl/tree/master/modules/react-map-gl-draw).
 
 ## react-map-gl v5.0
 

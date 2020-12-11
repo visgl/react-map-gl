@@ -56,7 +56,7 @@ export default class IndexPage extends React.Component {
 
           <h3>
             <Icon src="images/icon-high-precision.svg" />
-            Part of Uber Visualization's Framework Suite
+            Part of vis.gl's Framework Suite
           </h3>
           <p>
           Use together with e.g. <a
