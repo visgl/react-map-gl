@@ -29,33 +29,30 @@ npm install --save react-map-gl
 ### Example
 
 ```js
-import {Component} from 'react';
+import * as React from 'react';
 import ReactMapGL from 'react-map-gl';
 
-class Map extends Component {
+function Map {
+  const [viewport, setViewport] = React.useState({
+    latitude: 37.7577,
+    longitude: -122.4376,
+    zoom: 8
+  });
 
-  state = {
-    viewport: {
-      width: 400,
-      height: 400,
-      latitude: 37.7577,
-      longitude: -122.4376,
-      zoom: 8
-    }
-  };
-
-  render() {
-    return (
-      <ReactMapGL
-        {...this.state.viewport}
-        onViewportChange={(viewport) => this.setState({viewport})}
-      />
-    );
-  }
+  return (
+    <ReactMapGL
+      {...viewport}
+      width="100%"
+      height="100%"
+      onViewportChange={(viewport) => setViewport(viewport)}
+    />
+  );
 }
 ```
 
 ### Using Mapbox Tokens
+
+**Starting with v2.0, mapbox-gl requires a Mapbox token for any usage, with or without the Mapbox data service. See [about Mapbox tokens](/docs/get-started/mapbox-tokens.md) for your options.**
 
 To show maps from a service such as Mapbox you will need to register on their website in order to retrieve an access token required by the map component, which will be used to identify you and start serving up map tiles. The service will be free until a certain level of traffic is exceeded.
 
