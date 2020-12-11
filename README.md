@@ -11,10 +11,7 @@
 
 <h1 align="center">react-map-gl | <a href="https://visgl.github.io/react-map-gl">Docs</a></h1>
 
-react-map-gl is a suite of [React](http://facebook.github.io/react/) components for
-[Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js).
-
-Mapbox GL JS is an awesome library for making modern web maps. It is beautiful, efficient (WebGL-powered), and fully open source. You may load map data from Mapbox's own service, which is free until a certain level of traffic is exceeded; or you can create and host your own map data using one of the many [open source tools](https://github.com/mapbox/awesome-vector-tiles).
+`react-map-gl` is a suite of [React](http://facebook.github.io/react/) components designed to provide a React API for [Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js)-compatible libraries. More information in the online documentation.
 
 See our [Design Philosophy](docs/README.md#design-philosophy).
 
