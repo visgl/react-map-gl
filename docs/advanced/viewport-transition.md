@@ -81,7 +81,7 @@ import {WebMercatorViewport} from 'react-map-gl';
     };
 ```
 
-[Documentation of WebMercatorViewport](https://uber.github.io/react-map-gl/#/documentation/api-reference/web-mercator-viewport)
+[Documentation of WebMercatorViewport](https://visgl.github.io/react-map-gl/docs/api-reference/web-mercator-viewport)
 
 
 ## Controlling Map Transitions

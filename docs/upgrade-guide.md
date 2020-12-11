@@ -46,7 +46,8 @@ The `viewport` parameter passed to the `onChangeViewport` callback now includes 
 
 ### `fitBounds` utility function
 
-The `fitBounds` utility has been moved to the [viewport-mercator-project](https://github.com/uber-common/viewport-mercator-project) library. The function can now be called as follows:
+The `fitBounds` utility has been moved to the [math.gl](https://github.com/uber-web/math.gl) library. The function can now be called as follows:
+
 ```js
 import WebMercatorViewport from 'viewport-mercator-project';
 const viewport = new WebMercatorViewport({width: 600, height: 400});
