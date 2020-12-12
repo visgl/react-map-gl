@@ -2,6 +2,12 @@
 
 # Version 5.2
 
+## 5.2.11 (Dec 11, 2020)
+
+- Safe check layer props (#1225)
+- Fix dynamic position offscreen (#1253)
+- Fix dynamic position tests (#1255)
+
 ## 5.2.10 (Nov 5, 2020)
 
 - Use valid fill-extrusion value for layer type (#1199)
