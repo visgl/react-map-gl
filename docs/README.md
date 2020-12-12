@@ -5,10 +5,10 @@ Mapbox GL JS-compatible libraries.
 
 | Library | Description |
 | --- | --- | 
-| [MapLibre](https://github.com/MapLibre/maplibre-gl-js) | An open fork of mapbox-gl-js v1, that can be used without a mapbox token. |
+| [MapLibre](https://github.com/MapLibre/maplibre-gl-js) | An open fork of mapbox-gl v1, that can be used without a mapbox token. |
 | [Mapbox GL JS v1](https://github.com/mapbox/mapbox-gl-js) | The previous version of mapbox GL JS. This version is free open source and can be used with non-mapbox basemaps without a mapbox token. |
 | [Mapbox GL JS v2](https://github.com/mapbox/mapbox-gl-js) | The latest version of Mapbox GL JS. Note that version 2 is not free open source, and a mapbox token is required and billable events are generated even if you do not use mapbox hosted basemaps. |
-| Other mapbox-gl-js forks | It may be possible to use react-map-gl with other mapbox forks, but this is not a supported use case. Minor PRs to enable other forks to be used may be accepted. |
+| Other mapbox-gl forks | It may be possible to use react-map-gl with other mapbox forks, but this is not a supported use case. Minor PRs to enable other forks to be used may be accepted. |
 
 For basemaps:
 - You can load map data from Mapbox's own service.

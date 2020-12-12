@@ -168,7 +168,7 @@ Date: Jan 17, 2017
 
 ## react-map-gl v1.0
 
-* **Perspective Mode** - Now supports `bearing` and `pitch` properties, per mapbox-gl-js api documentation. These props default to 0 which means that maps will still be rendered in flat/ortographic mode when they are not provided
+* **Perspective Mode** - Now supports `bearing` and `pitch` properties, per mapbox-gl api documentation. These props default to 0 which means that maps will still be rendered in flat/ortographic mode when they are not provided
 * **Support for ES6 imports** - The map overlay components (HTMLOverlay, CanvasOverlay, SVGOverlay etc) previously had to be imported via their relative source paths can now be imported directly using `import {SVGOverlay} from 'react-map-gl'.
 
 
