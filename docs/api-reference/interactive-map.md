@@ -99,7 +99,7 @@ Min zoom level.
 
 ##### `maxPitch` (Number)
 
-- default: `60`
+- default: `85`
 
 Max pitch in degrees.
 

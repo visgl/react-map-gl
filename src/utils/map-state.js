@@ -9,7 +9,7 @@ export const MAPBOX_LIMITS = {
   minZoom: 0,
   maxZoom: 24,
   minPitch: 0,
-  maxPitch: 60
+  maxPitch: 85
 };
 
 const DEFAULT_STATE = {
