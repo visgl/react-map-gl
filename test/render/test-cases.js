@@ -50,7 +50,7 @@ export default [
   {
     title: 'Custom tile server',
     props: {
-      mapboxApiAccessToken: '',
+      mapboxApiAccessToken: __MAPBOX_TOKEN__,
       mapStyle: 'http://localhost:5000/test/data/style.json',
       longitude: -122.4,
       latitude: 37.78,
@@ -63,7 +63,7 @@ export default [
     title: 'NavigationControl',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: '',
+      mapboxApiAccessToken: __MAPBOX_TOKEN__,
       mapStyle: EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
@@ -81,7 +81,7 @@ export default [
     title: 'Popup',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: '',
+      mapboxApiAccessToken: __MAPBOX_TOKEN__,
       mapStyle: EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
@@ -109,7 +109,7 @@ export default [
     title: 'JSX Source/Layer',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: '',
+      mapboxApiAccessToken: __MAPBOX_TOKEN__,
       mapStyle: EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
@@ -130,7 +130,7 @@ export default [
     title: 'JSX Source/Layer toggle style',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: '',
+      mapboxApiAccessToken: __MAPBOX_TOKEN__,
       mapStyle: ALT_EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
@@ -151,7 +151,7 @@ export default [
     title: 'JSX Source/Layer removal',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: '',
+      mapboxApiAccessToken: __MAPBOX_TOKEN__,
       mapStyle: ALT_EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
@@ -164,7 +164,7 @@ export default [
     title: 'GeolocateControl',
     Component: StaticMap,
     props: {
-      mapboxApiAccessToken: '',
+      mapboxApiAccessToken: __MAPBOX_TOKEN__,
       mapStyle: EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
