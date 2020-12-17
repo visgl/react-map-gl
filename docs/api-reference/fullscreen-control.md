@@ -39,5 +39,5 @@ Label applied to the fullscreen control button.
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.
 
 ## Source
-[fullscreen-control.js](https://github.com/visgl/react-map-gl/tree/5.2-release/src/components/fullscreen-control.js)
+[fullscreen-control.js](https://github.com/visgl/react-map-gl/tree/6.0-release/src/components/fullscreen-control.js)
 

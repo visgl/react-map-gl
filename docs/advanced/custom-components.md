@@ -81,4 +81,4 @@ Implement this method to render the content of this component. `this._context` i
 
 
 ## Source
-[base-control.js](https://github.com/visgl/react-map-gl/tree/5.2-release/src/components/base-control.js)
+[base-control.js](https://github.com/visgl/react-map-gl/tree/6.0-release/src/components/base-control.js)
