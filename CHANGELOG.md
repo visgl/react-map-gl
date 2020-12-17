@@ -2,6 +2,12 @@
 
 # Version 6.0
 
+## Version 6.0.1 (Dec 17, 2020)
+
+- Drop a breaking change intended for the next minor release
+
+## Version 6.0.0 (Dec 16, 2020)
+
 - mapbox-gl@2.0.0 (#1263)
 - Change `maxPitch` to `85`
 
