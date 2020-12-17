@@ -89,6 +89,18 @@ var Source = function (_PureComponent) {
         });
       } else if ((type === 'canvas' || type === 'video') && changedKeyCount === 1 && changedKey === 'coordinates') {
         source.setCoordinates(sourceOptions.coordinates);
+      } else if (type === 'vector' && source.setUrl) {
+        switch (changedKey) {
+          case 'url':
+            source.setUrl(sourceOptions.url);
+            break;
+
+          case 'tiles':
+            source.setTiles(sourceOptions.tiles);
+            break;
+
+          default:
+        }
       } else {
         console.warn("Unable to update <Source> prop: ".concat(changedKey));
       }
@@ -144,7 +156,7 @@ var Source = function (_PureComponent) {
       this._updateSource();
 
       return React.Children.map(this.props.children, function (child) {
-        return cloneElement(child, {
+        return child && cloneElement(child, {
           source: _this3.id
         });
       });

@@ -188,8 +188,8 @@ export default class StaticMap extends PureComponent {
 
   _renderOverlays(dimensions) {
     const {
-      width = Number(this.props.width),
-      height = Number(this.props.height)
+      width,
+      height
     } = dimensions;
 
     this._updateMapSize(width, height);
@@ -243,8 +243,6 @@ export default class StaticMap extends PureComponent {
       className: className
     }), React.createElement(AutoSizer, {
       key: "autosizer",
-      disableWidth: Number.isFinite(width),
-      disableHeight: Number.isFinite(height),
       onResize: this.props.onResize
     }, this._renderOverlays.bind(this)), this._renderNoTokenWarning());
   }

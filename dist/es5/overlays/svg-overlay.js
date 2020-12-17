@@ -39,7 +39,8 @@ var defaultProps = {
   captureScroll: false,
   captureDrag: false,
   captureClick: false,
-  captureDoubleClick: false
+  captureDoubleClick: false,
+  capturePointerMove: false
 };
 
 var SVGOverlay = function (_BaseControl) {

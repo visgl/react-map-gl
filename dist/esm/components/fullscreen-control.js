@@ -17,11 +17,13 @@ import * as React from 'react';
 import mapboxgl from '../utils/mapboxgl';
 var propTypes = Object.assign({}, BaseControl.propTypes, {
   className: PropTypes.string,
-  container: PropTypes.object
+  container: PropTypes.object,
+  label: PropTypes.string
 });
 var defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
-  container: null
+  container: null,
+  label: 'Toggle fullscreen'
 });
 
 var FullscreenControl = function (_BaseControl) {
@@ -101,13 +103,15 @@ var FullscreenControl = function (_BaseControl) {
         return null;
       }
 
-      var className = this.props.className;
+      var _this$props = this.props,
+          className = _this$props.className,
+          label = _this$props.label;
       var isFullscreen = this.state.isFullscreen;
       var type = isFullscreen ? 'shrink' : 'fullscreen';
       return React.createElement("div", {
         className: "mapboxgl-ctrl mapboxgl-ctrl-group ".concat(className),
         ref: this._containerRef
-      }, this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen));
+      }, this._renderButton(type, label, this._onClickFullscreen));
     }
   }]);
 

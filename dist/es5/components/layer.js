@@ -39,8 +39,19 @@ function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflec
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
+var LAYER_TYPES = {
+  fill: 'fill',
+  line: 'line',
+  symbol: 'symbol',
+  circle: 'circle',
+  'fill-extrusion': 'fill-extrusion',
+  raster: 'raster',
+  background: 'background',
+  heatmap: 'heatmap',
+  hillshade: 'hillshade'
+};
 var propTypes = {
-  type: _propTypes["default"].string.isRequired,
+  type: _propTypes["default"].oneOf(Object.keys(LAYER_TYPES)).isRequired,
   id: _propTypes["default"].string,
   source: _propTypes["default"].string,
   beforeId: _propTypes["default"].string
@@ -62,17 +73,33 @@ function diffLayerStyles(map, id, props, prevProps) {
   }
 
   if (layout !== prevProps.layout) {
+    var prevLayout = prevProps.layout || {};
+
     for (var key in layout) {
-      if (!(0, _deepEqual["default"])(layout[key], prevProps.layout[key])) {
+      if (!(0, _deepEqual["default"])(layout[key], prevLayout[key])) {
         map.setLayoutProperty(id, key, layout[key]);
+      }
+    }
+
+    for (var _key in prevLayout) {
+      if (!layout.hasOwnProperty(_key)) {
+        map.setLayoutProperty(id, _key, undefined);
       }
     }
   }
 
   if (paint !== prevProps.paint) {
-    for (var _key in paint) {
-      if (!(0, _deepEqual["default"])(paint[_key], prevProps.paint[_key])) {
-        map.setPaintProperty(id, _key, paint[_key]);
+    var prevPaint = prevProps.paint || {};
+
+    for (var _key2 in paint) {
+      if (!(0, _deepEqual["default"])(paint[_key2], prevPaint[_key2])) {
+        map.setPaintProperty(id, _key2, paint[_key2]);
+      }
+    }
+
+    for (var _key3 in prevPaint) {
+      if (!paint.hasOwnProperty(_key3)) {
+        map.setPaintProperty(id, _key3, undefined);
       }
     }
   }
@@ -85,9 +112,9 @@ function diffLayerStyles(map, id, props, prevProps) {
     map.setLayerZoomRange(id, minzoom, maxzoom);
   }
 
-  for (var _key2 in otherProps) {
-    if (!(0, _deepEqual["default"])(otherProps[_key2], prevProps[_key2])) {
-      map.setLayerProperty(id, _key2, otherProps[_key2]);
+  for (var _key4 in otherProps) {
+    if (!(0, _deepEqual["default"])(otherProps[_key4], prevProps[_key4])) {
+      map.setLayerProperty(id, _key4, otherProps[_key4]);
     }
   }
 }

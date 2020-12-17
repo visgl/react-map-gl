@@ -70,6 +70,18 @@ export default class Source extends PureComponent {
         });
       } else if ((type === 'canvas' || type === 'video') && changedKeyCount === 1 && changedKey === 'coordinates') {
         source.setCoordinates(sourceOptions.coordinates);
+      } else if (type === 'vector' && source.setUrl) {
+        switch (changedKey) {
+          case 'url':
+            source.setUrl(sourceOptions.url);
+            break;
+
+          case 'tiles':
+            source.setTiles(sourceOptions.tiles);
+            break;
+
+          default:
+        }
       } else {
         console.warn("Unable to update <Source> prop: ".concat(changedKey));
       }
@@ -114,7 +126,7 @@ export default class Source extends PureComponent {
 
     this._updateSource();
 
-    return React.Children.map(this.props.children, child => cloneElement(child, {
+    return React.Children.map(this.props.children, child => child && cloneElement(child, {
       source: this.id
     }));
   }

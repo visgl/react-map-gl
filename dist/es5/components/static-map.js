@@ -233,10 +233,8 @@ var StaticMap = function (_PureComponent) {
     value: function _renderOverlays(dimensions) {
       var _this2 = this;
 
-      var _dimensions$width = dimensions.width,
-          width = _dimensions$width === void 0 ? Number(this.props.width) : _dimensions$width,
-          _dimensions$height = dimensions.height,
-          height = _dimensions$height === void 0 ? Number(this.props.height) : _dimensions$height;
+      var width = dimensions.width,
+          height = dimensions.height;
 
       this._updateMapSize(width, height);
 
@@ -289,8 +287,6 @@ var StaticMap = function (_PureComponent) {
         className: className
       }), React.createElement(_reactVirtualizedAutoSizer["default"], {
         key: "autosizer",
-        disableWidth: Number.isFinite(width),
-        disableHeight: Number.isFinite(height),
         onResize: this.props.onResize
       }, this._renderOverlays.bind(this)), this._renderNoTokenWarning());
     }

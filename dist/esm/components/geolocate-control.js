@@ -195,15 +195,16 @@ var GeolocateControl = function (_BaseControl) {
 
       return React.createElement(Marker, {
         key: "location-maker",
-        className: "mapboxgl-user-location-dot",
         longitude: markerPosition.longitude,
         latitude: markerPosition.latitude,
-        onContextMenu: function onContextMenu(e) {
-          return e.preventDefault();
-        },
         captureDrag: false,
         captureDoubleClick: false
-      });
+      }, React.createElement("div", {
+        className: "mapboxgl-user-location-dot",
+        style: {
+          transform: 'translate(-50%, -50%)'
+        }
+      }));
     });
 
     return _this;
@@ -260,10 +261,7 @@ var GeolocateControl = function (_BaseControl) {
         key: "geolocate-control",
         className: "mapboxgl-ctrl mapboxgl-ctrl-group ".concat(className),
         ref: this._containerRef,
-        style: style,
-        onContextMenu: function onContextMenu(e) {
-          return e.preventDefault();
-        }
+        style: style
       }, this._renderButton('geolocate', label, this._triggerGeolocate)));
     }
   }]);

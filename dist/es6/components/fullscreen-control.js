@@ -6,11 +6,13 @@ import * as React from 'react';
 import mapboxgl from '../utils/mapboxgl';
 const propTypes = Object.assign({}, BaseControl.propTypes, {
   className: PropTypes.string,
-  container: PropTypes.object
+  container: PropTypes.object,
+  label: PropTypes.string
 });
 const defaultProps = Object.assign({}, BaseControl.defaultProps, {
   className: '',
-  container: null
+  container: null,
+  label: 'Toggle fullscreen'
 });
 export default class FullscreenControl extends BaseControl {
   constructor(...args) {
@@ -70,7 +72,8 @@ export default class FullscreenControl extends BaseControl {
     }
 
     const {
-      className
+      className,
+      label
     } = this.props;
     const {
       isFullscreen
@@ -79,7 +82,7 @@ export default class FullscreenControl extends BaseControl {
     return React.createElement("div", {
       className: "mapboxgl-ctrl mapboxgl-ctrl-group ".concat(className),
       ref: this._containerRef
-    }, this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen));
+    }, this._renderButton(type, label, this._onClickFullscreen));
   }
 
 }

@@ -39,11 +39,13 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 var propTypes = Object.assign({}, _baseControl["default"].propTypes, {
   className: _propTypes["default"].string,
-  container: _propTypes["default"].object
+  container: _propTypes["default"].object,
+  label: _propTypes["default"].string
 });
 var defaultProps = Object.assign({}, _baseControl["default"].defaultProps, {
   className: '',
-  container: null
+  container: null,
+  label: 'Toggle fullscreen'
 });
 
 var FullscreenControl = function (_BaseControl) {
@@ -119,13 +121,15 @@ var FullscreenControl = function (_BaseControl) {
         return null;
       }
 
-      var className = this.props.className;
+      var _this$props = this.props,
+          className = _this$props.className,
+          label = _this$props.label;
       var isFullscreen = this.state.isFullscreen;
       var type = isFullscreen ? 'shrink' : 'fullscreen';
       return React.createElement("div", {
         className: "mapboxgl-ctrl mapboxgl-ctrl-group ".concat(className),
         ref: this._containerRef
-      }, this._renderButton(type, 'Toggle fullscreen', this._onClickFullscreen));
+      }, this._renderButton(type, label, this._onClickFullscreen));
     }
   }]);
   return FullscreenControl;

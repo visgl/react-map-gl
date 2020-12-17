@@ -6,8 +6,19 @@ import PropTypes from 'prop-types';
 import MapContext from './map-context';
 import assert from '../utils/assert';
 import deepEqual from '../utils/deep-equal';
+const LAYER_TYPES = {
+  fill: 'fill',
+  line: 'line',
+  symbol: 'symbol',
+  circle: 'circle',
+  'fill-extrusion': 'fill-extrusion',
+  raster: 'raster',
+  background: 'background',
+  heatmap: 'heatmap',
+  hillshade: 'hillshade'
+};
 const propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(Object.keys(LAYER_TYPES)).isRequired,
   id: PropTypes.string,
   source: PropTypes.string,
   beforeId: PropTypes.string
@@ -29,17 +40,33 @@ function diffLayerStyles(map, id, props, prevProps) {
   }
 
   if (layout !== prevProps.layout) {
+    const prevLayout = prevProps.layout || {};
+
     for (const key in layout) {
-      if (!deepEqual(layout[key], prevProps.layout[key])) {
+      if (!deepEqual(layout[key], prevLayout[key])) {
         map.setLayoutProperty(id, key, layout[key]);
+      }
+    }
+
+    for (const key in prevLayout) {
+      if (!layout.hasOwnProperty(key)) {
+        map.setLayoutProperty(id, key, undefined);
       }
     }
   }
 
   if (paint !== prevProps.paint) {
+    const prevPaint = prevProps.paint || {};
+
     for (const key in paint) {
-      if (!deepEqual(paint[key], prevProps.paint[key])) {
+      if (!deepEqual(paint[key], prevPaint[key])) {
         map.setPaintProperty(id, key, paint[key]);
+      }
+    }
+
+    for (const key in prevPaint) {
+      if (!paint.hasOwnProperty(key)) {
+        map.setPaintProperty(id, key, undefined);
       }
     }
   }

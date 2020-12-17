@@ -21,7 +21,8 @@ var defaultProps = {
   captureScroll: false,
   captureDrag: false,
   captureClick: false,
-  captureDoubleClick: false
+  captureDoubleClick: false,
+  capturePointerMove: false
 };
 
 var CanvasOverlay = function (_BaseControl) {

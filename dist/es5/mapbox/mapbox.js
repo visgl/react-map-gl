@@ -399,7 +399,7 @@ var Mapbox = function () {
         testElement.className = 'mapboxgl-map';
         testElement.style.display = 'none';
 
-        _globals.document.body.append(testElement);
+        _globals.document.body.appendChild(testElement);
 
         var isCssLoaded = window.getComputedStyle(testElement).position !== 'static';
 
@@ -410,7 +410,7 @@ var Mapbox = function () {
           link.setAttribute('type', 'text/css');
           link.setAttribute('href', "https://api.tiles.mapbox.com/mapbox-gl-js/v".concat(mapboxVersion, "/mapbox-gl.css"));
 
-          _globals.document.head.append(link);
+          _globals.document.head.appendChild(link);
         }
       } catch (error) {}
     }

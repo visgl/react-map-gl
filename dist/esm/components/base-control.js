@@ -18,13 +18,15 @@ var propTypes = {
   captureScroll: PropTypes.bool,
   captureDrag: PropTypes.bool,
   captureClick: PropTypes.bool,
-  captureDoubleClick: PropTypes.bool
+  captureDoubleClick: PropTypes.bool,
+  capturePointerMove: PropTypes.bool
 };
 var defaultProps = {
   captureScroll: false,
   captureDrag: true,
   captureClick: true,
-  captureDoubleClick: true
+  captureDoubleClick: true,
+  capturePointerMove: false
 };
 
 var BaseControl = function (_PureComponent) {
@@ -73,6 +75,12 @@ var BaseControl = function (_PureComponent) {
       }
     });
 
+    _defineProperty(_assertThisInitialized(_this), "_onPointerMove", function (evt) {
+      if (_this.props.capturePointerMove) {
+        evt.stopPropagation();
+      }
+    });
+
     return _this;
   }
 
@@ -93,7 +101,8 @@ var BaseControl = function (_PureComponent) {
           panstart: this._onDragStart,
           anyclick: this._onClick,
           click: this._onClick,
-          dblclick: this._onDblClick
+          dblclick: this._onDblClick,
+          pointermove: this._onPointerMove
         };
         eventManager.watch(this._events, ref);
       }

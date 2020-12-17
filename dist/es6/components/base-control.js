@@ -7,13 +7,15 @@ const propTypes = {
   captureScroll: PropTypes.bool,
   captureDrag: PropTypes.bool,
   captureClick: PropTypes.bool,
-  captureDoubleClick: PropTypes.bool
+  captureDoubleClick: PropTypes.bool,
+  capturePointerMove: PropTypes.bool
 };
 const defaultProps = {
   captureScroll: false,
   captureDrag: true,
   captureClick: true,
-  captureDoubleClick: true
+  captureDoubleClick: true,
+  capturePointerMove: false
 };
 export default class BaseControl extends PureComponent {
   constructor(...args) {
@@ -48,6 +50,12 @@ export default class BaseControl extends PureComponent {
         evt.stopPropagation();
       }
     });
+
+    _defineProperty(this, "_onPointerMove", evt => {
+      if (this.props.capturePointerMove) {
+        evt.stopPropagation();
+      }
+    });
   }
 
   componentDidMount() {
@@ -67,7 +75,8 @@ export default class BaseControl extends PureComponent {
         panstart: this._onDragStart,
         anyclick: this._onClick,
         click: this._onClick,
-        dblclick: this._onDblClick
+        dblclick: this._onDblClick,
+        pointermove: this._onPointerMove
       };
       eventManager.watch(this._events, ref);
     }

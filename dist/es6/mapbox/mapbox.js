@@ -351,7 +351,7 @@ export default class Mapbox {
       const testElement = document.createElement('div');
       testElement.className = 'mapboxgl-map';
       testElement.style.display = 'none';
-      document.body.append(testElement);
+      document.body.appendChild(testElement);
       const isCssLoaded = window.getComputedStyle(testElement).position !== 'static';
 
       if (!isCssLoaded) {
@@ -359,7 +359,7 @@ export default class Mapbox {
         link.setAttribute('rel', 'stylesheet');
         link.setAttribute('type', 'text/css');
         link.setAttribute('href', "https://api.tiles.mapbox.com/mapbox-gl-js/v".concat(mapboxVersion, "/mapbox-gl.css"));
-        document.head.append(link);
+        document.head.appendChild(link);
       }
     } catch (error) {}
   }

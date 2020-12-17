@@ -49,22 +49,26 @@ export function getDynamicPosition({
   } = ANCHOR_POSITION[anchor];
   let top = y - anchorY * selfHeight;
   let bottom = top + selfHeight;
-  const yStep = 0.5;
+  let cutoffY = Math.max(0, padding - top) + Math.max(0, bottom - height + padding);
 
-  if (top < padding) {
-    while (top < padding && anchorY >= yStep) {
-      anchorY -= yStep;
-      top += yStep * selfHeight;
+  if (cutoffY > 0) {
+    let bestAnchorY = anchorY;
+    let minCutoff = cutoffY;
+
+    for (anchorY = 0; anchorY <= 1; anchorY += 0.5) {
+      top = y - anchorY * selfHeight;
+      bottom = top + selfHeight;
+      cutoffY = Math.max(0, padding - top) + Math.max(0, bottom - height + padding);
+
+      if (cutoffY < minCutoff) {
+        minCutoff = cutoffY;
+        bestAnchorY = anchorY;
+      }
     }
-  } else if (bottom > height - padding) {
-    while (bottom > height - padding && anchorY <= 1 - yStep) {
-      anchorY += yStep;
-      bottom -= yStep * selfHeight;
-    }
+
+    anchorY = bestAnchorY;
   }
 
-  let left = x - anchorX * selfWidth;
-  let right = left + selfWidth;
   let xStep = 0.5;
 
   if (anchorY === 0.5) {
@@ -72,16 +76,26 @@ export function getDynamicPosition({
     xStep = 1;
   }
 
-  if (left < padding) {
-    while (left < padding && anchorX >= xStep) {
-      anchorX -= xStep;
-      left += xStep * selfWidth;
+  let left = x - anchorX * selfWidth;
+  let right = left + selfWidth;
+  let cutoffX = Math.max(0, padding - left) + Math.max(0, right - width + padding);
+
+  if (cutoffX > 0) {
+    let bestAnchorX = anchorX;
+    let minCutoff = cutoffX;
+
+    for (anchorX = 0; anchorX <= 1; anchorX += xStep) {
+      left = x - anchorX * selfWidth;
+      right = left + selfWidth;
+      cutoffX = Math.max(0, padding - left) + Math.max(0, right - width + padding);
+
+      if (cutoffX < minCutoff) {
+        minCutoff = cutoffX;
+        bestAnchorX = anchorX;
+      }
     }
-  } else if (right > width - padding) {
-    while (right > width - padding && anchorX <= 1 - xStep) {
-      anchorX += xStep;
-      right -= xStep * selfWidth;
-    }
+
+    anchorX = bestAnchorX;
   }
 
   return ANCHOR_TYPES.find(positionType => {

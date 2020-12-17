@@ -179,13 +179,16 @@ export default class GeolocateControl extends BaseControl {
 
       return React.createElement(Marker, {
         key: "location-maker",
-        className: "mapboxgl-user-location-dot",
         longitude: markerPosition.longitude,
         latitude: markerPosition.latitude,
-        onContextMenu: e => e.preventDefault(),
         captureDrag: false,
         captureDoubleClick: false
-      });
+      }, React.createElement("div", {
+        className: "mapboxgl-user-location-dot",
+        style: {
+          transform: 'translate(-50%, -50%)'
+        }
+      }));
     });
   }
 
@@ -234,8 +237,7 @@ export default class GeolocateControl extends BaseControl {
       key: "geolocate-control",
       className: "mapboxgl-ctrl mapboxgl-ctrl-group ".concat(className),
       ref: this._containerRef,
-      style: style,
-      onContextMenu: e => e.preventDefault()
+      style: style
     }, this._renderButton('geolocate', label, this._triggerGeolocate)));
   }
 
