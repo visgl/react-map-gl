@@ -24,7 +24,7 @@ const ALT_EMPTY_MAP_STYLE = {
 };
 
 export default [
-  __MAPBOX_TOKEN__ && {
+  {
     title: 'Basic map',
     props: {
       mapboxApiAccessToken: __MAPBOX_TOKEN__,
@@ -39,7 +39,7 @@ export default [
   {
     title: 'Invalid map token',
     props: {
-      mapboxApiAccessToken: '',
+      mapboxApiAccessToken: 'invalid_token',
       mapStyle: 'mapbox://styles/mapbox/dark-v9',
       longitude: -122.4,
       latitude: 37.78,
@@ -180,4 +180,4 @@ export default [
     },
     goldenImage: 'test/render/golden-images/geolocate-control.png'
   }
-].filter(Boolean);
+].filter(testCase => testCase.props.mapboxApiAccessToken);
