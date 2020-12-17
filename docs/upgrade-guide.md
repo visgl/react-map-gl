@@ -1,5 +1,10 @@
 # Upgrade Guide
 
+## Upgrading to v6
+
+- A valid Mapbox access token is always required.
+- The default value of `InteractiveMap`'s `maxPitch` prop is changed to `85` from `60`.
+
 ## Upgrading to v4
 
 - `onChangeViewport` is removed, use `onViewportChange` instead

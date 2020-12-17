@@ -27,5 +27,5 @@ Parameters:
 
 ## Source
 
-[linear-interpolator.js](https://github.com/visgl/react-map-gl/tree/5.2-release/src/utils/transition/linear-interpolator.js)
+[linear-interpolator.js](https://github.com/visgl/react-map-gl/tree/6.0-release/src/utils/transition/linear-interpolator.js)
 
