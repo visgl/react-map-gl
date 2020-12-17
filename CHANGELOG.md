@@ -1,6 +1,69 @@
 # CHANGELOG
 
+# Version 6.0
+
+- mapbox-gl@2.0.0 (#1263)
+- Change `maxPitch` to `85`
+
 # Version 5.2
+
+## 5.2.11 (Dec 11, 2020)
+
+- Safe check layer props (#1225)
+- Fix dynamic position offscreen (#1253)
+- Fix dynamic position tests (#1255)
+
+## 5.2.10 (Nov 5, 2020)
+
+- Use valid fill-extrusion value for layer type (#1199)
+- Add capturePointerMove to NavigationControl (#1215)
+- Fix user location dot offset (#1220)
+- Safety check before calling cloneElement (#1219)
+
+## 5.2.9 (Oct 7, 2020)
+
+- Fix for layout and paint diffing logic (#1194)
+- Add types for layer type and source-layer (#1192)
+- Support updating vector source (#1196)
+- Fix IE compatibility (#1195)
+- Add label prop to FullscreenControl (#1197)
+
+## 5.2.8 (Sep 1, 2020)
+
+- Always rerender overlay after map initialization (#1172)
+
+## 5.2.7 (June 5, 2020)
+
+- NavigationControl: fall back to the latest UI version (#1124)
+- [Geolocate] fix auto when location blocked (#1126)
+
+## 5.2.6 (June 4, 2020)
+
+- [Geolocate] Auto trigger when component loads (#1116)
+- Check if map style is loaded before removing source or layer (#1123)
+
+## 5.2.5 (Apr 20, 2020)
+
+- Migrate to import * as React from 'react' (#1038)
+- Fix issue where translate by partial pixels causes blurry rendering (#1039)
+- Bump dev tools (#1040)
+- Correct interaction state on double click (#1081)
+- Fix edge case in transitionDuration:auto (#1080)
+
+## 5.2.3 (Feb 10, 2020)
+
+- Sanity check in source/layer update (#1022)
+
+## 5.2.2 (Feb 3, 2020)
+
+- Bump mjolnir.js dependency (#990)
+- Re-export setRTLTextPlugin plugin (#1010)
+- Fix GeolocateControl error when used with StaticMap (#1012)
+- Fix issue where adding popup enables double click recognizer (#1013)
+
+## 5.2.1 (Jan 12, 2020)
+
+- Deep compare source props (#985)
 
 ## 5.2.0 (Jan 6, 2020)
 
