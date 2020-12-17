@@ -34,7 +34,7 @@ function Map() {
 }
 ```
 
-See full project setup in [get-started examples](https://github.com/visgl/react-map-gl/tree/5.2-release/examples/get-started)
+See full project setup in [get-started examples](https://github.com/visgl/react-map-gl/tree/6.0-release/examples/get-started)
 
 ## Styling
 
@@ -81,13 +81,13 @@ To use this API, consult Mapbox's [setRTLTextPlugin](https://docs.mapbox.com/map
 
 * `browserify` - react-map-gl is extensively tested with `browserify` and works without configuration.
 
-* `webpack` - Most of the provided react-map-gl examples use webpack. Look at the [get started examples](https://github.com/visgl/react-map-gl/tree/5.2-release/examples/get-started) folder for minimalist templates.
+* `webpack` - Most of the provided react-map-gl examples use webpack. Look at the [get started examples](https://github.com/visgl/react-map-gl/tree/6.0-release/examples/get-started) folder for minimalist templates.
 
 * `create-react-app` - react-map-gl is compatible with [create-react-app](https://github.com/facebook/create-react-app).
 
 * `create-react-app-typescript` - react-map-gl is compatible with [create-react-app-typescript](https://github.com/wmonk/create-react-app-typescript). You can see an example [here](https://github.com/zackhsi/react-map-gl-typescript).
 
-There's many other ready-to-run [examples](https://github.com/visgl/react-map-gl/tree/5.2-release/examples) you can take a look at if you need more inspiration.
+There's many other ready-to-run [examples](https://github.com/visgl/react-map-gl/tree/6.0-release/examples) you can take a look at if you need more inspiration.
 
 
 ## Using with a mapbox-gl Fork

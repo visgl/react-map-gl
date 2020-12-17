@@ -26,7 +26,7 @@ export default class ControlPanel extends PureComponent {
         <div>{eventNames.map(this.renderEvent)}</div>
         <div className="source-link">
           <a
-            href="https://github.com/visgl/react-map-gl/tree/5.2-release/examples/draggable-markers"
+            href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/draggable-markers"
             target="_new"
           >
             View Code ↗

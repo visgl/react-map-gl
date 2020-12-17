@@ -266,4 +266,4 @@ const viewport = new WebMercatorViewport({width: 800, height: 600})
 
 ## Source
 
-[static-map.js](https://github.com/visgl/react-map-gl/tree/5.2-release/src/components/static-map.js)
+[static-map.js](https://github.com/visgl/react-map-gl/tree/6.0-release/src/components/static-map.js)

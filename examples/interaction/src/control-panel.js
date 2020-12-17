@@ -81,7 +81,7 @@ export default class ControlPanel extends PureComponent {
         <p>Turn interactive features off/on.</p>
         <div className="source-link">
           <a
-            href="https://github.com/visgl/react-map-gl/tree/5.2-release/examples/interaction"
+            href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/interaction"
             target="_new"
           >
             View Code ↗

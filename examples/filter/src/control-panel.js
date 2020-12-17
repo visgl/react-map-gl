@@ -9,7 +9,7 @@ export default class ControlPanel extends PureComponent {
         <p>Hover over counties to highlight counties that share the same name.</p>
         <div className="source-link">
           <a
-            href="https://github.com/visgl/react-map-gl/tree/5.2-release/examples/filter"
+            href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/filter"
             target="_new"
           >
             View Code ↗
