@@ -6,8 +6,9 @@ Release date: Dec 16, 2020
 
 ### What's Changed
 
-- The 6.0 release upgrades its Mapbox GL JS dependency to v2.0. There are [imortant changes](https://github.com/mapbox/mapbox-gl-js/releases/tag/v2.0.0) to mapbox-gl's license and pricing model in this milestone. If you are NOT using a Mapbox account (e.g. self-hosting map tiles), do **NOT** upgrade to this version, and consider your options discussed in [this document](/docs/get-started/mapbox-tokens.md).
-- The default of `maxPitch` is changed to `85`.
+The 6.0 release upgrades its Mapbox GL JS dependency to v2.0. There are [imortant changes](https://github.com/mapbox/mapbox-gl-js/releases/tag/v2.0.0) to mapbox-gl's license and pricing model in this milestone. If you are NOT using a Mapbox account (e.g. self-hosting map tiles), do **NOT** upgrade to this version, and consider your options discussed in [this document](/docs/get-started/mapbox-tokens.md).
+
+See [upgrade guide](/docs/upgrade-guide.md) for a complete list of breaking changes.
 
 ## react-map-gl v5.2
 
