@@ -156,7 +156,7 @@ module.exports = {
         THEME_OVERRIDES: require('./src/theme.json'),
 
         STYLESHEETS: [
-          'https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.css',
+          'https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css',
           'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css',
           '/style.css'
         ]
