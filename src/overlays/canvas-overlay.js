@@ -1,4 +1,3 @@
-// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,11 +20,11 @@
 
 import * as React from 'react';
 import {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
-import {window} from '../utils/globals';
+import * as PropTypes from 'prop-types';
 import useMapControl, {mapControlPropTypes} from '../components/use-map-control';
 
-import type {MapControlProps} from '../components/use-map-control';
+/* global window */
+const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1;
 
 const propTypes = Object.assign({}, mapControlPropTypes, {
   redraw: PropTypes.func.isRequired
@@ -39,20 +38,14 @@ const defaultProps = {
   capturePointerMove: false
 };
 
-export type CanvasOverlayProps = MapControlProps & {
-  redraw: Function
-};
-
-function CanvasOverlay(props: CanvasOverlayProps) {
+function CanvasOverlay(props) {
   const {context, containerRef} = useMapControl(props);
   const [ctx, setDrawingContext] = useState(null);
 
   useEffect(() => {
-    // $FlowFixMe
     setDrawingContext(containerRef.current.getContext('2d'));
   }, []);
 
-  const pixelRatio = window.devicePixelRatio || 1;
   const {viewport, isDragging} = context;
 
   if (ctx) {

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true
+  },
+  "include":[
+    "src/*"
+  ],
+  "exclude":[
+    "node_modules"
+  ]
+}

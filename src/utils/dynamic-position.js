@@ -1,5 +1,3 @@
-// @flow
-
 export const ANCHOR_POSITION = {
   top: {x: 0.5, y: 0},
   'top-left': {x: 0, y: 0},
@@ -11,20 +9,19 @@ export const ANCHOR_POSITION = {
   right: {x: 1, y: 0.5}
 };
 
-export type PositionType = $Keys<typeof ANCHOR_POSITION>;
-
 const ANCHOR_TYPES = Object.keys(ANCHOR_POSITION);
 
 /**
  * Calculate the dynamic position for a popup to fit in a container.
- * @param {Number} x - x position of the anchor on screen
- * @param {Number} y - y position of the anchor on screen
- * @param {Number} width - width of the container
- * @param {Number} height - height of the container
- * @param {Number} padding - extra space from the edge in pixels
- * @param {Number} selfWidth - width of the popup
- * @param {Number} selfHeight - height of the popup
- * @param {String} anchor - type of the anchor, one of 'top', 'bottom',
+ * @param {Object} opts
+ * @param {Number} opts.x - x position of the anchor on screen
+ * @param {Number} opts.y - y position of the anchor on screen
+ * @param {Number} opts.width - width of the container
+ * @param {Number} opts.height - height of the container
+ * @param {Number} opts.padding - extra space from the edge in pixels
+ * @param {Number} opts.selfWidth - width of the popup
+ * @param {Number} opts.selfHeight - height of the popup
+ * @param {String} opts.anchor - type of the anchor, one of 'top', 'bottom',
     'left', 'right', 'top-left', 'top-right', 'bottom-left' , and  'bottom-right'
  * @returns {String} position - one of 'top', 'bottom',
     'left', 'right', 'top-left', 'top-right', 'bottom-left' , and  'bottom-right'
@@ -39,16 +36,7 @@ export function getDynamicPosition({
   selfHeight,
   anchor,
   padding = 0
-}: {
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  selfWidth: number,
-  selfHeight: number,
-  anchor: PositionType,
-  padding: number
-}): PositionType {
+}) {
   let {x: anchorX, y: anchorY} = ANCHOR_POSITION[anchor];
 
   // anchorY: top - 0, center - 0.5, bottom - 1

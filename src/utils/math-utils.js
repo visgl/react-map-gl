@@ -1,13 +1,12 @@
-// @flow
 const EPSILON = 1e-7;
 
 // Returns true if value is either an array or a typed array
-function isArray(value: any): boolean {
+function isArray(value) {
   return Array.isArray(value) || ArrayBuffer.isView(value);
 }
 
 // TODO: use math.gl
-export function equals(a: any, b: any): boolean {
+export function equals(a, b) {
   if (a === b) {
     return true;
   }
@@ -25,12 +24,12 @@ export function equals(a: any, b: any): boolean {
   return Math.abs(a - b) <= EPSILON;
 }
 
-export function clamp(value: number, min: number, max: number): number {
+export function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
 // Interpolate between two numbers or two arrays
-export function lerp(a: any, b: any, t: number): any {
+export function lerp(a, b, t) {
   if (isArray(a)) {
     return a.map((ai, i) => lerp(ai, b[i], t));
   }

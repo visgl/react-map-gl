@@ -1,4 +1,3 @@
-// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,11 +19,9 @@
 // THE SOFTWARE.
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import mapboxgl from '../utils/mapboxgl';
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
-
-import type {MapControlProps} from './use-map-control';
 
 const propTypes = Object.assign({}, mapControlPropTypes, {
   maxWidth: PropTypes.number,
@@ -36,12 +33,7 @@ const defaultProps = Object.assign({}, mapControlDefaultProps, {
   unit: 'metric'
 });
 
-export type ScaleControlProps = MapControlProps & {
-  maxWidth: number,
-  unit: string
-};
-
-function ScaleControl(props: ScaleControlProps) {
+function ScaleControl(props) {
   const {context, containerRef} = useMapControl(props);
   const [mapboxScaleControl, createMapboxScaleControl] = useState(null);
 

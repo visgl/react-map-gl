@@ -1,6 +1,4 @@
-// @flow
 import WebMercatorViewport, {normalizeViewportProps} from 'viewport-mercator-project';
-import {TransitionInterpolator} from './transition';
 import {clamp} from './math-utils';
 import assert from './assert';
 
@@ -17,42 +15,6 @@ const DEFAULT_STATE = {
   bearing: 0,
   altitude: 1.5
 };
-
-type ViewportProps = {
-  width: number,
-  height: number,
-  latitude: number,
-  longitude: number,
-  zoom: number,
-  bearing: number,
-  pitch: number,
-  altitude: number,
-  maxZoom: number,
-  minZoom: number,
-  maxPitch: number,
-  minPitch: number,
-  transitionDuration: number,
-  transitionEasing: number => number,
-  transitionInterpolator: TransitionInterpolator,
-  transitionInterruption: number
-};
-
-type InteractiveState = {
-  startPanLngLat?: Array<number>,
-  startZoomLngLat?: Array<number>,
-  startBearing?: number,
-  startPitch?: number,
-  startZoom?: number
-};
-
-export type MapStateProps = ViewportProps &
-  InteractiveState & {
-    altitude?: number,
-    maxZoom?: number,
-    minZoom?: number,
-    maxPitch?: number,
-    minPitch?: number
-  };
 
 export default class MapState {
   constructor({
@@ -101,7 +63,7 @@ export default class MapState {
     startPitch,
     /** Zoom when current zoom operation started */
     startZoom
-  }: MapStateProps) {
+  }) {
     assert(Number.isFinite(width), '`width` must be supplied');
     assert(Number.isFinite(height), '`height` must be supplied');
     assert(Number.isFinite(longitude), '`longitude` must be supplied');
@@ -136,9 +98,6 @@ export default class MapState {
     };
   }
 
-  _viewportProps: ViewportProps;
-  _interactiveState: InteractiveState;
-
   /* Public API */
 
   getViewportProps() {
@@ -151,9 +110,10 @@ export default class MapState {
 
   /**
    * Start panning
-   * @param {[Number, Number]} pos - position on screen where the pointer grabs
+   * @param {Object} params
+   * @param {[Number, Number]} params.pos - position on screen where the pointer grabs
    */
-  panStart({pos}: {pos: Array<number>}) {
+  panStart({pos}) {
     return this._getUpdatedMapState({
       startPanLngLat: this._unproject(pos)
     });
@@ -161,11 +121,12 @@ export default class MapState {
 
   /**
    * Pan
-   * @param {[Number, Number]} pos - position on screen where the pointer is
-   * @param {[Number, Number], optional} startPos - where the pointer grabbed at
+   * @param {Object} params
+   * @param {[Number, Number]} params.pos - position on screen where the pointer is
+   * @param {[Number, Number]} [params.startPos] - where the pointer grabbed at
    *   the start of the operation. Must be supplied of `panStart()` was not called
    */
-  pan({pos, startPos}: {pos: Array<number>, startPos?: Array<number>}) {
+  pan({pos, startPos}) {
     const startPanLngLat = this._interactiveState.startPanLngLat || this._unproject(startPos);
 
     if (!startPanLngLat) {
@@ -195,9 +156,10 @@ export default class MapState {
 
   /**
    * Start rotating
-   * @param {[Number, Number]} pos - position on screen where the center is
+   * @param {Object} params
+   * @param {[Number, Number]} params.pos - position on screen where the center is
    */
-  rotateStart({pos}: {pos: Array<number>}) {
+  rotateStart(params) {
     return this._getUpdatedMapState({
       startBearing: this._viewportProps.bearing,
       startPitch: this._viewportProps.pitch
@@ -206,12 +168,13 @@ export default class MapState {
 
   /**
    * Rotate
-   * @param {Number} deltaScaleX - a number between [-1, 1] specifying the
+   * @param {Object} params
+   * @param {Number} params.deltaScaleX - a number between [-1, 1] specifying the
    *   change to bearing.
-   * @param {Number} deltaScaleY - a number between [-1, 1] specifying the
+   * @param {Number} params.deltaScaleY - a number between [-1, 1] specifying the
    *   change to pitch. -1 sets to minPitch and 1 sets to maxPitch.
    */
-  rotate({deltaScaleX = 0, deltaScaleY = 0}: {deltaScaleX?: number, deltaScaleY?: number}) {
+  rotate({deltaScaleX = 0, deltaScaleY = 0}) {
     const {startBearing, startPitch} = this._interactiveState;
 
     if (!Number.isFinite(startBearing) || !Number.isFinite(startPitch)) {
@@ -244,9 +207,10 @@ export default class MapState {
 
   /**
    * Start zooming
-   * @param {[Number, Number]} pos - position on screen where the center is
+   * @param {Object} params
+   * @param {[Number, Number]} params.pos - position on screen where the center is
    */
-  zoomStart({pos}: {pos: Array<number>}) {
+  zoomStart({pos}) {
     return this._getUpdatedMapState({
       startZoomLngLat: this._unproject(pos),
       startZoom: this._viewportProps.zoom
@@ -255,13 +219,14 @@ export default class MapState {
 
   /**
    * Zoom
-   * @param {[Number, Number]} pos - position on screen where the current center is
-   * @param {[Number, Number]} startPos - the center position at
+   * @param {Object} params
+   * @param {[Number, Number]} params.pos - position on screen where the current center is
+   * @param {[Number, Number]} [params.startPos] - the center position at
    *   the start of the operation. Must be supplied of `zoomStart()` was not called
-   * @param {Number} scale - a number between [0, 1] specifying the accumulated
+   * @param {Number} params.scale - a number between [0, 1] specifying the accumulated
    *   relative scale.
    */
-  zoom({pos, startPos, scale}: {pos: Array<number>, startPos?: Array<number>, scale: number}) {
+  zoom({pos, startPos, scale}) {
     assert(scale > 0, '`scale` must be a positive number');
 
     // Make sure we zoom around the current mouse position rather than map center
@@ -288,7 +253,6 @@ export default class MapState {
     const zoom = this._calculateNewZoom({scale, startZoom: startZoom || 0});
 
     const zoomedViewport = new WebMercatorViewport(Object.assign({}, this._viewportProps, {zoom}));
-    // $FlowFixMe
     const [longitude, latitude] = zoomedViewport.getMapCenterByLngLatPosition({
       lngLat: startZoomLngLat,
       pos
@@ -314,13 +278,13 @@ export default class MapState {
 
   /* Private methods */
 
-  _getUpdatedMapState(newProps: any): MapState {
+  _getUpdatedMapState(newProps) {
     // Update _viewportProps
     return new MapState(Object.assign({}, this._viewportProps, this._interactiveState, newProps));
   }
 
   // Apply any constraints (mathematical or defined by _viewportProps) to map state
-  _applyConstraints(props: ViewportProps): ViewportProps {
+  _applyConstraints(props) {
     // Ensure zoom is within specified range
     const {maxZoom, minZoom, zoom} = props;
     props.zoom = clamp(zoom, minZoom, maxZoom);
@@ -334,19 +298,13 @@ export default class MapState {
     return props;
   }
 
-  _unproject(pos: ?Array<number>): ?Array<number> {
+  _unproject(pos) {
     const viewport = new WebMercatorViewport(this._viewportProps);
     return pos && viewport.unproject(pos);
   }
 
   // Calculate a new lnglat based on pixel dragging position
-  _calculateNewLngLat({
-    startPanLngLat,
-    pos
-  }: {
-    startPanLngLat: Array<number>,
-    pos: Array<number>
-  }): Array<number> {
+  _calculateNewLngLat({startPanLngLat, pos}) {
     const viewport = new WebMercatorViewport(this._viewportProps);
     return viewport.getMapCenterByLngLatPosition({
       lngLat: startPanLngLat,
@@ -355,24 +313,14 @@ export default class MapState {
   }
 
   // Calculates new zoom
-  _calculateNewZoom({scale, startZoom}: {scale: number, startZoom: number}): number {
+  _calculateNewZoom({scale, startZoom}) {
     const {maxZoom, minZoom} = this._viewportProps;
     const zoom = startZoom + Math.log2(scale);
     return clamp(zoom, minZoom, maxZoom);
   }
 
   // Calculates a new pitch and bearing from a position (coming from an event)
-  _calculateNewPitchAndBearing({
-    deltaScaleX,
-    deltaScaleY,
-    startBearing,
-    startPitch
-  }: {
-    deltaScaleX: number,
-    deltaScaleY: number,
-    startBearing: number,
-    startPitch: number
-  }) {
+  _calculateNewPitchAndBearing({deltaScaleX, deltaScaleY, startBearing, startPitch}) {
     // clamp deltaScaleY to [-1, 1] so that rotation is constrained between minPitch and maxPitch.
     // deltaScaleX does not need to be clamped as bearing does not have constraints.
     deltaScaleY = clamp(deltaScaleY, -1, 1);

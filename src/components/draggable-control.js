@@ -1,4 +1,3 @@
-// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,12 +17,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import {useState, useEffect} from 'react';
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
-
-import type {MjolnirEvent} from 'mjolnir.js';
-import type {MapControlProps, MapControlRef} from './use-map-control';
 
 export const draggableControlPropTypes = Object.assign({}, mapControlPropTypes, {
   draggable: PropTypes.bool,
@@ -42,32 +38,7 @@ export const draggableControlDefaultProps = Object.assign({}, mapControlDefaultP
   offsetTop: 0
 });
 
-type Coordinate = [number, number];
-type Offset = [number, number];
-type CallbackEvent = MjolnirEvent & {
-  lngLat: Coordinate
-};
-
-export type DraggableControlProps = MapControlProps & {
-  draggable: boolean,
-  onDrag?: CallbackEvent => any,
-  onDragEnd?: CallbackEvent => any,
-  onDragStart?: CallbackEvent => any,
-  offsetLeft: number,
-  offsetTop: number
-};
-
-type State = {
-  dragPos: ?Coordinate,
-  dragOffset: ?Offset
-};
-
-export type DraggableControlRef = MapControlRef & {
-  props: DraggableControlProps,
-  state: State
-};
-
-function getDragEventPosition(event: MjolnirEvent): Coordinate {
+function getDragEventPosition(event) {
   const {
     offsetCenter: {x, y}
   } = event;
@@ -78,7 +49,7 @@ function getDragEventPosition(event: MjolnirEvent): Coordinate {
  * Returns offset of top-left of marker from drag start event
  * (used for positioning marker relative to next mouse coordinates)
  */
-function getDragEventOffset(event: MjolnirEvent, container): ?Offset {
+function getDragEventOffset(event, container) {
   const {
     center: {x, y}
   } = event;
@@ -89,19 +60,14 @@ function getDragEventOffset(event: MjolnirEvent, container): ?Offset {
   return null;
 }
 
-function getDragLngLat(
-  dragPos: Coordinate,
-  dragOffset: Offset,
-  props: DraggableControlProps,
-  context
-): Coordinate {
+function getDragLngLat(dragPos, dragOffset, props, context) {
   const x = dragPos[0] + dragOffset[0] - props.offsetLeft;
   const y = dragPos[1] + dragOffset[1] - props.offsetTop;
   // Unproject x/y value while respecting offset coordinates
   return context.viewport.unproject([x, y]);
 }
 
-function onDragStart(event: MjolnirEvent, {props, state, context, containerRef}) {
+function onDragStart(event, {props, state, context, containerRef}) {
   const {draggable} = props;
   if (!draggable) {
     return;
@@ -114,13 +80,13 @@ function onDragStart(event: MjolnirEvent, {props, state, context, containerRef})
   state.setDragOffset(dragOffset);
 
   if (props.onDragStart && dragOffset) {
-    const callbackEvent: CallbackEvent = Object.assign({}, event);
+    const callbackEvent = Object.assign({}, event);
     callbackEvent.lngLat = getDragLngLat(dragPos, dragOffset, props, context);
     props.onDragStart(callbackEvent);
   }
 }
 
-function onDrag(event: MjolnirEvent, {props, state, context}) {
+function onDrag(event, {props, state, context}) {
   event.stopPropagation();
 
   const dragPos = getDragEventPosition(event);
@@ -128,13 +94,13 @@ function onDrag(event: MjolnirEvent, {props, state, context}) {
 
   const {dragOffset} = state;
   if (props.onDrag && dragOffset) {
-    const callbackEvent: CallbackEvent = Object.assign({}, event);
+    const callbackEvent = Object.assign({}, event);
     callbackEvent.lngLat = getDragLngLat(dragPos, dragOffset, props, context);
     props.onDrag(callbackEvent);
   }
 }
 
-function onDragEnd(event: MjolnirEvent, {props, state, context}) {
+function onDragEnd(event, {props, state, context}) {
   event.stopPropagation();
 
   const {dragPos, dragOffset} = state;
@@ -142,20 +108,20 @@ function onDragEnd(event: MjolnirEvent, {props, state, context}) {
   state.setDragOffset(null);
 
   if (props.onDragEnd && dragPos && dragOffset) {
-    const callbackEvent: CallbackEvent = Object.assign({}, event);
+    const callbackEvent = Object.assign({}, event);
     callbackEvent.lngLat = getDragLngLat(dragPos, dragOffset, props, context);
     props.onDragEnd(callbackEvent);
   }
 }
 
-function onDragCancel(event: MjolnirEvent, {state}) {
+function onDragCancel(event, {state}) {
   event.stopPropagation();
 
   state.setDragPos(null);
   state.setDragOffset(null);
 }
 
-function registerEvents(thisRef: DraggableControlRef): Function {
+function registerEvents(thisRef) {
   const {eventManager} = thisRef.context;
   if (!eventManager || !thisRef.state.dragPos) {
     return undefined;
@@ -176,10 +142,7 @@ function registerEvents(thisRef: DraggableControlRef): Function {
   };
 }
 
-export default function useDraggableControl(
-  props: DraggableControlProps,
-  callbacks: any
-): DraggableControlRef {
+export default function useDraggableControl(props, callbacks) {
   const [dragPos, setDragPos] = useState(null);
   const [dragOffset, setDragOffset] = useState(null);
 

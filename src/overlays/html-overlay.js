@@ -1,5 +1,3 @@
-// @flow
-
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,10 +19,8 @@
 // THE SOFTWARE.
 
 import * as React from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import useMapControl, {mapControlPropTypes} from '../components/use-map-control';
-
-import type {MapControlProps} from '../components/use-map-control';
 
 const propTypes = Object.assign({}, mapControlPropTypes, {
   redraw: PropTypes.func.isRequired,
@@ -39,12 +35,7 @@ const defaultProps = {
   capturePointerMove: false
 };
 
-export type HTMLOverlayProps = MapControlProps & {
-  redraw: Function,
-  style?: Object
-};
-
-function HTMLOverlay(props: HTMLOverlayProps) {
+function HTMLOverlay(props) {
   const {context, containerRef} = useMapControl(props);
   const {viewport, isDragging} = context;
   const style = {

@@ -1,5 +1,3 @@
-// @flow
-
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,14 +19,12 @@
 // THE SOFTWARE.
 
 import {document} from '../utils/globals';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import mapboxgl from '../utils/mapboxgl';
 
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
-
-import type {MapControlProps} from './use-map-control';
 
 const propTypes = Object.assign({}, mapControlPropTypes, {
   // Custom className
@@ -47,13 +43,7 @@ const defaultProps = Object.assign({}, mapControlDefaultProps, {
   label: 'Toggle fullscreen'
 });
 
-export type FullscreenControlProps = MapControlProps & {
-  className: string,
-  container: ?HTMLElement,
-  label: string
-};
-
-function FullscreenControl(props: FullscreenControlProps) {
+function FullscreenControl(props) {
   const {context, containerRef} = useMapControl(props);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showButton, setShowButton] = useState(false);

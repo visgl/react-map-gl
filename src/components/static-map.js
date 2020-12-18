@@ -1,4 +1,3 @@
-// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,7 +19,7 @@
 // THE SOFTWARE.
 import * as React from 'react';
 import {PureComponent, createRef} from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 
 import {normalizeStyle} from '../utils/style-utils';
 
@@ -32,8 +31,6 @@ import mapboxgl from '../utils/mapboxgl';
 import {checkVisibilityConstraints} from '../utils/map-constraints';
 import {MAPBOX_LIMITS} from '../utils/map-state';
 import MapContext, {MapContextProvider} from './map-context';
-
-import type {ViewState} from '../mapbox/mapbox';
 
 /* eslint-disable max-len */
 const TOKEN_DOC_URL = 'https://visgl.github.io/react-map-gl/docs/get-started/mapbox-tokens';
@@ -85,44 +82,15 @@ const defaultProps = Object.assign({}, Mapbox.defaultProps, {
   visibilityConstraints: MAPBOX_LIMITS
 });
 
-export type StaticMapProps = {
-  gl?: any,
-  width: number | string,
-  height: number | string,
-  preventStyleDiffing: boolean,
-  disableTokenWarning: boolean,
-  visible: boolean,
-  className: string,
-  style: any,
-  visibilityConstraints: any,
-  children?: any,
-  onLoad: Function,
-  onError: Function,
-  onResize: Function,
-  mapStyle: any,
-  visible: boolean,
-  viewState?: ViewState,
-  longitude: number,
-  latitude: number,
-  zoom: number,
-  bearing: number,
-  pitch: number,
-  altitude?: number
-};
-
-type State = {
-  accessTokenInvalid: boolean
-};
-
-export default class StaticMap extends PureComponent<StaticMapProps, State> {
+export default class StaticMap extends PureComponent {
   static supported() {
     return mapboxgl && mapboxgl.supported();
   }
 
-  static propTypes: any = propTypes;
-  static defaultProps: StaticMapProps = defaultProps;
+  static propTypes = propTypes;
+  static defaultProps = defaultProps;
 
-  state: State = {
+  state = {
     accessTokenInvalid: false
   };
 
@@ -132,17 +100,15 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     }
     const {mapStyle} = this.props;
 
-    this._mapbox = new Mapbox(
-      // $FlowFixMe
-      Object.assign({}, this.props, {
-        mapboxgl, // Handle to mapbox-gl library
-        width: this._width,
-        height: this._height,
-        container: this._mapboxMapRef.current,
-        onError: this._mapboxMapError,
-        mapStyle: normalizeStyle(mapStyle)
-      })
-    );
+    this._mapbox = new Mapbox({
+      ...this.props,
+      mapboxgl, // Handle to mapbox-gl library
+      width: this._width,
+      height: this._height,
+      container: this._mapboxMapRef.current,
+      onError: this._mapboxMapError,
+      mapStyle: normalizeStyle(mapStyle)
+    });
     this._map = this._mapbox.getMap();
 
     const resizeObserver = new ResizeObserver(entries => {
@@ -161,7 +127,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     this._resizeObserver = resizeObserver;
   }
 
-  componentDidUpdate(prevProps: StaticMapProps) {
+  componentDidUpdate(prevProps) {
     if (this._mapbox) {
       this._updateMapStyle(prevProps, this.props);
       this._updateMapProps(this.props);
@@ -183,15 +149,15 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     }
   }
 
-  _mapbox: any = null;
-  _map: any = null;
-  _mapboxMapRef: {current: null | HTMLDivElement} = createRef();
-  _mapContainerRef: {current: null | HTMLDivElement} = createRef();
-  _queryParams: any = {};
-  _width: number = 0;
-  _height: number = 0;
-  _resizeObserver: null | ResizeObserver = null;
-  _context: any = null;
+  _mapbox = null;
+  _map = null;
+  _mapboxMapRef = createRef();
+  _mapContainerRef = createRef();
+  _queryParams = {};
+  _width = 0;
+  _height = 0;
+  _resizeObserver = null;
+  _context = null;
 
   // External apps can access map this way
   getMap = () => {
@@ -207,12 +173,12 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
    *   Point or an array of two points defining the bounding box
    * @param {Object} options - query options
    */
-  queryRenderedFeatures = (geometry: any, options: any = {}) => {
+  queryRenderedFeatures = (geometry, options = {}) => {
     return this._map.queryRenderedFeatures(geometry, options);
   };
 
   // Note: needs to be called after render (e.g. in componentDidUpdate)
-  _updateMapSize(width: number, height: number) {
+  _updateMapSize(width, height) {
     if (this._width !== width || this._height !== height) {
       this._width = width;
       this._height = height;
@@ -220,7 +186,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     }
   }
 
-  _updateMapStyle(oldProps: StaticMapProps, newProps: StaticMapProps) {
+  _updateMapStyle(oldProps, newProps) {
     const mapStyle = newProps.mapStyle;
     const oldMapStyle = oldProps.mapStyle;
     if (mapStyle !== oldMapStyle && mapStyle) {
@@ -230,7 +196,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     }
   }
 
-  _updateMapProps(props: StaticMapProps) {
+  _updateMapProps(props) {
     if (!this._mapbox) {
       return;
     }
@@ -243,13 +209,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
   }
 
   // Handle map error
-  _mapboxMapError = (evt: {
-    error?: {
-      message: string,
-      status: number
-    },
-    status: number
-  }) => {
+  _mapboxMapError = evt => {
     const statusCode = (evt.error && evt.error.status) || evt.status;
     if (statusCode === UNAUTHORIZED_ERROR_CODE && !this.state.accessTokenInvalid) {
       // Mapbox throws unauthorized error - invalid token
@@ -267,7 +227,12 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
         top: 0
       };
       return (
-        <div key="warning" id="no-token-warning" style={style}>
+        <div
+          key="warning"
+          id="no-token-warning"
+          // @ts-ignore
+          style={style}
+        >
           <h3 key="header">NO_TOKEN_WARNING</h3>
           <div key="text">For information on setting up your basemap, read</div>
           <a key="link" href={TOKEN_DOC_URL}>
@@ -297,7 +262,6 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
             ...interactiveContext,
             viewport:
               interactiveContext.viewport ||
-              // $FlowFixMe
               new WebMercatorViewport({
                 ...this.props,
                 ...this.props.viewState,
@@ -309,7 +273,12 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
           };
           return (
             <MapContextProvider value={context}>
-              <div key="map-overlays" className="overlays" style={CONTAINER_STYLE}>
+              <div
+                key="map-overlays"
+                className="overlays"
+                // @ts-ignore
+                style={CONTAINER_STYLE}
+              >
                 {this.props.children}
               </div>
             </MapContextProvider>
@@ -335,8 +304,19 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
     });
 
     return (
-      <div key="map-container" style={mapContainerStyle} ref={this._mapContainerRef}>
-        <div key="map-mapbox" ref={this._mapboxMapRef} style={mapStyle} className={className} />
+      <div
+        key="map-container"
+        ref={this._mapContainerRef}
+        // @ts-ignore
+        style={mapContainerStyle}
+      >
+        <div
+          key="map-mapbox"
+          ref={this._mapboxMapRef}
+          // @ts-ignore
+          style={mapStyle}
+          className={className}
+        />
         {this._renderOverlays()}
         {this._renderNoTokenWarning()}
       </div>

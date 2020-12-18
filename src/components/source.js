@@ -1,4 +1,3 @@
-// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +20,7 @@
 import * as React from 'react';
 import {useContext, useEffect, useMemo, useState, useRef} from 'react';
 import {cloneElement} from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import MapContext from './map-context';
 import assert from '../utils/assert';
 import deepEqual from '../utils/deep-equal';
@@ -29,16 +28,6 @@ import deepEqual from '../utils/deep-equal';
 const propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.string
-};
-
-type SourceProps = {
-  id?: string,
-  type: string,
-  children?: any,
-  data?: any,
-  coordinates?: any,
-  url?: any,
-  tiles?: any
 };
 
 let sourceCounter = 0;
@@ -104,9 +93,9 @@ function updateSource(source, props, prevProps) {
 }
 /* eslint-enable complexity */
 
-function Source(props: SourceProps) {
+function Source(props) {
   const context = useContext(MapContext);
-  const propsRef = useRef<SourceProps>({id: props.id, type: props.type});
+  const propsRef = useRef({id: props.id, type: props.type});
   const [, setStyleLoaded] = useState(0);
 
   const id = useMemo(() => props.id || `jsx-source-${sourceCounter++}`, []);

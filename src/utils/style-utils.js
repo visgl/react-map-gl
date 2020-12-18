@@ -1,17 +1,9 @@
-// @flow
-type MapboxStyle =
-  | string
-  | {
-      toJS?: Function,
-      layers: Array<any>
-    };
-
 const refProps = ['type', 'source', 'source-layer', 'minzoom', 'maxzoom', 'filter', 'layout'];
 
 // Prepare a map style object for diffing
 // If immutable - convert to plain object
 // Work around some issues in the styles that would fail Mapbox's diffing
-export function normalizeStyle(style: ?MapboxStyle): ?MapboxStyle {
+export function normalizeStyle(style) {
   if (!style) {
     return null;
   }
