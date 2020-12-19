@@ -1,9 +1,7 @@
 import * as React from 'react';
 import type {ViewState, MapboxProps} from '../mapbox/mapbox';
 
-export type StaticMapProps = Omit<MapboxProps, "mapboxgl" | "container" | "width" | "height"> & Partial<{
-  width: number | string,
-  height: number | string,
+export type StaticMapProps = MapboxProps & Partial<{
   className: string,
   style: any,
 

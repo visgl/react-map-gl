@@ -1,3 +1,4 @@
+import {ReactElement} from 'react';
 import type {MapControlProps} from '../components/use-map-control';
 
 type SVGOverlayProps = MapControlProps & {
@@ -5,4 +6,4 @@ type SVGOverlayProps = MapControlProps & {
   style?: Object
 };
 
-export default function SVGOverlay(props: SVGOverlayProps);
+export default function SVGOverlay(props: SVGOverlayProps): ReactElement;

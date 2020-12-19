@@ -1,14 +1,14 @@
 import {RefObject} from 'react';
 import {MapContextProps} from './map-context';
 
-export type MapControlProps = {
+export type MapControlProps = Partial<{
   captureScroll: boolean,
   captureDrag: boolean,
   captureClick: boolean,
   captureDoubleClick: boolean,
   capturePointerMove: boolean,
-  children?: any
-};
+  children: any
+}>;
 
 export type MapControlRef = {
   props: any,

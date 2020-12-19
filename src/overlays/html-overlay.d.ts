@@ -1,3 +1,4 @@
+import {ReactElement} from 'react';
 import type {MapControlProps} from '../components/use-map-control';
 
 type HTMLOverlayProps = MapControlProps & {
@@ -5,4 +6,4 @@ type HTMLOverlayProps = MapControlProps & {
   style?: Object
 };
 
-export default function HTMLOverlay(props: HTMLOverlayProps);
+export default function HTMLOverlay(props: HTMLOverlayProps): ReactElement;

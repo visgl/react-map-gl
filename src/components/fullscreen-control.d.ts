@@ -1,9 +1,10 @@
+import {ReactElement} from 'react';
 import {MapControlProps} from './use-map-control';
 
 type FullscreenControlProps = MapControlProps & {
-  className: string,
+  className?: string,
   container?: HTMLElement,
-  label: string
+  label?: string
 };
 
-export default function FullscreenControl(props: FullscreenControlProps);
+export default function FullscreenControl(props: FullscreenControlProps): ReactElement;

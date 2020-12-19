@@ -1,4 +1,6 @@
 
+import {ReactElement} from 'react';
+
 type SourceProps = {
   id?: string,
   type: string,
@@ -9,4 +11,4 @@ type SourceProps = {
   tiles?: any
 };
 
-export default function Source(props: SourceProps);
+export default function Source(props: SourceProps): ReactElement;

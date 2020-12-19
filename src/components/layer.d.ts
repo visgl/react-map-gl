@@ -12,4 +12,4 @@ type LayerProps = {
   maxzoom?: number
 };
 
-export default function Layer(props: LayerProps);
+export default function Layer(props: LayerProps): null;
