@@ -21,6 +21,7 @@
 /* global window, process, HTMLCanvasElement */
 import * as PropTypes from 'prop-types';
 import {document} from '../utils/globals';
+import {normalizeStyle} from '../utils/style-utils';
 
 function noop() {}
 
@@ -46,6 +47,8 @@ const propTypes = {
     PropTypes.string,
     PropTypes.object
   ]) /** The Mapbox style. A string url to a MapboxGL style */,
+  preventStyleDiffing:
+    PropTypes.bool /** There are known issues with style diffing. As stopgap, add option to prevent style diffing. */,
 
   visible: PropTypes.bool /** Whether the map is visible */,
   asyncRender: PropTypes.bool /** Whether mapbox should manage its own render cycle */,
@@ -77,6 +80,7 @@ const defaultProps = {
   reuseMaps: false,
   mapOptions: {},
   mapStyle: 'mapbox://styles/mapbox/light-v8',
+  preventStyleDiffing: false,
 
   visible: true,
   asyncRender: false,
@@ -167,14 +171,6 @@ export default class Mapbox {
     return this;
   }
 
-  // Mapbox's map.resize() reads size from DOM, so DOM element must already be resized
-  // In a system like React we must wait to read size until after render
-  // (e.g. until "componentDidUpdate")
-  resize() {
-    this._map.resize();
-    return this;
-  }
-
   // Force redraw the map now. Typically resize() and jumpTo() is reflected in the next
   // render cycle, which is managed by Mapbox's animation loop.
   // This removes the synchronization issue caused by requestAnimationFrame.
@@ -225,7 +221,7 @@ export default class Mapbox {
 
     // Step3: update style and call onload again
     if (props.mapStyle) {
-      this._map.setStyle(props.mapStyle, {
+      this._map.setStyle(normalizeStyle(props.mapStyle), {
         // From the user's perspective, there's no "diffing" on initialization
         // We always rebuild the style from scratch when creating a new Mapbox instance
         diff: false
@@ -263,7 +259,7 @@ export default class Mapbox {
         pitch: 0,
         bearing: 0,
         maxZoom: 24,
-        style: props.mapStyle,
+        style: normalizeStyle(props.mapStyle),
         interactive: false,
         trackResize: false,
         attributionControl: props.attributionControl,
@@ -347,6 +343,7 @@ export default class Mapbox {
 
     const viewportChanged = this._updateMapViewport(oldProps, newProps);
     const sizeChanged = this._updateMapSize(oldProps, newProps);
+    this._updateMapStyle(oldProps, newProps);
 
     if (!newProps.asyncRender && (viewportChanged || sizeChanged)) {
       this.redraw();
@@ -355,13 +352,22 @@ export default class Mapbox {
     this.props = newProps;
   }
 
+  _updateMapStyle(oldProps, newProps) {
+    const styleChanged = oldProps.mapStyle !== newProps.mapStyle;
+    if (styleChanged) {
+      this._map.setStyle(normalizeStyle(newProps.mapStyle), {
+        diff: !newProps.preventStyleDiffing
+      });
+    }
+  }
+
   // Note: needs to be called after render (e.g. in componentDidUpdate)
   _updateMapSize(oldProps, newProps) {
     const sizeChanged = oldProps.width !== newProps.width || oldProps.height !== newProps.height;
     if (sizeChanged) {
       this.width = newProps.width;
       this.height = newProps.height;
-      this.resize();
+      this._map.resize();
     }
     return sizeChanged;
   }

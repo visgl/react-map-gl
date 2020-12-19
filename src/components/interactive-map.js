@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {PureComponent, createRef} from 'react';
+import {useState, useRef, useEffect, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -7,11 +7,10 @@ import {MAPBOX_LIMITS} from '../utils/map-state';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import TransitionManager from '../utils/transition-manager';
-import MapContext from './map-context';
+import {MapContextProvider} from './map-context';
 
 import {EventManager} from 'mjolnir.js';
 import MapController from '../utils/map-controller';
-import deprecateWarn from '../utils/deprecate-warn';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -109,7 +108,7 @@ const defaultProps = Object.assign(
     onClick: null,
     onNativeClick: null,
     onHover: null,
-    onContextMenu: event => event.preventDefault(),
+    onContextMenu: (event) => event.preventDefault(),
 
     scrollZoom: true,
     dragPan: true,
@@ -125,153 +124,178 @@ const defaultProps = Object.assign(
   }
 );
 
-export default class InteractiveMap extends PureComponent {
-  static supported() {
-    return StaticMap.supported();
+/* Event handlers */
+function normalizeEvent(event) {
+  if (event.lngLat || !event.offsetCenter) {
+    return event;
   }
 
-  static propTypes = propTypes;
-  static defaultProps = defaultProps;
+  const {
+    offsetCenter: {x, y}
+  } = event;
+  const pos = [x, y];
 
-  constructor(props) {
-    super(props);
-    // Check for deprecated props
-    deprecateWarn(props);
+  const viewport = new WebMercatorViewport(
+    Object.assign({}, this.props, {
+      width: this.width,
+      height: this.height
+    })
+  );
 
-    // If props.controller is not provided, fallback to default MapController instance
-    // Cannot use defaultProps here because it needs to be per map instance
-    this._controller = props.controller || new MapController();
+  event.point = pos;
+  event.lngLat = viewport.unproject(pos);
 
-    this._eventManager = new EventManager(null, {
-      touchAction: props.touchAction
-    });
+  return event;
+}
 
-    this._updateInteractiveContext({
-      isDragging: false,
-      eventManager: this._eventManager,
-      onViewportChange: this._onViewportChange
-    });
+function getFeatures(pos) {
+  const {map} = this;
+
+  if (!map || !pos) {
+    return null;
   }
 
-  state = {
-    // Whether mapbox styles have finished loading
-    isLoaded: false,
-    // Whether the cursor is down
-    isDragging: false,
-    // Whether the cursor is over a clickable feature
-    isHovering: false
-  };
+  const queryParams = {};
+  const size = this.props.clickRadius;
 
-  componentDidMount() {
-    const eventManager = this._eventManager;
-
-    const container = this._eventCanvasRef.current;
-    eventManager.setElement(container);
-    // Register additional event handlers for click and hover
-    eventManager.on({
-      pointerdown: this._onPointerDown,
-      pointermove: this._onPointerMove,
-      pointerup: this._onPointerUp,
-      pointerleave: this._onEvent.bind(this, 'onMouseOut'),
-      click: this._onClick,
-      anyclick: this._onClick,
-      dblclick: this._onEvent.bind(this, 'onDblClick'),
-      wheel: this._onEvent.bind(this, 'onWheel'),
-      contextmenu: this._onEvent.bind(this, 'onContextMenu')
-    });
-
-    this._setControllerProps(this.props);
-
-    this._updateInteractiveContext({container});
+  if (this.props.interactiveLayerIds) {
+    queryParams.layers = this.props.interactiveLayerIds;
   }
 
-  componentDidUpdate() {
-    this._setControllerProps(this.props);
-  }
-
-  componentWillUnmount() {
-    this._eventManager.destroy();
-  }
-
-  _controller;
-  _eventManager;
-  _interactiveContext;
-  _width = 0;
-  _height = 0;
-  _eventCanvasRef = createRef();
-  _staticMapRef = createRef();
-
-  getMap = () => {
-    return this._staticMapRef.current ? this._staticMapRef.current.getMap() : null;
-  };
-
-  queryRenderedFeatures = (geometry, options = {}) => {
-    const map = this.getMap();
-    return map && map.queryRenderedFeatures(geometry, options);
-  };
-
-  _setControllerProps(props) {
-    props = Object.assign({}, props, props.viewState, {
-      isInteractive: Boolean(props.onViewStateChange || props.onViewportChange),
-      onViewportChange: this._onViewportChange,
-      onStateChange: this._onInteractionStateChange,
-      eventManager: this._eventManager,
-      width: this._width,
-      height: this._height
-    });
-
-    this._controller.setOptions(props);
-  }
-
-  _getFeatures({pos, radius}) {
-    let features;
-    const queryParams = {};
-    const map = this.getMap();
-
-    if (this.props.interactiveLayerIds) {
-      queryParams.layers = this.props.interactiveLayerIds;
-    }
-
-    if (radius) {
-      // Radius enables point features, like marker symbols, to be clicked.
-      const size = radius;
-      const bbox = [
+  if (size) {
+    // Radius enables point features, like marker symbols, to be clicked.
+    return map.queryRenderedFeatures(
+      [
         [pos[0] - size, pos[1] + size],
         [pos[0] + size, pos[1] - size]
-      ];
-      features = map && map.queryRenderedFeatures(bbox, queryParams);
-    } else {
-      features = map && map.queryRenderedFeatures(pos, queryParams);
+      ],
+      queryParams
+    );
+  }
+  try {
+    // This may fail if map is still loading
+    return map.queryRenderedFeatures(pos, queryParams);
+  } catch {
+    return null;
+  }
+}
+
+function onEvent(callbackName, event) {
+  const func = this.props[callbackName];
+  if (func) {
+    func(normalizeEvent.call(this, event));
+  }
+}
+
+function onPointerDown(event) {
+  onEvent.call(this, event.pointerType === 'touch' ? 'onTouchStart' : 'onMouseDown', event);
+}
+
+function onPointerUp(event) {
+  onEvent.call(this, event.pointerType === 'touch' ? 'onTouchEnd' : 'onMouseUp', event);
+}
+
+// eslint-disable-next-line complexity
+function onPointerMove(event) {
+  onEvent.call(this, event.pointerType === 'touch' ? 'onTouchMove' : 'onMouseMove', event);
+
+  if (!this.state.isDragging) {
+    const {onHover, interactiveLayerIds} = this.props;
+    let features;
+    event = normalizeEvent.call(this, event);
+    if (interactiveLayerIds || onHover) {
+      features = getFeatures.call(this, event.point);
     }
-    return features;
+    if (onHover) {
+      // backward compatibility: v3 `onHover` interface
+      event.features = features;
+      onHover(event);
+    }
+
+    const isHovering = Boolean(interactiveLayerIds && features && features.length > 0);
+    const isEntering = isHovering && !this.state.isHovering;
+    const isExiting = !isHovering && this.state.isHovering;
+
+    if (isEntering) {
+      onEvent.call(this, 'onMouseEnter', event);
+    }
+    if (isExiting) {
+      onEvent.call(this, 'onMouseLeave', event);
+    }
+    if (isEntering || isExiting) {
+      this.setState({isHovering});
+    }
+  }
+}
+
+function onPointerClick(event) {
+  const {onClick, onNativeClick, onDblClick, doubleClickZoom} = this.props;
+  let callbacks = [];
+  const isDoubleClickEnabled = onDblClick || doubleClickZoom;
+
+  // `click` is only fired on single click. `anyclick` is fired twice if double clicking.
+  // `click` has a delay period after pointer up that prevents it from firing when
+  // double clicking. `anyclick` is always fired immediately after pointer up.
+  // If double click is turned off by the user, we want to immediately fire the
+  // onClick event. Otherwise, we wait to make sure it's a single click.
+  switch (event.type) {
+    case 'anyclick':
+      callbacks.push(onNativeClick);
+      if (!isDoubleClickEnabled) {
+        callbacks.push(onClick);
+      }
+      break;
+
+    case 'click':
+      if (isDoubleClickEnabled) {
+        callbacks.push(onClick);
+      }
+      break;
+
+    default:
   }
 
-  _onInteractionStateChange = interactionState => {
-    const {isDragging = false} = interactionState;
-    if (isDragging !== this.state.isDragging) {
-      this._updateInteractiveContext({isDragging});
-      this.setState({isDragging});
-    }
+  callbacks = callbacks.filter(Boolean);
 
-    const {onInteractionStateChange} = this.props;
-    if (onInteractionStateChange) {
-      onInteractionStateChange(interactionState);
-    }
-  };
-
-  _updateInteractiveContext(updatedContext) {
-    this._interactiveContext = Object.assign({}, this._interactiveContext, updatedContext);
+  if (callbacks.length) {
+    event = normalizeEvent.call(this, event);
+    // backward compatibility: v3 `onClick` interface
+    event.features = getFeatures.call(this, event.point);
+    callbacks.forEach((cb) => cb(event));
   }
+}
+/* End of event handers */
 
-  _onResize = ({width, height}) => {
-    this._width = width;
-    this._height = height;
-    this._setControllerProps(this.props);
-    this.props.onResize({width, height});
+const InteractiveMap = forwardRef((props, ref) => {
+  const [controller] = useState(() => props.controller || new MapController());
+  const [eventManager] = useState(() => new EventManager(null, {touchAction: props.touchAction}));
+  const [context, setContext] = useState({
+    eventManager,
+    isDragging: false
+  });
+  const eventCanvasRef = useRef(null);
+  const staticMapRef = ref || useRef(null);
+
+  // Event handlers are registered once but need access to the latest props
+  // This is an anti-pattern, though it maintains a persistent reference to the latest props/state of this component
+  const _thisRef = useRef({
+    width: 0,
+    height: 0,
+    state: {
+      isHovering: false,
+      isDragging: false
+    }
+  });
+  const thisRef = _thisRef.current;
+  thisRef.props = props;
+  thisRef.map = staticMapRef.current && staticMapRef.current.getMap();
+  thisRef.setState = (newState) => {
+    const state = Object.assign(thisRef.state, newState);
+    eventCanvasRef.current.style.cursor = props.getCursor(state);
   };
 
-  _onViewportChange = (viewState, interactionState, oldViewState) => {
-    const {onViewStateChange, onViewportChange} = this.props;
+  const handleViewportChange = (viewState, interactionState, oldViewState) => {
+    const {onViewStateChange, onViewportChange} = props;
 
     if (onViewStateChange) {
       onViewStateChange({viewState, interactionState, oldViewState});
@@ -280,175 +304,92 @@ export default class InteractiveMap extends PureComponent {
       onViewportChange(viewState, interactionState, oldViewState);
     }
   };
+  context.onViewportChange = handleViewportChange;
 
-  /* Generic event handling */
-  _normalizeEvent(event) {
-    if (event.lngLat) {
-      // Already unprojected
-      return event;
+  const handleInteractionStateChange = (interactionState) => {
+    const {isDragging = false} = interactionState;
+    if (isDragging !== thisRef.state.isDragging) {
+      thisRef.setState({isDragging});
+      setContext({...context, isDragging});
     }
 
-    const {
-      offsetCenter: {x, y}
-    } = event;
-    const pos = [x, y];
-
-    const viewport = new WebMercatorViewport(
-      Object.assign({}, this.props, {
-        width: this._width,
-        height: this._height
-      })
-    );
-
-    event.point = pos;
-    event.lngLat = viewport.unproject(pos);
-
-    return event;
-  }
-
-  _onLoad = event => {
-    this.setState({isLoaded: true});
-    this.props.onLoad(event);
-  };
-
-  _onEvent = (callbackName, event) => {
-    const func = this.props[callbackName];
-    if (func) {
-      func(this._normalizeEvent(event));
+    const {onInteractionStateChange} = props;
+    if (onInteractionStateChange) {
+      onInteractionStateChange(interactionState);
     }
   };
 
-  /* Special case event handling */
-  _onPointerDown = event => {
-    switch (event.pointerType) {
-      case 'touch':
-        this._onEvent('onTouchStart', event);
-        break;
-
-      default:
-        this._onEvent('onMouseDown', event);
-    }
-  };
-
-  _onPointerUp = event => {
-    switch (event.pointerType) {
-      case 'touch':
-        this._onEvent('onTouchEnd', event);
-        break;
-
-      default:
-        this._onEvent('onMouseUp', event);
-    }
-  };
-
-  // eslint-disable-next-line complexity
-  _onPointerMove = event => {
-    switch (event.pointerType) {
-      case 'touch':
-        this._onEvent('onTouchMove', event);
-        break;
-
-      default:
-        this._onEvent('onMouseMove', event);
-    }
-
-    if (!this.state.isDragging) {
-      const {onHover, interactiveLayerIds} = this.props;
-      let features;
-      event = this._normalizeEvent(event);
-      if (this.state.isLoaded && (interactiveLayerIds || onHover)) {
-        features = this._getFeatures({
-          pos: event.point,
-          radius: this.props.clickRadius
-        });
-      }
-      if (onHover) {
-        // backward compatibility: v3 `onHover` interface
-        event.features = features;
-        onHover(event);
-      }
-
-      const isHovering = Boolean(interactiveLayerIds && features && features.length > 0);
-      const isEntering = isHovering && !this.state.isHovering;
-      const isExiting = !isHovering && this.state.isHovering;
-
-      if (isEntering) {
-        this._onEvent('onMouseEnter', event);
-      }
-      if (isExiting) {
-        this._onEvent('onMouseLeave', event);
-      }
-      if (isEntering || isExiting) {
-        this.setState({isHovering});
-      }
-    }
-  };
-
-  _onClick = event => {
-    const {onClick, onNativeClick, onDblClick, doubleClickZoom} = this.props;
-    let callbacks = [];
-    const isDoubleClickEnabled = onDblClick || doubleClickZoom;
-
-    // `click` is only fired on single click. `anyclick` is fired twice if double clicking.
-    // `click` has a delay period after pointer up that prevents it from firing when
-    // double clicking. `anyclick` is always fired immediately after pointer up.
-    // If double click is turned off by the user, we want to immediately fire the
-    // onClick event. Otherwise, we wait to make sure it's a single click.
-    switch (event.type) {
-      case 'anyclick':
-        callbacks.push(onNativeClick);
-        if (!isDoubleClickEnabled) {
-          callbacks.push(onClick);
-        }
-        break;
-
-      case 'click':
-        if (isDoubleClickEnabled) {
-          callbacks.push(onClick);
-        }
-        break;
-
-      default:
-    }
-
-    callbacks = callbacks.filter(Boolean);
-
-    if (callbacks.length) {
-      event = this._normalizeEvent(event);
-      // backward compatibility: v3 `onClick` interface
-      event.features = this._getFeatures({
-        pos: event.point,
-        radius: this.props.clickRadius
-      });
-      callbacks.forEach(cb => cb(event));
-    }
-  };
-
-  render() {
-    const {width, height, style, getCursor} = this.props;
-
-    const eventCanvasStyle = Object.assign({position: 'relative'}, style, {
-      width,
-      height,
-      cursor: getCursor(this.state)
+  const updateControllerOpts = () => {
+    const opts = Object.assign({}, props, props.viewState, {
+      isInteractive: Boolean(props.onViewStateChange || props.onViewportChange),
+      onViewportChange: handleViewportChange,
+      onStateChange: handleInteractionStateChange,
+      eventManager,
+      width: thisRef.width,
+      height: thisRef.height
     });
 
-    return (
-      <MapContext.Provider value={this._interactiveContext}>
-        <div key="event-canvas" ref={this._eventCanvasRef} style={eventCanvasStyle}>
-          <StaticMap
-            {...this.props}
-            width="100%"
-            height="100%"
-            style={null}
-            onResize={this._onResize}
-            onLoad={this._onLoad}
-            ref={this._staticMapRef}
-          >
-            {this.props.children}
-          </StaticMap>
-        </div>
-      </MapContext.Provider>
-    );
-  }
-}
+    controller.setOptions(opts);
+  };
+
+  const onResize = ({width, height}) => {
+    thisRef.width = width;
+    thisRef.height = height;
+    updateControllerOpts();
+    props.onResize({width, height});
+  };
+
+  useEffect(() => {
+    eventManager.setElement(eventCanvasRef.current);
+    // Register event handlers
+    eventManager.on({
+      pointerdown: onPointerDown.bind(thisRef),
+      pointermove: onPointerMove.bind(thisRef),
+      pointerup: onPointerUp.bind(thisRef),
+      pointerleave: onEvent.bind(thisRef, 'onMouseOut'),
+      click: onPointerClick.bind(thisRef),
+      anyclick: onPointerClick.bind(thisRef),
+      dblclick: onEvent.bind(thisRef, 'onDblClick'),
+      wheel: onEvent.bind(thisRef, 'onWheel'),
+      contextmenu: onEvent.bind(thisRef, 'onContextMenu')
+    });
+
+    context.container = eventCanvasRef.current;
+
+    // Clean up on unmount
+    return () => {
+      eventManager.destroy();
+    };
+  }, []);
+
+  updateControllerOpts();
+
+  const {width, height, style, getCursor} = props;
+
+  const eventCanvasStyle = Object.assign({position: 'relative'}, style, {
+    width,
+    height,
+    cursor: getCursor(thisRef.state)
+  });
+
+  return (
+    <MapContextProvider value={context}>
+      <div key="event-canvas" ref={eventCanvasRef} style={eventCanvasStyle}>
+        <StaticMap
+          {...props}
+          width="100%"
+          height="100%"
+          style={null}
+          onResize={onResize}
+          ref={staticMapRef}
+        />
+      </div>
+    </MapContextProvider>
+  );
+});
+
+InteractiveMap.supported = StaticMap.supported;
+InteractiveMap.propTypes = propTypes;
+InteractiveMap.defaultProps = defaultProps;
+
+export default InteractiveMap;

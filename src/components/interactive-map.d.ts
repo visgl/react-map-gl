@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {ReactElement} from 'react';
 import type {StaticMapProps} from './static-map';
 import MapController, {MjolnirEvent} from '../utils/map-controller';
 
@@ -54,11 +54,4 @@ export type InteractiveMapProps = StaticMapProps & Partial<{
   controller: MapController
 }>;
 
-export default class InteractiveMap extends React.PureComponent<InteractiveMapProps, State> {
-  static supported(): boolean;
-  static propTypes: any;
-  static defaultProps: InteractiveMapProps;
-
-  getMap(): any;
-  queryRenderedFeatures(geometry: [number,number] | [[number,number],[number,number]], options?: any): Array<any>;
-}
+export default function InteractiveMap(props: InteractiveMapProps): ReactElement;
