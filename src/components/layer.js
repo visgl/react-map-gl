@@ -120,23 +120,20 @@ function Layer(props) {
   const id = useMemo(() => props.id || `jsx-layer-${layerCounter++}`, []);
   const {map} = context;
 
-  useEffect(
-    () => {
-      if (map) {
-        const forceUpdate = () => setStyleLoaded(version => version + 1);
-        map.on('styledata', forceUpdate);
+  useEffect(() => {
+    if (map) {
+      const forceUpdate = () => setStyleLoaded(version => version + 1);
+      map.on('styledata', forceUpdate);
 
-        return () => {
-          map.off('styledata', forceUpdate);
-          if (map.style && map.style._loaded) {
-            map.removeLayer(id);
-          }
-        };
-      }
-      return undefined;
-    },
-    [map]
-  );
+      return () => {
+        map.off('styledata', forceUpdate);
+        if (map.style && map.style._loaded) {
+          map.removeLayer(id);
+        }
+      };
+    }
+    return undefined;
+  }, [map]);
 
   const layer = map && map.style && map.getLayer(id);
   if (layer) {

@@ -37,9 +37,15 @@ export default class App extends Component {
       const [minLng, minLat, maxLng, maxLat] = bbox(feature);
       // construct a viewport instance from the current state
       const viewport = new WebMercatorViewport(this.state.viewport);
-      const {longitude, latitude, zoom} = viewport.fitBounds([[minLng, minLat], [maxLng, maxLat]], {
-        padding: 40
-      });
+      const {longitude, latitude, zoom} = viewport.fitBounds(
+        [
+          [minLng, minLat],
+          [maxLng, maxLat]
+        ],
+        {
+          padding: 40
+        }
+      );
 
       this.setState({
         viewport: {

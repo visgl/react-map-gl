@@ -101,30 +101,27 @@ function Source(props) {
   const id = useMemo(() => props.id || `jsx-source-${sourceCounter++}`, []);
   const {map} = context;
 
-  useEffect(
-    () => {
-      if (map) {
-        const forceUpdate = () => setStyleLoaded(version => version + 1);
-        map.on('styledata', forceUpdate);
+  useEffect(() => {
+    if (map) {
+      const forceUpdate = () => setStyleLoaded(version => version + 1);
+      map.on('styledata', forceUpdate);
 
-        return () => {
-          map.off('styledata', forceUpdate);
-          /* global requestAnimationFrame */
-          // Do not remove source immediately because the
-          // dependent <Layer>s' componentWillUnmount() might not have been called
-          // Removing source before dependent layers will throw error
-          // TODO - find a more robust solution
-          requestAnimationFrame(() => {
-            if (map.style && map.style._loaded) {
-              map.removeSource(id);
-            }
-          });
-        };
-      }
-      return undefined;
-    },
-    [map]
-  );
+      return () => {
+        map.off('styledata', forceUpdate);
+        /* global requestAnimationFrame */
+        // Do not remove source immediately because the
+        // dependent <Layer>s' componentWillUnmount() might not have been called
+        // Removing source before dependent layers will throw error
+        // TODO - find a more robust solution
+        requestAnimationFrame(() => {
+          if (map.style && map.style._loaded) {
+            map.removeSource(id);
+          }
+        });
+      };
+    }
+    return undefined;
+  }, [map]);
 
   let source = map && map.style && map.getSource(id);
   if (source) {

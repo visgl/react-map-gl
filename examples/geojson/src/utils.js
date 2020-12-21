@@ -3,9 +3,7 @@ import {scaleQuantile} from 'd3-scale';
 
 export function updatePercentiles(featureCollection, accessor) {
   const {features} = featureCollection;
-  const scale = scaleQuantile()
-    .domain(features.map(accessor))
-    .range(range(9));
+  const scale = scaleQuantile().domain(features.map(accessor)).range(range(9));
   return {
     type: 'FeatureCollection',
     features: features.map(f => {

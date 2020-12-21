@@ -61,9 +61,7 @@ export default class ChoroplethOverlay extends PureComponent {
 
     if (this.props.renderWhileDragging || !isDragging) {
       const transform = geoTransform({point: projectPoint});
-      const path = geoPath()
-        .projection(transform)
-        .context(ctx);
+      const path = geoPath().projection(transform).context(ctx);
       this._drawFeatures(ctx, path);
     }
   };
@@ -76,10 +74,7 @@ export default class ChoroplethOverlay extends PureComponent {
     const colorDomain =
       this.props.colorDomain || extent(features.toArray(), this.props.valueAccessor);
 
-    const colorScale = scaleLinear()
-      .domain(colorDomain)
-      .range(this.props.colorRange)
-      .clamp(true);
+    const colorScale = scaleLinear().domain(colorDomain).range(this.props.colorRange).clamp(true);
 
     for (const feature of features) {
       ctx.beginPath();

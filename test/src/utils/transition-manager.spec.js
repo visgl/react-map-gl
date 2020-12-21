@@ -210,7 +210,7 @@ const easingFunctions = [t => Math.sqrt(t), t => t, t => t * t, t => t * t * t];
 const interruptions = [0.2, 0.5, 0.8];
 const values = [0, 0.5, 1];
 
-test('TransitionManager#cropEasingFunction', function(t) {
+test('TransitionManager#cropEasingFunction', function (t) {
   easingFunctions.forEach(func => {
     interruptions.forEach(x0 => {
       var newEasing = cropEasingFunction(func, x0);

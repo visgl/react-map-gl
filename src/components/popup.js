@@ -149,13 +149,10 @@ function Popup(props) {
   const {context, containerRef} = useMapControl(props, {onClick});
   const [, setLoaded] = useState(false);
 
-  useEffect(
-    () => {
-      // Container just got a size, re-calculate position
-      setLoaded(true);
-    },
-    [contentRef.current]
-  );
+  useEffect(() => {
+    // Container just got a size, re-calculate position
+    setLoaded(true);
+  }, [contentRef.current]);
 
   const {viewport} = context;
   const {className, longitude, latitude, altitude, tipSize, closeButton, children} = props;

@@ -10,7 +10,7 @@ export default function debounce(func, delay) {
     return func.apply(_this, _arguments);
   };
 
-  return function() {
+  return function () {
     _this = this;
     _arguments = arguments;
 

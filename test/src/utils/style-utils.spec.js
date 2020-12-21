@@ -48,7 +48,10 @@ const testStyle = {
         'line-color': '#efefef',
         'line-width': {
           base: 1.55,
-          stops: [[4, 0.25], [20, 30]]
+          stops: [
+            [4, 0.25],
+            [20, 30]
+          ]
         }
       },
       minzoom: 5,
@@ -72,7 +75,10 @@ const testStyle = {
         'line-color': '#efefef',
         'line-width': {
           base: 2,
-          stops: [[4, 0.5], [20, 40]]
+          stops: [
+            [4, 0.5],
+            [20, 40]
+          ]
         }
       }
     }
@@ -123,7 +129,10 @@ const expectedStyle = {
         'line-color': '#efefef',
         'line-width': {
           base: 1.55,
-          stops: [[4, 0.25], [20, 30]]
+          stops: [
+            [4, 0.25],
+            [20, 30]
+          ]
         }
       },
       minzoom: 5,
@@ -156,7 +165,10 @@ const expectedStyle = {
         'line-color': '#efefef',
         'line-width': {
           base: 2,
-          stops: [[4, 0.5], [20, 40]]
+          stops: [
+            [4, 0.5],
+            [20, 40]
+          ]
         }
       }
     }
