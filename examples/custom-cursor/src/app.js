@@ -12,7 +12,7 @@ function getCursor({isHovering, isDragging}) {
   return isDragging ? 'grabbing' : isHovering ? 'pointer' : 'default';
 }
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     longitude: -122.48,
     latitude: 37.78,
@@ -49,7 +49,6 @@ export default function App(props) {
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
       <ControlPanel
-        containerComponent={props.containerComponent}
         onChange={onInteractiveLayersChange}
       />
     </>

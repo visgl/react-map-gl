@@ -23,7 +23,7 @@ function filterFeaturesByDay(featureCollection, time) {
   return {type: 'FeatureCollection', features};
 }
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     latitude: 40,
     longitude: -100,
@@ -74,7 +74,6 @@ export default function App(props) {
         )}
       </MapGL>
       <ControlPanel
-        containerComponent={props.containerComponent}
         startTime={timeRange[0]}
         endTime={timeRange[1]}
         selectedTime={selectedTime}

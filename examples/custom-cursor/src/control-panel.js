@@ -63,7 +63,7 @@ function StyleControls(props) {
       <hr />
       <p>Clickable layers</p>
       {Object.keys(layerSelector).map((name) => (
-        <Checkbox name={name} value={categories[name]} onChange={toggleLayer} />
+        <Checkbox key={name} name={name} value={categories[name]} onChange={toggleLayer} />
       ))}
     </div>
   );

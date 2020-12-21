@@ -23,7 +23,7 @@ function pointOnCircle({center, angle, radius}) {
   };
 }
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     latitude: 0,
     longitude: -100,
@@ -56,7 +56,7 @@ export default function App(props) {
           </Source>
         )}
       </MapGL>
-      <ControlPanel containerComponent={props.containerComponent} />
+      <ControlPanel />
     </>
   );
 }

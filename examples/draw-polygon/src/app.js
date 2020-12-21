@@ -9,7 +9,7 @@ import {getFeatureStyle, getEditHandleStyle} from './style';
 
 const TOKEN = ''; // Set your mapbox token here
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     longitude: -91.874,
     latitude: 42.76,
@@ -79,7 +79,7 @@ export default function App(props) {
         />
         {drawTools}
       </MapGL>
-      <ControlPanel containerComponent={props.containerComponent} polygon={selectedFeature} />
+      <ControlPanel polygon={selectedFeature} />
     </>
   );
 }

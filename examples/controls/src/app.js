@@ -45,7 +45,7 @@ const scaleControlStyle = {
   padding: '10px'
 };
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     latitude: 40,
     longitude: -100,
@@ -94,7 +94,7 @@ export default function App(props) {
         </div>
       </MapGL>
 
-      <ControlPanel containerComponent={props.containerComponent} />
+      <ControlPanel />
     </>
   );
 }

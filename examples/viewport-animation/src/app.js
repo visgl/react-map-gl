@@ -7,7 +7,7 @@ import ControlPanel from './control-panel';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     latitude: 37.7751,
     longitude: -122.4193,
@@ -37,7 +37,7 @@ export default function App(props) {
         dragRotate={false}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
-      <ControlPanel containerComponent={props.containerComponent} onSelectCity={onSelectCity} />
+      <ControlPanel onSelectCity={onSelectCity} />
     </>
   );
 }

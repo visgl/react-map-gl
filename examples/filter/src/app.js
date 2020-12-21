@@ -8,7 +8,7 @@ import {countiesLayer, highlightLayer} from './map-style.js';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     latitude: 38.88,
     longitude: -98,
@@ -58,7 +58,7 @@ export default function App(props) {
           </Popup>
         )}
       </MapGL>
-      <ControlPanel containerComponent={props.containerComponent} />
+      <ControlPanel />
     </>
   );
 }

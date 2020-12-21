@@ -9,7 +9,7 @@ import MAP_STYLE from './map-style';
 
 const TOKEN = ''; // Set your mapbox token here
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     latitude: 37.78,
     longitude: -122.4,
@@ -60,7 +60,7 @@ export default function App(props) {
         onViewportChange={(v) => setViewport(v)}
         mapboxApiAccessToken={TOKEN}
       />
-      <ControlPanel containerComponent={props.containerComponent} />
+      <ControlPanel />
     </>
   );
 }

@@ -6,7 +6,7 @@ import ControlPanel from './control-panel';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     latitude: 37.805,
     longitude: -122.447,
@@ -27,9 +27,7 @@ export default function App(props) {
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
 
-      <ControlPanel
-        containerComponent={props.containerComponent}
-        onChange={(style) => setMapStyle(style)}
+      <ControlPanel onChange={(style) => setMapStyle(style)}
       />
     </>
   );

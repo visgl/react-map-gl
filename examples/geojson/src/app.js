@@ -9,7 +9,7 @@ import {updatePercentiles} from './utils';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     latitude: 40,
     longitude: -100,
@@ -77,7 +77,6 @@ export default function App(props) {
       </MapGL>
 
       <ControlPanel
-        containerComponent={props.containerComponent}
         year={year}
         onChange={(value) => setYear(value)}
       />

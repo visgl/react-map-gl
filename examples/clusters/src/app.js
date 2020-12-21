@@ -8,7 +8,7 @@ import {clusterLayer, clusterCountLayer, unclusteredPointLayer} from './layers';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     latitude: 40.67,
     longitude: -103.59,
@@ -65,7 +65,7 @@ export default function App(props) {
           <Layer {...unclusteredPointLayer} />
         </Source>
       </MapGL>
-      <ControlPanel containerComponent={props.containerComponent} />
+      <ControlPanel />
     </>
   );
 }

@@ -6,7 +6,7 @@ import ControlPanel from './control-panel';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     latitude: 37.729,
     longitude: -122.36,
@@ -48,7 +48,6 @@ export default function App(props) {
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
       <ControlPanel
-        containerComponent={props.containerComponent}
         settings={settings}
         interactionState={interactionState}
         onChange={updateSettings}
