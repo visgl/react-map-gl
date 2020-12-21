@@ -2,6 +2,10 @@
 
 # Version 6.0
 
+## Version 6.0.2 (Dec 21, 2020)
+
+- Add support for 'sky' layer type to Layer component (#1270)
+
 ## Version 6.0.1 (Dec 17, 2020)
 
 - Drop a breaking change intended for the next minor release
