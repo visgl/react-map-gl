@@ -11,7 +11,7 @@ function ControlPanel(props) {
   const days = Math.round((endTime - startTime) / day);
   const selectedDay = Math.round((selectedTime - startTime) / day);
 
-  const onSelectDay = (evt) => {
+  const onSelectDay = evt => {
     const daysToAdd = evt.target.value;
     // add selected days to start time to calculate new time
     const newTime = startTime + daysToAdd * day;
@@ -33,7 +33,7 @@ function ControlPanel(props) {
           type="checkbox"
           name="allday"
           checked={allDays}
-          onChange={(evt) => onChangeAllDays(evt.target.checked)}
+          onChange={evt => onChangeAllDays(evt.target.checked)}
         />
       </div>
       <div className={`input ${allDays ? 'disabled' : ''}`}>

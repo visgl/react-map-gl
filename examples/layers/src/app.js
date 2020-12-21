@@ -23,12 +23,11 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle={mapStyle}
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
 
-      <ControlPanel onChange={(style) => setMapStyle(style)}
-      />
+      <ControlPanel onChange={style => setMapStyle(style)} />
     </>
   );
 }

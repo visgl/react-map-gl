@@ -26,11 +26,11 @@ export default function App() {
     fetch(
       'https://raw.githubusercontent.com/uber/react-map-gl/master/examples/.data/us-income.geojson'
     )
-      .then((resp) => resp.json())
-      .then((json) => setAllData(json));
+      .then(resp => resp.json())
+      .then(json => setAllData(json));
   }, []);
 
-  const onHover = (event) => {
+  const onHover = event => {
     const {
       features,
       srcEvent: {offsetX, offsetY}
@@ -49,7 +49,7 @@ export default function App() {
   };
 
   const data = useMemo(() => {
-    return allData && updatePercentiles(allData, (f) => f.properties.income[year]);
+    return allData && updatePercentiles(allData, f => f.properties.income[year]);
   }, [allData, year]);
 
   return (
@@ -59,7 +59,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/light-v9"
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         interactiveLayerIds={['data']}
         onHover={onHover}
@@ -76,10 +76,7 @@ export default function App() {
         )}
       </MapGL>
 
-      <ControlPanel
-        year={year}
-        onChange={(value) => setYear(value)}
-      />
+      <ControlPanel year={year} onChange={value => setYear(value)} />
     </>
   );
 }

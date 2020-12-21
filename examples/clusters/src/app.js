@@ -18,7 +18,7 @@ export default function App() {
   });
   const mapRef = useRef(null);
 
-  const onClick = (event) => {
+  const onClick = event => {
     const feature = event.features[0];
     const clusterId = feature.properties.cluster_id;
 
@@ -46,7 +46,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         interactiveLayerIds={[clusterLayer.id]}
         onClick={onClick}

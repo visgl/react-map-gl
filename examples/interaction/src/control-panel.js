@@ -9,11 +9,7 @@ function Checkbox({name, value, onChange}) {
   return (
     <div className="input">
       <label>{formatSettingName(name)}</label>
-      <input
-        type="checkbox"
-        checked={value}
-        onChange={(evt) => onChange(name, evt.target.checked)}
-      />
+      <input type="checkbox" checked={value} onChange={evt => onChange(name, evt.target.checked)} />
     </div>
   );
 }
@@ -25,7 +21,7 @@ function NumericInput({name, value, onChange}) {
       <input
         type="number"
         value={value}
-        onChange={(evt) => onChange(name, Number(evt.target.value))}
+        onChange={evt => onChange(name, Number(evt.target.value))}
       />
     </div>
   );
@@ -59,7 +55,7 @@ function ControlPanel(props) {
       </div>
       <hr />
 
-      {Object.keys(settings).map((name) => renderSetting(name, settings[name]))}
+      {Object.keys(settings).map(name => renderSetting(name, settings[name]))}
 
       <hr />
 

@@ -22,11 +22,7 @@ function Checkbox({name, value, onChange}) {
   return (
     <div key={name} className="input">
       <label>{name}</label>
-      <input
-        type="checkbox"
-        checked={value}
-        onChange={(evt) => onChange(name, evt.target.checked)}
-      />
+      <input type="checkbox" checked={value} onChange={evt => onChange(name, evt.target.checked)} />
     </div>
   );
 }
@@ -40,7 +36,7 @@ function StyleControls(props) {
   });
 
   useEffect(() => {
-    const filter = (layerId) => getLayerFilter(categories, layerId);
+    const filter = layerId => getLayerFilter(categories, layerId);
     props.onChange(filter);
   }, [categories]);
 
@@ -62,7 +58,7 @@ function StyleControls(props) {
       </div>
       <hr />
       <p>Clickable layers</p>
-      {Object.keys(layerSelector).map((name) => (
+      {Object.keys(layerSelector).map(name => (
         <Checkbox key={name} name={name} value={categories[name]} onChange={toggleLayer} />
       ))}
     </div>

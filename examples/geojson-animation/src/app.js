@@ -47,7 +47,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/light-v9"
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       >
         {pointData && (

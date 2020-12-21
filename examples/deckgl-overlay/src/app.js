@@ -17,8 +17,8 @@ export default function App() {
 
   const arcLayer = new ArcLayer({
     data: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/bart-segments.json',
-    getSourcePosition: (d) => d.from.coordinates,
-    getTargetPosition: (d) => d.to.coordinates,
+    getSourcePosition: d => d.from.coordinates,
+    getTargetPosition: d => d.to.coordinates,
     getSourceColor: [255, 200, 0],
     getTargetColor: [0, 140, 255],
     getWidth: 12
@@ -30,7 +30,7 @@ export default function App() {
       width="100%"
       height="100%"
       maxPitch={85}
-      onViewportChange={(v) => setViewport(v)}
+      onViewportChange={v => setViewport(v)}
       mapboxApiAccessToken={TOKEN}
     >
       <DeckGL viewState={viewport} layers={[arcLayer]} />

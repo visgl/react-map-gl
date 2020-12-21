@@ -32,12 +32,12 @@ import CITIES from '../../.data/cities.json';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-const ZIPCODES = ZIPCODES_SF.features.map((f) => {
+const ZIPCODES = ZIPCODES_SF.features.map(f => {
   f.properties.value = Math.random() * 1000;
   return f;
 });
 
-const CITY_LOCATIONS = CITIES.map((c) => [c.longitude, c.latitude]);
+const CITY_LOCATIONS = CITIES.map(c => [c.longitude, c.latitude]);
 
 export default function App() {
   const [viewport, setViewport] = useState({
@@ -54,7 +54,7 @@ export default function App() {
       width="100vw"
       height="100vh"
       mapStyle="mapbox://styles/mapbox/dark-v9"
-      onViewportChange={(v) => setViewport(v)}
+      onViewportChange={v => setViewport(v)}
       mapboxApiAccessToken={MAPBOX_TOKEN}
     >
       <ChoroplethOverlay

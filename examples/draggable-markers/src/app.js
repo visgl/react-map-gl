@@ -29,15 +29,15 @@ export default function App() {
   });
   const [events, logEvents] = useState({});
 
-  const onMarkerDragStart = (event) => {
+  const onMarkerDragStart = event => {
     logEvents({...events, onDragStart: event.lngLat});
   };
 
-  const onMarkerDrag = (event) => {
+  const onMarkerDrag = event => {
     logEvents({...events, onDrag: event.lngLat});
   };
 
-  const onMarkerDragEnd = (event) => {
+  const onMarkerDragEnd = event => {
     logEvents({...events, onDragEnd: event.lngLat});
     setMarker({
       longitude: event.lngLat[0],
@@ -52,7 +52,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
         mapboxApiAccessToken={TOKEN}
       >
         <Marker

@@ -43,8 +43,8 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={(v) => setViewport(v)}
-        onInteractionStateChange={(s) => setInteractionState({...s})}
+        onViewportChange={v => setViewport(v)}
+        onInteractionStateChange={s => setInteractionState({...s})}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
       <ControlPanel

@@ -17,7 +17,7 @@ function ControlPanel(props) {
       </div>
       <hr />
 
-      {CITIES.filter((city) => city.state === 'California').map((city, index) => (
+      {CITIES.filter(city => city.state === 'California').map((city, index) => (
         <div key={`btn-${index}`} className="input">
           <input
             type="radio"

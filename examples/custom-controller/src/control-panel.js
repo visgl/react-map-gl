@@ -10,11 +10,7 @@ function Checkbox({name, value, onChange}) {
   return (
     <div key={name} className="input">
       <label>{formatSettingName(name)}</label>
-      <input
-        type="checkbox"
-        checked={value}
-        onChange={(evt) => onChange(name, evt.target.checked)}
-      />
+      <input type="checkbox" checked={value} onChange={evt => onChange(name, evt.target.checked)} />
     </div>
   );
 }

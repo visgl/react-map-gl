@@ -31,7 +31,7 @@ function ControlPanel(props) {
           min={1995}
           max={2015}
           step={1}
-          onChange={(evt) => props.onChange(evt.target.value)}
+          onChange={evt => props.onChange(evt.target.value)}
         />
       </div>
     </div>

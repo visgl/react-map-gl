@@ -22,11 +22,11 @@ export default function App() {
   });
   const [interactiveLayerIds, setInteractiveLayerIds] = useState([]);
 
-  const onInteractiveLayersChange = (layerFilter) => {
-    setInteractiveLayerIds(MAP_STYLE.layers.map((layer) => layer.id).filter(layerFilter));
+  const onInteractiveLayersChange = layerFilter => {
+    setInteractiveLayerIds(MAP_STYLE.layers.map(layer => layer.id).filter(layerFilter));
   };
 
-  const onClick = (event) => {
+  const onClick = event => {
     const feature = event.features && event.features[0];
 
     if (feature) {
@@ -45,12 +45,10 @@ export default function App() {
         onClick={onClick}
         getCursor={getCursor}
         interactiveLayerIds={interactiveLayerIds}
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
-      <ControlPanel
-        onChange={onInteractiveLayersChange}
-      />
+      <ControlPanel onChange={onInteractiveLayersChange} />
     </>
   );
 }

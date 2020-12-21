@@ -39,7 +39,7 @@ export default function App(props) {
         invertZoom={settings.invertZoom}
         invertPan={settings.invertPan}
         onPress={settings.longPress ? () => window.alert('pressed') : null} // eslint-disable-line no-alert
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
       <ControlPanel settings={settings} onChange={onSettingsChange} />

@@ -12,7 +12,7 @@ function filterFeaturesByDay(featureCollection, time) {
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date.getDate();
-  const features = featureCollection.features.filter((feature) => {
+  const features = featureCollection.features.filter(feature => {
     const featureDate = new Date(feature.properties.time);
     return (
       featureDate.getFullYear() === year &&
@@ -39,8 +39,8 @@ export default function App() {
   useEffect(() => {
     /* global fetch */
     fetch('https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson')
-      .then((resp) => resp.json())
-      .then((json) => {
+      .then(resp => resp.json())
+      .then(json => {
         // Note: In a real application you would do a validation of JSON data before doing anything with it,
         // but for demonstration purposes we ingore this part here and just trying to select needed data...
         const features = json.features;
@@ -64,7 +64,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       >
         {data && (
@@ -78,8 +78,8 @@ export default function App() {
         endTime={timeRange[1]}
         selectedTime={selectedTime}
         allDays={allDays}
-        onChangeTime={(time) => selectTime(time)}
-        onChangeAllDays={(on) => useAllDays(on)}
+        onChangeTime={time => selectTime(time)}
+        onChangeAllDays={on => useAllDays(on)}
       />
     </>
   );

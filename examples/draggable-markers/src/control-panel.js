@@ -12,7 +12,7 @@ function ControlPanel(props) {
       <h3>Draggable Marker</h3>
       <p>Try dragging the marker to another location.</p>
       <div>
-        {eventNames.map((eventName) => {
+        {eventNames.map(eventName => {
           const {events = {}} = props;
           const lngLat = events[eventName];
           return (

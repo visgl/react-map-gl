@@ -16,7 +16,7 @@ export default function BartMap(props) {
   });
 
   // eslint-disable-next-line
-  const onMapLoad = (event) => console.log(event);
+  const onMapLoad = event => console.log(event);
 
   return (
     <MapGL
@@ -25,7 +25,7 @@ export default function BartMap(props) {
       mapStyle={props.mapStyle}
       width="100%"
       height="100%"
-      onViewportChange={(v) => setViewport(v)}
+      onViewportChange={v => setViewport(v)}
       onLoad={onMapLoad}
       reuseMaps
     >

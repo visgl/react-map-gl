@@ -19,7 +19,7 @@ export default function App() {
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(null);
   const editorRef = useRef(null);
 
-  const onSelect = (options) => {
+  const onSelect = options => {
     setSelectedFeatureIndex(options && options.selectedFeatureIndex);
   };
 
@@ -64,7 +64,7 @@ export default function App() {
         height="100%"
         mapStyle="mapbox://styles/mapbox/satellite-v9"
         mapboxApiAccessToken={TOKEN}
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
       >
         <Editor
           ref={editorRef}

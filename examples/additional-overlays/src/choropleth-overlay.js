@@ -43,7 +43,7 @@ const defaultProps = {
   globalOpacity: 1,
   colorDomain: null,
   colorRange: ['#FFFFFF', '#1FBAD6'],
-  valueAccessor: (feature) => feature.properties.value
+  valueAccessor: feature => feature.properties.value
 };
 
 function drawFeatures(ctx, path, props) {

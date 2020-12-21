@@ -19,7 +19,7 @@ export default function App() {
   });
   const [hoverInfo, setHoverInfo] = useState(null);
 
-  const onHover = (event) => {
+  const onHover = event => {
     const county = event.features && event.features[0];
     setHoverInfo({
       longitude: event.lngLat[0],
@@ -39,7 +39,7 @@ export default function App() {
         height="100%"
         mapStyle="mapbox://styles/mapbox/light-v9"
         mapboxApiAccessToken={MAPBOX_TOKEN}
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
         onHover={onHover}
         interactiveLayerIds={['counties']}
       >

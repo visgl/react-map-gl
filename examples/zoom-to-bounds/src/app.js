@@ -18,7 +18,7 @@ export default function App() {
     pitch: 0
   });
 
-  const onClick = (event) => {
+  const onClick = event => {
     const feature = event.features[0];
     if (feature) {
       // calculate the bounding box of the feature
@@ -57,7 +57,7 @@ export default function App() {
         mapStyle={MAP_STYLE}
         interactiveLayerIds={['sf-neighborhoods-fill']}
         onClick={onClick}
-        onViewportChange={(v) => setViewport(v)}
+        onViewportChange={v => setViewport(v)}
         mapboxApiAccessToken={TOKEN}
       />
       <ControlPanel />

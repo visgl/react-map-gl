@@ -38,7 +38,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  lngLatAccessor: (location) => location,
+  lngLatAccessor: location => location,
   renderWhileDragging: true,
   dotRadius: 4,
   dotFill: '#1FBAD6',

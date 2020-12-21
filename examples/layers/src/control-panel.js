@@ -28,14 +28,14 @@ const colorClass = {
 
 function getMapStyle({visibility, color}) {
   const layers = defaultLayers
-    .filter((layer) => {
+    .filter(layer => {
       const id = layer.get('id');
-      return categories.every((name) => visibility[name] || !layerSelector[name].test(id));
+      return categories.every(name => visibility[name] || !layerSelector[name].test(id));
     })
-    .map((layer) => {
+    .map(layer => {
       const id = layer.get('id');
       const type = layer.get('type');
-      const category = categories.find((name) => layerSelector[name].test(id));
+      const category = categories.find(name => layerSelector[name].test(id));
       if (category && colorClass[type]) {
         return layer.setIn(['paint', colorClass[type]], color[category]);
       }
@@ -89,19 +89,19 @@ function StyleControls(props) {
         </a>
       </div>
       <hr />
-      {categories.map((name) => (
+      {categories.map(name => (
         <div key={name} className="input">
           <label>{name}</label>
           <input
             type="checkbox"
             checked={visibility[name]}
-            onChange={(evt) => onVisibilityChange(name, evt.target.checked)}
+            onChange={evt => onVisibilityChange(name, evt.target.checked)}
           />
           <input
             type="color"
             value={color[name]}
             disabled={!visibility[name]}
-            onChange={(evt) => onColorChange(name, evt.target.value)}
+            onChange={evt => onColorChange(name, evt.target.value)}
           />
         </div>
       ))}
