@@ -32,7 +32,8 @@ const LAYER_TYPES = [
   'raster',
   'background',
   'heatmap',
-  'hillshade'
+  'hillshade',
+  'sky'
 ];
 
 const propTypes = {
