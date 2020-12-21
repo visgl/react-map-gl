@@ -63,7 +63,10 @@ function getBounds(position) {
   const radius = position.coords.accuracy;
   const bounds = center.toBounds(radius);
 
-  return [[bounds._ne.lng, bounds._ne.lat], [bounds._sw.lng, bounds._sw.lat]];
+  return [
+    [bounds._ne.lng, bounds._ne.lat],
+    [bounds._sw.lng, bounds._sw.lat]
+  ];
 }
 
 function setupMapboxGeolocateControl(context, props, geolocateButton) {
@@ -154,14 +157,11 @@ function GeolocateControl(props) {
     };
   }, []);
 
-  useEffect(
-    () => {
-      if (props.auto) {
-        triggerGeolocate(context, props, mapboxGeolocateControl);
-      }
-    },
-    [mapboxGeolocateControl, props.auto]
-  );
+  useEffect(() => {
+    if (props.auto) {
+      triggerGeolocate(context, props, mapboxGeolocateControl);
+    }
+  }, [mapboxGeolocateControl, props.auto]);
 
   const {className, style, label, trackUserLocation} = props;
   return (

@@ -73,7 +73,10 @@ test('deepEqual', t => {
           'line-color': '#efefef',
           'line-width': {
             base: 1.55,
-            stops: [[4, 0.25], [20, 30]]
+            stops: [
+              [4, 0.25],
+              [20, 30]
+            ]
           }
         },
         'source-layer': 'road'
@@ -91,7 +94,10 @@ test('deepEqual', t => {
           'line-color': '#efefef',
           'line-width': {
             base: 1.55,
-            stops: [[4, 0.25], [20, 30]]
+            stops: [
+              [4, 0.25],
+              [20, 30]
+            ]
           }
         },
         'source-layer': 'road'

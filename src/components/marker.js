@@ -73,29 +73,26 @@ function Marker(props) {
   const transform = `translate(${crispPixel(x)}px, ${crispPixel(y)}px)`;
   const cursor = draggable ? (dragPos ? 'grabbing' : 'grab') : 'auto';
 
-  const control = useMemo(
-    () => {
-      const containerStyle = {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        transform,
-        cursor
-      };
+  const control = useMemo(() => {
+    const containerStyle = {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      transform,
+      cursor
+    };
 
-      return (
-        <div
-          className={`mapboxgl-marker ${props.className}`}
-          ref={thisRef.containerRef}
-          // @ts-ignore
-          style={containerStyle}
-        >
-          {props.children}
-        </div>
-      );
-    },
-    [props.className]
-  );
+    return (
+      <div
+        className={`mapboxgl-marker ${props.className}`}
+        ref={thisRef.containerRef}
+        // @ts-ignore
+        style={containerStyle}
+      >
+        {props.children}
+      </div>
+    );
+  }, [props.className]);
 
   const container = containerRef.current;
   if (container) {

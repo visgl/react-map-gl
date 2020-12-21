@@ -235,7 +235,10 @@ export default class InteractiveMap extends PureComponent {
     if (radius) {
       // Radius enables point features, like marker symbols, to be clicked.
       const size = radius;
-      const bbox = [[pos[0] - size, pos[1] + size], [pos[0] + size, pos[1] - size]];
+      const bbox = [
+        [pos[0] - size, pos[1] + size],
+        [pos[0] + size, pos[1] - size]
+      ];
       features = map && map.queryRenderedFeatures(bbox, queryParams);
     } else {
       features = map && map.queryRenderedFeatures(pos, queryParams);

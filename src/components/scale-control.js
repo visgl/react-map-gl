@@ -37,17 +37,14 @@ function ScaleControl(props) {
   const {context, containerRef} = useMapControl(props);
   const [mapboxScaleControl, createMapboxScaleControl] = useState(null);
 
-  useEffect(
-    () => {
-      if (context.map) {
-        const control = new mapboxgl.ScaleControl();
-        control._map = context.map;
-        control._container = containerRef.current;
-        createMapboxScaleControl(control);
-      }
-    },
-    [context.map]
-  );
+  useEffect(() => {
+    if (context.map) {
+      const control = new mapboxgl.ScaleControl();
+      control._map = context.map;
+      control._container = containerRef.current;
+      createMapboxScaleControl(control);
+    }
+  }, [context.map]);
 
   if (mapboxScaleControl) {
     mapboxScaleControl.options = props;

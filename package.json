@@ -45,9 +45,6 @@
     "metrics": "ocular-metrics",
     "update-release-branch": "scripts/update-release-branch.sh"
   },
-  "resolutions": {
-    "prettier": "1.14.3"
-  },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "mapbox-gl": "^2.0.0",
