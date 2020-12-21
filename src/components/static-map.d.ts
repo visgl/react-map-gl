@@ -2,8 +2,6 @@ import * as React from 'react';
 import type {MapboxProps} from '../mapbox/mapbox';
 
 export type StaticMapProps = MapboxProps & Partial<{
-  width: number | string,
-  height: number | string,
   className: string,
   style: any,
 

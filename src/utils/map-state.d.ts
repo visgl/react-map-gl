@@ -2,7 +2,7 @@ import {TransitionInterpolator} from './transition';
 
 export const MAPBOX_LIMITS: any;
 
-type ViewportProps = {
+export type ViewportProps = Partial<{
   width: number,
   height: number,
   latitude: number,
@@ -19,24 +19,17 @@ type ViewportProps = {
   transitionEasing: (t: number) => number,
   transitionInterpolator: TransitionInterpolator,
   transitionInterruption: number
-};
+}>;
 
-type InteractiveState = {
-  startPanLngLat?: Array<number>,
-  startZoomLngLat?: Array<number>,
-  startBearing?: number,
-  startPitch?: number,
-  startZoom?: number
-};
+type InteractiveState = Partial<{
+  startPanLngLat: Array<number>,
+  startZoomLngLat: Array<number>,
+  startBearing: number,
+  startPitch: number,
+  startZoom: number
+}>;
 
-export type MapStateProps = ViewportProps &
-  InteractiveState & {
-    altitude?: number,
-    maxZoom?: number,
-    minZoom?: number,
-    maxPitch?: number,
-    minPitch?: number
-  };
+export type MapStateProps = ViewportProps & InteractiveState;
 
 export default class MapState {
   constructor(props: MapStateProps);

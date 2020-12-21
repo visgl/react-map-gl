@@ -1,6 +1,7 @@
+import {ReactElement} from 'react';
 import {MapControlProps} from './use-map-control';
 
-type GeolocateControlProps = MapControlProps & {
+type GeolocateControlProps = MapControlProps & Partial<{
   className: string,
   style: Object,
   label: string,
@@ -13,6 +14,6 @@ type GeolocateControlProps = MapControlProps & {
   onViewStateChange?: Function,
   onViewportChange?: Function,
   onGeolocate?: Function
-};
+}>;
 
-export default function GeolocateControl(props: GeolocateControlProps);
+export default function GeolocateControl(props: GeolocateControlProps): ReactElement;

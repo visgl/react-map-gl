@@ -52,3 +52,7 @@ export {default as setRTLTextPlugin} from './utils/set-rtl-text-plugin';
 
 // Experimental Features (May change in minor version bumps, use at your own risk)
 export {default as _MapContext} from './components/map-context';
+
+// Types
+export type {ViewportProps} from './utils/map-state';
+export type {MapContextProps} from './components/map-context';
