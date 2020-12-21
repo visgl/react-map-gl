@@ -1,4 +1,3 @@
-// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,14 +19,12 @@
 // THE SOFTWARE.
 import * as React from 'react';
 import {useMemo} from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import useDraggableControl, {
   draggableControlDefaultProps,
   draggableControlPropTypes
 } from './draggable-control';
 import {crispPixel} from '../utils/crisp-pixel';
-
-import type {DraggableControlProps, DraggableControlRef} from './draggable-control';
 
 const propTypes = Object.assign({}, draggableControlPropTypes, {
   // Custom className
@@ -42,13 +39,7 @@ const defaultProps = Object.assign({}, draggableControlDefaultProps, {
   className: ''
 });
 
-export type MarkerProps = DraggableControlProps & {
-  className: string,
-  longitude: number,
-  latitude: number
-};
-
-function getPosition({props, state, context}): [number, number] {
+function getPosition({props, state, context}) {
   const {longitude, latitude, offsetLeft, offsetTop} = props;
   const {dragPos, dragOffset} = state;
 
@@ -71,8 +62,8 @@ function getPosition({props, state, context}): [number, number] {
  * is almost always triggered by a viewport change, we almost definitely need to
  * recalculate the marker's position when the parent re-renders.
  */
-function Marker(props: MarkerProps) {
-  const thisRef: DraggableControlRef = useDraggableControl(props);
+function Marker(props) {
+  const thisRef = useDraggableControl(props);
   const {state, containerRef} = thisRef;
 
   const {draggable} = props;
@@ -96,6 +87,7 @@ function Marker(props: MarkerProps) {
         <div
           className={`mapboxgl-marker ${props.className}`}
           ref={thisRef.containerRef}
+          // @ts-ignore
           style={containerStyle}
         >
           {props.children}

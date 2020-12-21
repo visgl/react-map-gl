@@ -12,7 +12,7 @@ const LIB_DIR = resolve(__dirname, '..');
 const SRC_DIR = resolve(LIB_DIR, './src');
 
 const BABEL_CONFIG = {
-  presets: ['@babel/env', '@babel/react', '@babel/flow'],
+  presets: ['@babel/env', '@babel/react'],
   plugins: ['@babel/proposal-class-properties']
 };
 

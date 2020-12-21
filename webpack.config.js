@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const getWebpackConfig = require('ocular-dev-tools/config/webpack.config');
 
 const BABEL_CONFIG = {
-  presets: ['@babel/env', '@babel/react', '@babel/flow'],
+  presets: ['@babel/env', '@babel/react'],
   plugins: ['version-inline', '@babel/proposal-class-properties']
 };
 

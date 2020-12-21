@@ -1,8 +1,6 @@
-// @flow
-
 import * as React from 'react';
 import {useRef, useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 
 import {document} from '../utils/globals';
 import mapboxgl from '../utils/mapboxgl';
@@ -12,8 +10,6 @@ import TransitionManager from '../utils/transition-manager';
 import {isGeolocationSupported} from '../utils/geolocate-utils';
 
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
-
-import type {MapControlProps} from './use-map-control';
 
 const LINEAR_TRANSITION_PROPS = Object.assign({}, TransitionManager.defaultProps, {
   transitionDuration: 500
@@ -62,31 +58,7 @@ const defaultProps = Object.assign({}, mapControlDefaultProps, {
   onGeolocate: () => {}
 });
 
-export type GeolocateControlProps = MapControlProps & {
-  className: string,
-  style: Object,
-  label: string,
-  auto: boolean,
-  positionOptions: any,
-  fitBoundsOptions: any,
-  trackUserLocation: boolean,
-  showUserLocation: boolean,
-  showAccuracyCircle: boolean,
-  onViewStateChange?: Function,
-  onViewportChange?: Function,
-  onGeolocate?: Function
-};
-
-type Coordinate = {
-  longitude: number,
-  latitude: number,
-  accuracy: number
-};
-type Position = {
-  coords: Coordinate
-};
-
-function getBounds(position: Position) {
+function getBounds(position) {
   const center = new mapboxgl.LngLat(position.coords.longitude, position.coords.latitude);
   const radius = position.coords.accuracy;
   const bounds = center.toBounds(radius);
@@ -94,11 +66,7 @@ function getBounds(position: Position) {
   return [[bounds._ne.lng, bounds._ne.lat], [bounds._sw.lng, bounds._sw.lat]];
 }
 
-function setupMapboxGeolocateControl(
-  context,
-  props: GeolocateControlProps,
-  geolocateButton: HTMLElement
-) {
+function setupMapboxGeolocateControl(context, props, geolocateButton) {
   const control = new mapboxgl.GeolocateControl(props);
 
   // Dummy placeholders so that _setupUI does not crash
@@ -138,7 +106,7 @@ function triggerGeolocate(context, props, control) {
   }
 }
 
-function updateCamera(position: Position, {context, props}) {
+function updateCamera(position, {context, props}) {
   const bounds = getBounds(position);
   const {longitude, latitude, zoom} = context.viewport.fitBounds(bounds, props.fitBoundsOptions);
 
@@ -160,10 +128,10 @@ function updateCamera(position: Position, {context, props}) {
   onViewportChange(viewState);
 }
 
-function GeolocateControl(props: GeolocateControlProps) {
+function GeolocateControl(props) {
   const thisRef = useMapControl(props);
   const {context, containerRef} = thisRef;
-  const geolocateButtonRef = useRef<null | HTMLElement>(null);
+  const geolocateButtonRef = useRef(null);
   const [mapboxGeolocateControl, createMapboxGeolocateControl] = useState(null);
   const [supportsGeolocation, setSupportsGeolocation] = useState(false);
 
@@ -176,7 +144,7 @@ function GeolocateControl(props: GeolocateControlProps) {
       if (geolocateButtonRef.current) {
         control = setupMapboxGeolocateControl(context, props, geolocateButtonRef.current);
         // Overwrite Mapbox's GeolocateControl internal method
-        control._updateCamera = (position: Position) => updateCamera(position, thisRef);
+        control._updateCamera = position => updateCamera(position, thisRef);
         createMapboxGeolocateControl(control);
       }
     });

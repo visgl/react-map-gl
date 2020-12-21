@@ -1,4 +1,3 @@
-// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,12 +21,7 @@ import * as React from 'react';
 import {PureComponent, createRef} from 'react';
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
 
-import type {MjolnirEvent} from 'mjolnir.js';
-import type {MapControlProps} from './use-map-control';
-
-export type BaseControlProps = MapControlProps;
-
-function Control(props: any) {
+function Control(props) {
   const {instance} = props;
   const {context, containerRef} = useMapControl(instance.props, props);
 
@@ -40,26 +34,22 @@ function Control(props: any) {
 /*
  * This class is kept for backward compatibility
  */
-export default class BaseControl<
-  Props: BaseControlProps,
-  State: any,
-  ContainerType: Element
-> extends PureComponent<Props, State> {
+export default class BaseControl extends PureComponent {
   static propTypes = mapControlPropTypes;
   static defaultProps = mapControlDefaultProps;
 
-  _context: any = {};
-  _containerRef: {current: null | ContainerType} = createRef();
+  _context = {};
+  _containerRef = createRef();
 
-  _onScroll = (evt: MjolnirEvent) => {};
+  _onScroll = evt => {};
 
-  _onDragStart = (evt: MjolnirEvent) => {};
+  _onDragStart = evt => {};
 
-  _onDblClick = (evt: MjolnirEvent) => {};
+  _onDblClick = evt => {};
 
-  _onClick = (evt: MjolnirEvent) => {};
+  _onClick = evt => {};
 
-  _onPointerMove = (evt: MjolnirEvent) => {};
+  _onPointerMove = evt => {};
 
   _render() {
     throw new Error('_render() not implemented');

@@ -1,7 +1,5 @@
-// @flow
-
 /* eslint-disable complexity */
-export default function deepEqual(a: ?mixed, b: ?mixed): boolean {
+export default function deepEqual(a, b) {
   if (a === b) {
     return true;
   }

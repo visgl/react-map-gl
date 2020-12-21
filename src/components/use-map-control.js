@@ -1,6 +1,5 @@
-// @flow
 import {useContext, useRef, useEffect} from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import MapContext from './map-context';
 
 export const mapControlDefaultProps = {
@@ -24,23 +23,7 @@ export const mapControlPropTypes = {
   capturePointerMove: PropTypes.bool
 };
 
-export type MapControlProps = {
-  captureScroll: boolean,
-  captureDrag: boolean,
-  captureClick: boolean,
-  captureDoubleClick: boolean,
-  capturePointerMove: boolean,
-  children?: any
-};
-
-export type MapControlRef = {
-  props: any,
-  context: any,
-  state: any,
-  containerRef: {current: null | HTMLElement}
-};
-
-function onMount(thisRef, callbacks = {}): Function {
+function onMount(thisRef, callbacks = {}) {
   const ref = thisRef.containerRef.current;
   const {eventManager} = thisRef.context;
   if (!ref || !eventManager) {
@@ -105,10 +88,10 @@ function onMount(thisRef, callbacks = {}): Function {
   };
 }
 
-export default function useMapControl(props: MapControlProps, callbacks: any): MapControlRef {
+export default function useMapControl(props, callbacks) {
   const context = useContext(MapContext);
-  const containerRef = useRef<null | HTMLElement>(null);
-  const thisRef = useRef<MapControlRef>({props, state: {}, context, containerRef});
+  const containerRef = useRef(null);
+  const thisRef = useRef({props, state: {}, context, containerRef});
 
   thisRef.current.props = props;
   thisRef.current.context = context;

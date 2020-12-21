@@ -1,18 +1,16 @@
-// @flow
 import {equals} from '../math-utils';
 import assert from '../assert';
-import type {MapStateProps} from '../map-state';
 
 export default class TransitionInterpolator {
-  propNames: Array<string> = [];
+  propNames = [];
 
   /**
    * Checks if two sets of props need transition in between
    * @param currentProps {object} - a list of viewport props
    * @param nextProps {object} - a list of viewport props
-   * @returns {bool} - true if two props are equivalent
+   * @returns {boolean} - true if two props are equivalent
    */
-  arePropsEqual(currentProps: any, nextProps: any): boolean {
+  arePropsEqual(currentProps, nextProps) {
     for (const key of this.propNames || []) {
       if (!equals(currentProps[key], nextProps[key])) {
         return false;
@@ -28,13 +26,7 @@ export default class TransitionInterpolator {
    * @returns {Object} {start, end} - start and end props to be passed
    *   to `interpolateProps`
    */
-  initializeProps(
-    startProps: any,
-    endProps: any
-  ): {
-    start: any,
-    end: any
-  } {
+  initializeProps(startProps, endProps) {
     return {start: startProps, end: endProps};
   }
 
@@ -45,7 +37,7 @@ export default class TransitionInterpolator {
    * @param t {number} - a time factor between [0, 1]
    * @returns {object} - a list of interpolated viewport props
    */
-  interpolateProps(startProps: any, endProps: any, t: number): any {
+  interpolateProps(startProps, endProps, t) {
     assert(false, 'interpolateProps is not implemented');
   }
 
@@ -55,7 +47,7 @@ export default class TransitionInterpolator {
    * @param endProps {object} - a list of target viewport props
    * @returns {Number} - transition duration in milliseconds
    */
-  getDuration(startProps: MapStateProps, endProps: MapStateProps) {
+  getDuration(startProps, endProps) {
     return endProps.transitionDuration;
   }
 }

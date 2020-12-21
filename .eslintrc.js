@@ -1,8 +1,8 @@
 // prettier-ignore
 module.exports = {
   parser: 'babel-eslint',
-  plugins: ['flowtype', 'react'],
-  extends: ['uber-jsx', 'uber-es2015', 'prettier', 'prettier/react', 'prettier/flowtype', 'plugin:import/errors', 'plugin:flowtype/recommended'],
+  plugins: ['react', '@typescript-eslint'],
+  extends: ['uber-jsx', 'uber-es2015', 'prettier', 'prettier/react', 'plugin:import/errors'],
   overrides: [{
     files: ['*.spec.js', 'webpack.config.js', '**/bundle/*.js'],
     rules: {

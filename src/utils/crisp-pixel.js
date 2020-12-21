@@ -1,15 +1,9 @@
-// @flow
-
 /* global window */
 const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1;
 
-export const crispPixel = (size: number) => Math.round(size * pixelRatio) / pixelRatio;
+export const crispPixel = size => Math.round(size * pixelRatio) / pixelRatio;
 
-export const crispPercentage = (
-  el: null | HTMLElement,
-  percentage: number,
-  dimension: 'x' | 'y' = 'x'
-) => {
+export const crispPercentage = (el, percentage, dimension = 'x') => {
   if (el === null) {
     return percentage;
   }

@@ -1,4 +1,3 @@
-// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,15 +19,12 @@
 // THE SOFTWARE.
 import * as React from 'react';
 import {useRef, useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
 
 import {getDynamicPosition, ANCHOR_POSITION} from '../utils/dynamic-position';
 
-import type {MapControlProps} from './use-map-control';
 import {crispPercentage, crispPixel} from '../utils/crisp-pixel';
-import type {PositionType} from '../utils/dynamic-position';
-import type {WebMercatorViewport} from 'viewport-mercator-project';
 
 const propTypes = Object.assign({}, mapControlPropTypes, {
   // Custom className
@@ -73,28 +69,7 @@ const defaultProps = Object.assign({}, mapControlDefaultProps, {
   onClose: () => {}
 });
 
-export type PopupProps = MapControlProps & {
-  className: string,
-  longitude: number,
-  latitude: number,
-  altitude: number,
-  offsetLeft: number,
-  offsetTop: number,
-  tipSize: number,
-  closeButton: boolean,
-  closeOnClick: boolean,
-  anchor: PositionType,
-  dynamicPosition: boolean,
-  sortByDepth: boolean,
-  onClose: Function
-};
-
-function getPosition(
-  props: PopupProps,
-  viewport: WebMercatorViewport,
-  el: null | HTMLElement,
-  [x, y]: [number, number]
-): PositionType {
+function getPosition(props, viewport, el, [x, y]) {
   const {anchor, dynamicPosition, tipSize} = props;
 
   if (el) {
@@ -115,13 +90,7 @@ function getPosition(
   return anchor;
 }
 
-function getContainerStyle(
-  props: PopupProps,
-  viewport: WebMercatorViewport,
-  el: null | HTMLElement,
-  [x, y, z]: [number, number, number],
-  positionType: PositionType
-) {
+function getContainerStyle(props, viewport, el, [x, y, z], positionType) {
   const {offsetLeft, offsetTop, sortByDepth} = props;
   const anchorPosition = ANCHOR_POSITION[positionType];
   const left = x + offsetLeft;
@@ -175,8 +144,8 @@ function onClick(evt, {props, context}) {
  * is almost always triggered by a viewport change, we almost definitely need to
  * recalculate the popup's position when the parent re-renders.
  */
-function Popup(props: PopupProps) {
-  const contentRef = useRef<null | HTMLElement>(null);
+function Popup(props) {
+  const contentRef = useRef(null);
   const {context, containerRef} = useMapControl(props, {onClick});
   const [, setLoaded] = useState(false);
 
@@ -208,6 +177,7 @@ function Popup(props: PopupProps) {
   return (
     <div
       className={`mapboxgl-popup mapboxgl-popup-anchor-${positionType} ${className}`}
+      // @ts-ignore
       style={containerStyle}
       ref={containerRef}
     >

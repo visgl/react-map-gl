@@ -1,4 +1,3 @@
-// @flow
 // Copyright (c) 2015 Uber Technologies, Inc.
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,48 +18,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import {useContext, useEffect, useMemo, useState, useRef} from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import MapContext from './map-context';
 import assert from '../utils/assert';
 import deepEqual from '../utils/deep-equal';
 
-const LAYER_TYPES = {
-  fill: 'fill',
-  line: 'line',
-  symbol: 'symbol',
-  circle: 'circle',
-  'fill-extrusion': 'fill-extrusion',
-  raster: 'raster',
-  background: 'background',
-  heatmap: 'heatmap',
-  hillshade: 'hillshade',
-  sky: 'sky'
-};
+const LAYER_TYPES = [
+  'fill',
+  'line',
+  'symbol',
+  'circle',
+  'fill-extrusion',
+  'raster',
+  'background',
+  'heatmap',
+  'hillshade',
+  'sky'
+];
 
 const propTypes = {
-  type: PropTypes.oneOf(Object.keys(LAYER_TYPES)).isRequired,
+  type: PropTypes.oneOf(LAYER_TYPES).isRequired,
   id: PropTypes.string,
   source: PropTypes.string,
   beforeId: PropTypes.string
 };
 
-export type LayerTypes = $Keys<typeof LAYER_TYPES>;
-
-type LayerProps = {
-  id?: string,
-  type: LayerTypes,
-  source?: string,
-  'source-layer'?: string,
-  beforeId?: string,
-  layout?: any,
-  paint?: any,
-  filter?: Array<mixed>,
-  minzoom?: number,
-  maxzoom?: number
-};
-
 /* eslint-disable complexity, max-statements */
-function diffLayerStyles(map: any, id: string, props: LayerProps, prevProps: LayerProps) {
+function diffLayerStyles(map, id, props, prevProps) {
   const {layout = {}, paint = {}, filter, minzoom, maxzoom, beforeId, ...otherProps} = props;
 
   if (beforeId !== prevProps.beforeId) {
@@ -128,9 +112,9 @@ function updateLayer(map, id, props, prevProps) {
 
 let layerCounter = 0;
 
-function Layer(props: LayerProps) {
+function Layer(props) {
   const context = useContext(MapContext);
-  const propsRef = useRef<LayerProps>({id: props.id, type: props.type});
+  const propsRef = useRef({id: props.id, type: props.type});
   const [, setStyleLoaded] = useState(0);
 
   const id = useMemo(() => props.id || `jsx-layer-${layerCounter++}`, []);

@@ -1,12 +1,9 @@
-// @flow
 import assert from '../assert';
 import TransitionInterpolator from './transition-interpolator';
 
 import {flyToViewport, getFlyToDuration} from 'viewport-mercator-project';
 import {isValid, getEndValueByShortestPath} from './transition-utils';
 import {lerp} from '../math-utils';
-
-import type {MapStateProps} from '../map-state';
 
 const VIEWPORT_TRANSITION_PROPS = ['longitude', 'latitude', 'zoom', 'bearing', 'pitch'];
 const REQUIRED_PROPS = ['latitude', 'longitude', 'zoom', 'width', 'height'];
@@ -17,13 +14,6 @@ const DEFAULT_OPTS = {
   // screenSpeed and maxDuration are used only if specified
 };
 
-type FlyToInterpolatorProps = {
-  curve?: number,
-  speed?: number,
-  screenSpeed?: number,
-  maxDuration?: number
-};
-
 /**
  * This class adapts mapbox-gl-js Map#flyTo animation so it can be used in
  * react/redux architecture.
@@ -32,7 +22,6 @@ type FlyToInterpolatorProps = {
  * "Jarke J. van Wijk and Wim A.A. Nuij"
  */
 export default class ViewportFlyToInterpolator extends TransitionInterpolator {
-  speed: number;
   propNames = VIEWPORT_TRANSITION_PROPS;
 
   /**
@@ -42,15 +31,13 @@ export default class ViewportFlyToInterpolator extends TransitionInterpolator {
    - `props.screenSpeed` (Number, optional) - The average speed of the animation measured in screenfuls per second. Similar to `opts.speed` it linearly affects the duration,  when specified `opts.speed` is ignored.
    - `props.maxDuration` (Number, optional) - Maximum duration in milliseconds, if calculated duration exceeds this value, `0` is returned.
    */
-  constructor(props: FlyToInterpolatorProps = {}) {
+  constructor(props = {}) {
     super();
 
     this.props = Object.assign({}, DEFAULT_OPTS, props);
   }
 
-  props: FlyToInterpolatorProps;
-
-  initializeProps(startProps: MapStateProps, endProps: MapStateProps) {
+  initializeProps(startProps, endProps) {
     const startViewportProps = {};
     const endViewportProps = {};
 
@@ -76,7 +63,7 @@ export default class ViewportFlyToInterpolator extends TransitionInterpolator {
     };
   }
 
-  interpolateProps(startProps: MapStateProps, endProps: MapStateProps, t: number) {
+  interpolateProps(startProps, endProps, t) {
     const viewport = flyToViewport(startProps, endProps, t, this.props);
 
     // Linearly interpolate 'bearing' and 'pitch' if exist.
@@ -88,7 +75,7 @@ export default class ViewportFlyToInterpolator extends TransitionInterpolator {
   }
 
   // computes the transition duration
-  getDuration(startProps: MapStateProps, endProps: MapStateProps) {
+  getDuration(startProps, endProps) {
     let {transitionDuration} = endProps;
     if (transitionDuration === 'auto') {
       // auto calculate duration based on start and end props

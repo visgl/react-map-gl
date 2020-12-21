@@ -1,18 +1,15 @@
-// @flow
 /* global requestAnimationFrame, cancelAnimationFrame */
 import assert from './assert';
-import {TransitionInterpolator, LinearInterpolator} from './transition';
+import {LinearInterpolator} from './transition';
 import MapState from './map-state';
-
-import type {MapStateProps} from './map-state';
 
 const noop = () => {};
 
 // crops the old easing function from x0 to 1 where x0 is the interruption point
 // returns a new easing function with domain [0, 1] and range [0, 1]
-export function cropEasingFunction(easing: number => number, x0: number): number => number {
+export function cropEasingFunction(easing, x0) {
   const y0 = easing(x0);
-  return (t: number) => (1 / (1 - y0)) * (easing(t * (1 - x0) + x0) - y0);
+  return t => (1 / (1 - y0)) * (easing(t * (1 - x0) + x0) - y0);
 }
 
 export const TRANSITION_EVENTS = {
@@ -24,7 +21,7 @@ export const TRANSITION_EVENTS = {
 
 const DEFAULT_PROPS = {
   transitionDuration: 0,
-  transitionEasing: (t: number) => t,
+  transitionEasing: t => t,
   transitionInterpolator: new LinearInterpolator(),
   transitionInterruption: TRANSITION_EVENTS.BREAK,
   onTransitionStart: noop,
@@ -34,43 +31,17 @@ const DEFAULT_PROPS = {
   onStateChange: noop
 };
 
-export type ViewportProps = MapStateProps & {
-  onTransitionStart: Function,
-  onTransitionInterrupt: Function,
-  onTransitionEnd: Function,
-  onViewportChange: Function,
-  onStateChange: Function
-};
-
-type TransitionState = {
-  propsInTransition: any,
-  interactionState: any,
-  startProps: MapStateProps,
-  endProps: MapStateProps,
-
-  duration: number,
-  easing: number => number,
-  interpolator: TransitionInterpolator,
-  interruption: number,
-
-  startTime: number
-};
-
 export default class TransitionManager {
   static defaultProps = DEFAULT_PROPS;
 
-  constructor(props?: ViewportProps, getTime: Function) {
+  constructor(props, getTime) {
     if (props) {
       this.props = props;
     }
     this.time = getTime || Date.now;
   }
 
-  props: ViewportProps;
-  state: TransitionState;
-  time: () => number;
-
-  _animationFrame: ?AnimationFrameID = null;
+  _animationFrame = null;
 
   // Returns current transitioned viewport.
   getViewportInTransition() {
@@ -79,7 +50,7 @@ export default class TransitionManager {
 
   // Process the viewport change, either ignore or trigger a new transiton.
   // Return true if a new transition is triggered, false otherwise.
-  processViewportChange(nextProps: ViewportProps) {
+  processViewportChange(nextProps) {
     const currentProps = this.props;
     // Set this.props here as '_triggerTransition' calls '_updateViewport' that uses this.props.
     this.props = nextProps;
@@ -127,25 +98,25 @@ export default class TransitionManager {
 
   // Helper methods
 
-  _isTransitionInProgress(): boolean {
+  _isTransitionInProgress() {
     return Boolean(this._animationFrame);
   }
 
-  _isTransitionEnabled(props: ViewportProps): boolean {
+  _isTransitionEnabled(props) {
     const {transitionDuration, transitionInterpolator} = props;
     return (
       (transitionDuration > 0 || transitionDuration === 'auto') && Boolean(transitionInterpolator)
     );
   }
 
-  _isUpdateDueToCurrentTransition(props: ViewportProps): boolean {
+  _isUpdateDueToCurrentTransition(props) {
     if (this.state.propsInTransition) {
       return this.state.interpolator.arePropsEqual(props, this.state.propsInTransition);
     }
     return false;
   }
 
-  _shouldIgnoreViewportChange(currentProps: ViewportProps, nextProps: ViewportProps): boolean {
+  _shouldIgnoreViewportChange(currentProps, nextProps) {
     if (!currentProps) {
       return true;
     }
@@ -165,7 +136,7 @@ export default class TransitionManager {
     return true;
   }
 
-  _triggerTransition(startProps: ViewportProps, endProps: ViewportProps) {
+  _triggerTransition(startProps, endProps) {
     assert(this._isTransitionEnabled(endProps));
 
     if (this._animationFrame) {

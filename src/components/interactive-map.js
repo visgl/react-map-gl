@@ -1,7 +1,6 @@
-// @flow
 import * as React from 'react';
 import {PureComponent, createRef} from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
 import {MAPBOX_LIMITS} from '../utils/map-state';
@@ -13,11 +12,6 @@ import MapContext from './map-context';
 import {EventManager} from 'mjolnir.js';
 import MapController from '../utils/map-controller';
 import deprecateWarn from '../utils/deprecate-warn';
-
-import type {ViewState} from '../mapbox/mapbox';
-import type {StaticMapProps} from './static-map';
-import type {MjolnirEvent} from 'mjolnir.js';
-import type {MapContextProps} from './map-context';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -101,13 +95,7 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   controller: PropTypes.instanceOf(MapController)
 });
 
-type State = {
-  isLoaded: boolean,
-  isDragging: boolean,
-  isHovering: boolean
-};
-
-const getDefaultCursor = ({isDragging, isHovering}: State) =>
+const getDefaultCursor = ({isDragging, isHovering}) =>
   isDragging ? 'grabbing' : isHovering ? 'pointer' : 'grab';
 
 const defaultProps = Object.assign(
@@ -121,7 +109,7 @@ const defaultProps = Object.assign(
     onClick: null,
     onNativeClick: null,
     onHover: null,
-    onContextMenu: (event: MouseEvent) => event.preventDefault(),
+    onContextMenu: event => event.preventDefault(),
 
     scrollZoom: true,
     dragPan: true,
@@ -137,57 +125,7 @@ const defaultProps = Object.assign(
   }
 );
 
-type InteractionState = {
-  isDragging: boolean
-};
-
-type MapEvent = MjolnirEvent & {
-  point: Array<number>,
-  lngLat: Array<number>,
-  features: ?Array<any>
-};
-
-export type InteractiveMapProps = StaticMapProps & {
-  onViewStateChange: Function,
-  onViewportChange: Function,
-  onInteractionStateChange: Function,
-  onHover: Function,
-  onClick: Function,
-  onNativeClick: Function,
-  onDblClick: Function,
-  onContextMenu: Function,
-  onMouseDown: Function,
-  onMouseMove: Function,
-  onMouseUp: Function,
-  onTouchStart: Function,
-  onTouchMove: Function,
-  onTouchEnd: Function,
-  onMouseEnter: Function,
-  onMouseLeave: Function,
-  onMouseOut: Function,
-  onWheel: Function,
-
-  transitionDuration: number,
-  transitionInterpolator: any,
-  transitionInterruption: number,
-  transitionEasing: Function,
-
-  scrollZoom: boolean,
-  dragPan: boolean,
-  dragRotate: boolean,
-  doubleClickZoom: boolean,
-  touchZoom: boolean,
-  touchRotate: boolean,
-  keyboard: boolean,
-
-  touchAction: string,
-  clickRadius: number,
-  interactiveLayerIds: Array<string>,
-  getCursor: Function,
-  controller: MapController
-};
-
-export default class InteractiveMap extends PureComponent<InteractiveMapProps, State> {
+export default class InteractiveMap extends PureComponent {
   static supported() {
     return StaticMap.supported();
   }
@@ -195,7 +133,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   static propTypes = propTypes;
   static defaultProps = defaultProps;
 
-  constructor(props: InteractiveMapProps) {
+  constructor(props) {
     super(props);
     // Check for deprecated props
     deprecateWarn(props);
@@ -215,7 +153,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     });
   }
 
-  state: State = {
+  state = {
     // Whether mapbox styles have finished loading
     isLoaded: false,
     // Whether the cursor is down
@@ -255,24 +193,24 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     this._eventManager.destroy();
   }
 
-  _controller: MapController;
-  _eventManager: any;
-  _interactiveContext: MapContextProps;
-  _width: number = 0;
-  _height: number = 0;
-  _eventCanvasRef: {current: null | HTMLDivElement} = createRef();
-  _staticMapRef: {current: null | StaticMap} = createRef();
+  _controller;
+  _eventManager;
+  _interactiveContext;
+  _width = 0;
+  _height = 0;
+  _eventCanvasRef = createRef();
+  _staticMapRef = createRef();
 
   getMap = () => {
     return this._staticMapRef.current ? this._staticMapRef.current.getMap() : null;
   };
 
-  queryRenderedFeatures = (geometry: any, options: any = {}) => {
+  queryRenderedFeatures = (geometry, options = {}) => {
     const map = this.getMap();
     return map && map.queryRenderedFeatures(geometry, options);
   };
 
-  _setControllerProps(props: InteractiveMapProps) {
+  _setControllerProps(props) {
     props = Object.assign({}, props, props.viewState, {
       isInteractive: Boolean(props.onViewStateChange || props.onViewportChange),
       onViewportChange: this._onViewportChange,
@@ -285,7 +223,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     this._controller.setOptions(props);
   }
 
-  _getFeatures({pos, radius}: {pos: Array<number>, radius: number}) {
+  _getFeatures({pos, radius}) {
     let features;
     const queryParams = {};
     const map = this.getMap();
@@ -305,7 +243,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     return features;
   }
 
-  _onInteractionStateChange = (interactionState: InteractionState) => {
+  _onInteractionStateChange = interactionState => {
     const {isDragging = false} = interactionState;
     if (isDragging !== this.state.isDragging) {
       this._updateInteractiveContext({isDragging});
@@ -318,22 +256,18 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     }
   };
 
-  _updateInteractiveContext(updatedContext: $Shape<MapContextProps>) {
+  _updateInteractiveContext(updatedContext) {
     this._interactiveContext = Object.assign({}, this._interactiveContext, updatedContext);
   }
 
-  _onResize = ({width, height}: {width: number, height: number}) => {
+  _onResize = ({width, height}) => {
     this._width = width;
     this._height = height;
     this._setControllerProps(this.props);
     this.props.onResize({width, height});
   };
 
-  _onViewportChange = (
-    viewState: ViewState,
-    interactionState: InteractionState,
-    oldViewState: ViewState
-  ) => {
+  _onViewportChange = (viewState, interactionState, oldViewState) => {
     const {onViewStateChange, onViewportChange} = this.props;
 
     if (onViewStateChange) {
@@ -345,7 +279,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   };
 
   /* Generic event handling */
-  _normalizeEvent(event: MapEvent) {
+  _normalizeEvent(event) {
     if (event.lngLat) {
       // Already unprojected
       return event;
@@ -357,7 +291,6 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     const pos = [x, y];
 
     const viewport = new WebMercatorViewport(
-      // $FlowFixMe
       Object.assign({}, this.props, {
         width: this._width,
         height: this._height
@@ -370,12 +303,12 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     return event;
   }
 
-  _onLoad = (event: MapEvent) => {
+  _onLoad = event => {
     this.setState({isLoaded: true});
     this.props.onLoad(event);
   };
 
-  _onEvent = (callbackName: string, event: MapEvent) => {
+  _onEvent = (callbackName, event) => {
     const func = this.props[callbackName];
     if (func) {
       func(this._normalizeEvent(event));
@@ -383,7 +316,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   };
 
   /* Special case event handling */
-  _onPointerDown = (event: MapEvent) => {
+  _onPointerDown = event => {
     switch (event.pointerType) {
       case 'touch':
         this._onEvent('onTouchStart', event);
@@ -394,7 +327,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     }
   };
 
-  _onPointerUp = (event: MapEvent) => {
+  _onPointerUp = event => {
     switch (event.pointerType) {
       case 'touch':
         this._onEvent('onTouchEnd', event);
@@ -406,7 +339,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
   };
 
   // eslint-disable-next-line complexity
-  _onPointerMove = (event: MapEvent) => {
+  _onPointerMove = event => {
     switch (event.pointerType) {
       case 'touch':
         this._onEvent('onTouchMove', event);
@@ -448,7 +381,7 @@ export default class InteractiveMap extends PureComponent<InteractiveMapProps, S
     }
   };
 
-  _onClick = (event: MapEvent) => {
+  _onClick = event => {
     const {onClick, onNativeClick, onDblClick, doubleClickZoom} = this.props;
     let callbacks = [];
     const isDoubleClickEnabled = onDblClick || doubleClickZoom;
