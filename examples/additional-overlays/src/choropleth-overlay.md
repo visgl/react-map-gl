@@ -21,10 +21,10 @@ const ChoroplethOverlay = require('./choropleth-overlay');
 ## Props
 
 #### features
-An [ImmutableJS](https://facebook.github.io/immutable-js/) [List](https://facebook.github.io/immutable-js/docs/#/List) of GeoJSON features.
+An array of GeoJSON features.
 
 ```js
-const features = Immutable.fromJS([
+const features = [
   {
     type: 'Feature',
     geometry: {
@@ -33,7 +33,7 @@ const features = Immutable.fromJS([
     }
   },
   ...
-]);
+];
 ```
 
 #### valueAccessor

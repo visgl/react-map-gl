@@ -1,6 +1,6 @@
-# Example: Draw Polygon
+# Example: DeckGL Overlay
 
-Demonstrates how to use [react-map-gl-draw](https://github.com/uber/nebula.gl/tree/master/modules/react-map-gl-draw) to draw polygons with react-map-gl.
+This example demonstrates using [deck.gl](https://deck.gl) to render a data overlay on top of react-map-gl.
 
 ## Usage
 

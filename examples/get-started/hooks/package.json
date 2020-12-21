@@ -5,7 +5,7 @@
   "dependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
-    "react-map-gl": "^5.1.0"
+    "react-map-gl": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

@@ -1,15 +1,12 @@
-## Example: Heatmap layer
+# Example: Heatmap layer
 
-This example showcases how to add a heatmap similar as described in https://docs.mapbox.com/mapbox-gl-js/example/heatmap-layer/.
+This app reproduces Mapbox's [Create a heatmap layer](https://docs.mapbox.com/mapbox-gl-js/example/heatmap-layer/) example.
 
-### How to run `heatmap layer example`?
+## Usage
 
-Install dependencies (only once)
-```
+To run this example, you need a [Mapbox token](http://visgl.github.io/react-map-gl/docs/get-started/mapbox-tokens). You can either set it as `MAPBOX_TOKEN` in `src/app.js`, or set a `MapboxAccessToken` environment variable in the command line.
+
+```bash
 npm i
+npm run start
 ```
-and run example
-```
-MapboxAccessToken={YOUR_MAPBOX_TOKEN} npm run start-local
-```
-which will open and point your browser to http://localhost:8081/
