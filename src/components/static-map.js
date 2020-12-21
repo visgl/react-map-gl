@@ -137,7 +137,7 @@ const StaticMap = forwardRef((props, ref) => {
       width: size[0],
       height: size[1],
       container: mapDivRef.current,
-      onError: (evt) => {
+      onError: evt => {
         const statusCode = (evt.error && evt.error.status) || evt.status;
         if (statusCode === UNAUTHORIZED_ERROR_CODE && accessTokenValid) {
           // Mapbox throws unauthorized error - invalid token
@@ -153,7 +153,7 @@ const StaticMap = forwardRef((props, ref) => {
       context.setMap(mapbox.getMap());
     }
 
-    const resizeObserver = new ResizeObserver((entries) => {
+    const resizeObserver = new ResizeObserver(entries => {
       if (entries[0].contentRect) {
         const {width, height} = entries[0].contentRect;
         setSize([width, height]);

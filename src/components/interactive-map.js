@@ -108,7 +108,7 @@ const defaultProps = Object.assign(
     onClick: null,
     onNativeClick: null,
     onHover: null,
-    onContextMenu: (event) => event.preventDefault(),
+    onContextMenu: event => event.preventDefault(),
 
     scrollZoom: true,
     dragPan: true,
@@ -261,7 +261,7 @@ function onPointerClick(event) {
     event = normalizeEvent.call(this, event);
     // backward compatibility: v3 `onClick` interface
     event.features = getFeatures.call(this, event.point);
-    callbacks.forEach((cb) => cb(event));
+    callbacks.forEach(cb => cb(event));
   }
 }
 /* End of event handers */
@@ -289,7 +289,7 @@ const InteractiveMap = forwardRef((props, ref) => {
   const thisRef = _thisRef.current;
   thisRef.props = props;
   thisRef.map = staticMapRef.current && staticMapRef.current.getMap();
-  thisRef.setState = (newState) => {
+  thisRef.setState = newState => {
     const state = Object.assign(thisRef.state, newState);
     eventCanvasRef.current.style.cursor = props.getCursor(state);
   };
@@ -306,7 +306,7 @@ const InteractiveMap = forwardRef((props, ref) => {
   };
   context.onViewportChange = handleViewportChange;
 
-  const handleInteractionStateChange = (interactionState) => {
+  const handleInteractionStateChange = interactionState => {
     const {isDragging = false} = interactionState;
     if (isDragging !== thisRef.state.isDragging) {
       thisRef.setState({isDragging});
