@@ -28,7 +28,7 @@ function Root() {
       mapboxApiAccessToken={MAPBOX_TOKEN}
     >
       <NavigationControl
-        // showCompass="true" // should generate flow error
+      // showCompass="true" // should generate flow error
       />
     </MapGL>
   );
