@@ -29,11 +29,14 @@ export default function App() {
     maxPitch: 85
   });
 
-  const updateSettings = useCallback((name, value) =>
-    setSettings(s => ({
-      ...s,
-      [name]: value
-    })), []);
+  const updateSettings = useCallback(
+    (name, value) =>
+      setSettings(s => ({
+        ...s,
+        [name]: value
+      })),
+    []
+  );
 
   return (
     <>
