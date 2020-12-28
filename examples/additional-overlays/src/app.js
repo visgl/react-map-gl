@@ -54,7 +54,7 @@ export default function App() {
       width="100vw"
       height="100vh"
       mapStyle="mapbox://styles/mapbox/dark-v9"
-      onViewportChange={v => setViewport(v)}
+      onViewportChange={setViewport}
       mapboxApiAccessToken={MAPBOX_TOKEN}
     >
       <ChoroplethOverlay

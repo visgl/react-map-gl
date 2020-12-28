@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useEffect, useMemo} from 'react';
+import {useState, useEffect, useMemo, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Source, Layer} from 'react-map-gl';
 import ControlPanel from './control-panel';
@@ -30,7 +30,7 @@ export default function App() {
       .then(json => setAllData(json));
   }, []);
 
-  const onHover = event => {
+  const onHover = useCallback(event => {
     const {
       features,
       srcEvent: {offsetX, offsetY}
@@ -46,7 +46,7 @@ export default function App() {
           }
         : null
     );
-  };
+  }, []);
 
   const data = useMemo(() => {
     return allData && updatePercentiles(allData, f => f.properties.income[year]);
@@ -59,7 +59,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/light-v9"
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         interactiveLayerIds={['data']}
         onHover={onHover}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Marker, NavigationControl} from 'react-map-gl';
 
@@ -29,21 +29,21 @@ export default function App() {
   });
   const [events, logEvents] = useState({});
 
-  const onMarkerDragStart = event => {
-    logEvents({...events, onDragStart: event.lngLat});
-  };
+  const onMarkerDragStart = useCallback(event => {
+    logEvents(_events => ({..._events, onDragStart: event.lngLat}));
+  }, []);
 
-  const onMarkerDrag = event => {
-    logEvents({...events, onDrag: event.lngLat});
-  };
+  const onMarkerDrag = useCallback(event => {
+    logEvents(_events => ({..._events, onDrag: event.lngLat}));
+  }, []);
 
-  const onMarkerDragEnd = event => {
-    logEvents({...events, onDragEnd: event.lngLat});
+  const onMarkerDragEnd = useCallback(event => {
+    logEvents(_events => ({..._events, onDragEnd: event.lngLat}));
     setMarker({
       longitude: event.lngLat[0],
       latitude: event.lngLat[1]
     });
-  };
+  }, []);
 
   return (
     <>
@@ -52,7 +52,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={TOKEN}
       >
         <Marker

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useMemo} from 'react';
+import {useState, useMemo, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Popup, Source, Layer} from 'react-map-gl';
 import ControlPanel from './control-panel';
@@ -19,14 +19,14 @@ export default function App() {
   });
   const [hoverInfo, setHoverInfo] = useState(null);
 
-  const onHover = event => {
+  const onHover = useCallback(event => {
     const county = event.features && event.features[0];
     setHoverInfo({
       longitude: event.lngLat[0],
       latitude: event.lngLat[1],
       countyName: county && county.properties.COUNTY
     });
-  };
+  }, []);
 
   const selectedCounty = (hoverInfo && hoverInfo.countyName) || '';
   const filter = useMemo(() => ['in', 'COUNTY', selectedCounty], [selectedCounty]);
@@ -39,7 +39,7 @@ export default function App() {
         height="100%"
         mapStyle="mapbox://styles/mapbox/light-v9"
         mapboxApiAccessToken={MAPBOX_TOKEN}
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
         onHover={onHover}
         interactiveLayerIds={['counties']}
       >

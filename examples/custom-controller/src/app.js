@@ -1,6 +1,6 @@
 /* global window */
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 
@@ -10,7 +10,7 @@ const customController = new MapController();
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default function App(props) {
+export default function App() {
   const [viewport, setViewport] = useState({
     longitude: -122.45,
     latitude: 37.78,
@@ -24,9 +24,9 @@ export default function App(props) {
     longPress: false
   });
 
-  const onSettingsChange = (name, value) => {
-    setSettings({...settings, [name]: value});
-  };
+  const onSettingsChange = useCallback((name, value) => {
+    setSettings(s => ({...s, [name]: value}));
+  }, []);
 
   return (
     <>
@@ -39,7 +39,7 @@ export default function App(props) {
         invertZoom={settings.invertZoom}
         invertPan={settings.invertPan}
         onPress={settings.longPress ? () => window.alert('pressed') : null} // eslint-disable-line no-alert
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
       <ControlPanel settings={settings} onChange={onSettingsChange} />

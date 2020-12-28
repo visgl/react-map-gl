@@ -30,7 +30,7 @@ export default function App() {
       width="100%"
       height="100%"
       maxPitch={85}
-      onViewportChange={v => setViewport(v)}
+      onViewportChange={setViewport}
       mapboxApiAccessToken={TOKEN}
     >
       <DeckGL viewState={viewport} layers={[arcLayer]} />

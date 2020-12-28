@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 import ControlPanel from './control-panel';
@@ -29,11 +29,11 @@ export default function App() {
     maxPitch: 85
   });
 
-  const updateSettings = (name, value) =>
-    setSettings({
-      ...settings,
+  const updateSettings = useCallback((name, value) =>
+    setSettings(s => ({
+      ...s,
       [name]: value
-    });
+    })), []);
 
   return (
     <>
@@ -43,7 +43,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
         onInteractionStateChange={s => setInteractionState({...s})}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />

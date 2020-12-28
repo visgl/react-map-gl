@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
+import {useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {extent} from 'd3-array';
 import {scaleLinear} from 'd3-scale';
@@ -65,7 +66,7 @@ function drawFeatures(ctx, path, props) {
 }
 
 export default function ChoroplethOverlay(props) {
-  const redraw = ({width, height, ctx, isDragging, project, unproject}) => {
+  const redraw = useCallback(({width, height, ctx, isDragging, project, unproject}) => {
     ctx.clearRect(0, 0, width, height);
 
     function projectPoint(lon, lat) {
@@ -80,7 +81,7 @@ export default function ChoroplethOverlay(props) {
       const path = geoPath().projection(transform).context(ctx);
       drawFeatures(ctx, path, props);
     }
-  };
+  }, []);
 
   return <CanvasOverlay redraw={redraw} />;
 }

@@ -62,10 +62,10 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={TOKEN}
       >
-        <Pins data={CITIES} onClick={evt => setPopupInfo(evt)} />
+        <Pins data={CITIES} onClick={setPopupInfo} />
 
         {popupInfo && (
           <Popup
@@ -74,7 +74,7 @@ export default function App() {
             longitude={popupInfo.longitude}
             latitude={popupInfo.latitude}
             closeOnClick={false}
-            onClose={() => setPopupInfo(null)}
+            onClose={setPopupInfo}
           >
             <CityInfo info={popupInfo} />
           </Popup>

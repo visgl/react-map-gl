@@ -25,7 +25,7 @@ export default function BartMap(props) {
       mapStyle={props.mapStyle}
       width="100%"
       height="100%"
-      onViewportChange={v => setViewport(v)}
+      onViewportChange={setViewport}
       onLoad={onMapLoad}
       reuseMaps
     >

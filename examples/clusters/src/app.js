@@ -46,7 +46,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         interactiveLayerIds={[clusterLayer.id]}
         onClick={onClick}

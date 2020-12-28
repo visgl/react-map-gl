@@ -1,6 +1,6 @@
 /* global window */
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 import ControlPanel from './control-panel';
@@ -22,17 +22,17 @@ export default function App() {
   });
   const [interactiveLayerIds, setInteractiveLayerIds] = useState([]);
 
-  const onInteractiveLayersChange = layerFilter => {
+  const onInteractiveLayersChange = useCallback(layerFilter => {
     setInteractiveLayerIds(MAP_STYLE.layers.map(layer => layer.id).filter(layerFilter));
-  };
+  }, []);
 
-  const onClick = event => {
+  const onClick = useCallback(event => {
     const feature = event.features && event.features[0];
 
     if (feature) {
       window.alert(`Clicked layer ${feature.layer.id}`); // eslint-disable-line no-alert
     }
-  };
+  }, []);
 
   return (
     <>
@@ -45,7 +45,7 @@ export default function App() {
         onClick={onClick}
         getCursor={getCursor}
         interactiveLayerIds={interactiveLayerIds}
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />
       <ControlPanel onChange={onInteractiveLayersChange} />

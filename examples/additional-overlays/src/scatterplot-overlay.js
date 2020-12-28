@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
+import {useCallback} from 'react';
 import PropTypes from 'prop-types';
 
 import {CanvasOverlay} from 'react-map-gl';
@@ -49,7 +50,7 @@ const defaultProps = {
 
 export default function ScatterplotOverlay(props) {
   /* eslint-disable max-statements */
-  const redraw = ({width, height, ctx, isDragging, project, unproject}) => {
+  const redraw = useCallback(({width, height, ctx, isDragging, project, unproject}) => {
     const {
       dotRadius,
       dotFill,
@@ -79,7 +80,7 @@ export default function ScatterplotOverlay(props) {
         }
       }
     }
-  };
+  }, []);
   /* eslint-enable max-statements */
 
   return <CanvasOverlay redraw={redraw} />;

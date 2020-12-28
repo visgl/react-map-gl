@@ -64,7 +64,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       >
         {data && (
@@ -78,8 +78,8 @@ export default function App() {
         endTime={timeRange[1]}
         selectedTime={selectedTime}
         allDays={allDays}
-        onChangeTime={time => selectTime(time)}
-        onChangeAllDays={on => useAllDays(on)}
+        onChangeTime={selectTime}
+        onChangeAllDays={useAllDays}
       />
     </>
   );

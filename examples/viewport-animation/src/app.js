@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL, {FlyToInterpolator} from 'react-map-gl';
 
@@ -16,7 +16,7 @@ export default function App() {
     pitch: 0
   });
 
-  const onSelectCity = ({longitude, latitude}) => {
+  const onSelectCity = useCallback(({longitude, latitude}) => {
     setViewport({
       longitude,
       latitude,
@@ -24,7 +24,7 @@ export default function App() {
       transitionInterpolator: new FlyToInterpolator({speed: 1.2}),
       transitionDuration: 'auto'
     });
-  };
+  }, []);
 
   return (
     <>
@@ -33,7 +33,7 @@ export default function App() {
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/light-v9"
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
         dragRotate={false}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       />

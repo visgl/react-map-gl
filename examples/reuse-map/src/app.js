@@ -20,7 +20,7 @@ export default function App() {
 
   return (
     <>
-      <button className="toggle-btn" onClick={toggleMap.bind(this)}>
+      <button className="toggle-btn" onClick={toggleMap}>
         Toggle Map
       </button>
       {showMap && <BartMap mapStyle={mapStyle} />}

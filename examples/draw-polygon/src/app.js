@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useRef} from 'react';
+import {useState, useRef, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 import {Editor, DrawPolygonMode, EditingMode} from 'react-map-gl-draw';
@@ -19,21 +19,21 @@ export default function App() {
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(null);
   const editorRef = useRef(null);
 
-  const onSelect = options => {
+  const onSelect = useCallback(options => {
     setSelectedFeatureIndex(options && options.selectedFeatureIndex);
-  };
+  }, []);
 
-  const onDelete = () => {
+  const onDelete = useCallback(() => {
     if (selectedFeatureIndex !== null && selectedFeatureIndex >= 0) {
       editorRef.current.deleteFeatures(selectedFeatureIndex);
     }
-  };
+  }, [selectedFeatureIndex]);
 
-  const onUpdate = ({editType}) => {
+  const onUpdate = useCallback(({editType}) => {
     if (editType === 'addFeature') {
       setMode(new EditingMode());
     }
-  };
+  }, []);
 
   const drawTools = (
     <div className="mapboxgl-ctrl-top-left">
@@ -64,7 +64,7 @@ export default function App() {
         height="100%"
         mapStyle="mapbox://styles/mapbox/satellite-v9"
         mapboxApiAccessToken={TOKEN}
-        onViewportChange={v => setViewport(v)}
+        onViewportChange={setViewport}
       >
         <Editor
           ref={editorRef}
