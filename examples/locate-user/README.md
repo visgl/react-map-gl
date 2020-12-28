@@ -1,12 +1,12 @@
-<div align="center">
-  <img src="https://avatars3.githubusercontent.com/u/2105791?v=3&s=200" />
-</div>
+# Example: Locate User 
 
-## Example: Locate User 
+Demonstrates how to automatically locate the user and track their current location with react-map-gl.
 
-Demonstrates how to locate the user and track its current location with react-map-gl.
+## Usage
 
-```
-    npm install
-    npm start
+To run this example, you need a [Mapbox token](http://visgl.github.io/react-map-gl/docs/get-started/mapbox-tokens). You can either set it as `MAPBOX_TOKEN` in `src/app.js`, or set a `MapboxAccessToken` environment variable in the command line.
+
+```bash
+npm i
+npm run start
 ```

@@ -18,10 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
-import {PureComponent} from 'react';
+import {useCallback} from 'react';
 import PropTypes from 'prop-types';
 
-import Immutable from 'immutable';
 import {CanvasOverlay} from 'react-map-gl';
 
 function round(x, n) {
@@ -30,7 +29,7 @@ function round(x, n) {
 }
 
 const propTypes = {
-  locations: PropTypes.instanceOf(Immutable.List).isRequired,
+  locations: PropTypes.array.isRequired,
   lngLatAccessor: PropTypes.func,
   renderWhileDragging: PropTypes.bool,
   globalOpacity: PropTypes.number,
@@ -40,7 +39,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  lngLatAccessor: location => [location.get(0), location.get(1)],
+  lngLatAccessor: location => location,
   renderWhileDragging: true,
   dotRadius: 4,
   dotFill: '#1FBAD6',
@@ -49,9 +48,9 @@ const defaultProps = {
   compositeOperation: 'source-over'
 };
 
-export default class ScatterplotOverlay extends PureComponent {
+export default function ScatterplotOverlay(props) {
   /* eslint-disable max-statements */
-  _redraw = ({width, height, ctx, isDragging, project, unproject}) => {
+  const redraw = useCallback(({width, height, ctx, isDragging, project, unproject}) => {
     const {
       dotRadius,
       dotFill,
@@ -59,12 +58,12 @@ export default class ScatterplotOverlay extends PureComponent {
       renderWhileDragging,
       locations,
       lngLatAccessor
-    } = this.props;
+    } = props;
 
     ctx.clearRect(0, 0, width, height);
     ctx.globalCompositeOperation = compositeOperation;
 
-    if ((renderWhileDragging || !isDragging) && locations) {
+    if (renderWhileDragging || !isDragging) {
       for (const location of locations) {
         const pixel = project(lngLatAccessor(location));
         const pixelRounded = [round(pixel[0], 1), round(pixel[1], 1)];
@@ -81,14 +80,11 @@ export default class ScatterplotOverlay extends PureComponent {
         }
       }
     }
-  };
+  }, []);
   /* eslint-enable max-statements */
 
-  render() {
-    return <CanvasOverlay redraw={this._redraw} />;
-  }
+  return <CanvasOverlay redraw={redraw} />;
 }
 
-ScatterplotOverlay.displayName = 'ScatterplotOverlay';
 ScatterplotOverlay.propTypes = propTypes;
 ScatterplotOverlay.defaultProps = defaultProps;

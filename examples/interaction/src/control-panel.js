@@ -1,100 +1,88 @@
 import * as React from 'react';
-import {PureComponent} from 'react';
 
 const camelPattern = /(^|[A-Z])[a-z]*/g;
+function formatSettingName(name) {
+  return name.match(camelPattern).join(' ');
+}
 
-export default class ControlPanel extends PureComponent {
-  _formatSettingName(name) {
-    return name.match(camelPattern).join(' ');
-  }
+function Checkbox({name, value, onChange}) {
+  return (
+    <div className="input">
+      <label>{formatSettingName(name)}</label>
+      <input type="checkbox" checked={value} onChange={evt => onChange(name, evt.target.checked)} />
+    </div>
+  );
+}
 
-  _renderCheckbox(name, value) {
-    return (
-      <div key={name} className="input">
-        <label>{this._formatSettingName(name)}</label>
-        <input
-          type="checkbox"
-          checked={value}
-          onChange={evt => this.props.onChange(name, evt.target.checked)}
-        />
-      </div>
-    );
-  }
+function NumericInput({name, value, onChange}) {
+  return (
+    <div className="input">
+      <label>{formatSettingName(name)}</label>
+      <input
+        type="number"
+        value={value}
+        onChange={evt => onChange(name, Number(evt.target.value))}
+      />
+    </div>
+  );
+}
 
-  _renderNumericInput(name, value) {
-    return (
-      <div key={name} className="input">
-        <label>{this._formatSettingName(name)}</label>
-        <input
-          type="number"
-          value={value}
-          onChange={evt => this.props.onChange(name, Number(evt.target.value))}
-        />
-      </div>
-    );
-  }
+function ControlPanel(props) {
+  const {settings, interactionState, onChange} = props;
 
-  _renderSetting(name, value) {
+  const renderSetting = (name, value) => {
     switch (typeof value) {
       case 'boolean':
-        return this._renderCheckbox(name, value);
+        return <Checkbox key={name} name={name} value={value} onChange={onChange} />;
       case 'number':
-        return this._renderNumericInput(name, value);
+        return <NumericInput key={name} name={name} value={value} onChange={onChange} />;
       default:
         return null;
     }
-  }
+  };
 
-  _renderInteractionStates({isDragging, isPanning, isRotating, isZooming, inTransition}) {
-    return (
+  return (
+    <div className="control-panel">
+      <h3>Limit Map Interaction</h3>
+      <p>Turn interactive features off/on.</p>
+      <div className="source-link">
+        <a
+          href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/interaction"
+          target="_new"
+        >
+          View Code ↗
+        </a>
+      </div>
+      <hr />
+
+      {Object.keys(settings).map(name => renderSetting(name, settings[name]))}
+
+      <hr />
+
       <div>
         <div>
           <label>Dragging</label>
-          <span>{isDragging && 'Yes'}</span>
+          <span>{interactionState.isDragging && 'Yes'}</span>
         </div>
         <div>
           <label>Transition</label>
-          <span>{inTransition && 'Yes'}</span>
+          <span>{interactionState.inTransition && 'Yes'}</span>
         </div>
         <div>
           <label>Panning</label>
-          <span>{isPanning && 'Yes'}</span>
+          <span>{interactionState.isPanning && 'Yes'}</span>
         </div>
         <div>
           <label>Rotating</label>
-          <span>{isRotating && 'Yes'}</span>
+          <span>{interactionState.isRotating && 'Yes'}</span>
         </div>
         <div>
           <label>Zooming</label>
-          <span>{isZooming && 'Yes'}</span>
+          <span>{interactionState.isZooming && 'Yes'}</span>
         </div>
       </div>
-    );
-  }
-
-  render() {
-    const {settings, interactionState} = this.props;
-
-    return (
-      <div className="control-panel">
-        <h3>Limit Map Interaction</h3>
-        <p>Turn interactive features off/on.</p>
-        <div className="source-link">
-          <a
-            href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/interaction"
-            target="_new"
-          >
-            View Code ↗
-          </a>
-        </div>
-        <hr />
-
-        {Object.keys(settings).map(name => this._renderSetting(name, settings[name]))}
-
-        <hr />
-
-        {this._renderInteractionStates(interactionState)}
-      </div>
-    );
-  }
+    </div>
+  );
 }
+
+export default React.memo(ControlPanel);

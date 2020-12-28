@@ -1,6 +1,6 @@
 /* global window */
 import * as React from 'react';
-import {Component} from 'react';
+import {useState, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 import ControlPanel from './control-panel';
@@ -8,62 +8,49 @@ import MAP_STYLE from '../../map-style-basic-v8.json';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default class App extends Component {
-  state = {
-    mapStyle: '',
-    viewport: {
-      latitude: 37.773,
-      longitude: -122.481,
-      zoom: 15.5,
-      bearing: 0,
-      pitch: 0
-    },
-    interactiveLayerIds: []
-  };
+function getCursor({isHovering, isDragging}) {
+  return isDragging ? 'grabbing' : isHovering ? 'pointer' : 'default';
+}
 
-  _onViewportChange = viewport => this.setState({viewport});
+export default function App() {
+  const [viewport, setViewport] = useState({
+    longitude: -122.48,
+    latitude: 37.78,
+    zoom: 15.5,
+    bearing: 0,
+    pitch: 0
+  });
+  const [interactiveLayerIds, setInteractiveLayerIds] = useState([]);
 
-  _onInteractiveLayersChange = layerFilter => {
-    this.setState({
-      interactiveLayerIds: MAP_STYLE.layers.map(layer => layer.id).filter(layerFilter)
-    });
-  };
+  const onInteractiveLayersChange = useCallback(layerFilter => {
+    setInteractiveLayerIds(MAP_STYLE.layers.map(layer => layer.id).filter(layerFilter));
+  }, []);
 
-  _onClick = event => {
+  const onClick = useCallback(event => {
     const feature = event.features && event.features[0];
 
     if (feature) {
       window.alert(`Clicked layer ${feature.layer.id}`); // eslint-disable-line no-alert
     }
-  };
+  }, []);
 
-  _getCursor = ({isHovering, isDragging}) => {
-    return isHovering ? 'pointer' : 'default';
-  };
-
-  render() {
-    const {viewport, interactiveLayerIds} = this.state;
-
-    return (
+  return (
+    <>
       <MapGL
         {...viewport}
         width="100%"
         height="100%"
         mapStyle={MAP_STYLE}
         clickRadius={2}
-        onClick={this._onClick}
-        getCursor={this._getCursor}
+        onClick={onClick}
+        getCursor={getCursor}
         interactiveLayerIds={interactiveLayerIds}
-        onViewportChange={this._onViewportChange}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
-      >
-        <ControlPanel
-          containerComponent={this.props.containerComponent}
-          onChange={this._onInteractiveLayersChange}
-        />
-      </MapGL>
-    );
-  }
+      />
+      <ControlPanel onChange={onInteractiveLayersChange} />
+    </>
+  );
 }
 
 export function renderToDom(container) {

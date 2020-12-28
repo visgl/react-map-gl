@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {PureComponent} from 'react';
+import {useState, useEffect} from 'react';
 
 // Layer id patterns by category
 const layerSelector = {
@@ -18,64 +18,51 @@ function getLayerFilter(categories, layerId) {
   return false;
 }
 
-export default class StyleControls extends PureComponent {
-  state = {
-    categories: {
-      parks: true,
-      buildings: true,
-      roads: true,
-      labels: true
-    }
+function Checkbox({name, value, onChange}) {
+  return (
+    <div key={name} className="input">
+      <label>{name}</label>
+      <input type="checkbox" checked={value} onChange={evt => onChange(name, evt.target.checked)} />
+    </div>
+  );
+}
+
+function StyleControls(props) {
+  const [categories, setCategories] = useState({
+    parks: true,
+    buildings: true,
+    roads: true,
+    labels: true
+  });
+
+  useEffect(() => {
+    const filter = layerId => getLayerFilter(categories, layerId);
+    props.onChange(filter);
+  }, [categories]);
+
+  const toggleLayer = (name, on) => {
+    setCategories({...categories, [name]: on});
   };
 
-  componentDidMount() {
-    const filter = getLayerFilter.bind(null, this.state.categories);
-    this.props.onChange(filter);
-  }
-
-  _onToggleLayer(name, event) {
-    const categories = {
-      ...this.state.categories,
-      [name]: event.target.checked
-    };
-    this.setState({categories});
-
-    const filter = getLayerFilter.bind(null, categories);
-    this.props.onChange(filter);
-  }
-
-  _renderLayerControl(name) {
-    const {categories} = this.state;
-
-    return (
-      <div key={name} className="input">
-        <label>{name}</label>
-        <input
-          type="checkbox"
-          checked={categories[name]}
-          onChange={this._onToggleLayer.bind(this, name)}
-        />
+  return (
+    <div className="control-panel">
+      <h3>Custom Cursor</h3>
+      <p>Customize the cursor based on interactivity.</p>
+      <div className="source-link">
+        <a
+          href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/custom-cursor"
+          target="_new"
+        >
+          View Code ↗
+        </a>
       </div>
-    );
-  }
-
-  render() {
-    return (
-      <div className="control-panel">
-        <h3>Custom Cursor</h3>
-        <p>Customize the cursor based on interactivity.</p>
-        <div className="source-link">
-          <a
-            href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/custom-cursor"
-            target="_new"
-          >
-            View Code ↗
-          </a>
-        </div>
-        <hr />
-        <p>Clickable layers</p>
-        {Object.keys(layerSelector).map(name => this._renderLayerControl(name))}
-      </div>
-    );
-  }
+      <hr />
+      <p>Clickable layers</p>
+      {Object.keys(layerSelector).map(name => (
+        <Checkbox key={name} name={name} value={categories[name]} onChange={toggleLayer} />
+      ))}
+    </div>
+  );
 }
+
+export default React.memo(StyleControls);

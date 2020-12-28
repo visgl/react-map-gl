@@ -21,7 +21,7 @@ function Root() {
       width="100vw"
       height="100vh"
       mapStyle="mapbox://styles/mapbox/dark-v9"
-      onViewportChange={nextViewport => setViewport(nextViewport)}
+      onViewportChange={setViewport}
       mapboxApiAccessToken={MAPBOX_TOKEN}
     />
   );

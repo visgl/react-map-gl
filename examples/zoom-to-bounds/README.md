@@ -1,12 +1,12 @@
-<div align="center">
-  <img src="https://avatars3.githubusercontent.com/u/2105791?v=3&s=200" />
-</div>
-
-## Example: Zoom To Bounds
+# Example: Zoom To Bounds
 
 Demonstrates how to zoom to a bounding box with react-map-gl.
 
-```
-    npm install
-    npm start
+## Usage
+
+To run this example, you need a [Mapbox token](http://visgl.github.io/react-map-gl/docs/get-started/mapbox-tokens). You can either set it as `MAPBOX_TOKEN` in `src/app.js`, or set a `MapboxAccessToken` environment variable in the command line.
+
+```bash
+npm i
+npm run start
 ```

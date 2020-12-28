@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Component} from 'react';
+import {useState, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Marker, NavigationControl} from 'react-map-gl';
 
@@ -15,66 +15,44 @@ const navStyle = {
   padding: '10px'
 };
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      viewport: {
-        latitude: 37.785164,
-        longitude: -100,
-        zoom: 3.5,
-        bearing: 0,
-        pitch: 0
-      },
-      marker: {
-        latitude: 37.785164,
-        longitude: -100
-      },
-      events: {}
-    };
-  }
+export default function App() {
+  const [viewport, setViewport] = useState({
+    latitude: 40,
+    longitude: -100,
+    zoom: 3.5,
+    bearing: 0,
+    pitch: 0
+  });
+  const [marker, setMarker] = useState({
+    latitude: 40,
+    longitude: -100
+  });
+  const [events, logEvents] = useState({});
 
-  _updateViewport = viewport => {
-    this.setState({viewport});
-  };
+  const onMarkerDragStart = useCallback(event => {
+    logEvents(_events => ({..._events, onDragStart: event.lngLat}));
+  }, []);
 
-  _logDragEvent(name, event) {
-    this.setState({
-      events: {
-        ...this.state.events,
-        [name]: event.lngLat
-      }
+  const onMarkerDrag = useCallback(event => {
+    logEvents(_events => ({..._events, onDrag: event.lngLat}));
+  }, []);
+
+  const onMarkerDragEnd = useCallback(event => {
+    logEvents(_events => ({..._events, onDragEnd: event.lngLat}));
+    setMarker({
+      longitude: event.lngLat[0],
+      latitude: event.lngLat[1]
     });
-  }
+  }, []);
 
-  _onMarkerDragStart = event => {
-    this._logDragEvent('onDragStart', event);
-  };
-
-  _onMarkerDrag = event => {
-    this._logDragEvent('onDrag', event);
-  };
-
-  _onMarkerDragEnd = event => {
-    this._logDragEvent('onDragEnd', event);
-    this.setState({
-      marker: {
-        longitude: event.lngLat[0],
-        latitude: event.lngLat[1]
-      }
-    });
-  };
-
-  render() {
-    const {viewport, marker} = this.state;
-
-    return (
+  return (
+    <>
       <MapGL
         {...viewport}
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={this._updateViewport}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={TOKEN}
       >
         <Marker
@@ -83,24 +61,20 @@ export default class App extends Component {
           offsetTop={-20}
           offsetLeft={-10}
           draggable
-          onDragStart={this._onMarkerDragStart}
-          onDrag={this._onMarkerDrag}
-          onDragEnd={this._onMarkerDragEnd}
+          onDragStart={onMarkerDragStart}
+          onDrag={onMarkerDrag}
+          onDragEnd={onMarkerDragEnd}
         >
           <Pin size={20} />
         </Marker>
 
         <div className="nav" style={navStyle}>
-          <NavigationControl onViewportChange={this._updateViewport} />
+          <NavigationControl />
         </div>
-
-        <ControlPanel
-          containerComponent={this.props.containerComponent}
-          events={this.state.events}
-        />
       </MapGL>
-    );
-  }
+      <ControlPanel events={events} />
+    </>
+  );
 }
 
 export function renderToDom(container) {

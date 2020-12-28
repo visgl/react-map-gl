@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {PureComponent} from 'react';
+import {useState, useEffect} from 'react';
 import {fromJS} from 'immutable';
 import MAP_STYLE from '../../map-style-basic-v8.json';
 
 const defaultMapStyle = fromJS(MAP_STYLE);
+const defaultLayers = defaultMapStyle.get('layers');
 
 const categories = ['labels', 'roads', 'buildings', 'parks', 'water', 'background'];
 
@@ -25,107 +26,87 @@ const colorClass = {
   symbol: 'text-color'
 };
 
-export default class StyleControls extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this._defaultLayers = defaultMapStyle.get('layers');
-
-    this.state = {
-      visibility: {
-        water: true,
-        parks: true,
-        buildings: true,
-        roads: true,
-        labels: true,
-        background: true
-      },
-      color: {
-        water: '#DBE2E6',
-        parks: '#E6EAE9',
-        buildings: '#c0c0c8',
-        roads: '#ffffff',
-        labels: '#78888a',
-        background: '#EBF0F0'
+function getMapStyle({visibility, color}) {
+  const layers = defaultLayers
+    .filter(layer => {
+      const id = layer.get('id');
+      return categories.every(name => visibility[name] || !layerSelector[name].test(id));
+    })
+    .map(layer => {
+      const id = layer.get('id');
+      const type = layer.get('type');
+      const category = categories.find(name => layerSelector[name].test(id));
+      if (category && colorClass[type]) {
+        return layer.setIn(['paint', colorClass[type]], color[category]);
       }
-    };
-  }
+      return layer;
+    });
 
-  componentDidMount() {
-    this._updateMapStyle(this.state);
-  }
-
-  _onColorChange(name, event) {
-    const color = {...this.state.color, [name]: event.target.value};
-    this.setState({color});
-    this._updateMapStyle({...this.state, color});
-  }
-
-  _onVisibilityChange(name, event) {
-    const visibility = {
-      ...this.state.visibility,
-      [name]: event.target.checked
-    };
-    this.setState({visibility});
-    this._updateMapStyle({...this.state, visibility});
-  }
-
-  _updateMapStyle({visibility, color}) {
-    const layers = this._defaultLayers
-      .filter(layer => {
-        const id = layer.get('id');
-        return categories.every(name => visibility[name] || !layerSelector[name].test(id));
-      })
-      .map(layer => {
-        const id = layer.get('id');
-        const type = layer.get('type');
-        const category = categories.find(name => layerSelector[name].test(id));
-        if (category && colorClass[type]) {
-          return layer.setIn(['paint', colorClass[type]], color[category]);
-        }
-        return layer;
-      });
-
-    this.props.onChange(defaultMapStyle.set('layers', layers));
-  }
-
-  _renderLayerControl(name) {
-    const {visibility, color} = this.state;
-
-    return (
-      <div key={name} className="input">
-        <label>{name}</label>
-        <input
-          type="checkbox"
-          checked={visibility[name]}
-          onChange={this._onVisibilityChange.bind(this, name)}
-        />
-        <input
-          type="color"
-          value={color[name]}
-          disabled={!visibility[name]}
-          onChange={this._onColorChange.bind(this, name)}
-        />
-      </div>
-    );
-  }
-
-  render() {
-    return (
-      <div className="control-panel">
-        <h3>Dynamic Styling</h3>
-        <p>Dynamically show/hide map layers and change color with Immutable map style.</p>
-        <div className="source-link">
-          <a
-            href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/layers"
-            target="_new"
-          >
-            View Code ↗
-          </a>
-        </div>
-        <hr />
-        {categories.map(name => this._renderLayerControl(name))}
-      </div>
-    );
-  }
+  return defaultMapStyle.set('layers', layers);
 }
+
+function StyleControls(props) {
+  const [visibility, setVisibility] = useState({
+    water: true,
+    parks: true,
+    buildings: true,
+    roads: true,
+    labels: true,
+    background: true
+  });
+
+  const [color, setColor] = useState({
+    water: '#DBE2E6',
+    parks: '#E6EAE9',
+    buildings: '#c0c0c8',
+    roads: '#ffffff',
+    labels: '#78888a',
+    background: '#EBF0F0'
+  });
+
+  useEffect(() => {
+    props.onChange(getMapStyle({visibility, color}));
+  }, [visibility, color]);
+
+  const onColorChange = (name, value) => {
+    setColor({...color, [name]: value});
+  };
+
+  const onVisibilityChange = (name, value) => {
+    setVisibility({...visibility, [name]: value});
+  };
+
+  return (
+    <div className="control-panel">
+      <h3>Dynamic Styling</h3>
+      <p>Dynamically show/hide map layers and change color with Immutable map style.</p>
+      <div className="source-link">
+        <a
+          href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/layers"
+          target="_new"
+        >
+          View Code ↗
+        </a>
+      </div>
+      <hr />
+      {categories.map(name => (
+        <div key={name} className="input">
+          <label>{name}</label>
+          <input
+            type="checkbox"
+            checked={visibility[name]}
+            onChange={evt => onVisibilityChange(name, evt.target.checked)}
+          />
+          <input
+            type="color"
+            value={color[name]}
+            disabled={!visibility[name]}
+            onChange={evt => onColorChange(name, evt.target.value)}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default React.memo(StyleControls);

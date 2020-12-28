@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Component} from 'react';
+import {useState, useRef, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 import {Editor, DrawPolygonMode, EditingMode} from 'react-map-gl-draw';
@@ -9,101 +9,79 @@ import {getFeatureStyle, getEditHandleStyle} from './style';
 
 const TOKEN = ''; // Set your mapbox token here
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this._editorRef = null;
-    this.state = {
-      viewport: {
-        longitude: -91.874,
-        latitude: 42.76,
-        zoom: 12
-      },
-      mode: null,
-      selectedFeatureIndex: null
-    };
-  }
+export default function App() {
+  const [viewport, setViewport] = useState({
+    longitude: -91.874,
+    latitude: 42.76,
+    zoom: 12
+  });
+  const [mode, setMode] = useState(null);
+  const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(null);
+  const editorRef = useRef(null);
 
-  _updateViewport = viewport => {
-    this.setState({viewport});
-  };
+  const onSelect = useCallback(options => {
+    setSelectedFeatureIndex(options && options.selectedFeatureIndex);
+  }, []);
 
-  _onSelect = options => {
-    this.setState({selectedFeatureIndex: options && options.selectedFeatureIndex});
-  };
-
-  _onDelete = () => {
-    const selectedIndex = this.state.selectedFeatureIndex;
-    if (selectedIndex !== null && selectedIndex >= 0) {
-      this._editorRef.deleteFeatures(selectedIndex);
+  const onDelete = useCallback(() => {
+    if (selectedFeatureIndex !== null && selectedFeatureIndex >= 0) {
+      editorRef.current.deleteFeatures(selectedFeatureIndex);
     }
-  };
+  }, [selectedFeatureIndex]);
 
-  _onUpdate = ({editType}) => {
+  const onUpdate = useCallback(({editType}) => {
     if (editType === 'addFeature') {
-      this.setState({
-        mode: new EditingMode()
-      });
+      setMode(new EditingMode());
     }
-  };
+  }, []);
 
-  _renderDrawTools = () => {
-    // copy from mapbox
-    return (
-      <div className="mapboxgl-ctrl-top-left">
-        <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
-          <button
-            className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"
-            title="Polygon tool (p)"
-            onClick={() => this.setState({mode: new DrawPolygonMode()})}
-          />
-          <button
-            className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_trash"
-            title="Delete"
-            onClick={this._onDelete}
-          />
-        </div>
+  const drawTools = (
+    <div className="mapboxgl-ctrl-top-left">
+      <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
+        <button
+          className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"
+          title="Polygon tool (p)"
+          onClick={() => setMode(new DrawPolygonMode())}
+        />
+        <button
+          className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_trash"
+          title="Delete"
+          onClick={onDelete}
+        />
       </div>
-    );
-  };
+    </div>
+  );
 
-  _renderControlPanel = () => {
-    const features = this._editorRef && this._editorRef.getFeatures();
-    let featureIndex = this.state.selectedFeatureIndex;
-    if (features && featureIndex === null) {
-      featureIndex = features.length - 1;
-    }
-    const polygon = features && features.length ? features[featureIndex] : null;
-    return <ControlPanel containerComponent={this.props.containerComponent} polygon={polygon} />;
-  };
+  const features = editorRef.current && editorRef.current.getFeatures();
+  const selectedFeature =
+    features && (features[selectedFeatureIndex] || features[features.length - 1]);
 
-  render() {
-    const {viewport, mode} = this.state;
-    return (
+  return (
+    <>
       <MapGL
         {...viewport}
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/satellite-v9"
         mapboxApiAccessToken={TOKEN}
-        onViewportChange={this._updateViewport}
+        onViewportChange={setViewport}
       >
         <Editor
-          ref={_ => (this._editorRef = _)}
+          ref={editorRef}
           style={{width: '100%', height: '100%'}}
           clickRadius={12}
           mode={mode}
-          onSelect={this._onSelect}
-          onUpdate={this._onUpdate}
+          onSelect={onSelect}
+          onUpdate={onUpdate}
           editHandleShape={'circle'}
           featureStyle={getFeatureStyle}
           editHandleStyle={getEditHandleStyle}
         />
-        {this._renderDrawTools()}
-        {this._renderControlPanel()}
+        {drawTools}
       </MapGL>
-    );
-  }
+      <ControlPanel polygon={selectedFeature} />
+    </>
+  );
 }
 
 export function renderToDom(container) {

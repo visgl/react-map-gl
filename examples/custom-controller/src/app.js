@@ -1,6 +1,6 @@
 /* global window */
 import * as React from 'react';
-import {Component} from 'react';
+import {useState, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 
@@ -10,34 +10,26 @@ const customController = new MapController();
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default class App extends Component {
-  state = {
-    viewport: {
-      latitude: 37.773,
-      longitude: -122.481,
-      zoom: 15.5,
-      bearing: 0,
-      pitch: 0
-    },
-    settings: {
-      invertZoom: false,
-      invertPan: false,
-      longPress: false
-    }
-  };
+export default function App() {
+  const [viewport, setViewport] = useState({
+    longitude: -122.45,
+    latitude: 37.78,
+    zoom: 15.5,
+    bearing: 0,
+    pitch: 0
+  });
+  const [settings, setSettings] = useState({
+    invertZoom: false,
+    invertPan: false,
+    longPress: false
+  });
 
-  _onViewportChange = viewport => this.setState({viewport});
+  const onSettingsChange = useCallback((name, value) => {
+    setSettings(s => ({...s, [name]: value}));
+  }, []);
 
-  _onSettingsChange = (name, value) => {
-    this.setState({
-      settings: {...this.state.settings, [name]: value}
-    });
-  };
-
-  render() {
-    const {viewport, settings} = this.state;
-
-    return (
+  return (
+    <>
       <MapGL
         {...viewport}
         width="100%"
@@ -47,13 +39,12 @@ export default class App extends Component {
         invertZoom={settings.invertZoom}
         invertPan={settings.invertPan}
         onPress={settings.longPress ? () => window.alert('pressed') : null} // eslint-disable-line no-alert
-        onViewportChange={this._onViewportChange}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
-      >
-        <ControlPanel settings={settings} onChange={this._onSettingsChange} />
-      </MapGL>
-    );
-  }
+      />
+      <ControlPanel settings={settings} onChange={onSettingsChange} />
+    </>
+  );
 }
 
 export function renderToDom(container) {

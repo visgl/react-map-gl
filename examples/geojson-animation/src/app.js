@@ -1,11 +1,10 @@
 /* global window */
 import * as React from 'react';
-import {Component} from 'react';
+import {useState, useEffect} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Source, Layer} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
-import {pointOnCircle} from './utils';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
@@ -17,47 +16,38 @@ const pointLayer = {
   }
 };
 
-export default class App extends Component {
-  state = {
-    pointData: null,
-    viewport: {
-      latitude: 0,
-      longitude: -100,
-      zoom: 3,
-      bearing: 0,
-      pitch: 0
-    }
+function pointOnCircle({center, angle, radius}) {
+  return {
+    type: 'Point',
+    coordinates: [center[0] + Math.cos(angle) * radius, center[1] + Math.sin(angle) * radius]
   };
+}
 
-  componentDidMount() {
-    this._animatePoint();
-  }
+export default function App() {
+  const [viewport, setViewport] = useState({
+    latitude: 0,
+    longitude: -100,
+    zoom: 3,
+    bearing: 0,
+    pitch: 0
+  });
+  const [pointData, setPointData] = useState(null);
 
-  componentWillUnmount() {
-    window.cancelAnimationFrame(this.animation);
-  }
+  useEffect(() => {
+    const animation = window.requestAnimationFrame(() =>
+      setPointData(pointOnCircle({center: [-100, 0], angle: Date.now() / 1000, radius: 20}))
+    );
+    return () => window.cancelAnimationFrame(animation);
+  });
 
-  animation = null;
-
-  _animatePoint = () => {
-    this.setState({
-      pointData: pointOnCircle({center: [-100, 0], angle: Date.now() / 1000, radius: 20})
-    });
-    this.animation = window.requestAnimationFrame(this._animatePoint);
-  };
-
-  _onViewportChange = viewport => this.setState({viewport});
-
-  render() {
-    const {viewport, pointData} = this.state;
-
-    return (
+  return (
+    <>
       <MapGL
         {...viewport}
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/light-v9"
-        onViewportChange={this._onViewportChange}
+        onViewportChange={setViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       >
         {pointData && (
@@ -65,10 +55,10 @@ export default class App extends Component {
             <Layer {...pointLayer} />
           </Source>
         )}
-        <ControlPanel containerComponent={this.props.containerComponent} />
       </MapGL>
-    );
-  }
+      <ControlPanel />
+    </>
+  );
 }
 
 export function renderToDom(container) {

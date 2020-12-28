@@ -1,13 +1,18 @@
-<div align="center">
-  <img src="https://avatars3.githubusercontent.com/u/2105791?v=3&s=200" />
-</div>
+# react-map-gl Example Using React Functional Component
 
-## react-map-gl example with React Hooks
+This example shows a minimal app configuration to use react-map-gl with a React functional component.
 
-The configuration showcased here is a bit less straightforward than its browserify
-equivalent due to some incompatibilities with mapbox-gl, but has been kept at a
-strict minimum.
+## Usage
 
-You should keep in mind that it is a development configuration, and probably
-should be tweaked a bit for production optimization, there is plenty ressources
-on the subject and are not in the scope of this example.
+To run this example, you need a [Mapbox token](http://visgl.github.io/react-map-gl/docs/get-started/mapbox-tokens). You can either set it as `MAPBOX_TOKEN` in `src/app.js`, or set a `MapboxAccessToken` environment variable in the command line.
+
+```bash
+npm i
+npm run start
+```
+
+To build a production version:
+
+```bash
+npm run build
+```

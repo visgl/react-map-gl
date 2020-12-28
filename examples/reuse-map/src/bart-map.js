@@ -1,54 +1,41 @@
 import * as React from 'react';
-import {Component} from 'react';
-import MapGL, {Marker} from '../../../src';
+import {useState} from 'react';
+import MapGL, {Marker} from 'react-map-gl';
 
 import bartStations from '../../.data/bart-station.json';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default class BartMap extends Component {
-  state = {
-    viewState: {
-      latitude: 37.729,
-      longitude: -122.36,
-      zoom: 11,
-      bearing: 0,
-      pitch: 50
-    }
-  };
-
-  _onViewportChange = viewState => this.setState({viewState});
+export default function BartMap(props) {
+  const [viewport, setViewport] = useState({
+    latitude: 37.73,
+    longitude: -122.36,
+    zoom: 11,
+    bearing: 0,
+    pitch: 50
+  });
 
   // eslint-disable-next-line
-  _onMapLoad = event => console.log(event);
+  const onMapLoad = event => console.log(event);
 
-  _renderMarker(station, i) {
-    const {name, coordinates} = station;
-    return (
-      <Marker key={i} longitude={coordinates[0]} latitude={coordinates[1]}>
-        <div className="station">
-          <span>{name}</span>
-        </div>
-      </Marker>
-    );
-  }
-
-  render() {
-    const {mapStyle} = this.props;
-    const {viewState} = this.state;
-    return (
-      <MapGL
-        {...viewState}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
-        mapStyle={mapStyle}
-        width="100%"
-        height="100%"
-        onViewportChange={this._onViewportChange}
-        onLoad={this._onMapLoad}
-        reuseMaps={true}
-      >
-        {bartStations.map(this._renderMarker)}
-      </MapGL>
-    );
-  }
+  return (
+    <MapGL
+      {...viewport}
+      mapboxApiAccessToken={MAPBOX_TOKEN}
+      mapStyle={props.mapStyle}
+      width="100%"
+      height="100%"
+      onViewportChange={setViewport}
+      onLoad={onMapLoad}
+      reuseMaps
+    >
+      {bartStations.map(({name, coordinates}, i) => (
+        <Marker key={i} longitude={coordinates[0]} latitude={coordinates[1]}>
+          <div className="station">
+            <span>{name}</span>
+          </div>
+        </Marker>
+      ))}
+    </MapGL>
+  );
 }

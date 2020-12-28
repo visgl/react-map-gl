@@ -1,11 +1,12 @@
 {
   "scripts": {
-    "start": "webpack-dev-server --progress --hot --open"
+    "start": "webpack-dev-server --progress --hot --open",
+    "build": "webpack -p"
   },
   "dependencies": {
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
-    "react-map-gl": "^5.1.0"
+    "react-map-gl": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

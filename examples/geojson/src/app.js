@@ -1,114 +1,84 @@
 import * as React from 'react';
-import {Component} from 'react';
+import {useState, useEffect, useMemo, useCallback} from 'react';
 import {render} from 'react-dom';
 import MapGL, {Source, Layer} from 'react-map-gl';
 import ControlPanel from './control-panel';
 
 import {dataLayer} from './map-style.js';
 import {updatePercentiles} from './utils';
-import {json as requestJson} from 'd3-request';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-export default class App extends Component {
-  state = {
-    year: 2015,
-    data: null,
-    hoveredFeature: null,
-    viewport: {
-      latitude: 40,
-      longitude: -100,
-      zoom: 3,
-      bearing: 0,
-      pitch: 0
-    }
-  };
+export default function App() {
+  const [viewport, setViewport] = useState({
+    latitude: 40,
+    longitude: -100,
+    zoom: 3,
+    bearing: 0,
+    pitch: 0
+  });
+  const [year, setYear] = useState(2015);
+  const [allData, setAllData] = useState(null);
+  const [hoverInfo, setHoverInfo] = useState(null);
 
-  componentDidMount() {
-    requestJson(
-      'https://raw.githubusercontent.com/uber/react-map-gl/master/examples/.data/us-income.geojson',
-      (error, response) => {
-        if (!error) {
-          this._loadData(response);
-        }
-      }
-    );
-  }
+  useEffect(() => {
+    /* global fetch */
+    fetch(
+      'https://raw.githubusercontent.com/uber/react-map-gl/master/examples/.data/us-income.geojson'
+    )
+      .then(resp => resp.json())
+      .then(json => setAllData(json));
+  }, []);
 
-  _loadData = data => {
-    this.setState({
-      data: updatePercentiles(data, f => f.properties.income[this.state.year])
-    });
-  };
-
-  _updateSettings = (name, value) => {
-    if (name === 'year') {
-      this.setState({year: value});
-
-      const {data} = this.state;
-      if (data) {
-        // trigger update
-        this.setState({
-          data: updatePercentiles(data, f => f.properties.income[value])
-        });
-      }
-    }
-  };
-
-  _onViewportChange = viewport => this.setState({viewport});
-
-  _onHover = event => {
+  const onHover = useCallback(event => {
     const {
       features,
       srcEvent: {offsetX, offsetY}
     } = event;
-    const hoveredFeature = features && features.find(f => f.layer.id === 'data');
+    const hoveredFeature = features && features[0];
 
-    this.setState({hoveredFeature, x: offsetX, y: offsetY});
-  };
-
-  _renderTooltip() {
-    const {hoveredFeature, x, y} = this.state;
-
-    return (
-      hoveredFeature && (
-        <div className="tooltip" style={{left: x, top: y}}>
-          <div>State: {hoveredFeature.properties.name}</div>
-          <div>Median Household Income: {hoveredFeature.properties.value}</div>
-          <div>Percentile: {(hoveredFeature.properties.percentile / 8) * 100}</div>
-        </div>
-      )
+    setHoverInfo(
+      hoveredFeature
+        ? {
+            feature: hoveredFeature,
+            x: offsetX,
+            y: offsetY
+          }
+        : null
     );
-  }
+  }, []);
 
-  render() {
-    const {viewport, data} = this.state;
+  const data = useMemo(() => {
+    return allData && updatePercentiles(allData, f => f.properties.income[year]);
+  }, [allData, year]);
 
-    return (
-      <div style={{height: '100%', position: 'relative'}}>
-        <MapGL
-          {...viewport}
-          width="100%"
-          height="100%"
-          mapStyle="mapbox://styles/mapbox/light-v9"
-          onViewportChange={this._onViewportChange}
-          mapboxApiAccessToken={MAPBOX_TOKEN}
-          onHover={this._onHover}
-        >
-          <Source type="geojson" data={data}>
-            <Layer {...dataLayer} />
-          </Source>
-          {this._renderTooltip()}
-        </MapGL>
+  return (
+    <>
+      <MapGL
+        {...viewport}
+        width="100%"
+        height="100%"
+        mapStyle="mapbox://styles/mapbox/light-v9"
+        onViewportChange={setViewport}
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+        interactiveLayerIds={['data']}
+        onHover={onHover}
+      >
+        <Source type="geojson" data={data}>
+          <Layer {...dataLayer} />
+        </Source>
+        {hoverInfo && (
+          <div className="tooltip" style={{left: hoverInfo.x, top: hoverInfo.y}}>
+            <div>State: {hoverInfo.feature.properties.name}</div>
+            <div>Median Household Income: {hoverInfo.feature.properties.value}</div>
+            <div>Percentile: {(hoverInfo.feature.properties.percentile / 8) * 100}</div>
+          </div>
+        )}
+      </MapGL>
 
-        <ControlPanel
-          containerComponent={this.props.containerComponent}
-          settings={this.state}
-          onChange={this._updateSettings}
-        />
-      </div>
-    );
-  }
+      <ControlPanel year={year} onChange={value => setYear(value)} />
+    </>
+  );
 }
 
 export function renderToDom(container) {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Component} from 'react';
+import {useState} from 'react';
 import {render} from 'react-dom';
 import MapGL, {LinearInterpolator, WebMercatorViewport} from 'react-map-gl';
 import bbox from '@turf/bbox';
@@ -9,35 +9,23 @@ import MAP_STYLE from './map-style';
 
 const TOKEN = ''; // Set your mapbox token here
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      viewport: {
-        latitude: 37.785164,
-        longitude: -122.4,
-        zoom: 11,
-        bearing: 0,
-        pitch: 0
-      },
-      popupInfo: null
-    };
+export default function App() {
+  const [viewport, setViewport] = useState({
+    latitude: 37.78,
+    longitude: -122.4,
+    zoom: 11,
+    bearing: 0,
+    pitch: 0
+  });
 
-    this._map = React.createRef();
-  }
-
-  _updateViewport = viewport => {
-    this.setState({viewport});
-  };
-
-  _onClick = event => {
+  const onClick = event => {
     const feature = event.features[0];
     if (feature) {
       // calculate the bounding box of the feature
       const [minLng, minLat, maxLng, maxLat] = bbox(feature);
       // construct a viewport instance from the current state
-      const viewport = new WebMercatorViewport(this.state.viewport);
-      const {longitude, latitude, zoom} = viewport.fitBounds(
+      const vp = new WebMercatorViewport(viewport);
+      const {longitude, latitude, zoom} = vp.fitBounds(
         [
           [minLng, minLat],
           [maxLng, maxLat]
@@ -47,40 +35,34 @@ export default class App extends Component {
         }
       );
 
-      this.setState({
-        viewport: {
-          ...this.state.viewport,
-          longitude,
-          latitude,
-          zoom,
-          transitionInterpolator: new LinearInterpolator({
-            around: [event.offsetCenter.x, event.offsetCenter.y]
-          }),
-          transitionDuration: 1000
-        }
+      setViewport({
+        ...viewport,
+        longitude,
+        latitude,
+        zoom,
+        transitionInterpolator: new LinearInterpolator({
+          around: [event.offsetCenter.x, event.offsetCenter.y]
+        }),
+        transitionDuration: 1000
       });
     }
   };
 
-  render() {
-    const {viewport} = this.state;
-
-    return (
+  return (
+    <>
       <MapGL
-        ref={this._map}
-        mapStyle={MAP_STYLE}
-        interactiveLayerIds={['sf-neighborhoods-fill']}
         {...viewport}
         width="100%"
         height="100%"
-        onClick={this._onClick}
-        onViewportChange={this._updateViewport}
+        mapStyle={MAP_STYLE}
+        interactiveLayerIds={['sf-neighborhoods-fill']}
+        onClick={onClick}
+        onViewportChange={v => setViewport(v)}
         mapboxApiAccessToken={TOKEN}
-      >
-        <ControlPanel containerComponent={this.props.containerComponent} />
-      </MapGL>
-    );
-  }
+      />
+      <ControlPanel />
+    </>
+  );
 }
 
 export function renderToDom(container) {
