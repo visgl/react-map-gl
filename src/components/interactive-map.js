@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useRef, useEffect, forwardRef} from 'react';
+import {useState, useRef, useMemo, useEffect, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -290,8 +290,8 @@ const InteractiveMap = forwardRef((props, ref) => {
   thisRef.props = props;
   thisRef.map = staticMapRef.current && staticMapRef.current.getMap();
   thisRef.setState = newState => {
-    const state = Object.assign(thisRef.state, newState);
-    eventCanvasRef.current.style.cursor = props.getCursor(state);
+    thisRef.state = {...thisRef.state, ...newState};
+    eventCanvasRef.current.style.cursor = props.getCursor(thisRef.state);
   };
 
   const handleViewportChange = (viewState, interactionState, oldViewState) => {
@@ -366,11 +366,16 @@ const InteractiveMap = forwardRef((props, ref) => {
 
   const {width, height, style, getCursor} = props;
 
-  const eventCanvasStyle = Object.assign({position: 'relative'}, style, {
-    width,
-    height,
-    cursor: getCursor(thisRef.state)
-  });
+  const eventCanvasStyle = useMemo(
+    () => ({
+      position: 'relative',
+      ...style,
+      width,
+      height,
+      cursor: getCursor(thisRef.state)
+    }),
+    [style, width, height, getCursor, thisRef.state]
+  );
 
   return (
     <MapContextProvider value={context}>
