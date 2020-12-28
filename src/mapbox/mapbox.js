@@ -274,13 +274,15 @@ export default class Mapbox {
         mapOptions.transformRequest = props.transformRequest;
       }
 
-      this._map = new this.mapboxgl.Map(Object.assign({}, mapOptions, props.mapOptions))
+      this._map = new this.mapboxgl.Map(Object.assign({}, mapOptions, props.mapOptions));
 
-      if(props.mapOptions.compact) {
-        this._map.addControl(new this.mapboxgl.AttributionControl({
-          compact: props.mapOptions.compact,
-          customAttribution: props.mapOptions.customAttribution
-        }));    
+      if (props.mapOptions.compact) {
+        this._map.addControl(
+          new this.mapboxgl.AttributionControl({
+            compact: props.mapOptions.compact,
+            customAttribution: props.mapOptions.customAttribution
+          })
+        );
       }
 
       // Attach optional onLoad function
