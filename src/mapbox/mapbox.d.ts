@@ -21,6 +21,7 @@ export type MapboxProps = Partial<{
   reuseMaps: boolean,
   transformRequest: Function,
   mapStyle: any,
+  preventStyleDiffing: boolean,
   visible: boolean,
   asyncRender: boolean,
   width: number | string,

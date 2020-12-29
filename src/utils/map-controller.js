@@ -150,6 +150,7 @@ export default class MapController {
   /**
    * Extract interactivity options
    */
+  /* eslint-disable complexity */
   setOptions(options) {
     const {
       onViewportChange,
@@ -173,7 +174,7 @@ export default class MapController {
 
     this.mapStateProps = options;
 
-    if (dimensionChanged) {
+    if (dimensionChanged && options.height) {
       // Dimensions changed, normalize the props
       this.updateViewport(new MapState(options));
     }
@@ -207,6 +208,7 @@ export default class MapController {
     this.touchRotate = touchRotate;
     this.keyboard = keyboard;
   }
+  /* eslint-enable complexity */
 
   toggleEvents(eventNames, enabled) {
     if (this.eventManager) {

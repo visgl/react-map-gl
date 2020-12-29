@@ -129,6 +129,7 @@ function Source(props) {
   } else {
     source = createSource(map, id, props);
   }
+  propsRef.current = props;
 
   return source
     ? React.Children.map(
