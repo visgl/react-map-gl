@@ -31,7 +31,6 @@ function round(x, n) {
 const propTypes = {
   locations: PropTypes.array.isRequired,
   lngLatAccessor: PropTypes.func,
-  renderWhileDragging: PropTypes.bool,
   globalOpacity: PropTypes.number,
   dotRadius: PropTypes.number,
   dotFill: PropTypes.string,
@@ -40,7 +39,6 @@ const propTypes = {
 
 const defaultProps = {
   lngLatAccessor: location => location,
-  renderWhileDragging: true,
   dotRadius: 4,
   dotFill: '#1FBAD6',
   globalOpacity: 1,
@@ -50,34 +48,25 @@ const defaultProps = {
 
 export default function ScatterplotOverlay(props) {
   /* eslint-disable max-statements */
-  const redraw = useCallback(({width, height, ctx, isDragging, project, unproject}) => {
-    const {
-      dotRadius,
-      dotFill,
-      compositeOperation,
-      renderWhileDragging,
-      locations,
-      lngLatAccessor
-    } = props;
+  const redraw = useCallback(({width, height, ctx, project, unproject}) => {
+    const {dotRadius, dotFill, compositeOperation, locations, lngLatAccessor} = props;
 
     ctx.clearRect(0, 0, width, height);
     ctx.globalCompositeOperation = compositeOperation;
 
-    if (renderWhileDragging || !isDragging) {
-      for (const location of locations) {
-        const pixel = project(lngLatAccessor(location));
-        const pixelRounded = [round(pixel[0], 1), round(pixel[1], 1)];
-        if (
-          pixelRounded[0] + dotRadius >= 0 &&
-          pixelRounded[0] - dotRadius < width &&
-          pixelRounded[1] + dotRadius >= 0 &&
-          pixelRounded[1] - dotRadius < height
-        ) {
-          ctx.fillStyle = dotFill;
-          ctx.beginPath();
-          ctx.arc(pixelRounded[0], pixelRounded[1], dotRadius, 0, Math.PI * 2);
-          ctx.fill();
-        }
+    for (const location of locations) {
+      const pixel = project(lngLatAccessor(location));
+      const pixelRounded = [round(pixel[0], 1), round(pixel[1], 1)];
+      if (
+        pixelRounded[0] + dotRadius >= 0 &&
+        pixelRounded[0] - dotRadius < width &&
+        pixelRounded[1] + dotRadius >= 0 &&
+        pixelRounded[1] - dotRadius < height
+      ) {
+        ctx.fillStyle = dotFill;
+        ctx.beginPath();
+        ctx.arc(pixelRounded[0], pixelRounded[1], dotRadius, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
   }, []);

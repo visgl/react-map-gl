@@ -146,7 +146,7 @@ function onClick(evt, {props, context}) {
  */
 function Popup(props) {
   const contentRef = useRef(null);
-  const {context, containerRef} = useMapControl(props, {onClick});
+  const {context, containerRef} = useMapControl({...props, onClick});
   const [, setLoaded] = useState(false);
 
   useEffect(() => {

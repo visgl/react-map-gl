@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useRef, useMemo, useEffect, forwardRef} from 'react';
+import {useContext, useRef, useMemo, useEffect, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -7,7 +7,7 @@ import {MAPBOX_LIMITS} from '../utils/map-state';
 import WebMercatorViewport from 'viewport-mercator-project';
 
 import TransitionManager from '../utils/transition-manager';
-import {MapContextProvider} from './map-context';
+import MapContext, {MapContextProvider} from './map-context';
 
 import {EventManager} from 'mjolnir.js';
 import MapController from '../utils/map-controller';
@@ -267,12 +267,9 @@ function onPointerClick(event) {
 /* End of event handers */
 
 const InteractiveMap = forwardRef((props, ref) => {
+  const parentContext = useContext(MapContext);
   const controller = useMemo(() => props.controller || new MapController(), []);
   const eventManager = useMemo(() => new EventManager(null, {touchAction: props.touchAction}), []);
-  const [context, setContext] = useState({
-    eventManager,
-    isDragging: false
-  });
   const eventCanvasRef = useRef(null);
   const staticMapRef = ref || useRef(null);
 
@@ -304,13 +301,21 @@ const InteractiveMap = forwardRef((props, ref) => {
       onViewportChange(viewState, interactionState, oldViewState);
     }
   };
+
+  const context = useMemo(
+    () => ({
+      ...parentContext,
+      eventManager,
+      container: parentContext.container || eventCanvasRef.current
+    }),
+    [parentContext, eventCanvasRef.current]
+  );
   context.onViewportChange = handleViewportChange;
 
   const handleInteractionStateChange = interactionState => {
     const {isDragging = false} = interactionState;
     if (isDragging !== thisRef.state.isDragging) {
       thisRef.setState({isDragging});
-      setContext({...context, isDragging});
     }
 
     const {onInteractionStateChange} = props;
@@ -353,8 +358,6 @@ const InteractiveMap = forwardRef((props, ref) => {
       wheel: onEvent.bind(thisRef, 'onWheel'),
       contextmenu: onEvent.bind(thisRef, 'onContextMenu')
     });
-
-    context.container = eventCanvasRef.current;
 
     // Clean up on unmount
     return () => {

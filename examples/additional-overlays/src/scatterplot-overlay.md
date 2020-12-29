@@ -13,7 +13,6 @@ const ScatterplotOverlay = require('./scatterplot-overlay');
       globalOpacity={0.8}
       compositeOperation="lighter"
       dotFill="blue"
-      renderWhileDragging={true}
     />
 </MapGL>
 ```
@@ -42,9 +41,6 @@ function lngLatAccessor(location) {
 }
 ```
 
-#### renderWhileDragging
-
-If the overlay should redraw when the user is dragging the map. Default `true`.
 
 #### dotRadius
 

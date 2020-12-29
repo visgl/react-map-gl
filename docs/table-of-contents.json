@@ -24,7 +24,6 @@
       "entries": [
         { "entry": "docs/advanced/custom-components" },
         { "entry": "docs/advanced/custom-map-controller" },
-        { "entry": "docs/advanced/custom-overlays" },
         { "entry": "docs/advanced/viewport-transition" }
       ]
     },

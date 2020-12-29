@@ -23,7 +23,7 @@ import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-
 
 function Control(props) {
   const {instance} = props;
-  const {context, containerRef} = useMapControl(instance.props, props);
+  const {context, containerRef} = useMapControl(props);
 
   instance._context = context;
   instance._containerRef = containerRef;
@@ -59,6 +59,7 @@ export default class BaseControl extends PureComponent {
     return (
       <Control
         instance={this}
+        {...this.props}
         onScroll={this._onScroll}
         onDragStart={this._onDragStart}
         onDblClick={this._onDblClick}

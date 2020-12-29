@@ -67,7 +67,7 @@ function getDragLngLat(dragPos, dragOffset, props, context) {
   return context.viewport.unproject([x, y]);
 }
 
-function onDragStart(event, {props, state, context, containerRef}) {
+function onDragStart(event, {props, callbacks, state, context, containerRef}) {
   const {draggable} = props;
   if (!draggable) {
     return;
@@ -79,38 +79,38 @@ function onDragStart(event, {props, state, context, containerRef}) {
   state.setDragPos(dragPos);
   state.setDragOffset(dragOffset);
 
-  if (props.onDragStart && dragOffset) {
+  if (callbacks.onDragStart && dragOffset) {
     const callbackEvent = Object.assign({}, event);
     callbackEvent.lngLat = getDragLngLat(dragPos, dragOffset, props, context);
-    props.onDragStart(callbackEvent);
+    callbacks.onDragStart(callbackEvent);
   }
 }
 
-function onDrag(event, {props, state, context}) {
+function onDrag(event, {props, callbacks, state, context}) {
   event.stopPropagation();
 
   const dragPos = getDragEventPosition(event);
   state.setDragPos(dragPos);
 
   const {dragOffset} = state;
-  if (props.onDrag && dragOffset) {
+  if (callbacks.onDrag && dragOffset) {
     const callbackEvent = Object.assign({}, event);
     callbackEvent.lngLat = getDragLngLat(dragPos, dragOffset, props, context);
-    props.onDrag(callbackEvent);
+    callbacks.onDrag(callbackEvent);
   }
 }
 
-function onDragEnd(event, {props, state, context}) {
+function onDragEnd(event, {props, callbacks, state, context}) {
   event.stopPropagation();
 
   const {dragPos, dragOffset} = state;
   state.setDragPos(null);
   state.setDragOffset(null);
 
-  if (props.onDragEnd && dragPos && dragOffset) {
+  if (callbacks.onDragEnd && dragPos && dragOffset) {
     const callbackEvent = Object.assign({}, event);
     callbackEvent.lngLat = getDragLngLat(dragPos, dragOffset, props, context);
-    props.onDragEnd(callbackEvent);
+    callbacks.onDragEnd(callbackEvent);
   }
 }
 
@@ -134,7 +134,7 @@ function registerEvents(thisRef) {
     panend: evt => onDragEnd(evt, thisRef),
     pancancel: evt => onDragCancel(evt, thisRef)
   };
-  eventManager.on(events);
+  eventManager.watch(events);
 
   // Clean up
   return () => {
@@ -142,12 +142,16 @@ function registerEvents(thisRef) {
   };
 }
 
-export default function useDraggableControl(props, callbacks) {
+export default function useDraggableControl(props) {
   const [dragPos, setDragPos] = useState(null);
   const [dragOffset, setDragOffset] = useState(null);
 
-  const thisRef = useMapControl(props, {...callbacks, onDragStart});
+  const thisRef = useMapControl({
+    ...props,
+    onDragStart
+  });
 
+  thisRef.callbacks = props;
   thisRef.state.dragPos = dragPos;
   thisRef.state.setDragPos = setDragPos;
   thisRef.state.dragOffset = dragOffset;

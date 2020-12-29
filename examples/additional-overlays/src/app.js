@@ -62,7 +62,6 @@ export default function App() {
         globalOpacity={0.8}
         colorDomain={[0, 500, 1000]}
         colorRange={['#31a354', '#addd8e', '#f7fcb9']}
-        renderWhileDragging={false}
         features={ZIPCODES}
       />
 
@@ -73,7 +72,6 @@ export default function App() {
         globalOpacity={0.8}
         compositeOperation="lighter"
         dotFill="#00a8fe"
-        renderWhileDragging={true}
       />
     </MapGL>
   );

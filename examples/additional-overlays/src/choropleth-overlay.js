@@ -27,7 +27,6 @@ import {geoPath, geoTransform} from 'd3-geo';
 import {CanvasOverlay} from 'react-map-gl';
 
 const propTypes = {
-  renderWhileDragging: PropTypes.bool.isRequired,
   globalOpacity: PropTypes.number.isRequired,
   /**
    * An Immutable List of feature objects.
@@ -40,7 +39,6 @@ const propTypes = {
 };
 
 const defaultProps = {
-  renderWhileDragging: true,
   globalOpacity: 1,
   colorDomain: null,
   colorRange: ['#FFFFFF', '#1FBAD6'],
@@ -66,7 +64,7 @@ function drawFeatures(ctx, path, props) {
 }
 
 export default function ChoroplethOverlay(props) {
-  const redraw = useCallback(({width, height, ctx, isDragging, project, unproject}) => {
+  const redraw = useCallback(({width, height, ctx, project, unproject}) => {
     ctx.clearRect(0, 0, width, height);
 
     function projectPoint(lon, lat) {
@@ -76,11 +74,9 @@ export default function ChoroplethOverlay(props) {
       /* eslint-enable no-invalid-this */
     }
 
-    if (props.renderWhileDragging || !isDragging) {
-      const transform = geoTransform({point: projectPoint});
-      const path = geoPath().projection(transform).context(ctx);
-      drawFeatures(ctx, path, props);
-    }
+    const transform = geoTransform({point: projectPoint});
+    const path = geoPath().projection(transform).context(ctx);
+    drawFeatures(ctx, path, props);
   }, []);
 
   return <CanvasOverlay redraw={redraw} />;

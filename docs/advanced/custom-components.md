@@ -1,84 +1,92 @@
 # Custom Components
 
-[Marker](/docs/api-reference/marker.md),
-[Popup](/docs/api-reference/popup.md), and
-[NavigationControl](/docs/api-reference/navigation-control.md)
-all extend the `BaseControl` React component. You may also create your own map control components.
+You may create your own map control components by consuming [MapContext](/docs/api-reference/map-context.md).
 
-## Example
+## Using the MapContext
 
 The following component renders a label "(longitude, latitude)" at the given coordinate:
 
 ```js
 import * as React from 'react';
-import {BaseControl} from 'react-map-gl';
+import MapGL, {MapContext} from 'react-map-gl';
 
-class CustomMarker extends BaseControl {
-  _render() {
-    const {longitude, latitude} = this.props;
+function CustomMarker(props) {
+  const context = React.useContext(MapContext);
+  
+  const {longitude, latitude} = props;
 
-    const [x, y] = this._context.viewport.project([longitude, latitude]);
+  const [x, y] = context.viewport.project([longitude, latitude]);
 
-    const markerStyle = {
-      position: 'absolute',
-      background: '#fff',
-      left: x,
-      top: y
-    };
+  const markerStyle = {
+    position: 'absolute',
+    background: '#fff',
+    left: x,
+    top: y
+  };
 
-    return (
-      <div ref={this._containerRef}
-        style={markerStyle} >
-        ({longitude}, {latitude})
-      </div>
-    );
-  }
+  return (
+    <div style={markerStyle} >
+      ({longitude}, {latitude})
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <MapGL longitude={-122.45} latitude={37.78} zoom={12} mapboxApiAccessToken={MAPBOX_TOKEN}>
+      <CustomeMarker longitude={-122.45} latitude={37.78} />
+    </MapGL>
+  )
 }
 ```
 
-## Properties
+## Using the useMapControl hook
 
-The following properties are handled by the `BaseControl` component:
+`useMapControl` is an experimental API that makes it easier to create controls with event handling.
 
-##### `captureScroll` {Boolean} - default: `false`
-Stop propagation of mouse wheel event to the map component. Can be used to stop map from zooming when this component is scrolled.
+```js
+import * as React from 'react';
+import MapGL, {_useMapControl as useMapControl} from 'react-map-gl';
 
-##### `captureDrag` {Boolean} - default: `true`
-Stop propagation of dragstart event to the map component. Can be used to stop map from panning when this component is dragged.
+function CustomControl(props) {
+  const [counter, setCounter] = React.useState(0);
+  const {context, containerRef} = useMapControl({
+    onDragStart: evt => {
+      // prevent the base map from panning
+      evt.stopPropagation();
+    },
+    onClick: evt => {
+      if (evt.type === 'click') {
+        setCounter(v => v + 1);
+      }
+    }
+  });
 
-##### `captureClick` {Boolean} - default: `true`
-Stop propagation of click event to the map component. Can be used to stop map from calling the `onClick` callback when this component is clicked.
+  return (
+    <div ref={containerRef} >
+      Clicked {counter} times
+    </div>
+  );
+}
 
-##### `captureDoubleClick` {Boolean} - default: `true`
-Stop propagation of dblclick event to the map component. Can be used to stop map from zooming when this component is double clicked.
+function App() {
+  return (
+    <MapGL longitude={-122.45} latitude={37.78} zoom={12} mapboxApiAccessToken={MAPBOX_TOKEN}>
+      <CustomControl />
+    </MapGL>
+  )
+}
+```
 
-##### `capturePointerMove` {Boolean} - default: `false`
-Stop propagation of pointermove event to the map component. Can be used to stop map from calling the `onMouseMove` or `onTouchMove` callback when this component is hovered.
+Calling `useMapControl(opts)` returns an object containing the following fields:
 
-## Private Members
+- `context` (MapContext) - the current context value
+- `containerRef` (RefObject) - this should be assigned to the `ref` prop of the DOM element that the event listeners should attach to.
 
-##### `_containerRef`
+This hook supports the following options:
 
-A React [ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) object.
-
-Should be assigned to the `ref` prop of the root DOM element of this component. Required to leverage the `capture*` props.
-
-##### `_context`
-
-An object containing the following fields:
-
-- `viewport` {WebMercatorViewport} - the current viewport
-- `map` {mapboxgl.Map} - the Mapbox map instance
-- `eventManager` {EventManager} - the event manager. Only available if using `InteractiveMap`.
-- `isDragging` {Bool} - whether the map is being dragged. Only available if using `InteractiveMap`.
-
-
-## Private Methods
-
-##### `_render`
-
-Implement this method to render the content of this component. `this._context` is accessible when this method is called.
-
-
-## Source
-[base-control.js](https://github.com/visgl/react-map-gl/tree/6.0-release/src/components/base-control.js)
+- `onScroll` (Function) - called on mouse wheel event. Can be used to stop map from zooming when this component is scrolled.
+- `onDragStart` (Function) - called on dragstart event. Can be used to stop map from panning when this component is dragged.
+- `onClick` (Function) - called on click event. Can be used to stop map from calling the `onClick` callback when this component is clicked.
+- `onDoubleClick` (Function) - called on double click event. Can be used to stop map from zooming when this component is double clicked.
+- `onPointerMove` (Function) - called on pointermove event. Can be used to stop map from calling the `onMouseMove` or `onTouchMove` callback when this component is hovered.
