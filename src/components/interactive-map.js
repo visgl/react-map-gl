@@ -267,8 +267,8 @@ function onPointerClick(event) {
 /* End of event handers */
 
 const InteractiveMap = forwardRef((props, ref) => {
-  const [controller] = useState(() => props.controller || new MapController());
-  const [eventManager] = useState(() => new EventManager(null, {touchAction: props.touchAction}));
+  const controller = useMemo(() => props.controller || new MapController(), []);
+  const eventManager = useMemo(() => new EventManager(null, {touchAction: props.touchAction}), []);
   const [context, setContext] = useState({
     eventManager,
     isDragging: false
