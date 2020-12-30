@@ -39,6 +39,21 @@ module.exports.onCreateWebpackConfig = function onCreateWebpackConfigOverride(op
     type: "javascript/auto",
   });
 
+  // Work around for https://github.com/mapbox/mapbox-gl-js/issues/10173
+  if (stage === 'build-javascript') {
+    for (const rule of config.module.rules) {
+      // find the babel loader
+      const loader = rule.use &&
+        (Array.isArray(rule.use) ? rule.use : [rule.use])
+          .find(u => u.loader && u.loader.includes("babel-loader"));
+      if (!rule.include && loader && loader.options) {
+        loader.options.ignore = [
+          resolve(__dirname, '../node_modules/mapbox-gl/dist/mapbox-gl.js')
+        ];
+      }
+    }
+  }
+
   // Completely replace the webpack config for the current stage.
   // This can be dangerous and break Gatsby if certain configuration options are changed.
   // Generally only useful for cases where you need to handle config merging logic yourself,
