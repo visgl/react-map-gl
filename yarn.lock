@@ -1692,10 +1692,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/jsonlint-lines-primitives/-/jsonlint-lines-primitives-2.0.2.tgz#ce56e539f83552b58d10d672ea4d6fc9adc7b234"
   integrity sha1-zlblOfg1UrWNENZy6k1vya3HsjQ=
 
-"@mapbox/mapbox-gl-supported@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@mapbox/mapbox-gl-supported/-/mapbox-gl-supported-1.5.0.tgz#f60b6a55a5d8e5ee908347d2ce4250b15103dc8e"
-  integrity sha512-/PT1P6DNf7vjEEiPkVIRJkvibbqWtqnyGaBz3nfRdcxclNSnSdaLU5tfAgcD7I8Yt5i+L19s406YLl1koLnLbg==
+"@mapbox/mapbox-gl-supported@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@mapbox/mapbox-gl-supported/-/mapbox-gl-supported-2.0.0.tgz#bb133cd91e562c006713fbc83f21e4b6f711a388"
+  integrity sha512-zu4udqYiBrKMQKwpKJ4hhPON7tz0QR/JZ3iGpHnNWFmH3Sv/ysxlICATUtGCFpsyJf2v1WpFhlzaZ3GhhKmPMA==
 
 "@mapbox/point-geometry@0.1.0", "@mapbox/point-geometry@^0.1.0", "@mapbox/point-geometry@~0.1.0":
   version "0.1.0"
@@ -6710,15 +6710,15 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-mapbox-gl@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-2.0.0.tgz#a91bb7c58bd7d2dcab89f0f8a6571ff441daf1ef"
-  integrity sha512-agvgYMQflJj1Qp3Ge3IGWIHC/KGc65ukTE47OU9GFc4MGGUa1LngxNWul0ubD8AujmpWyVwfDnZDSoL8hA4c8Q==
+mapbox-gl@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-2.0.1.tgz#e081c075fca2473fbc0e3a28f57c1b68ced3d997"
+  integrity sha512-4sWRh4FztQakCPO/WN2JsMSDOVLKXPSQvHjJgXwIEQtnrxjyFB7Et0VX+h9rDxOA4EB6BRCG8mNgw648/dXNTg==
   dependencies:
     "@mapbox/geojson-rewind" "^0.5.0"
     "@mapbox/geojson-types" "^1.0.2"
     "@mapbox/jsonlint-lines-primitives" "^2.0.2"
-    "@mapbox/mapbox-gl-supported" "^1.5.0"
+    "@mapbox/mapbox-gl-supported" "^2.0.0"
     "@mapbox/point-geometry" "^0.1.0"
     "@mapbox/tiny-sdf" "^1.1.1"
     "@mapbox/unitbezier" "^0.0.0"
