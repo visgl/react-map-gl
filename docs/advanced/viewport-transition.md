@@ -7,50 +7,42 @@ Instead, transitions can be defined using [InteractiveMap](/docs/api-reference/i
 ## Example: Fly to a New Location
 
 ```jsx
-import ReactMapGL, {LinearInterpolator, FlyToInterpolator} from 'react-map-gl';
+import * as React from 'react';
+import ReactMapGL, {FlyToInterpolator} from 'react-map-gl';
 // 3rd-party easing functions
 import d3 from 'd3-ease';
 
-class MyApp extends React.Component {
-    state = {
-        viewport: {
-            width: 800,
-            height: 600,
-            longitude: -122.45,
-            latitude: 37.78,
-            zoom: 14
-        }
-    };
+function App() {
+  const [viewport, setViewport] = React.useState({
+    width: 800,
+    height: 600,
+    latitude: 37.78,
+    longitude: -122.45,
+    zoom: 14
+  });
 
-    _onViewportChange = viewport => {
-        this.setState({viewport});
-    };
+  const goToNYC = () => {
+    setViewport({
+      ...viewport,
+      longitude: -74.1,
+      latitude: 40.7,
+      zoom: 14,
+      transitionDuration: 5000,
+      transitionInterpolator: new FlyToInterpolator(),
+      transitionEasing: d3.easeCubic
+    });
+  };
 
-    _goToNYC = () => {
-        const viewport = {
-            ...this.state.viewport,
-            longitude: -74.1,
-            latitude: 40.7,
-            zoom: 14,
-            transitionDuration: 5000,
-            transitionInterpolator: new FlyToInterpolator(),
-            transitionEasing: d3.easeCubic
-        };
-        this.setState({viewport});
-    };
-
-    render() {
-        return (
-            <div>
-                <ReactMapGL {...this.state.viewport} onViewportChange={this._onViewportChange} />
-                <button onClick={this._goToNYC}>New York City</button>
-            </div>
-        );
-    }
+  return (
+    <div>
+      <ReactMapGL {...viewport} onViewportChange={setViewport} />
+      <button onClick={goToNYC}>New York City</button>
+    </div>
+  );
 }
 ```
 
-See [viewport animation](#examples/viewport-animation) for a complete example.
+See [viewport animation](http://visgl.github.io/react-map-gl/examples/viewport-animation) for a complete example.
 
 
 ## Example: Transition Viewport To A Bounding Box
@@ -62,23 +54,22 @@ import {WebMercatorViewport} from 'react-map-gl';
 ```
 
 ```js
-    _goToSF = () => {
-        const {longitude, latitude, zoom} = new WebMercatorViewport(this.state.viewport)
-            .fitBounds([[-122.4, 37.7], [-122.5, 37.8]], {
-              padding: 20,
-              offset: [0, -100]
-            });
-        const viewport = {
-            ...this.state.viewport,
-            longitude,
-            latitude,
-            zoom,
-            transitionDuration: 5000,
-            transitionInterpolator: new FlyToInterpolator(),
-            transitionEasing: d3.easeCubic
-        }
-        this.setState({viewport});
-    };
+  const goToSF = () => {
+    const {longitude, latitude, zoom} = new WebMercatorViewport(viewport)
+        .fitBounds([[-122.4, 37.7], [-122.5, 37.8]], {
+          padding: 20,
+          offset: [0, -100]
+        });
+    setViewport({
+      ...viewport,
+      longitude,
+      latitude,
+      zoom,
+      transitionDuration: 5000,
+      transitionInterpolator: new FlyToInterpolator(),
+      transitionEasing: d3.easeCubic
+    });
+  };
 ```
 
 [Documentation of WebMercatorViewport](https://visgl.github.io/react-map-gl/docs/api-reference/web-mercator-viewport)
@@ -88,7 +79,7 @@ import {WebMercatorViewport} from 'react-map-gl';
 
 ### InteractiveMap's Transition Props
 
-See properties of [InteractiveMap](/docs/api-reference/interactive-map.md##transitions).
+See properties of [InteractiveMap](/docs/api-reference/interactive-map.md#transitions).
 
 - `transitionDuration` (Number)
 - `transitionInterpolator` (Object)
@@ -104,9 +95,7 @@ See properties of [InteractiveMap](/docs/api-reference/interactive-map.md##trans
 `InteractiveMap` is designed to be a stateless component. For transitions to work, the application must update the viewport props returned by the `onViewportChange` callback:
 
 ```js
-<ReactMapGL
-    {...this.state.viewport}
-    onViewportChange={(viewport) => this.setState({viewport})}
+<ReactMapGL {...viewport} onViewportChange={setViewport} />
 ```
 
 Remarks:

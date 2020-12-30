@@ -4,28 +4,21 @@
 
 This component renders `MapboxGL` and provides full interactivity support.
 It uses `StaticMap` underneath to render the final map component.
-This is the `default` exported component from `ReactMapGL`.
+This is the `default` exported component from `react-map-gl`.
 
 ```js
-import {Component} from 'react';
+import * as React from 'react';
 import ReactMapGL from 'react-map-gl';
 
-class Map extends Component {
-  render() {
-    return (
-      <ReactMapGL
-        width={400}
-        height={400}
-        latitude={37.7577}
-        longitude={-122.4376}
-        zoom={8}
-        onViewportChange={(viewport) => {
-          const {width, height, latitude, longitude, zoom} = viewport;
-          // call `setState` and use the state to update the map.
-        }}
-      />
-    );
-  }
+function App() {
+  const [viewport, setViewport] = React.useState({
+    longitude: -122.45,
+    latitude: 37.78,
+    zoom: 14
+  });
+  return (
+    <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport} />
+  );
 }
 ```
 
