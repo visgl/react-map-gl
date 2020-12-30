@@ -5,20 +5,22 @@
 This is a React equivalent of Mapbox's [ScaleControl](https://docs.mapbox.com/mapbox-gl-js/api/#scalecontrol).
 
 ```js
-import {Component} from 'react';
+import * as React from 'react';
 import ReactMapGL, {ScaleControl} from 'react-map-gl';
 
-class Map extends Component {
-  render() {
-    const {viewport, updateViewport} = this.props;
-    return (
-      <ReactMapGL {...viewport} onViewportChange={updateViewport}>
-        <div style={{position: 'absolute', bottom: 100, left: 20}}>
-          <ScaleControl maxWidth={100} unit={"metric"}/>
-        </div>
-      </ReactMapGL>
-    );
-  }
+function App() {
+  const [viewport, setViewport] = React.useState({
+    longitude: -122.45,
+    latitude: 37.78,
+    zoom: 14
+  });
+  return (
+    <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport}>
+      <div style={{position: 'absolute', bottom: 100, left: 20}}>
+        <ScaleControl maxWidth={100} unit="metric" />
+      </div>
+    </ReactMapGL>
+  );
 }
 ```
 
