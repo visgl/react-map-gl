@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useRef, useMemo, useEffect, forwardRef} from 'react';
+import {useState, useRef, useMemo, useEffect, useLayoutEffect, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -266,6 +266,7 @@ function onPointerClick(event) {
 }
 /* End of event handers */
 
+/* eslint-disable max-statements */
 const InteractiveMap = forwardRef((props, ref) => {
   const controller = useMemo(() => props.controller || new MapController(), []);
   const eventManager = useMemo(() => new EventManager(null, {touchAction: props.touchAction}), []);
@@ -294,7 +295,16 @@ const InteractiveMap = forwardRef((props, ref) => {
     eventCanvasRef.current.style.cursor = props.getCursor(thisRef.state);
   };
 
+  let inRender = true;
+  let updateRequested;
+
   const handleViewportChange = (viewState, interactionState, oldViewState) => {
+    if (inRender) {
+      // Do not call the callbacks during render - may result in "cannot update during an existing state transition" error.
+      // Defer the update until after render
+      updateRequested = [viewState, interactionState, oldViewState];
+      return;
+    }
     const {onViewStateChange, onViewportChange} = props;
 
     if (onViewStateChange) {
@@ -362,6 +372,13 @@ const InteractiveMap = forwardRef((props, ref) => {
     };
   }, []);
 
+  useLayoutEffect(() => {
+    if (updateRequested) {
+      // Perform deferred updates
+      handleInteractionStateChange(...updateRequested);
+    }
+  });
+
   updateControllerOpts();
 
   const {width, height, style, getCursor} = props;
@@ -377,20 +394,27 @@ const InteractiveMap = forwardRef((props, ref) => {
     [style, width, height, getCursor, thisRef.state]
   );
 
-  return (
-    <MapContextProvider value={context}>
-      <div key="event-canvas" ref={eventCanvasRef} style={eventCanvasStyle}>
-        <StaticMap
-          {...props}
-          width="100%"
-          height="100%"
-          style={null}
-          onResize={onResize}
-          ref={staticMapRef}
-        />
-      </div>
-    </MapContextProvider>
-  );
+  if (!updateRequested) {
+    // Only rerender if no viewport update has been requested during render.
+    // Otherwise return the last rendered child, and invoke the callback when we're done.
+    thisRef._child = (
+      <MapContextProvider value={context}>
+        <div key="event-canvas" ref={eventCanvasRef} style={eventCanvasStyle}>
+          <StaticMap
+            {...props}
+            width="100%"
+            height="100%"
+            style={null}
+            onResize={onResize}
+            ref={staticMapRef}
+          />
+        </div>
+      </MapContextProvider>
+    );
+  }
+
+  inRender = false;
+  return thisRef._child;
 });
 
 InteractiveMap.supported = StaticMap.supported;
