@@ -7,20 +7,18 @@ static, and should be used to render a map with no interactivity. For a componen
 that supports full user interactivity, see [InteractiveMap](/docs/api-reference/interactive-map.md).
 
 ```js
-import {Component} from 'react';
+import * as React from 'react';
 import {StaticMap} from 'react-map-gl';
 
-class Map extends Component {
-  render() {
-    return (
-      <StaticMap
-        width={400}
-        height={400}
-        latitude={37.7577}
-        longitude={-122.4376}
-        zoom={8} />
-    );
-  }
+function App() {
+  return (
+    <StaticMap
+      width="100vw"
+      height="100vh"
+      latitude={37.78}
+      longitude={-122.45}
+      zoom={8} />
+  );
 }
 ```
 

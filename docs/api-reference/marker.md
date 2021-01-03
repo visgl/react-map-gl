@@ -7,19 +7,22 @@ This is a React equivalent of Mapbox's
 be used to render custom icons at specific locations on the map.
 
 ```js
-import {Component} from 'react';
+import * as React from 'react';
 import ReactMapGL, {Marker} from 'react-map-gl';
 
-class Map extends Component {
-  render() {
-    return (
-      <ReactMapGL latitude={37.78} longitude={-122.41} zoom={8}>
-        <Marker latitude={37.78} longitude={-122.41} offsetLeft={-20} offsetTop={-10}>
-          <div>You are here</div>
-        </Marker>
-      </ReactMapGL>
-    );
-  }
+function App() {
+  const [viewport, setViewport] = React.useState({
+    longitude: -122.45,
+    latitude: 37.78,
+    zoom: 14
+  });
+  return (
+    <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport}>
+      <Marker latitude={37.78} longitude={-122.41} offsetLeft={-20} offsetTop={-10}>
+        <div>You are here</div>
+      </Marker>
+    </ReactMapGL>
+  );
 }
 ```
 
@@ -27,37 +30,29 @@ Performance notes: if a large number of markers are needed, it's generally favor
 
 ```js
 import * as React from 'react';
-import {PureComponent} from 'react';
 import ReactMapGL, {Marker} from 'react-map-gl';
 
-const CITIES = [...];
+function App(props) {
+  const [viewport, setViewport] = React.useState({
+    longitude: -122.45,
+    latitude: 37.78,
+    zoom: 14
+  });
 
-// PureComponent ensures that the markers are only rerendered when data changes
-class Markers extends PureComponent {
-  render() {
-    const {data} = this.props;
-    return data.map(
-      city => <Marker key={city.name} longitude={city.longitude} latitude={city.latitude} ><img src="pin.png" /></Marker>
+  // Only rerender markers if props.data has changed
+  const markers = React.useMemo(() => data.map(
+    city => (
+      <Marker key={city.name} longitude={city.longitude} latitude={city.latitude} >
+        <img src="pin.png" />
+      </Marker>
     )
-  }
-}
+  ), [props.data]);
 
-class Map extends PureComponent {
-  state = {
-    viewport: {
-      latitude: 37.78,
-      longitude: -122.41,
-      zoom: 8
-    }
-  };
-
-  render() {
-    return (
-      <ReactMapGL {...this.state.viewport} onViewportChange={viewport => this.setState({viewport})}>
-        <Markers data={CITIES} />
-      </ReactMapGL>
-    );
-  }
+  return (
+    <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport}>
+      {markers}
+    </ReactMapGL>
+  );
 }
 ```
 

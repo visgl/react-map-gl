@@ -5,20 +5,22 @@
 This is a React equivalent of Mapbox's [FullscreenControl](https://www.mapbox.com/mapbox-gl-js/api/#fullscreencontrol).
 
 ```js
-import {Component} from 'react';
+import * as React from 'react';
 import ReactMapGL, {FullscreenControl} from 'react-map-gl';
 
-class Map extends Component {
-  render() {
-    const {viewport, updateViewport} = this.props;
-    return (
-      <ReactMapGL {...viewport} onViewportChange={updateViewport}>
-        <div style={{position: 'absolute', right: 0}}>
-          <FullscreenControl container={document.querySelector('body')}/>
-        </div>
-      </ReactMapGL>
-    );
-  }
+function App() {
+  const [viewport, setViewport] = React.useState({
+    longitude: -122.45,
+    latitude: 37.78,
+    zoom: 14
+  });
+  return (
+    <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport}>
+      <div style={{position: 'absolute', top: 10, right: 10}}>
+        <FullscreenControl />
+      </div>
+    </ReactMapGL>
+  );
 }
 ```
 

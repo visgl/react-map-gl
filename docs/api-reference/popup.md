@@ -6,30 +6,30 @@ This is a React equivalent of Mapbox's [Popup Control](https://www.mapbox.com/ma
 show tooltip popups with custom HTML content at specific locations on the map.
 
 ```js
-import {Component} from 'react';
+import * as React from 'react';
 import ReactMapGL, {Popup} from 'react-map-gl';
 
-class Map extends Component {
-  state = {
-    showPopup: true
-  };
+function App() {
+  const [viewport, setViewport] = React.useState({
+    longitude: -122.45,
+    latitude: 37.78,
+    zoom: 14
+  });
+  const [showPopup, togglePopup] = React.useState(false);
 
-  render() {
-    const {showPopup} = this.state;
-    return (
-      <ReactMapGL latitude={37.78} longitude={-122.41} zoom={8}>
-        {showPopup && <Popup
+  return (
+    <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport}>
+      {showPopup && <Popup
           latitude={37.78}
           longitude={-122.41}
           closeButton={true}
           closeOnClick={false}
-          onClose={() => this.setState({showPopup: false})}
+          onClose={() => togglePopup(false)}
           anchor="top" >
           <div>You are here</div>
         </Popup>}
-      </ReactMapGL>
-    );
-  }
+    </ReactMapGL>
+  );
 }
 ```
 
