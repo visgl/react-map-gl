@@ -23,7 +23,7 @@ export const mapControlPropTypes = {
   capturePointerMove: PropTypes.bool
 };
 
-function onMount(thisRef, callbacks = {}) {
+function onMount(thisRef) {
   const ref = thisRef.containerRef.current;
   const {eventManager} = thisRef.context;
   if (!ref || !eventManager) {
@@ -32,51 +32,57 @@ function onMount(thisRef, callbacks = {}) {
 
   const events = {
     wheel: evt => {
-      if (thisRef.props.captureScroll) {
+      const {props} = thisRef;
+      if (props.captureScroll) {
         evt.stopPropagation();
       }
-      if (callbacks.onScroll) {
-        callbacks.onScroll(evt, thisRef);
+      if (props.onScroll) {
+        props.onScroll(evt, thisRef);
       }
     },
     panstart: evt => {
-      if (thisRef.props.captureDrag) {
+      const {props} = thisRef;
+      if (props.captureDrag) {
         evt.stopPropagation();
       }
-      if (callbacks.onDragStart) {
-        callbacks.onDragStart(evt, thisRef);
+      if (props.onDragStart) {
+        props.onDragStart(evt, thisRef);
       }
     },
     anyclick: evt => {
-      if (thisRef.props.captureClick) {
+      const {props} = thisRef;
+      if (props.captureClick) {
         evt.stopPropagation();
       }
-      if (callbacks.onClick) {
-        callbacks.onClick(evt, thisRef);
+      if (props.onClick) {
+        props.onClick(evt, thisRef);
       }
     },
     click: evt => {
-      if (thisRef.props.captureClick) {
+      const {props} = thisRef;
+      if (props.captureClick) {
         evt.stopPropagation();
       }
-      if (callbacks.onClick) {
-        callbacks.onClick(evt, thisRef);
+      if (props.onClick) {
+        props.onClick(evt, thisRef);
       }
     },
     dblclick: evt => {
-      if (thisRef.props.captureDoubleClick) {
+      const {props} = thisRef;
+      if (props.captureDoubleClick) {
         evt.stopPropagation();
       }
-      if (callbacks.onDoubleClick) {
-        callbacks.onDoubleClick(evt, thisRef);
+      if (props.onDoubleClick) {
+        props.onDoubleClick(evt, thisRef);
       }
     },
     pointermove: evt => {
-      if (thisRef.props.capturePointerMove) {
+      const {props} = thisRef;
+      if (props.capturePointerMove) {
         evt.stopPropagation();
       }
-      if (callbacks.onPointerMove) {
-        callbacks.onPointerMove(evt, thisRef);
+      if (props.onPointerMove) {
+        props.onPointerMove(evt, thisRef);
       }
     }
   };
@@ -88,15 +94,16 @@ function onMount(thisRef, callbacks = {}) {
   };
 }
 
-export default function useMapControl(props, callbacks) {
+export default function useMapControl(props = {}) {
   const context = useContext(MapContext);
   const containerRef = useRef(null);
-  const thisRef = useRef({props, state: {}, context, containerRef});
+  const _thisRef = useRef({props, state: {}, context, containerRef});
+  const thisRef = _thisRef.current;
 
-  thisRef.current.props = props;
-  thisRef.current.context = context;
+  thisRef.props = props;
+  thisRef.context = context;
 
-  useEffect(() => onMount(thisRef.current, callbacks), [context.eventManager]);
+  useEffect(() => onMount(thisRef), [context.eventManager]);
 
-  return thisRef.current;
+  return thisRef;
 }

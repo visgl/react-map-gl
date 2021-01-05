@@ -11,14 +11,12 @@ const MapContext = createContext({
   // DOM element that contains the map
   container: null,
 
-  /* Interactive-only context */
+  /* Interaction callbacks */
   onViewportChange: null,
   onViewStateChange: null,
 
   // EventManager instance
-  eventManager: null,
-  // whether the map is being dragged
-  isDragging: false
+  eventManager: null
 });
 
 // Save the original Provider component
@@ -38,8 +36,6 @@ function WrappedProvider({value, children}) {
 
   return <MapContextProvider value={value}>{children}</MapContextProvider>;
 }
-
-WrappedProvider.$$typeof = MapContextProvider.$$typeof;
 
 MapContext.Provider = WrappedProvider;
 

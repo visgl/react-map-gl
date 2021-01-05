@@ -38,6 +38,36 @@ The maximum length of the scale control in pixels.
 
 Unit of the distance, one of `'imperial'`, `'metric'` or `'nautical'`.
 
+##### `captureScroll` (Boolean)
+
+- default: `false`
+
+Stop propagation of mouse wheel event to the map component. Can be used to stop map from zooming when this component is scrolled.
+
+##### `captureDrag` (Boolean)
+
+- default: `true`
+
+Stop propagation of dragstart event to the map component. Can be used to stop map from panning when this component is dragged.
+
+##### `captureClick` (Boolean)
+
+- default: `true`
+
+Stop propagation of click event to the map component. Can be used to stop map from calling the `onClick` callback when this component is clicked.
+
+##### `captureDoubleClick` (Boolean)
+
+- default: `true`
+
+Stop propagation of dblclick event to the map component. Can be used to stop map from zooming when this component is double clicked.
+
+##### `capturePointerMove` (Boolean)
+
+- default: `false`
+
+Stop propagation of pointermove event to the map component. Can be used to stop map from calling the `onMouseMove` or `onTouchMove` callback when this component is hovered.
+
 ## Styling
 
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.

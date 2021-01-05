@@ -120,7 +120,7 @@ Stop propagation of mouse wheel event to the map component. Can be used to stop 
 
 - default: `true`
 
-Stop propagation of dragstart event to the map component. Can be used to stop map from panning when this component is dragged. Automatically true if `draggable` is `true`.
+Stop propagation of dragstart event to the map component. Can be used to stop map from panning when this component is dragged.
 
 ##### `captureClick` (Boolean)
 
@@ -133,6 +133,12 @@ Stop propagation of click event to the map component. Can be used to stop map fr
 - default: `true`
 
 Stop propagation of dblclick event to the map component. Can be used to stop map from zooming when this component is double clicked.
+
+##### `capturePointerMove` (Boolean)
+
+- default: `false`
+
+Stop propagation of pointermove event to the map component. Can be used to stop map from calling the `onMouseMove` or `onTouchMove` callback when this component is hovered.
 
 ## Styling
 

@@ -50,5 +50,10 @@ export {default as MapController} from './utils/map-controller';
 export {WebMercatorViewport} from 'viewport-mercator-project';
 export {default as setRTLTextPlugin} from './utils/set-rtl-text-plugin';
 
-// Experimental Features (May change in minor version bumps, use at your own risk)
+export {default as MapContext} from './components/map-context';
+
+// Experimental
+export {default as _useMapControl} from './components/use-map-control';
+
+// Backward compatibility
 export {default as _MapContext} from './components/map-context';

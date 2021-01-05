@@ -13,7 +13,6 @@ const ChoroplethOverlay = require('./choropleth-overlay');
       colorRange={['hsl(0.8, 1, 0.8)', 'hsl(0, 1, 1)']}
       valueAccessor={f => f.properties.value}
       globalOpacity={0.8}
-      renderWhileDragging={true}
     />
 </MapGL>
 ```
@@ -56,11 +55,6 @@ It reflects the range of input values of all features.
 
 An array of strings to be passed to [d3.scaleLinear.range](https://github.com/d3/d3-scale#linear-scales).
 It reflects the range of output colors for all features.
-
-
-#### renderWhileDragging
-
-If the overlay should redraw when the user is dragging the map. Default `true`.
 
 
 #### globalOpacity
