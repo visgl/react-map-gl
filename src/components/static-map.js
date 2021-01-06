@@ -117,6 +117,10 @@ function getRefHandles(map) {
   });
 }
 
+function preventScroll(event) {
+  event.target.scrollTo(0, 0);
+}
+
 const StaticMap = forwardRef((props, ref) => {
   const [accessTokenValid, setTokenState] = useState(true);
   const [size, setSize] = useState([0, 0]);
@@ -211,6 +215,7 @@ const StaticMap = forwardRef((props, ref) => {
         className="overlays"
         // @ts-ignore
         style={CONTAINER_STYLE}
+        onScroll={preventScroll}
       >
         {props.children}
       </div>
