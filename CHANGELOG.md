@@ -2,6 +2,11 @@
 
 # Version 5.2
 
+## 5.2.12 (Jan 7, 2021)
+
+- Fix no token warning message (#1289)
+- Prevent overlay container from scrolling on focus (#1286)
+
 ## 5.2.11 (Dec 11, 2020)
 
 - Safe check layer props (#1225)
