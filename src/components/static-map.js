@@ -114,6 +114,10 @@ type State = {
   accessTokenInvalid: boolean
 };
 
+function preventScroll(event) {
+  event.target.scrollTo(0, 0);
+}
+
 export default class StaticMap extends PureComponent<StaticMapProps, State> {
   static supported() {
     return mapboxgl && mapboxgl.supported();
@@ -277,7 +281,12 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
           };
           return (
             <MapContext.Provider value={context}>
-              <div key="map-overlays" className="overlays" style={CONTAINER_STYLE}>
+              <div
+                key="map-overlays"
+                className="overlays"
+                style={CONTAINER_STYLE}
+                onScroll={preventScroll}
+              >
                 {this.props.children}
               </div>
             </MapContext.Provider>
