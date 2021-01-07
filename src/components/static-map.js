@@ -244,7 +244,7 @@ export default class StaticMap extends PureComponent<StaticMapProps, State> {
       };
       return (
         <div key="warning" id="no-token-warning" style={style}>
-          <h3 key="header">NO_TOKEN_WARNING</h3>
+          <h3 key="header">{NO_TOKEN_WARNING}</h3>
           <div key="text">For information on setting up your basemap, read</div>
           <a key="link" href={TOKEN_DOC_URL}>
             Note on Map Tokens
