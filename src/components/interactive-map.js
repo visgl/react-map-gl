@@ -293,13 +293,14 @@ const InteractiveMap = forwardRef((props, ref) => {
   };
 
   let inRender = true;
-  let updateRequested;
+  let viewportUpdateRequested;
+  let stateUpdateRequested;
 
   const handleViewportChange = (viewState, interactionState, oldViewState) => {
     if (inRender) {
       // Do not call the callbacks during render - may result in "cannot update during an existing state transition" error.
       // Defer the update until after render
-      updateRequested = [viewState, interactionState, oldViewState];
+      viewportUpdateRequested = [viewState, interactionState, oldViewState];
       return;
     }
     const {onViewStateChange, onViewportChange} = props;
@@ -326,6 +327,13 @@ const InteractiveMap = forwardRef((props, ref) => {
     const {isDragging = false} = interactionState;
     if (isDragging !== thisRef.state.isDragging) {
       thisRef.setState({isDragging});
+    }
+
+    if (inRender) {
+      // Do not call the callbacks during render - may result in "cannot update during an existing state transition" error.
+      // Defer the update until after render
+      stateUpdateRequested = interactionState;
+      return;
     }
 
     const {onInteractionStateChange} = props;
@@ -376,9 +384,12 @@ const InteractiveMap = forwardRef((props, ref) => {
   }, []);
 
   useLayoutEffect(() => {
-    if (updateRequested) {
+    if (viewportUpdateRequested) {
       // Perform deferred updates
-      handleInteractionStateChange(...updateRequested);
+      handleViewportChange(...viewportUpdateRequested);
+    }
+    if (stateUpdateRequested) {
+      handleInteractionStateChange(stateUpdateRequested);
     }
   });
 
@@ -397,7 +408,7 @@ const InteractiveMap = forwardRef((props, ref) => {
     [style, width, height, getCursor, thisRef.state]
   );
 
-  if (!updateRequested) {
+  if (!viewportUpdateRequested) {
     // Only rerender if no viewport update has been requested during render.
     // Otherwise return the last rendered child, and invoke the callback when we're done.
     thisRef._child = (
