@@ -21,7 +21,6 @@
 import MapState from './map-state';
 import {LinearInterpolator} from './transition';
 import TransitionManager, {TRANSITION_EVENTS} from './transition-manager';
-import debounce from './debounce';
 
 const NO_TRANSITION_PROPS = {
   transitionDuration: 0
@@ -68,7 +67,6 @@ export default class MapController {
 
   constructor() {
     this.handleEvent = this.handleEvent.bind(this);
-    this._onWheelEnd = debounce(this._onWheelEnd, 100);
   }
 
   /**
@@ -315,14 +313,14 @@ export default class MapController {
     }
 
     const newMapState = this.mapState.zoom({pos, scale});
-    this.updateViewport(newMapState, NO_TRANSITION_PROPS, {isZooming: true});
-    // Wheel events are discrete, let's wait a little before resetting isZooming
-    this._onWheelEnd();
+    this.updateViewport(
+      newMapState,
+      Object.assign({}, LINEAR_TRANSITION_PROPS, {
+        transitionInterpolator: new LinearInterpolator({around: pos})
+      }),
+      {isZooming: true}
+    );
     return true;
-  }
-
-  _onWheelEnd() {
-    this.setState({isZooming: false});
   }
 
   // Default handler for the `pinchstart` event.
