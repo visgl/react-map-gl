@@ -6,7 +6,6 @@ import MapGL, {GeolocateControl} from 'react-map-gl';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 const geolocateStyle = {
-  position: 'absolute',
   top: 0,
   left: 0,
   margin: 10

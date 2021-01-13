@@ -102,6 +102,10 @@ If `true`, the order of the popups will be dynamically rearranged to ensure that
 
 Callback when the user closes the popup.
 
+##### `className` (String)
+
+Assign a custom class name to the container of this control.
+
 ##### `captureScroll` (Boolean)
 
 - default: `false`

@@ -18,28 +18,24 @@ import CITIES from '../../.data/cities.json';
 const TOKEN = ''; // Set your mapbox token here
 
 const geolocateStyle = {
-  position: 'absolute',
   top: 0,
   left: 0,
   padding: '10px'
 };
 
 const fullscreenControlStyle = {
-  position: 'absolute',
   top: 36,
   left: 0,
   padding: '10px'
 };
 
 const navStyle = {
-  position: 'absolute',
   top: 72,
   left: 0,
   padding: '10px'
 };
 
 const scaleControlStyle = {
-  position: 'absolute',
   bottom: 36,
   left: 0,
   padding: '10px'
@@ -80,18 +76,10 @@ export default function App() {
           </Popup>
         )}
 
-        <div style={geolocateStyle}>
-          <GeolocateControl />
-        </div>
-        <div style={fullscreenControlStyle}>
-          <FullscreenControl />
-        </div>
-        <div style={navStyle}>
-          <NavigationControl />
-        </div>
-        <div style={scaleControlStyle}>
-          <ScaleControl />
-        </div>
+        <GeolocateControl style={geolocateStyle} />
+        <FullscreenControl style={fullscreenControlStyle} />
+        <NavigationControl style={navStyle} />
+        <ScaleControl style={scaleControlStyle} />
       </MapGL>
 
       <ControlPanel />
