@@ -21,4 +21,4 @@ export const mapControlDefaultProps: MapControlProps;
 
 export const mapControlPropTypes: any;
 
-export default function useMapControl(props: MapControlProps, callbacks: any): MapControlRef;
+export default function useMapControl(props: MapControlProps): MapControlRef;
