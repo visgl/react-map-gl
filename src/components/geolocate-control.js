@@ -203,4 +203,4 @@ function GeolocateControl(props) {
 GeolocateControl.propTypes = propTypes;
 GeolocateControl.defaultProps = defaultProps;
 
-export default GeolocateControl;
+export default React.memo(GeolocateControl);

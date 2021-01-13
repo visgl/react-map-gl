@@ -126,4 +126,4 @@ function NavigationControl(props) {
 NavigationControl.propTypes = propTypes;
 NavigationControl.defaultProps = defaultProps;
 
-export default NavigationControl;
+export default React.memo(NavigationControl);

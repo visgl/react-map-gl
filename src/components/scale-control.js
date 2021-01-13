@@ -66,4 +66,4 @@ function ScaleControl(props) {
 ScaleControl.propTypes = propTypes;
 ScaleControl.defaultProps = defaultProps;
 
-export default ScaleControl;
+export default React.memo(ScaleControl);

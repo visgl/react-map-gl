@@ -108,4 +108,4 @@ function FullscreenControl(props) {
 FullscreenControl.propTypes = propTypes;
 FullscreenControl.defaultProps = defaultProps;
 
-export default FullscreenControl;
+export default React.memo(FullscreenControl);

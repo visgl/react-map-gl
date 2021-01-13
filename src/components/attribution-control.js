@@ -92,4 +92,4 @@ function AttributionControl(props) {
 AttributionControl.propTypes = propTypes;
 AttributionControl.defaultProps = defaultProps;
 
-export default AttributionControl;
+export default React.memo(AttributionControl);

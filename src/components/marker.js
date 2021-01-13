@@ -106,4 +106,4 @@ function Marker(props) {
 Marker.defaultProps = defaultProps;
 Marker.propTypes = propTypes;
 
-export default Marker;
+export default React.memo(Marker);
