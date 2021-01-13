@@ -78,9 +78,15 @@ Check [`locate user`](https://github.com/visgl/react-map-gl/tree/6.0-release/exa
 
 ##### `label` (String)
 
-- default: `Geolocate`
+- default: `'Find My Location'`
 
 Label applied to the Geolocate control button.
+
+##### `disabledLabel` (String)
+
+- default: `'Location Not Available'`
+
+Label applied to the Geolocate control button if geolocation is disabled by the user.
 
 ##### `auto` (Boolean)
 
