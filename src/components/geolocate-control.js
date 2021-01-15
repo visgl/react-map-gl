@@ -45,13 +45,8 @@ const propTypes = Object.assign({}, mapControlPropTypes, {
 
 const defaultProps = Object.assign({}, mapControlDefaultProps, {
   className: '',
-<<<<<<< HEAD
-  style: {},
   label: 'Find My Location',
   disabledLabel: 'Location Not Available',
-=======
-  label: 'Geolocate',
->>>>>>> Align control component APIs
   auto: false,
 
   // mapbox geolocate options
