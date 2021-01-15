@@ -23,7 +23,7 @@ To use this API, consult Mapbox's [setRTLTextPlugin](https://docs.mapbox.com/map
 
 ## Where is fitBounds?
 
-You can use the `WebMercatorViewport` utility to find the target viewport that fits around a lngLat bounding box:
+You can use the `WebMercatorViewport` utility to find the target viewport that fits around a longitude-latitude bounding box:
 
 ```js
 import {WebMercatorViewport} from 'react-map-gl';
