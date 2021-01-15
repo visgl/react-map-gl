@@ -1,20 +1,11 @@
 import * as React from 'react';
-import {useState} from 'react';
 import {render} from 'react-dom';
 import DeckGL, {ArcLayer} from 'deck.gl';
-import MapGL from 'react-map-gl';
+import {StaticMap, MapContext, AttributionControl} from 'react-map-gl';
 
 const TOKEN = ''; // Set your mapbox token here
 
 export default function App() {
-  const [viewport, setViewport] = useState({
-    longitude: -122.45,
-    latitude: 37.75,
-    zoom: 11,
-    bearing: 0,
-    pitch: 60
-  });
-
   const arcLayer = new ArcLayer({
     data: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/bart-segments.json',
     getSourcePosition: d => d.from.coordinates,
@@ -25,16 +16,29 @@ export default function App() {
   });
 
   return (
-    <MapGL
-      {...viewport}
-      width="100%"
-      height="100%"
-      maxPitch={85}
-      onViewportChange={setViewport}
-      mapboxApiAccessToken={TOKEN}
+    <DeckGL
+      initialViewState={{
+        longitude: -122.45,
+        latitude: 37.75,
+        zoom: 11,
+        bearing: 0,
+        pitch: 60
+      }}
+      controller={true}
+      layers={[arcLayer]}
+      // This is required when using react-map-gl controls as children
+      ContextProvider={MapContext.Provider}
     >
-      <DeckGL viewState={viewport} layers={[arcLayer]} />
-    </MapGL>
+      <StaticMap mapboxApiAccessToken={TOKEN} attributionControl={false} />
+      <AttributionControl
+        style={{
+          fontFamily: 'sans-serif',
+          fontSize: 14,
+          right: 0,
+          bottom: 0
+        }}
+      />
+    </DeckGL>
   );
 }
 

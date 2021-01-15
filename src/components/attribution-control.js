@@ -55,7 +55,7 @@ function AttributionControl(props) {
       );
     }
 
-    return () => removeAttributionControl(control);
+    return () => control && removeAttributionControl(control);
   }, [context.map]);
 
   const compact = props.compact === undefined ? context.viewport.width <= 640 : props.compact;
