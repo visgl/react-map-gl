@@ -1,4 +1,4 @@
-# Scale Control
+# ScaleControl
 
 ![Since v5.2](https://img.shields.io/badge/since-v5.2-green)
 

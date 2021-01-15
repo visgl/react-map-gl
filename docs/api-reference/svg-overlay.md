@@ -1,4 +1,4 @@
-# SVG Overlay
+# SVGOverlay
 
 Allows applications to overlay data on top of maps using a SVG container.
 

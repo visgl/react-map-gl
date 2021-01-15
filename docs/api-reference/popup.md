@@ -1,4 +1,4 @@
-# Popup Control
+# Popup
 
 ![Since v3.0](https://img.shields.io/badge/since-v3.0-green)
 
