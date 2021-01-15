@@ -16,11 +16,11 @@
         { "entry": "docs/get-started/get-started" },
         { "entry": "docs/get-started/mapbox-tokens" },
         { "entry": "docs/get-started/state-management" },
-        { "entry": "docs/get-started/viewport-transition" },
+        { "entry": "docs/advanced/viewport-transition" },
+        { "entry": "docs/get-started/faq" },
         { "entry": "docs/get-started/adding-custom-data" },
         { "entry": "docs/advanced/custom-components" },
-        { "entry": "docs/advanced/custom-map-controller" },
-        { "entry": "docs/get-started/faq" }
+        { "entry": "docs/advanced/custom-map-controller" }
       ]
     },
     {
