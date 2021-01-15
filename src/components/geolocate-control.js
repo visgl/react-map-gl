@@ -23,6 +23,7 @@ const propTypes = Object.assign({}, mapControlPropTypes, {
   style: PropTypes.object,
   // Custom label assigned to the control
   label: PropTypes.string,
+  disabledLabel: PropTypes.string,
   // Auto trigger instead of waiting for click
   auto: PropTypes.bool,
 
@@ -45,7 +46,8 @@ const propTypes = Object.assign({}, mapControlPropTypes, {
 const defaultProps = Object.assign({}, mapControlDefaultProps, {
   className: '',
   style: {},
-  label: 'Geolocate',
+  label: 'Find My Location',
+  disabledLabel: 'Location Not Available',
   auto: false,
 
   // mapbox geolocate options
@@ -163,7 +165,13 @@ function GeolocateControl(props) {
     }
   }, [mapboxGeolocateControl, props.auto]);
 
-  const {className, style, label, trackUserLocation} = props;
+  useEffect(() => {
+    if (mapboxGeolocateControl) {
+      mapboxGeolocateControl._onZoom();
+    }
+  }, [context.viewport.zoom]);
+
+  const {className, style, label, disabledLabel, trackUserLocation} = props;
   return (
     <div>
       <div
@@ -179,7 +187,8 @@ function GeolocateControl(props) {
           disabled={!supportsGeolocation}
           aria-pressed={!trackUserLocation}
           type="button"
-          title={label}
+          title={supportsGeolocation ? label : disabledLabel}
+          aria-label={supportsGeolocation ? label : disabledLabel}
           onClick={() => triggerGeolocate(context, props, mapboxGeolocateControl)}
         >
           <span className="mapboxgl-ctrl-icon" aria-hidden="true" />
