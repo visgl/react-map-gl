@@ -2,43 +2,47 @@
 
 ## Native Mapbox Layers
 
-You can inject data and mapbox native layers by modifying the map style object:
+You can inject data and mapbox native layers using the [Source](/docs/api-reference/source.md) and [Layer](/docs/api-reference/layer.md) components:
 
 ```js
-import {fromJS} from 'immutable';
-const mapStyle = fromJS({
-    version: 8,
-    sources: {
-        points: {
-            type: 'geojson',
-            data: {
-                type: 'FeatureCollection',
-                features: [
-                    {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.45, 37.78]}}
-                ]
-            }
-        }
-    },
-    layers: [
-        {
-            id: 'my-layer',
-            type: 'circle',
-            source: 'points',
-            paint: {
-                'circle-color': '#f00',
-                'circle-radius': 4
-            }
-        }
-    ]
-});
+import * as React from 'react';
+import ReactMapGL, {Source, Layer} from 'react-map-gl';
 
-<ReactMapGL mapStyle={mapStyle} ... />
+const geojson = {
+  type: 'FeatureCollection',
+  features: [
+    {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.8]}}
+  ]
+};
 
+const layerStyle = {
+  id: 'point',
+  type: 'circle',
+  paint: {
+    'circle-radius': 10,
+    'circle-color': '#007cbf'
+  }
+};
+
+function App() {
+  const [viewport, setViewport] = React.useState({
+    longitude: -122.45,
+    latitude: 37.78,
+    zoom: 14
+  });
+  return (
+    <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport}>
+      <Source id="my-data" type="geojson" data={geojson}>
+        <Layer {...layerStyle} />
+      </Source>
+    </ReactMapGL>
+  );
+}
 ```
 
 For details about data sources and layer configuration, check out the [Mapbox style specification](https://www.mapbox.com/mapbox-gl-js/style-spec).
 
-For dynamically updating data and layers, check out the [GeoJSON](http://visgl.github.io/react-map-gl/examples/geojson) and [GeoJSON animation](http://visgl.github.io/react-map-gl/examples/geojson-animation) examples.
+For dynamically updating data sources and layers, check out the [GeoJSON](http://visgl.github.io/react-map-gl/examples/geojson) and [GeoJSON animation](http://visgl.github.io/react-map-gl/examples/geojson-animation) examples.
 
 
 ## Overlays
