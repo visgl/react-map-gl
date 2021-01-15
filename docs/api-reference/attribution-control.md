@@ -50,6 +50,8 @@ Assign a custom class name to the container of this control.
 
 ##### `style` (Object)
 
+- default: `{position: 'absolute'}`
+
 A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to this control.
 
 ##### `captureScroll` (Boolean)

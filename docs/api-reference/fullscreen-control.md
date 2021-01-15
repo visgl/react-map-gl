@@ -8,6 +8,11 @@ This is a React equivalent of Mapbox's [FullscreenControl](https://www.mapbox.co
 import * as React from 'react';
 import ReactMapGL, {FullscreenControl} from 'react-map-gl';
 
+const fullscreenControlStyle= {
+  right: 10,
+  top: 10
+};
+
 function App() {
   const [viewport, setViewport] = React.useState({
     longitude: -122.45,
@@ -16,9 +21,7 @@ function App() {
   });
   return (
     <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport}>
-      <div style={{position: 'absolute', top: 10, right: 10}}>
-        <FullscreenControl />
-      </div>
+      <FullscreenControl style={fullscreenControlStyle} />
     </ReactMapGL>
   );
 }
@@ -35,6 +38,16 @@ function App() {
 - default: `Toggle fullscreen`
 
 Label applied to the fullscreen control button.
+
+##### `className` (String)
+
+Assign a custom class name to the container of this control.
+
+##### `style` (Object)
+
+- default: `{position: 'absolute'}`
+
+A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to this control.
 
 ##### `captureScroll` (Boolean)
 

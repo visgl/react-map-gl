@@ -110,6 +110,10 @@ Parameters:
 - `event` - The pointer event.
   + `event.lngLat` - The geo coordinates where the drag ended, as `[lng, lat]`.
 
+##### `className` (String)
+
+Assign a custom class name to the container of this control.
+
 ##### `captureScroll` (Boolean)
 
 - default: `false`

@@ -3,6 +3,7 @@ import {MapControlProps} from './use-map-control';
 
 type NavigationControlProps = MapControlProps & Partial<{
   className: string,
+  style: Object,
   onViewStateChange: Function,
   onViewportChange: Function,
   showCompass: boolean,

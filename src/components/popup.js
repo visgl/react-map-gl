@@ -194,4 +194,4 @@ function Popup(props) {
 Popup.propTypes = propTypes;
 Popup.defaultProps = defaultProps;
 
-export default Popup;
+export default React.memo(Popup);

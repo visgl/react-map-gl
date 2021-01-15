@@ -8,6 +8,11 @@ This is a React equivalent of Mapbox's [GeolocateControl](https://www.mapbox.com
 import * as React from 'react';
 import ReactMapGL, {GeolocateControl} from "react-map-gl";
 
+const geolocateControlStyle= {
+  right: 10,
+  top: 10
+};
+
 function App() {
   const [viewport, setViewport] = React.useState({
     longitude: -122.45,
@@ -16,13 +21,12 @@ function App() {
   });
   return (
     <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport}>
-      <div style={{position: 'absolute', top: 10, right: 10}}>
-        <GeolocateControl
-          positionOptions={{enableHighAccuracy: true}}
-          trackUserLocation={true}
-          auto
-        />
-      </div>
+      <GeolocateControl
+        style={geolocateControlStyle}
+        positionOptions={{enableHighAccuracy: true}}
+        trackUserLocation={true}
+        auto
+      />
     </ReactMapGL>
   );
 }
@@ -70,11 +74,15 @@ By default a dot will be shown on the map at the user's location. Set to false t
 
 By default, if showUserLocation is `true` , a transparent circle will be drawn around the user location indicating the accuracy (95% confidence level) of the user's location. Set to `false` to disable. Always disabled when showUserLocation is `false`.
 
+##### `className` (String)
+
+Assign a custom class name to the container of this control.
+
 ##### `style` (Object)
 
-A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to Geolocate control button.
+- default: `{position: 'absolute'}`
 
-Check [`locate user`](https://github.com/visgl/react-map-gl/tree/6.0-release/examples/locate-user/src/app.js) example for basic styling.
+A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to this control.
 
 ##### `label` (String)
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useEffect, useCallback, useState, useRef} from 'react';
+import {useEffect, useCallback, useState, useRef, useMemo} from 'react';
 import * as PropTypes from 'prop-types';
 import mapboxgl from '../utils/mapboxgl';
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
@@ -67,9 +67,10 @@ function AttributionControl(props) {
   }, [compact]);
 
   const toggleAttribution = useCallback(() => setShowCompact(value => !value), []);
+  const style = useMemo(() => ({position: 'absolute', ...props.style}), [props.style]);
 
   return (
-    <div style={{position: 'absolute', ...props.style}} className={props.className}>
+    <div style={style} className={props.className}>
       <div
         ref={containerRef}
         aria-pressed={showCompact}
@@ -91,4 +92,4 @@ function AttributionControl(props) {
 AttributionControl.propTypes = propTypes;
 AttributionControl.defaultProps = defaultProps;
 
-export default AttributionControl;
+export default React.memo(AttributionControl);

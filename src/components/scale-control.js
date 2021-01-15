@@ -18,17 +18,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useMemo} from 'react';
 import * as PropTypes from 'prop-types';
 import mapboxgl from '../utils/mapboxgl';
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
 
 const propTypes = Object.assign({}, mapControlPropTypes, {
+  className: PropTypes.string,
+  style: PropTypes.object,
   maxWidth: PropTypes.number,
   unit: PropTypes.oneOf(['imperial', 'metric', 'nautical'])
 });
 
 const defaultProps = Object.assign({}, mapControlDefaultProps, {
+  className: '',
   maxWidth: 100,
   unit: 'metric'
 });
@@ -51,10 +54,16 @@ function ScaleControl(props) {
     mapboxScaleControl._onMove();
   }
 
-  return <div ref={containerRef} className="mapboxgl-ctrl mapboxgl-ctrl-scale" />;
+  const style = useMemo(() => ({position: 'absolute', ...props.style}), [props.style]);
+
+  return (
+    <div style={style} className={props.className}>
+      <div ref={containerRef} className="mapboxgl-ctrl mapboxgl-ctrl-scale" />
+    </div>
+  );
 }
 
 ScaleControl.propTypes = propTypes;
 ScaleControl.defaultProps = defaultProps;
 
-export default ScaleControl;
+export default React.memo(ScaleControl);

@@ -8,6 +8,11 @@ This is a React equivalent of Mapbox's [ScaleControl](https://docs.mapbox.com/ma
 import * as React from 'react';
 import ReactMapGL, {ScaleControl} from 'react-map-gl';
 
+const scaleControlStyle= {
+  left: 20,
+  bottom: 100
+};
+
 function App() {
   const [viewport, setViewport] = React.useState({
     longitude: -122.45,
@@ -16,9 +21,7 @@ function App() {
   });
   return (
     <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport}>
-      <div style={{position: 'absolute', bottom: 100, left: 20}}>
-        <ScaleControl maxWidth={100} unit="metric" />
-      </div>
+      <ScaleControl maxWidth={100} unit="metric" style={scaleControlStyle} />
     </ReactMapGL>
   );
 }
@@ -37,6 +40,16 @@ The maximum length of the scale control in pixels.
 - default: `'metric'`
 
 Unit of the distance, one of `'imperial'`, `'metric'` or `'nautical'`.
+
+##### `className` (String)
+
+Assign a custom class name to the container of this control.
+
+##### `style` (Object)
+
+- default: `{position: 'absolute'}`
+
+A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to this control.
 
 ##### `captureScroll` (Boolean)
 

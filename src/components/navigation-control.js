@@ -14,6 +14,7 @@ const noop = () => {};
 const propTypes = Object.assign({}, mapControlPropTypes, {
   // Custom className
   className: PropTypes.string,
+  style: PropTypes.object,
   // Callbacks fired when the user interacted with the map. The object passed to the callbacks
   // contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
   onViewStateChange: PropTypes.func,
@@ -109,12 +110,15 @@ function NavigationControl(props) {
   };
 
   const {className, showCompass, showZoom, zoomInLabel, zoomOutLabel, compassLabel} = props;
+  const style = useMemo(() => ({position: 'absolute', ...props.style}), [props.style]);
 
   return (
-    <div className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`} ref={containerRef}>
-      {showZoom && renderButton('zoom-in', zoomInLabel, onZoomIn)}
-      {showZoom && renderButton('zoom-out', zoomOutLabel, onZoomOut)}
-      {showCompass && renderButton('compass', compassLabel, onResetNorth, renderCompass(context))}
+    <div style={style} className={className}>
+      <div className="mapboxgl-ctrl mapboxgl-ctrl-group" ref={containerRef}>
+        {showZoom && renderButton('zoom-in', zoomInLabel, onZoomIn)}
+        {showZoom && renderButton('zoom-out', zoomOutLabel, onZoomOut)}
+        {showCompass && renderButton('compass', compassLabel, onResetNorth, renderCompass(context))}
+      </div>
     </div>
   );
 }
@@ -122,4 +126,4 @@ function NavigationControl(props) {
 NavigationControl.propTypes = propTypes;
 NavigationControl.defaultProps = defaultProps;
 
-export default NavigationControl;
+export default React.memo(NavigationControl);

@@ -9,6 +9,11 @@ which provides zoom buttons and a compass button.
 import * as React from 'react';
 import ReactMapGL, {NavigationControl} from 'react-map-gl';
 
+const navControlStyle= {
+  right: 10,
+  top: 10
+};
+
 function App() {
   const [viewport, setViewport] = React.useState({
     longitude: -122.45,
@@ -17,9 +22,7 @@ function App() {
   });
   return (
     <ReactMapGL {...viewport} width="100vw" height="100vh" onViewportChange={setViewport}>
-      <div style={{position: 'absolute', top: 10, right: 10}}>
-        <NavigationControl />
-      </div>
+      <NavigationControl style={navControlStyle} />
     </ReactMapGL>
   );
 }
@@ -42,6 +45,34 @@ Show or hide the compass button
 - default: `true`
 
 Show or hide the zoom buttons
+
+##### `zoomInLabel` (String)
+
+- default: `Zoom In`
+
+Label applied to the zoom in control button.
+
+##### `zoomOutLabel` (String)
+
+- default: `Zoom Out`
+
+Label applied to the zoom out control button.
+
+##### `compassLabel` (String)
+
+- default: `Reset North`
+
+Label applied to the compass control button.
+
+##### `className` (String)
+
+Assign a custom class name to the container of this control.
+
+##### `style` (Object)
+
+- default: `{position: 'absolute'}`
+
+A [React style](https://reactjs.org/docs/dom-elements.html#style) object applied to this control.
 
 ##### `captureScroll` (Boolean)
 
@@ -73,23 +104,6 @@ Stop propagation of dblclick event to the map component. Can be used to stop map
 
 Stop propagation of pointermove event to the map component. Can be used to stop map from calling the `onMouseMove` or `onTouchMove` callback when this component is hovered.
 
-##### `zoomInLabel` (String)
-
-- default: `Zoom In`
-
-Label applied to the zoom in control button.
-
-##### `zoomOutLabel` (String)
-
-- default: `Zoom Out`
-
-Label applied to the zoom out control button.
-
-##### `compassLabel` (String)
-
-- default: `Reset North`
-
-Label applied to the compass control button.
 
 ## Styling
 

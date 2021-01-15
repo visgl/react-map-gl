@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useRef, useEffect, useState} from 'react';
+import {useRef, useEffect, useState, useMemo} from 'react';
 import * as PropTypes from 'prop-types';
 
 import {document} from '../utils/globals';
@@ -45,7 +45,6 @@ const propTypes = Object.assign({}, mapControlPropTypes, {
 
 const defaultProps = Object.assign({}, mapControlDefaultProps, {
   className: '',
-  style: {},
   label: 'Find My Location',
   disabledLabel: 'Location Not Available',
   auto: false,
@@ -171,15 +170,13 @@ function GeolocateControl(props) {
     }
   }, [context.viewport.zoom]);
 
-  const {className, style, label, disabledLabel, trackUserLocation} = props;
+  const {className, label, disabledLabel, trackUserLocation} = props;
+
+  const style = useMemo(() => ({position: 'absolute', ...props.style}), [props.style]);
+
   return (
-    <div>
-      <div
-        key="geolocate-control"
-        className={`mapboxgl-ctrl mapboxgl-ctrl-group ${className}`}
-        ref={containerRef}
-        style={style}
-      >
+    <div style={style} className={className}>
+      <div key="geolocate-control" className="mapboxgl-ctrl mapboxgl-ctrl-group" ref={containerRef}>
         <button
           key="geolocate"
           className={`mapboxgl-ctrl-icon mapboxgl-ctrl-geolocate`}
@@ -201,4 +198,4 @@ function GeolocateControl(props) {
 GeolocateControl.propTypes = propTypes;
 GeolocateControl.defaultProps = defaultProps;
 
-export default GeolocateControl;
+export default React.memo(GeolocateControl);
