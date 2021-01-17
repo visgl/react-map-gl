@@ -1,4 +1,4 @@
-# Fullscreen Control
+# FullscreenControl
 
 ![Since v4.1](https://img.shields.io/badge/since-v4.1-green)
 

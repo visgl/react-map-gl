@@ -67,6 +67,8 @@ But we would recommend using something like [dotenv](https://github.com/motdotla
 
 This library provides convenient wrappers around initializing and (to some degree) tracking the state of a Mapbox WebGL map. Because most of the functionality of Mapbox's JS API depends on the use of HTML5 canvases and WebGL, which React is not built to manipulate, the React component does not mirror all the functionality of Mapbox GL JS's Map class. You may access the native Mapbox API exposed by the `getMap()` function in this library. However, proceed with caution as calling the native APIs may break the connection between the React layer props and the underlying map state.
 
+Examples of replacing common native API calls with their React equivalents can be found on the [FAQ](/docs/get-started/faq.md) page.
+
 
 ### Contribute
 

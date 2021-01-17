@@ -56,27 +56,6 @@ with Browserify or - [css-loader](https://webpack.github.io/docs/stylesheets.htm
 import 'mapbox-gl/dist/mapbox-gl.css';
 ```
 
-## Enable Right-to-Left Language Support
-
-![Since v5.2.2](https://img.shields.io/badge/since-v5.2.2-green)
-
-```js
-import {setRTLTextPlugin} from 'react-map-gl';
-
-setRTLTextPlugin(
-  // find out the latest version at https://www.npmjs.com/package/@mapbox/mapbox-gl-rtl-text
-  'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-  null,
-  // lazy: only load when the map first encounters Hebrew or Arabic text
-  true
-);
-```
-
-This is the same as `import {setRTLTextPlugin} from 'mapbox-gl'` in the browser, but will not crash in node. The export mainly offers a convenience when using server-side rendering.
-
-To use this API, consult Mapbox's [setRTLTextPlugin](https://docs.mapbox.com/mapbox-gl-js/api/#setrtltextplugin) documentation.
-
-
 ## Using with Browserify, Webpack, and other JavaScript Bundlers
 
 * `browserify` - react-map-gl is extensively tested with `browserify` and works without configuration.

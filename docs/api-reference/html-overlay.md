@@ -1,4 +1,4 @@
-# HTML Overlay
+# HTMLOverlay
 
 Allows applications to overlay data on top of maps using a HTML container.
 

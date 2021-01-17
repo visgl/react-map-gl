@@ -11,36 +11,34 @@
       ]
     },
     {
-      "title": "Getting Started",
+      "title": "Developer Guide",
       "entries": [
         { "entry": "docs/get-started/get-started" },
         { "entry": "docs/get-started/mapbox-tokens" },
         { "entry": "docs/get-started/state-management" },
-        { "entry": "docs/get-started/adding-custom-data" }
-      ]
-    },
-    {
-      "title": "Advanced",
-      "entries": [
+        { "entry": "docs/advanced/viewport-transition" },
+        { "entry": "docs/get-started/faq" },
+        { "entry": "docs/get-started/adding-custom-data" },
         { "entry": "docs/advanced/custom-components" },
-        { "entry": "docs/advanced/custom-map-controller" },
-        { "entry": "docs/advanced/viewport-transition" }
+        { "entry": "docs/advanced/custom-map-controller" }
       ]
     },
     {
       "title": "API Reference",
       "entries": [
+        { "entry": "docs/api-reference/attribution-control" },
         { "entry": "docs/api-reference/canvas-overlay" },
         { "entry": "docs/api-reference/fly-to-interpolator" },
+        { "entry": "docs/api-reference/fullscreen-control" },
+        { "entry": "docs/api-reference/geolocate-control" },
         { "entry": "docs/api-reference/html-overlay" },
         { "entry": "docs/api-reference/interactive-map" },
         { "entry": "docs/api-reference/layer" },
         { "entry": "docs/api-reference/linear-interpolator" },
-        { "entry": "docs/api-reference/marker" },
+        { "entry": "docs/api-reference/map-context" },
         { "entry": "docs/api-reference/map-controller" },
+        { "entry": "docs/api-reference/marker" },
         { "entry": "docs/api-reference/navigation-control" },
-        { "entry": "docs/api-reference/fullscreen-control" },
-        { "entry": "docs/api-reference/geolocate-control" },
         { "entry": "docs/api-reference/pointer-event" },
         { "entry": "docs/api-reference/popup" },
         { "entry": "docs/api-reference/scale-control" },
