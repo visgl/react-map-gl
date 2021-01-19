@@ -16,6 +16,9 @@ const DEFAULT_STATE = {
   altitude: 1.5
 };
 
+const PITCH_MOUSE_THRESHOLD = 5;
+const PITCH_ACCEL = 1.2;
+
 export default class MapState {
   constructor({
     /** Mapbox viewport properties */
@@ -57,6 +60,8 @@ export default class MapState {
     startPanLngLat,
     /* Center of the zoom when the operation first started */
     startZoomLngLat,
+    /* Cursor position when the rotate operation started */
+    startRotatePos,
     /** Bearing when current perspective rotate operation started */
     startBearing,
     /** Pitch when current perspective rotate operation started */
@@ -89,9 +94,10 @@ export default class MapState {
       transitionInterruption
     });
 
-    this._interactiveState = {
+    this._state = {
       startPanLngLat,
       startZoomLngLat,
+      startRotatePos,
       startBearing,
       startPitch,
       startZoom
@@ -104,8 +110,8 @@ export default class MapState {
     return this._viewportProps;
   }
 
-  getInteractiveState() {
-    return this._interactiveState;
+  getState() {
+    return this._state;
   }
 
   /**
@@ -127,7 +133,7 @@ export default class MapState {
    *   the start of the operation. Must be supplied of `panStart()` was not called
    */
   pan({pos, startPos}) {
-    const startPanLngLat = this._interactiveState.startPanLngLat || this._unproject(startPos);
+    const startPanLngLat = this._state.startPanLngLat || this._unproject(startPos);
 
     if (!startPanLngLat) {
       return this;
@@ -159,8 +165,9 @@ export default class MapState {
    * @param {Object} params
    * @param {[Number, Number]} params.pos - position on screen where the center is
    */
-  rotateStart(params) {
+  rotateStart({pos}) {
     return this._getUpdatedMapState({
+      startRotatePos: pos,
       startBearing: this._viewportProps.bearing,
       startPitch: this._viewportProps.pitch
     });
@@ -169,29 +176,32 @@ export default class MapState {
   /**
    * Rotate
    * @param {Object} params
-   * @param {Number} params.deltaScaleX - a number between [-1, 1] specifying the
-   *   change to bearing.
-   * @param {Number} params.deltaScaleY - a number between [-1, 1] specifying the
-   *   change to pitch. -1 sets to minPitch and 1 sets to maxPitch.
+   * @param {[Number, Number]} params.pos - position on screen where the center is
+   * @param {Number} params.deltaAngleX - the change to bearing.
+   * @param {Number} params.deltaAngleY - the change to pitch.
    */
-  rotate({deltaScaleX = 0, deltaScaleY = 0}) {
-    const {startBearing, startPitch} = this._interactiveState;
+  rotate({pos, deltaAngleX = 0, deltaAngleY = 0}) {
+    const {startRotatePos, startBearing, startPitch} = this._state;
 
     if (!Number.isFinite(startBearing) || !Number.isFinite(startPitch)) {
       return this;
     }
 
-    const {pitch, bearing} = this._calculateNewPitchAndBearing({
-      deltaScaleX,
-      deltaScaleY,
-      startBearing: startBearing || 0,
-      startPitch: startPitch || 0
-    });
+    let newRotation;
+    if (pos) {
+      newRotation = this._calculateNewPitchAndBearing({
+        ...this._getRotationParams(pos, startRotatePos),
+        startBearing,
+        startPitch
+      });
+    } else {
+      newRotation = {
+        bearing: startBearing + deltaAngleX,
+        pitch: startPitch + deltaAngleY
+      };
+    }
 
-    return this._getUpdatedMapState({
-      bearing,
-      pitch
-    });
+    return this._getUpdatedMapState(newRotation);
   }
 
   /**
@@ -230,7 +240,7 @@ export default class MapState {
     assert(scale > 0, '`scale` must be a positive number');
 
     // Make sure we zoom around the current mouse position rather than map center
-    let {startZoom, startZoomLngLat} = this._interactiveState;
+    let {startZoom, startZoomLngLat} = this._state;
 
     if (!Number.isFinite(startZoom)) {
       // We have two modes of zoom:
@@ -280,7 +290,7 @@ export default class MapState {
 
   _getUpdatedMapState(newProps) {
     // Update _viewportProps
-    return new MapState(Object.assign({}, this._viewportProps, this._interactiveState, newProps));
+    return new MapState(Object.assign({}, this._viewportProps, this._state, newProps));
   }
 
   // Apply any constraints (mathematical or defined by _viewportProps) to map state
@@ -341,5 +351,30 @@ export default class MapState {
       pitch,
       bearing
     };
+  }
+
+  _getRotationParams(pos, startPos) {
+    const deltaX = pos[0] - startPos[0];
+    const deltaY = pos[1] - startPos[1];
+    const centerY = pos[1];
+    const startY = startPos[1];
+    const {width, height} = this._viewportProps;
+
+    const deltaScaleX = deltaX / width;
+    let deltaScaleY = 0;
+
+    if (deltaY > 0) {
+      if (Math.abs(height - startY) > PITCH_MOUSE_THRESHOLD) {
+        // Move from 0 to -1 as we drag upwards
+        deltaScaleY = (deltaY / (startY - height)) * PITCH_ACCEL;
+      }
+    } else if (deltaY < 0) {
+      if (startY > PITCH_MOUSE_THRESHOLD) {
+        // Move from 0 to 1 as we drag upwards
+        deltaScaleY = 1 - centerY / startY;
+      }
+    }
+    deltaScaleY = Math.min(1, Math.max(-1, deltaScaleY));
+    return {deltaScaleX, deltaScaleY};
   }
 }

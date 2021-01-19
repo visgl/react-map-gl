@@ -67,15 +67,9 @@ Get a new descriptor object of the map state. If specified, props in the `overri
 
 Add/remove event listeners based on the latest `InteractiveMap` props.
 
-##### `setState`
-
-`setState(newState)`
-
-Save a persistent state (e.g. isDragging) for future use.
-
 ##### `updateViewport`
 
-`updateViewport(newMapState, extraProps, extraState)`
+`updateViewport(newMapState, extraProps, interactionState)`
 
 Invoke `onViewportChange` callback with a new map state.
 

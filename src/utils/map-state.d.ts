@@ -36,7 +36,7 @@ export default class MapState {
 
   getViewportProps(): ViewportProps;
 
-  getInteractiveState(): InteractiveState;
+  getState(): InteractiveState;
 
   panStart(params: {pos: Array<number>}): MapState;
 
@@ -46,7 +46,7 @@ export default class MapState {
 
   rotateStart(params: {pos: Array<number>}): MapState;
 
-  rotate(params: {deltaScaleX?: number, deltaScaleY?: number}): MapState;
+  rotate(params: {pos?: Array<number>, deltaAngleX?: number, deltaAngleY?: number}): MapState;
 
   rotateEnd(): MapState;
 
