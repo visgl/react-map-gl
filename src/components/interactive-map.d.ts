@@ -48,6 +48,7 @@ export type InteractiveMapProps = StaticMapProps & Partial<{
   keyboard: boolean,
 
   touchAction: string,
+  eventRecognizerOptions: any,
   clickRadius: number,
   interactiveLayerIds: Array<string>,
   getCursor: (state: State) => string,
