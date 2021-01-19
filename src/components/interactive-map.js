@@ -162,19 +162,18 @@ function getFeatures(pos) {
     queryParams.layers = this.props.interactiveLayerIds;
   }
 
-  if (size) {
-    // Radius enables point features, like marker symbols, to be clicked.
-    return map.queryRenderedFeatures(
-      [
-        [pos[0] - size, pos[1] + size],
-        [pos[0] + size, pos[1] - size]
-      ],
-      queryParams
-    );
-  }
   try {
     // This may fail if map is still loading
-    return map.queryRenderedFeatures(pos, queryParams);
+    return map.queryRenderedFeatures(
+      size
+        ? // Radius enables point features, like marker symbols, to be clicked.
+          [
+            [pos[0] - size, pos[1] + size],
+            [pos[0] + size, pos[1] - size]
+          ]
+        : pos,
+      queryParams
+    );
   } catch {
     return null;
   }
