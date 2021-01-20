@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useRef, useEffect, useState, useMemo} from 'react';
+import {useRef, useEffect, useState, useCallback, useMemo} from 'react';
 import * as PropTypes from 'prop-types';
 
 import {document} from '../utils/globals';
@@ -80,6 +80,7 @@ function setupMapboxGeolocateControl(context, props, geolocateButton) {
     _getUIString: () => ''
   };
   control._setupUI(true);
+  control._map = context.map;
 
   // replace mapbox internal UI elements with ours
   control._geolocateButton = geolocateButton;
@@ -100,14 +101,6 @@ function setupMapboxGeolocateControl(context, props, geolocateButton) {
 
   control.on('geolocate', props.onGeolocate);
   return control;
-}
-
-function triggerGeolocate(context, props, control) {
-  if (control) {
-    control._map = context.map;
-    control.options = props;
-    control.trigger();
-  }
 }
 
 function updateCamera(position, {context, props}) {
@@ -142,25 +135,36 @@ function GeolocateControl(props) {
   useEffect(() => {
     let control;
 
-    isGeolocationSupported().then(result => {
-      setSupportsGeolocation(result);
+    if (context.map) {
+      isGeolocationSupported().then(result => {
+        setSupportsGeolocation(result);
 
-      if (geolocateButtonRef.current) {
-        control = setupMapboxGeolocateControl(context, props, geolocateButtonRef.current);
-        // Overwrite Mapbox's GeolocateControl internal method
-        control._updateCamera = position => updateCamera(position, thisRef);
-        createMapboxGeolocateControl(control);
-      }
-    });
+        if (geolocateButtonRef.current) {
+          control = setupMapboxGeolocateControl(context, props, geolocateButtonRef.current);
+          // Overwrite Mapbox's GeolocateControl internal method
+          control._updateCamera = position => updateCamera(position, thisRef);
+          createMapboxGeolocateControl(control);
+        }
+      });
+    }
 
     return () => {
-      control._clearWatch();
+      if (control) {
+        control._clearWatch();
+      }
     };
-  }, []);
+  }, [context.map]);
+
+  const triggerGeolocate = useCallback(() => {
+    if (mapboxGeolocateControl) {
+      mapboxGeolocateControl.options = thisRef.props;
+      mapboxGeolocateControl.trigger();
+    }
+  }, [mapboxGeolocateControl]);
 
   useEffect(() => {
     if (props.auto) {
-      triggerGeolocate(context, props, mapboxGeolocateControl);
+      triggerGeolocate();
     }
   }, [mapboxGeolocateControl, props.auto]);
 
@@ -186,7 +190,7 @@ function GeolocateControl(props) {
           type="button"
           title={supportsGeolocation ? label : disabledLabel}
           aria-label={supportsGeolocation ? label : disabledLabel}
-          onClick={() => triggerGeolocate(context, props, mapboxGeolocateControl)}
+          onClick={triggerGeolocate}
         >
           <span className="mapboxgl-ctrl-icon" aria-hidden="true" />
         </button>
