@@ -35,9 +35,9 @@ export default class TransitionManager {
   static defaultProps = DEFAULT_PROPS;
 
   constructor(props, getTime) {
-    if (props) {
-      this.props = props;
-    }
+    this.props = props;
+    this.onViewportChange = props.onViewportChange || noop;
+    this.onStateChange = props.onStateChange || noop;
     this.time = getTime || Date.now;
   }
 
@@ -174,11 +174,10 @@ export default class TransitionManager {
       startProps: initialProps.start,
       endProps: initialProps.end,
       animation: null,
-      propsInTransition: {},
-      interactionState
+      propsInTransition: {}
     };
     this._onTransitionFrame();
-    this.props.onStateChange(interactionState);
+    this.onStateChange(interactionState);
   }
 
   _onTransitionFrame = () => {
@@ -192,7 +191,7 @@ export default class TransitionManager {
       cancelAnimationFrame(this._animationFrame);
       this._animationFrame = null;
     }
-    this.props.onStateChange({
+    this.onStateChange({
       inTransition: false,
       isZooming: false,
       isPanning: false,
@@ -217,11 +216,7 @@ export default class TransitionManager {
     const mapState = new MapState(Object.assign({}, this.props, viewport));
     this.state.propsInTransition = mapState.getViewportProps();
 
-    this.props.onViewportChange(
-      this.state.propsInTransition,
-      this.state.interactionState,
-      this.props
-    );
+    this.onViewportChange(this.state.propsInTransition, this.props);
 
     if (shouldEnd) {
       this._endTransition();

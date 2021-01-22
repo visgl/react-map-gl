@@ -120,14 +120,11 @@ test('MapState - Pan', t => {
 });
 
 test('MapState - Rotate', t => {
-  const X_DELTA = -0.2;
-  const Y_DELTA = 0.2;
-
   SAMPLE_VIEWPORTS.forEach(viewport => {
     // one-off rotating
     const viewport1 = new MapState(viewport)
       .rotateStart({})
-      .rotate({deltaScaleX: X_DELTA, deltaScaleY: Y_DELTA})
+      .rotate({deltaAngleX: 2.25, deltaAngleY: viewport.pitch > 0 ? 1.5 : 4.25})
       .rotateEnd()
       .getViewportProps();
 
@@ -147,9 +144,9 @@ test('MapState - Rotate', t => {
 
     // chained rotating
     const viewport2 = new MapState(viewport)
-      .rotateStart({})
-      .rotate({deltaScaleX: 0, deltaScaleY: 0})
-      .rotate({deltaScaleX: X_DELTA, deltaScaleY: Y_DELTA})
+      .rotateStart({pos: [400, 300]})
+      .rotate({pos: [410, 300]})
+      .rotate({pos: [410, 285]})
       .rotateEnd()
       .getViewportProps();
 
@@ -163,19 +160,19 @@ test('MapState - Rotate', t => {
     const state = new MapState(viewport).rotateStart({});
 
     t.is(
-      state.rotate({deltaScaleY: 2}).getViewportProps().pitch,
+      state.rotate({deltaAngleY: 180}).getViewportProps().pitch,
       viewport.maxPitch || MAPBOX_LIMITS.maxPitch,
       'Capped at max pitch'
     );
 
     t.is(
-      state.rotate({deltaScaleY: -2}).getViewportProps().pitch,
+      state.rotate({deltaAngleY: -180}).getViewportProps().pitch,
       viewport.minPitch || MAPBOX_LIMITS.minPitch,
       'Capped at min pitch'
     );
 
     t.is(
-      state.rotate({deltaScaleX: 2}).getViewportProps().bearing,
+      state.rotate({deltaAngleX: 360}).getViewportProps().bearing,
       viewport.bearing || 0,
       'Big delta X is fine'
     );

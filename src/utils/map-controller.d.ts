@@ -28,13 +28,13 @@ export default class MapController {
   onStateChange: Function;
   mapStateProps: any;
   eventManager: any;
-  scrollZoom: boolean;
-  dragPan: boolean;
-  dragRotate: boolean;
+  scrollZoom: boolean | {speed?: number, smooth?: number};
+  dragPan: boolean | {inertia?: number};
+  dragRotate: boolean | {inertia?: number};
   doubleClickZoom: boolean;
-  touchZoom: boolean;
-  touchRotate: boolean;
-  keyboard: boolean;
+  touchZoom: boolean | {inertia?: number};
+  touchRotate: boolean | {inertia?: number};
+  keyboard: boolean | {zoomSpeed?: number, moveSpeed?: number, rotateSpeedX?: number, rotateSpeedY?: number};
 
   _state: any;
   _events: any;

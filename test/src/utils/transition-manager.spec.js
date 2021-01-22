@@ -128,7 +128,7 @@ const TEST_CASES = [
 ];
 
 test('TransitionManager#constructor', t => {
-  const transitionManager = new TransitionManager();
+  const transitionManager = new TransitionManager({});
   t.ok(transitionManager, 'TransitionManager constructor does not throw errors');
   t.notOk(transitionManager._isTransitionInProgress(), 'no transition in progress');
   t.end();
@@ -177,9 +177,8 @@ test('TransitionManager#callbacks', t => {
       );
       endCount++;
     },
-    onViewportChange: (newViewport, interactionState) => {
+    onViewportChange: newViewport => {
       t.ok(!transitionInterpolator.arePropsEqual(viewport, newViewport), 'viewport has changed');
-      t.ok(interactionState.inTransition, 'inTransition flag is true');
       viewport = newViewport;
       // update props in transition, should not trigger interruption
       transitionManager.processViewportChange(Object.assign({}, transitionProps, viewport));

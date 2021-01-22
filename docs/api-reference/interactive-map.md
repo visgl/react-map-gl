@@ -102,23 +102,30 @@ Max pitch in degrees.
 
 Min pitch in degrees.
 
-##### `scrollZoom` (Boolean)
+##### `scrollZoom` (Boolean|Object)
 
 - default: `true`
 
-Enable scroll to zoom.
+Enable scroll to zoom. If an object is provided, may contain the following options to customize the scroll zoom behavior:
 
-##### `dragPan` (Boolean)
+- `speed` (Number) - Multiplier for the wheel delta. Default `0.01`.
+- `smooth` (Number) - Smoothly transition to the new zoom. If enabled, will provide a slightly lagged but smoother experience. Default `true`.
+
+##### `dragPan` (Boolean|Object)
 
 - default: `true`
 
-Enable drag to pan.
+Enable drag to pan. If an object is provided, may contain the following options to customize its behavior:
+
+- `inertia` (Number) - Enable momentum/inertia when the gesture ends. The value specifies after how long the panning comes to a stop, in milliseconds. Default `300`.
 
 ##### `dragRotate` (Boolean)
 
 - default: `true`
 
-Enable drag to rotate.
+Enable drag to rotate. If an object is provided, may contain the following options to customize its behavior:
+
+- `inertia` (Number) - Enable momentum/inertia when the gesture ends. The value specifies after how long the rotation comes to a stop, in milliseconds. Default `300`.
 
 ##### `doubleClickZoom` (Boolean)
 
@@ -126,17 +133,33 @@ Enable drag to rotate.
 
 Enable double click to zoom.
 
-##### `touchZoom` (Boolean)
+##### `touchZoom` (Boolean|Object)
 
 - default: `true`
 
-Enable multitouch zoom.
+Enable multitouch zoom. If an object is provided, may contain the following options to customize its behavior:
 
-##### `touchRotate` (Boolean)
+- `inertia` (Number) - Enable momentum/inertia when the gesture ends. The value specifies after how long the zooming comes to a stop, in milliseconds. Default `300`.
+
+##### `touchRotate` (Boolean|Object)
 
 - default: `false`
 
-Enable multitouch rotate.
+Enable multitouch rotate, including two-finger rotation to change bearing and three-finger swipe to change pitch. If an object is provided, may contain the following options to customize its behavior:
+
+- `inertia` (Number) - Enable momentum/inertia when the gesture ends. The value specifies after how long the rotation comes to a stop, in milliseconds. Default `300`.
+
+##### `keyboard (Boolean|Object)
+
+- default: `true`
+
+Enable keyboard navigation. If an object is provided, may contain the following options to customize its behavior:
+
+- `zoomSpeed` (Number) - speed of zoom using +/- keys. Default `2`.
+- `moveSpeed` (Number) - speed of movement using arrow keys, in pixels.
+- `rotateSpeedX` (Number) - speed of rotation using shift + left/right arrow keys, in degrees. Default `15`.
+- `rotateSpeedY` (Number) - speed of rotation using shift + up/down arrow keys, in degrees. Default `10`.
+
 
 ##### `touchAction` (String)
 
