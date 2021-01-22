@@ -169,6 +169,33 @@ Allow browser default touch actions. Default `none`. See [hammer.js doc](http://
 
 By default, the map captures all touch interactions. This prop is useful for mobile applications to unblock default scrolling behavior. For example, use the combination `dragPan: false` and `touchAction: 'pan-y'` to allow vertical page scroll when dragging over the map.
 
+##### `eventRecognizerOptions` (Object)
+
+- default: `{}`
+
+Set options for gesture recognition. My contain the following fields:
+
+- `pan` - an object that is [Hammer.Pan](http://hammerjs.github.io/recognizer-pan/) options. This gesture is used for drag events.
+- `pinch` - an object that is [Hammer.Pinch](http://hammerjs.github.io/recognizer-pinch/) options This gesture is used for two-finger touch events.
+- `tripan` - an object that is [Hammer.Pan](http://hammerjs.github.io/recognizer-pan/) options.  This gesture is used for three-finger touch events.
+- `tap` - an object that is [Hammer.Tap](http://hammerjs.github.io/recognizer-tap/) options. This gesture is used for the `onClick` callback.
+- `anytap` - an object that is [Hammer.Tap](http://hammerjs.github.io/recognizer-tap/) options. This gesture is used for the `onNativeClick` callback.
+- `doubletap` - an object that is [Hammer.Tap](http://hammerjs.github.io/recognizer-tap/) options. This gesture is used for double click events.
+
+For example, the following setting makes panning less sensitive and clicking easier on mobile:
+
+```jsx
+const eventRecognizerOptions = isMobile ? {
+  pan: {threshold: 10},
+  tap: {threshold: 5}
+} : {};
+
+<MapGL
+  eventRecognizerOptions={eventRecognizerOptions}
+/>
+```
+
+Note that the value of this prop is used once when the component mounts. Subsequent changes will be ignored.
 
 ##### `clickRadius` (Number)
 

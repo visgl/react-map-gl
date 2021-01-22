@@ -80,6 +80,9 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
   /** Custom touch-action CSS for the event canvas. Defaults to 'none' */
   touchAction: PropTypes.string,
 
+  /** Custom hammer.js recognizer options */
+  eventRecognizerOptions: PropTypes.object,
+
   /** Radius to detect features around a clicked point. Defaults to 0. */
   clickRadius: PropTypes.number,
 
@@ -119,6 +122,7 @@ const defaultProps = Object.assign(
     keyboard: true,
 
     touchAction: 'none',
+    eventRecognizerOptions: {},
     clickRadius: 0,
     getCursor: getDefaultCursor
   }
@@ -269,7 +273,14 @@ function onPointerClick(event) {
 const InteractiveMap = forwardRef((props, ref) => {
   const parentContext = useContext(MapContext);
   const controller = useMemo(() => props.controller || new MapController(), []);
-  const eventManager = useMemo(() => new EventManager(null, {touchAction: props.touchAction}), []);
+  const eventManager = useMemo(
+    () =>
+      new EventManager(null, {
+        touchAction: props.touchAction,
+        recognizerOptions: props.eventRecognizerOptions
+      }),
+    []
+  );
   const eventCanvasRef = useRef(null);
   const staticMapRef = ref || useRef(null);
 
