@@ -2,6 +2,19 @@
 
 # Version 6.1
 
+## 6.1.0-beta.1 (Jan 22, 2021)
+
+- Add eventRecognizerOptions prop (#1302)
+- Controller inertia (#1303)
+- Misc component bug fixes (#1301)
+- Align control component APIs (#1297)
+- Minor fixes to GeolocateControl (#1296)
+- Add AttributionControl (#1295)
+- Smooth zoom on scroll (#1288)
+- Defer onInteractionStateChange callback (#1287)
+- Prevent overlay container from scrolling on focus (#1286)
+- Fix no token warning message (#1289)
+
 ## 6.1.0-alpha.1 (Jan 5, 2021)
 
 - Clean up and document MapContext and useMapControl APIs (#1278)
