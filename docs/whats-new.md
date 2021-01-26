@@ -1,5 +1,21 @@
 # What's new
 
+## react-map-gl v5.3/v6.1
+
+Release date: Jan 27, 2020
+
+### Highlights
+
+- **TypeScript and Flow typings** are now published with the library
+- **More controller customizations.** Smooth easing on wheel scroll, three-finger gesture to change pitch, inertia after pan/pinch, and customizable keyboard navigation speed. See the updated [interaction options](/docs/api-reference/interactive-map.md#interaction-options) for details.
+- A new [eventRecognizerOptions](/docs/api-reference/interactive-map.md#eventrecognizeroptions) prop is added for fine-tuning the interaction experience.
+- New component: [AttributionControl](/docs/api-reference/attribution-control.md)
+- Promoted to official API: [MapContext](/docs/api-reference/map-context.md)
+- Resolved React error over attempted state update during render
+- `GeolocateControl` added supports for `showAccuracyCircle`
+- All controls now support inline styling with a `style` prop
+- All components and examples have been rewritten as functional components
+
 ## react-map-gl v6.0
 
 Release date: Dec 16, 2020
