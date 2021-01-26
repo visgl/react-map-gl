@@ -7,7 +7,7 @@ Release date: Jan 27, 2020
 ### Highlights
 
 - **TypeScript and Flow typings** are now published with the library
-- **More controller customizations** Smooth easing on wheel scroll, three-finger gesture to change pitch, inertia after pan/pinch, and customizable keyboard navigation speed. See the updated [interaction options](/docs/api-reference/interactive-map.md#interaction-options) for details.
+- **More controller customizations.** Smooth easing on wheel scroll, three-finger gesture to change pitch, inertia after pan/pinch, and customizable keyboard navigation speed. See the updated [interaction options](/docs/api-reference/interactive-map.md#interaction-options) for details.
 - A new [eventRecognizerOptions](/docs/api-reference/interactive-map.md#eventrecognizeroptions) prop is added for fine-tuning the interaction experience.
 - New component: [AttributionControl](/docs/api-reference/attribution-control.md)
 - Promoted to official API: [MapContext](/docs/api-reference/map-context.md)
