@@ -1,8 +1,8 @@
 # CHANGELOG
 
-# Version 6.1
+# Version 5.3
 
-## 6.1.0-beta.1 (Jan 22, 2021)
+## 5.3.0 (Jan 27, 2021)
 
 - Add eventRecognizerOptions prop (#1302)
 - Controller inertia (#1303)
@@ -12,14 +12,8 @@
 - Add AttributionControl (#1295)
 - Smooth zoom on scroll (#1288)
 - Defer onInteractionStateChange callback (#1287)
-- Prevent overlay container from scrolling on focus (#1286)
-- Fix no token warning message (#1289)
-
-## 6.1.0-alpha.1 (Jan 5, 2021)
-
 - Clean up and document MapContext and useMapControl APIs (#1278)
 - Fix React error when transition is triggered (#1277)
-- Bump mapbox-gl (#1279)
 - Refactor StaticMap and InteractiveMap into functional components (#1271)
 - Resolve prettier conflict (#1274)
 - Migrate to TypeScript: initial commit (#1268)
@@ -28,22 +22,12 @@
 - Elevate map to top-level MapContext (#1233)
 - Replace react resizer with ResizeObserver (#1174)
 
-# Version 6.0
-
-## Version 6.0.2 (Dec 21, 2020)
-
-- Add support for 'sky' layer type to Layer component (#1270)
-
-## Version 6.0.1 (Dec 17, 2020)
-
-- Drop a breaking change intended for the next minor release
-
-## Version 6.0.0 (Dec 16, 2020)
-
-- mapbox-gl@2.0.0 (#1263)
-- Change `maxPitch` to `85`
-
 # Version 5.2
+
+## 5.2.12 (Jan 7, 2021)
+
+- Fix no token warning message (#1289)
+- Prevent overlay container from scrolling on focus (#1286)
 
 ## 5.2.11 (Dec 11, 2020)
 
