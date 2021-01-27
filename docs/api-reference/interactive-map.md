@@ -409,5 +409,5 @@ Inherit the following methods from [StaticMap](/docs/api-reference/static-map.md
 
 ## Source
 
-[interactive-map.js](https://github.com/visgl/react-map-gl/tree/6.0-release/src/components/interactive-map.js)
+[interactive-map.js](https://github.com/visgl/react-map-gl/tree/5.3-release/src/components/interactive-map.js)
 

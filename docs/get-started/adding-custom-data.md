@@ -73,7 +73,7 @@ function redraw({project}) {
 
 ### Example Overlays
 
-There are a couple of [additional overlays](https://github.com/visgl/react-map-gl/tree/6.0-release/examples/additional-overlays) in the examples folder that can be copied into applications `ScatterplotOverlay`, `ChoroplethOverlay`.
+There are a couple of [additional overlays](https://github.com/visgl/react-map-gl/tree/5.3-release/examples/additional-overlays) in the examples folder that can be copied into applications `ScatterplotOverlay`, `ChoroplethOverlay`.
 
 Third-party overlays are also available. For example, the [heatmap-overlay](https://github.com/vicapow/react-map-gl-heatmap-overlay) module uses [webgl-heatmap](https://github.com/vicapow/webgl-heatmap) to create geographic heatmaps.
 

@@ -47,5 +47,5 @@ Stop propagation of pointermove event to the map component. Can be used to stop 
 
 
 ## Source
-[canvas-overlay.js](https://github.com/visgl/react-map-gl/tree/6.0-release/src/overlays/canvas-overlay.js)
+[canvas-overlay.js](https://github.com/visgl/react-map-gl/tree/5.3-release/src/overlays/canvas-overlay.js)
 

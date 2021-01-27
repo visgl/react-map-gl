@@ -70,4 +70,4 @@ Type of the source.
 
 ## Source
 
-[source.js](https://github.com/visgl/react-map-gl/tree/6.0-release/src/components/source.js)
+[source.js](https://github.com/visgl/react-map-gl/tree/5.3-release/src/components/source.js)

@@ -9,7 +9,7 @@ function ControlPanel(props) {
       <p>Smooth animate of the viewport.</p>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/viewport-animation"
+          href="https://github.com/visgl/react-map-gl/tree/5.3-release/examples/viewport-animation"
           target="_new"
         >
           View Code ↗
