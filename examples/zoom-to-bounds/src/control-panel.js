@@ -7,7 +7,7 @@ function ControlPanel() {
       <p>Click on a San Fransisco Neighborhood to zoom in.</p>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/zoom-to-bounds"
+          href="https://github.com/visgl/react-map-gl/tree/6.1-release/examples/zoom-to-bounds"
           target="_new"
         >
           View Code ↗

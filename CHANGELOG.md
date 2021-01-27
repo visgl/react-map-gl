@@ -2,6 +2,8 @@
 
 # Version 6.1
 
+## 6.1.0 (Jan 27, 2021)
+
 ## 6.1.0-beta.1 (Jan 22, 2021)
 
 - Add eventRecognizerOptions prop (#1302)
@@ -30,6 +32,11 @@
 
 # Version 6.0
 
+## Version 6.0.3 (Jan 7, 2021)
+
+- Fix no token warning message (#1289)
+- Prevent overlay container from scrolling on focus (#1286)
+
 ## Version 6.0.2 (Dec 21, 2020)
 
 - Add support for 'sky' layer type to Layer component (#1270)
@@ -44,6 +51,11 @@
 - Change `maxPitch` to `85`
 
 # Version 5.2
+
+## 5.2.12 (Jan 7, 2021)
+
+- Fix no token warning message (#1289)
+- Prevent overlay container from scrolling on focus (#1286)
 
 ## 5.2.11 (Dec 11, 2020)
 

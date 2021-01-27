@@ -24,7 +24,7 @@ function ControlPanel(props) {
       <p>Override default event handling logic.</p>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/6.0-release/examples/custom-controller"
+          href="https://github.com/visgl/react-map-gl/tree/6.1-release/examples/custom-controller"
           target="_new"
         >
           View Code ↗
