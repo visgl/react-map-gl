@@ -11,9 +11,6 @@ jobs:
   test-node:
     runs-on: ubuntu-latest
 
-    env:
-      MapboxAccessToken: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-
     steps:
       - uses: actions/checkout@v2.1.1
 

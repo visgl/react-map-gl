@@ -7,7 +7,7 @@ const TEST_CASES = [
     result: true
   },
   {
-    props: {longitude: -122, latitude: 38, zoom: 10, pitch: 90, bearing: 0},
+    props: {longitude: -122, latitude: 38, zoom: 10, pitch: 70, bearing: 0},
     result: false
   },
   {

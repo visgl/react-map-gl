@@ -124,7 +124,7 @@ test('MapState - Rotate', t => {
     // one-off rotating
     const viewport1 = new MapState(viewport)
       .rotateStart({})
-      .rotate({deltaAngleX: 2.25, deltaAngleY: viewport.pitch > 0 ? 1.5 : 4.25})
+      .rotate({deltaAngleX: 2.25, deltaAngleY: viewport.pitch > 0 ? 1.5 : 3})
       .rotateEnd()
       .getViewportProps();
 
