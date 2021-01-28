@@ -59,3 +59,4 @@ export {ViewportProps} from './utils/map-state';
 export {MapContextProps} from './components/map-context';
 export {MapRef} from './components/static-map';
 export {SourceProps} from './components/source';
+export {LayerProps} from './components/layer'
