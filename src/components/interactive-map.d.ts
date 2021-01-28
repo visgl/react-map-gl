@@ -8,7 +8,7 @@ type State = {
   isHovering: boolean
 };
 
-type MapEvent = MjolnirEvent & {
+export type MapEvent = MjolnirEvent & {
   point: Array<number>,
   lngLat: Array<number>,
   features?: Array<any>

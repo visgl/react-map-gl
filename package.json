@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "@types/geojson": "^7946.0.7",
     "mapbox-gl": "^2.0.1",
     "mjolnir.js": "^2.5.0",
     "prop-types": "^15.7.2",
