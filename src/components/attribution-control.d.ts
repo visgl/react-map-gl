@@ -1,7 +1,7 @@
 import {ReactElement} from 'react';
 import {MapControlProps} from './use-map-control';
 
-type AttributionControlProps = MapControlProps & Partial<{
+export type AttributionControlProps = MapControlProps & Partial<{
   toggleLabel: string,
   className: string,
   style: Object,
