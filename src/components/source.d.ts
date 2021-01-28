@@ -1,5 +1,5 @@
 
-import {ReactElement} from 'react';
+import {PureComponent, ReactElement} from 'react';
 import * as GeoJSON from 'geojson';
 
 export interface SourceProps {
@@ -26,6 +26,8 @@ export interface SourceProps {
   coordinates?: number[][];
   urls?: string[];
   children?: any;
+
 }
 
-export default function Source(props: SourceProps): ReactElement;
+export default class Source extends PureComponent<SourceProps> {}
+
