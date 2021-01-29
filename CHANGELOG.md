@@ -2,6 +2,11 @@
 
 # Version 6.1
 
+## 6.1.1 (Jan 29, 2021)
+
+- Improve Type Definitions (#1308)
+- Fix SSR warning (#1310)
+
 ## 6.1.0 (Jan 27, 2021)
 
 ## 6.1.0-beta.1 (Jan 22, 2021)
