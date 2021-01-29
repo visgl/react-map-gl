@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useContext, useRef, useMemo, useEffect, useLayoutEffect, forwardRef} from 'react';
+import {useContext, useRef, useMemo, useEffect, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -11,6 +11,7 @@ import MapContext, {MapContextProvider} from './map-context';
 
 import {EventManager} from 'mjolnir.js';
 import MapController from '../utils/map-controller';
+import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -393,7 +394,7 @@ const InteractiveMap = forwardRef((props, ref) => {
     };
   }, []);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (viewportUpdateRequested) {
       // Perform deferred updates
       handleViewportChange(...viewportUpdateRequested);
@@ -418,7 +419,7 @@ const InteractiveMap = forwardRef((props, ref) => {
     [style, width, height, getCursor, thisRef.state]
   );
 
-  if (!viewportUpdateRequested) {
+  if (!viewportUpdateRequested || !thisRef._child) {
     // Only rerender if no viewport update has been requested during render.
     // Otherwise return the last rendered child, and invoke the callback when we're done.
     thisRef._child = (
