@@ -2,7 +2,7 @@ import {ReactElement} from 'react';
 import {MapControlProps} from './use-map-control';
 import type {PositionType} from '../utils/dynamic-position';
 
-type PopupProps = MapControlProps & {
+export type PopupProps = MapControlProps & {
   className?: string,
   longitude: number,
   latitude: number,

@@ -1,7 +1,7 @@
 import {ReactElement} from 'react';
 import type {DraggableControlProps} from './draggable-control';
 
-type MarkerProps = DraggableControlProps & {
+export type MarkerProps = DraggableControlProps & {
   className?: string,
   longitude: number,
   latitude: number
