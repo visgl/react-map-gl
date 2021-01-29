@@ -3,7 +3,7 @@ import {PureComponent, Ref} from "react";
 
 export interface LayerProps {
   id?: string;
-  type:  'fill' | 'line' | 'symbol' | 'circle' | 'fill-extrusion' | 'raster' | 'background' | 'heatmap' | 'hillshade';
+  type:  'fill' | 'line' | 'symbol' | 'circle' | 'fill-extrusion' | 'raster' | 'background' | 'heatmap' | 'hillshade' | 'sky';
   source?: string;
   beforeId?: string;
   layout?: MapboxGL.AnyLayout;
