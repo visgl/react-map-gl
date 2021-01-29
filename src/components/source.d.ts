@@ -1,14 +1,33 @@
 
-import {ReactElement} from 'react';
+import {PureComponent, ReactElement} from 'react';
+import * as GeoJSON from 'geojson';
 
-type SourceProps = {
-  id?: string,
-  type: string,
-  children?: any,
-  data?: any,
-  coordinates?: any,
-  url?: any,
-  tiles?: any
-};
+export interface SourceProps {
+  id?: string;
+  type: string;
+  url?: string;
+  tiles?: string[];
+  tileSize?: number;
+  bounds?: number[];
+  scheme?: 'xyz' | 'tms';
+  minzoom?: number;
+  maxzoom?: number;
+  attribution?: string;
+  encoding?: 'terrarium' | 'mapbox';
+  data?: GeoJSON.Feature<GeoJSON.Geometry> | GeoJSON.FeatureCollection<GeoJSON.Geometry> | string;
+  buffer?: number;
+  tolerance?: number;
+  cluster?: boolean;
+  clusterRadius?: number;
+  clusterProperties?: object;
+  clusterMaxZoom?: number;
+  lineMetrics?: boolean;
+  generateId?: boolean;
+  coordinates?: number[][];
+  urls?: string[];
+  children?: any;
 
-export default function Source(props: SourceProps): ReactElement;
+}
+
+export default class Source extends PureComponent<SourceProps> {}
+
