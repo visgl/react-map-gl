@@ -73,7 +73,7 @@
     "flowgen": "^1.12.1",
     "immutable": "^3.8.2",
     "jsdom": "^15.0.0",
-    "ocular-dev-tools": "^0.1.8",
+    "ocular-dev-tools": "^0.2.2",
     "pre-commit": "^1.2.2",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
