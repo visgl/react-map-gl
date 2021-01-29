@@ -50,7 +50,7 @@ const viewport = new WebMercatorViewport({width: 800, height: 600})
 
 You cannot manipulate the map camera via `getMap()` and the native mapbox-gl API. To conform to the reactive programming paradigm, all camera changes should be driven by prop changes on the React component. Circumventing this will break the binding between React components and the underlying map instance.
 
-Instead, use the [InteractiveMap](/docs/api-reference/interactive-map.md)'s transition props. See [viewport transition](docs/advanced/viewport-transition.md) for examples.
+Instead, use the [InteractiveMap](/docs/api-reference/interactive-map.md)'s transition props. See [viewport transition](/docs/advanced/viewport-transition.md) for examples.
 
 ## mapbox-gl-draw does not work with react-map-gl
 
