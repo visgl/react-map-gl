@@ -2,6 +2,11 @@
 
 # Version 5.3
 
+## 5.3.1 (Jan 29, 2021)
+
+- Improve Type Definitions (#1308)
+- Fix SSR warning (#1310)
+
 ## 5.3.0 (Jan 27, 2021)
 
 - Add eventRecognizerOptions prop (#1302)
