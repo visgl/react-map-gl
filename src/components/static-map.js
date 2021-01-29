@@ -24,7 +24,6 @@ import {
   useEffect,
   useContext,
   useMemo,
-  useLayoutEffect,
   useImperativeHandle,
   forwardRef
 } from 'react';
@@ -38,6 +37,7 @@ import mapboxgl from '../utils/mapboxgl';
 import {checkVisibilityConstraints} from '../utils/map-constraints';
 import {MAPBOX_LIMITS} from '../utils/map-state';
 import MapContext, {MapContextProvider} from './map-context';
+import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
 
 /* eslint-disable max-len */
 const TOKEN_DOC_URL = 'https://visgl.github.io/react-map-gl/docs/get-started/mapbox-tokens';
@@ -174,7 +174,7 @@ const StaticMap = forwardRef((props, ref) => {
     };
   }, []);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (mapboxRef.current) {
       mapboxRef.current.setProps(
         Object.assign({}, props, {
