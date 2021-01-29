@@ -8,12 +8,12 @@ type CallbackEvent = MjolnirEvent & {
 };
 
 export type DraggableControlProps = MapControlProps & {
-  draggable: boolean,
+  draggable?: boolean,
   onDrag?: (evt: CallbackEvent) => void,
   onDragEnd?: (evt: CallbackEvent) => void,
   onDragStart?: (evt: CallbackEvent) => void,
-  offsetLeft: number,
-  offsetTop: number
+  offsetLeft?: number,
+  offsetTop?: number
 };
 
 type State = {
