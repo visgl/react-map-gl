@@ -1,5 +1,5 @@
-import {ReactElement} from 'react';
-import type {StaticMapProps} from './static-map';
+import {ReactElement, Ref} from 'react';
+import type {MapRef, StaticMapProps} from './static-map';
 import MapController, {MjolnirEvent} from '../utils/map-controller';
 
 type State = {
@@ -46,13 +46,13 @@ export type InteractiveMapProps = StaticMapProps & Partial<{
   touchZoom: boolean,
   touchRotate: boolean,
   keyboard: boolean,
-
   touchAction: string,
   eventRecognizerOptions: any,
   clickRadius: number,
   interactiveLayerIds: Array<string>,
   getCursor: (state: State) => string,
-  controller: MapController
+  controller: MapController,
+  ref: Ref<MapRef>
 }>;
 
 export default function InteractiveMap(props: InteractiveMapProps): ReactElement;
