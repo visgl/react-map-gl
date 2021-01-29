@@ -1,5 +1,5 @@
 import * as MapboxGL from "mapbox-gl";
-import {PureComponent} from "react";
+import {PureComponent, Ref} from "react";
 
 export interface LayerProps {
   id?: string;
@@ -20,8 +20,9 @@ export interface LayerProps {
   filter?: any[];
   minzoom?: number;
   maxzoom?: number;
+  ref?:Ref<LayerProps>
 }
 
-export default class Layer extends PureComponent<LayerProps> {}
+export default function Layer(props: LayerProps): null;
 
 
