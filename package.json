@@ -38,7 +38,7 @@
     "flowgen": "for i in $(find dist -type f -name \"*.d.ts\"); do sh -c \"flowgen $i -o ${i%.*.*}.js.flow\"; done;",
     "lint": "ocular-lint",
     "cover": "ocular-test cover",
-    "publish-prod": "ocular-publish prod",
+    "publish-prod": "ocular-publish prod alt-latest",
     "publish-beta": "ocular-publish beta",
     "test": "tsc && ocular-test",
     "test-fast": "tsc && ocular-test node",
