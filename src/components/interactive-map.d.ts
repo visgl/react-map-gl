@@ -38,6 +38,9 @@ export type InteractiveMapProps = StaticMapProps & Partial<{
   transitionInterpolator: any,
   transitionInterruption: number,
   transitionEasing: Function,
+  onTransitionStart: Function,
+  onTransitionInterrupt: Function,
+  onTransitionEnd: Function,
 
   scrollZoom: boolean,
   dragPan: boolean,
