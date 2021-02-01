@@ -52,7 +52,12 @@ export type InteractiveMapProps = StaticMapProps & Partial<{
   interactiveLayerIds: Array<string>,
   getCursor: (state: State) => string,
   controller: MapController,
-  ref: Ref<MapRef>
+  ref: Ref<MapRef>,
+
+  maxZoom: number,
+  minZoom: number,
+  maxPitch: number,
+  minPitch: number
 }>;
 
 export default function InteractiveMap(props: InteractiveMapProps): ReactElement;
