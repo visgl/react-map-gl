@@ -2,6 +2,12 @@
 
 # Version 6.1
 
+## 6.1.2 (Feb 1, 2021)
+
+- Add attribution control to typescript index exports (#1314)
+- Fix Typescript Types for Viewport Constraints Type (#1318)
+- Fix bug where getMap() at component mount returns null (#1319)
+
 ## 6.1.1 (Jan 29, 2021)
 
 - Improve Type Definitions (#1308)
