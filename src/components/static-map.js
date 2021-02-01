@@ -18,15 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
-import {
-  useState,
-  useRef,
-  useEffect,
-  useContext,
-  useMemo,
-  useImperativeHandle,
-  forwardRef
-} from 'react';
+import {useState, useRef, useContext, useMemo, useImperativeHandle, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
 import WebMercatorViewport from 'viewport-mercator-project';
@@ -108,10 +100,11 @@ function NoTokenWarning() {
   );
 }
 
-function getRefHandles(map) {
+function getRefHandles(mapboxRef) {
   return () => ({
-    getMap: () => map,
+    getMap: () => mapboxRef.current && mapboxRef.current.getMap(),
     queryRenderedFeatures: (geometry, options = {}) => {
+      const map = mapboxRef.current && mapboxRef.current.getMap();
       return map && map.queryRenderedFeatures(geometry, options);
     }
   });
@@ -129,7 +122,7 @@ const StaticMap = forwardRef((props, ref) => {
   const containerRef = useRef(null);
   const context = useContext(MapContext);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!StaticMap.supported()) {
       return undefined;
     }
@@ -191,7 +184,7 @@ const StaticMap = forwardRef((props, ref) => {
   // Note: this is not a recommended pattern in React FC - Keeping for backward compatibility
   useImperativeHandle(
     ref,
-    useMemo(() => getRefHandles(map), [map])
+    useMemo(() => getRefHandles(mapboxRef), [])
   );
 
   const overlays = map && (
