@@ -18,15 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
-import {
-  useState,
-  useRef,
-  useEffect,
-  useContext,
-  useMemo,
-  useImperativeHandle,
-  forwardRef
-} from 'react';
+import {useState, useRef, useContext, useMemo, useImperativeHandle, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
 import WebMercatorViewport from 'viewport-mercator-project';
