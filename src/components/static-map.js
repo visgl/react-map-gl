@@ -108,10 +108,11 @@ function NoTokenWarning() {
   );
 }
 
-function getRefHandles(map) {
+function getRefHandles(mapboxRef) {
   return () => ({
-    getMap: () => map,
+    getMap: () => mapboxRef.current && mapboxRef.current.getMap(),
     queryRenderedFeatures: (geometry, options = {}) => {
+      const map = mapboxRef.current && mapboxRef.current.getMap();
       return map && map.queryRenderedFeatures(geometry, options);
     }
   });
@@ -129,7 +130,7 @@ const StaticMap = forwardRef((props, ref) => {
   const containerRef = useRef(null);
   const context = useContext(MapContext);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!StaticMap.supported()) {
       return undefined;
     }
@@ -191,7 +192,7 @@ const StaticMap = forwardRef((props, ref) => {
   // Note: this is not a recommended pattern in React FC - Keeping for backward compatibility
   useImperativeHandle(
     ref,
-    useMemo(() => getRefHandles(map), [map])
+    useMemo(() => getRefHandles(mapboxRef), [])
   );
 
   const overlays = map && (
