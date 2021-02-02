@@ -48,19 +48,19 @@ const propTypes = Object.assign({}, StaticMap.propTypes, {
 
   /** Enables control event handling */
   // Scroll to zoom
-  scrollZoom: PropTypes.bool,
+  scrollZoom: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   // Drag to pan
-  dragPan: PropTypes.bool,
+  dragPan: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   // Drag to rotate
-  dragRotate: PropTypes.bool,
+  dragRotate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   // Double click to zoom
   doubleClickZoom: PropTypes.bool,
   // Multitouch zoom
-  touchZoom: PropTypes.bool,
+  touchZoom: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   // Multitouch rotate
-  touchRotate: PropTypes.bool,
+  touchRotate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   // Keyboard
-  keyboard: PropTypes.bool,
+  keyboard: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
 
   /** Event callbacks */
   onHover: PropTypes.func,
