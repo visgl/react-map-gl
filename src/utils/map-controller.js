@@ -375,7 +375,7 @@ export default class MapController {
       return false;
     }
 
-    const {speed = 0.01, smooth = true} = this.scrollZoom;
+    const {speed = 0.01, smooth = false} = this.scrollZoom;
 
     event.preventDefault();
 
