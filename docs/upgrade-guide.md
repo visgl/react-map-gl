@@ -4,14 +4,13 @@
 
 - `MapContext` is now an official API. The experimental `_MapContext` export will be removed in a future release.
 - `react-virtualized-auto-sizer` is no longer a dependency.
-- Inertia and smooth zooming has been enabled by default on the map controller. To revert to the behavior in previous versions, set the [interaction options](/docs/api-reference/interactive-map.md#interaction-options):
+- Inertia has been enabled by default on the map controller. To revert to the behavior in previous versions, set the [interaction options](/docs/api-reference/interactive-map.md#interaction-options):
 
 ```js
 const CONTROLLER_OPTS = {
   dragPan: {inertia: 0},
   dragRotate: {inertia: 0},
-  touchZoom: {inertia: 0},
-  scrollZoom: {smooth: false}
+  touchZoom: {inertia: 0}
 };
 
 <MapGL {...CONTROLLER_OPTS} ... />
