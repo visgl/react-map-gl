@@ -2,6 +2,12 @@
 
 # Version 5.3
 
+## 5.3.3 (Feb 2, 2021)
+
+- Add Typescript Types to interactive-map (#1320)
+- Set scrollZoom.smooth default to false (#1321)
+- Update InteractiveMap prop types (#1324)
+
 ## 5.3.2 (Feb 1, 2021)
 
 - Add attribution control to typescript index exports (#1314)
