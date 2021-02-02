@@ -109,7 +109,7 @@ Min pitch in degrees.
 Enable scroll to zoom. If an object is provided, may contain the following options to customize the scroll zoom behavior:
 
 - `speed` (Number) - Multiplier for the wheel delta. Default `0.01`.
-- `smooth` (Number) - Smoothly transition to the new zoom. If enabled, will provide a slightly lagged but smoother experience. Default `true`.
+- `smooth` (Boolean) - Smoothly transition to the new zoom. If enabled, will provide a slightly lagged but smoother experience. Default `false`.
 
 ##### `dragPan` (Boolean|Object)
 
@@ -410,4 +410,3 @@ Inherit the following methods from [StaticMap](/docs/api-reference/static-map.md
 ## Source
 
 [interactive-map.js](https://github.com/visgl/react-map-gl/tree/6.0-release/src/components/interactive-map.js)
-
