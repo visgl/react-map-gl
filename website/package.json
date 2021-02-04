@@ -2,7 +2,7 @@
   "name": "react-map-gl-website",
   "scripts": {
     "start": "yarn clean && yarn develop",
-    "build": "(cd .. && yarn build) && yarn clean-examples && yarn clean && gatsby build --prefix-paths",
+    "build": "yarn clean-examples && yarn clean && gatsby build --prefix-paths",
     "clean": "rm -rf ./.cache ./public && yarn update-external-docs",
     "clean-examples": "find ../examples -name node_modules -exec rm -r {} \\; || true",
     "update-external-docs": "curl https://raw.githubusercontent.com/uber-web/math.gl/master/modules/web-mercator/docs/api-reference/web-mercator-viewport.md > ../docs/api-reference/web-mercator-viewport.md",
