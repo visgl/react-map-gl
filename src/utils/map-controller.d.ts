@@ -56,5 +56,5 @@ export default class MapController {
 
   setOptions(options: any): void;
 
-  toggleEvents(eventNames: Array<string>, enabled: boolean);
+  toggleEvents(eventNames: Array<string>, enabled: boolean): void;
 }
