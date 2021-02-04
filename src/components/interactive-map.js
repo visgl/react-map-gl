@@ -314,7 +314,7 @@ const InteractiveMap = forwardRef((props, ref) => {
       viewportUpdateRequested = [viewState, interactionState, oldViewState];
       return;
     }
-    const {onViewStateChange, onViewportChange} = props;
+    const {onViewStateChange, onViewportChange} = thisRef.props;
 
     if (onViewStateChange) {
       onViewStateChange({viewState, interactionState, oldViewState});
@@ -347,15 +347,15 @@ const InteractiveMap = forwardRef((props, ref) => {
       return;
     }
 
-    const {onInteractionStateChange} = props;
+    const {onInteractionStateChange} = thisRef.props;
     if (onInteractionStateChange) {
       onInteractionStateChange(interactionState);
     }
   };
 
   const updateControllerOpts = () => {
-    const opts = Object.assign({}, props, props.viewState, {
-      isInteractive: Boolean(props.onViewStateChange || props.onViewportChange),
+    const opts = Object.assign({}, thisRef.props, thisRef.props.viewState, {
+      isInteractive: Boolean(thisRef.props.onViewStateChange || thisRef.props.onViewportChange),
       onViewportChange: handleViewportChange,
       onStateChange: handleInteractionStateChange,
       eventManager,
@@ -370,7 +370,7 @@ const InteractiveMap = forwardRef((props, ref) => {
     thisRef.width = width;
     thisRef.height = height;
     updateControllerOpts();
-    props.onResize({width, height});
+    thisRef.props.onResize({width, height});
   };
 
   useEffect(() => {
