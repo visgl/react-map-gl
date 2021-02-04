@@ -2,6 +2,10 @@
 
 # Version 5.3
 
+## 5.3.4 (Feb 3, 2021)
+
+- Fix props reference on viewport resize (#1328)
+
 ## 5.3.3 (Feb 2, 2021)
 
 - Add Typescript Types to interactive-map (#1320)
