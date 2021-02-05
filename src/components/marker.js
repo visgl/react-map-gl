@@ -66,13 +66,14 @@ function Marker(props) {
   const thisRef = useDraggableControl(props);
   const {state, containerRef} = thisRef;
 
-  const {draggable} = props;
+  const {children, className, draggable} = props;
   const {dragPos} = state;
 
   const [x, y] = getPosition(thisRef);
   const transform = `translate(${crispPixel(x)}px, ${crispPixel(y)}px)`;
   const cursor = draggable ? (dragPos ? 'grabbing' : 'grab') : 'auto';
 
+  // Perf: avoid rerendering if only the viewport changed
   const control = useMemo(() => {
     const containerStyle = {
       position: 'absolute',
@@ -84,15 +85,15 @@ function Marker(props) {
 
     return (
       <div
-        className={`mapboxgl-marker ${props.className}`}
+        className={`mapboxgl-marker ${className}`}
         ref={thisRef.containerRef}
         // @ts-ignore
         style={containerStyle}
       >
-        {props.children}
+        {children}
       </div>
     );
-  }, [props.className]);
+  }, [children, className]);
 
   const container = containerRef.current;
   if (container) {
