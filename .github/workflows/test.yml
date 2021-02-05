@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MapboxAccessToken: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MapboxAccessToken: ${{ secrets.MAPBOX_ACCESS_TOKEN_CI }}
 
     steps:
       - uses: actions/checkout@v2.1.1
