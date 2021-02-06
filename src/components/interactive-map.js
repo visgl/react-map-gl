@@ -354,16 +354,18 @@ const InteractiveMap = forwardRef((props, ref) => {
   };
 
   const updateControllerOpts = () => {
-    const opts = Object.assign({}, thisRef.props, thisRef.props.viewState, {
-      isInteractive: Boolean(thisRef.props.onViewStateChange || thisRef.props.onViewportChange),
-      onViewportChange: handleViewportChange,
-      onStateChange: handleInteractionStateChange,
-      eventManager,
-      width: thisRef.width,
-      height: thisRef.height
-    });
-
-    controller.setOptions(opts);
+    if (thisRef.width && thisRef.height) {
+      controller.setOptions({
+        ...thisRef.props,
+        ...thisRef.props.viewState,
+        isInteractive: Boolean(thisRef.props.onViewStateChange || thisRef.props.onViewportChange),
+        onViewportChange: handleViewportChange,
+        onStateChange: handleInteractionStateChange,
+        eventManager,
+        width: thisRef.width,
+        height: thisRef.height
+      });
+    }
   };
 
   const onResize = ({width, height}) => {
