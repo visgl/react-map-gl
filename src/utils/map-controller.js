@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* eslint-disable complexity */
+/* eslint-disable complexity, max-statements */
 import MapState from './map-state';
 import {LinearInterpolator} from './transition';
 import TransitionManager, {TRANSITION_EVENTS} from './transition-manager';
@@ -142,7 +142,8 @@ export default class MapController {
   // formats map state and invokes callback function
   updateViewport(newMapState, extraProps, interactionState) {
     // Always trigger callback on initial update (resize)
-    const oldViewport = this.mapState ? this.mapState.getViewportProps() : {};
+    const oldViewport =
+      this.mapState instanceof MapState ? this.mapState.getViewportProps() : this.mapState;
     const newViewport = {...newMapState.getViewportProps(), ...extraProps};
 
     const viewStateChanged = Object.keys(newViewport).some(
@@ -199,12 +200,15 @@ export default class MapController {
     this.onViewportChange = onViewportChange;
     this.onStateChange = onStateChange;
 
-    const dimensionChanged = !this.mapStateProps || this.mapStateProps.height !== options.height;
+    const prevOptions = this.mapStateProps || {};
+    const dimensionChanged =
+      prevOptions.height !== options.height || prevOptions.width !== options.width;
 
     this.mapStateProps = options;
 
-    if (dimensionChanged && options.height) {
-      // Dimensions changed, normalize the props
+    if (dimensionChanged) {
+      // Dimensions changed, normalize the props and fire change event
+      this.mapState = prevOptions;
       this.updateViewport(new MapState(options));
     }
     // Update transition
