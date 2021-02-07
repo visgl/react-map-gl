@@ -2,6 +2,12 @@
 
 # Version 5.3
 
+## 5.3.5 (Feb 7, 2021)
+
+- Fix stale Marker children (#1332)
+- Consistent onViewportChange events on map resize (#1335)
+- Fix usage with function refs (#1339)
+
 ## 5.3.4 (Feb 3, 2021)
 
 - Fix props reference on viewport resize (#1328)
