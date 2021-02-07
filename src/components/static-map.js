@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
-import {useState, useRef, useContext, useMemo, useImperativeHandle, forwardRef} from 'react';
+import {useState, useRef, useContext, useImperativeHandle, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
 import WebMercatorViewport from 'viewport-mercator-project';
@@ -101,13 +101,13 @@ function NoTokenWarning() {
 }
 
 function getRefHandles(mapboxRef) {
-  return () => ({
+  return {
     getMap: () => mapboxRef.current && mapboxRef.current.getMap(),
     queryRenderedFeatures: (geometry, options = {}) => {
       const map = mapboxRef.current && mapboxRef.current.getMap();
       return map && map.queryRenderedFeatures(geometry, options);
     }
-  });
+  };
 }
 
 function preventScroll(event) {
@@ -182,10 +182,7 @@ const StaticMap = forwardRef((props, ref) => {
 
   // External apps can call methods via ref
   // Note: this is not a recommended pattern in React FC - Keeping for backward compatibility
-  useImperativeHandle(
-    ref,
-    useMemo(() => getRefHandles(mapboxRef), [])
-  );
+  useImperativeHandle(ref, () => getRefHandles(mapboxRef), []);
 
   const overlays = map && (
     <MapContextProvider

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useContext, useRef, useMemo, useEffect, forwardRef} from 'react';
+import {useContext, useRef, useMemo, useEffect, useImperativeHandle, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
 import StaticMap from './static-map';
@@ -270,6 +270,13 @@ function onPointerClick(event) {
 }
 /* End of event handers */
 
+function getRefHandles(staticMapRef) {
+  return {
+    getMap: staticMapRef.current && staticMapRef.current.getMap,
+    queryRenderedFeatures: staticMapRef.current && staticMapRef.current.queryRenderedFeatures
+  };
+}
+
 /* eslint-disable max-statements */
 const InteractiveMap = forwardRef((props, ref) => {
   const parentContext = useContext(MapContext);
@@ -283,7 +290,7 @@ const InteractiveMap = forwardRef((props, ref) => {
     []
   );
   const eventCanvasRef = useRef(null);
-  const staticMapRef = ref || useRef(null);
+  const staticMapRef = useRef(null);
 
   // Event handlers are registered once but need access to the latest props
   // This is an anti-pattern, though it maintains a persistent reference to the latest props/state of this component
@@ -323,6 +330,8 @@ const InteractiveMap = forwardRef((props, ref) => {
       onViewportChange(viewState, interactionState, oldViewState);
     }
   };
+
+  useImperativeHandle(ref, () => getRefHandles(staticMapRef), []);
 
   const context = useMemo(
     () => ({
