@@ -47,7 +47,7 @@ export default class Mapbox {
   height: number;
 
   constructor(props: MapboxProps);
-  finalize();
-  setProps(props: MapboxProps);
+  finalize(): Mapbox;
+  setProps(props: MapboxProps): Mapbox;
   getMap(): any;
 }

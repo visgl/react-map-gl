@@ -53,7 +53,7 @@
     "mjolnir.js": "^2.5.0",
     "prop-types": "^15.7.2",
     "resize-observer-polyfill": "^1.5.1",
-    "viewport-mercator-project": "^6.2.3 || ^7.0.1"
+    "viewport-mercator-project": "^6.2.3 || ^7.0.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.4",
