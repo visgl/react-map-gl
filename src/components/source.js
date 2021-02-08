@@ -131,16 +131,18 @@ function Source(props) {
   }
   propsRef.current = props;
 
-  return source
-    ? React.Children.map(
+  return (
+    (source &&
+      React.Children.map(
         props.children,
         child =>
           child &&
           cloneElement(child, {
             source: id
           })
-      )
-    : null;
+      )) ||
+    null
+  );
 }
 
 Source.propTypes = propTypes;
