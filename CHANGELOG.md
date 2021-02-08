@@ -2,6 +2,11 @@
 
 # Version 6.1
 
+## 6.1.6 (Feb 8, 2021)
+
+- Improve Typescript types definitions (#1333)
+- Fix react error when Source has no children (#1341)
+
 ## 6.1.5 (Feb 7, 2021)
 
 - Fix stale Marker children (#1332)
