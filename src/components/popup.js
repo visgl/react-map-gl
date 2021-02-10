@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
-import {useRef, useState, useEffect} from 'react';
+import {useRef, useState, useEffect, useCallback} from 'react';
 import * as PropTypes from 'prop-types';
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
 
@@ -146,7 +146,8 @@ function onClick(evt, {props, context}) {
  */
 function Popup(props) {
   const contentRef = useRef(null);
-  const {context, containerRef} = useMapControl({...props, onClick});
+  const thisRef = useMapControl({...props, onClick});
+  const {context, containerRef} = thisRef;
   const [, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -169,7 +170,7 @@ function Popup(props) {
   );
 
   // If eventManager does not exist (using with static map), listen to React event
-  const onReactClick = context.eventManager ? null : onClick;
+  const onReactClick = useCallback(e => !context.eventManager && onClick(e, thisRef), []);
 
   return (
     <div
@@ -179,12 +180,7 @@ function Popup(props) {
       ref={containerRef}
     >
       <div key="tip" className="mapboxgl-popup-tip" style={{borderWidth: tipSize}} />
-      <div
-        key="content"
-        ref={contentRef}
-        className="mapboxgl-popup-content"
-        onClick={e => onReactClick(e, {props, context})}
-      >
+      <div key="content" ref={contentRef} className="mapboxgl-popup-content" onClick={onReactClick}>
         {closeButton && (
           <button key="close-button" className="mapboxgl-popup-close-button" type="button">
             ×
