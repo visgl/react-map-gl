@@ -179,7 +179,12 @@ function Popup(props) {
       ref={containerRef}
     >
       <div key="tip" className="mapboxgl-popup-tip" style={{borderWidth: tipSize}} />
-      <div key="content" ref={contentRef} className="mapboxgl-popup-content" onClick={onReactClick}>
+      <div
+        key="content"
+        ref={contentRef}
+        className="mapboxgl-popup-content"
+        onClick={e => onReactClick(e, {props, context})}
+      >
         {closeButton && (
           <button key="close-button" className="mapboxgl-popup-close-button" type="button">
             ×
