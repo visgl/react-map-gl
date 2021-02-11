@@ -2,6 +2,10 @@
 
 # Version 5.3
 
+## 5.3.7 (Feb 10, 2021)
+
+- fix using Popup with StaticMap (#1348)
+
 ## 5.3.6 (Feb 8, 2021)
 
 - Improve Typescript types definitions (#1333)
