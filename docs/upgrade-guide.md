@@ -16,6 +16,10 @@ const CONTROLLER_OPTS = {
 <MapGL {...CONTROLLER_OPTS} ... />
 ```
 
+- `Source` and `Layer` components no longer expose imperative methods via `ref` as part of the migration to functional components. This is to comply with the pattern recommended by the latest React.
+  + If you used to call `sourceRef.getSource()`, it can be replaced with `mapRef().getMap().getSource(sourceId)`.
+  + If you used to call `layerRef.getLayer()`, it can be replaced with `mapRef().getMap().getLayer(layerId)`.
+
 ## Upgrading to v6
 
 - A valid Mapbox access token is always required.
