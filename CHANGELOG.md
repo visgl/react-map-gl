@@ -2,6 +2,11 @@
 
 # Version 5.3
 
+## 5.3.8 (Feb 16, 2021)
+
+- Fix pointer event normalization when using viewState (#1355)
+- Fix missing source-layer param in LayerProps (#1358)
+
 ## 5.3.7 (Feb 10, 2021)
 
 - fix using Popup with StaticMap (#1348)
