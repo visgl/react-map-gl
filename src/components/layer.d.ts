@@ -5,6 +5,7 @@ export interface LayerProps {
   id?: string;
   type:  'fill' | 'line' | 'symbol' | 'circle' | 'fill-extrusion' | 'raster' | 'background' | 'heatmap' | 'hillshade' | 'sky';
   source?: string;
+  'source-layer'?: string,
   beforeId?: string;
   layout?: MapboxGL.AnyLayout;
   paint:
