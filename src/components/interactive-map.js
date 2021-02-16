@@ -141,7 +141,7 @@ function normalizeEvent(event) {
   const pos = [x, y];
 
   const viewport = new WebMercatorViewport(
-    Object.assign({}, this.props, {
+    Object.assign({}, this.props, this.props.viewState, {
       width: this.width,
       height: this.height
     })
