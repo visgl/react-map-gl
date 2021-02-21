@@ -2,6 +2,10 @@
 
 # Version 6.1
 
+## 6.1.9 (Feb 20, 2021)
+
+- Export MapContext and _useMapControl types (#1362)
+
 ## 6.1.8 (Feb 16, 2021)
 
 - Fix pointer event normalization when using viewState (#1355)
