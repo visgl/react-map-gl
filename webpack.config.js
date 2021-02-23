@@ -12,7 +12,6 @@ module.exports = env => {
   config.module.rules.push({
     // This is required to handle inline worker!
     test: /\.js$/,
-    exclude: /node_modules/,
     use: [
       {
         loader: 'babel-loader',
@@ -20,6 +19,16 @@ module.exports = env => {
       }
     ]
   });
+
+  config.modules.rules.push({
+    test: /\bmapbox-gl-csp-worker.js\b/i,
+    use: {
+      loader: 'worker-loader',
+      options: {
+        inline: 'no-fallback'
+      }
+    },
+  })
 
   config.plugins = (config.plugins || []).concat([
     new webpack.DefinePlugin({
