@@ -27,8 +27,8 @@ module.exports = env => {
       options: {
         inline: 'no-fallback'
       }
-    },
-  })
+    }
+  });
 
   config.plugins = (config.plugins || []).concat([
     new webpack.DefinePlugin({
