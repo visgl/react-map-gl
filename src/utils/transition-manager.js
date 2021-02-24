@@ -34,11 +34,11 @@ const DEFAULT_PROPS = {
 export default class TransitionManager {
   static defaultProps = DEFAULT_PROPS;
 
-  constructor(props, getTime) {
-    this.props = props;
-    this.onViewportChange = props.onViewportChange || noop;
-    this.onStateChange = props.onStateChange || noop;
-    this.time = getTime || Date.now;
+  constructor(opts = {}) {
+    this.props = null;
+    this.onViewportChange = opts.onViewportChange || noop;
+    this.onStateChange = opts.onStateChange || noop;
+    this.time = opts.getTime || Date.now;
   }
 
   _animationFrame = null;
@@ -56,7 +56,7 @@ export default class TransitionManager {
     this.props = nextProps;
 
     // NOTE: Be cautious re-ordering statements in this function.
-    if (this._shouldIgnoreViewportChange(currentProps, nextProps)) {
+    if (!currentProps || this._shouldIgnoreViewportChange(currentProps, nextProps)) {
       return false;
     }
 
