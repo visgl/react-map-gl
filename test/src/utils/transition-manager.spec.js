@@ -128,7 +128,7 @@ const TEST_CASES = [
 ];
 
 test('TransitionManager#constructor', t => {
-  const transitionManager = new TransitionManager({});
+  const transitionManager = new TransitionManager();
   t.ok(transitionManager, 'TransitionManager constructor does not throw errors');
   t.notOk(transitionManager._isTransitionInProgress(), 'no transition in progress');
   t.end();
@@ -138,7 +138,8 @@ test('TransitionManager#processViewportChange', t => {
   const mergeProps = props => Object.assign({}, TransitionManager.defaultProps, props);
 
   TEST_CASES.forEach(testCase => {
-    const transitionManager = new TransitionManager(mergeProps(testCase.initialProps));
+    const transitionManager = new TransitionManager();
+    transitionManager.processViewportChange(mergeProps(testCase.initialProps));
 
     testCase.input.forEach((props, i) => {
       t.is(
@@ -188,7 +189,8 @@ test('TransitionManager#callbacks', t => {
 
   const mergeProps = props => Object.assign({}, TransitionManager.defaultProps, callbacks, props);
 
-  const transitionManager = new TransitionManager(mergeProps(testCase.initialProps));
+  const transitionManager = new TransitionManager(callbacks);
+  transitionManager.processViewportChange(mergeProps(testCase.initialProps));
 
   testCase.input.forEach((props, i) => {
     transitionProps = mergeProps(props);
@@ -374,12 +376,11 @@ test('TransitionManager#TRANSITION_EVENTS', t => {
       mode = parseInt(mode);
       let transitionProps;
       let time = 0;
-      const transitionManager = new TransitionManager(
+      const transitionManager = new TransitionManager({getTime: () => time});
+      transitionManager.processViewportChange(
         Object.assign({}, TransitionManager.defaultProps, testCase.initialProps, {
           transitionInterruption: mode
-        }),
-        // Override current time getter
-        () => time
+        })
       );
 
       testCase.input.forEach((props, i) => {
@@ -440,7 +441,8 @@ test('TransitionManager#auto#duration', t => {
     bearing: 0,
     transitionDuration: 200
   };
-  const transitionManager = new TransitionManager(mergeProps(initialProps));
+  const transitionManager = new TransitionManager();
+  transitionManager.processViewportChange(mergeProps(initialProps));
   transitionManager.processViewportChange(
     mergeProps({
       width: 100,
