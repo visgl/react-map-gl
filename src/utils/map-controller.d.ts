@@ -5,18 +5,22 @@ export type MjolnirEvent = {
   type: string,
   center: {x: number, y: number},
   offsetCenter: {x: number, y: number},
-  deltaX: number,
-  deltaY: number,
-  delta: number,
-  scale: number,
-  rotation: number,
-  pointerType: string,
-  metaKey: boolean,
-  rightButton: boolean,
-  stopPropagation: Function,
-  preventDefault: Function,
+  deltaX?: number,
+  deltaY?: number,
+  delta?: number,
+  scale?: number,
+  rotation?: number,
+  pointerType?: string,
+  metaKey?: boolean,
+  key?: number,
+  leftButton?: boolean,
+  middleButton?: boolean,
+  rightButton?: boolean,
+  stopPropagation: () => void,
+  stopImmediatePropagation: () => void,
+  preventDefault: () => void,
   target: HTMLElement,
-  srcEvent: any
+  srcEvent: MouseEvent | PointerEvent | TouchEvent
 };
 
 export const LINEAR_TRANSITION_PROPS: any;
