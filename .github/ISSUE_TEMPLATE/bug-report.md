@@ -21,6 +21,7 @@ assignees: ''
 
 - Library Version: [e.g. react-map-gl 6.1.10]
 - Mapbox Version: [e.g. mapbox-gl 2.1.1]
+- React Version: [e.g. react 17.0.1]
 - Browser Version: [e.g. Chrome 88.0]
 - OS: [e.g. Mac OS X 11.2]
 
