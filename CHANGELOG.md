@@ -2,6 +2,11 @@
 
 # Version 6.1
 
+## 6.1.10 (Feb 26, 2021)
+
+- Block transition on initial mount (#1367)
+- Improve typescript bindings (#1369)
+
 ## 6.1.9 (Feb 20, 2021)
 
 - Export MapContext and _useMapControl types (#1362)
