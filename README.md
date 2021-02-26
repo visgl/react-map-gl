@@ -29,7 +29,7 @@ npm install --save react-map-gl
 import * as React from 'react';
 import ReactMapGL from 'react-map-gl';
 
-function Map {
+function Map() {
   const [viewport, setViewport] = React.useState({
     latitude: 37.7577,
     longitude: -122.4376,
