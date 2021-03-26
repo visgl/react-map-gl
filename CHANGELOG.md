@@ -2,6 +2,11 @@
 
 # Version 6.1
 
+## 6.1.11 (Mar 26, 2021)
+
+- Bump elliptic from 6.5.3 to 6.5.4 (#1394)
+- Ensure source exists before trying to remove it (#1417)
+
 ## 6.1.10 (Feb 26, 2021)
 
 - Block transition on initial mount (#1367)
