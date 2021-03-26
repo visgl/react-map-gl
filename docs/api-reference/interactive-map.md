@@ -149,7 +149,7 @@ Enable multitouch rotate, including two-finger rotation to change bearing and th
 
 - `inertia` (Number) - Enable momentum/inertia when the gesture ends. The value specifies after how long the rotation comes to a stop, in milliseconds. Default `300`.
 
-##### `keyboard (Boolean|Object)
+##### `keyboard` (Boolean|Object)
 
 - default: `true`
 
