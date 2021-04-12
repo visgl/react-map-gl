@@ -114,14 +114,14 @@ function Source(props) {
         // Removing source before dependent layers will throw error
         // TODO - find a more robust solution
         requestAnimationFrame(() => {
-          if (map.style && map.style._loaded) {
+          if (map.style && map.style._loaded && map.getSource(id)) {
             map.removeSource(id);
           }
         });
       };
     }
     return undefined;
-  }, [map]);
+  }, [map, id]);
 
   let source = map && map.style && map.getSource(id);
   if (source) {
