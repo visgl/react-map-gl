@@ -9,8 +9,8 @@ type State = {
 };
 
 export type MapEvent = MjolnirEvent & {
-  point: [x: number, y: number],
-  lngLat: [longitude: number, latitude: number],
+  point: [number, number], // [x: number, y: number]
+  lngLat: [number, number], // [longitude: number, latitude: number]
   features?: Array<any>
 };
 
