@@ -51,9 +51,7 @@ function FullscreenControl(props) {
   const [mapboxFullscreenControl, createMapboxFullscreenControl] = useState(null);
 
   useEffect(() => {
-    const container = props.container || context.container;
-
-    const control = new mapboxgl.FullscreenControl({container});
+    const control = new mapboxgl.FullscreenControl();
 
     createMapboxFullscreenControl(control);
     setShowButton(control._checkFullscreenSupport());
@@ -75,6 +73,7 @@ function FullscreenControl(props) {
 
   const onClickFullscreen = () => {
     if (mapboxFullscreenControl) {
+      mapboxFullscreenControl._container = props.container || context.container;
       mapboxFullscreenControl._onClickFullscreen();
     }
   };
