@@ -26,7 +26,7 @@ export interface SourceProps {
   coordinates?: number[][];
   urls?: string[];
   children?: any;
-
+  promoteId?: string;
 }
 
 export default class Source extends PureComponent<SourceProps> {}
