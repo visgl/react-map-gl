@@ -123,6 +123,10 @@ function getContainerStyle(props, viewport, el, [x, y, z], positionType) {
 }
 
 function onClick(evt, {props, context}) {
+  if (props.captureClick) {
+    context.eventManager.once('click', e => e.stopPropagation(), evt.target);
+  }
+
   if (props.closeOnClick || evt.target.className === 'mapboxgl-popup-close-button') {
     props.onClose();
 
