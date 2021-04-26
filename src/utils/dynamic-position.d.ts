@@ -1,4 +1,4 @@
-export type PositionType = 'top' | 'top-left' | 'top-right' | 'bottom' | 'bottom-left' | 'bottem-right' | 'left' | 'right';
+export type PositionType = 'top' | 'top-left' | 'top-right' | 'bottom' | 'bottom-left' | 'bottom-right' | 'left' | 'right';
 
 export const ANCHOR_POSITION: Record<PositionType, {
   x: number,
