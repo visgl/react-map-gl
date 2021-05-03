@@ -2,6 +2,11 @@
 
 # Version 6.1
 
+## 6.1.13 (May 3, 2021)
+
+- Work around for pointermove event on hidden map (#1450)
+- Fix: typo in PositionType value (#1444)
+
 ## 6.1.12 (Apr 12, 2021)
 
 - [Typescript] Remove usage of labelled tuples (#1426)
