@@ -1,5 +1,5 @@
 import * as MapboxGL from "mapbox-gl";
-import {PureComponent, Ref} from "react";
+import {ReactElement, Ref} from "react";
 
 export interface LayerProps {
   id?: string;
@@ -24,6 +24,6 @@ export interface LayerProps {
   ref?:Ref<LayerProps>
 }
 
-export default function Layer(props: LayerProps): null;
+export default function Layer(props: LayerProps): ReactElement;
 
 
