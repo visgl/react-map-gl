@@ -134,14 +134,15 @@ function normalizeEvent(event) {
   if (event.lngLat || !event.offsetCenter) {
     return event;
   }
-  // https://github.com/visgl/react-map-gl/issues/1449
-  if (!this.width || !this.height) {
-    return event;
-  }
 
   const {
     offsetCenter: {x, y}
   } = event;
+  // https://github.com/visgl/react-map-gl/issues/1449
+  // TODO - fix in mjolnir.js
+  if (!Number.isFinite(x) || !Number.isFinite(y)) {
+    return event;
+  }
   const pos = [x, y];
 
   const viewport = new WebMercatorViewport(
