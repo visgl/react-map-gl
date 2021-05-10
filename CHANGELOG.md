@@ -2,6 +2,11 @@
 
 # Version 5.3
 
+## 5.3.14 (May 10, 2021)
+
+- Safety check before unprojection (#1452)
+- Fix return type of Layer function (#1453)
+
 ## 5.3.13 (May 3, 2021)
 
 - Work around for pointermove event on hidden map (#1450)
