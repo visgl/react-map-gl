@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import * as React from 'react';
-import {useState, useRef, useContext, useImperativeHandle, forwardRef} from 'react';
+import {useState, useRef, useCallback, useContext, useImperativeHandle, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
 import WebMercatorViewport from 'viewport-mercator-project';
@@ -110,16 +110,13 @@ function getRefHandles(mapboxRef) {
   };
 }
 
-function preventScroll(event) {
-  event.target.scrollTo(0, 0);
-}
-
 const StaticMap = forwardRef((props, ref) => {
   const [accessTokenValid, setTokenState] = useState(true);
   const [size, setSize] = useState([0, 0]);
   const mapboxRef = useRef(null);
   const mapDivRef = useRef(null);
   const containerRef = useRef(null);
+  const overlayRef = useRef(null);
   const context = useContext(MapContext);
 
   useIsomorphicLayoutEffect(() => {
@@ -184,6 +181,12 @@ const StaticMap = forwardRef((props, ref) => {
   // Note: this is not a recommended pattern in React FC - Keeping for backward compatibility
   useImperativeHandle(ref, () => getRefHandles(mapboxRef), []);
 
+  const preventScroll = useCallback(({target}) => {
+    if (target === overlayRef.current) {
+      target.scrollTo(0, 0);
+    }
+  }, []);
+
   const overlays = map && (
     <MapContextProvider
       value={{
@@ -203,6 +206,7 @@ const StaticMap = forwardRef((props, ref) => {
       <div
         key="map-overlays"
         className="overlays"
+        ref={overlayRef}
         // @ts-ignore
         style={CONTAINER_STYLE}
         onScroll={preventScroll}
