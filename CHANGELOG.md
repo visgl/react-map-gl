@@ -2,6 +2,10 @@
 
 # Version 6.1
 
+## 6.1.15 (May 12, 2021)
+
+- Only block scrolling on the overlay container itself (#1465)
+
 ## 6.1.14 (May 10, 2021)
 
 - Safety check before unprojection (#1452)
