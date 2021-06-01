@@ -25,6 +25,7 @@ import useDraggableControl, {
   draggableControlPropTypes
 } from './draggable-control';
 import {crispPixel} from '../utils/crisp-pixel';
+import {getTerrainElevation} from '../utils/terrain';
 
 const propTypes = Object.assign({}, draggableControlPropTypes, {
   // Custom className
@@ -42,14 +43,17 @@ const defaultProps = Object.assign({}, draggableControlDefaultProps, {
 function getPosition({props, state, context}) {
   const {longitude, latitude, offsetLeft, offsetTop} = props;
   const {dragPos, dragOffset} = state;
+  const {viewport, map} = context;
 
   // If dragging, just return the current drag position
   if (dragPos && dragOffset) {
     return [dragPos[0] + dragOffset[0], dragPos[1] + dragOffset[1]];
   }
 
+  const altitude = getTerrainElevation(map, {longitude, latitude});
+
   // Otherwise return the projected lat/lng with offset
-  let [x, y] = context.viewport.project([longitude, latitude]);
+  let [x, y] = viewport.project([longitude, latitude, altitude]);
   x += offsetLeft;
   y += offsetTop;
   return [x, y];
