@@ -224,7 +224,7 @@ function onPointerMove(event) {
       event.features = features;
 
       // backward compatibility: v3 `onHover` interface
-      if (onHover) { 
+      if (onHover) {
         onHover(event);
       }
     }
