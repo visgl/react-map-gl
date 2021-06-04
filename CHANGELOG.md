@@ -2,6 +2,12 @@
 
 # Version 5.3
 
+## 5.3.16 (Jun 4, 2021)
+
+- Making features available to onMouseEnter (#1474)
+- Prevent attribution button from submitting forms (#1477)
+- Remove extra props in GeolocateControl callback (#1480)
+
 ## 5.3.15 (May 12, 2021)
 
 - Only block scrolling on the overlay container itself (#1465)
