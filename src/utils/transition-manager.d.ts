@@ -5,8 +5,8 @@ export type ViewportProps = MapStateProps & {
   onTransitionStart: Function,
   onTransitionInterrupt: Function,
   onTransitionEnd: Function,
-  onViewportChange: Function,
-  onStateChange: Function
+  onViewportChange?: Function,
+  onStateChange?: Function
 };
 
 type TransitionState = {

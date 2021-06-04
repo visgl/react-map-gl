@@ -26,9 +26,7 @@ const DEFAULT_PROPS = {
   transitionInterruption: TRANSITION_EVENTS.BREAK,
   onTransitionStart: noop,
   onTransitionInterrupt: noop,
-  onTransitionEnd: noop,
-  onViewportChange: noop,
-  onStateChange: noop
+  onTransitionEnd: noop
 };
 
 export default class TransitionManager {
