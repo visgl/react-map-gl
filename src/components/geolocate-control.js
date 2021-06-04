@@ -6,14 +6,10 @@ import {document} from '../utils/globals';
 import mapboxgl from '../utils/mapboxgl';
 
 import MapState from '../utils/map-state';
-import TransitionManager from '../utils/transition-manager';
+import {LINEAR_TRANSITION_PROPS} from '../utils/map-controller';
 import {isGeolocationSupported} from '../utils/geolocate-utils';
 
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
-
-const LINEAR_TRANSITION_PROPS = Object.assign({}, TransitionManager.defaultProps, {
-  transitionDuration: 500
-});
 
 const noop = () => {};
 

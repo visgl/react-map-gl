@@ -79,6 +79,7 @@ function AttributionControl(props) {
         }`}
       >
         <button
+          type="button"
           className="mapboxgl-ctrl-attrib-button"
           title={props.toggleLabel}
           onClick={toggleAttribution}
