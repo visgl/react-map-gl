@@ -49,11 +49,11 @@
     "@babel/runtime": "^7.0.0",
     "@types/geojson": "^7946.0.7",
     "@types/mapbox-gl": "^2.0.3",
-    "mapbox-gl": "^2.0.1",
+    "mapbox-gl": "^2.3.0",
     "mjolnir.js": "^2.5.0",
     "prop-types": "^15.7.2",
     "resize-observer-polyfill": "^1.5.1",
-    "viewport-mercator-project": "^6.2.3 || ^7.0.2"
+    "viewport-mercator-project": "^7.0.3"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.4",
