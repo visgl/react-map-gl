@@ -215,15 +215,19 @@ function onPointerMove(event) {
     if (interactiveLayerIds || onHover) {
       features = getFeatures.call(this, event.point);
     }
-    if (onHover) {
-      // backward compatibility: v3 `onHover` interface
-      event.features = features;
-      onHover(event);
-    }
 
     const isHovering = Boolean(interactiveLayerIds && features && features.length > 0);
     const isEntering = isHovering && !this.state.isHovering;
     const isExiting = !isHovering && this.state.isHovering;
+
+    if (onHover || isEntering) {
+      event.features = features;
+
+      // backward compatibility: v3 `onHover` interface
+      if (onHover) {
+        onHover(event);
+      }
+    }
 
     if (isEntering) {
       onEvent.call(this, 'onMouseEnter', event);
