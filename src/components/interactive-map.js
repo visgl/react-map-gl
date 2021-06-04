@@ -2,9 +2,8 @@ import * as React from 'react';
 import {useContext, useRef, useMemo, useEffect, useImperativeHandle, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
-import StaticMap from './static-map';
+import StaticMap, {getViewport} from './static-map';
 import {MAPBOX_LIMITS} from '../utils/map-state';
-import WebMercatorViewport from 'viewport-mercator-project';
 
 import TransitionManager from '../utils/transition-manager';
 import MapContext, {MapContextProvider} from './map-context';
@@ -12,6 +11,7 @@ import MapContext, {MapContextProvider} from './map-context';
 import {EventManager} from 'mjolnir.js';
 import MapController from '../utils/map-controller';
 import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
+import {getTerrainElevation} from '../utils/terrain';
 
 const propTypes = Object.assign({}, StaticMap.propTypes, {
   // Additional props on top of StaticMap
@@ -145,15 +145,11 @@ function normalizeEvent(event) {
   }
   const pos = [x, y];
 
-  const viewport = new WebMercatorViewport(
-    Object.assign({}, this.props, this.props.viewState, {
-      width: this.width,
-      height: this.height
-    })
-  );
-
   event.point = pos;
-  event.lngLat = viewport.unproject(pos);
+
+  const {viewport} = this;
+  const location = viewport.unproject(pos, {targetZ: viewport.meterOffset[2]});
+  event.lngLat = [location[0], location[1]];
 
   return event;
 }
@@ -332,6 +328,11 @@ const InteractiveMap = forwardRef((props, ref) => {
     }
     const {onViewStateChange, onViewportChange} = thisRef.props;
 
+    /* eslint-disable accessor-pairs */
+    Object.defineProperty(viewState, 'position', {
+      get: () => [0, 0, getTerrainElevation(thisRef.map, viewState)]
+    });
+
     if (onViewStateChange) {
       onViewStateChange({viewState, interactionState, oldViewState});
     }
@@ -351,6 +352,8 @@ const InteractiveMap = forwardRef((props, ref) => {
     [parentContext, eventCanvasRef.current]
   );
   context.onViewportChange = handleViewportChange;
+  context.viewport = parentContext.viewport || getViewport(thisRef);
+  thisRef.viewport = context.viewport;
 
   const handleInteractionStateChange = interactionState => {
     const {isDragging = false} = interactionState;

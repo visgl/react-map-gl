@@ -23,7 +23,7 @@ import * as PropTypes from 'prop-types';
 import useMapControl, {mapControlDefaultProps, mapControlPropTypes} from './use-map-control';
 
 import {getDynamicPosition, ANCHOR_POSITION} from '../utils/dynamic-position';
-
+import {getTerrainElevation} from '../utils/terrain';
 import {crispPercentage, crispPixel} from '../utils/crisp-pixel';
 
 const propTypes = Object.assign({}, mapControlPropTypes, {
@@ -57,7 +57,6 @@ const propTypes = Object.assign({}, mapControlPropTypes, {
 
 const defaultProps = Object.assign({}, mapControlDefaultProps, {
   className: '',
-  altitude: 0,
   offsetLeft: 0,
   offsetTop: 0,
   tipSize: 10,
@@ -155,8 +154,13 @@ function Popup(props) {
     setLoaded(true);
   }, [contentRef.current]);
 
-  const {viewport} = context;
-  const {className, longitude, latitude, altitude, tipSize, closeButton, children} = props;
+  const {viewport, map} = context;
+  const {className, longitude, latitude, tipSize, closeButton, children} = props;
+
+  let {altitude} = props;
+  if (altitude === undefined) {
+    altitude = getTerrainElevation(map, {longitude, latitude});
+  }
 
   const position = viewport.project([longitude, latitude, altitude]);
 
