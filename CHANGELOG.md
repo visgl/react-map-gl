@@ -2,6 +2,13 @@
 
 # Version 6.1
 
+## 6.1.16 (Jun 4, 2021)
+
+- Support Mapbox terrain (#1483)
+- Making features available to onMouseEnter (#1474)
+- Prevent attribution button from submitting forms (#1477)
+- Remove extra props in GeolocateControl callback (#1480)
+
 ## 6.1.15 (May 12, 2021)
 
 - Only block scrolling on the overlay container itself (#1465)
