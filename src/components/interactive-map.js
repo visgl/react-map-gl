@@ -2,9 +2,8 @@ import * as React from 'react';
 import {useContext, useRef, useMemo, useEffect, useImperativeHandle, forwardRef} from 'react';
 import * as PropTypes from 'prop-types';
 
-import StaticMap from './static-map';
+import StaticMap, {getViewport} from './static-map';
 import {MAPBOX_LIMITS} from '../utils/map-state';
-import WebMercatorViewport from 'viewport-mercator-project';
 
 import TransitionManager from '../utils/transition-manager';
 import MapContext, {MapContextProvider} from './map-context';
@@ -145,15 +144,9 @@ function normalizeEvent(event) {
   }
   const pos = [x, y];
 
-  const viewport = new WebMercatorViewport(
-    Object.assign({}, this.props, this.props.viewState, {
-      width: this.width,
-      height: this.height
-    })
-  );
-
   event.point = pos;
-  event.lngLat = viewport.unproject(pos);
+
+  event.lngLat = this.viewport.unproject(pos);
 
   return event;
 }
@@ -351,6 +344,8 @@ const InteractiveMap = forwardRef((props, ref) => {
     [parentContext, eventCanvasRef.current]
   );
   context.onViewportChange = handleViewportChange;
+  context.viewport = parentContext.viewport || getViewport(thisRef);
+  thisRef.viewport = context.viewport;
 
   const handleInteractionStateChange = interactionState => {
     const {isDragging = false} = interactionState;

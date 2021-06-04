@@ -38,6 +38,15 @@ const NO_TOKEN_WARNING = 'A valid API access token is required to use Mapbox dat
 
 function noop() {}
 
+export function getViewport({props, width, height}) {
+  return new WebMercatorViewport({
+    ...props,
+    ...props.viewState,
+    width,
+    height
+  });
+}
+
 const UNAUTHORIZED_ERROR_CODE = 401;
 
 const CONTAINER_STYLE = {
@@ -112,7 +121,7 @@ function getRefHandles(mapboxRef) {
 
 const StaticMap = forwardRef((props, ref) => {
   const [accessTokenValid, setTokenState] = useState(true);
-  const [size, setSize] = useState([0, 0]);
+  const [size, setSize] = useState({width: 0, height: 0});
   const mapboxRef = useRef(null);
   const mapDivRef = useRef(null);
   const containerRef = useRef(null);
@@ -127,9 +136,8 @@ const StaticMap = forwardRef((props, ref) => {
     // Initialize
     const mapbox = new Mapbox({
       ...props,
+      ...size,
       mapboxgl, // Handle to mapbox-gl library
-      width: size[0],
-      height: size[1],
       container: mapDivRef.current,
       onError: evt => {
         const statusCode = (evt.error && evt.error.status) || evt.status;
@@ -150,7 +158,7 @@ const StaticMap = forwardRef((props, ref) => {
     const resizeObserver = new ResizeObserver(entries => {
       if (entries[0].contentRect) {
         const {width, height} = entries[0].contentRect;
-        setSize([width, height]);
+        setSize({width, height});
         props.onResize({width, height});
       }
     });
@@ -166,12 +174,7 @@ const StaticMap = forwardRef((props, ref) => {
 
   useIsomorphicLayoutEffect(() => {
     if (mapboxRef.current) {
-      mapboxRef.current.setProps(
-        Object.assign({}, props, {
-          width: size[0],
-          height: size[1]
-        })
-      );
+      mapboxRef.current.setProps({...props, ...size});
     }
   });
 
@@ -191,14 +194,7 @@ const StaticMap = forwardRef((props, ref) => {
     <MapContextProvider
       value={{
         ...context,
-        viewport:
-          context.viewport ||
-          new WebMercatorViewport({
-            ...props,
-            ...props.viewState,
-            width: size[0],
-            height: size[1]
-          }),
+        viewport: context.viewport || getViewport({map, props, ...size}),
         map,
         container: context.container || containerRef.current
       }}
