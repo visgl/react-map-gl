@@ -150,6 +150,12 @@ module.exports = {
             image: 'images/example-draw-polygon.jpg',
             componentUrl: resolve(__dirname, '../examples/draw-polygon/src/app.js'),
             path: 'examples/draw-polygon'
+          },
+          {
+            title: 'Terrain',
+            image: 'images/example-terrain.jpg',
+            componentUrl: resolve(__dirname, '../examples/terrain/src/app.js'),
+            path: 'examples/terrain'
           }
         ],
 
