@@ -1,4 +1,4 @@
-# Example: Draggable Marker
+# Example: 3D Terrain
 
 Demonstrates how to add 3D terrain with react-map-gl.
 
