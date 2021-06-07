@@ -62,7 +62,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 * `webpack` - Most of the provided react-map-gl examples use webpack. Look at the [get started examples](https://github.com/visgl/react-map-gl/tree/6.0-release/examples/get-started) folder for minimalist templates.
 
-* `create-react-app` - react-map-gl is compatible with [create-react-app](https://github.com/facebook/create-react-app).
+* `create-react-app` - react-map-gl is compatible with [create-react-app](https://github.com/facebook/create-react-app). You can see an example [here](https://github.com/uber/react-map-gl/tree/master/examples/get-started/create-react-app).
 
 * `create-react-app-typescript` - react-map-gl is compatible with [create-react-app-typescript](https://github.com/wmonk/create-react-app-typescript). You can see an example [here](https://github.com/zackhsi/react-map-gl-typescript).
 
