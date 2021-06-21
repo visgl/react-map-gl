@@ -204,6 +204,11 @@ export default class Mapbox {
     });
   };
 
+  _handleError = event => {
+    // @ts-ignore
+    this.props.onError(event);
+  };
+
   _reuse(props) {
     this._map = Mapbox.savedMap;
     // When reusing the saved map, we need to reparent the map(canvas) and other child nodes
@@ -272,8 +277,8 @@ export default class Mapbox {
       this._map = new this.mapboxgl.Map(Object.assign({}, mapOptions, props.mapOptions));
 
       // Attach optional onLoad function
-      this._map.once('load', props.onLoad);
-      this._map.on('error', props.onError);
+      this._map.once('load', this._fireLoadEvent);
+      this._map.on('error', this._handleError);
     }
 
     return this;
@@ -288,8 +293,8 @@ export default class Mapbox {
       Mapbox.savedMap = this._map;
 
       // deregister the mapbox event listeners
-      this._map.off('load', this.props.onLoad);
-      this._map.off('error', this.props.onError);
+      this._map.off('load', this._fireLoadEvent);
+      this._map.off('error', this._handleError);
       this._map.off('styledata', this._fireLoadEvent);
     } else {
       this._map.remove();
