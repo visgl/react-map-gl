@@ -1,7 +1,7 @@
 import {TransitionInterpolator} from './transition';
 import type {MapStateProps} from './map-state';
 
-export type ViewportProps = MapStateProps & {
+export type TransitionManagerProps = MapStateProps & {
   onTransitionStart: Function,
   onTransitionInterrupt: Function,
   onTransitionEnd: Function,
@@ -9,7 +9,7 @@ export type ViewportProps = MapStateProps & {
   onStateChange?: Function
 };
 
-type TransitionState = {
+export type TransitionState = {
   propsInTransition: any,
   interactionState: any,
   startProps: MapStateProps,
@@ -24,13 +24,13 @@ type TransitionState = {
 };
 
 export default class TransitionManager {
-  static defaultProps: ViewportProps;
+  static defaultProps: TransitionManagerProps;
 
-  constructor(props?: ViewportProps, getTime?: Function);
+  constructor(props?: TransitionManagerProps, getTime?: Function);
 
-  getViewportInTransition(): ViewportProps;
+  getViewportInTransition(): TransitionManagerProps;
 
-  processViewportChange(nextProps: ViewportProps): boolean;
+  processViewportChange(nextProps: TransitionManagerProps): boolean;
 
 }
 

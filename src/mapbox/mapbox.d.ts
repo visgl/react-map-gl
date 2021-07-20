@@ -1,3 +1,20 @@
+import * as MapboxGL from "mapbox-gl";
+
+export interface MapLoadEvent {
+  type: string;
+  target: MapboxGL.Map;
+}
+
+export interface MapRequest {
+  url: string;
+  headers?: { [index: string]: string };
+  credentials?: string;
+}
+
+export interface MapError {
+  error?: { message: string; status: number };
+  status: number;
+}
 
 export type ViewState = {
   longitude: number,
@@ -16,10 +33,10 @@ export type MapboxProps = Partial<{
   mapboxApiUrl: string,
   attributionControl: boolean,
   preserveDrawingBuffer: boolean,
-  onLoad: Function,
-  onError: Function,
+  onLoad: (event: MapLoadEvent) => void,
+  onError: (e: MapError) => void;
   reuseMaps: boolean,
-  transformRequest: Function,
+  transformRequest: (url?: string, resourceType?: string) => MapRequest;
   mapStyle: any,
   preventStyleDiffing: boolean,
   visible: boolean,
@@ -33,7 +50,7 @@ export type MapboxProps = Partial<{
   bearing: number,
   pitch: number,
   altitude: number,
-  mapOptions: any
+  mapOptions: MapboxGL.MapboxOptions
 }>;
 
 export default class Mapbox {

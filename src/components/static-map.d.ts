@@ -6,10 +6,15 @@ export type StaticMapProps = MapboxProps & Partial<{
   style: any,
 
   disableTokenWarning: boolean,
-  visibilityConstraints: any,
+  visibilityConstraints: {
+    minZoom?: number;
+    maxZoom?: number;
+    minPitch?: number;
+    maxPitch?: number;
+  };
   children: any,
 
-  onResize: Function
+  onResize: (dimensions: { width: number; height: number }) => void;
 }>;
 
 export interface MapRef {
