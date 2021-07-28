@@ -1,8 +1,9 @@
+import * as MapboxGL from "mapbox-gl";
 import {ReactElement, Ref} from 'react';
 import type {MapRef, StaticMapProps} from './static-map';
 import MapController, {MjolnirEvent} from '../utils/map-controller';
 
-type State = {
+export type ExtraState = {
   isLoaded: boolean,
   isDragging: boolean,
   isHovering: boolean
@@ -13,6 +14,15 @@ export type MapEvent = MjolnirEvent & {
   lngLat: [number, number], // [longitude: number, latitude: number]
   features?: Array<any>
 };
+
+export type EasingFunction = (t: number) => number;
+
+export enum TRANSITION_EVENTS {
+  BREAK = 1,
+  SNAP_TO_END = 2,
+  IGNORE = 3,
+  UPDATE = 4,
+}
 
 export type InteractiveMapProps = StaticMapProps & Partial<{
   onViewStateChange: Function,
@@ -34,13 +44,13 @@ export type InteractiveMapProps = StaticMapProps & Partial<{
   onMouseOut: (evt: MapEvent) => void,
   onWheel: (evt: MapEvent) => void,
 
-  transitionDuration: number,
+  transitionDuration: number | 'auto',
   transitionInterpolator: any,
-  transitionInterruption: number,
-  transitionEasing: Function,
-  onTransitionStart: Function,
-  onTransitionInterrupt: Function,
-  onTransitionEnd: Function,
+  transitionInterruption: TRANSITION_EVENTS,
+  transitionEasing: EasingFunction,
+  onTransitionStart: () => void,
+  onTransitionInterrupt: () => void,
+  onTransitionEnd: () => void,
 
   scrollZoom: boolean | {speed?: number, smooth?: boolean},
   dragPan: boolean | {inertia?: number},
@@ -53,7 +63,7 @@ export type InteractiveMapProps = StaticMapProps & Partial<{
   eventRecognizerOptions: any,
   clickRadius: number,
   interactiveLayerIds: Array<string>,
-  getCursor: (state: State) => string,
+  getCursor: (state: ExtraState) => string,
   controller: MapController,
   ref: Ref<MapRef>,
 

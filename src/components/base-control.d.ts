@@ -1,7 +1,8 @@
 import {MapControlProps} from './use-map-control';
 import {MjolnirEvent} from '../utils/map-controller';
+import {PureComponent} from 'react';
 
-export default class BaseControl {
+export default class BaseControl<T extends MapControlProps, S extends Element> extends PureComponent<T>  {
 
   static defaultProps: MapControlProps;
 
