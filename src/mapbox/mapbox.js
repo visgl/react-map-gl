@@ -161,8 +161,8 @@ export default class Mapbox {
   width = 0;
   height = 0;
 
-  finalize(props) {
-    this._destroy(props);
+  finalize() {
+    this._destroy();
     return this;
   }
 
@@ -279,12 +279,12 @@ export default class Mapbox {
     return this;
   }
 
-  _destroy(props) {
+  _destroy() {
     if (!this._map) {
       return;
     }
 
-    if (props.reuseMaps && !Mapbox.savedMap) {
+    if (this.props.reuseMaps && !Mapbox.savedMap) {
       Mapbox.savedMap = this._map;
 
       // deregister the mapbox event listeners
