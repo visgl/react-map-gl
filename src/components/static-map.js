@@ -169,7 +169,7 @@ const StaticMap = forwardRef((props, ref) => {
 
     // Clean up
     return () => {
-      mapbox.finalize();
+      mapbox.finalize(props);
       mapboxRef.current = null;
       resizeObserver.disconnect();
     };
