@@ -14,10 +14,7 @@ function ControlPanel() {
         </a>
       </p>
       <div className="source-link">
-        <a
-          href="https://github.com/visgl/react-map-gl/tree/master/examples/maplibre"
-          target="_new"
-        >
+        <a href="https://github.com/visgl/react-map-gl/tree/master/examples/maplibre" target="_new">
           View Code ↗
         </a>
       </div>

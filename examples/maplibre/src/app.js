@@ -5,28 +5,28 @@ import MapGL, {NavigationControl} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
 
-/// maplibre-gl.css is included by tag in index.html
-/// Alternatively, use CSS loader with the following line:
+// / maplibre-gl.css is included by tag in index.html
+// / Alternatively, use CSS loader with the following line:
 // import 'maplibre-gl/dist/maplibre-gl.css';
 
 const OSM_MAP = {
   version: 8,
   sources: {
     osm: {
-      type: "raster",
-      tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      type: 'raster',
+      tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
       tileSize: 256,
-      attribution: "&copy; OpenStreetMap Contributors",
-      maxzoom: 19,
-    },
+      attribution: '&copy; OpenStreetMap Contributors',
+      maxzoom: 19
+    }
   },
   layers: [
     {
-      id: "osm",
-      type: "raster",
-      source: "osm",
-    },
-  ],
+      id: 'osm',
+      type: 'raster',
+      source: 'osm'
+    }
+  ]
 };
 
 export default function App() {
