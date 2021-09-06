@@ -1,5 +1,11 @@
+import * as React from 'react';
 import {ReactElement} from 'react';
 import type {MapboxProps} from '../mapbox/mapbox';
+
+export interface MapRef {
+  getMap(): any;
+  queryRenderedFeatures(geometry: [number,number] | [[number,number],[number,number]], options?: any): Array<any>;
+}
 
 export type StaticMapProps = MapboxProps & Partial<{
   className: string,
@@ -15,11 +21,7 @@ export type StaticMapProps = MapboxProps & Partial<{
   children: any,
 
   onResize: (dimensions: { width: number; height: number }) => void;
+
+  ref: React.Ref<MapRef>
 }>;
-
-export interface MapRef {
-  getMap(): any;
-  queryRenderedFeatures(geometry: [number,number] | [[number,number],[number,number]], options?: any): Array<any>;
-}
-
 export default function StaticMap(props: StaticMapProps) : ReactElement;
