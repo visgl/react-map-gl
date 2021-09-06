@@ -29,7 +29,7 @@ This does not scale when we have many components that need to synchronize with e
 
 Ultimately, in the spirit of the [reactive programming paradigm](https://en.wikipedia.org/wiki/Reactive_programming), data always flows **down**. In a complex application, any user input or data fetch can affect the rendering of many components. We might store the **source of truth** in a parent component state, or Redux store, or hooks, and let it propagate down to the map as well as its peers. As long as the map manages its own state, as mapbox-gl is designed to do, we risk the components going out of sync.
 
-react-map-gl creates a fully reactive wrapper for mapbox-gl. The [InteractiveMap](/docs/api-reference/interactive-map) component is stateless. To move the map camera in anyway, the application must update the component's props. The application can also be confident that the map's camera would never deviate from the props that it's assigned. At first glance, its API may seem verbose to those who come from the imperative world of mapbox-gl. However, it is essential for the correctness of large applications.
+react-map-gl creates a fully reactive wrapper for mapbox-gl. The [InteractiveMap](/docs/api-reference/interactive-map.md) component is stateless. To move the map camera in anyway, the application must update the component's props. The application can also be confident that the map's camera would never deviate from the props that it's assigned. At first glance, its API may seem verbose to those who come from the imperative world of mapbox-gl. However, it is essential for the correctness of large applications.
 
 
 ## Limitations

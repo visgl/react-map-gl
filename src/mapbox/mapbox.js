@@ -289,7 +289,7 @@ export default class Mapbox {
       return;
     }
 
-    if (!Mapbox.savedMap) {
+    if (this.props.reuseMaps && !Mapbox.savedMap) {
       Mapbox.savedMap = this._map;
 
       // deregister the mapbox event listeners
