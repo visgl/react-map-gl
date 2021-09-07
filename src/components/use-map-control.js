@@ -54,8 +54,8 @@ function onMount(thisRef) {
       if (props.captureClick) {
         evt.stopPropagation();
       }
-      if (props.onClick) {
-        props.onClick(evt, thisRef);
+      if (props.onNativeClick) {
+        props.onNativeClick(evt, thisRef);
       }
     },
     click: evt => {
