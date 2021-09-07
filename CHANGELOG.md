@@ -2,6 +2,16 @@
 
 # Version 6.1
 
+## 6.1.17 (Sep 7, 2021)
+
+- Fix Popup closeOnClick behavior (#1565)
+- Improve typing (#1568)
+- Remove double onClick invocation in useMapControl (#1567)
+- Avoid invoking viewport updates when clamped at minZoom/maxZoom (#1564)
+- Fix stale `onLoad` and `onError` event handlers (#1505)
+- Fix to not save to savedMap when reuseMaps is false (#1555)
+- Improves type definitions. Adds exports (#1534)
+
 ## 6.1.16 (Jun 4, 2021)
 
 - Support Mapbox terrain (#1483)
