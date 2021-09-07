@@ -393,6 +393,10 @@ export default class MapController {
     }
 
     const newMapState = this.mapState.zoom({pos, scale});
+    if (newMapState.getViewportProps().zoom === this.mapStateProps.zoom) {
+      return false;
+    }
+
     this.updateViewport(
       newMapState,
       {
