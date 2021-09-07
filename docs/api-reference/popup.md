@@ -71,7 +71,7 @@ If `true`, a close button will appear in the top right corner of the popup.
 
 - default: `true`
 
-If `true`, the popup will closed when the map is clicked.
+If `true`, the popup will be closed when the map is clicked.
 
 ##### `tipSize` (Number)
 
