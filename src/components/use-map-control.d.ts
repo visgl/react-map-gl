@@ -7,6 +7,14 @@ export type MapControlProps = Partial<{
   captureClick: boolean,
   captureDoubleClick: boolean,
   capturePointerMove: boolean,
+
+  onScroll: Function,
+  onDragStart: Function,
+  onClick: Function,
+  onNativeClick: Function,
+  onDoubleClick: Function,
+  onPointerMove: Function,
+
   children: any
 }>;
 
