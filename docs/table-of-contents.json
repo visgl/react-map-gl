@@ -26,13 +26,13 @@
     {
       "title": "API Reference",
       "entries": [
+        { "entry": "docs/api-reference/interactive-map" },
         { "entry": "docs/api-reference/attribution-control" },
         { "entry": "docs/api-reference/canvas-overlay" },
         { "entry": "docs/api-reference/fly-to-interpolator" },
         { "entry": "docs/api-reference/fullscreen-control" },
         { "entry": "docs/api-reference/geolocate-control" },
         { "entry": "docs/api-reference/html-overlay" },
-        { "entry": "docs/api-reference/interactive-map" },
         { "entry": "docs/api-reference/layer" },
         { "entry": "docs/api-reference/linear-interpolator" },
         { "entry": "docs/api-reference/map-context" },
