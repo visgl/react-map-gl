@@ -122,21 +122,6 @@ function getContainerStyle(props, viewport, el, [x, y, z], positionType) {
   return style;
 }
 
-function onClick(evt, {props, context}) {
-  if (props.closeOnClick || evt.target.className === 'mapboxgl-popup-close-button') {
-    props.onClose();
-
-    if (context.eventManager) {
-      // Using with InteractiveMap
-      // After we call `onClose` on `anyclick`, this component will be unmounted
-      // at which point we unregister the event listeners and stop blocking propagation.
-      // Then after a short delay a `click` event will fire
-      // Attach a one-time event listener here to prevent it from triggering `onClick` of the base map
-      context.eventManager.once('click', e => e.stopPropagation(), evt.target);
-    }
-  }
-}
-
 /*
  * PureComponent doesn't update when context changes.
  * The only way is to implement our own shouldComponentUpdate here. Considering
@@ -146,7 +131,7 @@ function onClick(evt, {props, context}) {
  */
 function Popup(props) {
   const contentRef = useRef(null);
-  const thisRef = useMapControl({...props, onClick});
+  const thisRef = useMapControl(props);
   const {context, containerRef} = thisRef;
   const [, setLoaded] = useState(false);
 
@@ -154,6 +139,18 @@ function Popup(props) {
     // Container just got a size, re-calculate position
     setLoaded(true);
   }, [contentRef.current]);
+
+  useEffect(() => {
+    if (context.eventManager && props.closeOnClick) {
+      const clickCallback = () => thisRef.props.onClose();
+      context.eventManager.on('anyclick', clickCallback);
+
+      return () => {
+        context.eventManager.off('anyclick', clickCallback);
+      };
+    }
+    return undefined;
+  }, [context.eventManager, props.closeOnClick]);
 
   const {viewport} = context;
   const {className, longitude, latitude, altitude, tipSize, closeButton, children} = props;
@@ -169,10 +166,19 @@ function Popup(props) {
     positionType
   );
 
-  // If eventManager does not exist (using with static map), listen to React event
-  const onReactClick = useCallback(e => !context.eventManager && onClick(e, thisRef), [
-    context.eventManager
-  ]);
+  const onClickCloseButton = useCallback(evt => {
+    thisRef.props.onClose();
+
+    const {eventManager} = thisRef.context;
+    if (eventManager) {
+      // Using with InteractiveMap
+      // After we call `onClose` on `anyclick`, this component will be unmounted
+      // at which point we unregister the event listeners and stop blocking propagation.
+      // Then after a short delay a `click` event will fire
+      // Attach a one-time event listener here to prevent it from triggering `onClick` of the base map
+      eventManager.once('click', e => e.stopPropagation(), evt.target);
+    }
+  }, []);
 
   return (
     <div
@@ -182,9 +188,14 @@ function Popup(props) {
       ref={containerRef}
     >
       <div key="tip" className="mapboxgl-popup-tip" style={{borderWidth: tipSize}} />
-      <div key="content" ref={contentRef} className="mapboxgl-popup-content" onClick={onReactClick}>
+      <div key="content" ref={contentRef} className="mapboxgl-popup-content">
         {closeButton && (
-          <button key="close-button" className="mapboxgl-popup-close-button" type="button">
+          <button
+            key="close-button"
+            className="mapboxgl-popup-close-button"
+            type="button"
+            onClick={onClickCloseButton}
+          >
             ×
           </button>
         )}
