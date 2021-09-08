@@ -68,6 +68,7 @@ export default [
       longitude: -122.4,
       latitude: 37.78,
       zoom: 12.5,
+      reuseMaps: true,
       bearing: 30,
       children: (
         <div style={{position: 'absolute', left: 10, top: 10}}>
@@ -85,6 +86,7 @@ export default [
       mapStyle: EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
+      reuseMaps: true,
       zoom: 12.5,
       children: [
         <Popup key="0" longitude={-122.4} latitude={37.78} className="test-popup">
@@ -113,6 +115,7 @@ export default [
       mapStyle: EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
+      reuseMaps: true,
       zoom: 12.5,
       children: [
         <Source
@@ -134,6 +137,7 @@ export default [
       mapStyle: ALT_EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
+      reuseMaps: true,
       zoom: 12.5,
       children: [
         <Source
@@ -155,6 +159,7 @@ export default [
       mapStyle: ALT_EMPTY_MAP_STYLE,
       longitude: -122.4,
       latitude: 37.78,
+      reuseMaps: true,
       zoom: 12.5,
       children: []
     },
@@ -169,6 +174,7 @@ export default [
       longitude: -122.4,
       latitude: 37.78,
       zoom: 12.5,
+      reuseMaps: true,
       bearing: 30,
       children: (
         <GeolocateControl
