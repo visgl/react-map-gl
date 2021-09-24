@@ -73,3 +73,12 @@ Examples of replacing common native API calls with their React equivalents can b
 ### Contribute
 
 See [contribution guide](/CONTRIBUTING.md).
+
+
+### Attributions
+
+react-map-gl is part of vis.gl, an [Urban Computing Foundation](https://uc.foundation) project.
+
+Development is also supported by
+
+<img src="https://raw.githubusercontent.com/visgl/deck.gl-data/master/images/branding/mapbox.svg" height="40" />
