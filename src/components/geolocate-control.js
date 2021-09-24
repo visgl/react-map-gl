@@ -30,6 +30,7 @@ const propTypes = Object.assign({}, mapControlPropTypes, {
   trackUserLocation: PropTypes.bool,
   showUserLocation: PropTypes.bool,
   showAccuracyCircle: PropTypes.bool,
+  showUserHeading: PropTypes.bool,
 
   // Callbacks fired when the user interacted with the map. The object passed to the callbacks
   // contains viewport properties such as `longitude`, `latitude`, `zoom` etc.
@@ -50,6 +51,7 @@ const defaultProps = Object.assign({}, mapControlDefaultProps, {
   fitBoundsOptions: {maxZoom: 15},
   trackUserLocation: false,
   showUserLocation: true,
+  showUserHeading: false,
   showAccuracyCircle: true,
 
   onGeolocate: () => {}
