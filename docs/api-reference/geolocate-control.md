@@ -6,9 +6,9 @@ This is a React equivalent of Mapbox's [GeolocateControl](https://www.mapbox.com
 
 ```js
 import * as React from 'react';
-import ReactMapGL, {GeolocateControl} from "react-map-gl";
+import ReactMapGL, {GeolocateControl} from 'react-map-gl';
 
-const geolocateControlStyle= {
+const geolocateControlStyle = {
   right: 10,
   top: 10
 };
@@ -54,7 +54,7 @@ A Geolocation API [PositionOptions](https://developer.mozilla.org/en-US/docs/Web
 
 - default: `{maxZoom: 15}`
 
-A [fitBounds](/docs/api-reference/web-mercator-viewport.md#fitboundsbounds-options-object) options object to use when the map is panned and zoomed to the user's location. The default is to use a  maxZoom of 15 to limit how far the map will zoom in for very accurate locations.
+A [fitBounds](/docs/api-reference/web-mercator-viewport.md#fitboundsbounds-options-object) options object to use when the map is panned and zoomed to the user's location. The default is to use a maxZoom of 15 to limit how far the map will zoom in for very accurate locations.
 
 ##### `trackUserLocation` (Boolean)
 
@@ -67,6 +67,12 @@ If true the Geolocate Control becomes a toggle button and when active the map wi
 - default: `true`
 
 By default a dot will be shown on the map at the user's location. Set to false to disable.
+
+##### showUserHeading (Boolean)
+
+- default: `false`
+
+If true a heading indicator will be shown on the map at the user's location.
 
 ##### `showAccuracyCircle` (Boolean)
 
@@ -131,7 +137,6 @@ Stop propagation of dblclick event to the map component. Can be used to stop map
 - default: `false`
 
 Stop propagation of pointermove event to the map component. Can be used to stop map from calling the `onMouseMove` or `onTouchMove` callback when this component is hovered.
-
 
 ## Styling
 
