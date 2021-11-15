@@ -50,7 +50,7 @@ export type MapboxProps = Partial<{
   bearing: number,
   pitch: number,
   altitude: number,
-  mapOptions: MapboxGL.MapboxOptions
+  mapOptions: Omit<MapboxGL.MapboxOptions, 'container'>
 }>;
 
 export default class Mapbox {
