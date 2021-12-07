@@ -2,6 +2,11 @@
 
 # Version 5.3
 
+## 5.3.18 (Dec 6, 2021)
+
+- Omit container prop on mapOptions in types (#1603)
+- Add showUserHeading to GeolocateControl (#1580)
+
 ## 5.3.17 (Sep 7, 2021)
 
 - Fix Popup closeOnClick behavior (#1565)
