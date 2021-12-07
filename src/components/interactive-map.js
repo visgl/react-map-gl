@@ -147,9 +147,10 @@ function normalizeEvent(event) {
 
   event.point = pos;
 
-  const {viewport} = this;
-  const location = viewport.unproject(pos, {targetZ: viewport.meterOffset[2]});
-  event.lngLat = [location[0], location[1]];
+  if (this.map) {
+    const location = this.map.unproject(pos);
+    event.lngLat = [location.lng, location.lat];
+  }
 
   return event;
 }
