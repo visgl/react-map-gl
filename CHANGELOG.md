@@ -2,6 +2,12 @@
 
 # Version 6.1
 
+## 6.1.18 (Dec 6, 2021)
+
+- Fix unprojection when using terrain (#1620)
+- Omit container prop on mapOptions in types (#1603)
+- Add showUserHeading to GeolocateControl (#1580)
+
 ## 6.1.17 (Sep 7, 2021)
 
 - Fix Popup closeOnClick behavior (#1565)
