@@ -34,7 +34,7 @@ function CustomMarker(props) {
 function App() {
   return (
     <MapGL longitude={-122.45} latitude={37.78} zoom={12} mapboxApiAccessToken={MAPBOX_TOKEN}>
-      <CustomeMarker longitude={-122.45} latitude={37.78} />
+      <CustomMarker longitude={-122.45} latitude={37.78} />
     </MapGL>
   )
 }
