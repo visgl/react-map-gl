@@ -15,7 +15,7 @@ export type ViewportProps = Partial<{
   minZoom: number,
   maxPitch: number,
   minPitch: number,
-  transitionDuration: number,
+  transitionDuration: number | 'auto',
   transitionEasing: (t: number) => number,
   transitionInterpolator: TransitionInterpolator,
   transitionInterruption: number
