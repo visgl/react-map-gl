@@ -1,1 +1,2 @@
-export default null;
+import mapboxgl from 'mapbox-gl';
+export default mapboxgl;

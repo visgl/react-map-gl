@@ -1,11 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const getBabelConfig = require('ocular-dev-tools/config/babel.config');
+const {getBabelConfig} = require('ocular-dev-tools');
 
 module.exports = api => {
-  const config = getBabelConfig(api);
-
-  config.presets = (config.presets || []).concat(['@babel/preset-react']);
-  config.plugins = (config.plugins || []).concat('@babel/proposal-class-properties');
+  let config = getBabelConfig(api, {react: true});
 
   return config;
 };
