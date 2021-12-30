@@ -35,7 +35,7 @@ export type ViewStateChangeEvent = MapboxEvent & {
 };
 
 export type MarkerDragEvent = MapboxEvent & {
-  lngLat: LngLatLike
+  lngLat: LngLatLike;
 };
 
 // re-export mapbox types
