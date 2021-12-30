@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useRef, useEffect, useLayoutEffect, forwardRef, useImperativeHandle} from 'react';
+import {useState, useRef, useEffect, forwardRef, useImperativeHandle} from 'react';
 
 import Mapbox from '../mapbox/mapbox';
 import type {MapboxProps} from '../mapbox/mapbox';
@@ -7,6 +7,7 @@ import MapContext from './map-context';
 
 import type {CSSProperties} from 'react';
 import type {MapboxMap} from '../utils/types';
+import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
 
 export interface MapRef {
   getMap(): MapboxMap;
@@ -57,7 +58,7 @@ const Map = forwardRef((props: MapProps, ref) => {
     return () => map.destroy();
   }, []);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (mapInstance) {
       mapInstance.setProps(props);
     }
