@@ -1,54 +1,93 @@
 # State Management
 
-`InteractiveMap` is designed to be a stateless component. Its appearance is entirely controlled by the properties that are passed in from its parent. In this architecture, transition works the same way as interaction: the component shall notify the application of "user intent" by calling the `onViewportChange` callback, but ultimately the application needs to decide what to do with it.
+There are two ways to use a [Map](/docs/api-reference/map.md):
 
-The most simple handling of this intent is to save it and pass it back to the component:
-```jsx
-<ReactMapGL
-    {...this.state.viewport}
-    onViewportChange={(viewport) => this.setState({viewport})} />
+- [Uncontrolled](https://reactjs.org/docs/uncontrolled-components.html): The application sets the initial view state (Camera options) when the map is mounted, and the component automatically makes changes to the view states afterwards. This mode works very similarly to the mapbox-gl `Map` class.
+- [Controlled](https://reactjs.org/docs/forms.html#controlled-components): The application manages the view state, and pass it to the map via props. The map invokes a callback with a new view state during user interaction transition, and the application can decide what to do with it. This mode is the most powerful when an application has other components that need to interact with the map, or implements its own user input and data handling logic.
+
+
+## Uncontrolled Map
+
+You may clone a full app configuration for this example [here](/examples/get-started/basic).
+
+```js
+import * as React from 'react';
+import {Map} from 'react-map-gl';
+
+function App() {
+  return <Map
+    initialViewState={{
+      longitude: -100,
+      latitude: 40,
+      zoom: 3.5
+    }}
+    mapStyle="mapbox://styles/mapbox/streets-v9"
+  />;
+}
 ```
 
-User interaction and transition will not work without a valid `onViewportChange` handler.
+## Controlled Map
 
-The advantage of this practice is that it ensures a single source of truth regarding the viewport state (in the example above, saved in the `state` of the container component). When you use this viewport state to direct the rendering of other components, it is guaranteed that they will always be synced with the map.
+You may clone a full app configuration for this example [here](/examples/get-started/controlled).
 
-You may apply additional constraints to the viewport:
+```js
+import * as React from 'react';
+import {Map} from 'react-map-gl';
 
-```jsx
-_onViewportChange = viewport => {
-    if (viewport.longitude > 0) {
-        viewport.longitude = 0;
+function App() {
+  const [viewState, setViewState] = React.useState({
+    longitude: -100,
+    latitude: 40,
+    zoom: 3.5
+  });
+
+  return <Map
+    {...viewState}
+    onMove={evt => setViewState(evt.viewState)}
+    mapStyle="mapbox://styles/mapbox/streets-v9"
+  />;
+}
+```
+
+A real-world application likely uses more complicated state flows:
+
+- Using map with a state store (Redux) [example](/examples/get-started/redux)
+- Using map with SSR (Next.js) [example](/examples/get-started/nextjs)
+
+
+## Custom Camera Constraints
+
+`Map` offers props that set basic constraints for the camera, e.g. `maxBounds`, `minZoom`, `maxPitch`. If you need more complicated logic to constrain the camera, you may use it as a controlled component. The following example restricts the map center inside a GeoJSON geofence:
+
+```js
+import * as React from 'react';
+import {Map} from 'react-map-gl';
+
+// npm install @turf/turf
+import * as turf from '@turf/turf';
+
+// A circle of 5 mile radius of the Empire State Building
+const GEOFENCE = turf.circle([-74.0122106, 40.7467898], 5, {units: 'miles'});
+
+function App() {
+  const [viewState, setViewState] = React.useState({
+    longitude: -100,
+    latitude: 40,
+    zoom: 3.5
+  });
+
+  const onMove = React.useCallback(({viewState}) => {
+    const newCenter = [viewState.longitude, viewState.latitude];
+    // Only update the view state if the center is inside the geofence
+    if (turf.booleanPointInPolygon(newCenter, GEOFENCE)) {
+      setViewState(newCenter);
     }
-    this.setState({viewport});
-}
+  }, [])
 
-render() {
-    return <ReactMapGL {...this.state.viewport} onViewportChange={this._onViewportChange} />
-}
-```
-
-Or manipulate the viewport outside of the ReactMap component:
-
-```jsx
-_goToNYC = () => {
-    const viewport = {...this.state.viewport, longitude: -74.1, latitude: 40.7};
-    this.setState({viewport});
-}
-
-render() {
-    return (
-        <div>
-            <ReactMapGL {...this.state.viewport} onViewportChange={this._onViewportChange} />
-            <button onClick={this._goToNYC}>New York City</button>
-        </div>
-    );
+  return <Map
+    {...viewState}
+    onMove={onMove}
+    mapStyle="mapbox://styles/mapbox/streets-v9"
+  />;
 }
 ```
-
-
-## Using with Redux
-
-If you're using redux, it is very easy to hook this component up to store state in the redux state tree.
-The simplest way is to take all properties passed to the `onViewportChange` function property and add them
-directly into the store. This state can then be passed back to the `<ReactMapGL>` component without any transformation.
