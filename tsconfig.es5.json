@@ -10,6 +10,6 @@
     "outDir": "./dist/es5"
   },
   "include": [
-    "src/*"
+    "src/**/*"
   ]
 }
