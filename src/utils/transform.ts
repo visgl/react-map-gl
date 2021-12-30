@@ -1,18 +1,6 @@
 import mapboxgl from './mapboxgl';
 
-import type {PaddingOptions} from 'mapbox-gl';
-
-/**
- * Descriptor of the camera's state
- */
-export type ViewState = {
-  longitude?: number;
-  latitude?: number;
-  zoom?: number;
-  bearing?: number;
-  pitch?: number;
-  padding?: PaddingOptions;
-};
+import type {PaddingOptions, ViewState} from './types';
 
 /**
  * Stub for mapbox's Transform class

@@ -1,4 +1,4 @@
 import * as React from 'react';
-import type {Map} from 'mapbox-gl';
+import type {MapboxMap} from '../utils/types';
 
-export default React.createContext<Map>(null);
+export default React.createContext<MapboxMap>(null);

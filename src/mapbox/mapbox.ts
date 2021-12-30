@@ -1,139 +1,114 @@
 import mapboxgl from '../utils/mapboxgl';
-import {
-  ViewState,
-  Transform,
-  transformToViewState,
-  applyViewStateToTransform
-} from '../utils/transform';
+import {Transform, transformToViewState, applyViewStateToTransform} from '../utils/transform';
 import {deepEqual} from '../utils/deep-equal';
 
 import type {
+  ProjectionSpecification,
+  ViewState,
+  ViewStateChangeEvent,
   MapboxOptions,
   Style,
+  MapMouseEvent,
   MapLayerMouseEvent,
   MapLayerTouchEvent,
   MapWheelEvent,
+  MapDataEvent,
   MapboxEvent,
   ErrorEvent,
-  DragPanOptions
-} from 'mapbox-gl';
+  MapboxGeoJSONFeature
+} from '../utils/types';
 
-type ViewStateChangeEvent = MapboxEvent & {
-  viewState: ViewState;
-};
+export type MapboxProps = Omit<
+  MapboxOptions,
+  'center' | 'accessToken' | 'container' | 'style' | 'bounds' | 'fitBoundsOptions'
+> &
+  ViewState & {
+    mapboxAccessToken?: string;
 
-export type MapboxProps = Omit<MapboxOptions, 'center' | 'accessToken' | 'container' | 'style'> & {
-  /* Initialization props */
-  mapboxAccessToken?: string;
+    /** Camera options used when constructing the Map instance */
+    initialViewState?: Pick<MapboxOptions, 'bounds' | 'fitBoundsOptions'> & ViewState;
 
-  // Initial view state, for use as a stateful component
-  initialViewState?: ViewState;
+    /** If provided, render into an external WebGL context */
+    gl?: WebGLRenderingContext;
 
-  // Render into an external WebGL context
-  gl?: WebGLRenderingContext;
+    /** Aternative way to specify camera state */
+    viewState?: ViewState;
 
-  /* Reactive props */
+    /** Mapbox style */
+    mapStyle?: string | Style;
+    /** Enable diffing when the map style changes */
+    styleDiffing?: boolean;
+    /** Default layers to query on pointer events */
+    interactiveLayerIds?: string[];
+    /** The projection the map should be rendered in */
+    projection?: ProjectionSpecification | string;
+    /** CSS cursor */
+    cursor?: string;
 
-  // Constraints
-  maxBounds?: [[number, number], [number, number]];
-  minZoom: number;
-  maxZoom: number;
-  minPitch: number;
-  maxPitch: number;
+    // Callbacks
+    onMouseDown?: (e: MapLayerMouseEvent) => void;
+    onMouseUp?: (e: MapLayerMouseEvent) => void;
+    onMouseOver?: (e: MapLayerMouseEvent) => void;
+    onMouseMove?: (e: MapLayerMouseEvent) => void;
+    onClick?: (e: MapLayerMouseEvent) => void;
+    onDblClick?: (e: MapLayerMouseEvent) => void;
+    onMouseEnter?: (e: MapLayerMouseEvent) => void;
+    onMouseLeave?: (e: MapLayerMouseEvent) => void;
+    onMouseOut?: (e: MapLayerMouseEvent) => void;
+    onContextMenu?: (e: MapLayerMouseEvent) => void;
+    onWheel?: (e: MapWheelEvent) => void;
+    onTouchStart?: (e: MapLayerTouchEvent) => void;
+    onTouchEnd?: (e: MapLayerTouchEvent) => void;
+    onTouchMove?: (e: MapLayerTouchEvent) => void;
+    onTouchCancel?: (e: MapLayerTouchEvent) => void;
 
-  // Interaction handlers
-  scrollZoom:
-    | boolean
-    | {
-        around?: 'center';
-      };
-  boxZoom: boolean;
-  dragRotate: boolean;
-  dragPan: boolean | DragPanOptions;
-  keyboard: boolean;
-  doubleClickZoom: boolean;
-  touchZoomRotate:
-    | boolean
-    | {
-        around?: 'center';
-      };
-  touchPitch: boolean;
+    onMoveStart?: (e: ViewStateChangeEvent) => void;
+    onMove?: (e: ViewStateChangeEvent) => void;
+    onMoveEnd?: (e: ViewStateChangeEvent) => void;
+    onDragStart?: (e: ViewStateChangeEvent) => void;
+    onDrag?: (e: ViewStateChangeEvent) => void;
+    onDragEnd?: (e: ViewStateChangeEvent) => void;
+    onZoomStart?: (e: ViewStateChangeEvent) => void;
+    onZoom?: (e: ViewStateChangeEvent) => void;
+    onZoomEnd?: (e: ViewStateChangeEvent) => void;
+    onRotateStart?: (e: ViewStateChangeEvent) => void;
+    onRotate?: (e: ViewStateChangeEvent) => void;
+    onRotateEnd?: (e: ViewStateChangeEvent) => void;
+    onPitchStart?: (e: ViewStateChangeEvent) => void;
+    onPitch?: (e: ViewStateChangeEvent) => void;
+    onPitchEnd?: (e: ViewStateChangeEvent) => void;
+    onBoxZoomStart?: (e: ViewStateChangeEvent) => void;
+    onBoxZoomEnd?: (e: ViewStateChangeEvent) => void;
+    onBoxZoomCancel?: (e: ViewStateChangeEvent) => void;
 
-  // View state
-  viewState?: ViewState;
-
-  // Style
-  mapStyle: string | Style;
-  styleDiffing: boolean;
-  interactiveLayerIds?: [string];
-  projection: string | object;
-  renderWorldCopies: boolean;
-
-  // Callbacks
-  onMouseDown?: (e: MapLayerMouseEvent) => void;
-  onMouseUp?: (e: MapLayerMouseEvent) => void;
-  onMouseOver?: (e: MapLayerMouseEvent) => void;
-  onMouseMove?: (e: MapLayerMouseEvent) => void;
-  onPreClick?: (e: MapLayerMouseEvent) => void;
-  onClick?: (e: MapLayerMouseEvent) => void;
-  onDblClick?: (e: MapLayerMouseEvent) => void;
-  onMouseEnter?: (e: MapLayerMouseEvent) => void;
-  onMouseLeave?: (e: MapLayerMouseEvent) => void;
-  onMouseOut?: (e: MapLayerMouseEvent) => void;
-  onContextMenu?: (e: MapLayerMouseEvent) => void;
-  onWheel?: (e: MapWheelEvent) => void;
-  onTouchStart?: (e: MapLayerTouchEvent) => void;
-  onTouchEnd?: (e: MapLayerTouchEvent) => void;
-  onTouchMove?: (e: MapLayerTouchEvent) => void;
-  onTouchCancel?: (e: MapLayerTouchEvent) => void;
-
-  onResize?: (e: ViewStateChangeEvent) => void;
-  onMoveStart?: (e: ViewStateChangeEvent) => void;
-  onMove?: (e: ViewStateChangeEvent) => void;
-  onMoveEnd?: (e: ViewStateChangeEvent) => void;
-  onDragStart?: (e: ViewStateChangeEvent) => void;
-  onDrag?: (e: ViewStateChangeEvent) => void;
-  onDragEnd?: (e: ViewStateChangeEvent) => void;
-  onZoomStart?: (e: ViewStateChangeEvent) => void;
-  onZoom?: (e: ViewStateChangeEvent) => void;
-  onZoomEnd?: (e: ViewStateChangeEvent) => void;
-  onRotateStart?: (e: ViewStateChangeEvent) => void;
-  onRotate?: (e: ViewStateChangeEvent) => void;
-  onRotateEnd?: (e: ViewStateChangeEvent) => void;
-  onPitchStart?: (e: ViewStateChangeEvent) => void;
-  onPitch?: (e: ViewStateChangeEvent) => void;
-  onPitchEnd?: (e: ViewStateChangeEvent) => void;
-  onBoxZoomStart?: (e: ViewStateChangeEvent) => void;
-  onBoxZoomEnd?: (e: ViewStateChangeEvent) => void;
-  onBoxZoomCancel?: (e: ViewStateChangeEvent) => void;
-
-  onLoad?: (e: MapboxEvent) => void;
-  onRender?: (e: MapboxEvent) => void;
-  onIdle?: (e: MapboxEvent) => void;
-  onError?: (e: ErrorEvent) => void;
-  onRemove?: (e: MapboxEvent) => void;
-} & ViewState;
+    onResize?: (e: MapboxEvent) => void;
+    onLoad?: (e: MapboxEvent) => void;
+    onRender?: (e: MapboxEvent) => void;
+    onIdle?: (e: MapboxEvent) => void;
+    onError?: (e: ErrorEvent) => void;
+    onRemove?: (e: MapboxEvent) => void;
+    onData?: (e: MapDataEvent) => void;
+    onStyleData?: (e: MapDataEvent) => void;
+    onSourceData?: (e: MapDataEvent) => void;
+  };
 
 const pointerEvents = {
   mousedown: 'onMouseDown',
   mouseup: 'onMouseUp',
   mouseover: 'onMouseOver',
   mousemove: 'onMouseMove',
-  preclick: 'onPreClick',
   click: 'onClick',
   dblclick: 'onDblClick',
   mouseenter: 'onMouseEnter',
   mouseleave: 'onMouseLeave',
   mouseout: 'onMouseOut',
   contextmenu: 'onContextMenu',
-  wheel: 'onWheel',
   touchstart: 'onTouchStart',
   touchend: 'onTouchEnd',
   touchmove: 'onTouchMove',
   touchcancel: 'onTouchCancel'
 };
 const cameraEvents = {
-  resize: 'onResize',
   movestart: 'onMoveStart',
   move: 'onMove',
   moveend: 'onMoveEnd',
@@ -153,12 +128,16 @@ const cameraEvents = {
   boxzoomend: 'onBoxZoomEnd',
   boxzoomcancel: 'onBoxZoomCancel'
 };
-const lifeCycleEvents = {
+const otherEvents = {
+  wheel: 'onWheel',
+  resize: 'onResize',
   load: 'onLoad',
   render: 'onRender',
   idle: 'onIdle',
-  error: 'onError',
-  remove: 'onRemove'
+  remove: 'onRemove',
+  data: 'onData',
+  styledata: 'onStyleData',
+  sourcedata: 'onSourceData'
 };
 const settingNames: (keyof MapboxProps)[] = [
   'minZoom',
@@ -201,6 +180,7 @@ export default class Mapbox {
   // Internal states
   private _internalUpdate: boolean = false;
   private _inRender: boolean = false;
+  private _hoveredFeatures: MapboxGeoJSONFeature[] = null;
   private _moved: boolean = false;
   private _zoomed: boolean = false;
   private _pitched: boolean = false;
@@ -244,6 +224,7 @@ export default class Mapbox {
     const {props} = this;
     const mapOptions = {
       ...props,
+      ...props.initialViewState,
       accessToken: props.mapboxAccessToken || getAccessTokenFromEnv() || null,
       container,
       style: props.mapStyle
@@ -296,9 +277,10 @@ export default class Mapbox {
     for (const eventName in cameraEvents) {
       map.on(eventName, this._onCameraEvent);
     }
-    for (const eventName in lifeCycleEvents) {
-      map.on(eventName, this._onLifeCycleEvent);
+    for (const eventName in otherEvents) {
+      map.on(eventName, this._onEvent);
     }
+    map.on('error', this._onError);
     this._map = map;
   }
 
@@ -385,10 +367,16 @@ export default class Mapbox {
      @returns {bool} true if style is changed
    */
   _updateStyle(nextProps: MapboxProps, currProps: MapboxProps): boolean {
+    if (nextProps.cursor !== currProps.cursor) {
+      this._map.getCanvas().style.cursor = nextProps.cursor;
+    }
     if (nextProps.mapStyle !== currProps.mapStyle) {
-      const options = {
+      const options: any = {
         diff: nextProps.styleDiffing
       };
+      if ('localIdeographFontFamily' in nextProps) {
+        options.localIdeographFontFamily = nextProps.localIdeographFontFamily;
+      }
       this._map.setStyle(nextProps.mapStyle, options);
       return true;
     }
@@ -417,28 +405,80 @@ export default class Mapbox {
     return changed;
   }
 
-  _onLifeCycleEvent = (e: MapboxEvent) => {
+  _onEvent = (e: MapboxEvent) => {
     // @ts-ignore
-    const cb = this.props[lifeCycleEvents[e.type]];
+    const cb = this.props[otherEvents[e.type]];
     if (cb) {
       cb(e);
     }
   };
+
+  _onError = (e: ErrorEvent) => {
+    if (this.props.onError) {
+      this.props.onError(e);
+    } else {
+      console.error(e.error);
+    }
+  };
+
+  _updateHover(e: MapMouseEvent) {
+    const {props} = this;
+    const shouldTrackHoveredFeatures =
+      props.interactiveLayerIds && (props.onMouseMove || props.onMouseEnter || props.onMouseLeave);
+
+    if (shouldTrackHoveredFeatures) {
+      const eventType = e.type;
+      const wasHovering = this._hoveredFeatures?.length > 0;
+      let features;
+      if (eventType === 'mousemove') {
+        try {
+          features = this._map.queryRenderedFeatures(e.point, {
+            layers: props.interactiveLayerIds
+          });
+        } catch {
+          features = [];
+        }
+      } else {
+        features = [];
+      }
+      const isHovering = features.length > 0;
+
+      if (!isHovering && wasHovering) {
+        e.type = 'mouseleave';
+        this._onPointerEvent(e);
+      }
+      this._hoveredFeatures = features;
+      if (isHovering && !wasHovering) {
+        e.type = 'mouseenter';
+        this._onPointerEvent(e);
+      }
+      e.type = eventType;
+    } else {
+      this._hoveredFeatures = null;
+    }
+  }
 
   _onPointerEvent = (e: MapLayerMouseEvent | MapLayerTouchEvent) => {
     // @ts-ignore
     const cb = this.props[pointerEvents[e.type]];
     if (cb) {
-      if (this.props.interactiveLayerIds) {
-        e.features = this._map.queryRenderedFeatures(e.point, {
-          layers: this.props.interactiveLayerIds
-        });
+      if (this.props.interactiveLayerIds && e.type !== 'mouseover' && e.type !== 'mouseout') {
+        const features =
+          this._hoveredFeatures ||
+          this._map.queryRenderedFeatures(e.point, {
+            layers: this.props.interactiveLayerIds
+          });
+        if (!features.length) {
+          return;
+        }
+        e.features = features;
       }
       cb(e);
+      delete e.features;
     }
   };
 
-  _onCameraEvent = (e: MapboxEvent) => {
+  _onCameraEvent = (e: ViewStateChangeEvent) => {
     if (this._internalUpdate) {
       return;
     }
@@ -461,6 +501,12 @@ export default class Mapbox {
 
       case 'move':
         this._updateViewState(this.props, false);
+        break;
+
+      case 'mousemove':
+      case 'mouseout':
+        // @ts-ignore
+        this._updateHover(event);
         break;
     }
     if (typeof event === 'object' && event.type in cameraEvents) {
@@ -538,9 +584,17 @@ function getAccessTokenFromEnv(): string {
     accessToken = match && match[1];
   }
 
-  if (!accessToken && typeof process !== 'undefined') {
-    // Note: This depends on bundler plugins (e.g. webpack) importing environment correctly
-    accessToken = process.env.MapboxAccessToken || process.env.REACT_APP_MAPBOX_ACCESS_TOKEN; // eslint-disable-line
+  // Note: This depends on bundler plugins (e.g. webpack) importing environment correctly
+  try {
+    accessToken = accessToken || process.env.MapboxAccessToken;
+  } catch {
+    // ignore
+  }
+
+  try {
+    accessToken = accessToken || process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+  } catch {
+    // ignore
   }
 
   return accessToken;

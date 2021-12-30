@@ -1,16 +1,25 @@
 import * as React from 'react';
-import {useState, useRef, useEffect, useLayoutEffect} from 'react';
+import {useState, useRef, useEffect, useLayoutEffect, forwardRef, useImperativeHandle} from 'react';
 
 import Mapbox from '../mapbox/mapbox';
 import type {MapboxProps} from '../mapbox/mapbox';
 import MapContext from './map-context';
 
 import type {CSSProperties} from 'react';
+import type {MapboxMap} from '../utils/types';
+
+export interface MapRef {
+  getMap(): MapboxMap;
+}
 
 export type MapProps = MapboxProps & {
+  /** Map container id */
   id?: string;
+  /** Map container CSS style */
   style?: CSSProperties;
   children?: any;
+
+  ref?: React.Ref<MapRef>;
 };
 
 const defaultProps: MapProps = {
@@ -37,7 +46,7 @@ const defaultProps: MapProps = {
   renderWorldCopies: true
 };
 
-export default function Map(props: MapProps) {
+const Map = forwardRef((props: MapProps, ref) => {
   const [mapInstance, setMapInstance] = useState<Mapbox>(null);
   const containerRef = useRef();
 
@@ -54,6 +63,14 @@ export default function Map(props: MapProps) {
     }
   });
 
+  useImperativeHandle(
+    ref,
+    () => ({
+      getMap: () => mapInstance.getMap()
+    }),
+    [mapInstance]
+  );
+
   const style: CSSProperties = {
     position: 'relative',
     width: '100%',
@@ -68,6 +85,8 @@ export default function Map(props: MapProps) {
       )}
     </div>
   );
-}
+});
 
 Map.defaultProps = defaultProps;
+
+export default Map;
