@@ -1,25 +1,8 @@
 const webpack = require('webpack');
-const getWebpackConfig = require('ocular-dev-tools/config/webpack.config');
-
-const BABEL_CONFIG = {
-  presets: ['@babel/env', '@babel/react'],
-  plugins: ['version-inline', '@babel/proposal-class-properties']
-};
+const {getWebpackConfig} = require('ocular-dev-tools');
 
 module.exports = env => {
   const config = getWebpackConfig(env);
-
-  config.module.rules.push({
-    // This is required to handle inline worker!
-    test: /\.js$/,
-    exclude: /node_modules/,
-    use: [
-      {
-        loader: 'babel-loader',
-        options: BABEL_CONFIG
-      }
-    ]
-  });
 
   config.plugins = (config.plugins || []).concat([
     new webpack.DefinePlugin({
