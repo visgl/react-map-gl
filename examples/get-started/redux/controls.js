@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { useCallback, useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import {useCallback, useState, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
 export default function Controls() {
   const viewState = useSelector(s => s.viewState);
@@ -22,7 +22,7 @@ export default function Controls() {
     const [lng, lat] = inputValue.split(',').map(Number);
     if (Math.abs(lng) <= 180 && Math.abs(lat) <= 85) {
       dispatch({
-        type: 'setViewState', 
+        type: 'setViewState',
         payload: {...viewState, longitude: lng, latitude: lat}
       });
       setError(false);
@@ -34,7 +34,12 @@ export default function Controls() {
   return (
     <div style={{padding: 12, fontFamily: 'sans-serif'}}>
       <span>MAP CENTER: </span>
-      <input type="text" value={inputValue} onChange={onChange} style={{color: hasError ? 'red' : 'black'}} />
+      <input
+        type="text"
+        value={inputValue}
+        onChange={onChange}
+        style={{color: hasError ? 'red' : 'black'}}
+      />
       <button onClick={onSubmit}>GO</button>
     </div>
   );

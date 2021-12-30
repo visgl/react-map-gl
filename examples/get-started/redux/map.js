@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Map from 'react-map-gl';
 
-import { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import {useCallback} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -14,14 +14,14 @@ export default function MapView() {
   const dispatch = useDispatch();
 
   const onMove = useCallback(evt => {
-    dispatch({ type: 'setViewState', payload: evt.viewState});
-  }, [])
+    dispatch({type: 'setViewState', payload: evt.viewState});
+  }, []);
 
   return (
     <Map
       {...viewState}
       onMove={onMove}
-      style={{ width: 800, height: 600 }}
+      style={{width: 800, height: 600}}
       mapStyle={mapStyle}
       mapboxAccessToken={MAPBOX_TOKEN}
     />

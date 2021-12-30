@@ -34,7 +34,7 @@ const config = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/env', '@babel/react'],
+              presets: ['@babel/env', '@babel/react']
             }
           },
           {
@@ -46,9 +46,7 @@ const config = {
   },
 
   // Optional: Enables reading mapbox token from environment variable
-  plugins: [
-    new webpack.EnvironmentPlugin({MapboxAccessToken: ''})
-  ]
+  plugins: [new webpack.EnvironmentPlugin({MapboxAccessToken: ''})]
 };
 
 // Enables bundling against src in this repo rather than the installed version

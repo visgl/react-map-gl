@@ -2,7 +2,7 @@ const {resolve} = require('path');
 
 const config = {
   lint: {
-    paths: ['src', 'test'] // , 'examples',
+    paths: ['src', 'test', 'examples']
   },
 
   aliases: {

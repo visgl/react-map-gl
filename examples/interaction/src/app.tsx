@@ -47,10 +47,7 @@ export default function App() {
         mapStyle="mapbox://styles/mapbox/dark-v9"
         mapboxAccessToken={MAPBOX_TOKEN}
       />
-      <ControlPanel
-        settings={settings}
-        onChange={updateSettings}
-      />
+      <ControlPanel settings={settings} onChange={updateSettings} />
     </>
   );
 }

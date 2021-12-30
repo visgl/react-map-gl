@@ -8,10 +8,12 @@ import Map from './map';
 import Controls from './controls';
 
 function Root() {
-  return <Provider store={store}>
-    <Controls />
-    <Map />
-  </Provider>;
+  return (
+    <Provider store={store}>
+      <Controls />
+      <Map />
+    </Provider>
+  );
 }
 
 render(<Root />, document.body.appendChild(document.createElement('div')));
