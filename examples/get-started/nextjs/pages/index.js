@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Head from 'next/head';
-import Map from 'react-map-gl';
+import Map, {Marker} from 'react-map-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -22,7 +22,9 @@ export default function Home() {
         style={{width: 800, height: 600}}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxAccessToken={MAPBOX_TOKEN}
-      />
+      >
+        <Marker longitude={-122.4} latitude={37.8} color="red" />
+      </Map>
     </div>
   );
 }
