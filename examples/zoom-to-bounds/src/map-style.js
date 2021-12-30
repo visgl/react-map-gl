@@ -9,8 +9,7 @@ const mapStyle = {
 
 mapStyle.sources['sf-neighborhoods'] = {
   type: 'geojson',
-  data:
-    'https://raw.githubusercontent.com/uber/react-map-gl/master/examples/.data/feature-example-sf.json'
+  data: 'https://raw.githubusercontent.com/uber/react-map-gl/master/examples/.data/feature-example-sf.json'
 };
 
 mapStyle.layers.push(

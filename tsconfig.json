@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "build": true,
     "target": "es2020",
     "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "moduleResolution": "node",
-    "module": "ES2020",
-    "declaration": true,
-    "sourceMap": true,
-    "outDir": "./dist/esm"
+    "module": "ES2020"
   },
   "include":[
-    "src/*"
+    "examples/**/*",
+    "src/**/*",
+    "test/**/*"
   ]
 }
