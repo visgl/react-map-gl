@@ -30,7 +30,7 @@ If `Marker` is mounted with child components, then its content will be rendered 
 
 ### Render options
 
-#### anchor: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'`
+#### anchor: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
 Default: `'center'`
 
