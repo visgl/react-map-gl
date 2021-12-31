@@ -1,3 +1,4 @@
+/* global document */
 import * as React from 'react';
 import {createPortal} from 'react-dom';
 import {useEffect, useState, useRef, useContext} from 'react';

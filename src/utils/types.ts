@@ -38,6 +38,12 @@ export type MarkerDragEvent = MapboxEvent & {
   lngLat: LngLatLike;
 };
 
+export type GeolocateEvent = MapboxEvent & GeolocationPosition;
+
+export type GeolocateErrorEvent = MapboxEvent & GeolocationPositionError;
+
+export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+
 // re-export mapbox types
 export type {
   MapboxOptions,
@@ -53,6 +59,9 @@ export type {
   MapboxEvent,
   ErrorEvent,
   MapboxGeoJSONFeature,
+  IControl,
+  PositionOptions,
+  FitBoundsOptions,
   Map as MapboxMap,
   Marker as MapboxMarker,
   Popup as MapboxPopup

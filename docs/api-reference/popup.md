@@ -34,7 +34,7 @@ function App() {
 
 ### Render options
 
-#### anchor: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'`
+#### anchor: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | undefined
 
 A string indicating the part of the popup that should be positioned closest to the coordinate, set via `longitude` and `latitude`. 
 If unset, the anchor will be dynamically set to ensure the popup falls within the map container with a preference for `'bottom'`.
