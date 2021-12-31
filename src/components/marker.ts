@@ -3,8 +3,7 @@ import {createPortal} from 'react-dom';
 import {useEffect, useState, useRef, useContext} from 'react';
 
 import mapboxgl from '../utils/mapboxgl';
-import type {MarkerOptions, MapboxEvent} from 'mapbox-gl';
-import type {MarkerDragEvent} from '../utils/types';
+import type {MarkerDragEvent, MarkerOptions, MapboxPopup} from '../utils/types';
 
 import MapContext from './map-context';
 import {arePointsEqual} from '../utils/deep-equal';
@@ -12,6 +11,7 @@ import {arePointsEqual} from '../utils/deep-equal';
 export type MarkerProps = Omit<MarkerOptions, 'element'> & {
   longitude: number;
   latitude: number;
+  popup?: MapboxPopup;
   onDragStart?: (e: MarkerDragEvent) => void;
   onDrag?: (e: MarkerDragEvent) => void;
   onDragEnd?: (e: MarkerDragEvent) => void;
@@ -20,6 +20,7 @@ export type MarkerProps = Omit<MarkerOptions, 'element'> & {
 
 const defaultProps: Partial<MarkerProps> = {
   draggable: false,
+  popup: null,
   rotation: 0,
   rotationAlignment: 'auto',
   pitchAlignment: 'auto'
@@ -83,6 +84,9 @@ function Marker(props: MarkerProps) {
   }
   if (marker.getPitchAlignment() !== props.pitchAlignment) {
     marker.setPitchAlignment(props.pitchAlignment);
+  }
+  if (marker.getPopup() !== props.popup) {
+    marker.setPopup(props.popup);
   }
 
   return createPortal(props.children, marker.getElement());
