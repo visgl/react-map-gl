@@ -1,5 +1,6 @@
 import mapboxgl from '../utils/mapboxgl';
 import {Transform, transformToViewState, applyViewStateToTransform} from '../utils/transform';
+import {normalizeStyle} from '../utils/style-utils';
 import {deepEqual} from '../utils/deep-equal';
 
 import type {
@@ -8,6 +9,9 @@ import type {
   ViewStateChangeEvent,
   MapboxOptions,
   Style,
+  ImmutableLike,
+  LngLatBoundsLike,
+  FitBoundsOptions,
   MapMouseEvent,
   MapLayerMouseEvent,
   MapLayerTouchEvent,
@@ -26,7 +30,10 @@ export type MapboxProps = Omit<
     mapboxAccessToken?: string;
 
     /** Camera options used when constructing the Map instance */
-    initialViewState?: Pick<MapboxOptions, 'bounds' | 'fitBoundsOptions'> & ViewState;
+    initialViewState?: ViewState & {
+      bounds?: LngLatBoundsLike;
+      fitBoundsOptions?: FitBoundsOptions;
+    };
 
     /** If provided, render into an external WebGL context */
     gl?: WebGLRenderingContext;
@@ -35,7 +42,7 @@ export type MapboxProps = Omit<
     viewState?: ViewState;
 
     /** Mapbox style */
-    mapStyle?: string | Style;
+    mapStyle?: string | Style | ImmutableLike;
     /** Enable diffing when the map style changes */
     styleDiffing?: boolean;
     /** Default layers to query on pointer events */
@@ -227,7 +234,7 @@ export default class Mapbox {
       ...props.initialViewState,
       accessToken: props.mapboxAccessToken || getAccessTokenFromEnv() || null,
       container,
-      style: props.mapStyle
+      style: normalizeStyle(props.mapStyle)
     };
 
     const viewState = mapOptions.initialViewState || mapOptions.viewState || mapOptions;
@@ -377,7 +384,7 @@ export default class Mapbox {
       if ('localIdeographFontFamily' in nextProps) {
         options.localIdeographFontFamily = nextProps.localIdeographFontFamily;
       }
-      this._map.setStyle(nextProps.mapStyle, options);
+      this._map.setStyle(normalizeStyle(nextProps.mapStyle), options);
       return true;
     }
     return false;
