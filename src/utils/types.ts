@@ -1,4 +1,4 @@
-import type {PaddingOptions, MapboxEvent} from 'mapbox-gl';
+import type {PaddingOptions, MapboxEvent, LngLatLike} from 'mapbox-gl';
 
 /** Defines the projection that the map should be rendered in */
 export type ProjectionSpecification = {
@@ -34,9 +34,15 @@ export type ViewStateChangeEvent = MapboxEvent & {
   viewState: ViewState;
 };
 
+export type MarkerDragEvent = MapboxEvent & {
+  lngLat: LngLatLike;
+};
+
 // re-export mapbox types
 export type {
   MapboxOptions,
+  MarkerOptions,
+  PopupOptions,
   Style,
   PaddingOptions,
   MapMouseEvent,
@@ -47,5 +53,7 @@ export type {
   MapboxEvent,
   ErrorEvent,
   MapboxGeoJSONFeature,
-  Map as MapboxMap
+  Map as MapboxMap,
+  Marker as MapboxMarker,
+  Popup as MapboxPopup
 } from 'mapbox-gl';

@@ -1,7 +1,7 @@
 /* global document */
 import * as React from 'react';
 import {render} from 'react-dom';
-import Map from 'react-map-gl';
+import Map, {Marker} from 'react-map-gl';
 
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -15,7 +15,9 @@ function Root() {
       }}
       style={{width: 800, height: 600}}
       mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
-    />
+    >
+      <Marker longitude={-122.4} latitude={37.8} color="red" />
+    </Map>
   );
 }
 
