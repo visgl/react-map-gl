@@ -41,6 +41,8 @@ export type MarkerDragEvent = MapboxEvent & {
 // re-export mapbox types
 export type {
   MapboxOptions,
+  MarkerOptions,
+  PopupOptions,
   Style,
   PaddingOptions,
   MapMouseEvent,
@@ -51,5 +53,7 @@ export type {
   MapboxEvent,
   ErrorEvent,
   MapboxGeoJSONFeature,
-  Map as MapboxMap
+  Map as MapboxMap,
+  Marker as MapboxMarker,
+  Popup as MapboxPopup
 } from 'mapbox-gl';
