@@ -44,13 +44,48 @@ export type GeolocateErrorEvent = MapboxEvent & GeolocationPositionError;
 
 export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
+export interface ImmutableLike {
+  toJS: () => any;
+}
+
 // re-export mapbox types
 export type {
+  PointLike,
+  LngLatLike,
+  LngLatBoundsLike,
   MapboxOptions,
   MarkerOptions,
   PopupOptions,
-  Style,
   PaddingOptions,
+  PositionOptions,
+  FitBoundsOptions,
+  Style,
+  AnyLayer,
+  BackgroundLayer,
+  CircleLayer,
+  FillExtrusionLayer,
+  FillLayer,
+  HeatmapLayer,
+  HillshadeLayer,
+  LineLayer,
+  RasterLayer,
+  SymbolLayer,
+  CustomLayerInterface,
+  SkyLayer,
+  AnySourceData,
+  GeoJSONSourceRaw,
+  VideoSourceRaw,
+  ImageSourceRaw,
+  CanvasSourceRaw,
+  AnySourceImpl,
+  GeoJSONSource,
+  VideoSource,
+  ImageSource,
+  CanvasSource,
+  VectorSourceImpl,
+  VectorSource,
+  RasterSource,
+  RasterDemSource,
   MapMouseEvent,
   MapLayerMouseEvent,
   MapLayerTouchEvent,
@@ -60,8 +95,6 @@ export type {
   ErrorEvent,
   MapboxGeoJSONFeature,
   IControl,
-  PositionOptions,
-  FitBoundsOptions,
   Map as MapboxMap,
   Marker as MapboxMarker,
   Popup as MapboxPopup
