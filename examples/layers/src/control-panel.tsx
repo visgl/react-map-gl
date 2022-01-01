@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import {fromJS} from 'immutable';
 import MAP_STYLE from '../../map-style-basic-v8.json';
 
-const defaultMapStyle = fromJS(MAP_STYLE);
+const defaultMapStyle: any = fromJS(MAP_STYLE);
 const defaultLayers = defaultMapStyle.get('layers');
 
 const categories = ['labels', 'roads', 'buildings', 'parks', 'water', 'background'];

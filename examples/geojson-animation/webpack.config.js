@@ -5,33 +5,40 @@
 const resolve = require('path').resolve;
 const webpack = require('webpack');
 
-const BABEL_CONFIG = {
-  presets: ['@babel/env', '@babel/react'],
-  plugins: ['@babel/proposal-class-properties']
-};
-
 const config = {
   mode: 'development',
 
+  devServer: {
+    static: '.'
+  },
+
   entry: {
-    app: resolve('./src/app.js')
+    app: resolve('./src/app')
   },
 
   output: {
     library: 'App'
   },
 
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.json']
+  },
+
   module: {
     rules: [
       {
-        // Compile ES2015 using babel
-        test: /\.js$/,
+        test: /\.(ts|js)x?$/,
         include: [resolve('.')],
         exclude: [/node_modules/],
         use: [
           {
             loader: 'babel-loader',
-            options: BABEL_CONFIG
+            options: {
+              presets: ['@babel/env', '@babel/react']
+            }
+          },
+          {
+            loader: 'ts-loader'
           }
         ]
       }
@@ -39,7 +46,7 @@ const config = {
   },
 
   // Optional: Enables reading mapbox token from environment variable
-  plugins: [new webpack.EnvironmentPlugin(['MapboxAccessToken'])]
+  plugins: [new webpack.EnvironmentPlugin({MapboxAccessToken: ''})]
 };
 
 // Enables bundling against src in this repo rather than the installed version

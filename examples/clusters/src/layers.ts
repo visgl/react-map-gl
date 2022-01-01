@@ -1,4 +1,6 @@
-export const clusterLayer = {
+import type {LayerProps} from 'react-map-gl';
+
+export const clusterLayer: LayerProps = {
   id: 'clusters',
   type: 'circle',
   source: 'earthquakes',
@@ -9,7 +11,7 @@ export const clusterLayer = {
   }
 };
 
-export const clusterCountLayer = {
+export const clusterCountLayer: LayerProps = {
   id: 'cluster-count',
   type: 'symbol',
   source: 'earthquakes',
@@ -21,7 +23,7 @@ export const clusterCountLayer = {
   }
 };
 
-export const unclusteredPointLayer = {
+export const unclusteredPointLayer: LayerProps = {
   id: 'unclustered-point',
   type: 'circle',
   source: 'earthquakes',

@@ -1,4 +1,4 @@
-import type {PaddingOptions, MapboxEvent, LngLatLike} from 'mapbox-gl';
+import type {PaddingOptions, MapboxEvent, LngLat} from 'mapbox-gl';
 
 /** Defines the projection that the map should be rendered in */
 export type ProjectionSpecification = {
@@ -35,7 +35,7 @@ export type ViewStateChangeEvent = MapboxEvent & {
 };
 
 export type MarkerDragEvent = MapboxEvent & {
-  lngLat: LngLatLike;
+  lngLat: LngLat;
 };
 
 export type GeolocateEvent = MapboxEvent & GeolocationPosition;
@@ -50,8 +50,11 @@ export interface ImmutableLike {
 
 // re-export mapbox types
 export type {
+  Point,
   PointLike,
+  LngLat,
   LngLatLike,
+  LngLatBounds,
   LngLatBoundsLike,
   MapboxOptions,
   MarkerOptions,
@@ -59,7 +62,7 @@ export type {
   PaddingOptions,
   PositionOptions,
   FitBoundsOptions,
-  Style,
+  Style as MapboxStyle,
   AnyLayer,
   BackgroundLayer,
   CircleLayer,

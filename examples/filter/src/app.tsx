@@ -1,29 +1,21 @@
 import * as React from 'react';
 import {useState, useMemo, useCallback} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Popup, Source, Layer} from 'react-map-gl';
+import Map, {Popup, Source, Layer} from 'react-map-gl';
 import ControlPanel from './control-panel';
 
-import {countiesLayer, highlightLayer} from './map-style.js';
+import {countiesLayer, highlightLayer} from './map-style';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default function App() {
-  const [viewport, setViewport] = useState({
-    latitude: 38.88,
-    longitude: -98,
-    zoom: 3,
-    minZoom: 2,
-    bearing: 0,
-    pitch: 0
-  });
   const [hoverInfo, setHoverInfo] = useState(null);
 
   const onHover = useCallback(event => {
     const county = event.features && event.features[0];
     setHoverInfo({
-      longitude: event.lngLat[0],
-      latitude: event.lngLat[1],
+      longitude: event.lngLat.lng,
+      latitude: event.lngLat.lat,
       countyName: county && county.properties.COUNTY
     });
   }, []);
@@ -33,14 +25,16 @@ export default function App() {
 
   return (
     <>
-      <MapGL
-        {...viewport}
-        width="100%"
-        height="100%"
+      <Map
+        initialViewState={{
+          latitude: 38.88,
+          longitude: -98,
+          zoom: 3
+        }}
+        minZoom={2}
         mapStyle="mapbox://styles/mapbox/light-v9"
-        mapboxApiAccessToken={MAPBOX_TOKEN}
-        onViewportChange={setViewport}
-        onHover={onHover}
+        mapboxAccessToken={MAPBOX_TOKEN}
+        onMouseMove={onHover}
         interactiveLayerIds={['counties']}
       >
         <Source type="vector" url="mapbox://mapbox.82pkq93d">
@@ -51,13 +45,14 @@ export default function App() {
           <Popup
             longitude={hoverInfo.longitude}
             latitude={hoverInfo.latitude}
+            offset={[0, -10]}
             closeButton={false}
             className="county-info"
           >
             {selectedCounty}
           </Popup>
         )}
-      </MapGL>
+      </Map>
       <ControlPanel />
     </>
   );

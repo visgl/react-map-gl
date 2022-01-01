@@ -8,7 +8,7 @@ import type {
   ViewState,
   ViewStateChangeEvent,
   MapboxOptions,
-  Style,
+  MapboxStyle,
   ImmutableLike,
   LngLatBoundsLike,
   FitBoundsOptions,
@@ -42,7 +42,7 @@ export type MapboxProps = Omit<
     viewState?: ViewState;
 
     /** Mapbox style */
-    mapStyle?: string | Style | ImmutableLike;
+    mapStyle?: string | MapboxStyle | ImmutableLike;
     /** Enable diffing when the map style changes */
     styleDiffing?: boolean;
     /** Default layers to query on pointer events */
@@ -516,13 +516,20 @@ export default class Mapbox {
         this._updateHover(event);
         break;
     }
-    if (typeof event === 'object' && event.type in cameraEvents) {
-      (event as ViewStateChangeEvent).viewState = transformToViewState(tr);
+    if (eventType in cameraEvents) {
+      if (typeof event === 'object') {
+        (event as ViewStateChangeEvent).viewState = transformToViewState(tr);
+      }
+      if (this._map.isMoving()) {
+        // Replace map.transform with ours during the callbacks
+        map.transform = this._renderTransform;
+        baseFire.call(map, event, properties);
+        map.transform = tr;
+
+        return map;
+      }
     }
-    // Replace map.transform with ours during the callbacks
-    map.transform = this._renderTransform;
     baseFire.call(map, event, properties);
-    map.transform = tr;
 
     return map;
   }
