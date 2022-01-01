@@ -1,4 +1,4 @@
-import type {PointLike} from 'mapbox-gl';
+import type {PointLike} from './types';
 
 /**
  * Compare two points

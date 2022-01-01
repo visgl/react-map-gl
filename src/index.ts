@@ -1,6 +1,7 @@
 export {default} from './components/map';
 
 export {default as Map, MapProps, MapRef} from './components/map';
+
 export {default as Marker, MarkerProps} from './components/marker';
 export {default as Popup, PopupProps} from './components/popup';
 export {
@@ -17,6 +18,9 @@ export {
   NavigationControlProps
 } from './components/navigation-control';
 export {default as ScaleControl, ScaleControlProps} from './components/scale-control';
+
+export {default as Source, SourceProps} from './components/source';
+export {default as Layer, LayerProps} from './components/layer';
 
 // Types
 export * from './utils/types';

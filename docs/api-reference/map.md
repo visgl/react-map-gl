@@ -71,6 +71,8 @@ The current cursor [type](https://developer.mozilla.org/en-US/docs/Web/CSS/curso
 
 #### `mapStyle` (Style|string)
 
+Default: (empty style)
+
 The map's Mapbox style. This must be an a JSON object conforming to the schema described in the [Mapbox Style Specification](https://mapbox.com/mapbox-gl-style-spec/), or a URL to such JSON.
 
 #### `styleDiffing` (boolean)
