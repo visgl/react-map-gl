@@ -33,10 +33,10 @@ export default function App() {
     setHoverInfo(
       hoveredFeature
         ? {
-          feature: hoveredFeature,
-          x,
-          y
-        }
+            feature: hoveredFeature,
+            x,
+            y
+          }
         : null
     );
   }, []);
