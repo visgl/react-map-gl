@@ -6,7 +6,7 @@ import {useEffect, useState, useRef, useContext} from 'react';
 import mapboxgl from '../utils/mapboxgl';
 import type {MarkerDragEvent, MarkerOptions, MapboxPopup} from '../utils/types';
 
-import MapContext from './map-context';
+import {MapContext} from './map';
 import {arePointsEqual} from '../utils/deep-equal';
 
 export type MarkerProps = Omit<MarkerOptions, 'element'> & {

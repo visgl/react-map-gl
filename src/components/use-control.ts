@@ -1,6 +1,6 @@
 import {useContext, useState, useEffect} from 'react';
 import type {IControl, ControlPosition} from '../utils/types';
-import MapContext from './map-context';
+import {MapContext} from './map';
 
 export default function useControl(onCreate: () => IControl, position?: ControlPosition) {
   const map = useContext(MapContext);
