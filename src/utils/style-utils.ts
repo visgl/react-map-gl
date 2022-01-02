@@ -1,11 +1,11 @@
-import {ImmutableLike, Style} from './types';
+import {ImmutableLike, MapboxStyle} from './types';
 
 const refProps = ['type', 'source', 'source-layer', 'minzoom', 'maxzoom', 'filter', 'layout'];
 
 // Prepare a map style object for diffing
 // If immutable - convert to plain object
 // Work around some issues in older styles that would fail Mapbox's diffing
-export function normalizeStyle(style: string | Style | ImmutableLike): string | Style {
+export function normalizeStyle(style: string | MapboxStyle | ImmutableLike): string | MapboxStyle {
   if (!style) {
     return null;
   }
@@ -13,7 +13,7 @@ export function normalizeStyle(style: string | Style | ImmutableLike): string | 
     return style;
   }
   if ('toJS' in style) {
-    style = style.toJS() as Style;
+    style = style.toJS() as MapboxStyle;
   }
   const layerIndex = {};
 

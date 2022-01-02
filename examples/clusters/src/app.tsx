@@ -1,53 +1,49 @@
 import * as React from 'react';
-import {useState, useRef} from 'react';
+import {useRef} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Source, Layer} from 'react-map-gl';
+import {Map, Source, Layer} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
 import {clusterLayer, clusterCountLayer, unclusteredPointLayer} from './layers';
 
+import type {MapRef} from 'react-map-gl';
+import type {GeoJSONSource} from 'react-map-gl';
+
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 export default function App() {
-  const [viewport, setViewport] = useState({
-    latitude: 40.67,
-    longitude: -103.59,
-    zoom: 3,
-    bearing: 0,
-    pitch: 0
-  });
-  const mapRef = useRef(null);
+  const mapRef = useRef<MapRef>(null);
 
   const onClick = event => {
     const feature = event.features[0];
     const clusterId = feature.properties.cluster_id;
 
-    const mapboxSource = mapRef.current.getMap().getSource('earthquakes');
+    const map = mapRef.current.getMap();
+    const mapboxSource = map.getSource('earthquakes') as GeoJSONSource;
 
     mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
       if (err) {
         return;
       }
 
-      setViewport({
-        ...viewport,
-        longitude: feature.geometry.coordinates[0],
-        latitude: feature.geometry.coordinates[1],
+      map.easeTo({
+        center: feature.geometry.coordinates,
         zoom,
-        transitionDuration: 500
+        duration: 500
       });
     });
   };
 
   return (
     <>
-      <MapGL
-        {...viewport}
-        width="100%"
-        height="100%"
+      <Map
+        initialViewState={{
+          latitude: 40.67,
+          longitude: -103.59,
+          zoom: 3
+        }}
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={setViewport}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
+        mapboxAccessToken={MAPBOX_TOKEN}
         interactiveLayerIds={[clusterLayer.id]}
         onClick={onClick}
         ref={mapRef}
@@ -64,7 +60,7 @@ export default function App() {
           <Layer {...clusterCountLayer} />
           <Layer {...unclusteredPointLayer} />
         </Source>
-      </MapGL>
+      </Map>
       <ControlPanel />
     </>
   );

@@ -1,4 +1,6 @@
-export const countiesLayer = {
+import type {FillLayer} from 'react-map-gl';
+
+export const countiesLayer: FillLayer = {
   id: 'counties',
   type: 'fill',
   'source-layer': 'original',
@@ -8,7 +10,7 @@ export const countiesLayer = {
   }
 };
 // Highlighted county polygons
-export const highlightLayer = {
+export const highlightLayer: FillLayer = {
   id: 'counties-highlighted',
   type: 'fill',
   source: 'counties',

@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {useState, useCallback} from 'react';
 import {render} from 'react-dom';
-import Map, {Style} from 'react-map-gl';
+import Map, {MapboxStyle} from 'react-map-gl';
 import ControlPanel from './control-panel';
 import MAP_STYLE from '../../map-style-basic-v8.json';
 
@@ -39,7 +39,7 @@ export default function App() {
     <>
       <Map
         initialViewState={initialViewState}
-        mapStyle={MAP_STYLE as Style}
+        mapStyle={MAP_STYLE as MapboxStyle}
         onClick={onClick}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
