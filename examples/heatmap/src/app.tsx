@@ -24,13 +24,6 @@ function filterFeaturesByDay(featureCollection, time) {
 }
 
 export default function App() {
-  const [viewport, setViewport] = useState({
-    latitude: 40,
-    longitude: -100,
-    zoom: 3,
-    bearing: 0,
-    pitch: 0
-  });
   const [allDays, useAllDays] = useState(true);
   const [timeRange, setTimeRange] = useState([0, 0]);
   const [selectedTime, selectTime] = useState(0);
@@ -60,12 +53,13 @@ export default function App() {
   return (
     <>
       <MapGL
-        {...viewport}
-        width="100%"
-        height="100%"
+        initialViewState={{
+          latitude: 40,
+          longitude: -100,
+          zoom: 3
+        }}
         mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={setViewport}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
+        mapboxAccessToken={MAPBOX_TOKEN}
       >
         {data && (
           <Source type="geojson" data={data}>

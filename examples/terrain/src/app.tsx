@@ -1,13 +1,15 @@
 import * as React from 'react';
-import {useState, useCallback} from 'react';
+import {useCallback} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Source, Layer} from 'react-map-gl';
+import Map, {Source, Layer} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
 
+import type {SkyLayer} from 'react-map-gl';
+
 const TOKEN = ''; // Set your mapbox token here
 
-const skyLayer = {
+const skyLayer: SkyLayer = {
   id: 'sky',
   type: 'sky',
   paint: {
@@ -18,14 +20,6 @@ const skyLayer = {
 };
 
 export default function App() {
-  const [viewport, setViewport] = useState({
-    latitude: 32.6141,
-    longitude: -114.34411,
-    zoom: 14,
-    bearing: 80,
-    pitch: 80
-  });
-
   const onMapLoad = useCallback(evt => {
     const map = evt.target;
     map.setTerrain({source: 'mapbox-dem', exaggeration: 1.5});
@@ -33,13 +27,16 @@ export default function App() {
 
   return (
     <>
-      <MapGL
-        {...viewport}
-        width="100%"
-        height="100%"
+      <Map
+        initialViewState={{
+          latitude: 32.6141,
+          longitude: -114.34411,
+          zoom: 14,
+          bearing: 80,
+          pitch: 80
+        }}
         mapStyle="mapbox://styles/mapbox/satellite-v9"
-        onViewportChange={setViewport}
-        mapboxApiAccessToken={TOKEN}
+        mapboxAccessToken={TOKEN}
         onLoad={onMapLoad}
       >
         <Source
@@ -50,7 +47,7 @@ export default function App() {
           maxzoom={14}
         />
         <Layer {...skyLayer} />
-      </MapGL>
+      </Map>
       <ControlPanel />
     </>
   );

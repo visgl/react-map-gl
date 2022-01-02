@@ -1,6 +1,9 @@
+import type {HeatmapLayer} from 'react-map-gl';
+
 const MAX_ZOOM_LEVEL = 9;
 
-export const heatmapLayer = {
+export const heatmapLayer: HeatmapLayer = {
+  id: 'heatmap',
   maxzoom: MAX_ZOOM_LEVEL,
   type: 'heatmap',
   paint: {

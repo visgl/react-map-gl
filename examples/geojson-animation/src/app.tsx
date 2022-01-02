@@ -2,13 +2,14 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
 import {render} from 'react-dom';
-import MapGL, {Source, Layer} from 'react-map-gl';
+import {Map, Source, Layer} from 'react-map-gl';
+import type {LayerProps} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
-const pointLayer = {
+const pointLayer: LayerProps = {
   type: 'circle',
   paint: {
     'circle-radius': 10,
@@ -24,13 +25,6 @@ function pointOnCircle({center, angle, radius}) {
 }
 
 export default function App() {
-  const [viewport, setViewport] = useState({
-    latitude: 0,
-    longitude: -100,
-    zoom: 3,
-    bearing: 0,
-    pitch: 0
-  });
   const [pointData, setPointData] = useState(null);
 
   useEffect(() => {
@@ -42,20 +36,21 @@ export default function App() {
 
   return (
     <>
-      <MapGL
-        {...viewport}
-        width="100%"
-        height="100%"
+      <Map
+        initialViewState={{
+          latitude: 0,
+          longitude: -100,
+          zoom: 3
+        }}
         mapStyle="mapbox://styles/mapbox/light-v9"
-        onViewportChange={setViewport}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
+        mapboxAccessToken={MAPBOX_TOKEN}
       >
         {pointData && (
           <Source type="geojson" data={pointData}>
             <Layer {...pointLayer} />
           </Source>
         )}
-      </MapGL>
+      </Map>
       <ControlPanel />
     </>
   );
