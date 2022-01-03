@@ -10,7 +10,7 @@ export default function Controls() {
 
   useEffect(() => {
     if (!mymap) {
-      return;
+      return undefined;
     }
 
     const onMove = () => {

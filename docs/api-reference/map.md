@@ -24,11 +24,8 @@ function App() {
 
 ## Methods
 
-#### `getMap()`
+The following methods are accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) or the [useMap](/docs/api-reference/use-map.md) hook.
 
-Returns the underlying [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/) instance.
-
-Example:
 
 ```js
 import * as React from 'react';
@@ -46,6 +43,13 @@ function App() {
 }
 ```
 
+#### `getMap()`
+
+Returns the underlying [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/) instance.
+
+#### `getViewState()`
+
+Returns the current view state of the map.
 
 ## Properties
 

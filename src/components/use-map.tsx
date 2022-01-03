@@ -4,7 +4,7 @@ import {useState, useCallback, useContext} from 'react';
 import {MapRef} from '../mapbox/create-ref';
 
 type MountedMapsContextValue = {
-  maps: Record<string, MapRef>;
+  maps: {[id: string]: MapRef};
   onMapMount: (map: MapRef, id: string) => void;
   onMapUnmount: (id: string) => void;
 };
@@ -12,7 +12,7 @@ type MountedMapsContextValue = {
 export const MountedMapsContext = React.createContext<MountedMapsContextValue>(null);
 
 export const MapProvider: React.FC<{}> = props => {
-  const [maps, setMaps] = useState<Record<string, MapRef>>({});
+  const [maps, setMaps] = useState<{[id: string]: MapRef}>({});
 
   const onMapMount = useCallback(
     (map: MapRef, id: string = 'default') => {

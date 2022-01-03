@@ -18,15 +18,14 @@ export default function App() {
     const feature = event.features[0];
     const clusterId = feature.properties.cluster_id;
 
-    const map = mapRef.current.getMap();
-    const mapboxSource = map.getSource('earthquakes') as GeoJSONSource;
+    const mapboxSource = mapRef.current.getSource('earthquakes') as GeoJSONSource;
 
     mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
       if (err) {
         return;
       }
 
-      map.easeTo({
+      mapRef.current.easeTo({
         center: feature.geometry.coordinates,
         zoom,
         duration: 500

@@ -45,7 +45,7 @@ const defaultProps: MapProps = {
   renderWorldCopies: true
 };
 
-const Map = forwardRef((props: MapProps, ref) => {
+const Map = forwardRef<MapRef, MapProps>((props, ref) => {
   const mountedMapsContext = useContext(MountedMapsContext);
   const [mapInstance, setMapInstance] = useState<Mapbox>(null);
   const containerRef = useRef();

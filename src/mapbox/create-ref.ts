@@ -114,6 +114,10 @@ export type MapRef = {
 } & Pick<MapboxMap, typeof forwardMethods[number]>;
 
 export default function createRef(mapInstance: Mapbox): MapRef {
+  if (!mapInstance) {
+    return null;
+  }
+
   const result: any = {
     getMap: () => mapInstance.map,
     getViewState: () => mapInstance.viewState

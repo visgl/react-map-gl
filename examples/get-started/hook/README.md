@@ -1,6 +1,6 @@
 # react-map-gl Example: Using Map with a State Management System
 
-This example shows how to use react-map-gl's Map component with react-redux.
+This example shows how to use react-map-gl's Map component with the `useMap` hook.
 
 ## Usage
 
