@@ -2,12 +2,16 @@ import * as React from 'react';
 import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
-import type {ControlPosition} from '../utils/types';
+import type {ControlPosition} from '../types';
 
 export type ScaleControlProps = {
-  /** Unit of the distance. Default 'metric'. */
+  /** Unit of the distance.
+   * @default "metric"
+   */
   unit?: 'imperial' | 'metric' | 'nautical';
-  /** The maximum length of the scale control in pixels. Default 100. */
+  /** The maximum length of the scale control in pixels.
+   * @default 100
+   */
   maxWidth?: number;
   /** Placement of the control relative to the map. */
   position?: ControlPosition;

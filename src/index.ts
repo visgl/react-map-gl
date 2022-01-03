@@ -27,4 +27,4 @@ export {default as useControl} from './components/use-control';
 export {MapProvider, useMap} from './components/use-map';
 
 // Types
-export * from './utils/types';
+export * from './types/external';

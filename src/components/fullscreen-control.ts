@@ -3,7 +3,7 @@ import * as React from 'react';
 import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
-import type {ControlPosition} from '../utils/types';
+import type {ControlPosition} from '../types';
 
 export type FullscreenControlProps = {
   /** Id of the DOM element which should be made full screen. By default, the map container

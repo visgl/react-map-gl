@@ -3,10 +3,11 @@ import {MapContext} from './map';
 import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
 
-import type {MapboxMap, AnyLayer} from '../utils/types';
+import type {MapboxMap, AnyLayer} from '../types';
 
 export type LayerProps = AnyLayer & {
   id?: string;
+  /** If set, the layer will be inserted before the specified layer */
   beforeId?: string;
 };
 

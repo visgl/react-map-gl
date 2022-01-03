@@ -1,4 +1,4 @@
-import type {MapboxMap, ViewState} from '../utils/types';
+import type {MapboxMap, ViewState} from '../types';
 import type Mapbox from './mapbox';
 
 /** mapboxgl.Map methods to forward to the ref object
