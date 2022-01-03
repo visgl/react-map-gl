@@ -6,7 +6,7 @@ React component that wraps [FullscreenControl](https://docs.mapbox.com/mapbox-gl
 
 ```js
 import * as React from 'react';
-import {Map, FullscreenControl} from 'react-map-gl';
+import Map, {FullscreenControl} from 'react-map-gl';
 
 function App() {
   return <Map

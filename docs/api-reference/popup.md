@@ -9,7 +9,7 @@ React component that wraps [Popup](https://docs.mapbox.com/mapbox-gl-js/api/mark
 
 ```js
 import * as React from 'react';
-import {Map, Popup} from 'react-map-gl';
+import Map, {Popup} from 'react-map-gl';
 
 function App() {
   const [showPopup, setShowPopup] = React.useState(true);
