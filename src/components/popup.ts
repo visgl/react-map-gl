@@ -17,7 +17,7 @@ export type PopupProps = {
   /**
    * A string indicating the part of the popup that should be positioned closest to the coordinate.
    * Options are `'center'`, `'top'`, `'bottom'`, `'left'`, `'right'`, `'top-left'`, `'top-right'`, `'bottom-left'`,
-   * and `'bottom-right'`. If unset, the anchor will be dynamically set to ensure the popup falls within the map 
+   * and `'bottom-right'`. If unset, the anchor will be dynamically set to ensure the popup falls within the map
    * container with a preference for `'bottom'`.
    */
   anchor?: Anchor;
@@ -47,7 +47,7 @@ export type PopupProps = {
    * - a PointLike specifying a constant offset
    * - an object of Points specifing an offset for each anchor position.
    */
-  offset?: number | PointLike | Partial<{ [anchor in Anchor]: PointLike }>;
+  offset?: number | PointLike | Partial<{[anchor in Anchor]: PointLike}>;
   /** Space-separated CSS class names to add to popup container. */
   className?: string;
   /**

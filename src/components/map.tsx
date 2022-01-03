@@ -85,6 +85,7 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
   );
 });
 
+Map.displayName = 'Map';
 Map.defaultProps = defaultProps;
 
 export default Map;

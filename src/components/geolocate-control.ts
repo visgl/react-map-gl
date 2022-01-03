@@ -105,4 +105,6 @@ const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>(
   return null;
 });
 
+GeolocateControl.displayName = 'GeolocateControl';
+
 export default React.memo(GeolocateControl);

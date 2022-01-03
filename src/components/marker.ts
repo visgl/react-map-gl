@@ -28,7 +28,7 @@ export type MarkerProps = {
    * @default "#3FB1CE"
    */
   color?: string;
-  /** A boolean indicating whether or not a marker is able to be dragged to a new position on the map. 
+  /** A boolean indicating whether or not a marker is able to be dragged to a new position on the map.
    * @default false
    */
   draggable?: boolean;
