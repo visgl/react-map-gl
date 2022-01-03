@@ -6,7 +6,7 @@ This component allows apps to create a [map layer](https://docs.mapbox.com/mapbo
 
 ```js
 import * as React from 'react';
-import {Map, Layer} from 'react-map-gl';
+import Map, {Layer} from 'react-map-gl';
 
 const parkLayer = {
   id: 'landuse_park',

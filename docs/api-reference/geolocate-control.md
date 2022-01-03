@@ -6,7 +6,7 @@ React component that wraps [GeolocateControl](https://docs.mapbox.com/mapbox-gl-
 
 ```js
 import * as React from 'react';
-import {Map, GeolocateControl} from 'react-map-gl';
+import Map, {GeolocateControl} from 'react-map-gl';
 
 function App() {
   return <Map
