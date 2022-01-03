@@ -2,11 +2,12 @@ import * as React from 'react';
 import {useState, useRef, useEffect, useContext, forwardRef, useImperativeHandle} from 'react';
 
 import {MountedMapsContext} from './use-map';
+import mapboxgl from '../utils/mapboxgl';
 import Mapbox, {MapboxProps} from '../mapbox/mapbox';
 import createRef, {MapRef} from '../mapbox/create-ref';
 
 import type {CSSProperties} from 'react';
-import type {MapboxMap} from '../utils/types';
+import type {MapboxMap} from '../types';
 import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
 
 export const MapContext = React.createContext<MapboxMap>(null);
@@ -17,8 +18,6 @@ export type MapProps = MapboxProps & {
   /** Map container CSS style */
   style?: CSSProperties;
   children?: any;
-
-  ref?: React.Ref<MapRef>;
 };
 
 const defaultProps: MapProps = {
@@ -51,7 +50,7 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
   const containerRef = useRef();
 
   useEffect(() => {
-    const map = new Mapbox(props);
+    const map = new Mapbox(mapboxgl.Map, props);
     map.initialize(containerRef.current);
     setMapInstance(map);
     mountedMapsContext?.onMapMount(createRef(map), props.id);
@@ -86,6 +85,7 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
   );
 });
 
+Map.displayName = 'Map';
 Map.defaultProps = defaultProps;
 
 export default Map;

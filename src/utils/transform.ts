@@ -1,6 +1,6 @@
 import mapboxgl from './mapboxgl';
 
-import type {PaddingOptions, ViewState} from './types';
+import type {PaddingOptions, ViewState} from '../types';
 
 /**
  * Stub for mapbox's Transform class

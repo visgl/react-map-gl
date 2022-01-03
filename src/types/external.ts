@@ -30,6 +30,14 @@ export type ViewState = {
   padding?: PaddingOptions;
 };
 
+export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+
+export interface ImmutableLike {
+  toJS: () => any;
+}
+
+/* Events */
+
 export type ViewStateChangeEvent = MapboxEvent & {
   viewState: ViewState;
 };
@@ -42,13 +50,8 @@ export type GeolocateEvent = MapboxEvent & GeolocationPosition;
 
 export type GeolocateErrorEvent = MapboxEvent & GeolocationPositionError;
 
-export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+/* re-export mapbox types */
 
-export interface ImmutableLike {
-  toJS: () => any;
-}
-
-// re-export mapbox types
 export type {
   Point,
   PointLike,
@@ -56,14 +59,15 @@ export type {
   LngLatLike,
   LngLatBounds,
   LngLatBoundsLike,
-  MapboxOptions,
-  MarkerOptions,
-  PopupOptions,
+  Anchor,
+  Alignment,
   PaddingOptions,
   PositionOptions,
   FitBoundsOptions,
+  DragPanOptions,
+  InteractiveOptions,
+  TransformRequestFunction,
   Style as MapboxStyle,
-  AnyLayer,
   BackgroundLayer,
   CircleLayer,
   FillExtrusionLayer,
@@ -75,12 +79,10 @@ export type {
   SymbolLayer,
   CustomLayerInterface,
   SkyLayer,
-  AnySourceData,
   GeoJSONSourceRaw,
   VideoSourceRaw,
   ImageSourceRaw,
   CanvasSourceRaw,
-  AnySourceImpl,
   GeoJSONSource,
   VideoSource,
   ImageSource,
@@ -98,7 +100,5 @@ export type {
   ErrorEvent,
   MapboxGeoJSONFeature,
   IControl,
-  Map as MapboxMap,
-  Marker as MapboxMarker,
-  Popup as MapboxPopup
+  Map as MapboxMap
 } from 'mapbox-gl';

@@ -10,7 +10,7 @@ import type {
   MapboxEvent,
   GeolocateEvent,
   GeolocateErrorEvent
-} from '../utils/types';
+} from '../types';
 
 export type GeolocateControlRef = {
   /** Triggers a geolocate event */
@@ -18,25 +18,34 @@ export type GeolocateControlRef = {
 };
 
 export type GeolocateControlProps = {
-  /** A Geolocation API PositionOptions object. */
+  /**
+   * A Geolocation API PositionOptions object.
+   * @default {enableHighAccuracy:false,timeout:6000}
+   */
   positionOptions?: PositionOptions;
   /** A Map#fitBounds options object to use when the map is panned and zoomed to the user's location.
-   * The default is to use a maxZoom of 15 to limit how far the map will zoom in for very accurate locations.
+   * @default {maxZoom:15}
    */
   fitBoundsOptions?: FitBoundsOptions;
   /** If true the GeolocateControl becomes a toggle button and when active the map will receive
    * updates to the user's location as it changes. Default false.
+   * @default false
    */
   trackUserLocation?: boolean;
   /** Draw a transparent circle will be drawn around the user location indicating the accuracy
    * (95% confidence level) of the user's location. Set to false to disable.
-   * This only has effect if `showUserLocation` is true. Default true.
+   * This only has effect if `showUserLocation` is true.
+   * @default true
    */
   showAccuracyCircle?: boolean;
-  /** Show a dot on the map at the user's location. Set to false to disable. Default true. */
+  /**
+   * Show a dot on the map at the user's location. Set to false to disable.
+   * @default true
+   */
   showUserLocation?: boolean;
   /** If true an arrow will be drawn next to the user location dot indicating the device's heading.
    * This only has affect when `trackUserLocation` is true. Default false.
+   * @default false
    */
   showUserHeading?: boolean;
   /** Placement of the control relative to the map. */
@@ -95,5 +104,7 @@ const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>(
 
   return null;
 });
+
+GeolocateControl.displayName = 'GeolocateControl';
 
 export default React.memo(GeolocateControl);

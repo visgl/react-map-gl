@@ -1,4 +1,4 @@
-import {ImmutableLike, MapboxStyle} from './types';
+import {ImmutableLike, MapboxStyle} from '../types';
 
 const refProps = ['type', 'source', 'source-layer', 'minzoom', 'maxzoom', 'filter', 'layout'];
 
