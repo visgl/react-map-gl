@@ -2,14 +2,17 @@ import * as React from 'react';
 import area from '@turf/area';
 
 function ControlPanel(props) {
-  const polygon = props.polygon;
-  const polygonArea = polygon && area(polygon);
+  let polygonArea = 0;
+  for (const polygon of props.polygons) {
+    polygonArea += area(polygon);
+  }
+
   return (
     <div className="control-panel">
       <h3>Draw Polygon</h3>
-      {polygon && (
+      {polygonArea > 0 && (
         <p>
-          {polygonArea} <br />
+          {Math.round(polygonArea * 100) / 100} <br />
           square meters
         </p>
       )}

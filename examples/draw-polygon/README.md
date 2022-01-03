@@ -1,6 +1,6 @@
 # Example: Draw Polygon
 
-Demonstrates how to use [react-map-gl-draw](https://github.com/uber/nebula.gl/tree/master/modules/react-map-gl-draw) to draw polygons with react-map-gl.
+This app reproduces Mapbox's [Draw a polygon and calculate its area](https://docs.mapbox.com/mapbox-gl-js/example/mapbox-gl-draw/) example.
 
 ## Usage
 

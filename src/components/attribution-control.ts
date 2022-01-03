@@ -17,7 +17,7 @@ export type AttributionControlProps = {
 };
 
 function AttributionControl(props: AttributionControlProps): null {
-  const ctrl = useControl(() => new mapboxgl.AttributionControl(props), props.position);
+  useControl(() => new mapboxgl.AttributionControl(props), {position: props.position});
 
   return null;
 }

@@ -16,7 +16,7 @@ export type NavigationControlProps = {
 };
 
 function NavigationControl(props: NavigationControlProps): null {
-  const ctrl = useControl(() => new mapboxgl.NavigationControl(props), props.position);
+  useControl(() => new mapboxgl.NavigationControl(props), {position: props.position});
 
   return null;
 }

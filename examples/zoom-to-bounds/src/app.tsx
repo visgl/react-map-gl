@@ -17,12 +17,10 @@ export default function App() {
   const onClick = (event: MapLayerMouseEvent) => {
     const feature = event.features[0];
     if (feature) {
-      const map = mapRef.current.getMap();
-
       // calculate the bounding box of the feature
       const [minLng, minLat, maxLng, maxLat] = bbox(feature);
 
-      map.fitBounds(
+      mapRef.current.fitBounds(
         [
           [minLng, minLat],
           [maxLng, maxLat]

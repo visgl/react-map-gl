@@ -58,27 +58,30 @@ export type GeolocateControlProps = {
 const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>((props, ref) => {
   const thisRef = useRef({props});
 
-  const ctrl = useControl(() => {
-    const gc = new mapboxgl.GeolocateControl(props);
+  const ctrl = useControl(
+    () => {
+      const gc = new mapboxgl.GeolocateControl(props);
 
-    gc.on('geolocate', e => {
-      thisRef.current.props.onGeolocate?.(e as GeolocateEvent);
-    });
-    gc.on('error', e => {
-      thisRef.current.props.onError?.(e as GeolocateErrorEvent);
-    });
-    gc.on('outofmaxbounds', e => {
-      thisRef.current.props.onOutOfMaxBounds?.(e as GeolocateEvent);
-    });
-    gc.on('trackuserlocationstart', e => {
-      thisRef.current.props.onTrackUserLocationStart?.(e as MapboxEvent);
-    });
-    gc.on('trackuserlocationend', e => {
-      thisRef.current.props.onTrackUserLocationEnd?.(e as MapboxEvent);
-    });
+      gc.on('geolocate', e => {
+        thisRef.current.props.onGeolocate?.(e as GeolocateEvent);
+      });
+      gc.on('error', e => {
+        thisRef.current.props.onError?.(e as GeolocateErrorEvent);
+      });
+      gc.on('outofmaxbounds', e => {
+        thisRef.current.props.onOutOfMaxBounds?.(e as GeolocateEvent);
+      });
+      gc.on('trackuserlocationstart', e => {
+        thisRef.current.props.onTrackUserLocationStart?.(e as MapboxEvent);
+      });
+      gc.on('trackuserlocationend', e => {
+        thisRef.current.props.onTrackUserLocationEnd?.(e as MapboxEvent);
+      });
 
-    return gc;
-  }, props.position) as mapboxgl.GeolocateControl;
+      return gc;
+    },
+    {position: props.position}
+  ) as mapboxgl.GeolocateControl;
 
   thisRef.current.props = props;
 

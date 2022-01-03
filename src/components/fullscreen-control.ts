@@ -14,12 +14,12 @@ export type FullscreenControlProps = {
 };
 
 function FullscreenControl(props: FullscreenControlProps): null {
-  const ctrl = useControl(
+  useControl(
     () =>
       new mapboxgl.FullscreenControl({
         container: props.containerId && document.getElementById(props.containerId)
       }),
-    props.position
+    {position: props.position}
   );
 
   return null;

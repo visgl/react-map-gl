@@ -30,15 +30,8 @@ export default function App() {
     } = event;
     const hoveredFeature = features && features[0];
 
-    setHoverInfo(
-      hoveredFeature
-        ? {
-            feature: hoveredFeature,
-            x,
-            y
-          }
-        : null
-    );
+    // prettier-ignore
+    setHoverInfo(hoveredFeature && {feature: hoveredFeature, x, y});
   }, []);
 
   const data = useMemo(() => {

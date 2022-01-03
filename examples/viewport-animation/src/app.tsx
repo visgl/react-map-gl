@@ -19,10 +19,7 @@ export default function App() {
   const mapRef = useRef<MapRef>();
 
   const onSelectCity = useCallback(({longitude, latitude}) => {
-    if (mapRef.current) {
-      const map = mapRef.current.getMap();
-      map.flyTo({center: [longitude, latitude]});
-    }
+    mapRef.current?.flyTo({center: [longitude, latitude], duration: 2000});
   }, []);
 
   return (
