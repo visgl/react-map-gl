@@ -25,8 +25,7 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.esm.json --noEmit",
     "bootstrap": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn && ocular-bootstrap",
-    "build": "ocular-clean && tsc -b tsconfig.esm.json && tsc -b tsconfig.es5.json && npm run flowgen",
-    "flowgen": "for i in $(find dist -type f -name \"*.d.ts\"); do sh -c \"flowgen $i -o ${i%.*.*}.js.flow\"; done;",
+    "build": "ocular-clean && tsc -b tsconfig.esm.json && tsc -b tsconfig.es5.json",
     "lint": "ocular-lint",
     "cover": "ocular-test cover",
     "publish-prod": "ocular-publish prod",
@@ -53,7 +52,6 @@
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.0",
     "coveralls": "^3.0.0",
-    "flowgen": "^1.12.1",
     "jsdom": "^15.0.0",
     "mapbox-gl": "^2.1.0",
     "ocular-dev-tools": "beta",
