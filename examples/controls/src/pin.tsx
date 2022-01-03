@@ -10,10 +10,7 @@ const pinStyle = {
   stroke: 'none'
 };
 
-function Pin({size = 20, onClick} : {
-  size?: number,
-  onClick?: () => void
-}) {
+function Pin({size = 20, onClick}: {size?: number; onClick?: () => void}) {
   return (
     <svg height={size} viewBox="0 0 24 24" style={pinStyle} onClick={onClick}>
       <path d={ICON} />
