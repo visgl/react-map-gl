@@ -28,7 +28,7 @@ function NumericInput({name, value, onChange}) {
 }
 
 function ControlPanel(props) {
-  const {settings, interactionState, onChange} = props;
+  const {settings, onChange} = props;
 
   const renderSetting = (name, value) => {
     switch (typeof value) {

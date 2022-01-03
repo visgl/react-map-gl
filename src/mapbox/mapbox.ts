@@ -19,7 +19,8 @@ import type {
   MapDataEvent,
   MapboxEvent,
   ErrorEvent,
-  MapboxGeoJSONFeature
+  MapboxGeoJSONFeature,
+  MapboxMap
 } from '../utils/types';
 
 export type MapboxProps = Omit<
@@ -198,8 +199,12 @@ export default class Mapbox {
     this.props = props;
   }
 
-  getMap() {
-    return this._map;
+  get map(): MapboxMap {
+    return this._map as MapboxMap;
+  }
+
+  get viewState(): ViewState {
+    return transformToViewState(this._renderTransform);
   }
 
   setProps(props: MapboxProps) {

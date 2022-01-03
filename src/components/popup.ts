@@ -6,7 +6,7 @@ import {useEffect, useState, useRef, useContext} from 'react';
 import mapboxgl from '../utils/mapboxgl';
 import type {PopupOptions, MapboxEvent} from '../utils/types';
 
-import MapContext from './map-context';
+import {MapContext} from './map';
 import {deepEqual} from '../utils/deep-equal';
 
 export type PopupProps = PopupOptions & {

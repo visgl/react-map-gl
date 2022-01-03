@@ -1,17 +1,15 @@
 import * as React from 'react';
-import {useState, useRef, useEffect, forwardRef, useImperativeHandle} from 'react';
+import {useState, useRef, useEffect, useContext, forwardRef, useImperativeHandle} from 'react';
 
-import Mapbox from '../mapbox/mapbox';
-import type {MapboxProps} from '../mapbox/mapbox';
-import MapContext from './map-context';
+import {MountedMapsContext} from './use-map';
+import Mapbox, {MapboxProps} from '../mapbox/mapbox';
+import createRef, {MapRef} from '../mapbox/create-ref';
 
 import type {CSSProperties} from 'react';
 import type {MapboxMap} from '../utils/types';
 import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
 
-export interface MapRef {
-  getMap(): MapboxMap;
-}
+export const MapContext = React.createContext<MapboxMap>(null);
 
 export type MapProps = MapboxProps & {
   /** Map container id */
@@ -47,7 +45,8 @@ const defaultProps: MapProps = {
   renderWorldCopies: true
 };
 
-const Map = forwardRef((props: MapProps, ref) => {
+const Map = forwardRef<MapRef, MapProps>((props, ref) => {
+  const mountedMapsContext = useContext(MountedMapsContext);
   const [mapInstance, setMapInstance] = useState<Mapbox>(null);
   const containerRef = useRef();
 
@@ -55,7 +54,12 @@ const Map = forwardRef((props: MapProps, ref) => {
     const map = new Mapbox(props);
     map.initialize(containerRef.current);
     setMapInstance(map);
-    return () => map.destroy();
+    mountedMapsContext?.onMapMount(createRef(map), props.id);
+
+    return () => {
+      mountedMapsContext?.onMapUnmount(props.id);
+      map.destroy();
+    };
   }, []);
 
   useIsomorphicLayoutEffect(() => {
@@ -64,13 +68,7 @@ const Map = forwardRef((props: MapProps, ref) => {
     }
   });
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      getMap: () => mapInstance.getMap()
-    }),
-    [mapInstance]
-  );
+  useImperativeHandle(ref, () => createRef(mapInstance), [mapInstance]);
 
   const style: CSSProperties = {
     position: 'relative',
@@ -82,7 +80,7 @@ const Map = forwardRef((props: MapProps, ref) => {
   return (
     <div id={props.id} ref={containerRef} style={style}>
       {mapInstance && (
-        <MapContext.Provider value={mapInstance.getMap()}>{props.children}</MapContext.Provider>
+        <MapContext.Provider value={mapInstance.map}>{props.children}</MapContext.Provider>
       )}
     </div>
   );

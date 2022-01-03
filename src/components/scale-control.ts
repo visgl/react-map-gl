@@ -19,10 +19,9 @@ const defaultProps: ScaleControlProps = {
 };
 
 function ScaleControl(props: ScaleControlProps): null {
-  const ctrl = useControl(
-    () => new mapboxgl.ScaleControl(props),
-    props.position
-  ) as mapboxgl.ScaleControl;
+  const ctrl = useControl(() => new mapboxgl.ScaleControl(props), {
+    position: props.position
+  }) as mapboxgl.ScaleControl;
 
   // @ts-ignore
   if (ctrl.options.unit !== props.unit || ctrl.options.maxWidth !== props.maxWidth) {
