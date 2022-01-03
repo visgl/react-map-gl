@@ -2,6 +2,11 @@
 
 # Version 7.0
 
+## 7.0.0-alpha.3 (Jan 3, 2022)
+
+- [v7] Clean up typings and expose more utility types (#1667)
+- Drop flow types support (#1666)
+
 ## 7.0.0-alpha.2 (Jan 2, 2022)
 
 - Update `@types/mapbox-gl` dependency
