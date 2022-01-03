@@ -32,7 +32,7 @@
         { "entry": "docs/api-reference/popup" },
         { "entry": "docs/api-reference/scale-control" },
         { "entry": "docs/api-reference/source" },
-        { "entry": "docs/api-reference/use-control" }
+        { "entry": "docs/api-reference/use-control" },
         { "entry": "docs/api-reference/use-map" }
       ]
     }
