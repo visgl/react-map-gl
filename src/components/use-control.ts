@@ -1,5 +1,5 @@
 import {useContext, useState, useEffect} from 'react';
-import type {IControl, ControlPosition, MapboxMap} from '../utils/types';
+import type {IControl, ControlPosition, MapboxMap} from '../types';
 import {MapContext} from './map';
 
 export default function useControl(

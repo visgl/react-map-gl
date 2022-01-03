@@ -12,7 +12,7 @@ import type {
   ImageSource,
   VideoSource,
   AnySourceImpl
-} from '../utils/types';
+} from '../types';
 
 export type SourceProps = AnySourceData & {
   id?: string;

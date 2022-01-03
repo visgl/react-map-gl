@@ -2,7 +2,7 @@ import * as React from 'react';
 import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
-import type {ControlPosition} from '../utils/types';
+import type {ControlPosition} from '../types';
 
 export type AttributionControlProps = {
   /**
