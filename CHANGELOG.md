@@ -1,5 +1,16 @@
 # CHANGELOG
 
+# Version 7.0
+
+## 7.0.0-alpha.1 (Jan 2, 2022)
+
+- [v7] utility hooks (#1663)
+- [v7] Add Layer and Source (#1657)
+- [v7] Control components (#1656)
+- [v7] Marker and Popup (#1655)
+- [v7] Map component (#1652)
+- Typescript dev setup
+
 # Version 6.1
 
 ## 6.1.0-beta.1 (Jan 22, 2021)
