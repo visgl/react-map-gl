@@ -1,7 +1,7 @@
 {
   "name": "react-map-gl",
   "description": "React components for Mapbox GL JS-compatible libraries",
-  "version": "7.0.0-alpha.1",
+  "version": "7.0.0-alpha.2",
   "keywords": [
     "mapbox",
     "mapbox-gl",
@@ -37,7 +37,7 @@
     "update-release-branch": "scripts/update-release-branch.sh"
   },
   "dependencies": {
-    "@types/mapbox-gl": "^2.0.3"
+    "@types/mapbox-gl": "^2.6.0"
   },
   "peerDependencies": {
     "mapbox-gl": "*",

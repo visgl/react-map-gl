@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.0-alpha.2 (Jan 2, 2022)
+
+- Update `@types/mapbox-gl` dependency
+
 ## 7.0.0-alpha.1 (Jan 2, 2022)
 
 - [v7] utility hooks (#1663)
