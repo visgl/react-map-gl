@@ -6,7 +6,7 @@ React component that wraps [AttributionControl](https://docs.mapbox.com/mapbox-g
 
 ```js
 import * as React from 'react';
-import {Map, AttributionControl} from 'react-map-gl';
+import Map, {AttributionControl} from 'react-map-gl';
 
 function App() {
   return <Map

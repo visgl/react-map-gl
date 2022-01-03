@@ -6,7 +6,7 @@ React component that wraps [ScaleControl](https://docs.mapbox.com/mapbox-gl-js/a
 
 ```js
 import * as React from 'react';
-import {Map, ScaleControl} from 'react-map-gl';
+import Map, {ScaleControl} from 'react-map-gl';
 
 function App() {
   return <Map

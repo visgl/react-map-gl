@@ -6,7 +6,7 @@ This component allows apps to create a [map source](https://docs.mapbox.com/mapb
 
 ```js
 import * as React from 'react';
-import {Map, Source, Layer} from 'react-map-gl';
+import Map, {Source, Layer} from 'react-map-gl';
 
 const geojson = {
   type: 'FeatureCollection',

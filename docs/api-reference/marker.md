@@ -6,7 +6,7 @@ React component that wraps [Marker](https://docs.mapbox.com/mapbox-gl-js/api/mar
 
 ```js
 import * as React from 'react';
-import {Map, Marker} from 'react-map-gl';
+import Map, {Marker} from 'react-map-gl';
 
 function App() {
   return <Map

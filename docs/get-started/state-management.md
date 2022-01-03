@@ -12,7 +12,7 @@ You may clone a full app configuration for this example [here](/examples/get-sta
 
 ```js
 import * as React from 'react';
-import {Map} from 'react-map-gl';
+import Map from 'react-map-gl';
 
 function App() {
   return <Map
@@ -32,7 +32,7 @@ You may clone a full app configuration for this example [here](/examples/get-sta
 
 ```js
 import * as React from 'react';
-import {Map} from 'react-map-gl';
+import Map from 'react-map-gl';
 
 function App() {
   const [viewState, setViewState] = React.useState({
@@ -61,7 +61,7 @@ A real-world application likely uses more complicated state flows:
 
 ```js
 import * as React from 'react';
-import {Map} from 'react-map-gl';
+import Map from 'react-map-gl';
 
 // npm install @turf/turf
 import * as turf from '@turf/turf';
