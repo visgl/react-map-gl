@@ -639,8 +639,8 @@ export default class Mapbox {
       }
       if ('terrain' in nextProps && !deepEqual(nextProps.terrain, currProps.terrain)) {
         if (!nextProps.terrain || map.getSource(nextProps.terrain.source)) {
-        changed = true;
-        map.setTerrain(nextProps.terrain);
+          changed = true;
+          map.setTerrain(nextProps.terrain);
         }
       }
     }
