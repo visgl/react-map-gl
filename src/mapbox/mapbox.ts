@@ -9,6 +9,9 @@ import type {
   DragPanOptions,
   InteractiveOptions,
   TransformRequestFunction,
+  Light,
+  Fog,
+  TerrainSpecification,
   MapboxStyle,
   ImmutableLike,
   LngLatBoundsLike,
@@ -247,6 +250,14 @@ export type MapboxProps = ViewState & {
    * @default true
    */
   styleDiffing?: boolean;
+  /** The fog property of the style. Must conform to the Fog Style Specification .
+   * If `null` is provided, removes the fog from the map. */
+  fog?: Fog | null;
+  /** Light properties of the map. */
+  light?: Light;
+  /** Terrain property of the style. Must conform to the Terrain Style Specification .
+   * If `null` is provided, removes terrain from the map. */
+  terrain?: TerrainSpecification | null;
   /** Default layers to query on pointer events */
   interactiveLayerIds?: string[];
   /** The projection the map should be rendered in
@@ -432,6 +443,7 @@ export default class Mapbox {
     }
     const viewStateChanged = this._updateViewState(props, true);
     this._updateStyle(props, oldProps);
+    this._updateStyleComponents(props, oldProps);
     this._updateHandlers(props, oldProps);
 
     // If 1) view state has changed to match props and
@@ -474,6 +486,7 @@ export default class Mapbox {
     }
 
     const map: any = new this._MapClass(mapOptions);
+    // Props that are not part of constructor options
     if (viewState.padding) {
       map.setPadding(viewState.padding);
     }
@@ -502,6 +515,8 @@ export default class Mapbox {
     for (const eventName in otherEvents) {
       map.on(eventName, this._onEvent);
     }
+    map.on('styledata', () => this._updateStyleComponents(this.props, {}));
+    map.on('sourcedata', () => this._updateStyleComponents(this.props, {}));
     map.on('error', this._onError);
     this._map = map;
   }
@@ -575,9 +590,9 @@ export default class Mapbox {
     const map = this._map;
     let changed = false;
     for (const propName of settingNames) {
-      if (!deepEqual(nextProps[propName], currProps[propName])) {
+      if (propName in nextProps && !deepEqual(nextProps[propName], currProps[propName])) {
         changed = true;
-        map[`set${propName[0].toUpperCase()}${propName.slice(1)}`]?.(nextProps[propName]);
+        map[`set${propName[0].toUpperCase()}${propName.slice(1)}`](nextProps[propName]);
       }
     }
     return changed;
@@ -603,6 +618,33 @@ export default class Mapbox {
       return true;
     }
     return false;
+  }
+
+  /* Update fog, light and terrain to match props
+     @param {object} nextProps
+     @param {object} currProps
+     @returns {bool} true if anything is changed
+   */
+  _updateStyleComponents(nextProps: MapboxProps, currProps: MapboxProps): boolean {
+    const map = this._map;
+    let changed = false;
+    if (map.style.loaded()) {
+      if ('light' in nextProps && !deepEqual(nextProps.light, currProps.light)) {
+        changed = true;
+        map.setLight(nextProps.light);
+      }
+      if ('fog' in nextProps && !deepEqual(nextProps.fog, currProps.fog)) {
+        changed = true;
+        map.setFog(nextProps.fog);
+      }
+      if ('terrain' in nextProps && !deepEqual(nextProps.terrain, currProps.terrain)) {
+        if (!nextProps.terrain || map.getSource(nextProps.terrain.source)) {
+          changed = true;
+          map.setTerrain(nextProps.terrain);
+        }
+      }
+    }
+    return changed;
   }
 
   /* Update interaction handlers to match props
