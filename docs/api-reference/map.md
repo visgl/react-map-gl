@@ -73,17 +73,20 @@ The current cursor [type](https://developer.mozilla.org/en-US/docs/Web/CSS/curso
 
 ### Styling options
 
+#### fog: Fog | null
+
+The fog property of the style. Must conform to the [Fog Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/fog/).
+If `null` is provided, removes the fog from the map.
+
+#### light: Light
+
+Light properties of the style. Must conform to the [Light Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light).
+
 #### mapStyle: Style | string | Immutable
 
 Default: (empty style)
 
 The map's Mapbox style. This must be an a JSON object conforming to the schema described in the [Mapbox Style Specification](https://mapbox.com/mapbox-gl-style-spec/), or a URL to such JSON.
-
-#### styleDiffing: boolean
-
-Default: `true`
-
-Enable diffing when `mapStyle` changes. If `false`, force a 'full' update, removing the current style and building the given one instead of attempting a diff-based update.
 
 #### projection: string | ProjectionSpecification
 
@@ -96,6 +99,18 @@ The projection the map should be rendered in. Available projections are Albers (
 Default: `true`
 
 If `true`, multiple copies of the world will be rendered, when zoomed out.
+
+#### styleDiffing: boolean
+
+Default: `true`
+
+Enable diffing when `mapStyle` changes. If `false`, force a 'full' update, removing the current style and building the given one instead of attempting a diff-based update.
+
+#### terrain: TerrainSpecification
+
+Terrain property of the style. Must conform to the [Terrain Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/terrain/).
+If `null` is provided, removes terrain from the map.
+
 
 ### Camera options
 

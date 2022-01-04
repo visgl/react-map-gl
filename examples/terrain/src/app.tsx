@@ -22,7 +22,7 @@ const skyLayer: SkyLayer = {
 export default function App() {
   const onMapLoad = useCallback(evt => {
     const map = evt.target;
-    map.setTerrain({source: 'mapbox-dem', exaggeration: 1.5});
+    map.setTerrain();
   }, []);
 
   return (
@@ -37,7 +37,7 @@ export default function App() {
         }}
         mapStyle="mapbox://styles/mapbox/satellite-v9"
         mapboxAccessToken={TOKEN}
-        onLoad={onMapLoad}
+        terrain={{source: 'mapbox-dem', exaggeration: 1.5}}
       >
         <Source
           id="mapbox-dem"
