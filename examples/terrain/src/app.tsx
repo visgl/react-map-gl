@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {useCallback} from 'react';
 import {render} from 'react-dom';
 import Map, {Source, Layer} from 'react-map-gl';
 
@@ -20,11 +19,6 @@ const skyLayer: SkyLayer = {
 };
 
 export default function App() {
-  const onMapLoad = useCallback(evt => {
-    const map = evt.target;
-    map.setTerrain({source: 'mapbox-dem', exaggeration: 1.5});
-  }, []);
-
   return (
     <>
       <Map
@@ -37,7 +31,7 @@ export default function App() {
         }}
         mapStyle="mapbox://styles/mapbox/satellite-v9"
         mapboxAccessToken={TOKEN}
-        onLoad={onMapLoad}
+        terrain={{source: 'mapbox-dem', exaggeration: 1.5}}
       >
         <Source
           id="mapbox-dem"
