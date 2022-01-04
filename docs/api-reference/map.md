@@ -456,6 +456,10 @@ Default: `true`
 
 If `true`, an attribution control will be added to the map.
 
+#### baseApiUrl: string
+
+The map's default API URL for requesting tiles, styles, sprites, and glyphs.
+
 #### bearingSnap: number
 
 Default: `7`
@@ -547,6 +551,12 @@ Default: `'bottom-left'`
 
 A string representing the position of the Mapbox wordmark on the map.
 
+#### maxParallelImageRequests: number
+
+Default: `16`
+
+The maximum number of images (raster tiles, sprites, icons) to load in parallel.
+
 #### maxTileCacheSize: number
 
 Default: `null`
@@ -578,6 +588,14 @@ Default: `true`
 
 If `false`, the map won't attempt to re-request tiles once they expire per their HTTP `cacheControl`/`expires` headers.
 
+#### RTLTextPlugin: string
+
+Default: `'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'`
+
+Sets the map's [RTL text plugin](https://www.mapbox.com/mapbox-gl-js/plugins/#mapbox-gl-rtl-text). Necessary for supporting the Arabic and Hebrew languages, which are written right-to-left.
+
+Setting this prop is the equivelant of calling [mapboxgl.setRTLTextPlugin](https://docs.mapbox.com/mapbox-gl-js/api/properties/#setrtltextplugin) with `lazy: true`.
+
 #### testMode: boolean
 
 Default: `false`
@@ -595,3 +613,20 @@ If `true`, the map will automatically resize when the browser window resizes.
 Default: `null`
 
 A callback run before the Map makes a request for an external URL. The callback can be used to modify the url, set headers, or set the credentials property for cross-origin requests.
+
+#### workerClass: object
+
+Default: `null`
+
+Provides an interface for external module bundlers such as Webpack or Rollup to package mapbox-gl's WebWorker into a separate class and integrate it with the library.
+Takes precedence over `workerUrl`.
+
+#### workerCount: number
+
+Default: `2`
+
+The number of web workers instantiated on a page with mapbox-gl maps.
+
+#### workerUrl: string
+
+Provides an interface for loading mapbox-gl's WebWorker bundle from a self-hosted URL. This is useful if your site needs to operate in a strict CSP (Content Security Policy) environment wherein you are not allowed to load JavaScript code from a Blob URL, which is default behavior.
