@@ -1,5 +1,6 @@
 import mapboxgl from './mapboxgl';
 
+import type {MapboxProps} from '../mapbox/mapbox';
 import type {PaddingOptions, ViewState} from '../types';
 
 /**
@@ -7,6 +8,8 @@ import type {PaddingOptions, ViewState} from '../types';
  * https://github.com/mapbox/mapbox-gl-js/blob/main/src/geo/transform.js
  */
 export type Transform = {
+  width: number;
+  height: number;
   center: {lng: number; lat: number};
   zoom: number;
   bearing: number;
@@ -40,12 +43,8 @@ export function transformToViewState(tr: Transform): ViewState {
  * @param viewState
  * @returns true if the transform has changed
  */
-export function applyViewStateToTransform(
-  tr: Transform,
-  vs: ViewState | {viewState: ViewState}
-): boolean {
-  // @ts-ignore
-  const v: ViewState = vs.viewState || vs;
+export function applyViewStateToTransform(tr: Transform, props: MapboxProps): boolean {
+  const v: Partial<ViewState> = props.viewState || props;
   let changed = false;
 
   if ('longitude' in v && 'latitude' in v) {
