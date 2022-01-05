@@ -27,12 +27,12 @@ import type {
   MapboxMap
 } from '../types';
 
-export type MapboxProps = ViewState & {
+export type MapboxProps = Partial<ViewState> & {
   // Init options
   mapboxAccessToken?: string;
 
   /** Camera options used when constructing the Map instance */
-  initialViewState?: ViewState & {
+  initialViewState?: Partial<ViewState> & {
     /** The initial bounds of the map. If bounds is specified, it overrides longitude, latitude and zoom options. */
     bounds?: LngLatBoundsLike;
     /** A fitBounds options object to use only when setting the bounds option. */
@@ -239,8 +239,11 @@ export type MapboxProps = ViewState & {
   /** Minimum zoom of the map. */
   minZoom?: number;
 
-  /** Aternative way to specify camera state */
-  viewState?: ViewState;
+  /** For external controller to override the camera state */
+  viewState?: ViewState & {
+    width: number;
+    height: number;
+  };
 
   // Styling
 
@@ -796,7 +799,18 @@ export default class Mapbox {
 
   _render(baseRender: Function, arg: number) {
     const map = this._map;
+    const props = this.props;
+    // map.transform will be swapped out in _onBeforeRender
+    const tr = map.transform;
     this._inRender = true;
+
+    // Check if size is controlled
+    if (props.viewState) {
+      const {width, height} = props.viewState;
+      if (width !== tr.width || height !== tr.height) {
+        map.resize();
+      }
+    }
 
     if (this._moved) {
       this._internalUpdate = true;
@@ -821,8 +835,6 @@ export default class Mapbox {
       this._internalUpdate = false;
     }
 
-    // map.transform will be swapped out in _onBeforeRender
-    const tr = map.transform;
     baseRender.call(map, arg);
     map.transform = tr;
     this._inRender = false;

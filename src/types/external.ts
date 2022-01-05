@@ -17,17 +17,17 @@ export type ProjectionSpecification = {
 /** Describes the camera's state */
 export type ViewState = {
   /** Longitude at map center */
-  longitude?: number;
+  longitude: number;
   /** Latitude at map center */
-  latitude?: number;
+  latitude: number;
   /** Map zoom level */
-  zoom?: number;
+  zoom: number;
   /** Map rotation bearing in degrees counter-clockwise from north */
-  bearing?: number;
+  bearing: number;
   /** Map angle in degrees at which the camera is looking at the ground */
-  pitch?: number;
+  pitch: number;
   /** Dimensions in pixels applied on each side of the viewport for shifting the vanishing point. */
-  padding?: PaddingOptions;
+  padding: PaddingOptions;
 };
 
 export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
