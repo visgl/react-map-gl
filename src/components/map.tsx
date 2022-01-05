@@ -1,5 +1,13 @@
 import * as React from 'react';
-import {useState, useRef, useEffect, useContext, forwardRef, useImperativeHandle} from 'react';
+import {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  useMemo,
+  forwardRef,
+  useImperativeHandle
+} from 'react';
 
 import {MountedMapsContext} from './use-map';
 import mapboxgl from '../utils/mapboxgl';
@@ -81,12 +89,15 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
 
   useImperativeHandle(ref, () => createRef(mapInstance), [mapInstance]);
 
-  const style: CSSProperties = {
-    position: 'relative',
-    width: '100%',
-    height: '100%',
-    ...props.style
-  };
+  const style: CSSProperties = useMemo(
+    () => ({
+      position: 'relative',
+      width: '100%',
+      height: '100%',
+      ...props.style
+    }),
+    [props.style]
+  );
 
   return (
     <div id={props.id} ref={containerRef} style={style}>
