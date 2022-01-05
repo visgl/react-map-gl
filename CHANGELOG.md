@@ -2,6 +2,12 @@
 
 # Version 7.0
 
+## 7.0.0-alpha.4 (Jan 4, 2022)
+
+- [v7] Fix resize synchronization (#1670)
+- [v7] Add fog, light, terrain props (#1669)
+- [v7] support global settings with MapProps (#1668)
+
 ## 7.0.0-alpha.3 (Jan 3, 2022)
 
 - [v7] Clean up typings and expose more utility types (#1667)
