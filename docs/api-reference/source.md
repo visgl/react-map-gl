@@ -42,7 +42,7 @@ function App() {
 
 ## Properties
 
-The props provided to this component should be conforming to the [Mapbox source specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources)or [CanvasSourceOptions](https://docs.mapbox.com/mapbox-gl-js/api/#canvassourceoptions).
+The props provided to this component should be conforming to the [Mapbox source specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources) or [CanvasSourceOptions](https://docs.mapbox.com/mapbox-gl-js/api/#canvassourceoptions).
 
 When props change _shallowly_, the component will attempt to update the source. Do not define objects/arrays inline to avoid perf hit.
 
