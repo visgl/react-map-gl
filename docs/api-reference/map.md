@@ -24,7 +24,7 @@ function App() {
 
 ## Methods
 
-The following methods are accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) or the [useMap](/docs/api-reference/use-map.md) hook.
+Imperative methods are accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) or the [useMap](/docs/api-reference/use-map.md) hook.
 
 
 ```js
@@ -35,21 +35,23 @@ function App() {
   const mapRef = React.useRef();
 
   React.useEffect(() => {
-    const mapboxMap = mapRef.current.getMap();
-    console.log(`mapbox-gl v${mapboxMap.version}`);
+    mapRef.current.on('styleimagemissing', () => {
+      // do something
+    });
   }, [])
 
-  return <Map ref={mapRef} ... />;
+  return <Map ref={mapRef} />;
 }
 ```
 
+The `MapRef` object exposes [Map methods](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) that **are safe to call without breaaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
+
+You can still access the hidden members via `getMap()`:
+
 #### getMap(): MapboxMap
 
-Returns the underlying [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/) instance.
+Returns the native [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/) instance associated with this component.
 
-#### getViewState(): ViewState
-
-Returns the current view state of the map.
 
 ## Properties
 
