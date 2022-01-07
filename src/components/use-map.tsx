@@ -14,24 +14,25 @@ export const MountedMapsContext = React.createContext<MountedMapsContextValue>(n
 export const MapProvider: React.FC<{}> = props => {
   const [maps, setMaps] = useState<{[id: string]: MapRef}>({});
 
-  const onMapMount = useCallback(
-    (map: MapRef, id: string = 'default') => {
-      if (maps[id]) {
+  const onMapMount = useCallback((map: MapRef, id: string = 'default') => {
+    setMaps(currMaps => {
+      if (currMaps[id]) {
         throw new Error(`Multiple maps with the same id: ${id}`);
       }
-      setMaps({...maps, [id]: map});
-    },
-    [maps]
-  );
+      return {...currMaps, [id]: map};
+    });
+  }, []);
 
-  const onMapUnmount = useCallback(
-    (id: string = 'default') => {
-      const nextMaps = {...maps};
-      delete nextMaps[id];
-      setMaps(nextMaps);
-    },
-    [maps]
-  );
+  const onMapUnmount = useCallback((id: string = 'default') => {
+    setMaps(currMaps => {
+      if (currMaps[id]) {
+        const nextMaps = {...currMaps};
+        delete nextMaps[id];
+        return nextMaps;
+      }
+      return currMaps;
+    });
+  }, []);
 
   return (
     <MountedMapsContext.Provider

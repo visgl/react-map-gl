@@ -1,8 +1,9 @@
-import {Transform, transformToViewState, applyViewStateToTransform} from '../utils/transform';
+import {transformToViewState, applyViewStateToTransform} from '../utils/transform';
 import {normalizeStyle} from '../utils/style-utils';
 import {deepEqual} from '../utils/deep-equal';
 
 import type {
+  Transform,
   ProjectionSpecification,
   ViewState,
   ViewStateChangeEvent,
