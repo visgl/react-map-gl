@@ -54,6 +54,7 @@ export default function createRef(mapInstance: Mapbox): MapRef {
     }
   };
 
+  // @ts-ignore
   for (const key of getMethodNames(map)) {
     // @ts-expect-error
     if (!(key in result) && !skipMethods.includes(key)) {
