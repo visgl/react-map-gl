@@ -94,7 +94,7 @@ function Popup(props: PopupProps) {
     popup.setLngLat([props.longitude, props.latitude]);
   }
   // @ts-ignore
-  if (props.offset && deepEqual(popup.options.offset, props.offset)) {
+  if (props.offset && !deepEqual(popup.options.offset, props.offset)) {
     popup.setOffset(props.offset);
   }
   // @ts-ignore

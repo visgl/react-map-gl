@@ -15,6 +15,9 @@ export function normalizeStyle(style: string | MapboxStyle | ImmutableLike): str
   if ('toJS' in style) {
     style = style.toJS() as MapboxStyle;
   }
+  if (!style.layers) {
+    return style;
+  }
   const layerIndex = {};
 
   for (const layer of style.layers) {

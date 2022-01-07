@@ -1,25 +1,7 @@
 import mapboxgl from './mapboxgl';
 
 import type {MapboxProps} from '../mapbox/mapbox';
-import type {PaddingOptions, ViewState} from '../types';
-
-/**
- * Stub for mapbox's Transform class
- * https://github.com/mapbox/mapbox-gl-js/blob/main/src/geo/transform.js
- */
-export type Transform = {
-  width: number;
-  height: number;
-  center: {lng: number; lat: number};
-  zoom: number;
-  bearing: number;
-  pitch: number;
-  padding: PaddingOptions;
-
-  clone: () => Transform;
-  resize: (width: number, height: number) => void;
-  isPaddingEqual: (value: PaddingOptions) => boolean;
-};
+import type {Transform, ViewState} from '../types';
 
 /**
  * Capture a transform's current state
