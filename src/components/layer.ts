@@ -25,7 +25,7 @@ function updateLayer(map: MapboxMap, id: string, props: LayerProps, prevProps: L
   if (beforeId !== prevProps.beforeId) {
     map.moveLayer(id, beforeId);
   }
-  if (props.layout !== prevProps.layout) {
+  if (layout !== prevProps.layout) {
     const prevLayout = prevProps.layout || {};
     for (const key in layout) {
       if (!deepEqual(layout[key], prevLayout[key])) {
@@ -38,7 +38,7 @@ function updateLayer(map: MapboxMap, id: string, props: LayerProps, prevProps: L
       }
     }
   }
-  if (props.paint !== prevProps.paint) {
+  if (paint !== prevProps.paint) {
     const prevPaint = prevProps.paint || {};
     for (const key in paint) {
       if (!deepEqual(paint[key], prevPaint[key])) {
@@ -51,7 +51,7 @@ function updateLayer(map: MapboxMap, id: string, props: LayerProps, prevProps: L
       }
     }
   }
-  if (!deepEqual(props.filter, prevProps.filter)) {
+  if (!deepEqual(filter, prevProps.filter)) {
     map.setFilter(id, filter);
   }
   if (minzoom !== prevProps.minzoom || maxzoom !== prevProps.maxzoom) {

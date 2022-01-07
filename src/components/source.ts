@@ -99,21 +99,14 @@ function Source(props: SourceProps) {
 
       return () => {
         map.off('styledata', forceUpdate);
-        /* global requestAnimationFrame */
-        // Do not remove source immediately because the
-        // dependent <Layer>s' componentWillUnmount() might not have been called
-        // Removing source before dependent layers will throw error
-        // TODO - find a more robust solution
-        requestAnimationFrame(() => {
-          // @ts-ignore
-          if (map.style && map.style._loaded && map.getSource(id)) {
-            map.removeSource(id);
-          }
-        });
+        // @ts-ignore
+        if (map.style && map.style._loaded && map.getSource(id)) {
+          map.removeSource(id);
+        }
       };
     }
     return undefined;
-  }, [map, id]);
+  }, []);
 
   // @ts-ignore
   let source = map && map.style && map.getSource(id);
