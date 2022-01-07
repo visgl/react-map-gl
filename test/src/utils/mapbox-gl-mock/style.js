@@ -59,7 +59,7 @@ export default class Style {
       throw new Error('No source with this id');
     }
     for (const layerId in this._layers) {
-      if (this._layers[layerId].source === id) {
+      if (this._layers[layerId].source === name) {
         throw new Error('Source cannot be removed while layer is using it.');
       }
     }

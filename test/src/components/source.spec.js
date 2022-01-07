@@ -49,6 +49,7 @@ test('Source/Layer', async t => {
   t.is(mapRef.current.getSource('my-data').getData(), geoJSON2, 'Source is updated');
 
   act(() => map.update(<Map ref={mapRef} mapStyle={mapStyle} />));
+  await sleep(5);
   t.notOk(mapRef.current.getSource('my-data'), 'Source is removed');
 
   map.unmount();
