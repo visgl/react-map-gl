@@ -1,6 +1,4 @@
 /* global window */
-require('@babel/register');
-
 const test = require('tape');
 const {_enableDOMLogging: enableDOMLogging} = require('@probe.gl/test-utils');
 
@@ -21,5 +19,4 @@ enableDOMLogging({
   })
 });
 
-require('./src');
-// require('./render');
+require('./render');
