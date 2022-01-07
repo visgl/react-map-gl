@@ -2,6 +2,13 @@
 
 # Version 7.0
 
+## 7.0.0-alpha.5 (Jan 6, 2022)
+
+- [v7] Handle unmount order (#1676)
+- [v7] Fix synchronization during transition (#1675)
+- [v7] Update MapRef (#1674)
+- [v7] Bug fixes (#1673)
+
 ## 7.0.0-alpha.4 (Jan 4, 2022)
 
 - [v7] Fix resize synchronization (#1670)
