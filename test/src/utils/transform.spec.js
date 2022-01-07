@@ -1,7 +1,7 @@
 import test from 'tape-promise/tape';
 import {transformToViewState, applyViewStateToTransform} from 'react-map-gl/utils/transform';
 
-import Transform from './transform';
+import Transform from './mapbox-gl-mock/transform';
 
 test('applyViewStateToTransform', t => {
   const tr = new Transform();

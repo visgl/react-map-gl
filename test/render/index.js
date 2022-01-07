@@ -1,7 +1,7 @@
 /* global window, document, FontFace */
 import test from 'tape-promise/tape';
 import * as React from 'react';
-import MapGL from 'react-map-gl';
+import Map from 'react-map-gl';
 import {render, unmountComponentAtNode} from 'react-dom';
 
 import TEST_CASES from './test-cases';
@@ -19,7 +19,7 @@ function getBoundingBoxInPage(domElement) {
   };
 }
 
-async function runTestCase({Component = MapGL, props}) {
+async function runTestCase({Component = Map, props}) {
   const container = document.createElement('div');
   container.style.width = `${WIDTH}px`;
   container.style.height = `${HEIGHT}px`;
@@ -33,14 +33,19 @@ async function runTestCase({Component = MapGL, props}) {
       container.remove();
     };
     const onLoad = ({target}) => {
-      // Wait for mapbox's animation to finish
-      target.once('idle', () =>
-        resolve({
-          map: target,
-          boundingBox: getBoundingBoxInPage(container),
-          unmount
-        })
-      );
+      // Wait for animations to finish
+      target.once('idle', () => {
+        /* global setTimeout */
+        setTimeout(
+          () =>
+            resolve({
+              map: target,
+              boundingBox: getBoundingBoxInPage(container),
+              unmount
+            }),
+          500
+        );
+      });
     };
 
     const onError = evt => {
@@ -49,15 +54,17 @@ async function runTestCase({Component = MapGL, props}) {
       reject(evt.error);
     };
 
-    render(
-      <Component width="100%" height="100%" {...props} onLoad={onLoad} onError={onError} />,
-      container
-    );
+    render(<Component {...props} onLoad={onLoad} onError={onError} />, container);
   });
 }
 
 // CI does not have the same default fonts as local boxes.
-async function loadFont() {
+async function loadStyles() {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = './node_modules/mapbox-gl/dist/mapbox-gl.css';
+  document.head.append(link);
+
   const font = new FontFace(
     'Roboto',
     'url(https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2)',
@@ -74,7 +81,7 @@ test('Render test', async t => {
   // Default tape test timeout is 500ms - allow enough time for render and screenshot
   t.timeoutAfter(TEST_CASES.length * 4000);
 
-  await loadFont();
+  await loadStyles();
 
   for (const testCase of TEST_CASES) {
     t.comment(testCase.title);
@@ -91,9 +98,9 @@ test('Render test', async t => {
         goldenImage,
         region: boundingBox,
         tolerance: 0.05,
-        includeEmpty: false
+        includeEmpty: false,
         // Uncomment to save screenshot
-        // , saveOnFail: true
+        saveOnFail: true
       });
 
       error = result.error;

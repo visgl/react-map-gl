@@ -40,7 +40,7 @@
       "prefetchable": true,
       "priority": 0,
       "tiles": [
-        "http://localhost:5000/test/data/tile/v1/{z}/{x}/{y}/COMPOSITE"
+        "https://raw.githubusercontent.com/visgl/react-map-gl/master/test/data/tile/v1/{z}/{x}/{y}/COMPOSITE"
       ],
       "type": "vector"
     },
@@ -70,13 +70,13 @@
       "minzoom": 10,
       "priority": 1,
       "tiles": [
-        "http://localhost:5000/test/data/tile/v1/{z}/{x}/{y}/POI"
+        "https://raw.githubusercontent.com/visgl/react-map-gl/master/test/data/tile/v1/{z}/{x}/{y}/POI"
       ],
       "type": "vector"
     }
   },
-  "sprite": "http://localhost:5000/test/data/sprite/tools/14/sprites",
-  "glyphs": "http://localhost:5000/test/data/glyph/{fontstack}/{range}",
+  "sprite": "https://raw.githubusercontent.com/visgl/react-map-gl/master/test/data/sprite/tools/14/sprites",
+  "glyphs": "https://raw.githubusercontent.com/visgl/react-map-gl/master/test/data/glyph/{fontstack}/{range}",
   "layers": [
     {
       "id": "background",
