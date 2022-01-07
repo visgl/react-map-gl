@@ -43,7 +43,7 @@ async function runTestCase({Component = Map, props}) {
               boundingBox: getBoundingBoxInPage(container),
               unmount
             }),
-          100
+          500
         );
       });
     };
