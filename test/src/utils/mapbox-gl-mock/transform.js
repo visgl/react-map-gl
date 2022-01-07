@@ -1,55 +1,7 @@
-function wrap(n, min, max) {
-  const d = max - min;
-  const w = ((((n - min) % d) + d) % d) + min;
-  return w === min ? max : w;
-}
+import {wrap, clamp} from './util';
 
-function clamp(n, min, max) {
-  return Math.min(max, Math.max(min, n));
-}
+import EdgeInsets from './edge_insets';
 
-/**
- * A dummy class that simulates mapbox's EdgeInsets
- */
-class EdgeInsets {
-  constructor(top = 0, bottom = 0, left = 0, right = 0) {
-    this.top = top;
-    this.bottom = bottom;
-    this.left = left;
-    this.right = right;
-  }
-
-  set(target) {
-    if (target.top !== null) this.top = target.top;
-    if (target.bottom !== null) this.bottom = target.bottom;
-    if (target.left !== null) this.left = target.left;
-    if (target.right !== null) this.right = target.right;
-
-    return this;
-  }
-
-  equals(other) {
-    return (
-      this.top === other.top &&
-      this.bottom === other.bottom &&
-      this.left === other.left &&
-      this.right === other.right
-    );
-  }
-
-  toJSON() {
-    return {
-      top: this.top,
-      bottom: this.bottom,
-      left: this.left,
-      right: this.right
-    };
-  }
-}
-
-/**
- * A dummy class that simulates mapbox's Transform
- */
 export default class Transform {
   constructor() {
     this.minZoom = 0;
@@ -119,7 +71,17 @@ export default class Transform {
   set padding(padding) {
     if (this._edgeInsets.equals(padding)) return;
     // Update edge-insets inplace
-    this._edgeInsets.set(padding);
+    this._edgeInsets.interpolate(this._edgeInsets, padding, 1);
+  }
+
+  clone() {
+    const that = new Transform();
+    that.center = this.center;
+    that.zoom = this.zoom;
+    that.bearing = this.bearing;
+    that.pitch = this.pitch;
+    that.padding = this.padding;
+    return that;
   }
 
   isPaddingEqual(padding) {

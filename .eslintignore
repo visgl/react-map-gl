@@ -1,2 +1,3 @@
 dist/
 node_modules/
+test/src/utils/mapbox-gl-mock/*.js
