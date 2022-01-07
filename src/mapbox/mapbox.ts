@@ -428,8 +428,8 @@ export default class Mapbox {
     return this._map as MapboxMap;
   }
 
-  get viewState(): ViewState {
-    return transformToViewState(this._renderTransform);
+  get transform(): Transform {
+    return this._renderTransform;
   }
 
   setProps(props: MapboxProps) {

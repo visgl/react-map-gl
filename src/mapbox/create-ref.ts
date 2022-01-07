@@ -1,130 +1,85 @@
-import type {MapboxMap, ViewState} from '../types';
+import type {MapboxMap, LngLatLike, PointLike} from '../types';
 import type Mapbox from './mapbox';
+import mapboxgl from '../utils/mapboxgl';
 
-/** mapboxgl.Map methods to forward to the ref object
-    Object.getOwnPropertyNames(Object.getPrototypeOf(map))
-      .filter(key => typeof temp1[key] === 'function' && key[0] != '_')
-  */
-const forwardMethods = [
-  // 'getCenter',
-  // 'setCenter',
-  'panBy',
-  'panTo',
-  // 'getZoom',
-  // 'setZoom',
-  'zoomTo',
-  'zoomIn',
-  'zoomOut',
-  // 'getBearing',
-  // 'setBearing',
-  // 'getPadding',
-  // 'setPadding',
-  'rotateTo',
-  'resetNorth',
-  'resetNorthPitch',
-  'snapToNorth',
-  // 'getPitch',
-  // 'setPitch',
-  'cameraForBounds',
-  'fitBounds',
-  'fitScreenCoordinates',
-  'jumpTo',
-  // 'getFreeCameraOptions',
-  // 'setFreeCameraOptions',
-  'easeTo',
-  'flyTo',
-  'isEasing',
-  'stop',
-  // "addControl",
-  // "removeControl",
-  // "hasControl",
-  'getContainer',
-  'getCanvasContainer',
-  'getCanvas',
-  'resize',
-  'getBounds',
-  // "getMaxBounds",
-  // "setMaxBounds",
-  // "setMinZoom",
-  // "getMinZoom",
-  // "setMaxZoom",
-  // "getMaxZoom",
-  // "setMinPitch",
-  // "getMinPitch",
-  // "setMaxPitch",
-  // "getMaxPitch",
-  // "getRenderWorldCopies",
-  // "setRenderWorldCopies",
-  // "getProjection",
-  // "setProjection",
-  'project',
-  'unproject',
-  'isMoving',
-  'isZooming',
-  'isRotating',
-  'on',
-  'once',
-  'off',
-  'queryRenderedFeatures',
-  'querySourceFeatures',
-  'queryTerrainElevation',
-  // "setStyle",
-  // "getStyle",
-  'isStyleLoaded',
-  // "addSource",
-  'isSourceLoaded',
-  'areTilesLoaded',
-  // "addSourceType",
-  // "removeSource",
-  'getSource',
-  'addImage',
-  'updateImage',
-  'hasImage',
-  'removeImage',
-  'loadImage',
-  'listImages',
-  // "addLayer",
-  'moveLayer',
-  // "removeLayer",
-  'getLayer',
-  // "setLayerZoomRange",
-  // "setFilter",
-  // "getFilter",
-  // "setPaintProperty",
-  // "getPaintProperty",
-  // "setLayoutProperty",
-  // "getLayoutProperty",
-  // 'setLight',
-  // 'getLight',
-  // 'setTerrain',
-  // 'getTerrain',
-  // 'setFog',
-  // 'getFog',
-  'setFeatureState',
-  'removeFeatureState',
-  'getFeatureState',
-  'loaded'
-  // "remove",
-  // "triggerRepaint"
+/** These methods may break the react binding if called directly */
+const skipMethods = [
+  'setMaxBounds',
+  'setMinZoom',
+  'setMaxZoom',
+  'setMinPitch',
+  'setMaxPitch',
+  'setRenderWorldCopies',
+  'setProjection',
+  'setStyle',
+  'addSource',
+  'removeSource',
+  'addLayer',
+  'removeLayer',
+  'setLayerZoomRange',
+  'setFilter',
+  'setPaintProperty',
+  'setLayoutProperty',
+  'setLight',
+  'setTerrain',
+  'setFog',
+  'remove'
 ] as const;
 
 export type MapRef = {
   getMap(): MapboxMap;
-  getViewState(): ViewState;
-} & Pick<MapboxMap, typeof forwardMethods[number]>;
+} & Omit<MapboxMap, typeof skipMethods[number]>;
 
 export default function createRef(mapInstance: Mapbox): MapRef {
   if (!mapInstance) {
     return null;
   }
 
+  const map: MapboxMap = mapInstance.map;
   const result: any = {
-    getMap: () => mapInstance.map,
-    getViewState: () => mapInstance.viewState
+    getMap: () => map,
+
+    // Overwrite getters to use our shadow transform
+    getCenter: () => mapInstance.transform.center,
+    getZoom: () => mapInstance.transform.zoom,
+    getBearing: () => mapInstance.transform.bearing,
+    getPitch: () => mapInstance.transform.pitch,
+    getPadding: () => mapInstance.transform.padding,
+    getBounds: () => mapInstance.transform.getBounds(),
+    project: (lnglat: LngLatLike) => {
+      return mapInstance.transform.locationPoint(mapboxgl.LngLat.convert(lnglat));
+    },
+    unproject: (point: PointLike) => {
+      return mapInstance.transform.pointLocation(mapboxgl.Point.convert(point));
+    }
   };
-  for (const key of forwardMethods) {
-    result[key] = mapInstance.map[key].bind(mapInstance.map);
+
+  for (const key of getMethodNames(map)) {
+    // @ts-expect-error
+    if (!(key in result) && !skipMethods.includes(key)) {
+      result[key] = map[key].bind(map);
+    }
   }
 
   return result;
+}
+
+function getMethodNames(obj) {
+  const result = new Set<string>();
+
+  let proto = obj;
+  while (proto) {
+    for (const key of Object.getOwnPropertyNames(proto)) {
+      if (
+        key[0] !== '_' &&
+        typeof obj[key] === 'function' &&
+        key !== 'fire' &&
+        key !== 'setEventedParent'
+      ) {
+        result.add(key);
+      }
+    }
+    proto = Object.getPrototypeOf(proto);
+  }
+  return Array.from(result);
 }
