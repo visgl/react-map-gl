@@ -11,7 +11,7 @@ export default function useControl(
   }
 ) {
   const map = useContext(MapContext);
-  const [ctrl] = useState(onCreate());
+  const [ctrl] = useState(onCreate);
 
   useEffect(() => {
     if (map) {
@@ -20,7 +20,10 @@ export default function useControl(
 
       return () => {
         opts?.onRemove?.(map);
-        map.removeControl(ctrl);
+        // Map might have been removed (parent effects are destroyed before child ones)
+        if (map.hasControl(ctrl)) {
+          map.removeControl(ctrl);
+        }
       };
     }
     return undefined;

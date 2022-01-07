@@ -85,6 +85,7 @@ function Layer(props: LayerProps) {
     if (map) {
       const forceUpdate = () => setStyleLoaded(version => version + 1);
       map.on('styledata', forceUpdate);
+      forceUpdate();
 
       return () => {
         map.off('styledata', forceUpdate);

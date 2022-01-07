@@ -48,7 +48,7 @@ const defaultProps: MapProps = {
   touchPitch: true,
 
   // Style
-  mapStyle: {version: 8},
+  mapStyle: {version: 8, sources: {}, layers: []},
   styleDiffing: true,
   projection: 'mercator',
   renderWorldCopies: true,
