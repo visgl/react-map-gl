@@ -417,7 +417,6 @@ export default class Mapbox {
   private _zoomed: boolean = false;
   private _pitched: boolean = false;
   private _rotated: boolean = false;
-  private _nextProps: MapboxProps | null;
 
   constructor(MapClass: typeof MapboxMap, props: MapboxProps) {
     this._MapClass = MapClass;
@@ -433,11 +432,6 @@ export default class Mapbox {
   }
 
   setProps(props: MapboxProps) {
-    if (this._inRender) {
-      this._nextProps = props;
-      return;
-    }
-
     const oldProps = this.props;
     this.props = props;
 
@@ -537,7 +531,7 @@ export default class Mapbox {
     // map._render will throw error if style does not exist
     // https://github.com/mapbox/mapbox-gl-js/blob/fb9fc316da14e99ff4368f3e4faa3888fb43c513
     //   /src/ui/map.js#L1834
-    if (map.style) {
+    if (!this._inRender && map.style) {
       // cancel the scheduled update
       if (map._frame) {
         map._frame.cancel();
@@ -839,13 +833,6 @@ export default class Mapbox {
     baseRender.call(map, arg);
     map.transform = tr;
     this._inRender = false;
-
-    // We do not allow props to change during a render
-    // When render is done, apply any pending changes
-    if (this._nextProps) {
-      this.setProps(this._nextProps);
-      this._nextProps = null;
-    }
   }
 
   _onBeforeRepaint() {
