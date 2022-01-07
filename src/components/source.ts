@@ -96,17 +96,24 @@ function Source(props: SourceProps) {
     if (map) {
       const forceUpdate = () => setStyleLoaded(version => version + 1);
       map.on('styledata', forceUpdate);
+      forceUpdate();
 
       return () => {
         map.off('styledata', forceUpdate);
-        // @ts-ignore
-        if (map.style && map.style._loaded && map.getSource(id)) {
-          map.removeSource(id);
-        }
+        // Parent effects are destroyed before child ones, see
+        // https://github.com/facebook/react/issues/16728
+        // Source can only be removed after all child layers are removed
+        /* global setTimeout */
+        setTimeout(() => {
+          // @ts-ignore
+          if (map.style && map.style._loaded && map.getSource(id)) {
+            map.removeSource(id);
+          }
+        }, 0);
       };
     }
     return undefined;
-  }, []);
+  }, [map]);
 
   // @ts-ignore
   let source = map && map.style && map.getSource(id);
