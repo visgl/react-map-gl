@@ -2,6 +2,11 @@
 
 # Version 7.0
 
+## 7.0.0-alpha.6 (Jan 9, 2022)
+
+- [v7] Fix double controls in strict mode (#1678)
+-  [v7] Fix AttributionControl prop typo (#1679)
+
 ## 7.0.0-alpha.5 (Jan 6, 2022)
 
 - [v7] Handle unmount order (#1676)
