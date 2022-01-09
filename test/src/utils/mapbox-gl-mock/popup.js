@@ -21,6 +21,10 @@ export default class Popup extends Evented {
     this._map = null;
   }
 
+  isOpen() {
+    return this._map !== null;
+  }
+
   getLngLat() {
     return this._lngLat;
   }
