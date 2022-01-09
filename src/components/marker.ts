@@ -1,7 +1,7 @@
 /* global document */
 import * as React from 'react';
 import {createPortal} from 'react-dom';
-import {useEffect, useState, useRef, useContext} from 'react';
+import {useEffect, useMemo, useRef, useContext} from 'react';
 
 import mapboxgl from '../utils/mapboxgl';
 import type {MarkerDragEvent, MapboxPopup, PointLike, Anchor, Alignment} from '../types';
@@ -73,7 +73,7 @@ const defaultProps: Partial<MarkerProps> = {
 
 function Marker(props: MarkerProps) {
   const map = useContext(MapContext);
-  const [marker] = useState(() => {
+  const marker = useMemo(() => {
     let hasChildren = false;
     React.Children.forEach(props.children, el => {
       if (el) {
@@ -85,8 +85,8 @@ function Marker(props: MarkerProps) {
       element: hasChildren ? document.createElement('div') : null
     };
 
-    return new mapboxgl.Marker(options).setLngLat([props.longitude, props.latitude]).addTo(map);
-  });
+    return new mapboxgl.Marker(options).setLngLat([props.longitude, props.latitude]);
+  }, []);
   const thisRef = useRef({props});
   thisRef.current.props = props;
 
@@ -106,6 +106,7 @@ function Marker(props: MarkerProps) {
       evt.lngLat = marker.getLngLat();
       thisRef.current.props.onDragEnd?.(evt);
     });
+    marker.addTo(map);
 
     return () => {
       marker.remove();
