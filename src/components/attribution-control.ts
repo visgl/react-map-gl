@@ -11,7 +11,7 @@ export type AttributionControlProps = {
    * that collapses when the map is less than 640 pixels wide.  */
   compact?: boolean;
   /** String or strings to show in addition to any other attributions. */
-  customAttributions?: string | string[];
+  customAttribution?: string | string[];
   /** Placement of the control relative to the map. */
   position?: ControlPosition;
 };
