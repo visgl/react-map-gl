@@ -1,7 +1,7 @@
 /* global document */
 import * as React from 'react';
 import {createPortal} from 'react-dom';
-import {useEffect, useState, useRef, useContext} from 'react';
+import {useEffect, useMemo, useRef, useContext} from 'react';
 
 import mapboxgl from '../utils/mapboxgl';
 import type {MapboxEvent, Anchor, PointLike} from '../types';
@@ -64,16 +64,13 @@ export type PopupProps = {
 
 function Popup(props: PopupProps) {
   const map = useContext(MapContext);
-  const [container] = useState(() => {
+  const container = useMemo(() => {
     return document.createElement('div');
-  });
-  const [popup] = useState(() => {
+  }, []);
+  const popup = useMemo(() => {
     const options = {...props};
-    return new mapboxgl.Popup(options)
-      .setLngLat([props.longitude, props.latitude])
-      .setDOMContent(container)
-      .addTo(map);
-  });
+    return new mapboxgl.Popup(options).setLngLat([props.longitude, props.latitude]);
+  }, []);
   const thisRef = useRef({props});
   thisRef.current.props = props;
 
@@ -84,34 +81,37 @@ function Popup(props: PopupProps) {
     popup.on('close', e => {
       thisRef.current.props.onClose?.(e as MapboxEvent);
     });
+    popup.setDOMContent(container).addTo(map);
 
     return () => {
       popup.remove();
     };
   }, []);
 
-  if (popup.getLngLat().lng !== props.longitude || popup.getLngLat().lat !== props.latitude) {
-    popup.setLngLat([props.longitude, props.latitude]);
-  }
-  // @ts-ignore
-  if (props.offset && !deepEqual(popup.options.offset, props.offset)) {
-    popup.setOffset(props.offset);
-  }
-  // @ts-ignore
-  if (popup.options.anchor !== props.anchor || popup.options.maxWidth !== props.maxWidth) {
+  if (popup.isOpen()) {
+    if (popup.getLngLat().lng !== props.longitude || popup.getLngLat().lat !== props.latitude) {
+      popup.setLngLat([props.longitude, props.latitude]);
+    }
     // @ts-ignore
-    popup.options.anchor = props.anchor;
-    popup.setMaxWidth(props.maxWidth);
-  }
-  // Adapted from https://github.com/mapbox/mapbox-gl-js/blob/main/src/ui/popup.js
-  // @ts-ignore
-  if (popup.options.className !== props.className) {
+    if (props.offset && !deepEqual(popup.options.offset, props.offset)) {
+      popup.setOffset(props.offset);
+    }
     // @ts-ignore
-    popup.options.className = props.className;
+    if (popup.options.anchor !== props.anchor || popup.options.maxWidth !== props.maxWidth) {
+      // @ts-ignore
+      popup.options.anchor = props.anchor;
+      popup.setMaxWidth(props.maxWidth);
+    }
+    // Adapted from https://github.com/mapbox/mapbox-gl-js/blob/main/src/ui/popup.js
     // @ts-ignore
-    popup._classList = new Set(props.className ? props.className.trim().split(/\s+/) : []);
-    // @ts-ignore
-    popup._updateClassList();
+    if (popup.options.className !== props.className) {
+      // @ts-ignore
+      popup.options.className = props.className;
+      // @ts-ignore
+      popup._classList = new Set(props.className ? props.className.trim().split(/\s+/) : []);
+      // @ts-ignore
+      popup._updateClassList();
+    }
   }
 
   return createPortal(props.children, container);

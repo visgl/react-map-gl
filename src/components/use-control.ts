@@ -1,4 +1,4 @@
-import {useContext, useState, useEffect} from 'react';
+import {useContext, useMemo, useEffect} from 'react';
 import type {IControl, ControlPosition, MapboxMap} from '../types';
 import {MapContext} from './map';
 
@@ -11,7 +11,7 @@ export default function useControl(
   }
 ) {
   const map = useContext(MapContext);
-  const [ctrl] = useState(onCreate);
+  const ctrl = useMemo(onCreate, []);
 
   useEffect(() => {
     if (map) {
