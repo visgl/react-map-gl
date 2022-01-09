@@ -38,7 +38,7 @@ Note that the following properties are not reactive. They are only used when the
 
 Note that your attribution must adhere to Mapbox's [guidelines](https://docs.mapbox.com/help/getting-started/attribution/).
 
-#### customAttributions: string | string[]
+#### customAttribution: string | string[]
 
 String or strings to show in addition to any other attributions.
 
