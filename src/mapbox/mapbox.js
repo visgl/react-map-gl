@@ -317,12 +317,20 @@ export default class Mapbox {
     // This eliminates the timing issue between calling resize() and DOM update
     /* eslint-disable accessor-pairs */
     const {container} = props;
-    Object.defineProperty(container, 'offsetWidth', {get: () => this.width});
-    Object.defineProperty(container, 'clientWidth', {get: () => this.width});
+    Object.defineProperty(container, 'offsetWidth', {
+      configurable: true,
+      get: () => this.width
+    });
+    Object.defineProperty(container, 'clientWidth', {
+      configurable: true,
+      get: () => this.width
+    });
     Object.defineProperty(container, 'offsetHeight', {
+      configurable: true,
       get: () => this.height
     });
     Object.defineProperty(container, 'clientHeight', {
+      configurable: true,
       get: () => this.height
     });
 
