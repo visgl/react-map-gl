@@ -62,6 +62,11 @@ export type PopupProps = {
   children?: React.ReactNode;
 };
 
+// Adapted from https://github.com/mapbox/mapbox-gl-js/blob/v1.13.0/src/ui/popup.js
+function getClassList(className: string) {
+  return new Set(className ? className.trim().split(/\s+/) : []);
+}
+
 function Popup(props: PopupProps) {
   const map = useContext(MapContext);
   const container = useMemo(() => {
@@ -102,15 +107,24 @@ function Popup(props: PopupProps) {
       popup.options.anchor = props.anchor;
       popup.setMaxWidth(props.maxWidth);
     }
-    // Adapted from https://github.com/mapbox/mapbox-gl-js/blob/main/src/ui/popup.js
     // @ts-ignore
     if (popup.options.className !== props.className) {
       // @ts-ignore
+      const prevClassList = getClassList(popup.options.className);
+      const nextClassList = getClassList(props.className);
+
+      for (const c of prevClassList) {
+        if (!nextClassList.has(c)) {
+          popup.removeClassName(c);
+        }
+      }
+      for (const c of nextClassList) {
+        if (!prevClassList.has(c)) {
+          popup.addClassName(c);
+        }
+      }
+      // @ts-ignore
       popup.options.className = props.className;
-      // @ts-ignore
-      popup._classList = new Set(props.className ? props.className.trim().split(/\s+/) : []);
-      // @ts-ignore
-      popup._updateClassList();
     }
   }
 

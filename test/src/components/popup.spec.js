@@ -57,6 +57,18 @@ test('Popup', t => {
   t.not(anchor, popup.options.anchor, 'anchor is updated');
   t.not(maxWidth, popup.options.maxWidth, 'maxWidth is updated');
 
+  act(() => {
+    map.update(
+      <Map ref={mapRef}>
+        <Popup longitude={-122} latitude={38} className="classA">
+          You are here
+        </Popup>
+      </Map>
+    );
+  });
+
+  t.is(popup.options.className, 'classA', 'className is updated');
+
   restoreMock();
 
   t.end();

@@ -4,6 +4,7 @@
     "jsx": "react",
     "moduleResolution": "node",
     "module": "commonjs",
+    "downlevelIteration": true,
     "declaration": true,
     "sourceMap": true,
     "outDir": "./dist/es5"

@@ -56,4 +56,11 @@ export default class Popup extends Evented {
     this.options.offset = value;
     return this;
   }
+
+  addClassName(className) {
+    this._classList.add(className);
+  }
+  removeClassName(className) {
+    this._classList.remove(className);
+  }
 }
