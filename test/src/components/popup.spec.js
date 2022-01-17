@@ -60,11 +60,7 @@ test('Popup', t => {
   act(() => {
     map.update(
       <Map ref={mapRef}>
-        <Popup
-          longitude={-122}
-          latitude={38}
-          className="classA"
-        >
+        <Popup longitude={-122} latitude={38} className="classA">
           You are here
         </Popup>
       </Map>
