@@ -4,9 +4,9 @@ export * from './external';
 
 // re-export mapbox types
 export type {
-  AnyLayer, 
-  AnySourceData, 
-  AnySourceImpl, 
+  AnyLayer,
+  AnySourceData,
+  AnySourceImpl,
   MapMouseEvent,
   Popup as MapboxPopup
 } from 'mapbox-gl';

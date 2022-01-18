@@ -4,7 +4,7 @@ import {createPortal} from 'react-dom';
 import {useEffect, useMemo, useRef, useContext} from 'react';
 
 import mapboxgl from '../utils/mapboxgl';
-import type { PopupEvent, Anchor, PointLike} from '../types';
+import type {PopupEvent, Anchor, PointLike} from '../types';
 
 import {MapContext} from './map';
 import {deepEqual} from '../utils/deep-equal';

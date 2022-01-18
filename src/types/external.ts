@@ -1,4 +1,4 @@
-import type { PaddingOptions, MapboxEvent, Popup, Marker, GeolocateControl, LngLat} from 'mapbox-gl';
+import type {PaddingOptions, MapboxEvent, Popup, Marker, GeolocateControl, LngLat} from 'mapbox-gl';
 
 /** Defines the projection that the map should be rendered in */
 export type ProjectionSpecification = {
@@ -38,13 +38,24 @@ export interface ImmutableLike {
 
 /* Events */
 
-export type ViewStateChangeEvent = (MapboxEvent<MouseEvent | TouchEvent | WheelEvent | undefined> & {
-  type: 'movestart' | 'move' | 'moveend' | 'zoomstart' | 'zoom' | 'zoomend';
-  viewState: ViewState;
-}) | (MapboxEvent<MouseEvent | TouchEvent | undefined> & {
-  type: 'rotatestart' | 'rotate' | 'rotateend' | 'dragstart' | 'drag' | 'dragend' | 'pitchstart' | 'pitch' | 'pitchend';
-  viewState: ViewState;
-});
+export type ViewStateChangeEvent =
+  | (MapboxEvent<MouseEvent | TouchEvent | WheelEvent | undefined> & {
+      type: 'movestart' | 'move' | 'moveend' | 'zoomstart' | 'zoom' | 'zoomend';
+      viewState: ViewState;
+    })
+  | (MapboxEvent<MouseEvent | TouchEvent | undefined> & {
+      type:
+        | 'rotatestart'
+        | 'rotate'
+        | 'rotateend'
+        | 'dragstart'
+        | 'drag'
+        | 'dragend'
+        | 'pitchstart'
+        | 'pitch'
+        | 'pitchend';
+      viewState: ViewState;
+    });
 
 export type PopupEvent = {
   type: 'open' | 'close';
@@ -60,7 +71,7 @@ export type MarkerDragEvent = {
 export type GeolocateEvent = {
   type: string;
   target: GeolocateControl;
-}
+};
 
 export type GeolocateResultEvent = GeolocateEvent & GeolocationPosition;
 
