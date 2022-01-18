@@ -2,6 +2,11 @@
 
 # Version 7.0
 
+## 7.0.0-alpha.7 (Jan 17, 2022)
+
+- Improve typing (#1695)
+- [v7] Fix popup className update in mapbox v1/maplibre (#1694)
+
 ## 7.0.0-alpha.6 (Jan 9, 2022)
 
 - [v7] Fix double controls in strict mode (#1678)
