@@ -1,7 +1,5 @@
 # AttributionControl
 
-![Since v7.0](https://img.shields.io/badge/since-v7.0-green)
-
 React component that wraps [AttributionControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#attributioncontrol).
 
 ```js
@@ -47,3 +45,8 @@ String or strings to show in addition to any other attributions.
 Default: `'bottom-right'`
 
 Placement of the control relative to the map.
+
+
+## Source
+
+[attribution-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/attribution-control.ts)

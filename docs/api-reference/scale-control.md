@@ -1,7 +1,5 @@
 # ScaleControl
 
-![Since v7.0](https://img.shields.io/badge/since-v7.0-green)
-
 React component that wraps [ScaleControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#scalecontrol).
 
 ```js
@@ -41,3 +39,8 @@ Placement of the control relative to the map. Note that this prop is only used w
 Default: `'metric'`
 
 Unit of the distance.
+
+
+## Source
+
+[scale-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/scale-control.ts)

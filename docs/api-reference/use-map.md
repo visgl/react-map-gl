@@ -34,4 +34,9 @@ See a full example [here](/examples/get-started/hook).
 
 `useMap(): {[id: string]: MapRef}`
 
-The hook returns an object that contains all mounted maps under the closest `MapProvider`. The keys are each map's [id](/docs/api-reference/map.md#prperties) and the values are the [ref object](/docs/api-reference/map.md#methods).
+The hook returns an object that contains all mounted maps under the closest `MapProvider`. The keys are each map's [id](/docs/api-reference/map.md#id) and the values are the [MapRef](/docs/api-reference/types.md#mapref).
+
+
+## Source
+
+[use-map.tsx](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/use-map.tsx)

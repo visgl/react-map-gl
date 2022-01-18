@@ -3,7 +3,13 @@ import {PaddingOptions, LngLat, Point, LngLatBounds} from 'mapbox-gl';
 export * from './external';
 
 // re-export mapbox types
-export type {AnyLayer, AnySourceData, AnySourceImpl, Popup as MapboxPopup} from 'mapbox-gl';
+export type {
+  AnyLayer,
+  AnySourceData,
+  AnySourceImpl,
+  MapMouseEvent,
+  Popup as MapboxPopup
+} from 'mapbox-gl';
 
 /**
  * Stub for mapbox's Transform class

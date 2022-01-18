@@ -1,7 +1,5 @@
 # GeolocateControl
 
-![Since v7.0](https://img.shields.io/badge/since-v7.0-green)
-
 React component that wraps [GeolocateControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocateControl).
 
 ```js
@@ -24,6 +22,23 @@ function App() {
 
 ## Methods
 
+Imperative methods are accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) hook:
+
+```js
+import * as React from 'react';
+import Map, {GeolocateControl} from 'react-map-gl';
+
+function App() {
+  const geolocateControlRef = React.useRef();
+
+  React.useEffect(() => {
+    geolocateControlRef.current.trigger();
+  }, [])
+
+  return <Map><GeolocateControl ref={geolocateControlRef} /></Map>;
+}
+```
+
 #### trigger(): boolean
 
 Trigger a geolocation event.
@@ -37,7 +52,7 @@ Note that the following properties are not reactive. They are only used when the
 
 ### Tracking options
 
-#### positionOptions: PositionOptions
+#### positionOptions: [PositionOptions](https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions)
 
 A Geolocation API [PositionOptions](https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions) object
 
@@ -49,7 +64,7 @@ If `true` the GeolocateControl becomes a toggle button and when active the map w
 
 ### Render options
 
-#### fitBoundsOptions: FitBoundsOptions
+#### fitBoundsOptions: [FitBoundsOptions](/docs/api-reference/types.md#fitboundsoptions)
 
 Default: `{maxZoom: 15}`
 
@@ -83,22 +98,27 @@ Show a dot on the map at the user's location. Set to `false` to disable.
 
 ### Callbacks
 
-#### onGeolocate: (evt: GeolocateEvent) => void
+#### onGeolocate: (evt: [GeolocateResultEvent](/docs/api-reference/types.md#geolocateresultevent)) => void
 
 Called on each Geolocation API position update that returned as success.
 
-#### onError: (evt: GeolocateErrorEvent) => void
+#### onError: (evt: [GeolocateErrorEvent](/docs/api-reference/types.md#geolocateerrorevent)) => void
 
 Called on each Geolocation API position update that returned as an error.
 
-#### onOutOfMaxBounds: (evt: GeolocateEvent) => void
+#### onOutOfMaxBounds: (evt: [GeolocateResultEvent](/docs/api-reference/types.md#geolocateresultevent)) => void
 
 Called on each Geolocation API position update that returned as success but user position is out of map `maxBounds`.
 
-#### onTrackUserLocationStart: (evt: MapboxEvent) => void
+#### onTrackUserLocationStart: (evt: [GeolocateEvent](/docs/api-reference/types.md#geolocateevent)) => void
 
 Called when the GeolocateControl changes to the active lock state.
 
-#### onTrackUserLocationEnd: (evt: MapboxEvent) => void
+#### onTrackUserLocationEnd: (evt: [GeolocateEvent](/docs/api-reference/types.md#geolocateevent)) => void
 
 Called when the GeolocateControl changes to the background state.
+
+
+## Source
+
+[geolocate-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/geolocate-control.ts)

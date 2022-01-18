@@ -1,7 +1,5 @@
 # NavigationControl
 
-![Since v7.0](https://img.shields.io/badge/since-v7.0-green)
-
 React component that wraps [NavigationControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#navigationcontrol).
 
 ```js
@@ -49,3 +47,8 @@ If true the zoom-in and zoom-out buttons are included.
 Default: `false`
 
 If `true` the pitch is visualized by rotating X-axis of compass.
+
+
+## Source
+
+[navigation-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/navigation-control.ts)

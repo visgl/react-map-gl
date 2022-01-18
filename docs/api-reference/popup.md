@@ -3,8 +3,6 @@
 
 ## Properties
 
-![Since v7.0](https://img.shields.io/badge/since-v7.0-green)
-
 React component that wraps [Popup](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup).
 
 ```js
@@ -67,7 +65,7 @@ Default: `true`
 
 If `true`, the popup will try to focus the first focusable element inside the popup.
 
-#### offset: number | PointLike | Record<string, PointLike>
+#### offset: number | [PointLike](/docs/api-reference/types.md#pointlike) | Record\<string, [PointLike](/docs/api-reference/types.md#pointlike)\>
 
 Default: `null`
 
@@ -87,10 +85,15 @@ A string that sets the CSS property of the popup's maximum width.
 
 ### Callbacks
 
-#### onOpen: (evt: MapboxEvent) => void
+#### onOpen: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void
 
 Called when the popup is opened manually or programatically.
 
-#### onClose: (evt: MapboxEvent) => void
+#### onClose: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void
 
 Called when the popup is closed manually or programatically.
+
+
+## Source
+
+[popup.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/popup.ts)

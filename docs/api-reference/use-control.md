@@ -53,12 +53,17 @@ The hook creates an [IControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/
 
 Parameters:
 
-- `onCreate` (Function) - called to create an instance of the control.
-- `options` (object)
-  + `position` ('top-left' | 'top-right' | 'bottom-left' | 'bottom-right') - control position relative to the map
-  + `onAdd` (Function) - called after the control is added to a map
-  + `onRemove` (Function) - called before the control is removed from a map
+- `onCreate`: () => [IControl](/docs/api-reference/types.md#icontrol) - called to create an instance of the control.
+- `options`: object
+  + `position`: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' - control position relative to the map
+  + `onAdd`: (map: [MapboxMap](/docs/api-reference/types.md#mapboxmap)) => void - called after the control is added to a map
+  + `onRemove`: (map: [MapboxMap](/docs/api-reference/types.md#mapboxmap)) => void - called before the control is removed from a map
 
 Returns:
 
-The control instance.
+[IControl](/docs/api-reference/types.md#icontrol) - the control instance from `onCreate`.
+
+
+## Source
+
+[use-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/use-control.ts)
