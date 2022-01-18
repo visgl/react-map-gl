@@ -1,7 +1,5 @@
 # FullscreenControl
 
-![Since v7.0](https://img.shields.io/badge/since-v7.0-green)
-
 React component that wraps [FullscreenControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#fullscreencontrol).
 
 ```js
@@ -35,3 +33,8 @@ Id of the DOM element which should be made full screen. By default, the map cont
 Default: `'top-right'`
 
 Placement of the control relative to the map.
+
+
+## Source
+
+[fullscreen-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/fullscreen-control.ts)

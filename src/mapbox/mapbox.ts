@@ -8,7 +8,7 @@ import type {
   ViewState,
   ViewStateChangeEvent,
   DragPanOptions,
-  InteractiveOptions,
+  ZoomRotateOptions,
   TransformRequestFunction,
   Light,
   Fog,
@@ -21,7 +21,9 @@ import type {
   MapLayerMouseEvent,
   MapLayerTouchEvent,
   MapWheelEvent,
-  MapDataEvent,
+  MapBoxZoomEvent,
+  MapStyleDataEvent,
+  MapSourceDataEvent,
   MapboxEvent,
   ErrorEvent,
   MapboxGeoJSONFeature,
@@ -213,19 +215,19 @@ export type MapboxProps = Partial<ViewState> & {
    * An `Object` value is passed as options to {@link ScrollZoomHandler#enable}.
    * @default true
    */
-  scrollZoom?: boolean | InteractiveOptions;
+  scrollZoom?: boolean | ZoomRotateOptions;
   /**
    * If `true`, the "drag to pitch" interaction is enabled.
    * An `Object` value is passed as options to {@link TouchPitchHandler#enable}.
    * @default true
    */
-  touchPitch?: boolean | InteractiveOptions;
+  touchPitch?: boolean;
   /**
    * If `true`, the "pinch to rotate and zoom" interaction is enabled.
    * An `Object` value is passed as options to {@link TouchZoomRotateHandler#enable}.
    * @default true
    */
-  touchZoomRotate?: boolean | InteractiveOptions;
+  touchZoomRotate?: boolean | ZoomRotateOptions;
 
   // Constraints
 
@@ -287,7 +289,6 @@ export type MapboxProps = Partial<ViewState> & {
   onMouseLeave?: (e: MapLayerMouseEvent) => void;
   onMouseOut?: (e: MapLayerMouseEvent) => void;
   onContextMenu?: (e: MapLayerMouseEvent) => void;
-  onWheel?: (e: MapWheelEvent) => void;
   onTouchStart?: (e: MapLayerTouchEvent) => void;
   onTouchEnd?: (e: MapLayerTouchEvent) => void;
   onTouchMove?: (e: MapLayerTouchEvent) => void;
@@ -308,9 +309,11 @@ export type MapboxProps = Partial<ViewState> & {
   onPitchStart?: (e: ViewStateChangeEvent) => void;
   onPitch?: (e: ViewStateChangeEvent) => void;
   onPitchEnd?: (e: ViewStateChangeEvent) => void;
-  onBoxZoomStart?: (e: ViewStateChangeEvent) => void;
-  onBoxZoomEnd?: (e: ViewStateChangeEvent) => void;
-  onBoxZoomCancel?: (e: ViewStateChangeEvent) => void;
+
+  onWheel?: (e: MapWheelEvent) => void;
+  onBoxZoomStart?: (e: MapBoxZoomEvent) => void;
+  onBoxZoomEnd?: (e: MapBoxZoomEvent) => void;
+  onBoxZoomCancel?: (e: MapBoxZoomEvent) => void;
 
   onResize?: (e: MapboxEvent) => void;
   onLoad?: (e: MapboxEvent) => void;
@@ -318,9 +321,9 @@ export type MapboxProps = Partial<ViewState> & {
   onIdle?: (e: MapboxEvent) => void;
   onError?: (e: ErrorEvent) => void;
   onRemove?: (e: MapboxEvent) => void;
-  onData?: (e: MapDataEvent) => void;
-  onStyleData?: (e: MapDataEvent) => void;
-  onSourceData?: (e: MapDataEvent) => void;
+  onData?: (e: MapStyleDataEvent | MapSourceDataEvent) => void;
+  onStyleData?: (e: MapStyleDataEvent) => void;
+  onSourceData?: (e: MapSourceDataEvent) => void;
 };
 
 const pointerEvents = {
@@ -354,13 +357,13 @@ const cameraEvents = {
   rotateend: 'onRotateEnd',
   pitchstart: 'onPitchStart',
   pitch: 'onPitch',
-  pitchend: 'onPitchEnd',
-  boxzoomstart: 'onBoxZoomStart',
-  boxzoomend: 'onBoxZoomEnd',
-  boxzoomcancel: 'onBoxZoomCancel'
+  pitchend: 'onPitchEnd'
 };
 const otherEvents = {
   wheel: 'onWheel',
+  boxzoomstart: 'onBoxZoomStart',
+  boxzoomend: 'onBoxZoomEnd',
+  boxzoomcancel: 'onBoxZoomCancel',
   resize: 'onResize',
   load: 'onLoad',
   render: 'onRender',

@@ -1,7 +1,5 @@
 # Map
 
-![Since v7.0](https://img.shields.io/badge/since-v7.0-green)
-
 React component that wraps [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/).
 
 ```js
@@ -44,7 +42,7 @@ function App() {
 }
 ```
 
-The `MapRef` object exposes [Map methods](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) that **are safe to call without breaaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
+The [MapRef](/docs/api-reference/types.md#mapref) object exposes [Map methods](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) that **are safe to call without breaaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
 
 You can still access the hidden members via `getMap()`:
 
@@ -75,22 +73,22 @@ The current cursor [type](https://developer.mozilla.org/en-US/docs/Web/CSS/curso
 
 ### Styling options
 
-#### fog: Fog | null
+#### fog: [Fog](/docs/api-reference/types.md#fog) | null
 
 The fog property of the style. Must conform to the [Fog Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/fog/).
 If `null` is provided, removes the fog from the map.
 
-#### light: Light
+#### light: [Light](/docs/api-reference/types.md#light)
 
 Light properties of the style. Must conform to the [Light Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light).
 
-#### mapStyle: Style | string | Immutable
+#### mapStyle: [MapboxStyle](/docs/api-reference/types.md#mapboxstyle) | string | Immutable
 
 Default: (empty style)
 
 The map's Mapbox style. This must be an a JSON object conforming to the schema described in the [Mapbox Style Specification](https://mapbox.com/mapbox-gl-style-spec/), or a URL to such JSON.
 
-#### projection: string | ProjectionSpecification
+#### projection: string | [ProjectionSpecification](/docs/api-reference/types.md#projectionspecification)
 
 Default: `'mercator'`
 
@@ -108,7 +106,7 @@ Default: `true`
 
 Enable diffing when `mapStyle` changes. If `false`, force a 'full' update, removing the current style and building the given one instead of attempting a diff-based update.
 
-#### terrain: TerrainSpecification
+#### terrain: [TerrainSpecification](/docs/api-reference/types.md#terrainspecification)
 
 Terrain property of the style. Must conform to the [Terrain Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/terrain/).
 If `null` is provided, removes terrain from the map.
@@ -120,13 +118,13 @@ If `null` is provided, removes terrain from the map.
 
 The initial view state of the map. If specified, `longitude`, `latitude`, `zoom` etc. in props are ignored when constructing the map. Only specify `initialViewState` if `Map` is being used as an **uncontrolled component**. See [state management](/docs/get-started/state-management.md) for examples.
 
-- `bounds` ([LngLatBoundsLike](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatboundslike)) - The initial bounds of the map. If specified, it overrides the `longitude`, `latitude` and `zoom` options. Default `null`.
-- `fitBoundsOptions` ([FitBoundsOptions](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#fitbounds)) - A `fitBounds` options object to use only when setting the `bounds` option. Default `null`.
-- `longitude` (number) - The initial longitude of the map center. Default `0`.
-- `latitude` (number) - The initial latitude of the map center. Default `0`.
-- `zoom` (number) - The initial zoom level. Default `0`.
-- `pitch` (number) - The initial pitch (tilt) of the map. Default `0`.
-- `bearing` (number) - The initial bearing (rotation) of the map. Default `0`.
+- `bounds?`: [LngLatBoundsLike](/docs/api-reference/types.md#lnglatboundslike) - The initial bounds of the map. If specified, it overrides the `longitude`, `latitude` and `zoom` options. Default `null`.
+- `fitBoundsOptions`: [FitBoundsOptions](/docs/api-reference/types.md#fitboundsoptions) - A `fitBounds` options object to use only when setting the `bounds` option. Default `null`.
+- `longitude`: number - The initial longitude of the map center. Default `0`.
+- `latitude`: number - The initial latitude of the map center. Default `0`.
+- `zoom`: number - The initial zoom level. Default `0`.
+- `pitch`: number - The initial pitch (tilt) of the map. Default `0`.
+- `bearing`: number - The initial bearing (rotation) of the map. Default `0`.
 
 #### longitude: number
 
@@ -148,11 +146,11 @@ The initial [pitch](https://docs.mapbox.com/help/glossary/camera/#pitch) (tilt) 
 
 The initial [bearing](https://docs.mapbox.com/help/glossary/camera/#bearing) (rotation) of the map, measured in degrees counter-clockwise from north.
 
-#### padding: PaddingOptions
+#### padding: [PaddingOptions](/docs/api-reference/types.md#paddingoptions)
 
 Default: `null`
 
-The padding in pixels around the viewport, in the shape of `{left?: number, top?: number, right?: number, bottom?: number}`.
+The padding in pixels around the viewport.
 
 #### minZoom: number
 
@@ -178,7 +176,7 @@ Default: `85`
 
 The maximum pitch of the map (0-85).
 
-#### maxBounds: LngLatBoundsLike
+#### maxBounds: [LngLatBoundsLike](/docs/api-reference/types.md#lnglatboundslike)
 
 Default: `null`
 
@@ -204,7 +202,7 @@ Default: `true`
 
 If `true`, the "drag to rotate" interaction is enabled (see [DragRotateHandler](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragrotatehandler)).
 
-#### dragPan: boolean | DragPanOptions
+#### dragPan: boolean | [DragPanOptions](/docs/api-reference/types.md#dragpanoptions)
 
 Default: `true`
 
@@ -216,19 +214,19 @@ Default: `true`
 
 If `true`, keyboard shortcuts are enabled (see [KeyboardHandler](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#keyboardhandler)).
 
-#### scrollZoom: boolean | InteractiveOptions
+#### scrollZoom: boolean | [ZoomRotateOptions](/docs/api-reference/types.md#zoomrotateoptions)
 
 Default: `true`
 
 If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to  [ScrollZoomHandler#enable](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler).
 
-#### touchPitch: boolean | InteractiveOptions
+#### touchPitch: boolean
 
 Default: `true`
 
 If `true`, the "drag to pitch" interaction is enabled. Optionally accpt an object value that is the options to [TouchPitchHandler#enable](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchpitchhandler).
 
-#### touchZoomRotate: boolean | InteractiveOptions
+#### touchZoomRotate: boolean | [ZoomRotateOptions](/docs/api-reference/types.md#zoomrotateoptions)
 
 Default: `true`
 
@@ -248,19 +246,19 @@ See the [Callbacks](#callbacks) section for affected events.
 
 ### Callbacks
 
-#### onResize: (event: MapboxEvent) => void
+#### onResize: (event: [MapboxEvent](/docs/api-reference/types.md#mapboxevent)) => void
 
 Called when the map has been resized.
 
-#### onLoad: (event: MapboxEvent) => void
+#### onLoad: (event: [MapboxEvent](/docs/api-reference/types.md#mapboxevent)) => void
 
 Called after all necessary resources have been downloaded and the first visually complete rendering of the map has occurred.
 
-#### onRender: (event: MapboxEvent) => void
+#### onRender: (event: [MapboxEvent](/docs/api-reference/types.md#mapboxevent)) => void
 
 Called whenever the map is drawn to the screen.
 
-#### onIdle: (event: MapboxEvent) => void
+#### onIdle: (event: [MapboxEvent](/docs/api-reference/types.md#mapboxevent)) => void
 
 Called after the last frame rendered before the map enters an "idle" state:
 
@@ -268,187 +266,187 @@ Called after the last frame rendered before the map enters an "idle" state:
 - All currently requested tiles have loaded
 - All fade/transition animations have completed
 
-#### onRemove: (event: MapboxEvent) => void
+#### onRemove: (event: [MapboxEvent](/docs/api-reference/types.md#mapboxevent)) => void
 
 Called when the map has been removed.
 
-#### onError: (event: ErrorEvent) => void
+#### onError: (event: [ErrorEvent](/docs/api-reference/types.md#errorevent)) => void
 
 Default: `evt => console.error(evt.error)`
 
 Called when an error occurs.
 
-#### onMouseDown: (event: MapLayerMouseEvent) => void
+#### onMouseDown: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a pointing device (usually a mouse) is pressed within the map.
 
 If `interactiveLayerIds` is specified, the event will fire only when the the cursor is pressed while inside a visible portion of the specifed layer(s).
 
-#### onMouseUp: (event: MapLayerMouseEvent) => void
+#### onMouseUp: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a pointing device (usually a mouse) is released within the map.
 
 If `interactiveLayerIds` is specified, the event will fire only when the the cursor is released while inside a visible portion of the specifed layer(s).
 
-#### onMouseOver: (event: MapLayerMouseEvent) => void
+#### onMouseOver: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a pointing device (usually a mouse) is moved within the map. As you move the cursor across a web page containing a map, the event will fire each time it enters the map or any child elements.
 
-#### onMouseEnter: (event: MapLayerMouseEvent) => void
+#### onMouseEnter: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a pointing device (usually a mouse) enters a visible portion of the layer(s) specified by `interactiveLayerIds` from outside that layer or outside the map canvas.
 
-#### onMouseMove: (event: MapLayerMouseEvent) => void
+#### onMouseMove: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a pointing device (usually a mouse) is moved while the cursor is inside the map. As you move the cursor across the map, the event will fire every time the cursor changes position within the map.
 
 If `interactiveLayerIds` is specified, the event will fire only when the the cursor is inside a visible portion of the specifed layer(s).
 
-#### onMouseLeave: (event: MapLayerMouseEvent) => void
+#### onMouseLeave: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a pointing device (usually a mouse) leaves a visible portion of the layer(s) specified by `interactiveLayerIds` or moves from the layer to outside the map canvas.
 
-#### onMouseOut: (event: MapLayerMouseEvent) => void
+#### onMouseOut: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a point device (usually a mouse) leaves the map's canvas.
 
-#### onClick: (event: MapLayerMouseEvent) => void
+#### onClick: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a pointing device (usually a mouse) is pressed and released at the same point on the map.
 
 If `interactiveLayerIds` is specified, the event will fire only when the point that is clicked twice contains a visible portion of the specifed layer.
 
-#### onDblClick: (event: MapLayerMouseEvent) => void
+#### onDblClick: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a pointing device (usually a mouse) is pressed and released twice at the same point on the map in rapid succession.
 
 If `interactiveLayerIds` is specified, the event will fire only when the point that is pressed and released contains a visible portion of the specifed layer.
 
-#### onContextMenu: (event: MapLayerMouseEvent) => void
+#### onContextMenu: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when the right button of the mouse is clicked or the context menu key is pressed within the map.
 
 If `interactiveLayerIds` is specified, the event will fire only when the point that is right clicked contains a visible portion of the specifed layer.
 
-#### onWheel: (event: MapWheelEvent) => void
+#### onWheel: (event: [MapWheelEvent](/docs/api-reference/types.md#mapwheelevent)) => void
 
 Called when a wheel event occurs within the map.
 
-#### onTouchStart: (event: MapLayerTouchEvent) => void
+#### onTouchStart: (event: [MapLayerTouchEvent](/docs/api-reference/types.md#maplayertouchevent)) => void
 
 Called when a `touchstart` event occurs within the map.
 
 If `interactiveLayerIds` is specified, the event will fire only when the point is inside a visible portion of the specifed layer.
 
 
-#### onTouchEnd: (event: MapLayerTouchEvent) => void
+#### onTouchEnd: (event: [MapLayerTouchEvent](/docs/api-reference/types.md#maplayertouchevent)) => void
 
 Called when a `touchend` event occurs within the map.
 
 If `interactiveLayerIds` is specified, the event will fire only when the point is inside a visible portion of the specifed layer.
 
-#### onTouchMove: (event: MapLayerTouchEvent) => void
+#### onTouchMove: (event: [MapLayerTouchEvent](/docs/api-reference/types.md#maplayertouchevent)) => void
 
 Called when a `touchmove` event occurs within the map.
 
 If `interactiveLayerIds` is specified, the event will fire only when the point is inside a visible portion of the specifed layer.
 
-#### onTouchCancel: (event: MapLayerTouchEvent) => void
+#### onTouchCancel: (event: [MapLayerTouchEvent](/docs/api-reference/types.md#maplayertouchevent)) => void
 
 Called when a `touchcancel` event occurs within the map.
 
 If `interactiveLayerIds` is specified, the event will fire only when the point is inside a visible portion of the specifed layer.
 
-#### onMoveStart: (event: ViewStateChangeEvent) => void
+#### onMoveStart: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called just before the map begins a transition from one view to another.
 
-#### onMove: (event: ViewStateChangeEvent) => void
+#### onMove: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called repeatedly during an animated transition from one view to another.
 
 When `Map` is used as a controlled component, `event.viewState` reflects the view state that the camera "proposes" to move to, as a result of either user interaction or methods such as [flyTo](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto). The camera does not actually change until the application updates the view state props (`longitude`, `latitude`, `zoom` etc.).
 See [state management](/docs/get-started/state-management.md) for examples.
 
-#### onMoveEnd: (event: ViewStateChangeEvent) => void
+#### onMoveEnd: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called just after the map completes a transition from one view to another.
 
-#### onDragStart: (event: ViewStateChangeEvent) => void
+#### onDragStart: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called when a "drag to pan" interaction starts.
 
-#### onDrag: (event: ViewStateChangeEvent) => void
+#### onDrag: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called repeatedly during a "drag to pan" interaction.
 
-#### onDragEnd: (event: ViewStateChangeEvent) => void
+#### onDragEnd: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called when a "drag to pan" interaction ends.
 
-#### onZoomStart: (event: ViewStateChangeEvent) => void
+#### onZoomStart: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called just before the map begins a transition from one zoom level to another.
 
-#### onZoom: (event: ViewStateChangeEvent) => void
+#### onZoom: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called repeatedly during an animated transition from one zoom level to another.
 
 When `Map` is used as a controlled component, `event.viewState.zoom` reflects the zoom that the camera "proposes" to change to, as a result of either user interaction or methods such as [flyTo](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto). The camera does not actually change until the application updates the `zoom` prop.
 
-#### onZoomEnd: (event: ViewStateChangeEvent) => void
+#### onZoomEnd: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called just after the map completes a transition from one zoom level to another.
 
-#### onRotateStart: (event: ViewStateChangeEvent) => void
+#### onRotateStart: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called just before the map begins a transition from one bearing (rotation) to another.
 
-#### onRotate: (event: ViewStateChangeEvent) => void
+#### onRotate: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called repeatedly during an animated transition from one bearing (rotation) to another.
 
 When `Map` is used as a controlled component, `event.viewState.bearing` reflects the zoom that the camera "proposes" to change to, as a result of either user interaction or methods such as [flyTo](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto). The camera does not actually change until the application updates the `bearing` prop.
 
-#### onRotateEnd: (event: ViewStateChangeEvent) => void
+#### onRotateEnd: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called just after the map completes a transition from one bearing (rotation) to another.
 
-#### onPitchStart: (event: ViewStateChangeEvent) => void
+#### onPitchStart: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called just before the map begins a transition from one pitch (tilt) to another.
 
-#### onPitch: (event: ViewStateChangeEvent) => void
+#### onPitch: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called repeatedly during an animated transition from one pitch (tilt) to another.
 
 When `Map` is used as a controlled component, `event.viewState.pitch` reflects the zoom that the camera "proposes" to change to, as a result of either user interaction or methods such as [flyTo](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto). The camera does not actually change until the application updates the `pitch` prop.
 
-#### onPitchEnd: (event: ViewStateChangeEvent) => void
+#### onPitchEnd: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
 Called just after the map completes a transition from one pitch (tilt) to another.
 
-#### onBoxZoomStart: (event: ViewStateChangeEvent) => void
+#### onBoxZoomStart: (event: [MapBoxZoomEvent](/docs/api-reference/types.md#mapboxzoomevent)) => void
 
 Called when a "box zoom" interaction starts.
 
-#### onBoxZoomEnd: (event: ViewStateChangeEvent) => void
+#### onBoxZoomEnd: (event: [MapBoxZoomEvent](/docs/api-reference/types.md#mapboxzoomevent)) => void
 
 Called when a "box zoom" interaction ends.
 
-#### onBoxZoomCancel: (event: ViewStateChangeEvent) => void
+#### onBoxZoomCancel: (event:[MapBoxZoomEvent](/docs/api-reference/types.md#mapboxzoomevent)) => void
 
 Called when the user cancels a "box zoom" interaction, or when the bounding box does not meet the minimum size threshold.
 
-#### onData: (event: MapDataEvent) => void
+#### onData: (event: [MapStyleDataEvent](/docs/api-reference/types.md#mapstyledataevent) | [MapSourceDataEvent](/docs/api-reference/types.md#mapsourcedataevent)) => void
 
 Called when any map data loads or changes. See [MapDataEvent](https://docs.mapbox.com/mapbox-gl-js/api/events/#mapdataevent) for more information.
 
-#### onStyleData: (event: MapDataEvent) => void
+#### onStyleData: (event: [MapStyleDataEvent](/docs/api-reference/types.md#mapstyledataevent)) => void
 
 Called when the map's style loads or changes. See [MapDataEvent](https://docs.mapbox.com/mapbox-gl-js/api/events/#mapdataevent) for more information.
 
-#### onSourceData: (event: MapDataEvent) => void
+#### onSourceData: (event: [MapSourceDataEvent](/docs/api-reference/types.md#mapsourcedataevent)) => void
 
 Called when one of the map's sources loads or changes, including if a tile belonging to a source loads or changes. See [MapDataEvent](https://docs.mapbox.com/mapbox-gl-js/api/events/#mapdataevent) for more information.
 
@@ -625,7 +623,7 @@ Default: `true`
 
 If `true`, the map will automatically resize when the browser window resizes.
 
-#### transformRequest: TransformRequestFunction
+#### transformRequest: [TransformRequestFunction](/docs/api-reference/types.md#transformrequestfunction)
 
 Default: `null`
 
@@ -647,3 +645,8 @@ The number of web workers instantiated on a page with mapbox-gl maps.
 #### workerUrl: string
 
 Provides an interface for loading mapbox-gl's WebWorker bundle from a self-hosted URL. This is useful if your site needs to operate in a strict CSP (Content Security Policy) environment wherein you are not allowed to load JavaScript code from a Blob URL, which is default behavior.
+
+
+## Source
+
+[map.tsx](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/map.tsx)
