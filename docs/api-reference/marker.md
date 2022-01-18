@@ -1,7 +1,5 @@
 # Marker
 
-![Since v7.0](https://img.shields.io/badge/since-v7.0-green)
-
 React component that wraps [Marker](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker).
 
 ```js
@@ -62,7 +60,7 @@ Required. The latitude of the anchor location.
 
 Required. The longitude of the anchor location.
 
-#### offset: PointLike
+#### offset: [PointLike](/docs/api-reference/types.md#pointlike)
 
 Default: `null`
 
@@ -101,14 +99,19 @@ This prop is not reactive (only used when the marker is mounted).
 
 ### Callbacks
 
-#### onDragStart: (evt: MarkerDragEvent) => void
+#### onDragStart: (evt: [MarkerDragEvent](/docs/api-reference/types.md#markerdragevent)) => void
 
 Called when dragging starts, if `draggable` is `true`.
 
-#### onDrag: (evt: MarkerDragEvent) => void
+#### onDrag: (evt: [MarkerDragEvent](/docs/api-reference/types.md#markerdragevent)) => void
 
 Called while dragging, if `draggable` is `true`.
 
-#### onDragEnd: (evt: MarkerDragEvent) => void
+#### onDragEnd: (evt: [MarkerDragEvent](/docs/api-reference/types.md#markerdragevent)) => void
 
 Called when dragging ends, if `draggable` is `true`.
+
+
+## Source
+
+[marker.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/marker.ts)

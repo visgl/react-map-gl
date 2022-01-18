@@ -9,6 +9,7 @@ import type {
   FitBoundsOptions,
   MapboxEvent,
   GeolocateEvent,
+  GeolocateResultEvent,
   GeolocateErrorEvent
 } from '../types';
 
@@ -52,16 +53,16 @@ export type GeolocateControlProps = {
   position?: ControlPosition;
 
   /** Called on each Geolocation API position update that returned as success. */
-  onGeolocate?: (e: GeolocateEvent) => void;
+  onGeolocate?: (e: GeolocateResultEvent) => void;
   /** Called on each Geolocation API position update that returned as an error. */
   onError?: (e: GeolocateErrorEvent) => void;
   /** Called on each Geolocation API position update that returned as success but user position
    * is out of map `maxBounds`. */
-  onOutOfMaxBounds?: (e: GeolocateEvent) => void;
+  onOutOfMaxBounds?: (e: GeolocateResultEvent) => void;
   /** Called when the GeolocateControl changes to the active lock state. */
-  onTrackUserLocationStart?: (e: MapboxEvent) => void;
+  onTrackUserLocationStart?: (e: GeolocateEvent) => void;
   /** Called when the GeolocateControl changes to the background state. */
-  onTrackUserLocationEnd?: (e: MapboxEvent) => void;
+  onTrackUserLocationEnd?: (e: GeolocateEvent) => void;
 };
 
 const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>((props, ref) => {
@@ -72,19 +73,19 @@ const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>(
       const gc = new mapboxgl.GeolocateControl(props);
 
       gc.on('geolocate', e => {
-        thisRef.current.props.onGeolocate?.(e as GeolocateEvent);
+        thisRef.current.props.onGeolocate?.(e as GeolocateResultEvent);
       });
       gc.on('error', e => {
         thisRef.current.props.onError?.(e as GeolocateErrorEvent);
       });
       gc.on('outofmaxbounds', e => {
-        thisRef.current.props.onOutOfMaxBounds?.(e as GeolocateEvent);
+        thisRef.current.props.onOutOfMaxBounds?.(e as GeolocateResultEvent);
       });
       gc.on('trackuserlocationstart', e => {
-        thisRef.current.props.onTrackUserLocationStart?.(e as MapboxEvent);
+        thisRef.current.props.onTrackUserLocationStart?.(e as GeolocateEvent);
       });
       gc.on('trackuserlocationend', e => {
-        thisRef.current.props.onTrackUserLocationEnd?.(e as MapboxEvent);
+        thisRef.current.props.onTrackUserLocationEnd?.(e as GeolocateEvent);
       });
 
       return gc;

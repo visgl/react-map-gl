@@ -4,7 +4,7 @@ import {createPortal} from 'react-dom';
 import {useEffect, useMemo, useRef, useContext} from 'react';
 
 import mapboxgl from '../utils/mapboxgl';
-import type {MapboxEvent, Anchor, PointLike} from '../types';
+import type {PopupEvent, Anchor, PointLike} from '../types';
 
 import {MapContext} from './map';
 import {deepEqual} from '../utils/deep-equal';
@@ -57,8 +57,8 @@ export type PopupProps = {
    */
   maxWidth?: string;
 
-  onOpen?: (e: MapboxEvent) => void;
-  onClose?: (e: MapboxEvent) => void;
+  onOpen?: (e: PopupEvent) => void;
+  onClose?: (e: PopupEvent) => void;
   children?: React.ReactNode;
 };
 
@@ -81,10 +81,10 @@ function Popup(props: PopupProps) {
 
   useEffect(() => {
     popup.on('open', e => {
-      thisRef.current.props.onOpen?.(e as MapboxEvent);
+      thisRef.current.props.onOpen?.(e as PopupEvent);
     });
     popup.on('close', e => {
-      thisRef.current.props.onClose?.(e as MapboxEvent);
+      thisRef.current.props.onClose?.(e as PopupEvent);
     });
     popup.setDOMContent(container).addTo(map);
 

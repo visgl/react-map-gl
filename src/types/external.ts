@@ -1,4 +1,4 @@
-import type {PaddingOptions, MapboxEvent, LngLat} from 'mapbox-gl';
+import type {PaddingOptions, MapboxEvent, Popup, Marker, GeolocateControl, LngLat} from 'mapbox-gl';
 
 /** Defines the projection that the map should be rendered in */
 export type ProjectionSpecification = {
@@ -38,17 +38,44 @@ export interface ImmutableLike {
 
 /* Events */
 
-export type ViewStateChangeEvent = MapboxEvent & {
-  viewState: ViewState;
+export type ViewStateChangeEvent =
+  | (MapboxEvent<MouseEvent | TouchEvent | WheelEvent | undefined> & {
+      type: 'movestart' | 'move' | 'moveend' | 'zoomstart' | 'zoom' | 'zoomend';
+      viewState: ViewState;
+    })
+  | (MapboxEvent<MouseEvent | TouchEvent | undefined> & {
+      type:
+        | 'rotatestart'
+        | 'rotate'
+        | 'rotateend'
+        | 'dragstart'
+        | 'drag'
+        | 'dragend'
+        | 'pitchstart'
+        | 'pitch'
+        | 'pitchend';
+      viewState: ViewState;
+    });
+
+export type PopupEvent = {
+  type: 'open' | 'close';
+  target: Popup;
 };
 
-export type MarkerDragEvent = MapboxEvent & {
+export type MarkerDragEvent = {
+  type: 'dragstart' | 'drag' | 'dragend';
+  target: Marker;
   lngLat: LngLat;
 };
 
-export type GeolocateEvent = MapboxEvent & GeolocationPosition;
+export type GeolocateEvent = {
+  type: string;
+  target: GeolocateControl;
+};
 
-export type GeolocateErrorEvent = MapboxEvent & GeolocationPositionError;
+export type GeolocateResultEvent = GeolocateEvent & GeolocationPosition;
+
+export type GeolocateErrorEvent = GeolocateEvent & GeolocationPositionError;
 
 /* re-export mapbox types */
 
@@ -65,7 +92,7 @@ export type {
   PositionOptions,
   FitBoundsOptions,
   DragPanOptions,
-  InteractiveOptions,
+  InteractiveOptions as ZoomRotateOptions,
   TransformRequestFunction,
   Light,
   Fog,
@@ -90,15 +117,16 @@ export type {
   VideoSource,
   ImageSource,
   CanvasSource,
-  VectorSourceImpl,
-  VectorSource,
+  VectorSourceImpl as VectorTileSource,
+  VectorSource as VectorSourceRaw,
   RasterSource,
   RasterDemSource,
-  MapMouseEvent,
   MapLayerMouseEvent,
   MapLayerTouchEvent,
+  MapBoxZoomEvent,
   MapWheelEvent,
-  MapDataEvent,
+  MapStyleDataEvent,
+  MapSourceDataEvent,
   MapboxEvent,
   ErrorEvent,
   MapboxGeoJSONFeature,

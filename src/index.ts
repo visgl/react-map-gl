@@ -21,7 +21,7 @@ export type {MarkerProps} from './components/marker';
 export type {PopupProps} from './components/popup';
 export type {AttributionControlProps} from './components/attribution-control';
 export type {FullscreenControlProps} from './components/fullscreen-control';
-export type {GeolocateControlProps} from './components/geolocate-control';
+export type {GeolocateControlProps, GeolocateControlRef} from './components/geolocate-control';
 export type {NavigationControlProps} from './components/navigation-control';
 export type {ScaleControlProps} from './components/scale-control';
 export type {SourceProps} from './components/source';
