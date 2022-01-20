@@ -1,5 +1,19 @@
 # What's new
 
+## react-map-gl v7.0
+
+Release date: TBD
+
+v7 is a complete rewrite of the library. It addresses many long-standing issues in v5 and v6 limited by legacy architecture decisions. The most notable results of this redesign are:
+
+- Performance: minimize the overhead of React, offer the same fast and smooth interaction as the native library
+- Lightweight: the ESM build size is reduced from 219k to 57k
+- Predictability: Components behave the same as their mapbox counterparts. Props are mapped 1:1 from the native options wherever appropriate. Almost all imperative APIs (`flyTo`, `fitBounds` etc.) can now be called directly without breaking the React binding.
+- Compatibility: first and third-party plugins! Directly use [mapbox-gl-draw](https://github.com/visgl/react-map-gl/tree/master/examples/draw-polygon), [mapbox-gl-geocoder](https://github.com/visgl/react-map-gl/tree/master/examples/geocoder), to name a few.
+- TypeScript compliant: the code base is now entirely written in TypeScript, and all types can be [imported](/docs/api-reference/types.md).
+
+Visit the [upgrade guide](/docs/upgrade-guide.md) if you are trying to upgrade from v5 and v6.
+
 ## react-map-gl v5.3/v6.1
 
 Release date: Jan 27, 2020
