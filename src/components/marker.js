@@ -33,7 +33,9 @@ const propTypes = Object.assign({}, draggableControlPropTypes, {
   // Longitude of the anchor point
   longitude: PropTypes.number.isRequired,
   // Latitude of the anchor point
-  latitude: PropTypes.number.isRequired
+  latitude: PropTypes.number.isRequired,
+  // Custom style
+  style: PropTypes.object
 });
 
 const defaultProps = Object.assign({}, draggableControlDefaultProps, {
@@ -70,7 +72,7 @@ function Marker(props) {
   const thisRef = useDraggableControl(props);
   const {state, containerRef} = thisRef;
 
-  const {children, className, draggable} = props;
+  const {children, className, draggable, style} = props;
   const {dragPos} = state;
 
   const [x, y] = getPosition(thisRef);
@@ -84,7 +86,8 @@ function Marker(props) {
       left: 0,
       top: 0,
       transform,
-      cursor
+      cursor,
+      ...style
     };
 
     return (
