@@ -2,7 +2,7 @@
 
 ## Upgrading to v7.0
 
-v7 is a complete rewrite of the library. It is redesigned to be fast, lightweight, fully typed, to behave the same and expose the same APIs as the wrapped map library, and to provide the maxium compatibility with third-party plugins. To take advantages of these new features, you need to make some changes to your code that was previously depending on react-map-gl v5 and v6.
+v7 is a complete rewrite of the library. It is redesigned to be fast, lightweight, fully typed, to behave the same and expose the same APIs as the wrapped map library, and to provide the maximum compatibility with third-party plugins. To take advantages of these new features, you need to make some changes to your code that was previously depending on react-map-gl v5 and v6.
 
 > If you are using react-map-gl controls (`Marker`, `Popup`, `NavigationControl` etc.) with deck.gl's `ContextProvider`, do not upgrade to this version. The old approach no longer works with v7. We are moving the support for this use case to a new project that does not depend on mapbox.
 
