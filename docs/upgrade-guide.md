@@ -1,5 +1,53 @@
 # Upgrade Guide
 
+## Upgrading to v7.0
+
+v7 is a complete rewrite of the library. It is redesigned to be fast, lightweight, fully typed, to behave the same and expose the same APIs as the wrapped map library, and to provide the maximum compatibility with third-party plugins. To take advantages of these new features, you need to make some changes to your code that was previously depending on react-map-gl v5 and v6.
+
+> If you are using react-map-gl controls (`Marker`, `Popup`, `NavigationControl` etc.) with deck.gl's `ContextProvider`, do not upgrade to this version. The old approach no longer works with v7. We are moving the support for this use case to a new project that does not depend on mapbox.
+
+### Dependencies
+
+- Add `mapbox-gl` (or a compatible fork) to your package.json. `react-map-gl` no longer lists a specific map renderer in its dependencies, so you are free to use it with Mapbox v1, v2 or Maplibre.
+- `viewport-mercator-project` (an alias of `@math.gl/web-mercator`) is no longer a dependency. You can still install the library on the side as a utility for viewport-related math, but it's no longer required.
+
+### Module exports
+
+- `InteractiveMap` and `StaticMap` are removed. Instead, import `Map`.
+- `setRTLTextPlugin` is removed. Use the `Map` component's `RTLTextPlugin` prop (default enabled).
+- `MapController` is removed.  v7.0 has removed its own implementation of user input handling in favor of the [native handlers](https://docs.mapbox.com/mapbox-gl-js/api/handlers/). If you are using a custom implementation of `MapController`, check if the native handlers offer options to address your application's needs.
+- `MapContext` and `useMapControl` are removed. Check out the new API [useMap](/docs/api-reference/use-map.md) and [useControl](/docs/api-reference/use-control.md).
+- The overlay components (`HTMLOverlay`, `CanvasOverlay` and `SVGOveray`) are removed. Check out [this example](https://github.com/visgl/react-map-gl/tree/master/examples/custom-overlay) for implementing similar controls in your own application.
+- `LinearInterpolator` and `FlyToInterpolator` are removed. Use `map.easeTo()` and `map.flyTo()` instead, see [this example](https://github.com/visgl/react-map-gl/tree/master/examples/viewport-animation).
+
+### Map
+
+[documentation](/docs/api-reference/map.md)
+
+- Renamed props for better consistency with the wrapped library:
+  + `mapboxApiAccessToken` is now `mapboxAccessToken`
+  + `mapboxApiUrl` is now `baseApiUrl`
+  + `preventStyleDiffing` (default `false`) is replaced with `styleDiffing` (default `true`)
+- `mapStyle` should be explicitly specified. The default value has changed fro `"mapbox://styles/mapbox/light-v9"` to an empty style.
+- The following props are removed and apps should use `style` instead:
+  + `width`
+  + `height`
+  + `visible`
+- `onViewportChange`, `onViewStateChange` and `onInteractionStateChange` are removed. You can either use `Map` as an uncontrolled component with the new `initialViewState` prop, or if you need to manage the camera state externally (e.g. in Redux), use the `onMove` callback instead. See examples in [state management](/docs/get-started/state-management.md).
+- `transition*` props are removed. Use `map.easeTo()` and `map.flyTo()` instead, see [this example](https://github.com/visgl/react-map-gl/tree/master/examples/viewport-animation).
+- `mapOptions` is removed. Almost all of the options for the native `Map` class are exposed as props. 
+- `onHover` is removed. Use `onMouseMove` or `onMouseEnter`.
+- The event argument is changed for all interaction callbacks. See documentation for details.
+- `getCursor` is removed as part of the effort to get `Map` behave the same as the native component. To set the cursor, use the `cursor` prop. Follow [this example](https://github.com/visgl/react-map-gl/tree/master/examples/custom-cursor) to change cursor on hover.
+- `touchAction` and `eventRecognizerOptions` are removed. Check out the `cooperativeGestures` prop.
+
+### Other components
+
+- `capture*` props are removed.
+- `*label` props are removed. Use `Map`'s `locale` prop.
+- All map controls' props are now strictly aligned with their mapbox-gl counterparts. In heading this direction, we are able to remove a significant amount of custom code and have the components behave more predictably for developers switching from the native library. If your application is relying on an old feature that is no longer supported, please open a topic on [Discussion](https://github.com/visgl/react-map-gl/discussions) so we can review on a case-by-case basis.
+
+
 ## Upgrading to v5.3/v6.1
 
 - `MapContext` is now an official API. The experimental `_MapContext` export will be removed in a future release.
