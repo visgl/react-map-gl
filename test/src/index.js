@@ -9,3 +9,4 @@ import './components/use-map.spec';
 import './utils/deep-equal.spec';
 import './utils/transform.spec';
 import './utils/style-utils.spec';
+import './utils/apply-react-style.spec';

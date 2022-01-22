@@ -83,6 +83,10 @@ Default: `240px`
 
 A string that sets the CSS property of the popup's maximum width.
 
+#### style: CSSProperties
+
+CSS style override that applies to the popup's container.
+
 ### Callbacks
 
 #### onOpen: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void

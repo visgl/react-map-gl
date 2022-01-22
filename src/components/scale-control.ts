@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {useEffect} from 'react';
+import {applyReactStyle} from '../utils/apply-react-style';
 import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
@@ -15,6 +17,8 @@ export type ScaleControlProps = {
   maxWidth?: number;
   /** Placement of the control relative to the map. */
   position?: ControlPosition;
+  /** CSS style override, applied to the control's container */
+  style?: React.CSSProperties;
 };
 
 const defaultProps: ScaleControlProps = {
@@ -34,6 +38,11 @@ function ScaleControl(props: ScaleControlProps): null {
     // This method will trigger an update
     ctrl.setUnit(props.unit);
   }
+
+  useEffect(() => {
+    // @ts-ignore
+    applyReactStyle(ctrl._container, props.style);
+  }, [props.style]);
 
   return null;
 }

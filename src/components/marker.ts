@@ -2,6 +2,7 @@
 import * as React from 'react';
 import {createPortal} from 'react-dom';
 import {useEffect, useMemo, useRef, useContext} from 'react';
+import {applyReactStyle} from '../utils/apply-react-style';
 
 import mapboxgl from '../utils/mapboxgl';
 import type {MarkerDragEvent, MapboxPopup, PointLike, Anchor, Alignment} from '../types';
@@ -57,6 +58,8 @@ export type MarkerProps = {
   scale?: number;
   /** A Popup instance that is bound to the marker */
   popup?: MapboxPopup;
+  /** CSS style override, applied to the control's container */
+  style?: React.CSSProperties;
   onDragStart?: (e: MarkerDragEvent) => void;
   onDrag?: (e: MarkerDragEvent) => void;
   onDragEnd?: (e: MarkerDragEvent) => void;
@@ -112,6 +115,10 @@ function Marker(props: MarkerProps) {
       marker.remove();
     };
   }, []);
+
+  useEffect(() => {
+    applyReactStyle(marker.getElement(), props.style);
+  }, [props.style]);
 
   if (marker.getLngLat().lng !== props.longitude || marker.getLngLat().lat !== props.latitude) {
     marker.setLngLat([props.longitude, props.latitude]);
