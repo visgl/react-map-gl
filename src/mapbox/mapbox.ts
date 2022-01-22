@@ -416,10 +416,17 @@ export default class Mapbox {
   private _internalUpdate: boolean = false;
   private _inRender: boolean = false;
   private _hoveredFeatures: MapboxGeoJSONFeature[] = null;
-  private _moved: boolean = false;
-  private _zoomed: boolean = false;
-  private _pitched: boolean = false;
-  private _rotated: boolean = false;
+  private _deferredEvents: {
+    move: boolean;
+    zoom: boolean;
+    pitch: boolean;
+    rotate: boolean;
+  } = {
+    move: false,
+    zoom: false,
+    pitch: false,
+    rotate: false
+  };
 
   constructor(MapClass: typeof MapboxMap, props: MapboxProps) {
     this._MapClass = MapClass;
@@ -442,6 +449,7 @@ export default class Mapbox {
     if (settingsChanged) {
       this._renderTransform = this._map.transform.clone();
     }
+    const sizeChanged = this._updateSize(props);
     const viewStateChanged = this._updateViewState(props, true);
     this._updateStyle(props, oldProps);
     this._updateStyleComponents(props, oldProps);
@@ -450,7 +458,7 @@ export default class Mapbox {
     // If 1) view state has changed to match props and
     //    2) the props change is not triggered by map events,
     // it's driven by an external state change. Redraw immediately
-    if (settingsChanged || (viewStateChanged && !this._map.isMoving())) {
+    if (settingsChanged || sizeChanged || (viewStateChanged && !this._map.isMoving())) {
       this.redraw();
     }
   }
@@ -496,17 +504,28 @@ export default class Mapbox {
     // Hack
     // Insert code into map's render cycle
     const renderMap = map._render;
-    map._render = this._render.bind(this, renderMap);
+    map._render = (arg: number) => {
+      this._inRender = true;
+      renderMap.call(map, arg);
+      this._inRender = false;
+    };
     const runRenderTaskQueue = map._renderTaskQueue.run;
     map._renderTaskQueue.run = (arg: number) => {
       runRenderTaskQueue.call(map._renderTaskQueue, arg);
       this._onBeforeRepaint();
     };
+    map.on('render', () => this._onAfterRepaint());
     // Insert code into map's event pipeline
     const fireEvent = map.fire;
     map.fire = this._fireEvent.bind(this, fireEvent);
 
     // add listeners
+    map.on('resize', () => {
+      this._renderTransform.resize(map.transform.width, map.transform.height);
+    });
+    map.on('styledata', () => this._updateStyleComponents(this.props, {}));
+    map.on('sourcedata', () => this._updateStyleComponents(this.props, {}));
+    map.on('error', this._onError);
     for (const eventName in pointerEvents) {
       map.on(eventName, this._onPointerEvent);
     }
@@ -516,9 +535,6 @@ export default class Mapbox {
     for (const eventName in otherEvents) {
       map.on(eventName, this._onEvent);
     }
-    map.on('styledata', () => this._updateStyleComponents(this.props, {}));
-    map.on('sourcedata', () => this._updateStyleComponents(this.props, {}));
-    map.on('error', this._onError);
     this._map = map;
   }
 
@@ -545,6 +561,23 @@ export default class Mapbox {
     }
   }
 
+  /* Trigger map resize if size is controlled
+     @param {object} nextProps
+     @returns {bool} true if size has changed
+   */
+  _updateSize(nextProps: MapboxProps): boolean {
+    // Check if size is controlled
+    const {viewState} = nextProps;
+    if (viewState) {
+      const map = this._map;
+      if (viewState.width !== map.transform.width || viewState.height !== map.transform.height) {
+        map.resize();
+        return true;
+      }
+    }
+    return false;
+  }
+
   // Adapted from map.jumpTo
   /* Update camera to match props
      @param {object} nextProps
@@ -566,11 +599,12 @@ export default class Mapbox {
     });
 
     if (changed && triggerEvents) {
+      const deferredEvents = this._deferredEvents;
       // Delay DOM control updates to the next render cycle
-      this._moved = true;
-      this._zoomed = this._zoomed || zoom !== tr.zoom;
-      this._rotated = this._rotated || bearing !== tr.bearing;
-      this._pitched = this._pitched || pitch !== tr.pitch;
+      deferredEvents.move = true;
+      deferredEvents.zoom ||= zoom !== tr.zoom;
+      deferredEvents.rotate ||= bearing !== tr.bearing;
+      deferredEvents.pitch ||= pitch !== tr.pitch;
     }
 
     // Avoid manipulating the real transform when interaction/animation is ongoing
@@ -725,6 +759,10 @@ export default class Mapbox {
   }
 
   _onPointerEvent = (e: MapLayerMouseEvent | MapLayerTouchEvent) => {
+    if (e.type === 'mousemove' || e.type === 'mouseout') {
+      this._updateHover(e);
+    }
+
     // @ts-ignore
     const cb = this.props[pointerEvents[e.type]];
     if (cb) {
@@ -745,13 +783,15 @@ export default class Mapbox {
   };
 
   _onCameraEvent = (e: ViewStateChangeEvent) => {
-    if (this._internalUpdate) {
-      return;
+    if (!this._internalUpdate) {
+      // @ts-ignore
+      const cb = this.props[cameraEvents[e.type]];
+      if (cb) {
+        cb(e);
+      }
     }
-    // @ts-ignore
-    const cb = this.props[cameraEvents[e.type]];
-    if (cb) {
-      cb(e);
+    if (e.type in this._deferredEvents) {
+      this._deferredEvents[e.type] = false;
     }
   };
 
@@ -760,22 +800,8 @@ export default class Mapbox {
     const tr = map.transform;
 
     const eventType = typeof event === 'string' ? event : event.type;
-    switch (eventType) {
-      case 'resize':
-        this._renderTransform.resize(tr.width, tr.height);
-        break;
-
-      case 'move':
-        this._updateViewState(this.props, false);
-        break;
-
-      case 'mousemove':
-      case 'mouseout':
-        // @ts-ignore
-        this._updateHover(event);
-        break;
-
-      default:
+    if (eventType === 'move') {
+      this._updateViewState(this.props, false);
     }
     if (eventType in cameraEvents) {
       if (typeof event === 'object') {
@@ -795,53 +821,30 @@ export default class Mapbox {
     return map;
   }
 
-  _render(baseRender: Function, arg: number) {
-    const map = this._map;
-    const props = this.props;
-    // map.transform will be swapped out in _onBeforeRender
-    const tr = map.transform;
-    this._inRender = true;
-
-    // Check if size is controlled
-    if (props.viewState) {
-      const {width, height} = props.viewState;
-      if (width !== tr.width || height !== tr.height) {
-        map.resize();
-      }
-    }
-
-    if (this._moved) {
-      this._internalUpdate = true;
-      map.fire('move');
-
-      if (this._zoomed) {
-        map.fire('zoom');
-        this._zoomed = false;
-      }
-
-      if (this._rotated) {
-        map.fire('rotate');
-        this._rotated = false;
-      }
-
-      if (this._pitched) {
-        map.fire('pitch');
-        this._pitched = false;
-      }
-
-      this._moved = false;
-      this._internalUpdate = false;
-    }
-
-    baseRender.call(map, arg);
-    map.transform = tr;
-    this._inRender = false;
-  }
-
+  // All camera manipulations are complete, ready to repaint
   _onBeforeRepaint() {
+    const map = this._map;
+
+    // If there are camera changes driven by props, invoke camera events so that DOM controls are synced
+    this._internalUpdate = true;
+    for (const eventType in this._deferredEvents) {
+      if (this._deferredEvents[eventType]) {
+        map.fire(eventType);
+      }
+    }
+    this._internalUpdate = false;
+
+    const tr = this._map.transform;
     // Make sure camera matches the current props
     this._map.transform = this._renderTransform;
+
+    this._onAfterRepaint = () => {
+      // Restores camera state before render/load events are fired
+      this._map.transform = tr;
+    };
   }
+
+  _onAfterRepaint: () => void;
 }
 
 /**

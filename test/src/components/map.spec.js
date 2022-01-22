@@ -70,14 +70,16 @@ test('Map#uncontrolled', async t => {
 test('Map#controlled#no-update', async t => {
   t.plan(5);
 
+  const mapRef = {current: null};
   function onRender(e) {
-    const {lat} = e.target.getCenter();
+    const {lat} = mapRef.current.getCenter();
     t.is(lat, 40, `latitude should match props: ${lat}`);
   }
 
   act(() => {
     create(
       <Map
+        ref={mapRef}
         longitude={-100}
         latitude={40}
         zoom={4}
@@ -93,9 +95,10 @@ test('Map#controlled#no-update', async t => {
 test('Map#controlled#mirrow-back', async t => {
   t.plan(5);
 
+  const mapRef = {current: null};
   let lastLat;
   function onRender(e) {
-    const {lat} = e.target.getCenter();
+    const {lat} = mapRef.current.getCenter();
     t.is(lat, lastLat, `latitude should match state: ${lat}`);
   }
 
@@ -110,6 +113,7 @@ test('Map#controlled#mirrow-back', async t => {
 
     return (
       <Map
+        ref={mapRef}
         {...viewState}
         onLoad={e => {
           e.target.easeTo({center: [-122, 38], zoom: 14});
@@ -128,9 +132,10 @@ test('Map#controlled#mirrow-back', async t => {
 test('Map#controlled#delayed-update', async t => {
   t.plan(6);
 
+  const mapRef = {current: null};
   let lastLat;
   function onRender(e) {
-    const {lat} = e.target.getCenter();
+    const {lat} = mapRef.current.getCenter();
     t.is(lat, lastLat, `latitude should match state: ${lat}`);
   }
 
@@ -145,6 +150,7 @@ test('Map#controlled#delayed-update', async t => {
 
     return (
       <Map
+        ref={mapRef}
         {...viewState}
         onLoad={e => {
           e.target.easeTo({center: [-122, 38], zoom: 14});
