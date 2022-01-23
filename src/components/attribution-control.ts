@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {useEffect} from 'react';
+import {applyReactStyle} from '../utils/apply-react-style';
 import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
@@ -14,10 +16,19 @@ export type AttributionControlProps = {
   customAttribution?: string | string[];
   /** Placement of the control relative to the map. */
   position?: ControlPosition;
+  /** CSS style override, applied to the control's container */
+  style?: React.CSSProperties;
 };
 
 function AttributionControl(props: AttributionControlProps): null {
-  useControl(() => new mapboxgl.AttributionControl(props), {position: props.position});
+  const ctrl = useControl(() => new mapboxgl.AttributionControl(props), {
+    position: props.position
+  }) as mapboxgl.AttributionControl;
+
+  useEffect(() => {
+    // @ts-ignore
+    applyReactStyle(ctrl._container, props.style);
+  }, [props.style]);
 
   return null;
 }

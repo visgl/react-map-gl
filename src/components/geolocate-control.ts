@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {forwardRef, useImperativeHandle, useRef} from 'react';
+import {forwardRef, useImperativeHandle, useRef, useEffect} from 'react';
+import {applyReactStyle} from '../utils/apply-react-style';
 import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
@@ -7,7 +8,6 @@ import type {
   ControlPosition,
   PositionOptions,
   FitBoundsOptions,
-  MapboxEvent,
   GeolocateEvent,
   GeolocateResultEvent,
   GeolocateErrorEvent
@@ -51,6 +51,8 @@ export type GeolocateControlProps = {
   showUserHeading?: boolean;
   /** Placement of the control relative to the map. */
   position?: ControlPosition;
+  /** CSS style override, applied to the control's container */
+  style?: React.CSSProperties;
 
   /** Called on each Geolocation API position update that returned as success. */
   onGeolocate?: (e: GeolocateResultEvent) => void;
@@ -102,6 +104,11 @@ const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>(
     }),
     []
   );
+
+  useEffect(() => {
+    // @ts-ignore
+    applyReactStyle(ctrl._container, props.style);
+  }, [props.style]);
 
   return null;
 });

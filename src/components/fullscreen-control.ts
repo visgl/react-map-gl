@@ -1,5 +1,7 @@
 /* global document */
 import * as React from 'react';
+import {useEffect} from 'react';
+import {applyReactStyle} from '../utils/apply-react-style';
 import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
@@ -11,16 +13,23 @@ export type FullscreenControlProps = {
   containerId?: string;
   /** Placement of the control relative to the map. */
   position?: ControlPosition;
+  /** CSS style override, applied to the control's container */
+  style?: React.CSSProperties;
 };
 
 function FullscreenControl(props: FullscreenControlProps): null {
-  useControl(
+  const ctrl = useControl(
     () =>
       new mapboxgl.FullscreenControl({
         container: props.containerId && document.getElementById(props.containerId)
       }),
     {position: props.position}
-  );
+  ) as mapboxgl.FullscreenControl;
+
+  useEffect(() => {
+    // @ts-ignore
+    applyReactStyle(ctrl._controlContainer, props.style);
+  }, [props.style]);
 
   return null;
 }

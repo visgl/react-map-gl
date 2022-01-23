@@ -97,6 +97,10 @@ The default scale (`1`) corresponds to a height of `41px` and a width of `27px`.
 
 This prop is not reactive (only used when the marker is mounted).
 
+#### style: CSSProperties
+
+CSS style override that applies to the marker's container.
+
 ### Callbacks
 
 #### onDragStart: (evt: [MarkerDragEvent](/docs/api-reference/types.md#markerdragevent)) => void

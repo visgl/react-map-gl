@@ -34,6 +34,10 @@ Default: `'bottom-left'`
 
 Placement of the control relative to the map. Note that this prop is only used when the component first mounts.
 
+#### style: CSSProperties
+
+CSS style override that applies to the control's container.
+
 #### unit: 'imperial' | 'metric' | 'nautical'
 
 Default: `'metric'`

@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {useEffect} from 'react';
+import {applyReactStyle} from '../utils/apply-react-style';
 import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
@@ -19,10 +21,19 @@ export type NavigationControlProps = {
   visualizePitch?: boolean;
   /** Placement of the control relative to the map. */
   position?: ControlPosition;
+  /** CSS style override, applied to the control's container */
+  style?: React.CSSProperties;
 };
 
 function NavigationControl(props: NavigationControlProps): null {
-  useControl(() => new mapboxgl.NavigationControl(props), {position: props.position});
+  const ctrl = useControl(() => new mapboxgl.NavigationControl(props), {
+    position: props.position
+  }) as mapboxgl.NavigationControl;
+
+  useEffect(() => {
+    // @ts-ignore
+    applyReactStyle(ctrl._container, props.style);
+  }, [props.style]);
 
   return null;
 }
