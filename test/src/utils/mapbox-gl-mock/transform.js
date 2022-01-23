@@ -1,5 +1,6 @@
 import {wrap, clamp} from './util';
 
+import LngLat from './lng_lat';
 import EdgeInsets from './edge_insets';
 
 export default class Transform {
@@ -14,7 +15,7 @@ export default class Transform {
     this.maxLng = 180;
     this.width = 1;
     this.height = 1;
-    this._center = {lng: 0, lat: 0};
+    this._center = new LngLat(0, 0);
     this._zoom = 0;
     this.angle = 0;
     this._pitch = 0;

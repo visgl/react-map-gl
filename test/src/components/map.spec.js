@@ -4,7 +4,7 @@ import * as React from 'react';
 import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
 
-import {sleep} from '../utils/test-utils';
+import {sleep, waitForMapLoad} from '../utils/test-utils';
 
 test('Map', async t => {
   t.ok(Map, 'Map is defined');
@@ -23,6 +23,8 @@ test('Map', async t => {
       />
     );
   });
+
+  await waitForMapLoad(mapRef);
 
   t.ok(map.root, 'Rendered <Map />');
   t.is(mapRef.current.getCenter().lng, -100, 'longitude is set');

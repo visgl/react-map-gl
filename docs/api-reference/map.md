@@ -454,6 +454,37 @@ Called when one of the map's sources loads or changes, including if a tile belon
 
 Props in this section are not reactive. They are only used once when the Map instance is constructed.
 
+#### mapLib: any
+
+Override the map library. By default, it loads the mapbox-gl module using [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports). This can be used to replace mapbox-gl with a compatible fork:
+
+```js
+import * as React from 'react';
+import Map from 'react-map-gl';
+import maplibregl from 'maplibre-gl';
+
+function App() {
+  return <Map mapLib={maplibregl} />;
+}
+```
+
+Or to load a pre-bundled version of the library:
+
+```html
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.0/mapbox-gl.js" ></script>
+```
+
+```js
+import * as React from 'react';
+import Map from 'react-map-gl';
+
+function App() {
+  return <Map mapLib={window.mapboxgl} />;
+}
+```
+
+Default: `import('mapbox-gl')`
+
 #### mapboxAccessToken: string
 
 Token used to access the Mapbox data service. See [about map tokens](/docs/get-started/mapbox-tokens.md).

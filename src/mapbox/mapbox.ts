@@ -371,7 +371,8 @@ const otherEvents = {
   remove: 'onRemove',
   data: 'onData',
   styledata: 'onStyleData',
-  sourcedata: 'onSourceData'
+  sourcedata: 'onSourceData',
+  error: 'onError'
 };
 const settingNames: (keyof MapboxProps)[] = [
   'minZoom',
@@ -525,7 +526,6 @@ export default class Mapbox {
     });
     map.on('styledata', () => this._updateStyleComponents(this.props, {}));
     map.on('sourcedata', () => this._updateStyleComponents(this.props, {}));
-    map.on('error', this._onError);
     for (const eventName in pointerEvents) {
       map.on(eventName, this._onPointerEvent);
     }
@@ -709,15 +709,6 @@ export default class Mapbox {
     const cb = this.props[otherEvents[e.type]];
     if (cb) {
       cb(e);
-    }
-  };
-
-  _onError = (e: ErrorEvent) => {
-    if (this.props.onError) {
-      this.props.onError(e);
-    } else {
-      // eslint-disable-next-line
-      console.error(e.error);
     }
   };
 

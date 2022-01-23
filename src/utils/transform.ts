@@ -1,5 +1,3 @@
-import mapboxgl from './mapboxgl';
-
 import type {MapboxProps} from '../mapbox/mapbox';
 import type {Transform, ViewState} from '../types';
 
@@ -31,7 +29,8 @@ export function applyViewStateToTransform(tr: Transform, props: MapboxProps): bo
 
   if ('longitude' in v && 'latitude' in v) {
     const center = tr.center;
-    tr.center = new mapboxgl.LngLat(v.longitude, v.latitude);
+    // @ts-ignore
+    tr.center = new center.constructor(v.longitude, v.latitude);
     changed = changed || center !== tr.center;
   }
   if ('zoom' in v) {

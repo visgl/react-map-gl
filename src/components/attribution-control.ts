@@ -1,10 +1,9 @@
 import * as React from 'react';
 import {useEffect} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
-import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
-import type {ControlPosition} from '../types';
+import type {ControlPosition, MapboxAttributionControl} from '../types';
 
 export type AttributionControlProps = {
   /**
@@ -21,9 +20,9 @@ export type AttributionControlProps = {
 };
 
 function AttributionControl(props: AttributionControlProps): null {
-  const ctrl = useControl(() => new mapboxgl.AttributionControl(props), {
+  const ctrl = useControl(({mapLib}) => new mapLib.AttributionControl(props), {
     position: props.position
-  }) as mapboxgl.AttributionControl;
+  }) as MapboxAttributionControl;
 
   useEffect(() => {
     // @ts-ignore

@@ -2,10 +2,9 @@
 import * as React from 'react';
 import {useEffect} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
-import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
-import type {ControlPosition} from '../types';
+import type {ControlPosition, MapboxFullscreenControl} from '../types';
 
 export type FullscreenControlProps = {
   /** Id of the DOM element which should be made full screen. By default, the map container
@@ -19,12 +18,12 @@ export type FullscreenControlProps = {
 
 function FullscreenControl(props: FullscreenControlProps): null {
   const ctrl = useControl(
-    () =>
-      new mapboxgl.FullscreenControl({
+    ({mapLib}) =>
+      new mapLib.FullscreenControl({
         container: props.containerId && document.getElementById(props.containerId)
       }),
     {position: props.position}
-  ) as mapboxgl.FullscreenControl;
+  ) as MapboxFullscreenControl;
 
   useEffect(() => {
     // @ts-ignore

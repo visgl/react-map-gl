@@ -1,10 +1,9 @@
 import * as React from 'react';
 import {useEffect} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
-import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
-import type {ControlPosition} from '../types';
+import type {ControlPosition, MapboxNavigationControl} from '../types';
 
 export type NavigationControlProps = {
   /** If true the compass button is included.
@@ -26,9 +25,9 @@ export type NavigationControlProps = {
 };
 
 function NavigationControl(props: NavigationControlProps): null {
-  const ctrl = useControl(() => new mapboxgl.NavigationControl(props), {
+  const ctrl = useControl(({mapLib}) => new mapLib.NavigationControl(props), {
     position: props.position
-  }) as mapboxgl.NavigationControl;
+  }) as MapboxNavigationControl;
 
   useEffect(() => {
     // @ts-ignore
