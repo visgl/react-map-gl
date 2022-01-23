@@ -1,5 +1,4 @@
 import * as React from 'react';
-import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
 import type {ControlPosition} from '../types';
@@ -17,7 +16,7 @@ export type AttributionControlProps = {
 };
 
 function AttributionControl(props: AttributionControlProps): null {
-  useControl(() => new mapboxgl.AttributionControl(props), {position: props.position});
+  useControl(({mapLib}) => new mapLib.AttributionControl(props), {position: props.position});
 
   return null;
 }

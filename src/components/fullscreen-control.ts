@@ -1,6 +1,5 @@
 /* global document */
 import * as React from 'react';
-import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
 import type {ControlPosition} from '../types';
@@ -15,8 +14,8 @@ export type FullscreenControlProps = {
 
 function FullscreenControl(props: FullscreenControlProps): null {
   useControl(
-    () =>
-      new mapboxgl.FullscreenControl({
+    ({mapLib}) =>
+      new mapLib.FullscreenControl({
         container: props.containerId && document.getElementById(props.containerId)
       }),
     {position: props.position}

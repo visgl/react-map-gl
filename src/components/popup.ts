@@ -3,7 +3,6 @@ import * as React from 'react';
 import {createPortal} from 'react-dom';
 import {useEffect, useMemo, useRef, useContext} from 'react';
 
-import mapboxgl from '../utils/mapboxgl';
 import type {PopupEvent, Anchor, PointLike} from '../types';
 
 import {MapContext} from './map';
@@ -68,13 +67,13 @@ function getClassList(className: string) {
 }
 
 function Popup(props: PopupProps) {
-  const map = useContext(MapContext);
+  const {map, mapLib} = useContext(MapContext);
   const container = useMemo(() => {
     return document.createElement('div');
   }, []);
   const popup = useMemo(() => {
     const options = {...props};
-    return new mapboxgl.Popup(options).setLngLat([props.longitude, props.latitude]);
+    return new mapLib.Popup(options).setLngLat([props.longitude, props.latitude]);
   }, []);
   const thisRef = useRef({props});
   thisRef.current.props = props;

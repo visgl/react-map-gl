@@ -1,33 +1,36 @@
 import {useContext, useMemo, useEffect} from 'react';
-import type {IControl, ControlPosition, MapboxMap} from '../types';
+import type {IControl, ControlPosition} from '../types';
 import {MapContext} from './map';
+import type {MapContextValue} from './map';
+
+type ControlOptions = {
+  position?: ControlPosition;
+};
 
 export default function useControl(
-  onCreate: () => IControl,
-  opts?: {
-    position?: ControlPosition;
-    onAdd?: (map: MapboxMap) => void;
-    onRemove?: (map: MapboxMap) => void;
-  }
+  onCreate: (context: MapContextValue) => IControl,
+  onRemove?: ((context: MapContextValue) => void) | ControlOptions,
+  opts?: ControlOptions
 ) {
-  const map = useContext(MapContext);
-  const ctrl = useMemo(onCreate, []);
+  const context = useContext(MapContext);
+  const ctrl = useMemo(() => onCreate(context), []);
 
   useEffect(() => {
-    if (map) {
-      map.addControl(ctrl, opts?.position);
-      opts?.onAdd?.(map);
-
-      return () => {
-        opts?.onRemove?.(map);
-        // Map might have been removed (parent effects are destroyed before child ones)
-        if (map.hasControl(ctrl)) {
-          map.removeControl(ctrl);
-        }
-      };
+    const {map} = context;
+    if (!map.hasControl(ctrl)) {
+      map.addControl(ctrl, (opts || (onRemove as ControlOptions))?.position);
     }
-    return undefined;
-  }, [map]);
+
+    return () => {
+      if (typeof onRemove === 'function') {
+        onRemove(context);
+      }
+      // Map might have been removed (parent effects are destroyed before child ones)
+      if (map.hasControl(ctrl)) {
+        map.removeControl(ctrl);
+      }
+    };
+  }, []);
 
   return ctrl;
 }

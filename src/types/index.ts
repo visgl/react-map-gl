@@ -8,7 +8,13 @@ export type {
   AnySourceData,
   AnySourceImpl,
   MapMouseEvent,
-  Popup as MapboxPopup
+  Marker as MapboxMarker,
+  Popup as MapboxPopup,
+  AttributionControl as MapboxAttributionControl,
+  FullscreenControl as MapboxFullscreenControl,
+  GeolocateControl as MapboxGeolocateControl,
+  NavigationControl as MapboxNavigationControl,
+  ScaleControl as MapboxScaleControl
 } from 'mapbox-gl';
 
 /**
@@ -18,7 +24,7 @@ export type {
 export type Transform = {
   width: number;
   height: number;
-  center: {lng: number; lat: number};
+  center: LngLat;
   zoom: number;
   bearing: number;
   pitch: number;
