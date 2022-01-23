@@ -4,6 +4,7 @@
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+    "module": "es2020",
     "moduleResolution": "node",
     "sourceMap": true
   }

@@ -1,3 +1,4 @@
+/* global document */
 import * as React from 'react';
 import {useState, useCallback, cloneElement} from 'react';
 import {useControl} from 'react-map-gl';
@@ -34,23 +35,23 @@ class OverlayControl implements IControl {
  * A custom control that rerenders arbitrary React content whenever the camera changes
  */
 function CustomOverlay(props: {children: React.ReactElement}) {
-  const [viewState, setViewState] = useState(null);
+  const [, setViewState] = useState({});
 
   const onMove = useCallback(evt => setViewState(evt.viewState), []);
 
-  const ctrl = useControl(() => new OverlayControl(), {
-    onAdd: (map: MapboxMap) => {
-      setViewState({});
+  const ctrl = useControl(
+    ({map}) => {
       map.on('move', onMove);
+      const overlay = new OverlayControl();
+      map.addControl(overlay);
+      return overlay;
     },
-    onRemove: (map: MapboxMap) => {
+    ({map}) => {
       map.off('move', onMove);
     }
-  }) as OverlayControl;
+  ) as OverlayControl;
 
-  return (
-    viewState && createPortal(cloneElement(props.children, {map: ctrl.getMap()}), ctrl.getElement())
-  );
+  return createPortal(cloneElement(props.children, {map: ctrl.getMap()}), ctrl.getElement());
 }
 
 export default React.memo(CustomOverlay);

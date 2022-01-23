@@ -5,6 +5,7 @@ import Map from 'react-map-gl';
 import GeocoderControl from './geocoder-control';
 import ControlPanel from './control-panel';
 
+// eslint-disable-next-line
 const TOKEN = process.env.MapboxAccessToken; // Set your mapbox token here
 
 export default function App() {

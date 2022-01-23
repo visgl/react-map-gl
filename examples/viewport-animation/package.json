@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "webpack-dev-server --progress --hot --open",
-    "start-local": "webpack-dev-server --env local --progress --hot --open"
+    "start-local": "webpack-dev-server --env local --progress --hot --open",
+    "build": "webpack --env local --mode=production -o ./dist"
   },
   "dependencies": {
     "react": "^17.0.0",
