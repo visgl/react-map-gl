@@ -2,6 +2,7 @@
 import * as React from 'react';
 import {createPortal} from 'react-dom';
 import {useEffect, useMemo, useRef, useContext} from 'react';
+import {applyReactStyle} from '../utils/apply-react-style';
 
 import mapboxgl from '../utils/mapboxgl';
 import type {PopupEvent, Anchor, PointLike} from '../types';
@@ -56,6 +57,8 @@ export type PopupProps = {
    * @default "240px"
    */
   maxWidth?: string;
+  /** CSS style override, applied to the control's container */
+  style?: React.CSSProperties;
 
   onOpen?: (e: PopupEvent) => void;
   onClose?: (e: PopupEvent) => void;
@@ -92,6 +95,10 @@ function Popup(props: PopupProps) {
       popup.remove();
     };
   }, []);
+
+  useEffect(() => {
+    applyReactStyle(popup.getElement(), props.style);
+  }, [props.style]);
 
   if (popup.isOpen()) {
     if (popup.getLngLat().lng !== props.longitude || popup.getLngLat().lat !== props.latitude) {

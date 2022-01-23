@@ -20,6 +20,9 @@ export default class Popup extends Evented {
     this._map._removeMarker(this);
     this._map = null;
   }
+  getElement() {
+    return null;
+  }
 
   isOpen() {
     return this._map !== null;

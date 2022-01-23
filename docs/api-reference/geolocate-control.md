@@ -76,6 +76,10 @@ Default: `'top-right'`
 
 Placement of the control relative to the map.
 
+#### style: CSSProperties
+
+CSS style override that applies to the control's container.
+
 #### showAccuracyCircle: boolean
 
 Default: `true`
