@@ -1,10 +1,9 @@
 import * as React from 'react';
 import {useEffect} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
-import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
-import type {ControlPosition} from '../types';
+import type {ControlPosition, MapboxScaleControl} from '../types';
 
 export type ScaleControlProps = {
   /** Unit of the distance.
@@ -27,9 +26,9 @@ const defaultProps: ScaleControlProps = {
 };
 
 function ScaleControl(props: ScaleControlProps): null {
-  const ctrl = useControl(() => new mapboxgl.ScaleControl(props), {
+  const ctrl = useControl(({mapLib}) => new mapLib.ScaleControl(props), {
     position: props.position
-  }) as mapboxgl.ScaleControl;
+  }) as MapboxScaleControl;
 
   // @ts-ignore
   if (ctrl.options.unit !== props.unit || ctrl.options.maxWidth !== props.maxWidth) {

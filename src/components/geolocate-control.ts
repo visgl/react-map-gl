@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {forwardRef, useImperativeHandle, useRef, useEffect} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
-import mapboxgl from '../utils/mapboxgl';
 import useControl from './use-control';
 
 import type {
   ControlPosition,
   PositionOptions,
   FitBoundsOptions,
+  MapboxGeolocateControl,
   GeolocateEvent,
   GeolocateResultEvent,
   GeolocateErrorEvent
@@ -71,8 +71,8 @@ const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>(
   const thisRef = useRef({props});
 
   const ctrl = useControl(
-    () => {
-      const gc = new mapboxgl.GeolocateControl(props);
+    ({mapLib}) => {
+      const gc = new mapLib.GeolocateControl(props);
 
       gc.on('geolocate', e => {
         thisRef.current.props.onGeolocate?.(e as GeolocateResultEvent);
@@ -93,7 +93,7 @@ const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>(
       return gc;
     },
     {position: props.position}
-  ) as mapboxgl.GeolocateControl;
+  ) as MapboxGeolocateControl;
 
   thisRef.current.props = props;
 

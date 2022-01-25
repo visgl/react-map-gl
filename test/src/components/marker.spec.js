@@ -3,9 +3,9 @@ import * as React from 'react';
 import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
 
-import {createPortalMock} from '../utils/test-utils';
+import {createPortalMock, waitForMapLoad} from '../utils/test-utils';
 
-test('Marker', t => {
+test('Marker', async t => {
   const restoreMock = createPortalMock();
   const mapRef = {current: null};
 
@@ -17,6 +17,8 @@ test('Marker', t => {
       </Map>
     );
   });
+
+  await waitForMapLoad(mapRef);
 
   const marker = mapRef.current.getMap()._markers[0];
   t.ok(marker, 'Marker is created');
