@@ -2,6 +2,12 @@
 
 # Version 5.3
 
+## 5.3.19 (Jan 25, 2022)
+
+- Fix crash in React 18 StrictMode (#1680)
+- Update MapState type (#1626)
+- Add support for style prop in Marker (#1698)
+
 ## 5.3.18 (Dec 6, 2021)
 
 - Omit container prop on mapOptions in types (#1603)
