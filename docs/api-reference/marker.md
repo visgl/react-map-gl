@@ -144,6 +144,12 @@ Stop propagation of dblclick event to the map component. Can be used to stop map
 
 Stop propagation of pointermove event to the map component. Can be used to stop map from calling the `onMouseMove` or `onTouchMove` callback when this component is hovered.
 
+##### `style` (object)
+
+- default: `undefined`
+
+Optional extra style object to be applied to the marker. Can be used to add properties like `zIndex` to the marker as inline style.
+
 ## Styling
 
 Like its Mapbox counterpart, this control relies on the mapbox-gl stylesheet to work properly. Make sure to add the stylesheet to your page.
