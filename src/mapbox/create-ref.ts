@@ -1,6 +1,5 @@
 import type {MapboxMap, LngLatLike, PointLike} from '../types';
 import type Mapbox from './mapbox';
-import mapboxgl from '../utils/mapboxgl';
 
 /** These methods may break the react binding if called directly */
 const skipMethods = [
@@ -30,7 +29,7 @@ export type MapRef = {
   getMap(): MapboxMap;
 } & Omit<MapboxMap, typeof skipMethods[number]>;
 
-export default function createRef(mapInstance: Mapbox): MapRef {
+export default function createRef(mapInstance: Mapbox, mapLib: any): MapRef {
   if (!mapInstance) {
     return null;
   }
@@ -47,10 +46,10 @@ export default function createRef(mapInstance: Mapbox): MapRef {
     getPadding: () => mapInstance.transform.padding,
     getBounds: () => mapInstance.transform.getBounds(),
     project: (lnglat: LngLatLike) => {
-      return mapInstance.transform.locationPoint(mapboxgl.LngLat.convert(lnglat));
+      return mapInstance.transform.locationPoint(mapLib.LngLat.convert(lnglat));
     },
     unproject: (point: PointLike) => {
-      return mapInstance.transform.pointLocation(mapboxgl.Point.convert(point));
+      return mapInstance.transform.pointLocation(mapLib.Point.convert(point));
     }
   };
 

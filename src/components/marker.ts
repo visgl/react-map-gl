@@ -4,7 +4,6 @@ import {createPortal} from 'react-dom';
 import {useEffect, useMemo, useRef, useContext} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
 
-import mapboxgl from '../utils/mapboxgl';
 import type {MarkerDragEvent, MapboxPopup, PointLike, Anchor, Alignment} from '../types';
 
 import {MapContext} from './map';
@@ -75,7 +74,7 @@ const defaultProps: Partial<MarkerProps> = {
 };
 
 function Marker(props: MarkerProps) {
-  const map = useContext(MapContext);
+  const {map, mapLib} = useContext(MapContext);
   const marker = useMemo(() => {
     let hasChildren = false;
     React.Children.forEach(props.children, el => {
@@ -88,7 +87,7 @@ function Marker(props: MarkerProps) {
       element: hasChildren ? document.createElement('div') : null
     };
 
-    return new mapboxgl.Marker(options).setLngLat([props.longitude, props.latitude]);
+    return new mapLib.Marker(options).setLngLat([props.longitude, props.latitude]);
   }, []);
   const thisRef = useRef({props});
   thisRef.current.props = props;

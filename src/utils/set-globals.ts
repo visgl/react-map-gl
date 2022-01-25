@@ -1,5 +1,3 @@
-import mapboxgl from './mapboxgl';
-
 export type GlobalSettings = {
   /** The map's default API URL for requesting tiles, styles, sprites, and glyphs. */
   baseApiUrl?: string;
@@ -30,15 +28,19 @@ const globalSettings = [
   'workerUrl'
 ] as const;
 
-export default function setGlobals(props: GlobalSettings) {
+export default function setGlobals(mapLib: any, props: GlobalSettings) {
   for (const key of globalSettings) {
     if (key in props) {
-      mapboxgl[key] = props[key];
+      mapLib[key] = props[key];
     }
   }
 
-  if (props.RTLTextPlugin && mapboxgl.getRTLTextPluginStatus() === 'unavailable') {
-    mapboxgl.setRTLTextPlugin(
+  if (
+    props.RTLTextPlugin &&
+    mapLib.getRTLTextPluginStatus &&
+    mapLib.getRTLTextPluginStatus() === 'unavailable'
+  ) {
+    mapLib.setRTLTextPlugin(
       props.RTLTextPlugin,
       (error?: Error) => {
         if (error) {

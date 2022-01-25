@@ -48,7 +48,7 @@ Find out your mapbox version by running `yarn list mapbox-gl` or `npm ls mapbox-
 Or embed it in your app by using [css-loader](https://webpack.github.io/docs/stylesheets.html) with Webpack or [postcss](https://www.npmjs.com/package/rollup-plugin-postcss) with rollup:
 
 ```js
-// app.js
+/// app.js
 import 'mapbox-gl/dist/mapbox-gl.css';
 ```
 
@@ -61,50 +61,28 @@ Install your choice of fork along with react-map-gl, for example:
 npm install --save react-map-gl maplibre-gl
 ```
 
-In your bundler's configuration, set the forked library to replace any reference from mapbox-gl. This can be done in Webpack with something like:
+Then override the `mapLib` prop of `Map`:
 
 ```js
-// webpack.config.js
-module.export = {
-  // ...
-  resolve: {
-    alias: {
-      'mapbox-gl': 'maplibre-gl'
-    }
-  }
+import * as React from 'react';
+import Map from 'react-map-gl';
+import maplibregl from 'maplibre-gl';
+
+function App() {
+  return <Map mapLib={maplibregl} />;
 }
 ```
 
-In rollup:
+To use the stylesheet from the fork:
 
-```js
-// rollup.config.js
-import alias from '@rollup/plugin-alias';
-
-module.exports = {
-  // ...
-  plugins: [
-    alias({
-      entries: [
-        { find: 'mapbox-gl', replacement: 'maplibre-gl' },
-      ]
-    })
-  ]
-};
+```html
+<!-- index.html -->
+<link href='https://unpkg.com/maplibre-gl@<YOUR_MAPLIBRE_VERSION>/dist/maplibre-gl.css' rel='stylesheet' />
 ```
 
-In Next.js:
+Or
 
 ```js
-// next.config.js
-const nextConfig = {
-  // ...
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      'mapbox-gl': 'maplibre-gl',
-    };
-  // ...
-  }
-};
+/// app.js
+import 'maplibre-gl/dist/maplibre-gl.css';
 ```

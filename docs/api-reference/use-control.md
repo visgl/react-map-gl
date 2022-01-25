@@ -42,22 +42,30 @@ See a full example [here](/examples/draw-polygon).
 ## Signature
 
 ```js
-useControl(onCreate: () => IControl, options?: {
-  position?: ControlPosition;
-  onAdd?: (map: MapboxMap) => void;
-  onRemove?: (map: MapboxMap) => void;
-}): IControl
+useControl(
+  onCreate: ({map: MapboxMap, mapLib: mapboxgl}) => IControl,
+  options?: {
+    position?: ControlPosition;
+  }
+): IControl
+
+useControl(
+  onCreate: ({map: MapboxMap, mapLib: mapboxgl}) => IControl,
+  onRemove: ({map: MapboxMap, mapLib: mapboxgl}) => void,
+  options?: {
+    position?: ControlPosition;
+  }
+): IControl
 ```
 
 The hook creates an [IControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#icontrol) instance, adds it to the map when it's available, and removes it upon unmount.
 
 Parameters:
 
-- `onCreate`: () => [IControl](/docs/api-reference/types.md#icontrol) - called to create an instance of the control.
+- `onCreate`: ({map: MapboxMap, mapLib: mapboxgl}) => [IControl](/docs/api-reference/types.md#icontrol) - called to create an instance of the control.
+- `onRemove`: ({map: MapboxMap, mapLib: mapboxgl}) => void - called when the control is about to be removed.
 - `options`: object
   + `position`: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' - control position relative to the map
-  + `onAdd`: (map: [MapboxMap](/docs/api-reference/types.md#mapboxmap)) => void - called after the control is added to a map
-  + `onRemove`: (map: [MapboxMap](/docs/api-reference/types.md#mapboxmap)) => void - called before the control is removed from a map
 
 Returns:
 
