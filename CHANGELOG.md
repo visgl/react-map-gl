@@ -2,6 +2,12 @@
 
 # Version 6.1
 
+## 6.1.19 (Jan 25, 2022)
+
+- Add support for style prop in Marker (#1696)
+- Fix crash in React 18 StrictMode (#1680)
+- Update MapState type (#1626)
+
 ## 6.1.18 (Dec 6, 2021)
 
 - Fix unprojection when using terrain (#1620)
