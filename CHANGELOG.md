@@ -2,6 +2,12 @@
 
 # Version 7.0
 
+## 7.0.0-beta.1 (Jan 26, 2022)
+
+- Add mapLib API (#1703)
+- Support inline styling for all components (#1702)
+- Refactor Mapbox class (#1701)
+
 ## 7.0.0-alpha.7 (Jan 17, 2022)
 
 - Improve typing (#1695)
