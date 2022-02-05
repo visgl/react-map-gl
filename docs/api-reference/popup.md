@@ -32,40 +32,40 @@ function App() {
 
 ### Render options
 
-#### anchor: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | undefined
+#### `anchor`: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | undefined
 
 A string indicating the part of the popup that should be positioned closest to the coordinate, set via `longitude` and `latitude`. 
 If unset, the anchor will be dynamically set to ensure the popup falls within the map container with a preference for `'bottom'`.
 
-#### className: string
+#### `className`: string
 
 Space-separated CSS class names to add to popup container.
 
-#### closeButton: boolean
+#### `closeButton`: boolean
 
 Default: `true`
 
 If `true`, a close button will appear in the top right corner of the popup.
 
-#### closeOnClick: boolean
+#### `closeOnClick`: boolean
 
 Default: `true`
 
 If `true`, the popup will close when the map is clicked.
 
-#### closeOnMove: boolean
+#### `closeOnMove`: boolean
 
 Default: `false`
 
 If `true`, the popup will closed when the map moves.
 
-#### focusAfterOpen: boolean
+#### `focusAfterOpen`: boolean
 
 Default: `true`
 
 If `true`, the popup will try to focus the first focusable element inside the popup.
 
-#### offset: number | [PointLike](/docs/api-reference/types.md#pointlike) | Record\<string, [PointLike](/docs/api-reference/types.md#pointlike)\>
+#### `offset`: number | [PointLike](/docs/api-reference/types.md#pointlike) | Record\<string, [PointLike](/docs/api-reference/types.md#pointlike)\>
 
 Default: `null`
 
@@ -77,27 +77,27 @@ A pixel offset applied to the popup's location specified as:
 
 Negative offsets indicate left and up.
 
-#### maxWidth: string
+#### `maxWidth`: string
 
 Default: `240px`
 
 A string that sets the CSS property of the popup's maximum width.
 
-#### style: CSSProperties
+#### `style`: CSSProperties
 
 CSS style override that applies to the popup's container.
 
 ### Callbacks
 
-#### onOpen: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void
+#### `onOpen`: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void
 
 Called when the popup is opened manually or programatically.
 
-#### onClose: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void
+#### `onClose`: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void
 
 Called when the popup is closed manually or programatically.
 
 
 ## Source
 
-[popup.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/popup.ts)
+[popup.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/popup.ts)

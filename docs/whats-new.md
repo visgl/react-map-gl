@@ -2,7 +2,7 @@
 
 ## react-map-gl v7.0
 
-Release date: TBD
+Release date: February, 2022
 
 v7 is a complete rewrite of the library. It addresses many long-standing issues in v5 and v6 limited by legacy architecture decisions. The most notable results of this redesign are:
 

@@ -41,27 +41,27 @@ When props change *shallowly*, the component will perform style diffing to updat
 
 Once a `<Layer>` is mounted, the following props should not change. If you add/remove multiple JSX layers dynamically, make sure you use React's [key prop](https://reactjs.org/docs/lists-and-keys.html#keys) to give each element a stable identity.
 
-#### id: string
+#### `id`: string
 
 Unique identifier of the layer. If not provided, a default id will be assigned.
 
-#### type: string
+#### `type`: string
 
 Required. Type of the layer.
 
 ### Options
 
-#### beforeId: string
+#### `beforeId`: string
 
 The ID of an existing layer to insert this layer before. If this prop is omitted, the layer will be appended to the end of the layers array. This is useful when using dynamic layers with a map style from a URL.
 
 Note that layers are added by the order that they mount. They are *NOT* reordered later if their relative positions in the JSX tree change. If dynamic reordering is desired, you should manipulate `beforeId` for consistent behavior.
 
-#### source: string
+#### `source`: string
 
 `source` is required by some layer types in the Mapbox style specification. If `<Layer>` is used as the child of a [Source](/docs/api-reference/source.md) component, this prop will be overwritten by the id of the parent source.
 
 
 ## Source
 
-[layer.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/layer.ts)
+[layer.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/layer.ts)

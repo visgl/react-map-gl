@@ -11,23 +11,24 @@ const TOKEN = ''; // Set your mapbox token here
 export default function App() {
   const [features, setFeatures] = useState({});
 
-  const onUpdate = useCallback(
-    e => {
-      const newFeatures = {...features};
+  const onUpdate = useCallback(e => {
+    setFeatures(currFeatures => {
+      const newFeatures = {...currFeatures};
       for (const f of e.features) {
         newFeatures[f.id] = f;
       }
-      setFeatures(newFeatures);
-    },
-    [features]
-  );
+      return newFeatures;
+    });
+  }, []);
 
   const onDelete = useCallback(e => {
-    const newFeatures = {...features};
-    for (const f of e.features) {
-      delete newFeatures[f.id];
-    }
-    setFeatures(newFeatures);
+    setFeatures(currFeatures => {
+      const newFeatures = {...currFeatures};
+      for (const f of e.features) {
+        delete newFeatures[f.id];
+      }
+      return newFeatures;
+    });
   }, []);
 
   return (

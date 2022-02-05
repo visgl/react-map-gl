@@ -39,4 +39,4 @@ The hook returns an object that contains all mounted maps under the closest `Map
 
 ## Source
 
-[use-map.tsx](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/use-map.tsx)
+[use-map.tsx](https://github.com/visgl/react-map-gl/tree/master/src/components/use-map.tsx)
