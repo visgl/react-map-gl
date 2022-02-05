@@ -9,12 +9,6 @@ module.exports = {
 
   devtool: 'source-map',
 
-  resolve: {
-    alias: {
-      'mapbox-gl': 'maplibre-gl'
-    }
-  },
-
   module: {
     rules: [
       {
