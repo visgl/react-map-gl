@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useCallback, cloneElement} from 'react';
+import {useState, cloneElement} from 'react';
 import {useControl} from 'react-map-gl';
 import {createPortal} from 'react-dom';
 
@@ -7,18 +7,27 @@ import type {MapboxMap, IControl} from 'react-map-gl';
 
 // Based on template in https://docs.mapbox.com/mapbox-gl-js/api/markers/#icontrol
 class OverlayControl implements IControl {
-  _map: MapboxMap;
+  _map: MapboxMap = null;
   _container: HTMLElement;
+  _redraw: () => void;
+
+  constructor(redraw: () => void) {
+    this._redraw = redraw;
+  }
 
   onAdd(map) {
     this._map = map;
+    map.on('move', this._redraw);
+    /* global document */
     this._container = document.createElement('div');
+    this._redraw();
     return this._container;
   }
 
   onRemove() {
-    this._container.parentNode.removeChild(this._container);
-    this._map = undefined;
+    this._container.remove();
+    this._map.off('move', this._redraw);
+    this._map = null;
   }
 
   getMap() {
@@ -34,23 +43,16 @@ class OverlayControl implements IControl {
  * A custom control that rerenders arbitrary React content whenever the camera changes
  */
 function CustomOverlay(props: {children: React.ReactElement}) {
-  const [viewState, setViewState] = useState(null);
+  const [, setVersion] = useState(0);
 
-  const onMove = useCallback(evt => setViewState(evt.viewState), []);
-
-  const ctrl = useControl(() => new OverlayControl(), {
-    onAdd: (map: MapboxMap) => {
-      setViewState({});
-      map.on('move', onMove);
-    },
-    onRemove: (map: MapboxMap) => {
-      map.off('move', onMove);
-    }
+  const ctrl = useControl(() => {
+    const forceUpdate = () => setVersion(v => v + 1);
+    return new OverlayControl(forceUpdate);
   }) as OverlayControl;
 
-  return (
-    viewState && createPortal(cloneElement(props.children, {map: ctrl.getMap()}), ctrl.getElement())
-  );
+  const map = ctrl.getMap();
+
+  return map && createPortal(cloneElement(props.children, {map}), ctrl.getElement());
 }
 
 export default React.memo(CustomOverlay);
