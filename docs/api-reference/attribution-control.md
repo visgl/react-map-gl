@@ -52,4 +52,4 @@ CSS style override that applies to the control's container.
 
 ## Source
 
-[attribution-control.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/attribution-control.ts)
+[attribution-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/attribution-control.ts)

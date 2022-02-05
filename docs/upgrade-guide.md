@@ -17,8 +17,8 @@ v7 is a complete rewrite of the library. It is redesigned to be fast, lightweigh
 - `setRTLTextPlugin` is removed. Use the `Map` component's `RTLTextPlugin` prop (default enabled).
 - `MapController` is removed.  v7.0 has removed its own implementation of user input handling in favor of the [native handlers](https://docs.mapbox.com/mapbox-gl-js/api/handlers/). If you are using a custom implementation of `MapController`, check if the native handlers offer options to address your application's needs.
 - `MapContext` and `useMapControl` are removed. Check out the new API [useMap](/docs/api-reference/use-map.md) and [useControl](/docs/api-reference/use-control.md).
-- The overlay components (`HTMLOverlay`, `CanvasOverlay` and `SVGOveray`) are removed. Check out [this example](https://github.com/visgl/react-map-gl/tree/master/examples/custom-overlay) for implementing similar controls in your own application.
-- `LinearInterpolator` and `FlyToInterpolator` are removed. Use `map.easeTo()` and `map.flyTo()` instead, see [this example](https://github.com/visgl/react-map-gl/tree/master/examples/viewport-animation).
+- The overlay components (`HTMLOverlay`, `CanvasOverlay` and `SVGOveray`) are removed. Check out [this example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/custom-overlay) for implementing similar controls in your own application.
+- `LinearInterpolator` and `FlyToInterpolator` are removed. Use `map.easeTo()` and `map.flyTo()` instead, see [this example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/viewport-animation).
 
 ### Map
 
@@ -34,11 +34,11 @@ v7 is a complete rewrite of the library. It is redesigned to be fast, lightweigh
   + `height`
   + `visible`
 - `onViewportChange`, `onViewStateChange` and `onInteractionStateChange` are removed. You can either use `Map` as an uncontrolled component with the new `initialViewState` prop, or if you need to manage the camera state externally (e.g. in Redux), use the `onMove` callback instead. See examples in [state management](/docs/get-started/state-management.md).
-- `transition*` props are removed. Use `map.easeTo()` and `map.flyTo()` instead, see [this example](https://github.com/visgl/react-map-gl/tree/master/examples/viewport-animation).
+- `transition*` props are removed. Use `map.easeTo()` and `map.flyTo()` instead, see [this example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/viewport-animation).
 - `mapOptions` is removed. Almost all of the options for the native `Map` class are exposed as props. 
 - `onHover` is removed. Use `onMouseMove` or `onMouseEnter`.
 - The event argument is changed for all interaction callbacks. See documentation for details.
-- `getCursor` is removed as part of the effort to get `Map` behave the same as the native component. To set the cursor, use the `cursor` prop. Follow [this example](https://github.com/visgl/react-map-gl/tree/master/examples/custom-cursor) to change cursor on hover.
+- `getCursor` is removed as part of the effort to get `Map` behave the same as the native component. To set the cursor, use the `cursor` prop. Follow [this example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/custom-cursor) to change cursor on hover.
 - `touchAction` and `eventRecognizerOptions` are removed. Check out the `cooperativeGestures` prop.
 
 ### Other components

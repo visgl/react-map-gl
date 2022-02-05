@@ -55,4 +55,4 @@ If `true` the pitch is visualized by rotating X-axis of compass.
 
 ## Source
 
-[navigation-control.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/navigation-control.ts)
+[navigation-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/navigation-control.ts)

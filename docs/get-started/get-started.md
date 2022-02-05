@@ -29,7 +29,7 @@ function App() {
 }
 ```
 
-See full project setup in [get-started examples](https://github.com/visgl/react-map-gl/tree/master/examples/get-started).
+See full project setup in [get-started examples](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/get-started).
 
 
 ## Styling

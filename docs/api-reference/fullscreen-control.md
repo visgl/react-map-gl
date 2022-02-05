@@ -40,4 +40,4 @@ CSS style override that applies to the control's container.
 
 ## Source
 
-[fullscreen-control.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/fullscreen-control.ts)
+[fullscreen-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/fullscreen-control.ts)

@@ -8,7 +8,7 @@ function ControlPanel(props) {
 
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/6.1-release/examples/terrain"
+          href="https://github.com/visgl/react-map-gl/tree/7.0-release/examples/terrain"
           target="_new"
         >
           View Code ↗
