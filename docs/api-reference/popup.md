@@ -100,4 +100,4 @@ Called when the popup is closed manually or programatically.
 
 ## Source
 
-[popup.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/popup.ts)
+[popup.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/popup.ts)

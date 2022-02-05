@@ -680,4 +680,4 @@ Provides an interface for loading mapbox-gl's WebWorker bundle from a self-hoste
 
 ## Source
 
-[map.tsx](https://github.com/visgl/react-map-gl/tree/master/src/components/map.tsx)
+[map.tsx](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/map.tsx)

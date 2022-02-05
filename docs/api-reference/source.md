@@ -56,4 +56,4 @@ Required. Type of the source.
 
 ## Source
 
-[source.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/source.ts)
+[source.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/source.ts)

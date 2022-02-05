@@ -74,4 +74,4 @@ Returns:
 
 ## Source
 
-[use-control.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/use-control.ts)
+[use-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/use-control.ts)

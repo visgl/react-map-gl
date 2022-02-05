@@ -47,4 +47,4 @@ Unit of the distance.
 
 ## Source
 
-[scale-control.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/scale-control.ts)
+[scale-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/scale-control.ts)
