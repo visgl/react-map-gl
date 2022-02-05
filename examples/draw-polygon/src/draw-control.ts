@@ -46,7 +46,8 @@ export default function DrawControl(props: DrawControlProps) {
     },
     {
       position: props.position
-    });
+    }
+  );
 
   return null;
 }
