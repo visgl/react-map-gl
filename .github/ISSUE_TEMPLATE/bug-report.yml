@@ -1,0 +1,52 @@
+name: Bug Report
+description: Something does not work as expected
+title: "[Bug]"
+labels: bug
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thank you for taking the time to report a bug!
+      You may find answers faster by searching in [the documentation](https://visgl.github.io/react-map-gl/search) and [existing issues](https://github.com/visgl/react-map-gl/issue).
+      If you are unsure whether it is a bug in your own implementation or the library itself, consider starting a conversation in [Discussions](https://github.com/visgl/react-map-gl/discussions) instead.
+- type: textarea
+  attributes:
+    label: Description
+    description: What you're experiencing.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Expected Behavior
+    description: What you expect to see.
+  validations:
+    required: false
+- type: textarea
+  attributes:
+    label: Steps to Reproduce
+    description: |
+      Providing a Code Sandbox that reproduces the behavior. You can use [this boiler plate](https://codesandbox.io/s/react-map-gl-boiler-plate-717vw) as a starting point.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Environment
+    description: |
+      Example:
+        - **Framework version**: react-map-gl@7.0.0
+        - **Map library**: mapbox-gl@2.7.0
+        - **Browser**: Chrome 98.0
+        - **OS**: iOS 15.1
+    value: |
+        - Framework version:
+        - Map library:
+        - Browser:
+        - OS:
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Logs
+    description: Check the browser console for any relevant errors or warnings.
+  validations:
+    required: false
