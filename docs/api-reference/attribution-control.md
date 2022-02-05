@@ -28,7 +28,7 @@ function App() {
 
 Note that the following properties are not reactive. They are only used when the component first mounts.
 
-#### compact: boolean | undefined
+#### `compact`: boolean | undefined
 
 - If `true` , force a compact attribution that shows the full attribution on mouse hover.
 - If `false` , force the full attribution control.
@@ -36,20 +36,20 @@ Note that the following properties are not reactive. They are only used when the
 
 Note that your attribution must adhere to Mapbox's [guidelines](https://docs.mapbox.com/help/getting-started/attribution/).
 
-#### customAttribution: string | string[]
+#### `customAttribution`: string | string[]
 
 String or strings to show in addition to any other attributions.
 
-#### position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
 
 Default: `'bottom-right'`
 
 Placement of the control relative to the map.
 
-#### style: CSSProperties
+#### `style`: CSSProperties
 
 CSS style override that applies to the control's container.
 
 ## Source
 
-[attribution-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/attribution-control.ts)
+[attribution-control.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/attribution-control.ts)

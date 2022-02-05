@@ -24,29 +24,29 @@ function App() {
 
 Note that the following properties are not reactive. They are only used when the component first mounts.
 
-#### position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
 
 Default: `'top-right'`
 
 Placement of the control relative to the map.
 
-#### style: CSSProperties
+#### `style`: CSSProperties
 
 CSS style override that applies to the control's container.
 
-#### showCompass: boolean
+#### `showCompass`: boolean
 
 Default: `true`
 
 If `true` the compass button is included.
 
-#### showZoom: boolean
+#### `showZoom`: boolean
 
 Default: `true`
 
 If true the zoom-in and zoom-out buttons are included.
 
-#### visualizePitch: boolean
+#### `visualizePitch`: boolean
 
 Default: `false`
 
@@ -55,4 +55,4 @@ If `true` the pitch is visualized by rotating X-axis of compass.
 
 ## Source
 
-[navigation-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-dev/src/components/navigation-control.ts)
+[navigation-control.ts](https://github.com/visgl/react-map-gl/tree/master/src/components/navigation-control.ts)

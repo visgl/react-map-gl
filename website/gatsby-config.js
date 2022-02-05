@@ -70,100 +70,107 @@ module.exports = {
           {
             title: 'Dynamic Styling',
             image: 'images/example-layers.jpg',
-            componentUrl: resolve(__dirname, '../examples/layers/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/layers/src/app.tsx'),
             path: 'examples/layers'
           },
           {
             title: 'Markers & Popups',
             image: 'images/example-controls.jpg',
-            componentUrl: resolve(__dirname, '../examples/controls/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/controls/src/app.tsx'),
             path: 'examples/controls'
           },
           {
             title: 'Custom Cursor',
             image: 'images/example-custom-cursor.jpg',
-            componentUrl: resolve(__dirname, '../examples/custom-cursor/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/custom-cursor/src/app.tsx'),
             path: 'examples/custom-cursor'
           },
           {
             title: 'Draggable Marker',
             image: 'images/example-draggable-markers.jpg',
-            componentUrl: resolve(__dirname, '../examples/draggable-markers/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/draggable-markers/src/app.tsx'),
             path: 'examples/draggable-markers'
           },
           {
             title: 'GeoJSON',
             image: 'images/example-geojson.jpg',
-            componentUrl: resolve(__dirname, '../examples/geojson/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/geojson/src/app.tsx'),
             path: 'examples/geojson'
           },
           {
             title: 'GeoJSON Animation',
             image: 'images/example-geojson-animation.jpg',
-            componentUrl: resolve(__dirname, '../examples/geojson-animation/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/geojson-animation/src/app.tsx'),
             path: 'examples/geojson-animation'
           },
           {
             title: 'Clusters',
             image: 'images/example-clusters.jpg',
-            componentUrl: resolve(__dirname, '../examples/clusters/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/clusters/src/app.tsx'),
             path: 'examples/clusters'
-          },
-          {
-            title: 'Locate User',
-            image: 'images/example-locate-user.jpg',
-            componentUrl: resolve(__dirname, '../examples/locate-user/src/app.js'),
-            path: 'examples/locate-user'
           },
           {
             title: 'Limit Map Interaction',
             image: 'images/example-interaction.jpg',
-            componentUrl: resolve(__dirname, '../examples/interaction/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/interaction/src/app.tsx'),
             path: 'examples/interaction'
           },
           {
             title: 'Camera Transition',
             image: 'images/example-viewport-animation.jpg',
-            componentUrl: resolve(__dirname, '../examples/viewport-animation/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/viewport-animation/src/app.tsx'),
             path: 'examples/viewport-animation'
           },
           {
             title: 'Highlight By Filter',
             image: 'images/example-filter.jpg',
-            componentUrl: resolve(__dirname, '../examples/filter/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/filter/src/app.tsx'),
             path: 'examples/filter'
           },
           {
             title: 'Zoom To Bounds',
             image: 'images/example-zoom-to-bounds.jpg',
-            componentUrl: resolve(__dirname, '../examples/zoom-to-bounds/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/zoom-to-bounds/src/app.tsx'),
             path: 'examples/zoom-to-bounds'
           },
           {
             title: 'Heatmap',
             image: 'images/example-heatmap.jpg',
-            componentUrl: resolve(__dirname, '../examples/heatmap/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/heatmap/src/app.tsx'),
             path: 'examples/heatmap'
           },
           {
-            title: 'DrawPolygon',
+            title: 'Draw Polygon',
             image: 'images/example-draw-polygon.jpg',
-            componentUrl: resolve(__dirname, '../examples/draw-polygon/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/draw-polygon/src/app.tsx'),
             path: 'examples/draw-polygon'
           },
           {
             title: 'Terrain',
             image: 'images/example-terrain.jpg',
-            componentUrl: resolve(__dirname, '../examples/terrain/src/app.js'),
+            componentUrl: resolve(__dirname, '../examples/terrain/src/app.tsx'),
             path: 'examples/terrain'
+          },
+          {
+            title: 'Geocoder',
+            image: 'images/example-geocoder.jpg',
+            componentUrl: resolve(__dirname, '../examples/geocoder/src/app.tsx'),
+            path: 'examples/geocoder'
+          },
+          {
+            title: 'Side by Side',
+            image: 'images/example-side-by-side.jpg',
+            componentUrl: resolve(__dirname, '../examples/side-by-side/src/app.tsx'),
+            path: 'examples/side-by-side'
           }
         ],
 
         THEME_OVERRIDES: require('./src/theme.json'),
 
         STYLESHEETS: [
-          'https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css',
-          'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css',
+          'https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css',
+          'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.css',
+          'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css',
           '/style.css'
         ]
       }

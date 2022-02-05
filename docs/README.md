@@ -1,3 +1,19 @@
+
+<p align="center">
+  These docs are for
+  <a href="https://github.com/visgl/react-map-gl/blob/7.0-release/docs">
+    <img src="https://img.shields.io/badge/v7.0-brightgreen.svg?style=flat-square" />
+  </a>
+  Looking for an old version?
+  <a href="https://github.com/visgl/react-map-gl/blob/6.1-release/docs">
+    <img src="https://img.shields.io/badge/v6.1-brightgreen.svg?style=flat-square" />
+  </a>
+  <a href="https://github.com/visgl/react-map-gl/blob/5.3-release/docs">
+    <img src="https://img.shields.io/badge/v5.3-brightgreen.svg?style=flat-square" />
+  </a>
+</p>
+
+
 # Introduction
 
 react-map-gl is a suite of [React](http://facebook.github.io/react/) components for

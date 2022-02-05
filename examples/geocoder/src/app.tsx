@@ -20,8 +20,8 @@ export default function App() {
         mapboxAccessToken={TOKEN}
       >
         <GeocoderControl mapboxAccessToken={TOKEN} position="top-left" />
-        <ControlPanel />
       </Map>
+      <ControlPanel />
     </>
   );
 }

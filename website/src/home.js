@@ -41,17 +41,16 @@ export default class IndexPage extends React.Component {
             React Integration
           </h3>
           <p>
-          Integration on browser and Node.js, exposing the full power of mapbox-gl.
+          Use Mapbox GL JS Map as a fully controlled reactive component.
           </p>
 
           <h3>
             <Icon src="images/icon-layers.svg" />
-            Component Library
+            Extensible
           </h3>
           <p>
-          react-map-gl comes with additional React components that
-          synchronize with the map camera system. Use one of the supported
-          overlays to visualize data, or build your own.
+          Comes with additional React interfaces such as context and hooks
+          to support custom components.
           </p>
 
           <h3>

@@ -39,7 +39,7 @@ export default function App() {
   const onRightMoveStart = useCallback(() => setActiveMap('right'), []);
   const onMove = useCallback(evt => setViewState(evt.viewState), []);
 
-  const width = window.innerWidth;
+  const width = typeof window === 'undefined' ? 100 : window.innerWidth;
   const leftMapPadding = useMemo(() => {
     return {left: mode === 'split-screen' ? width / 2 : 0, top: 0, right: 0, bottom: 0};
   }, [width, mode]);
@@ -49,26 +49,28 @@ export default function App() {
 
   return (
     <>
-      <Map
-        id="left-map"
-        {...viewState}
-        padding={leftMapPadding}
-        onMoveStart={onLeftMoveStart}
-        onMove={activeMap === 'left' && onMove}
-        style={LeftMapStyle}
-        mapStyle="mapbox://styles/mapbox/light-v9"
-        mapboxAccessToken={TOKEN}
-      />
-      <Map
-        id="right-map"
-        {...viewState}
-        padding={rightMapPadding}
-        onMoveStart={onRightMoveStart}
-        onMove={activeMap === 'right' && onMove}
-        style={RightMapStyle}
-        mapStyle="mapbox://styles/mapbox/dark-v9"
-        mapboxAccessToken={TOKEN}
-      />
+      <div style={{position: 'relative', height: '100%'}}>
+        <Map
+          id="left-map"
+          {...viewState}
+          padding={leftMapPadding}
+          onMoveStart={onLeftMoveStart}
+          onMove={activeMap === 'left' && onMove}
+          style={LeftMapStyle}
+          mapStyle="mapbox://styles/mapbox/light-v9"
+          mapboxAccessToken={TOKEN}
+        />
+        <Map
+          id="right-map"
+          {...viewState}
+          padding={rightMapPadding}
+          onMoveStart={onRightMoveStart}
+          onMove={activeMap === 'right' && onMove}
+          style={RightMapStyle}
+          mapStyle="mapbox://styles/mapbox/dark-v9"
+          mapboxAccessToken={TOKEN}
+        />
+      </div>
       <ControlPanel mode={mode} onModeChange={setMode} />
     </>
   );
