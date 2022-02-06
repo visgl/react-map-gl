@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.2 (Feb 6, 2022)
+
+- Fix: set default maxPitch to 60 (#1720)
+
 ## 7.0.0 (Feb 4, 2022)
 
 v7 is a complete rewrite of the library. It addresses many long-standing issues in v5 and v6 limited by legacy architecture decisions. The most notable results of this redesign are:
