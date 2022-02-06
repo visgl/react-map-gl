@@ -40,7 +40,7 @@ const defaultProps: MapProps = {
   minZoom: 0,
   maxZoom: 22,
   minPitch: 0,
-  maxPitch: 85,
+  maxPitch: 60,
 
   // Interaction handlers
   scrollZoom: true,
