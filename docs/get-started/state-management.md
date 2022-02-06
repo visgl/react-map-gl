@@ -8,7 +8,7 @@ There are two ways to use a [Map](/docs/api-reference/map.md):
 
 ## Uncontrolled Map
 
-You may clone a full app configuration for this example [here](/examples/get-started/basic).
+You may clone a full app configuration for this example [here](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/get-started/basic).
 
 ```js
 import * as React from 'react';
@@ -28,7 +28,7 @@ function App() {
 
 ## Controlled Map
 
-You may clone a full app configuration for this example [here](/examples/get-started/controlled).
+You may clone a full app configuration for this example [here](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/get-started/controlled).
 
 ```js
 import * as React from 'react';
@@ -51,8 +51,8 @@ function App() {
 
 A real-world application likely uses more complicated state flows:
 
-- Using map with a state store (Redux) [example](/examples/get-started/redux)
-- Using map with SSR (Next.js) [example](/examples/get-started/nextjs)
+- Using map with a state store (Redux) [example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/get-started/redux)
+- Using map with SSR (Next.js) [example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/get-started/nextjs)
 
 
 ## Custom Camera Constraints

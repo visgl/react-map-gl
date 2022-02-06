@@ -28,7 +28,7 @@ function NavigateButton() {
 }
 ```
 
-See a full example [here](/examples/get-started/hook).
+See a full example [here](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/get-started/hook).
 
 ## Signature
 
