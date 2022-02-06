@@ -172,7 +172,7 @@ The minimum pitch of the map (0-85).
 
 #### `maxPitch`: number
 
-Default: `85`
+Default: `60`
 
 The maximum pitch of the map (0-85).
 
