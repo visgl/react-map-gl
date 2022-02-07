@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.3 (Feb 7, 2022)
+
+- Fix Popup double onClose call (#1729)
+
 ## 7.0.2 (Feb 6, 2022)
 
 - Fix: set default maxPitch to 60 (#1720)
