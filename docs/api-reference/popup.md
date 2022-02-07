@@ -25,7 +25,7 @@ function App() {
         anchor="bottom"
         onClose={() => setShowPopup(false)}>
         You are here
-      </Popup>}
+      </Popup>)}
   </Map>;
 }
 ```
