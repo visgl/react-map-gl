@@ -74,24 +74,28 @@ function Popup(props: PopupProps) {
   const container = useMemo(() => {
     return document.createElement('div');
   }, []);
-  const popup = useMemo(() => {
-    const options = {...props};
-    return new mapLib.Popup(options).setLngLat([props.longitude, props.latitude]);
-  }, []);
   const thisRef = useRef({props});
   thisRef.current.props = props;
 
-  useEffect(() => {
-    popup.on('open', e => {
+  const popup = useMemo(() => {
+    const options = {...props};
+    const pp = new mapLib.Popup(options).setLngLat([props.longitude, props.latitude]);
+    pp.on('open', e => {
       thisRef.current.props.onOpen?.(e as PopupEvent);
     });
-    popup.on('close', e => {
+    pp.on('close', e => {
       thisRef.current.props.onClose?.(e as PopupEvent);
     });
+    return pp;
+  }, []);
+
+  useEffect(() => {
     popup.setDOMContent(container).addTo(map);
 
     return () => {
-      popup.remove();
+      if (popup.isOpen()) {
+        popup.remove();
+      }
     };
   }, []);
 
