@@ -28,6 +28,7 @@ export const MapContext = React.createContext<MapContextValue>(null);
 export type MapProps = MapboxProps &
   GlobalSettings & {
     mapLib?: any;
+    reuseMaps?: boolean;
     /** Map container id */
     id?: string;
     /** Map container CSS style */
@@ -94,8 +95,12 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
 
         if (mapboxgl.supported(props)) {
           setGlobals(mapboxgl, props);
-          mapbox = new Mapbox(mapboxgl.Map, props);
-          mapbox.initialize(containerRef.current);
+          if (props.reuseMaps) {
+            mapbox = Mapbox.reuse(props, containerRef.current);
+          }
+          if (!mapbox) {
+            mapbox = new Mapbox(mapboxgl.Map, props, containerRef.current);
+          }
           contextValue.map = mapbox.map;
           contextValue.mapLib = mapboxgl;
 
@@ -118,7 +123,11 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
       isMounted = false;
       if (mapbox) {
         mountedMapsContext?.onMapUnmount(props.id);
-        mapbox.destroy();
+        if (props.reuseMaps) {
+          mapbox.recycle();
+        } else {
+          mapbox.destroy();
+        }
       }
     };
   }, []);

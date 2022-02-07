@@ -634,6 +634,16 @@ Default: `true`
 
 If `false`, the map won't attempt to re-request tiles once they expire per their HTTP `cacheControl`/`expires` headers.
 
+#### `reuseMaps`: boolean
+
+Default: `false`
+
+By default, every time a map component is unmounted, all internal resources associated with the underlying `Map` instance are released. If the map gets mounted again, a new `Map` instance is constructed.
+
+If `reuseMaps` is set to `true`, when a map component is unmounted, the underlying `Map` instance is retained in memory. The next time a map component gets mounted, the saved instance is reused. This behavior may be desirable if an application frequently mounts/unmounts map(s), for example in a tabbed or collapsable UI, and wants to avoid [new billable events](https://github.com/mapbox/mapbox-gl-js/releases/tag/v2.0.0) triggered by initialization.
+
+Note that since some map options cannot be modified after initialization, when reusing maps, only the reactive props and `initialViewState` of the new component are respected.
+
 #### `RTLTextPlugin`: string
 
 Default: `'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'`
