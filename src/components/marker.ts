@@ -75,6 +75,9 @@ const defaultProps: Partial<MarkerProps> = {
 
 function Marker(props: MarkerProps) {
   const {map, mapLib} = useContext(MapContext);
+  const thisRef = useRef({props});
+  thisRef.current.props = props;
+
   const marker = useMemo(() => {
     let hasChildren = false;
     React.Children.forEach(props.children, el => {
@@ -87,27 +90,27 @@ function Marker(props: MarkerProps) {
       element: hasChildren ? document.createElement('div') : null
     };
 
-    return new mapLib.Marker(options).setLngLat([props.longitude, props.latitude]);
-  }, []);
-  const thisRef = useRef({props});
-  thisRef.current.props = props;
-
-  useEffect(() => {
-    marker.on('dragstart', e => {
+    const mk = new mapLib.Marker(options).setLngLat([props.longitude, props.latitude]);
+    mk.on('dragstart', e => {
       const evt = e as MarkerDragEvent;
       evt.lngLat = marker.getLngLat();
       thisRef.current.props.onDragStart?.(evt);
     });
-    marker.on('drag', e => {
+    mk.on('drag', e => {
       const evt = e as MarkerDragEvent;
       evt.lngLat = marker.getLngLat();
       thisRef.current.props.onDrag?.(evt);
     });
-    marker.on('dragend', e => {
+    mk.on('dragend', e => {
       const evt = e as MarkerDragEvent;
       evt.lngLat = marker.getLngLat();
       thisRef.current.props.onDragEnd?.(evt);
     });
+
+    return mk;
+  }, []);
+
+  useEffect(() => {
     marker.addTo(map);
 
     return () => {
