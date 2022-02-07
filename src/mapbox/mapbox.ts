@@ -464,6 +464,7 @@ export default class Mapbox {
     }
   }
 
+  /* eslint-disable complexity,max-statements */
   initialize(container: HTMLDivElement) {
     const {props} = this;
     const mapOptions = {
@@ -537,6 +538,7 @@ export default class Mapbox {
     }
     this._map = map;
   }
+  /* eslint-enable complexity,max-statements */
 
   destroy() {
     this._map.remove();

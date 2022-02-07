@@ -47,6 +47,7 @@ type GeocoderControlProps = {
   onError?: (e: object) => void;
 };
 
+/* eslint-disable complexity,max-statements */
 export default function GeocoderControl(props: GeocoderControlProps) {
   const [marker, setMarker] = useState(null);
 
@@ -132,7 +133,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
   return marker;
 }
 
-function noop() {}
+const noop = () => {};
 
 GeocoderControl.defaultProps = {
   onLoading: noop,
