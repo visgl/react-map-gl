@@ -429,9 +429,12 @@ export default class Mapbox {
     rotate: false
   };
 
-  constructor(MapClass: typeof MapboxMap, props: MapboxProps) {
+  static savedMaps: Mapbox[] = [];
+
+  constructor(MapClass: typeof MapboxMap, props: MapboxProps, container: HTMLDivElement) {
     this._MapClass = MapClass;
     this.props = props;
+    this._initialize(container);
   }
 
   get map(): MapboxMap {
@@ -464,7 +467,42 @@ export default class Mapbox {
     }
   }
 
-  initialize(container: HTMLDivElement) {
+  static reuse(props: MapboxProps, container: HTMLDivElement) {
+    const that = Mapbox.savedMaps.pop();
+    if (!that) {
+      return null;
+    }
+
+    const map = that.map;
+    // When reusing the saved map, we need to reparent the map(canvas) and other child nodes
+    // intoto the new container from the props.
+    // Step1: reparenting child nodes from old container to new container
+    const oldContainer = map.getContainer();
+    container.className = oldContainer.className;
+    while (oldContainer.childNodes.length > 0) {
+      container.appendChild(oldContainer.childNodes[0]);
+    }
+    // Step2: replace the internal container with new container from the react component
+    // @ts-ignore
+    map._container = container;
+
+    // Step 3: apply new props
+    if (props.initialViewState) {
+      that._updateViewState(props.initialViewState, false);
+    }
+    map.resize();
+    that.setProps({...props, styleDiffing: false});
+
+    // Simulate load event
+    if (map.isStyleLoaded()) {
+      map.fire('load');
+    } else {
+      map.once('styledata', () => map.fire('load'));
+    }
+    return that;
+  }
+
+  _initialize(container: HTMLDivElement) {
     const {props} = this;
     const mapOptions = {
       ...props,
@@ -536,6 +574,10 @@ export default class Mapbox {
       map.on(eventName, this._onEvent);
     }
     this._map = map;
+  }
+
+  recycle() {
+    Mapbox.savedMaps.push(this);
   }
 
   destroy() {
