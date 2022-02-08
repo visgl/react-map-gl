@@ -73,6 +73,7 @@ const defaultProps: Partial<MarkerProps> = {
   pitchAlignment: 'auto'
 };
 
+/* eslint-disable complexity,max-statements */
 function Marker(props: MarkerProps) {
   const {map, mapLib} = useContext(MapContext);
   const thisRef = useRef({props});

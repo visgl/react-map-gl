@@ -14,6 +14,7 @@ export function arePointsEqual(a?: PointLike, b?: PointLike): boolean {
   return ax === bx && ay === by;
 }
 
+/* eslint-disable complexity */
 /**
  * Compare any two objects
  * @param a

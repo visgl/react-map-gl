@@ -17,6 +17,7 @@
         { "entry": "docs/get-started/mapbox-tokens" },
         { "entry": "docs/get-started/state-management" },
         { "entry": "docs/get-started/adding-custom-data" }
+        { "entry": "docs/get-started/tips-and-tricks" }
       ]
     },
     {

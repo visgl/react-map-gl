@@ -17,6 +17,7 @@ export function transformToViewState(tr: Transform): ViewState {
   };
 }
 
+/* eslint-disable complexity */
 /**
  * Mutate a transform to match the given view state
  * @param transform

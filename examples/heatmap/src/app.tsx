@@ -43,7 +43,8 @@ export default function App() {
         setTimeRange([startTime, endTime]);
         setEarthQuakes(json);
         selectTime(endTime);
-      });
+      })
+      .catch(err => console.error('Could not load data', err)); // eslint-disable-line
   }, []);
 
   const data = useMemo(() => {
