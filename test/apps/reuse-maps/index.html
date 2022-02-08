@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>react-map-gl Example</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        font-family: Helvetica, Arial, sans-serif;
+        overflow: hidden;
+      }
+      #app {
+        width: 100vw;
+        height: 100vh;
+      }
+      button {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src='app.js'></script>
+  </body>
+  <script type="text/javascript">
+    App.renderToDom(document.getElementById('app'));
+  </script>
+</html>
