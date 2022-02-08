@@ -28,7 +28,7 @@ v7 is a complete rewrite of the library. It is redesigned to be fast, lightweigh
   + `mapboxApiAccessToken` is now `mapboxAccessToken`
   + `mapboxApiUrl` is now `baseApiUrl`
   + `preventStyleDiffing` (default `false`) is replaced with `styleDiffing` (default `true`)
-- `mapStyle` should be explicitly specified. The default value has changed fro `"mapbox://styles/mapbox/light-v9"` to an empty style.
+- `mapStyle` should be explicitly specified. The default value has changed from `"mapbox://styles/mapbox/light-v9"` to an empty style.
 - The following props are removed and apps should use `style` instead:
   + `width`
   + `height`
