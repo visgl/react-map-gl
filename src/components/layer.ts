@@ -61,7 +61,7 @@ function updateLayer(map: MapboxMap, id: string, props: LayerProps, prevProps: L
 
 function createLayer(map: MapboxMap, id: string, props: LayerProps) {
   // @ts-ignore
-  if (map.style && map.style._loaded) {
+  if (map.style && map.style._loaded && map.getSource(props.source)) {
     const options: LayerProps = {...props, id};
     delete options.beforeId;
 
