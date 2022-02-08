@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.4 (Feb 7, 2022)
+
+- Add reuseMaps prop (#1730)
+
 ## 7.0.3 (Feb 7, 2022)
 
 - Fix Popup double onClose call (#1729)
