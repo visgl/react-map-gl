@@ -502,6 +502,7 @@ export default class Mapbox {
     return that;
   }
 
+  /* eslint-disable complexity,max-statements */
   _initialize(container: HTMLDivElement) {
     const {props} = this;
     const mapOptions = {
@@ -575,6 +576,7 @@ export default class Mapbox {
     }
     this._map = map;
   }
+  /* eslint-enable complexity,max-statements */
 
   recycle() {
     Mapbox.savedMaps.push(this);

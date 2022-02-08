@@ -69,6 +69,7 @@ function getClassList(className: string) {
   return new Set(className ? className.trim().split(/\s+/) : []);
 }
 
+/* eslint-disable complexity,max-statements */
 function Popup(props: PopupProps) {
   const {map, mapLib} = useContext(MapContext);
   const container = useMemo(() => {

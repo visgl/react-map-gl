@@ -45,6 +45,11 @@ For details about data sources and layer configuration, check out the [Mapbox st
 For dynamically updating data sources and layers, check out the [GeoJSON](http://visgl.github.io/react-map-gl/examples/geojson) and [GeoJSON animation](http://visgl.github.io/react-map-gl/examples/geojson-animation) examples.
 
 
+## Custom Overlays
+
+You can implement a custom HTML or SVG overlay on top of the map that redraws whenever the camera changes. By calling `map.project()` you can adjust the DOM or CSS properties so that the customly-drawn features are always aligned with the map. See a full example [here](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/custom-overlay).
+
+
 ## Other vis.gl Libraries
 
 For more feature rich and performant data visualization overlay use cases, you may consider using other visualization libraries. react-map-gl is part of the [vis.gl](https://www.github.com/visgl) ecosystem, a suite of high-performance data visualization tools for the Web.

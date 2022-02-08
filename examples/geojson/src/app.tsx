@@ -20,7 +20,8 @@ export default function App() {
       'https://raw.githubusercontent.com/uber/react-map-gl/master/examples/.data/us-income.geojson'
     )
       .then(resp => resp.json())
-      .then(json => setAllData(json));
+      .then(json => setAllData(json))
+      .catch(err => console.error('Could not load data', err)); // eslint-disable-line
   }, []);
 
   const onHover = useCallback(event => {
