@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.6 (Feb 9, 2022)
+
+- Fix handling of initial cursor value (#1737)
+
 ## 7.0.5 (Feb 8, 2022)
 
 - Confirm source exists before adding layer (#1735)
