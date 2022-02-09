@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.5 (Feb 8, 2022)
+
+- Confirm source exists before adding layer (#1735)
+
 ## 7.0.4 (Feb 7, 2022)
 
 - Add reuseMaps prop (#1730)
