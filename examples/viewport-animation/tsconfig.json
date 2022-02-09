@@ -5,6 +5,7 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
+    "module": "ES2020",
     "sourceMap": true
   }
 }
