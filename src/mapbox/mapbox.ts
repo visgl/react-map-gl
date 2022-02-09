@@ -539,6 +539,9 @@ export default class Mapbox {
     if (viewState.padding) {
       map.setPadding(viewState.padding);
     }
+    if (props.cursor) {
+      map.getCanvas().style.cursor = props.cursor;
+    }
     this._renderTransform = map.transform.clone();
 
     // Hack
