@@ -14,8 +14,8 @@ export default function Controls() {
     }
 
     const onMove = () => {
-      const {longitude, latitude} = mymap.getViewState();
-      setInputValue(`${longitude.toFixed(3)}, ${latitude.toFixed(3)}`);
+      const {lng, lat} = mymap.getCenter();
+      setInputValue(`${lng.toFixed(3)}, ${lat.toFixed(3)}`);
       setError(false);
     };
     mymap.on('move', onMove);
