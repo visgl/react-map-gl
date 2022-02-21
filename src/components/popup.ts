@@ -4,7 +4,7 @@ import {createPortal} from 'react-dom';
 import {useEffect, useMemo, useRef, useContext} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
 
-import type {PopupEvent, Anchor, PointLike} from '../types';
+import type {PopupEvent, Anchor, PointLike, MapboxPopup} from '../types';
 
 import {MapContext} from './map';
 import {deepEqual} from '../utils/deep-equal';
@@ -78,7 +78,7 @@ function Popup(props: PopupProps) {
   const thisRef = useRef({props});
   thisRef.current.props = props;
 
-  const popup = useMemo(() => {
+  const popup: MapboxPopup = useMemo(() => {
     const options = {...props};
     const pp = new mapLib.Popup(options).setLngLat([props.longitude, props.latitude]);
     pp.on('open', e => {
@@ -91,7 +91,7 @@ function Popup(props: PopupProps) {
   }, []);
 
   useEffect(() => {
-    popup.setDOMContent(container).addTo(map);
+    popup.setDOMContent(container).addTo(map.getMap());
 
     return () => {
       if (popup.isOpen()) {

@@ -43,15 +43,15 @@ See a full example [here](/examples/draw-polygon).
 
 ```js
 useControl<T extends IControl>(
-  onCreate: ({map: MapboxMap, mapLib: mapboxgl}) => IControl,
+  onCreate: ({map: MapRef, mapLib: mapboxgl}) => IControl,
   options?: {
     position?: ControlPosition;
   }
 ): T
 
 useControl<T extends IControl>(
-  onCreate: ({map: MapboxMap, mapLib: mapboxgl}) => IControl,
-  onRemove: ({map: MapboxMap, mapLib: mapboxgl}) => void,
+  onCreate: ({map: MapRef, mapLib: mapboxgl}) => IControl,
+  onRemove: ({map: MapRef, mapLib: mapboxgl}) => void,
   options?: {
     position?: ControlPosition;
   }

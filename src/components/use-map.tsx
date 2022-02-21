@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {useState, useCallback, useContext} from 'react';
+import {useState, useCallback, useMemo, useContext} from 'react';
 
 import {MapRef} from '../mapbox/create-ref';
+import {MapContext} from './map';
 
 type MountedMapsContextValue = {
   maps: {[id: string]: MapRef};
@@ -16,6 +17,9 @@ export const MapProvider: React.FC<{}> = props => {
 
   const onMapMount = useCallback((map: MapRef, id: string = 'default') => {
     setMaps(currMaps => {
+      if (id === 'current') {
+        throw new Error('\'current\' cannot be used as map id');
+      }
       if (currMaps[id]) {
         throw new Error(`Multiple maps with the same id: ${id}`);
       }
@@ -48,6 +52,15 @@ export const MapProvider: React.FC<{}> = props => {
 };
 
 export function useMap() {
-  const {maps} = useContext(MountedMapsContext);
-  return maps;
+  const maps = useContext(MountedMapsContext)?.maps;
+  const currentMap = useContext(MapContext);
+
+  const mapsWithCurrent = useMemo(() => {
+    if (currentMap) {
+      return {...maps, current: currentMap.map};
+    }
+    return maps;
+  }, [maps, currentMap]);
+
+  return mapsWithCurrent;
 }
