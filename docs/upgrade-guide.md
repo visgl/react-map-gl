@@ -17,7 +17,7 @@ v7 is a complete rewrite of the library. It is redesigned to be fast, lightweigh
 - `setRTLTextPlugin` is removed. Use the `Map` component's `RTLTextPlugin` prop (default enabled).
 - `MapController` is removed.  v7.0 has removed its own implementation of user input handling in favor of the [native handlers](https://docs.mapbox.com/mapbox-gl-js/api/handlers/). If you are using a custom implementation of `MapController`, check if the native handlers offer options to address your application's needs.
 - `MapContext` and `useMapControl` are removed. Check out the new API [useMap](/docs/api-reference/use-map.md) and [useControl](/docs/api-reference/use-control.md).
-- The overlay components (`HTMLOverlay`, `CanvasOverlay` and `SVGOveray`) are removed. Check out [this example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/custom-overlay) for implementing similar controls in your own application.
+- The overlay components (`HTMLOverlay`, `CanvasOverlay` and `SVGOverlay`) are removed. Check out [this example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/custom-overlay) for implementing similar controls in your own application.
 - `LinearInterpolator` and `FlyToInterpolator` are removed. Use `map.easeTo()` and `map.flyTo()` instead, see [this example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/viewport-animation).
 
 ### Map
