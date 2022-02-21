@@ -20,9 +20,12 @@ export type AttributionControlProps = {
 };
 
 function AttributionControl(props: AttributionControlProps): null {
-  const ctrl = useControl(({mapLib}) => new mapLib.AttributionControl(props), {
-    position: props.position
-  }) as MapboxAttributionControl;
+  const ctrl = useControl<MapboxAttributionControl>(
+    ({mapLib}) => new mapLib.AttributionControl(props),
+    {
+      position: props.position
+    }
+  );
 
   useEffect(() => {
     // @ts-ignore

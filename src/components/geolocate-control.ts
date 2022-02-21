@@ -70,7 +70,7 @@ export type GeolocateControlProps = {
 const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>((props, ref) => {
   const thisRef = useRef({props});
 
-  const ctrl = useControl(
+  const ctrl = useControl<MapboxGeolocateControl>(
     ({mapLib}) => {
       const gc = new mapLib.GeolocateControl(props);
 
@@ -93,7 +93,7 @@ const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>(
       return gc;
     },
     {position: props.position}
-  ) as MapboxGeolocateControl;
+  );
 
   thisRef.current.props = props;
 
