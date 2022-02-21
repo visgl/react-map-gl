@@ -17,13 +17,13 @@ export type FullscreenControlProps = {
 };
 
 function FullscreenControl(props: FullscreenControlProps): null {
-  const ctrl = useControl(
+  const ctrl = useControl<MapboxFullscreenControl>(
     ({mapLib}) =>
       new mapLib.FullscreenControl({
         container: props.containerId && document.getElementById(props.containerId)
       }),
     {position: props.position}
-  ) as MapboxFullscreenControl;
+  );
 
   useEffect(() => {
     // @ts-ignore

@@ -45,10 +45,10 @@ class OverlayControl implements IControl {
 function CustomOverlay(props: {children: React.ReactElement}) {
   const [, setVersion] = useState(0);
 
-  const ctrl = useControl(() => {
+  const ctrl = useControl<OverlayControl>(() => {
     const forceUpdate = () => setVersion(v => v + 1);
     return new OverlayControl(forceUpdate);
-  }) as OverlayControl;
+  });
 
   const map = ctrl.getMap();
 
