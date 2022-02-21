@@ -7,8 +7,8 @@ type ControlOptions = {
   position?: ControlPosition;
 };
 
-export default function useControl(
-  onCreate: (context: MapContextValue) => IControl,
+export default function useControl<T extends IControl>(
+  onCreate: (context: MapContextValue) => T,
   onRemove?: ((context: MapContextValue) => void) | ControlOptions,
   opts?: ControlOptions
 ) {
