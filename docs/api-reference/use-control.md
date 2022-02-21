@@ -42,20 +42,20 @@ See a full example [here](/examples/draw-polygon).
 ## Signature
 
 ```js
-useControl(
+useControl<T extends IControl>(
   onCreate: ({map: MapboxMap, mapLib: mapboxgl}) => IControl,
   options?: {
     position?: ControlPosition;
   }
-): IControl
+): T
 
-useControl(
+useControl<T extends IControl>(
   onCreate: ({map: MapboxMap, mapLib: mapboxgl}) => IControl,
   onRemove: ({map: MapboxMap, mapLib: mapboxgl}) => void,
   options?: {
     position?: ControlPosition;
   }
-): IControl
+): T
 ```
 
 The hook creates an [IControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#icontrol) instance, adds it to the map when it's available, and removes it upon unmount.

@@ -26,9 +26,9 @@ const defaultProps: ScaleControlProps = {
 };
 
 function ScaleControl(props: ScaleControlProps): null {
-  const ctrl = useControl(({mapLib}) => new mapLib.ScaleControl(props), {
+  const ctrl = useControl<MapboxScaleControl>(({mapLib}) => new mapLib.ScaleControl(props), {
     position: props.position
-  }) as MapboxScaleControl;
+  });
 
   // @ts-ignore
   if (ctrl.options.unit !== props.unit || ctrl.options.maxWidth !== props.maxWidth) {
