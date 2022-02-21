@@ -18,7 +18,7 @@ export const MapProvider: React.FC<{}> = props => {
   const onMapMount = useCallback((map: MapRef, id: string = 'default') => {
     setMaps(currMaps => {
       if (id === 'current') {
-        throw new Error('\'current\' cannot be used as map id');
+        throw new Error("'current' cannot be used as map id");
       }
       if (currMaps[id]) {
         throw new Error(`Multiple maps with the same id: ${id}`);
