@@ -2,6 +2,11 @@
 
 # Version 7.0
 
+## 7.0.7 (Feb 21, 2022)
+
+- Add onClick callback to Marker (#1761)
+- Add generic to use-control for inferring return type (#1739)
+
 ## 7.0.6 (Feb 9, 2022)
 
 - Fix handling of initial cursor value (#1737)
