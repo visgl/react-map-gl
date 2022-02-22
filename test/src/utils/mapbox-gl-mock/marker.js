@@ -9,7 +9,7 @@ export default class Marker extends Evented {
     this._map = null;
     this._lngLat = null;
     this._popup = null;
-    this._element = opts.element || {};
+    this._element = opts.element || {addEventListener: () => {}};
   }
 
   addTo(map) {

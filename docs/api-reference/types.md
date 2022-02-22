@@ -272,6 +272,7 @@ An object with the following fields:
 
 - `type`: string - Event type
 - `target`: [MapboxMap](#mapboxmap) - The map instance that fired the event
+- `originalEvent?`: [Event](https://developer.mozilla.org/en-US/docs/Web/API/Event)
 
 #### MapLayerMouseEvent
 

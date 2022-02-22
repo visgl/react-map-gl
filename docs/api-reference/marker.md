@@ -103,6 +103,10 @@ CSS style override that applies to the marker's container.
 
 ### Callbacks
 
+#### `onClick`: (evt: [MapEvent](/docs/api-reference/types.md#mapevent)) => void
+
+Called when the marker is clicked on.
+
 #### `onDragStart`: (evt: [MarkerDragEvent](/docs/api-reference/types.md#markerdragevent)) => void
 
 Called when dragging starts, if `draggable` is `true`.
