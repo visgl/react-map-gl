@@ -723,6 +723,9 @@ export default class Mapbox {
         if (!nextProps.terrain || map.getSource(nextProps.terrain.source)) {
           changed = true;
           map.setTerrain(nextProps.terrain);
+          // Copy changes to the transform
+          // @ts-ignore
+          this._renderTransform.elevation = map.transform.elevation;
         }
       }
     }
