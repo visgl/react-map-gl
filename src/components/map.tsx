@@ -14,13 +14,12 @@ import Mapbox, {MapboxProps} from '../mapbox/mapbox';
 import createRef, {MapRef} from '../mapbox/create-ref';
 
 import type {CSSProperties} from 'react';
-import type {MapboxMap} from '../types';
 import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
 import setGlobals, {GlobalSettings} from '../utils/set-globals';
 
 export type MapContextValue = {
   mapLib: any;
-  map: MapboxMap;
+  map: MapRef;
 };
 
 export const MapContext = React.createContext<MapContextValue>(null);
@@ -101,11 +100,11 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
           if (!mapbox) {
             mapbox = new Mapbox(mapboxgl.Map, props, containerRef.current);
           }
-          contextValue.map = mapbox.map;
+          contextValue.map = createRef(mapbox, mapboxgl);
           contextValue.mapLib = mapboxgl;
 
           setMapInstance(mapbox);
-          mountedMapsContext?.onMapMount(createRef(mapbox, mapboxgl), props.id);
+          mountedMapsContext?.onMapMount(contextValue.map, props.id);
         } else {
           throw new Error('Map is not supported by this browser');
         }
@@ -138,7 +137,7 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
     }
   });
 
-  useImperativeHandle(ref, () => createRef(mapInstance, contextValue.mapLib), [mapInstance]);
+  useImperativeHandle(ref, () => contextValue.map, [mapInstance]);
 
   const style: CSSProperties = useMemo(
     () => ({

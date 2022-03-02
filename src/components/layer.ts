@@ -75,7 +75,7 @@ function createLayer(map: MapboxMap, id: string, props: LayerProps) {
 let layerCounter = 0;
 
 function Layer(props: LayerProps) {
-  const {map} = useContext(MapContext);
+  const map: MapboxMap = useContext(MapContext).map.getMap();
   const propsRef = useRef(props);
   const [, setStyleLoaded] = useState(0);
 

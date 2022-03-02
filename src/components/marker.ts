@@ -10,7 +10,8 @@ import type {
   PointLike,
   Anchor,
   Alignment,
-  MapboxEvent
+  MapboxEvent,
+  MapboxMarker
 } from '../types';
 
 import {MapContext} from './map';
@@ -87,7 +88,7 @@ function Marker(props: MarkerProps) {
   const thisRef = useRef({props});
   thisRef.current.props = props;
 
-  const marker = useMemo(() => {
+  const marker: MapboxMarker = useMemo(() => {
     let hasChildren = false;
     React.Children.forEach(props.children, el => {
       if (el) {
@@ -129,7 +130,7 @@ function Marker(props: MarkerProps) {
   }, []);
 
   useEffect(() => {
-    marker.addTo(map);
+    marker.addTo(map.getMap());
 
     return () => {
       marker.remove();

@@ -1,7 +1,7 @@
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import {useControl} from 'react-map-gl';
 
-import type {MapboxMap, ControlPosition} from 'react-map-gl';
+import type {MapRef, ControlPosition} from 'react-map-gl';
 
 type ControlTypes =
   | 'point'
@@ -33,13 +33,13 @@ type DrawControlProps = {
 
 export default function DrawControl(props: DrawControlProps) {
   useControl(
-    ({map}: {map: MapboxMap}) => {
+    ({map}: {map: MapRef}) => {
       map.on('draw.create', props.onCreate);
       map.on('draw.update', props.onUpdate);
       map.on('draw.delete', props.onDelete);
       return new MapboxDraw(props);
     },
-    ({map}: {map: MapboxMap}) => {
+    ({map}: {map: MapRef}) => {
       map.off('draw.create', props.onCreate);
       map.off('draw.update', props.onUpdate);
       map.off('draw.delete', props.onDelete);

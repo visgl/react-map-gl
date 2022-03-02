@@ -43,15 +43,15 @@ See a full example [here](/examples/draw-polygon).
 
 ```js
 useControl<T extends IControl>(
-  onCreate: ({map: MapboxMap, mapLib: mapboxgl}) => IControl,
+  onCreate: ({map: MapRef, mapLib: mapboxgl}) => IControl,
   options?: {
     position?: ControlPosition;
   }
 ): T
 
 useControl<T extends IControl>(
-  onCreate: ({map: MapboxMap, mapLib: mapboxgl}) => IControl,
-  onRemove: ({map: MapboxMap, mapLib: mapboxgl}) => void,
+  onCreate: ({map: MapRef, mapLib: mapboxgl}) => IControl,
+  onRemove: ({map: MapRef, mapLib: mapboxgl}) => void,
   options?: {
     position?: ControlPosition;
   }
@@ -62,8 +62,8 @@ The hook creates an [IControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/
 
 Parameters:
 
-- `onCreate`: ({map: MapboxMap, mapLib: mapboxgl}) => [IControl](/docs/api-reference/types.md#icontrol) - called to create an instance of the control.
-- `onRemove`: ({map: MapboxMap, mapLib: mapboxgl}) => void - called when the control is about to be removed.
+- `onCreate`: ({map: MapRef, mapLib: mapboxgl}) => [IControl](/docs/api-reference/types.md#icontrol) - called to create an instance of the control.
+- `onRemove`: ({map: MapRef, mapLib: mapboxgl}) => void - called when the control is about to be removed.
 - `options`: object
   + `position`: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' - control position relative to the map
 
