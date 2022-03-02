@@ -18,7 +18,8 @@ export default function useControl<T extends IControl>(
   useEffect(() => {
     const {map} = context;
     if (!map.hasControl(ctrl)) {
-      map.addControl(ctrl, (opts || (onRemove as ControlOptions))?.position);
+      const { position } = opts || (onRemove as ControlOptions) || {}
+      map.addControl(ctrl, position);
     }
 
     return () => {
