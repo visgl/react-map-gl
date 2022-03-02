@@ -57,7 +57,7 @@ See a full example [here](https://github.com/visgl/react-map-gl/tree/7.0-release
 
 ## Signature
 
-`useMap(): {[id: string]: MapRef}`
+`useMap(): {current?: MapRef, [id: string]: MapRef}`
 
 The hook returns an object that contains all mounted maps under the closest `MapProvider`. The keys are each map's [id](/docs/api-reference/map.md#id) and the values are the [MapRef](/docs/api-reference/types.md#mapref).
 
