@@ -2,6 +2,11 @@
 
 # Version 7.0
 
+## 7.0.8 (Mar 1, 2022)
+
+- useMap() returns current map (#1763)
+- Fix terrain label rendering (#1778)
+
 ## 7.0.7 (Feb 21, 2022)
 
 - Add onClick callback to Marker (#1761)
