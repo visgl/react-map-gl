@@ -86,7 +86,7 @@ function updateSource(source: AnySourceImpl, props: SourceProps, prevProps: Sour
 /* eslint-enable complexity */
 
 function Source(props: SourceProps) {
-  const {map} = useContext(MapContext);
+  const map: MapboxMap = useContext(MapContext).map.getMap();
   const propsRef = useRef(props);
   const [, setStyleLoaded] = useState(0);
 
