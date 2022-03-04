@@ -67,7 +67,7 @@ export type MarkerProps = {
   popup?: MapboxPopup;
   /** CSS style override, applied to the control's container */
   style?: React.CSSProperties;
-  onClick: (e: MapboxEvent<MouseEvent>) => void;
+  onClick?: (e: MapboxEvent<MouseEvent>) => void;
   onDragStart?: (e: MarkerDragEvent) => void;
   onDrag?: (e: MarkerDragEvent) => void;
   onDragEnd?: (e: MarkerDragEvent) => void;
