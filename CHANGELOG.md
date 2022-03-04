@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.9 (Mar 3, 2022)
+
+- Make onClick prop of MarkerProps optional (#1789)
+
 ## 7.0.8 (Mar 1, 2022)
 
 - useMap() returns current map (#1763)
