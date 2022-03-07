@@ -32,13 +32,13 @@ import Map from 'react-map-gl';
 function App() {
   const mapRef = React.useRef();
 
-  React.useEffect(() => {
-    mapRef.current.on('styleimagemissing', () => {
+  const onMapLoad = React.useCallback(() => {
+    mapRef.current.on('move', () => {
       // do something
     });
-  }, [])
+  }, []);
 
-  return <Map ref={mapRef} />;
+  return <Map ref={mapRef} onLoad={onMapLoad} />;
 }
 ```
 

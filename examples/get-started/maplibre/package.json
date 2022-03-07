@@ -4,7 +4,7 @@
     "build": "webpack --mode=production -o ./dist"
   },
   "dependencies": {
-    "mapbox-gl": "^1.0.0",
+    "mapbox-gl": "npm:empty-npm-package@1.0.0",
     "maplibre-gl": "^2.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
