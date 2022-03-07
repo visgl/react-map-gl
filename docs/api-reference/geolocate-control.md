@@ -29,11 +29,12 @@ import * as React from 'react';
 import Map, {GeolocateControl} from 'react-map-gl';
 
 function App() {
-  const geolocateControlRef = React.useRef();
-
-  React.useEffect(() => {
-    geolocateControlRef.current.trigger();
-  }, [])
+  const geolocateControlRef = React.useCallback((ref) => {
+    if (ref) {
+      // Activate as soon as the control is loaded
+      ref.trigger();
+    }
+  }, []);
 
   return <Map><GeolocateControl ref={geolocateControlRef} /></Map>;
 }
