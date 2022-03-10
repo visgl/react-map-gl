@@ -51,7 +51,7 @@ export const MapProvider: React.FC<{}> = props => {
   );
 };
 
-export function useMap(): {current?: MapRef; [id: string]: MapRef} {
+export function useMap(): {current?: MapRef; [id: string]: MapRef | undefined} {
   const maps = useContext(MountedMapsContext)?.maps;
   const currentMap = useContext(MapContext);
 
