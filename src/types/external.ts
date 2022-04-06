@@ -30,7 +30,7 @@ export type ViewState = {
   padding: PaddingOptions;
 };
 
-export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | string;
 
 export interface ImmutableLike {
   toJS: () => any;
