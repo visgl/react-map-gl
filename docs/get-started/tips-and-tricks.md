@@ -65,7 +65,7 @@ In a moderately complex single-page app, as the user navigates through the UI, a
 </TabContext>
 ```
 
-Every time the user clicks the "table" tab, the map is unmounted. When they click the "map" tab, the map is mounted again. As of v2.0, mapbox-gl generates a [billable event](https://www.mapbox.com/pricing#maploads) every time a Map object is initialized. It is obviously not idea to get billed for just collapsing and expanding part of the UI.
+Every time the user clicks the "table" tab, the map is unmounted. When they click the "map" tab, the map is mounted again. As of v2.0, mapbox-gl generates a [billable event](https://www.mapbox.com/pricing#maploads) every time a Map object is initialized. It is obviously not ideal to get billed for just collapsing and expanding part of the UI.
 
 In this case, it is recommended that you set the [reuseMaps](/docs/api-reference/map.md#reuseMaps) prop to `true`:
 
