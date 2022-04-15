@@ -17,6 +17,8 @@ export type {
   ScaleControl as MapboxScaleControl
 } from 'mapbox-gl';
 
+import type {ProjectionSpecification} from '../types';
+
 /**
  * Stub for mapbox's Transform class
  * https://github.com/mapbox/mapbox-gl-js/blob/main/src/geo/transform.js
@@ -29,6 +31,7 @@ export type Transform = {
   bearing: number;
   pitch: number;
   padding: PaddingOptions;
+  projection: ProjectionSpecification;
 
   clone: () => Transform;
   resize: (width: number, height: number) => void;

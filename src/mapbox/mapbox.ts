@@ -852,7 +852,9 @@ export default class Mapbox {
         // Replace map.transform with ours during the callbacks
         map.transform = this._renderTransform;
         baseFire.call(map, event, properties);
+        const savedProjection = map.transform.projection;
         map.transform = tr;
+        map.transform.projection = savedProjection;
 
         return map;
       }
