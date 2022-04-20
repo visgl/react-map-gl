@@ -173,3 +173,19 @@ If your application can do without complicated DOM objects and CSS styling, cons
     </Map>
   );
 ```
+
+## Finding out if a point is within the current viewport
+
+There are some situations where you want to know if a point is currently visible on the map.  
+Checking this is simple and can be done like so:
+
+```jsx
+const mapRef = useRef<MapRef>();
+
+const checkIfPositionInViewport = (lat, lng) => {
+    const bounds = mapRef.current.getMap().getBounds();
+    return (lat >= bounds._sw.lat && lat <= bounds._nw.lat && lng >= bounds._sw.lng && lng <= bounds._nw.lng);
+}
+
+return <Map ref={mapRef} [..]/>
+```
