@@ -1,43 +1,11 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {useControl, Marker, ControlPosition} from 'react-map-gl';
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import {useControl, Marker, MarkerProps, ControlPosition} from 'react-map-gl';
+import MapboxGeocoder, {GeocoderOptions} from '@mapbox/mapbox-gl-geocoder';
 
-type GeocoderControlProps = {
+type GeocoderControlProps = Omit<GeocoderOptions, 'accessToken' | 'mapboxgl' | 'marker'> & {
   mapboxAccessToken: string;
-  origin?: string;
-  zoom?: number;
-  flyTo?: boolean | object;
-  placeholder?: string;
-  proximity?: {
-    longitude: number;
-    latitude: number;
-  };
-  trackProximity?: boolean;
-  collapsed?: boolean;
-  clearAndBlurOnEsc?: boolean;
-  clearOnBlur?: boolean;
-  box?: [number, number, number, number];
-  countries?: string;
-  types?: string;
-  minLength?: number;
-  limit?: number;
-  language?: string;
-  filter?: (feature: object) => boolean;
-  localGeocoder?: Function;
-  externalGeocoder?: Function;
-  reverseMode?: 'distance' | 'score';
-  reverseGeocode?: boolean;
-  enableEventLogging?: boolean;
-  marker?: boolean | object;
-  render?: (feature: object) => string;
-  getItemValue?: (feature: object) => string;
-  mode?: 'mapbox.places' | 'mapbox.places-permanent';
-  localGeocoderOnly?: boolean;
-  autocomplete?: boolean;
-  fuzzyMatch?: boolean;
-  routing?: boolean;
-  worldview?: string;
+  marker?: boolean | Omit<MarkerProps, 'longitude' | 'latitude'>;
 
   position: ControlPosition;
 
@@ -55,6 +23,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
     () => {
       const ctrl = new MapboxGeocoder({
         ...props,
+        marker: false,
         accessToken: props.mapboxAccessToken
       });
       ctrl.on('loading', props.onLoading);
@@ -66,7 +35,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
         const location =
           result &&
           (result.center || (result.geometry?.type === 'Point' && result.geometry.coordinates));
-        if (location) {
+        if (location && props.marker) {
           setMarker(<Marker {...props.marker} longitude={location[0]} latitude={location[1]} />);
         } else {
           setMarker(null);
@@ -80,6 +49,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
     }
   );
 
+  // @ts-ignore (TS2339) private member
   if (geocoder._map) {
     if (geocoder.getProximity() !== props.proximity && props.proximity !== undefined) {
       geocoder.setProximity(props.proximity);
@@ -94,41 +64,42 @@ export default function GeocoderControl(props: GeocoderControlProps) {
       geocoder.setZoom(props.zoom);
     }
     if (geocoder.getFlyTo() !== props.flyTo && props.flyTo !== undefined) {
-      geocoder.setFlyTo(props.zoom);
+      geocoder.setFlyTo(props.flyTo);
     }
     if (geocoder.getPlaceholder() !== props.placeholder && props.placeholder !== undefined) {
-      geocoder.setPlaceholder(props.zoom);
+      geocoder.setPlaceholder(props.placeholder);
     }
     if (geocoder.getCountries() !== props.countries && props.countries !== undefined) {
-      geocoder.setCountries(props.zoom);
+      geocoder.setCountries(props.countries);
     }
     if (geocoder.getTypes() !== props.types && props.types !== undefined) {
-      geocoder.setTypes(props.zoom);
+      geocoder.setTypes(props.types);
     }
     if (geocoder.getMinLength() !== props.minLength && props.minLength !== undefined) {
-      geocoder.setMinLength(props.zoom);
+      geocoder.setMinLength(props.minLength);
     }
     if (geocoder.getLimit() !== props.limit && props.limit !== undefined) {
-      geocoder.setLimit(props.zoom);
+      geocoder.setLimit(props.limit);
     }
     if (geocoder.getFilter() !== props.filter && props.filter !== undefined) {
-      geocoder.setFilter(props.zoom);
+      geocoder.setFilter(props.filter);
     }
     if (geocoder.getOrigin() !== props.origin && props.origin !== undefined) {
-      geocoder.setOrigin(props.zoom);
+      geocoder.setOrigin(props.origin);
     }
-    if (geocoder.getAutocomplete() !== props.autocomplete && props.autocomplete !== undefined) {
-      geocoder.setAutocomplete(props.zoom);
-    }
-    if (geocoder.getFuzzyMatch() !== props.fuzzyMatch && props.fuzzyMatch !== undefined) {
-      geocoder.setFuzzyMatch(props.zoom);
-    }
-    if (geocoder.getRouting() !== props.routing && props.routing !== undefined) {
-      geocoder.setRouting(props.zoom);
-    }
-    if (geocoder.getWorldview() !== props.worldview && props.worldview !== undefined) {
-      geocoder.setWorldview(props.zoom);
-    }
+    // Types missing from @types/mapbox__mapbox-gl-geocoder
+    // if (geocoder.getAutocomplete() !== props.autocomplete && props.autocomplete !== undefined) {
+    //   geocoder.setAutocomplete(props.autocomplete);
+    // }
+    // if (geocoder.getFuzzyMatch() !== props.fuzzyMatch && props.fuzzyMatch !== undefined) {
+    //   geocoder.setFuzzyMatch(props.fuzzyMatch);
+    // }
+    // if (geocoder.getRouting() !== props.routing && props.routing !== undefined) {
+    //   geocoder.setRouting(props.routing);
+    // }
+    // if (geocoder.getWorldview() !== props.worldview && props.worldview !== undefined) {
+    //   geocoder.setWorldview(props.worldview);
+    // }
   }
   return marker;
 }
@@ -136,6 +107,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
 const noop = () => {};
 
 GeocoderControl.defaultProps = {
+  marker: true,
   onLoading: noop,
   onResults: noop,
   onResult: noop,
