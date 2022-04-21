@@ -29,6 +29,8 @@ export type Transform = {
   bearing: number;
   pitch: number;
   padding: PaddingOptions;
+  elevation: any;
+  pixelsToGLUnits: [number, number];
 
   clone: () => Transform;
   resize: (width: number, height: number) => void;

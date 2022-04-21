@@ -1,4 +1,4 @@
-import {transformToViewState, applyViewStateToTransform} from '../utils/transform';
+import {transformToViewState, applyViewStateToTransform, cloneTransform} from '../utils/transform';
 import {normalizeStyle} from '../utils/style-utils';
 import {deepEqual} from '../utils/deep-equal';
 
@@ -451,7 +451,7 @@ export default class Mapbox {
 
     const settingsChanged = this._updateSettings(props, oldProps);
     if (settingsChanged) {
-      this._renderTransform = this._map.transform.clone();
+      this._renderTransform = cloneTransform(this._map.transform);
     }
     const sizeChanged = this._updateSize(props);
     const viewStateChanged = this._updateViewState(props, true);
@@ -542,7 +542,7 @@ export default class Mapbox {
     if (props.cursor) {
       map.getCanvas().style.cursor = props.cursor;
     }
-    this._renderTransform = map.transform.clone();
+    this._renderTransform = cloneTransform(map.transform);
 
     // Hack
     // Insert code into map's render cycle
@@ -723,11 +723,10 @@ export default class Mapbox {
         if (!nextProps.terrain || map.getSource(nextProps.terrain.source)) {
           changed = true;
           map.setTerrain(nextProps.terrain);
-          // Copy changes to the transform
-          // @ts-ignore
-          this._renderTransform.elevation = map.transform.elevation;
         }
       }
+      // Copy changes to the transform
+      this._renderTransform.elevation = map.transform.elevation;
     }
     return changed;
   }
@@ -878,6 +877,7 @@ export default class Mapbox {
     const tr = this._map.transform;
     // Make sure camera matches the current props
     this._map.transform = this._renderTransform;
+    this._map.painter.transform = this._renderTransform;
 
     this._onAfterRepaint = () => {
       // Restores camera state before render/load events are fired

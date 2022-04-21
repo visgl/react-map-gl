@@ -35,6 +35,7 @@ export default class Map extends Evented {
     this.transform.zoom = this.options.zoom || 0;
     this.transform.pitch = this.options.pitch || 0;
     this.transform.bearing = this.options.bearing || 0;
+    this.painter = {transform: this.transform};
 
     setTimeout(() => {
       this.style._loaded = true;
