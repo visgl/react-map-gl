@@ -91,11 +91,11 @@ CSS style override that applies to the popup's container.
 
 #### `onOpen`: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void
 
-Called when the popup is opened manually or programatically.
+Called when the popup is opened.
 
 #### `onClose`: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void
 
-Called when the popup is closed manually or programatically.
+Called when the popup is closed by the user clicking on the close button or outside (if `closeOnClick: true`).
 
 
 ## Source

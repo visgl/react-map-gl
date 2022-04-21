@@ -53,7 +53,7 @@
     "babel-loader": "^8.0.0",
     "coveralls": "^3.0.0",
     "jsdom": "^15.0.0",
-    "mapbox-gl": "^2.1.0",
+    "mapbox-gl": "^2.8.0",
     "ocular-dev-tools": "beta",
     "pre-commit": "^1.2.2",
     "react": "^17.0.0",

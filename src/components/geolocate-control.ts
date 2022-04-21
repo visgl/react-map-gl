@@ -74,6 +74,16 @@ const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>(
     ({mapLib}) => {
       const gc = new mapLib.GeolocateControl(props);
 
+      // Hack: fix GeolocateControl reuse
+      // When using React strict mode, the component is mounted twice.
+      // GeolocateControl's UI creation is asynchronous. Removing and adding it back causes the UI to be initialized twice.
+      const setupUI = gc._setupUI;
+      gc._setupUI = args => {
+        if (!gc._container.hasChildNodes()) {
+          setupUI(args);
+        }
+      };
+
       gc.on('geolocate', e => {
         thisRef.current.props.onGeolocate?.(e as GeolocateResultEvent);
       });
