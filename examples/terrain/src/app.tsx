@@ -29,6 +29,7 @@ export default function App() {
           bearing: 80,
           pitch: 80
         }}
+        maxPitch={85}
         mapStyle="mapbox://styles/mapbox/satellite-v9"
         mapboxAccessToken={TOKEN}
         terrain={{source: 'mapbox-dem', exaggeration: 1.5}}
