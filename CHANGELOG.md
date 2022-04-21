@@ -2,6 +2,13 @@
 
 # Version 7.0
 
+## 7.0.11 (Apr 21, 2022)
+
+- Use published types in geocoder and draw examples (#1838)
+- More robust add/remove condition checks (#1840)
+- Fix Popup and GeolocateControl under React StrictMode (#1836)
+- Fix rendering bug using terrain (#1841)
+
 ## 7.0.10 (Mar 13, 2022)
 
 - Fix useMap type (#1799)
