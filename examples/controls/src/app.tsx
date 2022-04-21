@@ -28,8 +28,14 @@ export default function App() {
           longitude={city.longitude}
           latitude={city.latitude}
           anchor="bottom"
+          onClick={e => {
+            // If we let the click event propagates to the map, it will immediately close the popup
+            // with `closeOnClick: true`
+            e.originalEvent.stopPropagation();
+            setPopupInfo(city);
+          }}
         >
-          <Pin onClick={() => setPopupInfo(city)} />
+          <Pin />
         </Marker>
       )),
     []
@@ -60,7 +66,6 @@ export default function App() {
             anchor="top"
             longitude={Number(popupInfo.longitude)}
             latitude={Number(popupInfo.latitude)}
-            closeOnClick={false}
             onClose={() => setPopupInfo(null)}
           >
             <div>
