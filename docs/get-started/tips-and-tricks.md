@@ -65,7 +65,7 @@ In a moderately complex single-page app, as the user navigates through the UI, a
 </TabContext>
 ```
 
-Every time the user clicks the "table" tab, the map is unmounted. When they click the "map" tab, the map is mounted again. As of v2.0, mapbox-gl generates a [billable event](https://www.mapbox.com/pricing#maploads) every time a Map object is initialized. It is obviously not idea to get billed for just collapsing and expanding part of the UI.
+Every time the user clicks the "table" tab, the map is unmounted. When they click the "map" tab, the map is mounted again. As of v2.0, mapbox-gl generates a [billable event](https://www.mapbox.com/pricing#maploads) every time a Map object is initialized. It is obviously not ideal to get billed for just collapsing and expanding part of the UI.
 
 In this case, it is recommended that you set the [reuseMaps](/docs/api-reference/map.md#reuseMaps) prop to `true`:
 
@@ -172,4 +172,20 @@ If your application can do without complicated DOM objects and CSS styling, cons
       </Sources>
     </Map>
   );
+```
+
+## Finding out if a point is within the current viewport
+
+There are some situations where you want to know if a point is currently visible on the map.  
+Checking this is simple and can be done like so:
+
+```jsx
+const mapRef = useRef<MapRef>();
+
+const checkIfPositionInViewport = (lat, lng) => {
+    const bounds = mapRef.current.getMap().getBounds();
+    return (lat >= bounds._sw.lat && lat <= bounds._nw.lat && lng >= bounds._sw.lng && lng <= bounds._nw.lng);
+}
+
+return <Map ref={mapRef} [..]/>
 ```

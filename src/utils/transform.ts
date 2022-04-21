@@ -2,6 +2,17 @@ import type {MapboxProps} from '../mapbox/mapbox';
 import type {Transform, ViewState} from '../types';
 
 /**
+ * Make a copy of a transform
+ * @param tr
+ */
+export function cloneTransform(tr: Transform): Transform {
+  const newTransform = tr.clone();
+  // Work around mapbox bug - this value is not assigned in clone(), only in resize()
+  newTransform.pixelsToGLUnits = tr.pixelsToGLUnits;
+  return newTransform;
+}
+
+/**
  * Capture a transform's current state
  * @param transform
  * @returns descriptor of the view state
