@@ -12,7 +12,7 @@ type MountedMapsContextValue = {
 
 export const MountedMapsContext = React.createContext<MountedMapsContextValue>(null);
 
-export const MapProvider: React.FC<{}> = props => {
+export const MapProvider: React.FC<{children?: React.ReactNode}> = props => {
   const [maps, setMaps] = useState<{[id: string]: MapRef}>({});
 
   const onMapMount = useCallback((map: MapRef, id: string = 'default') => {
