@@ -20,19 +20,22 @@ yarn test
 Test:
 
 ```bash
-$ npm run test
+$ yarn test
+
 ```
 
 Test in Node:
 
 ```bash
-$ npm run test node
+$ yarn test node
+
 ```
 
 Test in browser (can use Chrome dev tools for debugging):
 
 ```bash
-$ npm run test browser
+$ yarn test browser
+
 ```
 
 ## Pull Requests
@@ -44,7 +47,8 @@ Generally speaking, all PRs are open against the `master` branch, unless the fea
 ### PR Checklist
 
 - [ ] Tests
-  + `npm run test` must be successful.
+- `yarn test` must be successful.
+
   + New code should be covered by unit tests whenever possible.
 - [ ] Documentation
   + If public APIs are added/modified, update component documentation in `docs/api-reference`.
