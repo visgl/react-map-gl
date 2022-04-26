@@ -81,19 +81,25 @@ function Popup(props: PopupProps) {
   const popup: MapboxPopup = useMemo(() => {
     const options = {...props};
     const pp = new mapLib.Popup(options).setLngLat([props.longitude, props.latitude]);
-    pp.on('open', e => {
+    pp.once('open', e => {
       thisRef.current.props.onOpen?.(e as PopupEvent);
-    });
-    pp.on('close', e => {
-      thisRef.current.props.onClose?.(e as PopupEvent);
     });
     return pp;
   }, []);
 
   useEffect(() => {
+    const onClose = e => {
+      thisRef.current.props.onClose?.(e as PopupEvent);
+    };
+    popup.on('close', onClose);
     popup.setDOMContent(container).addTo(map.getMap());
 
     return () => {
+      // https://github.com/visgl/react-map-gl/issues/1825
+      // onClose should not be fired if the popup is removed by unmounting
+      // When using React strict mode, the component is mounted twice.
+      // Firing the onClose callback here would be a false signal to remove the component.
+      popup.off('close', onClose);
       if (popup.isOpen()) {
         popup.remove();
       }

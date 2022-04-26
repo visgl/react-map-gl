@@ -32,6 +32,8 @@ export type Transform = {
   pitch: number;
   padding: PaddingOptions;
   projection: ProjectionSpecification;
+  elevation: any;
+  pixelsToGLUnits: [number, number];
 
   clone: () => Transform;
   resize: (width: number, height: number) => void;
