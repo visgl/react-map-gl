@@ -5,14 +5,21 @@ import {deepEqual} from '../utils/deep-equal';
 
 import type {MapboxMap, AnyLayer} from '../types';
 
-export type LayerProps = AnyLayer & {
+export type DeprecatedLayerProps = AnyLayer & {
   id?: string;
   /** If set, the layer will be inserted before the specified layer */
   beforeId?: string;
 };
 
+export type LayerProps =
+  | {
+      layer: AnyLayer;
+      beforeId?: string;
+    }
+  | DeprecatedLayerProps;
+
 /* eslint-disable complexity, max-statements */
-function updateLayer(map: MapboxMap, id: string, props: LayerProps, prevProps: LayerProps) {
+function updateLayer(map: MapboxMap, id: string, props: AnyLayer, prevProps: AnyLayer) {
   assert(props.id === prevProps.id, 'layer id changed');
   assert(props.type === prevProps.type, 'layer type changed');
 
@@ -20,11 +27,8 @@ function updateLayer(map: MapboxMap, id: string, props: LayerProps, prevProps: L
     return;
   }
 
-  const {layout = {}, paint = {}, filter, minzoom, maxzoom, beforeId} = props;
+  const {layout = {}, paint = {}, filter, minzoom, maxzoom} = props;
 
-  if (beforeId !== prevProps.beforeId) {
-    map.moveLayer(id, beforeId);
-  }
   if (layout !== prevProps.layout) {
     const prevLayout = prevProps.layout || {};
     for (const key in layout) {
@@ -59,14 +63,16 @@ function updateLayer(map: MapboxMap, id: string, props: LayerProps, prevProps: L
   }
 }
 
-function createLayer(map: MapboxMap, id: string, props: LayerProps) {
+function isMapStyleLoaded(map: MapboxMap) {
   // @ts-ignore
-  if (map.style && map.style._loaded && (!('source' in props) || map.getSource(props.source))) {
-    const options: LayerProps = {...props, id};
-    delete options.beforeId;
+  return map.style && map.style._loaded;
+}
 
+function createLayer(map: MapboxMap, id: string, layerProps: LayerProps, beforeId: string) {
+  // @ts-ignore
+  if (isMapStyleLoaded(map) && (!('source' in layerProps) || map.getSource(layerProps.source))) {
     // @ts-ignore
-    map.addLayer(options, props.beforeId);
+    map.addLayer(layerProps, beforeId);
   }
 }
 
@@ -74,12 +80,23 @@ function createLayer(map: MapboxMap, id: string, props: LayerProps) {
 
 let layerCounter = 0;
 
-function Layer(props: LayerProps) {
+function Layer(props: LayerProps & {layer?: AnyLayer}) {
   const map: MapboxMap = useContext(MapContext).map.getMap();
-  const propsRef = useRef(props);
-  const [, setStyleLoaded] = useState(0);
 
-  const id = useMemo(() => props.id || `jsx-layer-${layerCounter++}`, []);
+  const layerProps = useMemo(() => {
+    if (props.layer) {
+      return props.layer;
+    }
+    const res = {...props};
+    delete res.beforeId;
+    return res as DeprecatedLayerProps;
+  }, [props.layer, props]);
+
+  const layerPropsRef = useRef(layerProps);
+  const [, setStyleLoaded] = useState(0);
+  const beforeId = props.beforeId;
+
+  const id = useMemo(() => layerProps.id || `jsx-layer-${layerCounter++}`, []);
 
   useEffect(() => {
     if (map) {
@@ -102,16 +119,22 @@ function Layer(props: LayerProps) {
   const layer = map && map.style && map.getLayer(id);
   if (layer) {
     try {
-      updateLayer(map, id, props, propsRef.current);
+      updateLayer(map, id, layerProps, layerPropsRef.current);
     } catch (error) {
       console.warn(error); // eslint-disable-line
     }
   } else {
-    createLayer(map, id, props);
+    createLayer(map, id, layerProps, beforeId);
   }
 
+  useEffect(() => {
+    if (beforeId && isMapStyleLoaded(map)) {
+      map.moveLayer(id, beforeId);
+    }
+  }, [beforeId]);
+
   // Store last rendered props
-  propsRef.current = props;
+  layerPropsRef.current = layerProps;
 
   return null;
 }
