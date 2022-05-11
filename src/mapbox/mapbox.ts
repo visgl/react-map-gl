@@ -879,7 +879,7 @@ export default class Mapbox {
 
     this._onAfterRepaint = () => {
       // Terrain is updated during render
-      if (tr.elevation = this._renderTransform.elevation) {
+      if ((tr.elevation = this._renderTransform.elevation)) {
         tr.updateElevation(false);
       }
       // Restores camera state before render/load events are fired
