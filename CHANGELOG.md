@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.12 (May 13, 2022)
+
+-  Fix mismatched terrain between transforms (#1855)
+
 ## 7.0.11 (Apr 21, 2022)
 
 - Use published types in geocoder and draw examples (#1838)
