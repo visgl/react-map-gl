@@ -725,8 +725,6 @@ export default class Mapbox {
           map.setTerrain(nextProps.terrain);
         }
       }
-      // Copy changes to the transform
-      this._renderTransform.elevation = map.transform.elevation;
     }
     return changed;
   }
@@ -880,6 +878,10 @@ export default class Mapbox {
     this._map.painter.transform = this._renderTransform;
 
     this._onAfterRepaint = () => {
+      // Terrain is updated during render
+      if ((tr.elevation = this._renderTransform.elevation)) {
+        tr.updateElevation(false);
+      }
       // Restores camera state before render/load events are fired
       this._map.transform = tr;
     };
