@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useMemo, useState} from 'react';
-import {render} from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import Map from 'react-map-gl';
 import {arc, pie} from 'd3-shape';
 
@@ -137,5 +137,5 @@ function makePieChart(datum: CountyElectionData, onHover: (target: CountyElectio
 }
 
 export function renderToDom(container) {
-  render(<App />, container);
+  createRoot(container).render(<App />);
 }

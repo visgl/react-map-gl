@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {render} from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import Map from 'react-map-gl';
 import ControlPanel from './control-panel';
 
@@ -28,5 +28,5 @@ export default function App() {
 }
 
 export function renderToDom(container) {
-  render(<App />, container);
+  createRoot(container).render(<App />);
 }
