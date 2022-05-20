@@ -1,6 +1,6 @@
 /* global document */
 import * as React from 'react';
-import {render} from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import Map, {Marker} from 'react-map-gl';
 import maplibregl from 'maplibre-gl';
 
@@ -23,4 +23,5 @@ function Root() {
   );
 }
 
-render(<Root />, document.body.appendChild(document.createElement('div')));
+const root = createRoot(document.body.appendChild(document.createElement('div')));
+root.render(<Root />);

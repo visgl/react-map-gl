@@ -1,6 +1,6 @@
 /* global document */
 import * as React from 'react';
-import {render} from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import {MapProvider} from 'react-map-gl';
 
 import Map from './map';
@@ -15,4 +15,5 @@ function Root() {
   );
 }
 
-render(<Root />, document.body.appendChild(document.createElement('div')));
+const root = createRoot(document.body.appendChild(document.createElement('div')));
+root.render(<Root />);

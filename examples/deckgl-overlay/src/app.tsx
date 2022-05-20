@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {render} from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import DeckGL, {ArcLayer} from 'deck.gl';
 import Map from 'react-map-gl';
 
@@ -33,5 +33,5 @@ export default function App() {
 }
 
 export function renderToDom(container) {
-  render(<App />, container);
+  createRoot(container).render(<App />);
 }
