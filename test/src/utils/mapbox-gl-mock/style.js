@@ -15,11 +15,17 @@ export default class Style {
     this._terrain = null;
 
     this._sources = {};
-    this._layers = {};
+    this._layers = [];
   }
 
   loaded() {
     return this._loaded;
+  }
+
+  serialize() {
+    const style = {sources: this._sources, layers: this._layers};
+    // deep clone
+    return JSON.parse(JSON.stringify(style));
   }
 
   _checkLoaded() {
@@ -58,8 +64,8 @@ export default class Style {
     if (!(name in this._sources)) {
       throw new Error('No source with this id');
     }
-    for (const layerId in this._layers) {
-      if (this._layers[layerId].source === name) {
+    for (const layer of this._layers) {
+      if (layer.source === name) {
         throw new Error('Source cannot be removed while layer is using it.');
       }
     }
@@ -68,25 +74,34 @@ export default class Style {
 
   addLayer(layer, before) {
     this._checkLoaded();
-    if (layer.id in this._layers) {
+    if (this._layers.some(l => l.id === layer.id)) {
       throw new Error('Layer with the same id already exists');
     }
     if (!(layer.source in this._sources)) {
       throw new Error('Layer source does not exist');
     }
-    this._layers[layer.id] = layer;
+    let i = -1;
+    if (before) {
+      i = this._layers.findIndex(l => l.id === before);
+    }
+    if (i >= 0) {
+      this._layers.splice(i, 0, layer);
+    } else {
+      this._layers.push(layer);
+    }
   }
 
   removeLayer(layerId) {
     this._checkLoaded();
-    if (!(layerId in this._layers)) {
+    const i = this._layers.findIndex(l => l.id === layerId);
+    if (i < 0) {
       throw new Error('No layer with this id');
     }
-    delete this._layers[layerId];
+    this._layers.splice(i, 1);
   }
 
   getLayer(layerId) {
-    return this._layers[layerId];
+    return this._layers.find(l => l.id === layerId);
   }
 
   setLayoutProperty(layerId, name, value) {
