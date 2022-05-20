@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.13 (May 19, 2022)
+
+- Fix MapProvider prop types (#1843)
+
 ## 7.0.12 (May 13, 2022)
 
 -  Fix mismatched terrain between transforms (#1855)
