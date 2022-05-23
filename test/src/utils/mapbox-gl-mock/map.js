@@ -56,6 +56,10 @@ export default class Map extends Evented {
     }
   }
 
+  getStyle() {
+    return this.style.serialize();
+  }
+
   _addMarker(marker) {
     this._markers.push(marker);
   }

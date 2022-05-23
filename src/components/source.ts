@@ -100,16 +100,22 @@ function Source(props: SourceProps) {
 
       return () => {
         map.off('styledata', forceUpdate);
-        // Parent effects are destroyed before child ones, see
-        // https://github.com/facebook/react/issues/16728
-        // Source can only be removed after all child layers are removed
-        /* global setTimeout */
-        setTimeout(() => {
-          // @ts-ignore
-          if (map.style && map.style._loaded && map.getSource(id)) {
-            map.removeSource(id);
+        // @ts-ignore
+        if (map.style && map.style._loaded && map.getSource(id)) {
+          // Parent effects are destroyed before child ones, see
+          // https://github.com/facebook/react/issues/16728
+          // Source can only be removed after all child layers are removed
+          const allLayers = map.getStyle()?.layers;
+          if (allLayers) {
+            for (const layer of allLayers) {
+              // @ts-ignore (2339) source does not exist on all layer types
+              if (layer.source === id) {
+                map.removeLayer(layer.id);
+              }
+            }
           }
-        }, 0);
+          map.removeSource(id);
+        }
       };
     }
     return undefined;

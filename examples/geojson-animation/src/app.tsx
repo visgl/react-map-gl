@@ -10,6 +10,7 @@ import ControlPanel from './control-panel';
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
 const pointLayer: LayerProps = {
+  id: 'point',
   type: 'circle',
   paint: {
     'circle-radius': 10,
