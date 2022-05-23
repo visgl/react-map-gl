@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.14 (May 23, 2022)
+
+- Properly remove source on component unmount (#1866)
+
 ## 7.0.13 (May 19, 2022)
 
 - Fix MapProvider prop types (#1843)
