@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.15 (May 24, 2022)
+
+- Fix create react app builds with es2018 target (#1872)
+
 ## 7.0.14 (May 23, 2022)
 
 - Properly remove source on component unmount (#1866)

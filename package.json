@@ -1,7 +1,7 @@
 {
   "name": "react-map-gl",
   "description": "React components for Mapbox GL JS-compatible libraries",
-  "version": "7.0.14",
+  "version": "7.0.15",
   "keywords": [
     "mapbox",
     "mapbox-gl",
