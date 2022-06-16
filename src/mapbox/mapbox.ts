@@ -810,9 +810,6 @@ export default class Mapbox {
           this._map.queryRenderedFeatures(e.point, {
             layers: this.props.interactiveLayerIds
           });
-        if (!features.length) {
-          return;
-        }
         e.features = features;
       }
       cb(e);
