@@ -451,7 +451,7 @@ export default class Mapbox {
 
     const settingsChanged = this._updateSettings(props, oldProps);
     if (settingsChanged) {
-      this._renderTransform = cloneTransform(this._map.transform);
+      this._createShadowTransform(this._map);
     }
     const sizeChanged = this._updateSize(props);
     const viewStateChanged = this._updateViewState(props, true);
@@ -542,7 +542,7 @@ export default class Mapbox {
     if (props.cursor) {
       map.getCanvas().style.cursor = props.cursor;
     }
-    this._renderTransform = cloneTransform(map.transform);
+    this._createShadowTransform(map);
 
     // Hack
     // Insert code into map's render cycle
@@ -608,6 +608,25 @@ export default class Mapbox {
     }
   }
 
+  _createShadowTransform(map: any) {
+    const renderTransform = cloneTransform(map.transform);
+    map.painter.transform = renderTransform;
+
+    // Terrain update is called by the painter
+    // Elevation changes must be reflected back to the original transform so that input handlers work correctly
+    // @ts-ignore method may be undefined
+    const updateElevation = renderTransform.updateElevation;
+    if (updateElevation) {
+      // @ts-ignore
+      renderTransform.updateElevation = arg => {
+        map.transform.elevation = renderTransform.elevation;
+        updateElevation.call(renderTransform, arg);
+        updateElevation.call(map.transform, arg);
+      };
+    }
+    this._renderTransform = renderTransform;
+  }
+
   /* Trigger map resize if size is controlled
      @param {object} nextProps
      @returns {bool} true if size has changed
@@ -640,10 +659,20 @@ export default class Mapbox {
     const tr = this._renderTransform;
     // Take a snapshot of the transform before mutation
     const {zoom, pitch, bearing} = tr;
+    const isMoving = map.isMoving();
+
+    if (isMoving) {
+      // All movement of the camera is done relative to the sea level
+      tr.cameraElevationReference = 'sea';
+    }
     const changed = applyViewStateToTransform(tr, {
       ...transformToViewState(map.transform),
       ...nextProps
     });
+    if (isMoving) {
+      // Reset camera reference
+      tr.cameraElevationReference = 'ground';
+    }
 
     if (changed && triggerEvents) {
       const deferredEvents = this._deferredEvents;
@@ -656,7 +685,7 @@ export default class Mapbox {
 
     // Avoid manipulating the real transform when interaction/animation is ongoing
     // as it would interfere with Mapbox's handlers
-    if (!map.isMoving()) {
+    if (!isMoving) {
       applyViewStateToTransform(map.transform, nextProps);
     }
 
@@ -872,13 +901,8 @@ export default class Mapbox {
     const tr = this._map.transform;
     // Make sure camera matches the current props
     this._map.transform = this._renderTransform;
-    this._map.painter.transform = this._renderTransform;
 
     this._onAfterRepaint = () => {
-      // Terrain is updated during render
-      if ((tr.elevation = this._renderTransform.elevation)) {
-        tr.updateElevation(false);
-      }
       // Restores camera state before render/load events are fired
       this._map.transform = tr;
     };

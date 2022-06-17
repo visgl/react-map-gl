@@ -31,6 +31,7 @@ export type Transform = {
   padding: PaddingOptions;
   elevation: any;
   pixelsToGLUnits: [number, number];
+  cameraElevationReference: 'ground' | 'sea';
 
   clone: () => Transform;
   resize: (width: number, height: number) => void;
