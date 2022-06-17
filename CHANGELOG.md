@@ -2,6 +2,11 @@
 
 # Version 7.0
 
+## 7.0.16 (Jun 17, 2022)
+
+- Fix terrain panning (#1894)
+- Fire pointer events even if no interactive features are involved (#1895)
+
 ## 7.0.15 (May 24, 2022)
 
 - Fix create react app builds with es2018 target (#1872)
