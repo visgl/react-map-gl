@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.17 (Jul 4, 2022)
+
+- [fix] id in LayerProps should be optional (#1910)
+
 ## 7.0.16 (Jun 17, 2022)
 
 - Fix terrain panning (#1894)
