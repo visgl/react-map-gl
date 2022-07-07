@@ -130,7 +130,7 @@ One way to improve the performance is `useMemo`:
         // vehicle icon
       </svg>
     </Marker>)
-  )}, [vehicles]);
+  ), [vehicles]);
 
   return (
     <Map
