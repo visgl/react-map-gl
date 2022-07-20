@@ -1,4 +1,4 @@
-import type {MapboxMap, LngLatLike, PointLike} from '../types';
+import type {MapboxMap, LngLatLike, PointLike, ElevationQueryOptions} from '../types';
 import type Mapbox from './mapbox';
 
 /** These methods may break the react binding if called directly */
@@ -50,6 +50,16 @@ export default function createRef(mapInstance: Mapbox, mapLib: any): MapRef {
     },
     unproject: (point: PointLike) => {
       return mapInstance.transform.pointLocation(mapLib.Point.convert(point));
+    },
+    queryTerrainElevation: (lnglat: LngLatLike, options: ElevationQueryOptions) => {
+      // @ts-ignore transform not defined
+      const tr = map.transform;
+      // @ts-ignore transform not defined
+      map.transform = mapInstance.transform;
+      const result = map.queryTerrainElevation(lnglat, options);
+      // @ts-ignore transform not defined
+      map.transform = tr;
+      return result;
     }
   };
 

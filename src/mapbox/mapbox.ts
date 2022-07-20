@@ -612,18 +612,6 @@ export default class Mapbox {
     const renderTransform = cloneTransform(map.transform);
     map.painter.transform = renderTransform;
 
-    // Terrain update is called by the painter
-    // Elevation changes must be reflected back to the original transform so that input handlers work correctly
-    // @ts-ignore method may be undefined
-    const updateElevation = renderTransform.updateElevation;
-    if (updateElevation) {
-      // @ts-ignore
-      renderTransform.updateElevation = arg => {
-        map.transform.elevation = renderTransform.elevation;
-        updateElevation.call(renderTransform, arg);
-        updateElevation.call(map.transform, arg);
-      };
-    }
     this._renderTransform = renderTransform;
   }
 
