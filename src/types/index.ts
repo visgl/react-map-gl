@@ -14,7 +14,8 @@ export type {
   FullscreenControl as MapboxFullscreenControl,
   GeolocateControl as MapboxGeolocateControl,
   NavigationControl as MapboxNavigationControl,
-  ScaleControl as MapboxScaleControl
+  ScaleControl as MapboxScaleControl,
+  ElevationQueryOptions
 } from 'mapbox-gl';
 
 /**
