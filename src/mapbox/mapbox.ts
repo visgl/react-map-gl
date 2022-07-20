@@ -487,11 +487,16 @@ export default class Mapbox {
     map._container = container;
 
     // Step 3: apply new props
-    if (props.initialViewState) {
-      that._updateViewState(props.initialViewState, false);
-    }
-    map.resize();
     that.setProps({...props, styleDiffing: false});
+    map.resize();
+    const {initialViewState} = props;
+    if (initialViewState) {
+      if (initialViewState.bounds) {
+        map.fitBounds(initialViewState.bounds, {...initialViewState.fitBoundsOptions, duration: 0});
+      } else {
+        that._updateViewState(initialViewState, false);
+      }
+    }
 
     // Simulate load event
     if (map.isStyleLoaded()) {
