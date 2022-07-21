@@ -2,6 +2,11 @@
 
 # Version 7.0
 
+## 7.0.18 (Jul 20, 2022)
+
+- Fix queryTerrainElevation (#1922)
+- Handle initialViewState.bounds when reusing map (#1923)
+
 ## 7.0.17 (Jul 4, 2022)
 
 - [fix] id in LayerProps should be optional (#1910)
