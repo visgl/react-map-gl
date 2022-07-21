@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {useState} from 'react';
 import {render} from 'react-dom';
-import Map from 'react-map-gl';
+import Map, {MapProps} from 'react-map-gl';
 
 const TOKEN = ''; // Set your mapbox token here
 
-const CONFIGS = [
+const CONFIGS: MapProps[] = [
   {
     style: {width: '100%', height: '100%'},
     mapStyle: 'mapbox://styles/mapbox/dark-v9',
@@ -19,9 +19,10 @@ const CONFIGS = [
     style: {width: 400, height: 300, margin: 100},
     mapStyle: 'mapbox://styles/mapbox/light-v9',
     initialViewState: {
-      longitude: -100,
-      latitude: 40,
-      zoom: 3.5
+      bounds: [
+        [-125, 35],
+        [-70, 45]
+      ]
     }
   },
   {
