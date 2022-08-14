@@ -56,6 +56,15 @@ useControl<T extends IControl>(
     position?: ControlPosition;
   }
 ): T
+
+useControl<T extends IControl>(
+  onCreate: ({map: MapRef, mapLib: mapboxgl}) => IControl,
+  onAdd: ({map: MapRef, mapLib: mapboxgl}) => void,
+  onRemove: ({map: MapRef, mapLib: mapboxgl}) => void,
+  options?: {
+    position?: ControlPosition;
+  }
+): T
 ```
 
 The hook creates an [IControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#icontrol) instance, adds it to the map when it's available, and removes it upon unmount.
@@ -63,7 +72,8 @@ The hook creates an [IControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/
 Parameters:
 
 - `onCreate`: ({map: MapRef, mapLib: mapboxgl}) => [IControl](/docs/api-reference/types.md#icontrol) - called to create an instance of the control.
-- `onRemove`: ({map: MapRef, mapLib: mapboxgl}) => void - called when the control is about to be removed.
+- `onAdd`: ({map: MapRef, mapLib: mapboxgl}) => void - called when the control has been added to the map.
+- `onRemove`: ({map: MapRef, mapLib: mapboxgl}) => void - called when the control is about to be removed from the map.
 - `options`: object
   + `position`: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' - control position relative to the map
 
