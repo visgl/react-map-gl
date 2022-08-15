@@ -6,17 +6,29 @@ import ControlPanel from './control-panel';
 
 import {countiesLayer, highlightLayer} from './map-style';
 
-const MAPBOX_TOKEN = ''; // Set your mapbox token here
+const MAPBOX_TOKEN =
+  'pk.eyJ1IjoidG9yZGFucyIsImEiOiJjamgzM3pmNGgwYXA5MnFvNDVhMWZ0ZG1nIn0.81lAz7ysD0LZU_eqa_hObg'; // Set your mapbox token here
 
 export default function App() {
   const [hoverInfo, setHoverInfo] = useState(null);
 
   const onHover = useCallback(event => {
     const county = event.features && event.features[0];
+    console.log('onHover', {event});
     setHoverInfo({
       longitude: event.lngLat.lng,
       latitude: event.lngLat.lat,
-      countyName: county && county.properties.COUNTY
+      countyName: 'ON HOVER'
+    });
+  }, []);
+
+  const onEnter = useCallback(event => {
+    const county = event.features && event.features[0];
+    console.error('onEnter', {event});
+    setHoverInfo({
+      longitude: event.lngLat.lng + 1,
+      latitude: event.lngLat.lat + 1,
+      countyName: 'ON ENTER'
     });
   }, []);
 
@@ -35,6 +47,7 @@ export default function App() {
         mapStyle="mapbox://styles/mapbox/light-v9"
         mapboxAccessToken={MAPBOX_TOKEN}
         onMouseMove={onHover}
+        onMouseEnter={onEnter}
         interactiveLayerIds={['counties']}
       >
         <Source type="vector" url="mapbox://mapbox.82pkq93d">
