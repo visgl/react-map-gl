@@ -280,13 +280,13 @@ Called when an error occurs.
 
 Called when a pointing device (usually a mouse) is pressed within the map.
 
-If `interactiveLayerIds` is specified, the event will fire only when the the cursor is pressed while inside a visible portion of the specifed layer(s).
+If `interactiveLayerIds` is specified, the event will contain an additional `features` field that contains features under the cursor from the specified layer.
 
 #### `onMouseUp`: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a pointing device (usually a mouse) is released within the map.
 
-If `interactiveLayerIds` is specified, the event will fire only when the the cursor is released while inside a visible portion of the specifed layer(s).
+If `interactiveLayerIds` is specified, the event will contain an additional `features` field that contains features under the cursor from the specified layer.
 
 #### `onMouseOver`: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
@@ -300,7 +300,7 @@ Called when a pointing device (usually a mouse) enters a visible portion of the 
 
 Called when a pointing device (usually a mouse) is moved while the cursor is inside the map. As you move the cursor across the map, the event will fire every time the cursor changes position within the map.
 
-If `interactiveLayerIds` is specified, the event will fire only when the the cursor is inside a visible portion of the specifed layer(s).
+If `interactiveLayerIds` is specified, the event will contain an additional `features` field that contains features under the cursor from the specified layer.
 
 #### `onMouseLeave`: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
@@ -314,19 +314,19 @@ Called when a point device (usually a mouse) leaves the map's canvas.
 
 Called when a pointing device (usually a mouse) is pressed and released at the same point on the map.
 
-If `interactiveLayerIds` is specified, the event will fire only when the point that is clicked twice contains a visible portion of the specifed layer.
+If `interactiveLayerIds` is specified, the event will contain an additional `features` field that contains features under the cursor from the specified layer.
 
 #### `onDblClick`: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when a pointing device (usually a mouse) is pressed and released twice at the same point on the map in rapid succession.
 
-If `interactiveLayerIds` is specified, the event will fire only when the point that is pressed and released contains a visible portion of the specifed layer.
+If `interactiveLayerIds` is specified, the event will contain an additional `features` field that contains features under the cursor from the specified layer.
 
 #### `onContextMenu`: (event: [MapLayerMouseEvent](/docs/api-reference/types.md#maplayermouseevent)) => void
 
 Called when the right button of the mouse is clicked or the context menu key is pressed within the map.
 
-If `interactiveLayerIds` is specified, the event will fire only when the point that is right clicked contains a visible portion of the specifed layer.
+If `interactiveLayerIds` is specified, the event will contain an additional `features` field that contains features under the cursor from the specified layer.
 
 #### `onWheel`: (event: [MapWheelEvent](/docs/api-reference/types.md#mapwheelevent)) => void
 
@@ -336,26 +336,25 @@ Called when a wheel event occurs within the map.
 
 Called when a `touchstart` event occurs within the map.
 
-If `interactiveLayerIds` is specified, the event will fire only when the point is inside a visible portion of the specifed layer.
-
+If `interactiveLayerIds` is specified, the event will contain an additional `features` field that contains features under the cursor from the specified layer.
 
 #### `onTouchEnd`: (event: [MapLayerTouchEvent](/docs/api-reference/types.md#maplayertouchevent)) => void
 
 Called when a `touchend` event occurs within the map.
 
-If `interactiveLayerIds` is specified, the event will fire only when the point is inside a visible portion of the specifed layer.
+If `interactiveLayerIds` is specified, the event will contain an additional `features` field that contains features under the cursor from the specified layer.
 
 #### `onTouchMove`: (event: [MapLayerTouchEvent](/docs/api-reference/types.md#maplayertouchevent)) => void
 
 Called when a `touchmove` event occurs within the map.
 
-If `interactiveLayerIds` is specified, the event will fire only when the point is inside a visible portion of the specifed layer.
+If `interactiveLayerIds` is specified, the event will contain an additional `features` field that contains features under the cursor from the specified layer.
 
 #### `onTouchCancel`: (event: [MapLayerTouchEvent](/docs/api-reference/types.md#maplayertouchevent)) => void
 
 Called when a `touchcancel` event occurs within the map.
 
-If `interactiveLayerIds` is specified, the event will fire only when the point is inside a visible portion of the specifed layer.
+If `interactiveLayerIds` is specified, the event will contain an additional `features` field that contains features under the cursor from the specified layer.
 
 #### `onMoveStart`: (event: [ViewStateChangeEvent](/docs/api-reference/types.md#viewstatechangeevent)) => void
 
