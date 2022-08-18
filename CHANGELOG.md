@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.19 (Aug 18, 2022)
+
+- Add `onAdd` callback to useControl hook (#1952)
+
 ## 7.0.18 (Jul 20, 2022)
 
 - Fix queryTerrainElevation (#1922)
