@@ -13,11 +13,11 @@ type DrawControlProps = ConstructorParameters<typeof MapboxDraw>[0] & {
 
 export default function DrawControl(props: DrawControlProps) {
   useControl<MapboxDraw>(
+    () => new MapboxDraw(props),
     ({map}: {map: MapRef}) => {
       map.on('draw.create', props.onCreate);
       map.on('draw.update', props.onUpdate);
       map.on('draw.delete', props.onDelete);
-      return new MapboxDraw(props);
     },
     ({map}: {map: MapRef}) => {
       map.off('draw.create', props.onCreate);
