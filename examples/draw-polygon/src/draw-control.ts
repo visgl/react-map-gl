@@ -2,13 +2,14 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import {useControl} from 'react-map-gl';
 
 import type {MapRef, ControlPosition} from 'react-map-gl';
+import GeoJSON from "geojson";
 
 type DrawControlProps = ConstructorParameters<typeof MapboxDraw>[0] & {
   position?: ControlPosition;
 
-  onCreate?: (evt: {features: object[]}) => void;
-  onUpdate?: (evt: {features: object[]; action: string}) => void;
-  onDelete?: (evt: {features: object[]}) => void;
+  onCreate?: (evt: {features: GeoJSON.Feature[]}) => void;
+  onUpdate?: (evt: {features: GeoJSON.Feature[]; action: string}) => void;
+  onDelete?: (evt: {features: GeoJSON.Feature[]}) => void;
 };
 
 export default function DrawControl(props: DrawControlProps) {

@@ -5,13 +5,14 @@ import Map from 'react-map-gl';
 
 import DrawControl from './draw-control';
 import ControlPanel from './control-panel';
+import GeoJSON from "geojson";
 
 const TOKEN = ''; // Set your mapbox token here
 
 export default function App() {
   const [features, setFeatures] = useState({});
 
-  const onUpdate = useCallback(e => {
+  const onUpdate = useCallback((e: { features: GeoJSON.Feature[] }) => {
     setFeatures(currFeatures => {
       const newFeatures = {...currFeatures};
       for (const f of e.features) {
@@ -21,7 +22,7 @@ export default function App() {
     });
   }, []);
 
-  const onDelete = useCallback(e => {
+  const onDelete = useCallback((e: { features: GeoJSON.Feature[] }) => {
     setFeatures(currFeatures => {
       const newFeatures = {...currFeatures};
       for (const f of e.features) {
