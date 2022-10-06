@@ -57,7 +57,7 @@ function updateLayer(map: MapboxMap, id: string, props: LayerProps, prevProps: L
   if (!deepEqual(filter, prevProps.filter)) {
     map.setFilter(id, filter);
   }
-  if (minzoom !== prevProps.minzoom || maxzoom !== prevProps.maxzoom) {
+  if ((typeof minzoom === "number" && typeof maxzoom === "number") && (minzoom !== prevProps.minzoom || maxzoom !== prevProps.maxzoom)) {
     map.setLayerZoomRange(id, minzoom, maxzoom);
   }
 }
