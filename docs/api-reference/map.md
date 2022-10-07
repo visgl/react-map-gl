@@ -42,7 +42,7 @@ function App() {
 }
 ```
 
-The [MapRef](/docs/api-reference/types.md#mapref) object exposes [Map methods](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) that **are safe to call without breaaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
+The [MapRef](/docs/api-reference/types.md#mapref) object exposes [Map methods](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) that **are safe to call without breaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
 
 You can still access the hidden members via `getMap()`:
 
