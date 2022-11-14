@@ -94,7 +94,7 @@ function Source(props: SourceProps) {
 
   useEffect(() => {
     if (map) {
-      const forceUpdate = () => setStyleLoaded(version => version + 1);
+      const forceUpdate = () => setTimeout(() => setStyleLoaded(version => version + 1), 0);
       map.on('styledata', forceUpdate);
       forceUpdate();
 
