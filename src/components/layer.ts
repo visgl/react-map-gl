@@ -79,7 +79,7 @@ let layerCounter = 0;
 
 function Layer(props: LayerProps) {
   const map: MapboxMap = useContext(MapContext).map.getMap();
-  const propsRef = useRef(props);
+  const propsRef = useRef({id: props.id, type: props.type} as LayerProps);
   const [, setStyleLoaded] = useState(0);
 
   const id = useMemo(() => props.id || `jsx-layer-${layerCounter++}`, []);
