@@ -2,6 +2,10 @@
 
 # Version 6.1
 
+## 6.1.20 (Nov 15, 2022)
+
+- Add conditional to mapboxScaleControl._onMove (#1961)
+
 ## 6.1.19 (Jan 25, 2022)
 
 - Add support for style prop in Marker (#1696)
