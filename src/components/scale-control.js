@@ -51,7 +51,7 @@ function ScaleControl(props) {
 
   if (mapboxScaleControl) {
     mapboxScaleControl.options = props;
-    mapboxScaleControl._onMove();
+    if (mapboxScaleControl._onMove) mapboxScaleControl._onMove();
   }
 
   const style = useMemo(() => ({position: 'absolute', ...props.style}), [props.style]);
