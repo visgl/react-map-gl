@@ -2,6 +2,10 @@
 
 # Version 5.3
 
+## 5.3.20 (Nov 15, 2022)
+
+- Add conditional to mapboxScaleControl._onMove (#1961)
+
 ## 5.3.19 (Jan 25, 2022)
 
 - Fix crash in React 18 StrictMode (#1680)
