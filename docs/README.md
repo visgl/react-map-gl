@@ -32,7 +32,7 @@ For basemaps:
 
 New to react-map-gl? [Get Started](/docs/get-started/get-started.md)
 
-Want to contribute? See our [Developer Guide](/docs/developer-guide.md)
+Want to contribute? See our [Developer Guide](/docs/contributing.md)
 
 
 ## Design Philosophy
