@@ -184,7 +184,7 @@ const mapRef = useRef<MapRef>();
 
 const checkIfPositionInViewport = (lat, lng) => {
     const bounds = mapRef.current.getMap().getBounds();
-    return (lat >= bounds._sw.lat && lat <= bounds._nw.lat && lng >= bounds._sw.lng && lng <= bounds._nw.lng);
+    return bounds.contains([lng, lat]);
 }
 
 return <Map ref={mapRef} [..]/>
