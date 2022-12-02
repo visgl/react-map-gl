@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.20 (Dec 2, 2022)
+
+- Fix SymbolLayer crash on style update (#2047)
+
 ## 7.0.19 (Aug 18, 2022)
 
 - Add `onAdd` callback to useControl hook (#1952)
