@@ -92,7 +92,7 @@ The map's Mapbox style. This must be an a JSON object conforming to the schema d
 
 Default: `'mercator'`
 
-The projection the map should be rendered in. Available projections are Albers (`'albers'`), Equal Earth (`'equalEarth'`), Equirectangular/Plate Carrée/WGS84 (`'equirectangular'`), Lambert (`'lambertConformalConic'`), Mercator (`'mercator'`), Natural Earth (`'naturalEarth'`), and Winkel Tripel (`'winkelTripel'`). Conic projections such as Albers and Lambert have configurable `center` and `parallels` properties that allow developers to define the region in which the projection has minimal distortion; see [example](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#setprojection).
+The projection the map should be rendered in. Available projections are Albers (`'albers'`), Equal Earth (`'equalEarth'`), Equirectangular/Plate Carrée/WGS84 (`'equirectangular'`), Globe (`'globe'`), Lambert (`'lambertConformalConic'`), Mercator (`'mercator'`), Natural Earth (`'naturalEarth'`), and Winkel Tripel (`'winkelTripel'`). Conic projections such as Albers and Lambert have configurable `center` and `parallels` properties that allow developers to define the region in which the projection has minimal distortion; see [example](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#setprojection).
 
 #### `renderWorldCopies`: boolean
 
