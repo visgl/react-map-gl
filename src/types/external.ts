@@ -6,6 +6,7 @@ export type ProjectionSpecification = {
     | 'albers'
     | 'equalEarth'
     | 'equirectangular'
+    | 'globe'
     | 'lambertConformalConic'
     | 'mercator'
     | 'naturalEarth'

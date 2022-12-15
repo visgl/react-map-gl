@@ -47,7 +47,7 @@ An object conforming to the [Terrain Style Specification](https://docs.mapbox.co
 
 An object with the following fields:
 
-- `name` (string): projection name, one of Albers (`'albers'`), Equal Earth (`'equalEarth'`), Equirectangular/Plate Carrée/WGS84 (`'equirectangular'`), Lambert (`'lambertConformalConic'`), Mercator (`'mercator'`), Natural Earth (`'naturalEarth'`), and Winkel Tripel (`'winkelTripel'`).
+- `name` (string): projection name, one of Albers (`'albers'`), Equal Earth (`'equalEarth'`), Equirectangular/Plate Carrée/WGS84 (`'equirectangular'`), Globe (`'globe'`), Lambert (`'lambertConformalConic'`), Mercator (`'mercator'`), Natural Earth (`'naturalEarth'`), and Winkel Tripel (`'winkelTripel'`).
 - `center?` ([number, number]): longitude and latitude of the projection center
 - `parallels?` ([number, number]): the [two standard parallels](https://en.wikipedia.org/wiki/Map_projection#Conic) of a conic projection such as Albers and Lambert.
 
