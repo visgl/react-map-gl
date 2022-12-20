@@ -2,6 +2,10 @@
 
 # Version 5.3
 
+## 5.3.21 (Dec 19, 2022)
+
+- Add a null-check to map.style in createSource (#2065)
+
 ## 5.3.20 (Nov 15, 2022)
 
 - Add conditional to mapboxScaleControl._onMove (#1961)
