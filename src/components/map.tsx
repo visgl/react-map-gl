@@ -149,11 +149,18 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
     [props.style]
   );
 
+  const content = useMemo(
+    () =>
+      React.Children.map(
+        props.children,
+        child => child && React.cloneElement(child, {...child.props, 'mapboxgl-child': ''})
+      ),
+    [props.children]
+  );
+
   return (
     <div id={props.id} ref={containerRef} style={style}>
-      {mapInstance && (
-        <MapContext.Provider value={contextValue}>{props.children}</MapContext.Provider>
-      )}
+      {mapInstance && <MapContext.Provider value={contextValue}>{content}</MapContext.Provider>}
     </div>
   );
 });
