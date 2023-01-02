@@ -587,10 +587,6 @@ export default class Mapbox {
   /* eslint-enable complexity,max-statements */
 
   recycle() {
-    // Clean up unnecessary elements before storing for reuse.
-    const container = this.map.getContainer();
-    container.querySelectorAll('[mapboxgl-child]').forEach(element => element.remove());
-
     Mapbox.savedMaps.push(this);
   }
 

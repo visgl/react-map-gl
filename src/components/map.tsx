@@ -70,6 +70,7 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
   const mountedMapsContext = useContext(MountedMapsContext);
   const [mapInstance, setMapInstance] = useState<Mapbox>(null);
   const containerRef = useRef();
+  const childrenRef = useRef<HTMLDivElement>();
 
   const {current: contextValue} = useRef<MapContextValue>({mapLib: null, map: null});
 
@@ -121,6 +122,9 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
     return () => {
       isMounted = false;
       if (mapbox) {
+        // Clean up unnecessary elements before storing for reuse.
+        childrenRef.current?.remove();
+
         mountedMapsContext?.onMapUnmount(props.id);
         if (props.reuseMaps) {
           mapbox.recycle();
@@ -149,18 +153,15 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
     [props.style]
   );
 
-  const content = useMemo(
-    () =>
-      React.Children.map(
-        props.children,
-        child => child && React.cloneElement(child, {...child.props, 'mapboxgl-child': ''})
-      ),
-    [props.children]
-  );
-
   return (
     <div id={props.id} ref={containerRef} style={style}>
-      {mapInstance && <MapContext.Provider value={contextValue}>{content}</MapContext.Provider>}
+      {mapInstance && (
+        <MapContext.Provider value={contextValue}>
+          <div ref={childrenRef} mapboxgl-children>
+            {props.children}
+          </div>
+        </MapContext.Provider>
+      )}
     </div>
   );
 });
