@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.21 (Jan 7, 2023)
+
+- fix `reuseMaps` not removing map children (#2092)
+
 ## 7.0.20 (Dec 2, 2022)
 
 - Fix SymbolLayer crash on style update (#2047)
