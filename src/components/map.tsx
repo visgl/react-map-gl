@@ -153,9 +153,7 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
     <div id={props.id} ref={containerRef} style={style}>
       {mapInstance && (
         <MapContext.Provider value={contextValue}>
-          <div mapboxgl-children=''>
-            {props.children}
-          </div>
+          <div mapboxgl-children="">{props.children}</div>
         </MapContext.Provider>
       )}
     </div>
