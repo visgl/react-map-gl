@@ -17,7 +17,7 @@ import type {
 import {MapContext} from './map';
 import {arePointsEqual} from '../utils/deep-equal';
 
-export type MarkerProps = {
+export type MarkerProps = Omit<React.HTMLAttributes<HTMLElement>, 'color' | 'draggable'> & {
   /** Longitude of the anchor location */
   longitude: number;
   /** Latitude of the anchor location */
@@ -65,9 +65,6 @@ export type MarkerProps = {
   scale?: number;
   /** A Popup instance that is bound to the marker */
   popup?: MapboxPopup;
-  /** CSS style override, applied to the control's container */
-  style?: React.CSSProperties;
-  onClick?: (e: MapboxEvent<MouseEvent>) => void;
   onDragStart?: (e: MarkerDragEvent) => void;
   onDrag?: (e: MarkerDragEvent) => void;
   onDragEnd?: (e: MarkerDragEvent) => void;
@@ -102,13 +99,20 @@ function Marker(props: MarkerProps) {
 
     const mk = new mapLib.Marker(options).setLngLat([props.longitude, props.latitude]);
 
-    mk.getElement().addEventListener('click', (e: MouseEvent) => {
-      thisRef.current.props.onClick?.({
-        type: 'click',
-        target: mk,
-        originalEvent: e
-      });
-    });
+    for (const propName of Object.keys(thisRef.current.props)) {
+      const isHandler = /^on[A-Z]/.test(propName);
+      if (isHandler) {
+        // slice(2) to remove 'on' prefix
+        const eventName = propName.slice(2).toLowerCase();
+        mk.getElement().addEventListener(eventName, (e: MapboxEvent<React.SyntheticEvent>) => {
+          thisRef.current.props[propName]?.({
+            type: eventName,
+            target: mk,
+            originalEvent: e
+          });
+        });
+      }
+    }
 
     mk.on('dragstart', e => {
       const evt = e as MarkerDragEvent;
