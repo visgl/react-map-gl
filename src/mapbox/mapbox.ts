@@ -257,13 +257,13 @@ export type MapboxProps = Partial<ViewState> & {
    */
   styleDiffing?: boolean;
   /** The fog property of the style. Must conform to the Fog Style Specification .
-   * If `null` is provided, removes the fog from the map. */
-  fog?: Fog | null;
+   * If `undefined` is provided, removes the fog from the map. */
+  fog?: Fog;
   /** Light properties of the map. */
   light?: Light;
   /** Terrain property of the style. Must conform to the Terrain Style Specification .
-   * If `null` is provided, removes terrain from the map. */
-  terrain?: TerrainSpecification | null;
+   * If `undefined` is provided, removes terrain from the map. */
+  terrain?: TerrainSpecification;
   /** Default layers to query on pointer events */
   interactiveLayerIds?: string[];
   /** The projection the map should be rendered in

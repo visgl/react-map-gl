@@ -73,10 +73,10 @@ The current cursor [type](https://developer.mozilla.org/en-US/docs/Web/CSS/curso
 
 ### Styling options
 
-#### `fog`: [Fog](/docs/api-reference/types.md#fog) | null
+#### `fog`: [Fog](/docs/api-reference/types.md#fog)
 
 The fog property of the style. Must conform to the [Fog Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/fog/).
-If `null` is provided, removes the fog from the map.
+If `undefined` is provided, removes the fog from the map.
 
 #### `light`: [Light](/docs/api-reference/types.md#light)
 
@@ -109,7 +109,7 @@ Enable diffing when `mapStyle` changes. If `false`, force a 'full' update, remov
 #### `terrain`: [TerrainSpecification](/docs/api-reference/types.md#terrainspecification)
 
 Terrain property of the style. Must conform to the [Terrain Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/terrain/).
-If `null` is provided, removes terrain from the map.
+If `undefined` is provided, removes terrain from the map.
 
 
 ### Camera options
