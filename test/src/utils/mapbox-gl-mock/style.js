@@ -11,8 +11,8 @@ export default class Style {
 
     this._loaded = false;
     this._light = null;
-    this._fog = null;
-    this._terrain = null;
+    this._fog = undefined;
+    this._terrain = undefined;
 
     this._sources = {};
     this._layers = [];
