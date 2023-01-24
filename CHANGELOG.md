@@ -2,6 +2,10 @@
 
 # Version 5.2
 
+## 5.2.13 (Jan 24, 2023)
+
+- Fix crash in React 18 StrictMode (#2105)
+
 ## 5.2.12 (Jan 7, 2021)
 
 - Fix no token warning message (#1289)
