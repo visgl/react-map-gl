@@ -365,15 +365,23 @@ export default class Mapbox {
     /* eslint-disable accessor-pairs */
     const {container} = props;
     // $FlowFixMe
-    Object.defineProperty(container, 'offsetWidth', {get: () => this.width});
+    Object.defineProperty(container, 'offsetWidth', {
+      configurable: true,
+      get: () => this.width
+    });
     // $FlowFixMe
-    Object.defineProperty(container, 'clientWidth', {get: () => this.width});
+    Object.defineProperty(container, 'clientWidth', {
+      configurable: true,
+      get: () => this.width
+    });
     // $FlowFixMe
     Object.defineProperty(container, 'offsetHeight', {
+      configurable: true,
       get: () => this.height
     });
     // $FlowFixMe
     Object.defineProperty(container, 'clientHeight', {
+      configurable: true,
       get: () => this.height
     });
 
