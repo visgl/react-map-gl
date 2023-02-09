@@ -4,7 +4,24 @@ import {useCallback, useState, useEffect} from 'react';
 import {useMap} from 'react-map-gl';
 
 export default function Controls() {
-  const {mymap} = useMap();
+  const demo = useMap();
+  console.log('Controls', {demo});
+  // First render:
+  // {
+  //     "demo": {
+  //         "current": undefined
+  //     }
+  // }
+  // Second render:
+  // {
+  //     "demo": {
+  //         "current": undefined,
+  //         "mymap": {...} // See /docs/api-reference/types.md#mapref
+  //     }
+  // }
+
+  const {mymap} = useMap(); // The id of <Map />
+
   const [inputValue, setInputValue] = useState('');
   const [hasError, setError] = useState(false);
 
