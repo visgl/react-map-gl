@@ -61,6 +61,8 @@ Map container id.
 
 Required when [`MapProvider`](./map-provider.md)s are used. Used to reference the map with [`useMap`](./use-map.md).
 
+Make sure to pick a name that has no conflict with other imports (there are no checks or erros in this case).
+
 #### `style`: CSSProperties
 
 Default: `{position: 'relative', width: '100%', height: '100%'}`
