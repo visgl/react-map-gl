@@ -1,6 +1,8 @@
 # useMap
 
-The `useMap` hook allows a custom component to reference the [Map](./map.md) that contains it.
+The `useMap` hook allows a component to reference the [Map](./map.md) that contains it.
+
+When used with [MapProvider](./map-provider.md), this hook can also reference maps that are rendered outside of the current map component's direct render tree.
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -60,7 +62,7 @@ function NavigateButton() {
 </Tabs>
 
 
-When used with the [MapProvider](./map-provider.md), this hook can also reference maps that are rendered outside of the current component's direct render tree.
+When used with the [MapProvider](./map-provider.md), this hook can also reference maps that are rendered outside of the current component's direct render tree as long as both trees are part of the current `<MapProvider>`.
 
 
 <Tabs groupId="map-library">
@@ -70,6 +72,8 @@ When used with the [MapProvider](./map-provider.md), this hook can also referenc
 import {MapProvider, Map, useMap} from 'react-map-gl';
 
 function Root() {
+  // Note: `useMap` will not work in <Root>, only children of <MapProvider> can use `useMap`
+
   return (
     <MapProvider>
       <Map id="myMapA" ... />
@@ -131,7 +135,7 @@ See a full example [here](https://github.com/visgl/react-map-gl/tree/7.0-release
 
 The hook returns an object that contains all mounted maps under the closest `MapProvider`. The keys are each map's [id](./map.md#id) and the values are the [MapRef](./types.md#mapref).
 
-If the hook is used inside a decendent of a `Map` component, the returned object also contains a `current` field that references the containing map.
+If the hook is used inside a decendent of a `Map` component, the returned object additionally contains a `current` field that references the containing map.
 
 ## Source
 
