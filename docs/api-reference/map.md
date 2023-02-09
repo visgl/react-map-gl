@@ -59,6 +59,8 @@ Returns the native [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/) instance
 
 Map container id.
 
+Required when [`MapProvider`](./map-provider.md)s are used. Used to reference the map with [`useMap`](./use-map.md).
+
 #### `style`: CSSProperties
 
 Default: `{position: 'relative', width: '100%', height: '100%'}`
