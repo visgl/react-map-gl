@@ -32,6 +32,8 @@ function NavigateButton() {
 import {MapProvider, Map, useMap} from 'react-map-gl';
 
 function Root() {
+  // Note: useMap will not work here, only child components can use useMap
+
   return (
     <MapProvider>
       <Map id="myMapA" ... />
