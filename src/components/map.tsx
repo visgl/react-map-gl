@@ -66,7 +66,9 @@ const defaultProps: MapProps = {
     'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'
 };
 
-const Map = forwardRef<MapRef, MapProps>((props, ref) => {
+const Map = forwardRef<MapRef, MapProps>((componentProps, ref) => {
+  const props: MapProps = useMemo(() => ({...defaultProps, ...componentProps}), [componentProps]);
+
   const mountedMapsContext = useContext(MountedMapsContext);
   const [mapInstance, setMapInstance] = useState<Mapbox>(null);
   const containerRef = useRef();
@@ -161,6 +163,5 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
 });
 
 Map.displayName = 'Map';
-Map.defaultProps = defaultProps;
 
 export default Map;

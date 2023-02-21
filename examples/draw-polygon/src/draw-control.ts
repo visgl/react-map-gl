@@ -2,6 +2,7 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import {useControl} from 'react-map-gl';
 
 import type {MapRef, ControlPosition} from 'react-map-gl';
+import {useMemo} from 'react';
 
 type DrawControlProps = ConstructorParameters<typeof MapboxDraw>[0] & {
   position?: ControlPosition;
@@ -11,7 +12,12 @@ type DrawControlProps = ConstructorParameters<typeof MapboxDraw>[0] & {
   onDelete?: (evt: {features: object[]}) => void;
 };
 
-export default function DrawControl(props: DrawControlProps) {
+export default function DrawControl(componentProps: DrawControlProps) {
+  const props: DrawControlProps = useMemo(
+    () => ({onCreate: () => {}, onUpdate: () => {}, onDelete: () => {}, ...componentProps}),
+    [componentProps]
+  );
+
   useControl<MapboxDraw>(
     () => new MapboxDraw(props),
     ({map}: {map: MapRef}) => {
@@ -31,9 +37,3 @@ export default function DrawControl(props: DrawControlProps) {
 
   return null;
 }
-
-DrawControl.defaultProps = {
-  onCreate: () => {},
-  onUpdate: () => {},
-  onDelete: () => {}
-};

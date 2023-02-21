@@ -25,7 +25,12 @@ const defaultProps: ScaleControlProps = {
   maxWidth: 100
 };
 
-function ScaleControl(props: ScaleControlProps): null {
+function ScaleControl(componentProps: ScaleControlProps): null {
+  const props: ScaleControlProps = React.useMemo(
+    () => ({...defaultProps, ...componentProps}),
+    [componentProps]
+  );
+
   const ctrl = useControl<MapboxScaleControl>(({mapLib}) => new mapLib.ScaleControl(props), {
     position: props.position
   });
@@ -45,7 +50,5 @@ function ScaleControl(props: ScaleControlProps): null {
 
   return null;
 }
-
-ScaleControl.defaultProps = defaultProps;
 
 export default React.memo(ScaleControl);

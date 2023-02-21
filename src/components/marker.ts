@@ -83,7 +83,12 @@ const defaultProps: Partial<MarkerProps> = {
 };
 
 /* eslint-disable complexity,max-statements */
-function Marker(props: MarkerProps) {
+function Marker(componentProps: MarkerProps) {
+  const props: MarkerProps = useMemo(
+    () => ({...defaultProps, ...componentProps}),
+    [componentProps]
+  );
+
   const {map, mapLib} = useContext(MapContext);
   const thisRef = useRef({props});
   thisRef.current.props = props;
@@ -165,8 +170,6 @@ function Marker(props: MarkerProps) {
 
   return createPortal(props.children, marker.getElement());
 }
-
-Marker.defaultProps = defaultProps;
 
 // @ts-ignore
 export default React.memo(Marker);
