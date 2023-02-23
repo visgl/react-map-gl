@@ -786,6 +786,15 @@ export default class Mapbox {
     }
   };
 
+  _uniqueLayersCount(features: MapboxGeoJSONFeature[] | null) {
+    if (!features) {
+      return 0;
+    }
+    return features.filter(
+      (feature, index) => features.findIndex(f => f.layer.id === feature.layer.id) === index
+    ).length;
+  }
+
   _updateHover(e: MapMouseEvent) {
     const {props} = this;
     const shouldTrackHoveredFeatures =
@@ -793,7 +802,7 @@ export default class Mapbox {
 
     if (shouldTrackHoveredFeatures) {
       const eventType = e.type;
-      const wasHovering = this._hoveredFeatures?.length > 0;
+      const hoveredLayersCount = this._uniqueLayersCount(this._hoveredFeatures);
       let features;
       if (eventType === 'mousemove') {
         try {
@@ -806,14 +815,14 @@ export default class Mapbox {
       } else {
         features = [];
       }
-      const isHovering = features.length > 0;
+      const hoveringLayersCount = this._uniqueLayersCount(features);
 
-      if (!isHovering && wasHovering) {
+      if (hoveringLayersCount < hoveredLayersCount) {
         e.type = 'mouseleave';
         this._onPointerEvent(e);
       }
       this._hoveredFeatures = features;
-      if (isHovering && !wasHovering) {
+      if (hoveringLayersCount > hoveredLayersCount) {
         e.type = 'mouseenter';
         this._onPointerEvent(e);
       }
