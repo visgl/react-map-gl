@@ -835,12 +835,12 @@ export default class Mapbox {
         let features;
         try {
           features =
-          this._hoveredFeatures ||
-          this._map.queryRenderedFeatures(e.point, {
-            layers: this.props.interactiveLayerIds.filter(this._map.getLayer)
-          }); 
+            this._hoveredFeatures ||
+            this._map.queryRenderedFeatures(e.point, {
+              layers: this.props.interactiveLayerIds.filter(this._map.getLayer)
+            });
         } catch {
-          features = []
+          features = [];
         }
         e.features = features;
       }
