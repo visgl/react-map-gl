@@ -10,27 +10,27 @@ type ControlOptions = {
 function useControl<T extends IControl>(
   onCreate: (context: MapContextValue) => T,
   opts?: ControlOptions
-);
+): T;
 
 function useControl<T extends IControl>(
   onCreate: (context: MapContextValue) => T,
   onRemove: (context: MapContextValue) => void,
   opts?: ControlOptions
-);
+): T;
 
 function useControl<T extends IControl>(
   onCreate: (context: MapContextValue) => T,
   onAdd: (context: MapContextValue) => void,
   onRemove: (context: MapContextValue) => void,
   opts?: ControlOptions
-);
+): T;
 
 function useControl<T extends IControl>(
   onCreate: (context: MapContextValue) => T,
   arg1?: ((context: MapContextValue) => void) | ControlOptions,
   arg2?: ((context: MapContextValue) => void) | ControlOptions,
   arg3?: ControlOptions
-) {
+): T {
   const context = useContext(MapContext);
   const ctrl = useMemo(() => onCreate(context), []);
 
