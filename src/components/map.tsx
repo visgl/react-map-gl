@@ -150,7 +150,7 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
   );
 
   const CHILD_CONTAINER_STYLE = {
-    height: 'inherit'
+    height: '100%'
   };
 
   return (
