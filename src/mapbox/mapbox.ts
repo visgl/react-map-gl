@@ -822,7 +822,7 @@ export default class Mapbox {
         this._onPointerEvent(e);
       }
       if (hoveringLayersCount === hoveredLayersCount && hoveringLayersCount !== 0) {
-        if (!hoveringLayers.every(layer => hoveredLayers.includes(layer))) {
+        if (hoveringLayers.some(layer => hoveredLayers.indexOf(layer) === -1)) {
           e.type = 'mouseleave';
           this._onPointerEvent(e);
           e.type = 'mouseenter';
