@@ -145,6 +145,11 @@ export type MapboxProps = Partial<ViewState> & {
    */
   maxTileCacheSize?: number;
   /**
+   * If true , mapbox-gl will collect and send performance metrics.
+   * defaults to true
+   */
+  performanceMetricsCollection?: boolean;
+  /**
    * If true, map will prioritize rendering for performance by reordering layers
    * If false, layers will always be drawn in the specified order
    * @default true
