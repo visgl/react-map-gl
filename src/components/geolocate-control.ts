@@ -79,7 +79,7 @@ const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>(
       // GeolocateControl's UI creation is asynchronous. Removing and adding it back causes the UI to be initialized twice.
       const setupUI = gc._setupUI;
       gc._setupUI = args => {
-        if (!gc._container.hasChildNodes()) {
+        if (!gc._container.hasChildNodes() && gc._map) {
           setupUI(args);
         }
       };
