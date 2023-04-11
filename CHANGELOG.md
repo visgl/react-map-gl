@@ -2,6 +2,15 @@
 
 # Version 7.0
 
+## 7.0.22 (Apr 11, 2023)
+
+- Improve map reuse consistency (#2155)
+- fix: query only the layers that have been loaded (#2128)
+- Inherit parent height in`mapboxgl-children` div (#2132)
+- set global settings before checking support status (#2138)
+- Change return type of `useControl` to return `T` instead of `any` (#2137)
+- Change fog and terrain types to match Mapbox types (#2106)
+
 ## 7.0.21 (Jan 7, 2023)
 
 - fix `reuseMaps` not removing map children (#2092)
