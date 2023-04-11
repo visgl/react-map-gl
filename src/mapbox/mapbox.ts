@@ -504,6 +504,9 @@ export default class Mapbox {
     } else {
       map.once('styledata', () => map.fire('load'));
     }
+
+    // Force redraw
+    map.triggerRepaint();
     return that;
   }
 
