@@ -798,7 +798,7 @@ export default class Mapbox {
       if (eventType === 'mousemove') {
         try {
           features = this._map.queryRenderedFeatures(e.point, {
-            layers: props.interactiveLayerIds
+            layers: props.interactiveLayerIds.filter(this._map.getLayer)
           });
         } catch {
           features = [];
@@ -832,11 +832,16 @@ export default class Mapbox {
     const cb = this.props[pointerEvents[e.type]];
     if (cb) {
       if (this.props.interactiveLayerIds && e.type !== 'mouseover' && e.type !== 'mouseout') {
-        const features =
-          this._hoveredFeatures ||
-          this._map.queryRenderedFeatures(e.point, {
-            layers: this.props.interactiveLayerIds
-          });
+        let features;
+        try {
+          features =
+            this._hoveredFeatures ||
+            this._map.queryRenderedFeatures(e.point, {
+              layers: this.props.interactiveLayerIds.filter(this._map.getLayer)
+            });
+        } catch {
+          features = [];
+        }
         e.features = features;
       }
       cb(e);
