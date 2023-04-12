@@ -12,6 +12,7 @@ import type {
   TransformRequestFunction,
   Light,
   Fog,
+  Point,
   TerrainSpecification,
   MapboxStyle,
   ImmutableLike,
@@ -789,6 +790,19 @@ export default class Mapbox {
     }
   };
 
+  private _queryRenderedFeatures(point: Point) {
+    const map = this._map;
+    const {interactiveLayerIds = []} = this.props;
+    try {
+      return map.queryRenderedFeatures(point, {
+        layers: interactiveLayerIds.filter(map.getLayer.bind(map))
+      });
+    } catch {
+      // May fail if style is not loaded
+      return [];
+    }
+  }
+
   _updateHover(e: MapMouseEvent) {
     const {props} = this;
     const shouldTrackHoveredFeatures =
@@ -797,18 +811,7 @@ export default class Mapbox {
     if (shouldTrackHoveredFeatures) {
       const eventType = e.type;
       const wasHovering = this._hoveredFeatures?.length > 0;
-      let features;
-      if (eventType === 'mousemove') {
-        try {
-          features = this._map.queryRenderedFeatures(e.point, {
-            layers: props.interactiveLayerIds.filter(this._map.getLayer)
-          });
-        } catch {
-          features = [];
-        }
-      } else {
-        features = [];
-      }
+      const features = this._queryRenderedFeatures(e.point);
       const isHovering = features.length > 0;
 
       if (!isHovering && wasHovering) {
@@ -835,17 +838,7 @@ export default class Mapbox {
     const cb = this.props[pointerEvents[e.type]];
     if (cb) {
       if (this.props.interactiveLayerIds && e.type !== 'mouseover' && e.type !== 'mouseout') {
-        let features;
-        try {
-          features =
-            this._hoveredFeatures ||
-            this._map.queryRenderedFeatures(e.point, {
-              layers: this.props.interactiveLayerIds.filter(this._map.getLayer)
-            });
-        } catch {
-          features = [];
-        }
-        e.features = features;
+        e.features = this._hoveredFeatures || this._queryRenderedFeatures(e.point);
       }
       cb(e);
       delete e.features;
@@ -875,7 +868,7 @@ export default class Mapbox {
     }
     if (eventType in cameraEvents) {
       if (typeof event === 'object') {
-        (event as ViewStateChangeEvent).viewState = transformToViewState(tr);
+        (event as unknown as ViewStateChangeEvent).viewState = transformToViewState(tr);
       }
       if (this._map.isMoving()) {
         // Replace map.transform with ours during the callbacks
