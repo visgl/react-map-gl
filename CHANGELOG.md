@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.23 (Apr 12, 2023)
+
+- Fix mouse events regression (#2158)
+
 ## 7.0.22 (Apr 11, 2023)
 
 - Improve map reuse consistency (#2155)
