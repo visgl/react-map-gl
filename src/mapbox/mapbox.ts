@@ -506,8 +506,9 @@ export default class Mapbox {
       map.once('styledata', () => map.fire('load'));
     }
 
-    // Force redraw
-    map.triggerRepaint();
+    // Force reload
+    // @ts-ignore
+    map._update();
     return that;
   }
 
