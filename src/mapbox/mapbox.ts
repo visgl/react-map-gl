@@ -4,7 +4,7 @@ import {deepEqual} from '../utils/deep-equal';
 
 import type {
   Transform,
-  ProjectionSpecification,
+  Projection,
   ViewState,
   ViewStateChangeEvent,
   DragPanOptions,
@@ -270,7 +270,7 @@ export type MapboxProps = Partial<ViewState> & {
   /** The projection the map should be rendered in
    * @default "mercator"
    */
-  projection?: ProjectionSpecification | string;
+  projection?: Projection;
   /**
    * If `true`, multiple copies of the world will be rendered, when zoomed out.
    * @default true

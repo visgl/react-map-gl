@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Map from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -9,6 +10,7 @@ export default function MapView() {
   return (
     <Map
       id="mymap"
+      mapLib={mapboxgl}
       initialViewState={{
         longitude: -122.4,
         latitude: 37.8,

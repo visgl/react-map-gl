@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Head from 'next/head';
 import Map, {Marker} from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -14,6 +15,7 @@ export default function Home() {
       </Head>
 
       <Map
+        mapLib={mapboxgl}
         initialViewState={{
           latitude: 37.8,
           longitude: -122.4,
