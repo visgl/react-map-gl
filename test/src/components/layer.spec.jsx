@@ -4,7 +4,7 @@ import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
 import mapboxMock from '../utils/mapbox-gl-mock';
 
-import {sleep} from '../utils/test-utils';
+import {waitForMapLoad} from '../utils/test-utils';
 
 test('Source/Layer', async t => {
   const mapRef = {current: null};
@@ -42,7 +42,7 @@ test('Source/Layer', async t => {
       </Map>
     );
   });
-  await sleep(50);
+  await waitForMapLoad(mapRef);
   t.ok(mapRef.current.getLayer('my-layer'), 'Layer is added');
 
   act(() =>
@@ -66,11 +66,11 @@ test('Source/Layer', async t => {
       </Map>
     )
   );
-  await sleep(50);
+  await waitForMapLoad(mapRef);
   t.ok(mapRef.current.getLayer('my-layer'), 'Layer is added after style change');
 
   act(() => map.update(<Map mapLib={mapboxMock} ref={mapRef} mapStyle={mapStyle} />));
-  await sleep(50);
+  await waitForMapLoad(mapRef);
   t.notOk(mapRef.current.getSource('my-data'), 'Source is removed');
   t.notOk(mapRef.current.getLayer('my-layer'), 'Layer is removed');
 

@@ -3,7 +3,7 @@ import * as React from 'react';
 import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
 
-import {sleep} from '../utils/test-utils';
+import {waitForMapLoad} from '../utils/test-utils';
 import mapboxMock from '../utils/mapbox-gl-mock';
 
 test('Source/Layer', async t => {
@@ -27,7 +27,7 @@ test('Source/Layer', async t => {
       </Map>
     );
   });
-  await sleep(50);
+  await waitForMapLoad(mapRef);
   t.ok(mapRef.current.getSource('my-data'), 'Source is added');
 
   act(() =>
@@ -37,7 +37,7 @@ test('Source/Layer', async t => {
       </Map>
     )
   );
-  await sleep(50);
+  await waitForMapLoad(mapRef);
   t.ok(mapRef.current.getSource('my-data'), 'Source is added after style change');
 
   act(() =>
@@ -50,7 +50,7 @@ test('Source/Layer', async t => {
   t.is(mapRef.current.getSource('my-data').getData(), geoJSON2, 'Source is updated');
 
   act(() => map.update(<Map ref={mapRef} mapLib={mapboxMock} mapStyle={mapStyle} />));
-  await sleep(50);
+  await waitForMapLoad(mapRef);
   t.notOk(mapRef.current.getSource('my-data'), 'Source is removed');
 
   map.unmount();

@@ -8,7 +8,7 @@ export function sleep(milliseconds) {
 export function waitForMapLoad(mapRef) {
   return new Promise(resolve => {
     const check = () => {
-      if (mapRef.current) {
+      if (mapRef.current && mapRef.current.getMap().isStyleLoaded()) {
         resolve();
       } else {
         setTimeout(check, 50);
