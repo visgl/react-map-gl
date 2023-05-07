@@ -12,7 +12,7 @@ export default defineConfig(async () => {
         'react-map-gl': join(rootDir, './src/index.ts'),
         'mapbox-gl': join(rootDir, './node_modules/mapbox-gl/dist/mapbox-gl-dev.js'),
         'maplibre-gl': join(rootDir, './node_modules/maplibre-gl/dist/maplibre-gl-dev.js'),
-        'react': join(rootDir, './node_modules/react'),
+        react: join(rootDir, './node_modules/react'),
         'react-dom': join(rootDir, './node_modules/react-dom')
       }
     },
