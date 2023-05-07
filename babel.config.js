@@ -1,8 +1,6 @@
-/* eslint-disable import/no-extraneous-dependencies */
-const {getBabelConfig} = require('ocular-dev-tools');
+const {getBabelConfig} = require('ocular-dev-tools/configuration');
 
-module.exports = api => {
-  let config = getBabelConfig(api, {react: true});
-
-  return config;
-};
+module.exports = getBabelConfig({
+  react: true,
+  overrides: {}
+});

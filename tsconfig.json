@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
     "target": "es2018",
+    "module": "commonjs",
     "jsx": "react",
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+    "esModuleInterop": true,
     "moduleResolution": "node",
-    "module": "ES2020"
+    "noEmit": true
   },
   "include":[
     "examples/**/*",

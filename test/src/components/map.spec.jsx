@@ -5,6 +5,7 @@ import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
 
 import {sleep, waitForMapLoad} from '../utils/test-utils';
+import mapboxMock from '../utils/mapbox-gl-mock';
 
 test('Map', async t => {
   t.ok(Map, 'Map is defined');
@@ -18,6 +19,7 @@ test('Map', async t => {
     map = create(
       <Map
         ref={mapRef}
+        mapLib={mapboxMock}
         initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
         onLoad={onLoad}
       />
@@ -32,7 +34,16 @@ test('Map', async t => {
   t.is(mapRef.current.getZoom(), 4, 'zoom is set');
 
   act(() => {
-    map.update(<Map ref={mapRef} longitude={-122} latitude={38} zoom={14} onLoad={onLoad} />);
+    map.update(
+      <Map
+        ref={mapRef}
+        mapLib={mapboxMock}
+        longitude={-122}
+        latitude={38}
+        zoom={14}
+        onLoad={onLoad}
+      />
+    );
   });
 
   t.is(mapRef.current.getCenter().lng, -122, 'longitude is updated');
@@ -59,6 +70,7 @@ test('Map#uncontrolled', async t => {
   act(() => {
     create(
       <Map
+        mapLib={mapboxMock}
         initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
         onLoad={e => {
           e.target.easeTo({center: [-122, 38], zoom: 14});
@@ -82,6 +94,7 @@ test('Map#controlled#no-update', async t => {
     create(
       <Map
         ref={mapRef}
+        mapLib={mapboxMock}
         longitude={-100}
         latitude={40}
         zoom={4}
@@ -116,6 +129,7 @@ test('Map#controlled#mirrow-back', async t => {
     return (
       <Map
         ref={mapRef}
+        mapLib={mapboxMock}
         {...viewState}
         onLoad={e => {
           e.target.easeTo({center: [-122, 38], zoom: 14});
@@ -153,6 +167,7 @@ test('Map#controlled#delayed-update', async t => {
     return (
       <Map
         ref={mapRef}
+        mapLib={mapboxMock}
         {...viewState}
         onLoad={e => {
           e.target.easeTo({center: [-122, 38], zoom: 14});

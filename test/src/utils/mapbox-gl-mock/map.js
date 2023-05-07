@@ -93,6 +93,10 @@ export default class Map extends Evented {
     return true;
   }
 
+  isStyleLoaded() {
+    return this.style.loaded();
+  }
+
   addSource(name, source) {
     this.style.addSource(name, source);
     if (source.type === 'geojson') {

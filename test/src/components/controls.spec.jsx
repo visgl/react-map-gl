@@ -9,35 +9,36 @@ import {
 import * as React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 import test from 'tape-promise/tape';
+import mapboxMock from '../utils/mapbox-gl-mock';
 
 test('Controls', t => {
   const renderer = ReactTestRenderer.create(<Map />);
   renderer.update(
-    <Map>
+    <Map mapLib={mapboxMock}>
       <AttributionControl />
     </Map>
   );
   t.ok(renderer.root, 'Rendered <AttributionControl />');
   renderer.update(
-    <Map>
+    <Map mapLib={mapboxMock}>
       <FullscreenControl />
     </Map>
   );
   t.ok(renderer.root, 'Rendered <FullscreenControl />');
   renderer.update(
-    <Map>
+    <Map mapLib={mapboxMock}>
       <GeolocateControl />
     </Map>
   );
   t.ok(renderer.root, 'Rendered <GeolocateControl />');
   renderer.update(
-    <Map>
+    <Map mapLib={mapboxMock}>
       <NavigationControl />
     </Map>
   );
   t.ok(renderer.root, 'Rendered <NavigationControl />');
   renderer.update(
-    <Map>
+    <Map mapLib={mapboxMock}>
       <ScaleControl />
     </Map>
   );

@@ -1,22 +1,7 @@
 /* global window */
-const test = require('tape');
-const {_enableDOMLogging: enableDOMLogging} = require('@probe.gl/test-utils');
+import test from 'tape';
 
-let failed = false;
 test.onFinish(window.browserTestDriver_finish);
-test.onFailure(() => {
-  failed = true;
-  window.browserTestDriver_fail();
-});
+test.onFailure(window.browserTestDriver_fail);
 
-// tap-browser-color alternative
-enableDOMLogging({
-  getStyle: message => ({
-    background: failed ? '#F28E82' : '#8ECA6C',
-    position: 'absolute',
-    top: '500px',
-    width: '100%'
-  })
-});
-
-require('./render');
+import './render';

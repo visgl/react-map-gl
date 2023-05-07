@@ -4,6 +4,7 @@ import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
 
 import {createPortalMock, waitForMapLoad} from '../utils/test-utils';
+import mapboxMock from '../utils/mapbox-gl-mock';
 
 test('Marker', async t => {
   const restoreMock = createPortalMock();
@@ -12,7 +13,7 @@ test('Marker', async t => {
   let map;
   act(() => {
     map = create(
-      <Map ref={mapRef}>
+      <Map ref={mapRef} mapLib={mapboxMock}>
         <Marker longitude={-122} latitude={38} />
       </Map>
     );
@@ -31,7 +32,7 @@ test('Marker', async t => {
 
   act(() => {
     map.update(
-      <Map ref={mapRef}>
+      <Map ref={mapRef} mapLib={mapboxMock}>
         <Marker longitude={-122} latitude={38} offset={[0, 0]} />
       </Map>
     );
@@ -42,7 +43,7 @@ test('Marker', async t => {
   let callbackType = '';
   act(() => {
     map.update(
-      <Map ref={mapRef}>
+      <Map ref={mapRef} mapLib={mapboxMock}>
         <Marker
           longitude={-122}
           latitude={38}
@@ -73,14 +74,14 @@ test('Marker', async t => {
   t.is(callbackType, 'dragend', 'onDragEnd called');
 
   act(() => {
-    map.update(<Map ref={mapRef} />);
+    map.update(<Map ref={mapRef} mapLib={mapboxMock} />);
   });
 
   t.is(mapRef.current.getMap()._markers.length, 0, 'marker is removed');
 
   act(() => {
     map.update(
-      <Map ref={mapRef}>
+      <Map ref={mapRef} mapLib={mapboxMock}>
         <Marker longitude={-100} latitude={40}>
           <div id="marker-content" />
         </Marker>

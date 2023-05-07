@@ -2,6 +2,7 @@ import {Map, Source, Layer} from 'react-map-gl';
 import * as React from 'react';
 import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
+import mapboxMock from '../utils/mapbox-gl-mock';
 
 import {sleep} from '../utils/test-utils';
 
@@ -34,19 +35,19 @@ test('Source/Layer', async t => {
   let map;
   act(() => {
     map = create(
-      <Map ref={mapRef}>
+      <Map ref={mapRef} mapLib={mapboxMock}>
         <Source id="my-data" type="geojson" data={geoJSON}>
           <Layer id="my-layer" {...pointLayer} />
         </Source>
       </Map>
     );
   });
-  await sleep(5);
+  await sleep(50);
   t.ok(mapRef.current.getLayer('my-layer'), 'Layer is added');
 
   act(() =>
     map.update(
-      <Map ref={mapRef}>
+      <Map ref={mapRef} mapLib={mapboxMock}>
         <Source id="my-data" type="geojson" data={geoJSON}>
           <Layer id="my-layer" {...pointLayer2} />
         </Source>
@@ -58,18 +59,18 @@ test('Source/Layer', async t => {
 
   act(() =>
     map.update(
-      <Map ref={mapRef} mapStyle={mapStyle}>
+      <Map ref={mapRef} mapLib={mapboxMock} mapStyle={mapStyle}>
         <Source id="my-data" type="geojson" data={geoJSON}>
           <Layer id="my-layer" {...pointLayer2} />
         </Source>
       </Map>
     )
   );
-  await sleep(5);
+  await sleep(50);
   t.ok(mapRef.current.getLayer('my-layer'), 'Layer is added after style change');
 
-  act(() => map.update(<Map ref={mapRef} mapStyle={mapStyle} />));
-  await sleep(5);
+  act(() => map.update(<Map mapLib={mapboxMock} ref={mapRef} mapStyle={mapStyle} />));
+  await sleep(50);
   t.notOk(mapRef.current.getSource('my-data'), 'Source is removed');
   t.notOk(mapRef.current.getLayer('my-layer'), 'Layer is removed');
 

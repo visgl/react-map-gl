@@ -4,6 +4,7 @@ import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
 
 import {createPortalMock, waitForMapLoad} from '../utils/test-utils';
+import mapboxMock from '../utils/mapbox-gl-mock';
 
 test('Popup', async t => {
   const restoreMock = createPortalMock();
@@ -12,7 +13,7 @@ test('Popup', async t => {
   let map;
   act(() => {
     map = create(
-      <Map ref={mapRef}>
+      <Map ref={mapRef} mapLib={mapboxMock}>
         <Popup longitude={-122} latitude={38} offset={[0, 10]}>
           You are here
         </Popup>
@@ -29,7 +30,7 @@ test('Popup', async t => {
 
   act(() => {
     map.update(
-      <Map ref={mapRef}>
+      <Map ref={mapRef} mapLib={mapboxMock}>
         <Popup longitude={-122} latitude={38} offset={[0, 10]}>
           You are here
         </Popup>
@@ -41,7 +42,7 @@ test('Popup', async t => {
 
   act(() => {
     map.update(
-      <Map ref={mapRef}>
+      <Map ref={mapRef} mapLib={mapboxMock}>
         <Popup
           longitude={-122}
           latitude={38}
@@ -61,7 +62,7 @@ test('Popup', async t => {
 
   act(() => {
     map.update(
-      <Map ref={mapRef}>
+      <Map ref={mapRef} mapLib={mapboxMock}>
         <Popup longitude={-122} latitude={38} className="classA">
           You are here
         </Popup>
