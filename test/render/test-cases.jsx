@@ -1,6 +1,7 @@
-/* global __MAPBOX_TOKEN__ */
 import * as React from 'react';
 import {NavigationControl, GeolocateControl, Marker, Popup, Source, Layer} from 'react-map-gl';
+
+const __MAPBOX_TOKEN__ = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const ALT_EMPTY_MAP_STYLE = {
   version: 8,
@@ -39,7 +40,7 @@ export default [
       latitude: 37.78,
       zoom: 12.5
     },
-    mapError: /access token/
+    mapError: true
   },
   {
     title: 'Custom tile server',

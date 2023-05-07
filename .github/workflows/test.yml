@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MapboxAccessToken: ${{ secrets.MAPBOX_ACCESS_TOKEN_CI }}
+      VITE_MAPBOX_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN_CI }}
 
     steps:
       - uses: actions/checkout@v2.1.1
@@ -20,7 +20,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
 
       - name: Install dependencies
         run: |

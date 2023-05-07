@@ -3,6 +3,7 @@ import * as React from 'react';
 import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
 import {waitForMapLoad} from '../utils/test-utils';
+import mapboxMock from '../utils/mapbox-gl-mock';
 
 test('useMap', async t => {
   let app;
@@ -17,8 +18,8 @@ test('useMap', async t => {
   act(() => {
     app = create(
       <MapProvider>
-        <Map id="mapA" />
-        <Map id="mapB" ref={mapRef} />
+        <Map id="mapA" mapLib={mapboxMock} />
+        <Map id="mapB" mapLib={mapboxMock} ref={mapRef} />
         <TestControl />
       </MapProvider>
     );

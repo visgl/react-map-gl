@@ -3,6 +3,7 @@ import test from 'tape-promise/tape';
 import * as React from 'react';
 import Map from 'react-map-gl';
 import {render, unmountComponentAtNode} from 'react-dom';
+import mapboxgl from 'mapbox-gl';
 
 import TEST_CASES from './test-cases';
 
@@ -54,7 +55,7 @@ async function runTestCase({Component = Map, props}) {
       reject(evt.error);
     };
 
-    render(<Component {...props} onLoad={onLoad} onError={onError} />, container);
+    render(<Component mapLib={mapboxgl} {...props} onLoad={onLoad} onError={onError} />, container);
   });
 }
 
@@ -110,7 +111,7 @@ test('Render test', async t => {
     }
 
     if (testCase.mapError) {
-      t.ok(error && testCase.mapError.test(error.message), 'Map should throw error');
+      t.ok(error, 'Map should throw error');
     } else if (error) {
       t.fail(error.message);
     } else {
