@@ -21,10 +21,7 @@ const config = {
   entry: {
     test: 'test/node.js',
     'test-browser': 'test/browser.js',
-    size: [
-      'test/size/all.js',
-      'test/size/map.js'
-    ]
+    size: ['test/size/all.js', 'test/size/map.js']
   }
 };
 
