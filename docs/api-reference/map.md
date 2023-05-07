@@ -59,6 +59,10 @@ Returns the native [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/) instance
 
 Map container id.
 
+Required when [`MapProvider`](./map-provider.md)s are used. Used to reference the map with [`useMap`](./use-map.md).
+
+Make sure to pick a name that has no conflict with other imports (there are no checks or erros in this case).
+
 #### `style`: CSSProperties
 
 Default: `{position: 'relative', width: '100%', height: '100%'}`
@@ -218,7 +222,7 @@ If `true`, keyboard shortcuts are enabled (see [KeyboardHandler](https://docs.ma
 
 Default: `true`
 
-If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to  [ScrollZoomHandler#enable](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler).
+If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to [ScrollZoomHandler#enable](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler).
 
 #### `touchPitch`: boolean
 
@@ -470,7 +474,7 @@ function App() {
 Or to load a pre-bundled version of the library:
 
 ```html
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.0/mapbox-gl.js" ></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.0/mapbox-gl.js"></script>
 ```
 
 ```js
@@ -521,7 +525,7 @@ The max number of pixels a user can shift the mouse pointer during a click for i
 
 Default: `false`
 
-If `true`, Resource Timing API information will be collected for requests made by GeoJSON and Vector Tile web workers (this information is normally inaccessible from the main Javascript thread). Information will be returned in a `resourceTiming` property of  relevant `data` events.
+If `true`, Resource Timing API information will be collected for requests made by GeoJSON and Vector Tile web workers (this information is normally inaccessible from the main Javascript thread). Information will be returned in a `resourceTiming` property of relevant `data` events.
 
 #### `cooperativeGestures`: boolean
 

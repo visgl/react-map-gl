@@ -4,14 +4,29 @@ import {useCallback, useState, useEffect} from 'react';
 import {useMap} from 'react-map-gl';
 
 export default function Controls() {
-  const {mymap} = useMap();
+  const demo = useMap();
+  console.log('Controls', {demo});
+  // First render:
+  // {
+  //     "demo": {
+  //         "current": undefined
+  //     }
+  // }
+  // Second render:
+  // {
+  //     "demo": {
+  //         "current": undefined,
+  //         "mymap": {...} // See /docs/api-reference/types.md#mapref
+  //     }
+  // }
+
+  const {mymap} = useMap(); // The id of <Map />
+
   const [inputValue, setInputValue] = useState('');
   const [hasError, setError] = useState(false);
 
   useEffect(() => {
-    if (!mymap) {
-      return undefined;
-    }
+    if (!mymap) return undefined;
 
     const onMove = () => {
       const {lng, lat} = mymap.getCenter();
@@ -31,6 +46,8 @@ export default function Controls() {
   }, []);
 
   const onSubmit = useCallback(() => {
+    if (!mymap) return undefined;
+
     const [lng, lat] = inputValue.split(',').map(Number);
     if (Math.abs(lng) <= 180 && Math.abs(lat) <= 85) {
       mymap.easeTo({
