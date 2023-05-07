@@ -74,14 +74,6 @@ export type MarkerProps = {
   children?: React.ReactNode;
 };
 
-const defaultProps: Partial<MarkerProps> = {
-  draggable: false,
-  popup: null,
-  rotation: 0,
-  rotationAlignment: 'auto',
-  pitchAlignment: 'auto'
-};
-
 /* eslint-disable complexity,max-statements */
 function Marker(props: MarkerProps) {
   const {map, mapLib} = useContext(MapContext);
@@ -137,36 +129,45 @@ function Marker(props: MarkerProps) {
     };
   }, []);
 
-  useEffect(() => {
-    applyReactStyle(marker.getElement(), props.style);
-  }, [props.style]);
+  const {
+    longitude,
+    latitude,
+    offset,
+    style,
+    draggable = false,
+    popup = null,
+    rotation = 0,
+    rotationAlignment = 'auto',
+    pitchAlignment = 'auto'
+  } = props;
 
-  if (marker.getLngLat().lng !== props.longitude || marker.getLngLat().lat !== props.latitude) {
-    marker.setLngLat([props.longitude, props.latitude]);
+  useEffect(() => {
+    applyReactStyle(marker.getElement(), style);
+  }, [style]);
+
+  if (marker.getLngLat().lng !== longitude || marker.getLngLat().lat !== latitude) {
+    marker.setLngLat([longitude, latitude]);
   }
-  if (props.offset && !arePointsEqual(marker.getOffset(), props.offset)) {
-    marker.setOffset(props.offset);
+  if (offset && !arePointsEqual(marker.getOffset(), offset)) {
+    marker.setOffset(offset);
   }
-  if (marker.isDraggable() !== props.draggable) {
-    marker.setDraggable(props.draggable);
+  if (marker.isDraggable() !== draggable) {
+    marker.setDraggable(draggable);
   }
-  if (marker.getRotation() !== props.rotation) {
-    marker.setRotation(props.rotation);
+  if (marker.getRotation() !== rotation) {
+    marker.setRotation(rotation);
   }
-  if (marker.getRotationAlignment() !== props.rotationAlignment) {
-    marker.setRotationAlignment(props.rotationAlignment);
+  if (marker.getRotationAlignment() !== rotationAlignment) {
+    marker.setRotationAlignment(rotationAlignment);
   }
-  if (marker.getPitchAlignment() !== props.pitchAlignment) {
-    marker.setPitchAlignment(props.pitchAlignment);
+  if (marker.getPitchAlignment() !== pitchAlignment) {
+    marker.setPitchAlignment(pitchAlignment);
   }
-  if (marker.getPopup() !== props.popup) {
-    marker.setPopup(props.popup);
+  if (marker.getPopup() !== popup) {
+    marker.setPopup(popup);
   }
 
   return createPortal(props.children, marker.getElement());
 }
 
-Marker.defaultProps = defaultProps;
-
-// @ts-ignore
 export default React.memo(Marker);

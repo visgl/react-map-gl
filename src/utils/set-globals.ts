@@ -35,13 +35,16 @@ export default function setGlobals(mapLib: any, props: GlobalSettings) {
     }
   }
 
+  const {
+    RTLTextPlugin = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'
+  } = props;
   if (
-    props.RTLTextPlugin &&
+    RTLTextPlugin &&
     mapLib.getRTLTextPluginStatus &&
     mapLib.getRTLTextPluginStatus() === 'unavailable'
   ) {
     mapLib.setRTLTextPlugin(
-      props.RTLTextPlugin,
+      RTLTextPlugin,
       (error?: Error) => {
         if (error) {
           // eslint-disable-next-line

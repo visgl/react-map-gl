@@ -20,32 +20,27 @@ export type ScaleControlProps = {
   style?: React.CSSProperties;
 };
 
-const defaultProps: ScaleControlProps = {
-  unit: 'metric',
-  maxWidth: 100
-};
-
 function ScaleControl(props: ScaleControlProps): null {
   const ctrl = useControl<MapboxScaleControl>(({mapLib}) => new mapLib.ScaleControl(props), {
     position: props.position
   });
 
+  const {style, unit = 'metric', maxWidth = 100} = props;
+
   // @ts-ignore
-  if (ctrl.options.unit !== props.unit || ctrl.options.maxWidth !== props.maxWidth) {
+  if (ctrl.options.unit !== unit || ctrl.options.maxWidth !== maxWidth) {
     // @ts-ignore
-    ctrl.options.maxWidth = props.maxWidth;
+    ctrl.options.maxWidth = maxWidth;
     // This method will trigger an update
-    ctrl.setUnit(props.unit);
+    ctrl.setUnit(unit);
   }
 
   useEffect(() => {
     // @ts-ignore
-    applyReactStyle(ctrl._container, props.style);
-  }, [props.style]);
+    applyReactStyle(ctrl._container, style);
+  }, [style]);
 
   return null;
 }
-
-ScaleControl.defaultProps = defaultProps;
 
 export default React.memo(ScaleControl);

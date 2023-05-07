@@ -35,38 +35,7 @@ export type MapProps = MapboxProps &
     children?: any;
   };
 
-const defaultProps: MapProps = {
-  // Constraints
-  minZoom: 0,
-  maxZoom: 22,
-  minPitch: 0,
-  maxPitch: 60,
-
-  // Interaction handlers
-  scrollZoom: true,
-  boxZoom: true,
-  dragRotate: true,
-  dragPan: true,
-  keyboard: true,
-  doubleClickZoom: true,
-  touchZoomRotate: true,
-  touchPitch: true,
-
-  // Style
-  mapStyle: {version: 8, sources: {}, layers: []},
-  styleDiffing: true,
-  projection: 'mercator',
-  renderWorldCopies: true,
-
-  // Callbacks
-  onError: e => console.error(e.error), // eslint-disable-line
-
-  // Globals
-  RTLTextPlugin:
-    'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'
-};
-
-const Map = forwardRef<MapRef, MapProps>((props, ref) => {
+function Map(props: MapProps, ref: React.Ref<MapRef>) {
   const mountedMapsContext = useContext(MountedMapsContext);
   const [mapInstance, setMapInstance] = useState<Mapbox>(null);
   const containerRef = useRef();
@@ -112,12 +81,17 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
         }
       })
       .catch(error => {
-        props.onError({
-          type: 'error',
-          target: null,
-          originalEvent: null,
-          error
-        });
+        const {onError} = props;
+        if (onError) {
+          onError({
+            type: 'error',
+            target: null,
+            originalEvent: null,
+            error
+          });
+        } else {
+          console.error(error); // eslint-disable-line
+        }
       });
 
     return () => {
@@ -166,9 +140,6 @@ const Map = forwardRef<MapRef, MapProps>((props, ref) => {
       )}
     </div>
   );
-});
+}
 
-Map.displayName = 'Map';
-Map.defaultProps = defaultProps;
-
-export default Map;
+export default forwardRef(Map);
