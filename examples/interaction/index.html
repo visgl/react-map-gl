@@ -44,9 +44,9 @@
   </head>
   <body>
     <div id="map"></div>
-    <script src='app.js'></script>
   </body>
-  <script type="text/javascript">
-    App.renderToDom(document.getElementById('map'));
+  <script type="module" type="text/javascript">
+    import {renderToDom} from './src/app.tsx';
+    renderToDom(document.getElementById('map'));
   </script>
 </html>
