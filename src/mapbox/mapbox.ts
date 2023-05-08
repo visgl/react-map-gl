@@ -775,7 +775,8 @@ export default class Mapbox {
     let changed = false;
     for (const propName of handlerNames) {
       const newValue = nextProps[propName] ?? true;
-      if (!deepEqual(newValue, currProps[propName])) {
+      const oldValue = currProps[propName] ?? true;
+      if (!deepEqual(newValue, oldValue)) {
         changed = true;
         if (newValue) {
           map[propName].enable(newValue);
