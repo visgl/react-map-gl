@@ -48,7 +48,7 @@ function Map(props: MapProps, ref: React.Ref<MapRef>) {
     let mapbox;
 
     Promise.resolve(mapLib)
-      .then((module) => {
+      .then(module => {
         if (!isMounted) {
           return;
         }
