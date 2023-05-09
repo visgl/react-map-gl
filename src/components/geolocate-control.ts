@@ -67,7 +67,7 @@ export type GeolocateControlProps = {
   onTrackUserLocationEnd?: (e: GeolocateEvent) => void;
 };
 
-const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>((props, ref) => {
+function GeolocateControl(props: GeolocateControlProps, ref: React.Ref<GeolocateControlRef>) {
   const thisRef = useRef({props});
 
   const ctrl = useControl<MapboxGeolocateControl>(
@@ -121,8 +121,8 @@ const GeolocateControl = forwardRef<GeolocateControlRef, GeolocateControlProps>(
   }, [props.style]);
 
   return null;
-});
+}
 
-GeolocateControl.displayName = 'GeolocateControl';
+const GeolocateControlWithRef = forwardRef(GeolocateControl);
 
-export default React.memo(GeolocateControl);
+export default React.memo(GeolocateControlWithRef);

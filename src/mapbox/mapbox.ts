@@ -327,6 +327,8 @@ export type MapboxProps = Partial<ViewState> & {
   onSourceData?: (e: MapSourceDataEvent) => void;
 };
 
+const DEFAULT_STYLE = {version: 8, sources: {}, layers: []};
+
 const pointerEvents = {
   mousedown: 'onMouseDown',
   mouseup: 'onMouseUp',
@@ -515,12 +517,13 @@ export default class Mapbox {
   /* eslint-disable complexity,max-statements */
   _initialize(container: HTMLDivElement) {
     const {props} = this;
+    const {mapStyle = DEFAULT_STYLE} = props;
     const mapOptions = {
       ...props,
       ...props.initialViewState,
       accessToken: props.mapboxAccessToken || getAccessTokenFromEnv() || null,
       container,
-      style: normalizeStyle(props.mapStyle)
+      style: normalizeStyle(mapStyle)
     };
 
     const viewState = mapOptions.initialViewState || mapOptions.viewState || mapOptions;
@@ -722,13 +725,14 @@ export default class Mapbox {
       this._map.getCanvas().style.cursor = nextProps.cursor;
     }
     if (nextProps.mapStyle !== currProps.mapStyle) {
+      const {mapStyle = DEFAULT_STYLE, styleDiffing = true} = nextProps;
       const options: any = {
-        diff: nextProps.styleDiffing
+        diff: styleDiffing
       };
       if ('localIdeographFontFamily' in nextProps) {
         options.localIdeographFontFamily = nextProps.localIdeographFontFamily;
       }
-      this._map.setStyle(normalizeStyle(nextProps.mapStyle), options);
+      this._map.setStyle(normalizeStyle(mapStyle), options);
       return true;
     }
     return false;
@@ -770,8 +774,9 @@ export default class Mapbox {
     const map = this._map;
     let changed = false;
     for (const propName of handlerNames) {
-      const newValue = nextProps[propName];
-      if (!deepEqual(newValue, currProps[propName])) {
+      const newValue = nextProps[propName] ?? true;
+      const oldValue = currProps[propName] ?? true;
+      if (!deepEqual(newValue, oldValue)) {
         changed = true;
         if (newValue) {
           map[propName].enable(newValue);
@@ -788,6 +793,8 @@ export default class Mapbox {
     const cb = this.props[otherEvents[e.type]];
     if (cb) {
       cb(e);
+    } else if (e.type === 'error') {
+      console.error((e as ErrorEvent).error); // eslint-disable-line
     }
   };
 
