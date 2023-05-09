@@ -24,6 +24,7 @@ const layerStyle = {
 
 function App() {
   return <Map
+    mapLib={import('mapbox-gl')}
     initialViewState={{
       longitude: -122.4,
       latitude: 37.8,

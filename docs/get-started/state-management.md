@@ -16,6 +16,7 @@ import Map from 'react-map-gl';
 
 function App() {
   return <Map
+    mapLib={import('mapbox-gl')}
     initialViewState={{
       longitude: -100,
       latitude: 40,
@@ -42,6 +43,7 @@ function App() {
   });
 
   return <Map
+    mapLib={import('mapbox-gl')}
     {...viewState}
     onMove={evt => setViewState(evt.viewState)}
     mapStyle="mapbox://styles/mapbox/streets-v9"
@@ -85,6 +87,7 @@ function App() {
   }, [])
 
   return <Map
+    mapLib={import('mapbox-gl')}
     {...viewState}
     onMove={onMove}
     mapStyle="mapbox://styles/mapbox/streets-v9"

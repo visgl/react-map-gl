@@ -27,11 +27,13 @@ const layerStyle = {
 function App() {
   const [viewport, setViewport] = React.useState();
   return (
-    <Map initialViewState={{
-      longitude: -122.45,
-      latitude: 37.78,
-      zoom: 14
-    }}>
+    <Map
+      mapLib={import('mapbox-gl')}
+      initialViewState={{
+        longitude: -122.45,
+        latitude: 37.78,
+        zoom: 14
+      }}>
       <Source id="my-data" type="geojson" data={geojson}>
         <Layer {...layerStyle} />
       </Source>

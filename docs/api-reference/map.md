@@ -8,6 +8,7 @@ import Map from 'react-map-gl';
 
 function App() {
   return <Map
+    mapLib={import('mapbox-gl')}
     initialViewState={{
       longitude: -100,
       latitude: 40,
@@ -38,7 +39,7 @@ function App() {
     });
   }, []);
 
-  return <Map ref={mapRef} onLoad={onMapLoad} />;
+  return <Map mapLib={import('mapbox-gl')} ref={mapRef} onLoad={onMapLoad} />;
 }
 ```
 
@@ -455,7 +456,9 @@ Props in this section are not reactive. They are only used once when the Map ins
 
 #### `mapLib`: any
 
-Override the map library. By default, it loads the mapbox-gl module using [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports). This can be used to replace mapbox-gl with a compatible fork:
+Specify the underlying base map library for the Map component. The value can be provided with several options:
+
+By module import (and embedding in the final bundle):
 
 ```js
 import * as React from 'react';
@@ -464,6 +467,17 @@ import maplibregl from 'maplibre-gl';
 
 function App() {
   return <Map mapLib={maplibregl} />;
+}
+```
+
+By dynamic import (thus enable bundle splitting):
+
+```js
+import * as React from 'react';
+import Map from 'react-map-gl';
+
+function App() {
+  return <Map mapLib={import('mapbox-gl')} />;
 }
 ```
 
@@ -482,7 +496,6 @@ function App() {
 }
 ```
 
-Default: `import('mapbox-gl')`
 
 #### `mapboxAccessToken`: string
 

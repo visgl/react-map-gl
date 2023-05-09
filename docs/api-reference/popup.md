@@ -13,6 +13,7 @@ function App() {
   const [showPopup, setShowPopup] = React.useState(true);
 
   return <Map
+    mapLib={import('mapbox-gl')}
     initialViewState={{
       longitude: -100,
       latitude: 40,
