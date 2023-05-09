@@ -477,17 +477,27 @@ export default class Mapbox {
     const map = that.map;
     // When reusing the saved map, we need to reparent the map(canvas) and other child nodes
     // intoto the new container from the props.
-    // Step1: reparenting child nodes from old container to new container
+    // Step 1: reparenting child nodes from old container to new container
     const oldContainer = map.getContainer();
     container.className = oldContainer.className;
     while (oldContainer.childNodes.length > 0) {
       container.appendChild(oldContainer.childNodes[0]);
     }
-    // Step2: replace the internal container with new container from the react component
+    // Step 2: replace the internal container with new container from the react component
     // @ts-ignore
     map._container = container;
 
-    // Step 3: apply new props
+    // With maplibre-gl as mapLib, map uses ResizeObserver to observe when its container resizes.
+    // When reusing the saved map, we need to disconnect the observer and observe the new container.
+    // Step 3: telling the ResizeObserver to disconnect and observe the new container
+    // @ts-ignore
+    const resizeObserver = map._resizeObserver;
+    if (resizeObserver) {
+      resizeObserver.disconnect();
+      resizeObserver.observe(container);
+    }
+
+    // Step 4: apply new props
     that.setProps({...props, styleDiffing: false});
     map.resize();
     const {initialViewState} = props;
