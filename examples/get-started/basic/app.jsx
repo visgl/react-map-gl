@@ -2,6 +2,7 @@
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import Map, {Marker} from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -10,6 +11,7 @@ const MAPBOX_TOKEN = ''; // Set your mapbox token here
 function Root() {
   return (
     <Map
+      mapLib={mapboxgl}
       initialViewState={{
         latitude: 37.8,
         longitude: -122.4,

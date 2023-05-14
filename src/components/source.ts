@@ -56,6 +56,7 @@ function updateSource(source: AnySourceImpl, props: SourceProps, prevProps: Sour
   const type = props.type;
 
   if (type === 'geojson') {
+    // @ts-expect-error there seems to be mismatch between GeoJSONSource.setData and GeoJSONSourceRaw.data
     (source as GeoJSONSource).setData(props.data);
   } else if (type === 'image') {
     (source as ImageSource).updateImage({url: props.url, coordinates: props.coordinates});

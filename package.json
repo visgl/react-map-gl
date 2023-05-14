@@ -36,16 +36,27 @@
     "update-release-branch": "scripts/update-release-branch.sh"
   },
   "dependencies": {
-    "@types/mapbox-gl": "^2.6.0"
+    "@types/mapbox-gl": "^2.7.11"
   },
   "peerDependencies": {
-    "mapbox-gl": "*",
-    "react": ">=16.3.0"
+    "mapbox-gl": ">=1.13.0",
+    "maplibregl": ">=1.13.0",
+    "react": ">=16.3.0",
+    "react-dom": ">=16.3.0"
+  },
+  "peerDependenciesMeta": {
+    "mapbox-gl": {
+      "optional": true
+    },
+    "maplibre-gl": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/react": "^16.0.0",
     "jsdom": "^16.5.0",
-    "mapbox-gl": "^2.8.0",
+    "mapbox-gl": "^2.14.0",
+    "maplibre-gl": "^2.4.0",
     "ocular-dev-tools": "2.0.0-alpha.13",
     "pre-commit": "^1.2.2",
     "react": "^18.0.0",

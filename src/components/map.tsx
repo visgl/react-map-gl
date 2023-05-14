@@ -47,17 +47,16 @@ function Map(props: MapProps, ref: React.Ref<MapRef>) {
     let isMounted = true;
     let mapbox;
 
-    Promise.resolve(mapLib || import('mapbox-gl'))
-      .then(mapboxgl => {
+    Promise.resolve(mapLib)
+      .then(module => {
         if (!isMounted) {
           return;
         }
-
-        if (!mapboxgl.Map) {
-          // commonjs style
-          mapboxgl = mapboxgl.default;
+        if (!module) {
+          throw new Error('Invalid mapLib');
         }
-        if (!mapboxgl || !mapboxgl.Map) {
+        const mapboxgl = 'Map' in module ? module : module.default;
+        if (!mapboxgl.Map) {
           throw new Error('Invalid mapLib');
         }
 

@@ -3,6 +3,7 @@ import {useRef} from 'react';
 import {createRoot} from 'react-dom/client';
 import Map from 'react-map-gl';
 import bbox from '@turf/bbox';
+import mapboxgl from 'mapbox-gl';
 
 import ControlPanel from './control-panel';
 import MAP_STYLE from './map-style';
@@ -34,6 +35,7 @@ export default function App() {
     <>
       <Map
         ref={mapRef}
+        mapLib={mapboxgl}
         initialViewState={{
           latitude: 37.78,
           longitude: -122.4,

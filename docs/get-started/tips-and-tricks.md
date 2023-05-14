@@ -53,6 +53,7 @@ In a moderately complex single-page app, as the user navigates through the UI, a
   </TabList>
   <TabPanel value="map">
     <Map
+      mapLib={import('mapbox-gl')}
       mapStyle="mapbox://styles/mapbox/streets-v9" >
       {items.map(renderMarker)}
     </Map>
@@ -72,6 +73,7 @@ In this case, it is recommended that you set the [reuseMaps](/docs/api-reference
 ```jsx
   <TabPanel value="map">
     <Map reuseMaps
+      mapLib={import('mapbox-gl')}
       mapStyle="mapbox://styles/mapbox/streets-v9" >
       {items.map(renderMarker)}
     </Map>
@@ -99,6 +101,7 @@ function MapView() {
 
   return (
     <Map
+      mapLib={import('mapbox-gl')}
       {...viewState}
       onMove={onMove}
       mapStyle="mapbox://styles/mapbox/streets-v9" >
@@ -134,6 +137,7 @@ One way to improve the performance is `useMemo`:
 
   return (
     <Map
+      mapLib={import('mapbox-gl')}
       {...viewState}
       onMove={onMove}
       mapStyle="mapbox://styles/mapbox/streets-v9" >
@@ -158,6 +162,7 @@ If your application can do without complicated DOM objects and CSS styling, cons
 
   return (
     <Map
+      mapLib={import('mapbox-gl')}
       {...viewState}
       onMove={onMove}
       mapStyle="mapbox://styles/mapbox/streets-v9" >

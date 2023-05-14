@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import Map from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
 
 import GeocoderControl from './geocoder-control';
 import ControlPanel from './control-panel';
@@ -12,6 +13,7 @@ export default function App() {
   return (
     <>
       <Map
+        mapLib={mapboxgl}
         initialViewState={{
           longitude: -79.4512,
           latitude: 43.6568,

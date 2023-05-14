@@ -17,6 +17,7 @@ import Map from 'react-map-gl';
 function App() {
   return (
     <Map
+      mapLib={import('mapbox-gl')}
       initialViewState={{
         longitude: -122.4,
         latitude: 37.8,
@@ -59,9 +60,6 @@ Install your choice of fork along with react-map-gl, for example:
 
 ```bash
 npm install --save react-map-gl maplibre-gl
-
-# Add an empty placeholder for mapbox-gl to satisfy the peer dependency
-npm install --save mapbox-gl@npm:empty-npm-package@1.0.0
 ```
 
 Then override the `mapLib` prop of `Map`:

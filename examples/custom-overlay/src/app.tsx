@@ -3,6 +3,7 @@ import {useMemo, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import Map from 'react-map-gl';
 import {arc, pie} from 'd3-shape';
+import mapboxgl from 'mapbox-gl';
 
 import CustomOverlay from './custom-overlay';
 import ControlPanel, {COLORS} from './control-panel';
@@ -26,6 +27,7 @@ export default function App() {
   return (
     <>
       <Map
+        mapLib={mapboxgl}
         initialViewState={{
           longitude: -100,
           latitude: 40,

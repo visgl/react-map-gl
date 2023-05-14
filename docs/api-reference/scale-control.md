@@ -8,6 +8,7 @@ import Map, {ScaleControl} from 'react-map-gl';
 
 function App() {
   return <Map
+    mapLib={import('mapbox-gl')}
     initialViewState={{
       longitude: -100,
       latitude: 40,

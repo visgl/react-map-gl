@@ -3,6 +3,7 @@ import * as React from 'react';
 import {useState, useCallback, useMemo} from 'react';
 import {createRoot} from 'react-dom/client';
 import Map from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
 
 import ControlPanel, {Mode} from './control-panel';
 
@@ -52,6 +53,7 @@ export default function App() {
       <div style={{position: 'relative', height: '100%'}}>
         <Map
           id="left-map"
+          mapLib={mapboxgl}
           {...viewState}
           padding={leftMapPadding}
           onMoveStart={onLeftMoveStart}
@@ -62,6 +64,7 @@ export default function App() {
         />
         <Map
           id="right-map"
+          mapLib={mapboxgl}
           {...viewState}
           padding={rightMapPadding}
           onMoveStart={onRightMoveStart}

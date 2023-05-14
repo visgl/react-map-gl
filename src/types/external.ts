@@ -1,19 +1,5 @@
 import type {PaddingOptions, MapboxEvent, Popup, Marker, GeolocateControl, LngLat} from 'mapbox-gl';
 
-/** Defines the projection that the map should be rendered in */
-export type ProjectionSpecification = {
-  name:
-    | 'albers'
-    | 'equalEarth'
-    | 'equirectangular'
-    | 'lambertConformalConic'
-    | 'mercator'
-    | 'naturalEarth'
-    | 'winkelTripel';
-  center?: [number, number];
-  parallels?: [number, number];
-};
-
 /** Describes the camera's state */
 export type ViewState = {
   /** Longitude at map center */
@@ -94,6 +80,7 @@ export type {
   DragPanOptions,
   InteractiveOptions as ZoomRotateOptions,
   TransformRequestFunction,
+  Projection,
   Light,
   Fog,
   TerrainSpecification,
