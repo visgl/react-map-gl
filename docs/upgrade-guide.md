@@ -1,8 +1,8 @@
 # Upgrade Guide
 
-## Upgrading to v7.1
+## Upgrading to v8.0
 
-In v7.1, `react-map-gl` no long require any vender-specific base map library as dependency. As a result, the `Map` component's `mapLib` prop must be provided. Users who use the package with `mapbox-gl` now need to specify `mapLib` as follows:
+In v8.0, `react-map-gl` no long require any vender-specific base map library as dependency. As a result, the `Map` component's `mapLib` prop must be provided. Users who use the package with `mapbox-gl` now need to specify `mapLib` as follows:
 
 ```jsx
 <Map mapLib={import('mapbox-gl')} ...>
