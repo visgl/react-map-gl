@@ -1,5 +1,7 @@
 import type {PaddingOptions, MapboxEvent, Popup, Marker, GeolocateControl, LngLat} from 'mapbox-gl';
 
+export type {IControl} from './map';
+
 /** Describes the camera's state */
 export type ViewState = {
   /** Longitude at map center */
@@ -46,6 +48,12 @@ export type ViewStateChangeEvent =
 export type PopupEvent = {
   type: 'open' | 'close';
   target: Popup;
+};
+
+export type MarkerEvent<TOrig> = {
+  type: string;
+  target: Marker;
+  originalEvent: TOrig;
 };
 
 export type MarkerDragEvent = {
@@ -116,7 +124,5 @@ export type {
   MapSourceDataEvent,
   MapboxEvent,
   ErrorEvent,
-  MapboxGeoJSONFeature,
-  IControl,
-  Map as MapboxMap
+  MapboxGeoJSONFeature
 } from 'mapbox-gl';

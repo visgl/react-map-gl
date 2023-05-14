@@ -21,9 +21,12 @@ export type ScaleControlProps = {
 };
 
 function ScaleControl(props: ScaleControlProps): null {
-  const ctrl = useControl<MapboxScaleControl>(({mapLib}) => new mapLib.ScaleControl(props), {
-    position: props.position
-  });
+  const ctrl = useControl<MapboxScaleControl>(
+    ({mapLib}) => new mapLib.ScaleControl(props) as MapboxScaleControl,
+    {
+      position: props.position
+    }
+  );
 
   const {style, unit = 'metric', maxWidth = 100} = props;
 

@@ -26,7 +26,7 @@ export type NavigationControlProps = {
 
 function NavigationControl(props: NavigationControlProps): null {
   const ctrl = useControl<MapboxNavigationControl>(
-    ({mapLib}) => new mapLib.NavigationControl(props),
+    ({mapLib}) => new mapLib.NavigationControl(props) as MapboxNavigationControl,
     {
       position: props.position
     }

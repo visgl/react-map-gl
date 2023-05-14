@@ -16,17 +16,32 @@ import createRef, {MapRef} from '../mapbox/create-ref';
 import type {CSSProperties} from 'react';
 import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
 import setGlobals, {GlobalSettings} from '../utils/set-globals';
+import type {MapLib} from '../types';
 
-export type MapContextValue = {
-  mapLib: any;
-  map: MapRef;
+export type MapContextValue<LibT extends MapLib = MapLib> = {
+  mapLib: LibT;
+  map: MapRef<InstanceType<LibT['Map']>>;
 };
 
 export const MapContext = React.createContext<MapContextValue>(null);
 
-export type MapProps = MapboxProps &
+// Redecalare forwardRef to support generics
+// https://fettblog.eu/typescript-react-generic-forward-refs/
+declare module 'react' {
+  function forwardRef<T, P = {}>(
+    render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
+  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+}
+
+type MapInitOptions<LibT extends MapLib> = Omit<
+  ConstructorParameters<LibT['Map']>[0],
+  'style' | 'container' | 'bounds' | 'fitBoundsOptions' | 'center'
+>;
+
+export type MapProps<LibT extends MapLib> = MapInitOptions<LibT> &
+  MapboxProps &
   GlobalSettings & {
-    mapLib?: any;
+    mapLib: LibT | Promise<LibT>;
     reuseMaps?: boolean;
     /** Map container id */
     id?: string;
@@ -35,20 +50,23 @@ export type MapProps = MapboxProps &
     children?: any;
   };
 
-function Map(props: MapProps, ref: React.Ref<MapRef>) {
+function Map<LibT extends MapLib>(
+  props: MapProps<LibT>,
+  ref: React.Ref<MapRef<InstanceType<LibT['Map']>>>
+) {
   const mountedMapsContext = useContext(MountedMapsContext);
-  const [mapInstance, setMapInstance] = useState<Mapbox>(null);
+  const [mapInstance, setMapInstance] = useState<Mapbox<LibT>>(null);
   const containerRef = useRef();
 
-  const {current: contextValue} = useRef<MapContextValue>({mapLib: null, map: null});
+  const {current: contextValue} = useRef<MapContextValue<LibT>>({mapLib: null, map: null});
 
   useEffect(() => {
     const mapLib = props.mapLib;
     let isMounted = true;
-    let mapbox;
+    let mapbox: Mapbox<LibT>;
 
     Promise.resolve(mapLib)
-      .then(module => {
+      .then((module: LibT | {default: LibT}) => {
         if (!isMounted) {
           return;
         }
@@ -65,7 +83,7 @@ function Map(props: MapProps, ref: React.Ref<MapRef>) {
         setGlobals(mapboxgl, props);
         if (!mapboxgl.supported || mapboxgl.supported(props)) {
           if (props.reuseMaps) {
-            mapbox = Mapbox.reuse(props, containerRef.current);
+            mapbox = Mapbox.reuse(props, containerRef.current) as Mapbox<LibT>;
           }
           if (!mapbox) {
             mapbox = new Mapbox(mapboxgl.Map, props, containerRef.current);

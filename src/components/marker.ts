@@ -5,12 +5,12 @@ import {useEffect, useMemo, useRef, useContext} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
 
 import type {
+  MarkerEvent,
   MarkerDragEvent,
   MapboxPopup,
   PointLike,
   Anchor,
   Alignment,
-  MapboxEvent,
   MapboxMarker
 } from '../types';
 
@@ -67,7 +67,7 @@ export type MarkerProps = {
   popup?: MapboxPopup;
   /** CSS style override, applied to the control's container */
   style?: React.CSSProperties;
-  onClick?: (e: MapboxEvent<MouseEvent>) => void;
+  onClick?: (e: MarkerEvent<MouseEvent>) => void;
   onDragStart?: (e: MarkerDragEvent) => void;
   onDrag?: (e: MarkerDragEvent) => void;
   onDragEnd?: (e: MarkerDragEvent) => void;
@@ -92,7 +92,8 @@ function Marker(props: MarkerProps) {
       element: hasChildren ? document.createElement('div') : null
     };
 
-    const mk = new mapLib.Marker(options).setLngLat([props.longitude, props.latitude]);
+    const mk = new mapLib.Marker(options) as MapboxMarker;
+    mk.setLngLat([props.longitude, props.latitude]);
 
     mk.getElement().addEventListener('click', (e: MouseEvent) => {
       thisRef.current.props.onClick?.({
@@ -122,7 +123,7 @@ function Marker(props: MarkerProps) {
   }, []);
 
   useEffect(() => {
-    marker.addTo(map.getMap());
+    marker.addTo(map.getMap() as any);
 
     return () => {
       marker.remove();

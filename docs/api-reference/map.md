@@ -26,12 +26,13 @@ function App() {
 Imperative methods are accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) or the [useMap](./use-map.md) hook.
 
 
-```js
+```tsx
 import * as React from 'react';
 import Map from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
 
 function App() {
-  const mapRef = React.useRef();
+  const mapRef = React.useRef<MapRef<mapboxgl.Map>>();
 
   const onMapLoad = React.useCallback(() => {
     mapRef.current.on('move', () => {
@@ -39,7 +40,7 @@ function App() {
     });
   }, []);
 
-  return <Map mapLib={import('mapbox-gl')} ref={mapRef} onLoad={onMapLoad} />;
+  return <Map mapLib={mapboxgl} ref={mapRef} onLoad={onMapLoad} />;
 }
 ```
 
@@ -53,6 +54,8 @@ Returns the native [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/) instance
 
 
 ## Properties
+
+Aside from the props listed below, the `Map` component supports all parameters of the [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters) constructor. Beware that this is not an exhaustive list of all props. Different base map libraries may offer different options and default values. When in doubt, refer to your base map library's documentation.
 
 ### Layout options
 
@@ -452,7 +455,9 @@ Called when one of the map's sources loads or changes, including if a tile belon
 
 ### Other options
 
-Props in this section are not reactive. They are only used once when the Map instance is constructed.
+The following props, along with any parameter of the [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters) not listed above, can be specified to construct the underlying `Map` instance. 
+
+Note: props in this section are not reactive. They are only used once when the Map instance is constructed.
 
 #### `mapLib`: any {#maplib}
 
@@ -501,150 +506,15 @@ function App() {
 
 Token used to access the Mapbox data service. See [about map tokens](../get-started/mapbox-tokens.md).
 
-#### `antialias`: boolean {#antialias}
-
-Default: `false`
-
-If `true` , the gl context will be created with [MSAA antialiasing](https://en.wikipedia.org/wiki/Multisample_anti-aliasing), which can be useful for antialiasing custom layers.
-This is `false` by default as a performance optimization.
-
-#### `attributionControl`: boolean {#attributioncontrol}
-
-Default: `true`
-
-If `true`, an attribution control will be added to the map.
-
-#### `baseApiUrl`: string {#baseapiurl}
+#### `baseApiUrl`: string
 
 The map's default API URL for requesting tiles, styles, sprites, and glyphs.
 
-#### `bearingSnap`: number {#bearingsnap}
-
-Default: `7`
-
-Snap to north threshold in degrees.
-
-#### `clickTolerance`: number {#clicktolerance}
-
-Default: `3`
-
-The max number of pixels a user can shift the mouse pointer during a click for it to be considered a valid click (as opposed to a mouse drag).
-
-#### `collectResourceTiming`: boolean {#collectresourcetiming}
-
-Default: `false`
-
-If `true`, Resource Timing API information will be collected for requests made by GeoJSON and Vector Tile web workers (this information is normally inaccessible from the main Javascript thread). Information will be returned in a `resourceTiming` property of  relevant `data` events.
-
-#### `cooperativeGestures`: boolean {#cooperativegestures}
-
-Default: `false`
-
-If `true` , scroll zoom will require pressing the ctrl or ⌘ key while scrolling to zoom map, and touch pan will require using two fingers while panning to move the map. Touch pitch will require three fingers to activate if enabled.
-
-#### `crossSourceCollisions`: boolean {#crosssourcecollisions}
-
-Default: `true`
-
-If `true`, symbols from multiple sources can collide with each other during collision detection. If `false`, collision detection is run separately for the symbols in each source.
-
-#### `customAttribution`: string | string[] {#customattribution}
-
-Default: `null`
-
-String or strings to show in an AttributionControl.
-Only applicable if `attributionControl` is `true`.
-
-#### `fadeDuration`: number {#fadeduration}
-
-Default: `300`
-
-Controls the duration of the fade-in/fade-out animation for label collisions, in milliseconds. This setting affects all symbol layers. This setting does not affect the duration of runtime styling transitions or raster tile cross-fading.
-
-#### `failIfMajorPerformanceCaveat`: boolean {#failifmajorperformancecaveat}
-
-Default: `false`
-
-If true, map creation will fail if the implementation determines that the performance of the created WebGL context would be dramatically lower than expected.
-
-#### `hash`: boolean | string {#hash}
-
-Default: `false`
-
-If `true`, the map's position (zoom, center latitude, center longitude, bearing, and pitch) will be synced with the hash fragment of the page's URL.
-For example, `http://path/to/my/page.html#2.59/39.26/53.07/-24.1/60`.
-
-An additional string may optionally be provided to indicate a parameter-styled hash,
-e.g. `http://path/to/my/page.html#map=2.59/39.26/53.07/-24.1/60&foo=bar`, where `foo` is a custom parameter and bar is an arbitrary hash distinct from the map hash.
-
-#### `interactive`: boolean {#interactive}
-
-Default: `true`
-
-If `false`, no mouse, touch, or keyboard listeners are attached to the map, so it will not respond to input.
-
-#### `locale`: Record\<string, string\> {#locale}
-
-Default: `null`
-
-A patch to apply to the default localization table for UI strings, e.g. control tooltips.
-The `locale` object maps namespaced UI string IDs to translated strings in the target language; see `src/ui/default_locale.js` for an example with all supported string IDs.
-The object may specify all UI strings (thereby adding support for a new translation) or only a subset of strings (thereby patching the default translation table).
-
-#### `localFontFamily`: string {#localfontfamily}
-
-Default: `null`
-
-Defines a CSS font-family for locally overriding generation of all glyphs. Font settings from the map's style will be ignored, except for font-weight keywords (light/regular/medium/bold). If set, this option overrides the setting in localIdeographFontFamily.
-
-#### `localIdeographFontFamily`: string {#localideographfontfamily}
-
-Default: `'sans-serif'`
-
-Defines a CSS font-family for locally overriding generation of glyphs in the 'CJK Unified Ideographs', 'Hiragana', 'Katakana', 'Hangul Syllables' and 'CJK Symbols and Punctuation' ranges. Overrides font settings from the map's style. See [example](https://www.mapbox.com/mapbox-gl-js/example/local-ideographs).
-
-#### `logoPosition`: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' {#logoposition}
-
-Default: `'bottom-left'`
-
-A string representing the position of the Mapbox wordmark on the map.
-
-#### `maxParallelImageRequests`: number {#maxparallelimagerequests}
+#### `maxParallelImageRequests`: number
 
 Default: `16`
 
 The maximum number of images (raster tiles, sprites, icons) to load in parallel.
-
-#### `maxTileCacheSize`: number {#maxtilecachesize}
-
-Default: `null`
-
-The maximum number of tiles stored in the tile cache for a given source. If omitted, the cache will be dynamically sized based on the current viewport.
-
-#### `optimizeForTerrain`: boolean {#optimizeforterrain}
-
-Default: `true`
-
-If true, map will prioritize rendering for performance by reordering layers.
-If false, layers will always be drawn in the specified order.
-
-#### `pitchWithRotate`: boolean {#pitchwithrotate}
-
-Default: `true`
-
-If `false`, the map's pitch (tilt) control with "drag to rotate" interaction will be disabled.
-
-#### `preserveDrawingBuffer`: boolean {#preservedrawingbuffer}
-
-Default: `false`
-
-If `true`, The maps canvas can be exported to a PNG using `map.getCanvas().toDataURL()`;. This is `false` by default as a performance optimization.
-
-#### `refreshExpiredTiles`: boolean {#refreshexpiredtiles}
-
-Default: `true`
-
-If `false`, the map won't attempt to re-request tiles once they expire per their HTTP `cacheControl`/`expires` headers.
 
 #### `reuseMaps`: boolean {#reusemaps}
 
@@ -663,24 +533,6 @@ Default: `'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3
 Sets the map's [RTL text plugin](https://www.mapbox.com/mapbox-gl-js/plugins/#mapbox-gl-rtl-text). Necessary for supporting the Arabic and Hebrew languages, which are written right-to-left.
 
 Setting this prop is the equivelant of calling [mapboxgl.setRTLTextPlugin](https://docs.mapbox.com/mapbox-gl-js/api/properties/#setrtltextplugin) with `lazy: true`.
-
-#### `testMode`: boolean {#testmode}
-
-Default: `false`
-
-Silences errors and warnings generated due to an invalid accessToken, useful when using the library to write unit tests.
-
-#### `trackResize`: boolean {#trackresize}
-
-Default: `true`
-
-If `true`, the map will automatically resize when the browser window resizes.
-
-#### `transformRequest`: [TransformRequestFunction](./types.md#transformrequestfunction) {#transformrequest}
-
-Default: `null`
-
-A callback run before the Map makes a request for an external URL. The callback can be used to modify the url, set headers, or set the credentials property for cross-origin requests.
 
 #### `workerClass`: object {#workerclass}
 

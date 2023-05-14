@@ -80,7 +80,8 @@ function Popup(props: PopupProps) {
 
   const popup: MapboxPopup = useMemo(() => {
     const options = {...props};
-    const pp = new mapLib.Popup(options).setLngLat([props.longitude, props.latitude]);
+    const pp = new mapLib.Popup(options) as MapboxPopup;
+    pp.setLngLat([props.longitude, props.latitude]);
     pp.once('open', e => {
       thisRef.current.props.onOpen?.(e as PopupEvent);
     });
@@ -92,7 +93,7 @@ function Popup(props: PopupProps) {
       thisRef.current.props.onClose?.(e as PopupEvent);
     };
     popup.on('close', onClose);
-    popup.setDOMContent(container).addTo(map.getMap());
+    popup.setDOMContent(container).addTo(map.getMap() as any);
 
     return () => {
       // https://github.com/visgl/react-map-gl/issues/1825

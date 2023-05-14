@@ -3,7 +3,7 @@ import {MapContext} from './map';
 import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
 
-import type {MapboxMap, AnyLayer} from '../types';
+import type {MapInstance, AnyLayer} from '../types';
 
 // Omiting property from a union type, see
 // https://github.com/microsoft/TypeScript/issues/39556#issuecomment-656925230
@@ -15,7 +15,7 @@ export type LayerProps = OptionalId<AnyLayer> & {
 };
 
 /* eslint-disable complexity, max-statements */
-function updateLayer(map: MapboxMap, id: string, props: LayerProps, prevProps: LayerProps) {
+function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps: LayerProps) {
   assert(props.id === prevProps.id, 'layer id changed');
   assert(props.type === prevProps.type, 'layer type changed');
 
@@ -62,7 +62,7 @@ function updateLayer(map: MapboxMap, id: string, props: LayerProps, prevProps: L
   }
 }
 
-function createLayer(map: MapboxMap, id: string, props: LayerProps) {
+function createLayer(map: MapInstance, id: string, props: LayerProps) {
   // @ts-ignore
   if (map.style && map.style._loaded && (!('source' in props) || map.getSource(props.source))) {
     const options: LayerProps = {...props, id};
@@ -78,7 +78,7 @@ function createLayer(map: MapboxMap, id: string, props: LayerProps) {
 let layerCounter = 0;
 
 function Layer(props: LayerProps) {
-  const map: MapboxMap = useContext(MapContext).map.getMap();
+  const map = useContext(MapContext).map.getMap();
   const propsRef = useRef(props);
   const [, setStyleLoaded] = useState(0);
 

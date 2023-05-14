@@ -1,6 +1,5 @@
-import {PaddingOptions, LngLat, Point, LngLatBounds} from 'mapbox-gl';
-
 export * from './external';
+export type {MapLib, MapInstance, Transform, MapInstanceInternal} from './map';
 
 // re-export mapbox types
 export type {
@@ -17,27 +16,3 @@ export type {
   ScaleControl as MapboxScaleControl,
   ElevationQueryOptions
 } from 'mapbox-gl';
-
-/**
- * Stub for mapbox's Transform class
- * https://github.com/mapbox/mapbox-gl-js/blob/main/src/geo/transform.js
- */
-export type Transform = {
-  width: number;
-  height: number;
-  center: LngLat;
-  zoom: number;
-  bearing: number;
-  pitch: number;
-  padding: PaddingOptions;
-  elevation: any;
-  pixelsToGLUnits: [number, number];
-  cameraElevationReference: 'ground' | 'sea';
-
-  clone: () => Transform;
-  resize: (width: number, height: number) => void;
-  isPaddingEqual: (value: PaddingOptions) => boolean;
-  getBounds: () => LngLatBounds;
-  locationPoint: (lngLat: LngLat) => Point;
-  pointLocation: (p: Point) => LngLat;
-};

@@ -67,10 +67,9 @@ Then override the `mapLib` prop of `Map`:
 ```js
 import * as React from 'react';
 import Map from 'react-map-gl';
-import maplibregl from 'maplibre-gl';
 
 function App() {
-  return <Map mapLib={maplibregl} />;
+  return <Map mapLib={import('maplibre-gl')} />;
 }
 ```
 

@@ -6,7 +6,7 @@ import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
 
 import type {
-  MapboxMap,
+  MapInstance,
   AnySourceData,
   GeoJSONSource,
   ImageSource,
@@ -21,7 +21,7 @@ export type SourceProps = AnySourceData & {
 
 let sourceCounter = 0;
 
-function createSource(map: MapboxMap, id: string, props: SourceProps) {
+function createSource(map: MapInstance, id: string, props: SourceProps) {
   // @ts-ignore
   if (map.style && map.style._loaded) {
     const options = {...props};
@@ -87,7 +87,7 @@ function updateSource(source: AnySourceImpl, props: SourceProps, prevProps: Sour
 /* eslint-enable complexity */
 
 function Source(props: SourceProps) {
-  const map: MapboxMap = useContext(MapContext).map.getMap();
+  const map = useContext(MapContext).map.getMap();
   const propsRef = useRef(props);
   const [, setStyleLoaded] = useState(0);
 
@@ -95,6 +95,7 @@ function Source(props: SourceProps) {
 
   useEffect(() => {
     if (map) {
+      /* global setTimeout */
       const forceUpdate = () => setTimeout(() => setStyleLoaded(version => version + 1), 0);
       map.on('styledata', forceUpdate);
       forceUpdate();

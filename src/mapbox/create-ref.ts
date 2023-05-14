@@ -1,4 +1,4 @@
-import type {MapboxMap, LngLatLike, PointLike, ElevationQueryOptions} from '../types';
+import type {MapLib, MapInstance, MapInstanceInternal, LngLatLike, PointLike, ElevationQueryOptions} from '../types';
 import type Mapbox from './mapbox';
 
 /** These methods may break the react binding if called directly */
@@ -25,16 +25,19 @@ const skipMethods = [
   'remove'
 ] as const;
 
-export type MapRef = {
-  getMap(): MapboxMap;
-} & Omit<MapboxMap, typeof skipMethods[number]>;
+export type MapRef<MapT extends MapInstance> = {
+  getMap(): MapT;
+} & Omit<MapT, typeof skipMethods[number]>;
 
-export default function createRef(mapInstance: Mapbox, mapLib: any): MapRef {
+export default function createRef<LibT extends MapLib>(
+  mapInstance: Mapbox<LibT>,
+  mapLib: LibT
+): MapRef<InstanceType<LibT['Map']>> {
   if (!mapInstance) {
     return null;
   }
 
-  const map: MapboxMap = mapInstance.map;
+  const map = mapInstance.map as MapInstanceInternal<InstanceType<LibT['Map']>>;
   const result: any = {
     getMap: () => map,
 
@@ -46,10 +49,18 @@ export default function createRef(mapInstance: Mapbox, mapLib: any): MapRef {
     getPadding: () => mapInstance.transform.padding,
     getBounds: () => mapInstance.transform.getBounds(),
     project: (lnglat: LngLatLike) => {
-      return mapInstance.transform.locationPoint(mapLib.LngLat.convert(lnglat));
+      const tr = map.transform;
+      map.transform = mapInstance.transform;
+      const result = map.project(lnglat);
+      map.transform = tr;
+      return result;
     },
     unproject: (point: PointLike) => {
-      return mapInstance.transform.pointLocation(mapLib.Point.convert(point));
+      const tr = map.transform;
+      map.transform = mapInstance.transform;
+      const result = map.unproject(point);
+      map.transform = tr;
+      return result;
     },
     queryTerrainElevation: (lnglat: LngLatLike, options: ElevationQueryOptions) => {
       // @ts-ignore transform not defined

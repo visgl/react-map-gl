@@ -21,7 +21,7 @@ function FullscreenControl(props: FullscreenControlProps): null {
     ({mapLib}) =>
       new mapLib.FullscreenControl({
         container: props.containerId && document.getElementById(props.containerId)
-      }),
+      }) as MapboxFullscreenControl,
     {position: props.position}
   );
 
