@@ -63,7 +63,7 @@ function Map(props: MapProps, ref: React.Ref<MapRef>) {
         // workerUrl & workerClass may change the result of supported()
         // https://github.com/visgl/react-map-gl/discussions/2027
         setGlobals(mapboxgl, props);
-        if (mapboxgl.supported(props)) {
+        if (!mapboxgl.supported || mapboxgl.supported(props)) {
           if (props.reuseMaps) {
             mapbox = Mapbox.reuse(props, containerRef.current);
           }
