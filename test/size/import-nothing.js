@@ -1,3 +1,3 @@
-import {InteractiveMap} from 'react-map-gl';
+import * as ReactMapGL from 'react-map-gl';
 
-console.log(InteractiveMap); // eslint-disable-line
+console.log(ReactMapGL); // eslint-disable-line

@@ -2,6 +2,10 @@
 
 # Version 7.0
 
+## 7.0.24 (May 24, 2023)
+
+- Make supported() check optional (maplibre-gl 3 compatibility) (#2179)
+
 ## 7.0.23 (Apr 12, 2023)
 
 - Fix mouse events regression (#2158)
