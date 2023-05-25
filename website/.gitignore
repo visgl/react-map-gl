@@ -1,2 +1,4 @@
 public/
 .cache/
+.docusaurus/
+build/

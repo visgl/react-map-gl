@@ -72,7 +72,7 @@ The hook creates an [IControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/
 
 Parameters:
 
-- `onCreate`: ({map: MapRef, mapLib: mapboxgl}) => [IControl](/docs/api-reference/types.md#icontrol) - called to create an instance of the control.
+- `onCreate`: ({map: MapRef, mapLib: mapboxgl}) => [IControl](./types.md#icontrol) - called to create an instance of the control.
 - `onAdd`: ({map: MapRef, mapLib: mapboxgl}) => void - called when the control has been added to the map.
 - `onRemove`: ({map: MapRef, mapLib: mapboxgl}) => void - called when the control is about to be removed from the map.
 - `options`: object
@@ -80,7 +80,7 @@ Parameters:
 
 Returns:
 
-[IControl](/docs/api-reference/types.md#icontrol) - the control instance from `onCreate`.
+[IControl](./types.md#icontrol) - the control instance from `onCreate`.
 
 
 ## Source

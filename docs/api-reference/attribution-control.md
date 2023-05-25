@@ -29,7 +29,7 @@ function App() {
 
 Note that the following properties are not reactive. They are only used when the component first mounts.
 
-#### `compact`: boolean | undefined
+#### `compact`: boolean | undefined {#compact}
 
 - If `true` , force a compact attribution that shows the full attribution on mouse hover.
 - If `false` , force the full attribution control.
@@ -37,17 +37,17 @@ Note that the following properties are not reactive. They are only used when the
 
 Note that your attribution must adhere to Mapbox's [guidelines](https://docs.mapbox.com/help/getting-started/attribution/).
 
-#### `customAttribution`: string | string[]
+#### `customAttribution`: string | string[] {#customattribution}
 
 String or strings to show in addition to any other attributions.
 
-#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' {#position}
 
 Default: `'bottom-right'`
 
 Placement of the control relative to the map.
 
-#### `style`: CSSProperties
+#### `style`: CSSProperties {#style}
 
 CSS style override that applies to the control's container.
 

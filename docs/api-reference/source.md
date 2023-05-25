@@ -1,6 +1,6 @@
 # Source
 
-This component allows apps to create a [map source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources) using React. It may contain [Layer](/docs/api-reference/layer.md) components as children.
+This component allows apps to create a [map source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources) using React. It may contain [Layer](./layer.md) components as children.
 
 ```js
 import * as React from 'react';
@@ -47,11 +47,11 @@ When props change _shallowly_, the component will attempt to update the source. 
 
 Once a `<Source>` is mounted, the following props should not change. If add/remove multiple JSX sources dynamically, make sure you use React's [key prop](https://reactjs.org/docs/lists-and-keys.html#keys) to give each element a stable identity.
 
-#### `id`: string
+#### `id`: string {#id}
 
 Unique identifier of the source. If not provided, a default id will be assigned.
 
-#### `type`: string
+#### `type`: string {#type}
 
 Required. Type of the source.
 
