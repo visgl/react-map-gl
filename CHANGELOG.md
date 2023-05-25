@@ -2,6 +2,11 @@
 
 # Version 7.0
 
+## 7.0.25 (May 25, 2023)
+
+- Fix reuseMaps with maplibre-gl ResizeObserver not changing observee (#2174)
+- Force map reload upon reuse (#2160)
+
 ## 7.0.24 (May 24, 2023)
 
 - Make supported() check optional (maplibre-gl 3 compatibility) (#2179)
