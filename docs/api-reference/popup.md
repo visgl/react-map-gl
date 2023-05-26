@@ -33,40 +33,40 @@ function App() {
 
 ### Render options
 
-#### `anchor`: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | undefined
+#### `anchor`: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | undefined {#anchor}
 
 A string indicating the part of the popup that should be positioned closest to the coordinate, set via `longitude` and `latitude`. 
 If unset, the anchor will be dynamically set to ensure the popup falls within the map container with a preference for `'bottom'`.
 
-#### `className`: string
+#### `className`: string {#classname}
 
 Space-separated CSS class names to add to popup container.
 
-#### `closeButton`: boolean
+#### `closeButton`: boolean {#closebutton}
 
 Default: `true`
 
 If `true`, a close button will appear in the top right corner of the popup.
 
-#### `closeOnClick`: boolean
+#### `closeOnClick`: boolean {#closeonclick}
 
 Default: `true`
 
 If `true`, the popup will close when the map is clicked.
 
-#### `closeOnMove`: boolean
+#### `closeOnMove`: boolean {#closeonmove}
 
 Default: `false`
 
 If `true`, the popup will closed when the map moves.
 
-#### `focusAfterOpen`: boolean
+#### `focusAfterOpen`: boolean {#focusafteropen}
 
 Default: `true`
 
 If `true`, the popup will try to focus the first focusable element inside the popup.
 
-#### `offset`: number | [PointLike](/docs/api-reference/types.md#pointlike) | Record\<string, [PointLike](/docs/api-reference/types.md#pointlike)\>
+#### `offset`: number | [PointLike](./types.md#pointlike) | Record\<string, [PointLike](./types.md#pointlike)\> {#offset}
 
 Default: `null`
 
@@ -78,23 +78,23 @@ A pixel offset applied to the popup's location specified as:
 
 Negative offsets indicate left and up.
 
-#### `maxWidth`: string
+#### `maxWidth`: string {#maxwidth}
 
 Default: `240px`
 
 A string that sets the CSS property of the popup's maximum width.
 
-#### `style`: CSSProperties
+#### `style`: CSSProperties {#style}
 
 CSS style override that applies to the popup's container.
 
 ### Callbacks
 
-#### `onOpen`: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void
+#### `onOpen`: (evt: [PopupEvent](./types.md#popupevent)) => void {#onopen}
 
 Called when the popup is opened.
 
-#### `onClose`: (evt: [PopupEvent](/docs/api-reference/types.md#popupevent)) => void
+#### `onClose`: (evt: [PopupEvent](./types.md#popupevent)) => void {#onclose}
 
 Called when the popup is closed by the user clicking on the close button or outside (if `closeOnClick: true`).
 

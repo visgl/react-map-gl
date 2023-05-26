@@ -18,11 +18,11 @@ A [custom layer implementation](https://docs.mapbox.com/mapbox-gl-js/api/#custom
 
 #### MapRef
 
-Instance [ref]((https://reactjs.org/docs/refs-and-the-dom.html#creating-refs)) of a `Map` component. See [Map documentation](/docs/api-reference/map.md#methods) for details.
+Instance [ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) of a `Map` component. See [Map documentation](./map.md#methods) for details.
 
 #### GeolocateControlRef
 
-Instance [ref]((https://reactjs.org/docs/refs-and-the-dom.html#creating-refs)) of a `GeolocateControl` component. See [GeolocateControl documentation](/docs/api-reference/geolocate-control.md#methods) for details.
+Instance [ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) of a `GeolocateControl` component. See [GeolocateControl documentation](./geolocate-control.md#methods) for details.
 
 
 ## Styling

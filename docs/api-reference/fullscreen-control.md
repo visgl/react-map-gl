@@ -25,17 +25,17 @@ function App() {
 
 Note that the following properties are not reactive. They are only used when the component first mounts.
 
-#### `containerId`: string
+#### `containerId`: string {#containerid}
 
 Id of the DOM element which should be made full screen. By default, the map container element will be made full screen.
   
-#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' {#position}
 
 Default: `'top-right'`
 
 Placement of the control relative to the map.
 
-#### `style`: CSSProperties
+#### `style`: CSSProperties {#style}
 
 CSS style override that applies to the control's container.
 

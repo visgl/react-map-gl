@@ -1,4 +1,6 @@
 
+# Introduction
+
 <p align="center">
   These docs are for
   <a href="https://github.com/visgl/react-map-gl/tree/7.0-release/docs">
@@ -12,9 +14,6 @@
     <img src="https://img.shields.io/badge/v5.3-brightgreen.svg?style=flat-square" />
   </a>
 </p>
-
-
-# Introduction
 
 react-map-gl is a suite of [React](http://facebook.github.io/react/) components for
 Mapbox GL JS-compatible libraries.
@@ -30,9 +29,9 @@ For basemaps:
 - You can load map data from Mapbox's own service.
 - You can create and host your own map data using one of the many [open source tools](https://github.com/mapbox/awesome-vector-tiles).
 
-New to react-map-gl? [Get Started](/docs/get-started/get-started.md)
+New to react-map-gl? [Get Started](./get-started/get-started.md)
 
-Want to contribute? See our [Developer Guide](/docs/contributing.md)
+Want to contribute? See our [Developer Guide](./contributing.md)
 
 
 ## Design Philosophy
@@ -45,10 +44,10 @@ This does not scale when we have many components that need to synchronize with e
 
 Ultimately, in the spirit of the [reactive programming paradigm](https://en.wikipedia.org/wiki/Reactive_programming), data always flows **down**. As long as the map manages its own state, as mapbox-gl is designed to do, we risk the components going out of sync.
 
-react-map-gl creates a fully reactive wrapper for mapbox-gl. The [Map](/docs/api-reference/map.md) component can be fully [controlled](https://reactjs.org/docs/forms.html#controlled-components), that is, the map's camera would never deviate from the props that it's assigned. Read more about this core behavior in [state management](/docs/get-started/state-management.md).
+react-map-gl creates a fully reactive wrapper for mapbox-gl. The [Map](./api-reference/map.md) component can be fully [controlled](https://reactjs.org/docs/forms.html#controlled-components), that is, the map's camera would never deviate from the props that it's assigned. Read more about this core behavior in [state management](./get-started/state-management.md).
 
 ## Limitations
 
 In v7.0, react-map-gl was fully rewritten to better align its API with the underlying Mapbox GL JS library. Wherever the reactive usage patterns permits, the wrapper's props and methods are 1:1 mappings to their native API equivelants.
 
-It is possible to call the native methods directly from the `Map` instance obtained via [getMap](/docs/api-reference/map.md#gemap). However, doing so may result in the map's state to deviate from its props. For example, calling `map.setMaxZoom` directly will cause the map's constraint settings to differ from the value of the `maxZoom` prop. Generally speaking, calling a native method is disencouraged if the same thing can be achieved through the React interface. If a third-party plugin does so, then it may lead to some unexpected behaviors.
+It is possible to call the native methods directly from the `Map` instance obtained via [getMap](./api-reference/map.md#gemap). However, doing so may result in the map's state to deviate from its props. For example, calling `map.setMaxZoom` directly will cause the map's constraint settings to differ from the value of the `maxZoom` prop. Generally speaking, calling a native method is disencouraged if the same thing can be achieved through the React interface. If a third-party plugin does so, then it may lead to some unexpected behaviors.

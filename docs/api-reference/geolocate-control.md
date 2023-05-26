@@ -41,7 +41,7 @@ function App() {
 }
 ```
 
-#### `trigger()`: boolean
+#### `trigger()`: boolean {#trigger}
 
 Trigger a geolocation event.
 
@@ -54,11 +54,11 @@ Note that the following properties are not reactive. They are only used when the
 
 ### Tracking options
 
-#### `positionOptions`: [PositionOptions](https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions)
+#### `positionOptions`: [PositionOptions](https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions) {#positionoptions}
 
 A Geolocation API [PositionOptions](https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions) object
 
-#### `trackUserLocation`: boolean
+#### `trackUserLocation`: boolean {#trackuserlocation}
 
 Default: `false`
 
@@ -66,37 +66,37 @@ If `true` the GeolocateControl becomes a toggle button and when active the map w
 
 ### Render options
 
-#### `fitBoundsOptions`: [FitBoundsOptions](/docs/api-reference/types.md#fitboundsoptions)
+#### `fitBoundsOptions`: [FitBoundsOptions](./types.md#fitboundsoptions) {#fitboundsoptions}
 
 Default: `{maxZoom: 15}`
 
 A ([fitBounds](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#fitbounds)) options object to use when the map is panned and zoomed to the user's location.
 
-#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' {#position}
 
 Default: `'top-right'`
 
 Placement of the control relative to the map.
 
-#### `style`: CSSProperties
+#### `style`: CSSProperties {#style}
 
 CSS style override that applies to the control's container.
 
-#### `showAccuracyCircle`: boolean
+#### `showAccuracyCircle`: boolean {#showaccuracycircle}
 
 Default: `true`
 
 Draw a transparent circle will be drawn around the user location indicating the accuracy (95% confidence level) of the user's location. Set to `false` to disable. 
 This only has effect if `showUserLocation` is `true`. 
 
-#### `showUserHeading`: boolean
+#### `showUserHeading`: boolean {#showuserheading}
 
 Default: `false`
 
 If `true`, an arrow will be drawn next to the user location dot indicating the device's heading.
 This only has affect when `trackUserLocation` is `true`.
 
-#### `showUserLocation`: boolean
+#### `showUserLocation`: boolean {#showuserlocation}
 
 Default: `true`
 
@@ -104,23 +104,23 @@ Show a dot on the map at the user's location. Set to `false` to disable.
 
 ### Callbacks
 
-#### `onGeolocate`: (evt: [GeolocateResultEvent](/docs/api-reference/types.md#geolocateresultevent)) => void
+#### `onGeolocate`: (evt: [GeolocateResultEvent](./types.md#geolocateresultevent)) => void {#ongeolocate}
 
 Called on each Geolocation API position update that returned as success.
 
-#### `onError`: (evt: [GeolocateErrorEvent](/docs/api-reference/types.md#geolocateerrorevent)) => void
+#### `onError`: (evt: [GeolocateErrorEvent](./types.md#geolocateerrorevent)) => void {#onerror}
 
 Called on each Geolocation API position update that returned as an error.
 
-#### `onOutOfMaxBounds`: (evt: [GeolocateResultEvent](/docs/api-reference/types.md#geolocateresultevent)) => void
+#### `onOutOfMaxBounds`: (evt: [GeolocateResultEvent](./types.md#geolocateresultevent)) => void {#onoutofmaxbounds}
 
 Called on each Geolocation API position update that returned as success but user position is out of map `maxBounds`.
 
-#### `onTrackUserLocationStart`: (evt: [GeolocateEvent](/docs/api-reference/types.md#geolocateevent)) => void
+#### `onTrackUserLocationStart`: (evt: [GeolocateEvent](./types.md#geolocateevent)) => void {#ontrackuserlocationstart}
 
 Called when the GeolocateControl changes to the active lock state.
 
-#### `onTrackUserLocationEnd`: (evt: [GeolocateEvent](/docs/api-reference/types.md#geolocateevent)) => void
+#### `onTrackUserLocationEnd`: (evt: [GeolocateEvent](./types.md#geolocateevent)) => void {#ontrackuserlocationend}
 
 Called when the GeolocateControl changes to the background state.
 

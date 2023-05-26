@@ -1,6 +1,6 @@
 # MapProvider
 
-A [Context.Provider](https://reactjs.org/docs/context.html#contextprovider) that facilitates map operations outside of the component that directly renders a [Map](/docs/api-reference/map.md).
+A [Context.Provider](https://reactjs.org/docs/context.html#contextprovider) that facilitates map operations outside of the component that directly renders a [Map](./map.md).
 
 The component should wrap all nodes in which you may want to access the maps:
 
@@ -18,7 +18,7 @@ function Root() {
 }
 ```
 
-See [useMap](/docs/api-reference/use-map.md) for more information.
+See [useMap](./use-map.md) for more information.
 
 
 ## Source

@@ -23,23 +23,23 @@ function App() {
 
 ## Properties
 
-#### `maxWidth`: string
+#### `maxWidth`: string {#maxwidth}
 
 Default: `100`
 
 The maximum length of the scale control in pixels.
 
-#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' {#position}
 
 Default: `'bottom-left'`
 
 Placement of the control relative to the map. Note that this prop is only used when the component first mounts.
 
-#### `style`: CSSProperties
+#### `style`: CSSProperties {#style}
 
 CSS style override that applies to the control's container.
 
-#### `unit`: 'imperial' | 'metric' | 'nautical'
+#### `unit`: 'imperial' | 'metric' | 'nautical' {#unit}
 
 Default: `'metric'`
 

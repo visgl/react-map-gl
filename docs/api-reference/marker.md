@@ -29,45 +29,45 @@ If `Marker` is mounted with child components, then its content will be rendered 
 
 ### Render options
 
-#### `anchor`: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+#### `anchor`: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' {#anchor}
 
 Default: `'center'`
 
 A string indicating the part of the Marker that should be positioned closest to the coordinate set via `longitude` and `latitude`.
 
-#### `color`: string
+#### `color`: string {#color}
 
 Default: `'#3FB1CE'`
 
 The color to use for the default marker if the component contains no content.
 
-#### `clickTolerance`: number
+#### `clickTolerance`: number {#clicktolerance}
 
-Default: `null` (inherits [Map](/docs/api-reference/map.md)'s `clickTolerance`)
+Default: `null` (inherits [Map](./map.md)'s `clickTolerance`)
 
 The max number of pixels a user can shift the mouse pointer during a click on the marker for it to be considered a valid click (as opposed to a marker drag).
 
-#### `draggable`: boolean
+#### `draggable`: boolean {#draggable}
 
 Default: `false`
 
 If `true`, the marker is able to be dragged to a new position on the map.
 
-#### `latitude`: number
+#### `latitude`: number {#latitude}
 
 Required. The latitude of the anchor location.
 
-#### `longitude`: number
+#### `longitude`: number {#longitude}
 
 Required. The longitude of the anchor location.
 
-#### `offset`: [PointLike](/docs/api-reference/types.md#pointlike)
+#### `offset`: [PointLike](./types.md#pointlike) {#offset}
 
 Default: `null`
 
 The offset in pixels as a [PointLike](https://docs.mapbox.com/mapbox-gl-js/api/geography/#pointlike) object to apply relative to the element's center. Negatives indicate left and up.
 
-#### `pitchAlignment`: 'map' | 'viewport' | 'auto'
+#### `pitchAlignment`: 'map' | 'viewport' | 'auto' {#pitchalignment}
 
 Default: `'auto'`
 
@@ -75,13 +75,13 @@ Default: `'auto'`
 - `viewport` aligns the `Marker` to the plane of the viewport.
 - `auto` automatically matches the value of `rotationAlignment`.
 
-#### `rotation`: number
+#### `rotation`: number {#rotation}
 
 Default: `0`
 
 The rotation angle of the marker in degrees, relative to its `rotationAlignment` setting. A positive value will rotate the marker clockwise.
 
-#### `rotationAlignment`: 'map' | 'viewport' | 'auto'
+#### `rotationAlignment`: 'map' | 'viewport' | 'auto' {#rotationalignment}
 
 Default: `'auto'`
 
@@ -89,7 +89,7 @@ Default: `'auto'`
 - `viewport` aligns the `Marker`'s rotation relative to the viewport, agnostic to map rotations.
 - `auto` is equivalent to `viewport`.
 
-#### `scale`: number
+#### `scale`: number {#scale}
 
 Default: `1`
 
@@ -98,25 +98,25 @@ The default scale (`1`) corresponds to a height of `41px` and a width of `27px`.
 
 This prop is not reactive (only used when the marker is mounted).
 
-#### `style`: CSSProperties
+#### `style`: CSSProperties {#style}
 
 CSS style override that applies to the marker's container.
 
 ### Callbacks
 
-#### `onClick`: (evt: [MapEvent](/docs/api-reference/types.md#mapevent)) => void
+#### `onClick`: (evt: [MapEvent](./types.md#mapevent)) => void {#onclick}
 
 Called when the marker is clicked on.
 
-#### `onDragStart`: (evt: [MarkerDragEvent](/docs/api-reference/types.md#markerdragevent)) => void
+#### `onDragStart`: (evt: [MarkerDragEvent](./types.md#markerdragevent)) => void {#ondragstart}
 
 Called when dragging starts, if `draggable` is `true`.
 
-#### `onDrag`: (evt: [MarkerDragEvent](/docs/api-reference/types.md#markerdragevent)) => void
+#### `onDrag`: (evt: [MarkerDragEvent](./types.md#markerdragevent)) => void {#ondrag}
 
 Called while dragging, if `draggable` is `true`.
 
-#### `onDragEnd`: (evt: [MarkerDragEvent](/docs/api-reference/types.md#markerdragevent)) => void
+#### `onDragEnd`: (evt: [MarkerDragEvent](./types.md#markerdragevent)) => void {#ondragend}
 
 Called when dragging ends, if `draggable` is `true`.
 

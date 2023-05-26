@@ -25,29 +25,29 @@ function App() {
 
 Note that the following properties are not reactive. They are only used when the component first mounts.
 
-#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' {#position}
 
 Default: `'top-right'`
 
 Placement of the control relative to the map.
 
-#### `style`: CSSProperties
+#### `style`: CSSProperties {#style}
 
 CSS style override that applies to the control's container.
 
-#### `showCompass`: boolean
+#### `showCompass`: boolean {#showcompass}
 
 Default: `true`
 
 If `true` the compass button is included.
 
-#### `showZoom`: boolean
+#### `showZoom`: boolean {#showzoom}
 
 Default: `true`
 
 If true the zoom-in and zoom-out buttons are included.
 
-#### `visualizePitch`: boolean
+#### `visualizePitch`: boolean {#visualizepitch}
 
 Default: `false`
 

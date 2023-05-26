@@ -2,7 +2,7 @@
 
 ## Native Mapbox Layers
 
-You can inject data and mapbox native layers using the [Source](/docs/api-reference/source.md) and [Layer](/docs/api-reference/layer.md) components:
+You can inject data and mapbox native layers using the [Source](../api-reference/source.md) and [Layer](../api-reference/layer.md) components:
 
 ```js
 import * as React from 'react';
