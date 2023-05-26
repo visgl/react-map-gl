@@ -1,4 +1,4 @@
-import {PaddingOptions, LngLat, Point, LngLatBounds} from 'mapbox-gl';
+import type {PaddingOptions, LngLat, Point, LngLatBounds} from 'mapbox-gl';
 
 export * from './external';
 
