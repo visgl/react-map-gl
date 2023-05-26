@@ -93,6 +93,17 @@ const config = {
     ]
   ],
 
+  themes: [
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        // https://github.com/easyops-cn/docusaurus-search-local#theme-options
+        // `hashed` is recommended as long-term-cache of index file is possible.
+        hashed: true,
+      },
+    ],
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
