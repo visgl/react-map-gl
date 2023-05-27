@@ -3,13 +3,13 @@ import {MapContext} from './map';
 import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
 
-import type {MapInstance, AnyLayer} from '../types';
+import type {MapInstance, AnyLayer, CustomLayerInterface} from '../types';
 
 // Omiting property from a union type, see
 // https://github.com/microsoft/TypeScript/issues/39556#issuecomment-656925230
 type OptionalId<T> = T extends {id: string} ? Omit<T, 'id'> & {id?: string} : T;
 
-export type LayerProps = OptionalId<AnyLayer> & {
+export type LayerProps = OptionalId<AnyLayer | CustomLayerInterface> & {
   /** If set, the layer will be inserted before the specified layer */
   beforeId?: string;
 };
@@ -23,7 +23,15 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
     return;
   }
 
-  const {layout = {}, paint = {}, filter, minzoom, maxzoom, beforeId} = props;
+  const {
+    layout = {},
+    paint = {},
+    // @ts-expect-error filter is not defined on some layer types
+    filter,
+    minzoom,
+    maxzoom,
+    beforeId
+  } = props;
 
   if (beforeId !== prevProps.beforeId) {
     map.moveLayer(id, beforeId);
@@ -54,6 +62,7 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
       }
     }
   }
+  // @ts-expect-error filter is not defined on some layer types
   if (!deepEqual(filter, prevProps.filter)) {
     map.setFilter(id, filter);
   }

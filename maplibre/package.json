@@ -1,0 +1,6 @@
+{
+  "internal": true,
+  "main": "../dist/es5/exports-maplibre.js",
+  "module": "../dist/esm/exports-maplibre.js",
+  "types": "../dist/esm/exports-maplibre.d.ts"
+}

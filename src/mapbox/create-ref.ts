@@ -1,4 +1,4 @@
-import type {MapLib, MapInstance, MapInstanceInternal, LngLatLike, PointLike, ElevationQueryOptions} from '../types';
+import type {MapInstance, MapInstanceInternal, LngLatLike, PointLike} from '../types';
 import type Mapbox from './mapbox';
 
 /** These methods may break the react binding if called directly */
@@ -29,15 +29,14 @@ export type MapRef<MapT extends MapInstance> = {
   getMap(): MapT;
 } & Omit<MapT, typeof skipMethods[number]>;
 
-export default function createRef<LibT extends MapLib>(
-  mapInstance: Mapbox<LibT>,
-  mapLib: LibT
-): MapRef<InstanceType<LibT['Map']>> {
+export default function createRef<MapT extends MapInstance>(
+  mapInstance: Mapbox<MapT>
+): MapRef<MapT> {
   if (!mapInstance) {
     return null;
   }
 
-  const map = mapInstance.map as MapInstanceInternal<InstanceType<LibT['Map']>>;
+  const map = mapInstance.map as MapInstanceInternal<MapT>;
   const result: any = {
     getMap: () => map,
 
@@ -62,7 +61,7 @@ export default function createRef<LibT extends MapLib>(
       map.transform = tr;
       return result;
     },
-    queryTerrainElevation: (lnglat: LngLatLike, options: ElevationQueryOptions) => {
+    queryTerrainElevation: (lnglat: LngLatLike, options: any) => {
       // @ts-ignore transform not defined
       const tr = map.transform;
       // @ts-ignore transform not defined

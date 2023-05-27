@@ -1,12 +1,12 @@
 /* global document */
 import * as React from 'react';
-import {useEffect} from 'react';
+import {useEffect, memo} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
 import useControl from './use-control';
 
-import type {ControlPosition, MapboxFullscreenControl} from '../types';
+import type {ControlPosition, FullscreenControlInstance} from '../types';
 
-export type FullscreenControlProps = {
+export type FullscreenControlProps<OptionsT> = Omit<OptionsT, 'container'> & {
   /** Id of the DOM element which should be made full screen. By default, the map container
    * element will be made full screen. */
   containerId?: string;
@@ -16,21 +16,22 @@ export type FullscreenControlProps = {
   style?: React.CSSProperties;
 };
 
-function FullscreenControl(props: FullscreenControlProps): null {
-  const ctrl = useControl<MapboxFullscreenControl>(
+function FullscreenControl<FullscreenControlOptions, ControlT extends FullscreenControlInstance>(
+  props: FullscreenControlProps<FullscreenControlOptions>
+): null {
+  const ctrl = useControl<ControlT>(
     ({mapLib}) =>
       new mapLib.FullscreenControl({
         container: props.containerId && document.getElementById(props.containerId)
-      }) as MapboxFullscreenControl,
+      }) as ControlT,
     {position: props.position}
   );
 
   useEffect(() => {
-    // @ts-ignore
     applyReactStyle(ctrl._controlContainer, props.style);
   }, [props.style]);
 
   return null;
 }
 
-export default React.memo(FullscreenControl);
+export default memo(FullscreenControl);

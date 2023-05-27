@@ -1,86 +1,47 @@
 /* global document */
 import * as React from 'react';
 import {createPortal} from 'react-dom';
-import {useEffect, useMemo, useRef, useContext} from 'react';
+import {useEffect, useMemo, useRef, useContext, useImperativeHandle, forwardRef, memo} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
 
-import type {
-  MarkerEvent,
-  MarkerDragEvent,
-  MapboxPopup,
-  PointLike,
-  Anchor,
-  Alignment,
-  MapboxMarker
-} from '../types';
+import type {MarkerEvent, MarkerDragEvent, PointLike, MarkerInstance} from '../types';
 
 import {MapContext} from './map';
 import {arePointsEqual} from '../utils/deep-equal';
 
-export type MarkerProps = {
+export type MarkerProps<OptionsT, MarkerT extends MarkerInstance> = OptionsT & {
   /** Longitude of the anchor location */
   longitude: number;
   /** Latitude of the anchor location */
   latitude: number;
-  /** A string indicating the part of the Marker that should be positioned closest to the coordinate set via Marker.setLngLat.
-   * Options are `'center'`, `'top'`, `'bottom'`, `'left'`, `'right'`, `'top-left'`, `'top-right'`, `'bottom-left'`, and `'bottom-right'`.
-   * @default "center"
-   */
-  anchor?: Anchor;
-  /**
-   * The max number of pixels a user can shift the mouse pointer during a click on the marker for it to be considered a valid click
-   * (as opposed to a marker drag). The default (0) is to inherit map's clickTolerance.
-   */
-  clickTolerance?: number;
-  /** The color to use for the default marker if options.element is not provided.
-   * @default "#3FB1CE"
-   */
-  color?: string;
-  /** A boolean indicating whether or not a marker is able to be dragged to a new position on the map.
-   * @default false
-   */
+
+  // These types will be further constraint by OptionsT
   draggable?: boolean;
-  /** The offset in pixels as a PointLike object to apply relative to the element's center. Negatives indicate left and up. */
   offset?: PointLike;
-  /** `map` aligns the `Marker` to the plane of the map.
-   * `viewport` aligns the `Marker` to the plane of the viewport.
-   * `auto` automatically matches the value of `rotationAlignment`.
-   * @default "auto"
-   */
-  pitchAlignment?: Alignment;
-  /** The rotation angle of the marker in degrees, relative to its `rotationAlignment` setting. A positive value will rotate the marker clockwise.
-   * @default 0
-   */
+  pitchAlignment?: string;
   rotation?: number;
-  /** `map` aligns the `Marker`'s rotation relative to the map, maintaining a bearing as the map rotates.
-   * `viewport` aligns the `Marker`'s rotation relative to the viewport, agnostic to map rotations.
-   * `auto` is equivalent to `viewport`.
-   * @default "auto"
-   */
-  rotationAlignment?: Alignment;
-  /** The scale to use for the default marker if options.element is not provided.
-   * The default scale (1) corresponds to a height of `41px` and a width of `27px`.
-   * @default 1
-   */
-  scale?: number;
-  /** A Popup instance that is bound to the marker */
-  popup?: MapboxPopup;
+  rotationAlignment?: string;
+  popup?: any;
+
   /** CSS style override, applied to the control's container */
   style?: React.CSSProperties;
-  onClick?: (e: MarkerEvent<MouseEvent>) => void;
-  onDragStart?: (e: MarkerDragEvent) => void;
-  onDrag?: (e: MarkerDragEvent) => void;
-  onDragEnd?: (e: MarkerDragEvent) => void;
+  onClick?: (e: MarkerEvent<MarkerT, MouseEvent>) => void;
+  onDragStart?: (e: MarkerDragEvent<MarkerT>) => void;
+  onDrag?: (e: MarkerDragEvent<MarkerT>) => void;
+  onDragEnd?: (e: MarkerDragEvent<MarkerT>) => void;
   children?: React.ReactNode;
 };
 
 /* eslint-disable complexity,max-statements */
-function Marker(props: MarkerProps) {
+function Marker<MarkerOptions, MarkerT extends MarkerInstance>(
+  props: MarkerProps<MarkerOptions, MarkerT>,
+  ref: React.Ref<MarkerT>
+) {
   const {map, mapLib} = useContext(MapContext);
   const thisRef = useRef({props});
   thisRef.current.props = props;
 
-  const marker: MapboxMarker = useMemo(() => {
+  const marker: MarkerT = useMemo(() => {
     let hasChildren = false;
     React.Children.forEach(props.children, el => {
       if (el) {
@@ -92,7 +53,7 @@ function Marker(props: MarkerProps) {
       element: hasChildren ? document.createElement('div') : null
     };
 
-    const mk = new mapLib.Marker(options) as MapboxMarker;
+    const mk = new mapLib.Marker(options) as MarkerT;
     mk.setLngLat([props.longitude, props.latitude]);
 
     mk.getElement().addEventListener('click', (e: MouseEvent) => {
@@ -104,17 +65,17 @@ function Marker(props: MarkerProps) {
     });
 
     mk.on('dragstart', e => {
-      const evt = e as MarkerDragEvent;
+      const evt = e as MarkerDragEvent<MarkerT>;
       evt.lngLat = marker.getLngLat();
       thisRef.current.props.onDragStart?.(evt);
     });
     mk.on('drag', e => {
-      const evt = e as MarkerDragEvent;
+      const evt = e as MarkerDragEvent<MarkerT>;
       evt.lngLat = marker.getLngLat();
       thisRef.current.props.onDrag?.(evt);
     });
     mk.on('dragend', e => {
-      const evt = e as MarkerDragEvent;
+      const evt = e as MarkerDragEvent<MarkerT>;
       evt.lngLat = marker.getLngLat();
       thisRef.current.props.onDragEnd?.(evt);
     });
@@ -123,12 +84,14 @@ function Marker(props: MarkerProps) {
   }, []);
 
   useEffect(() => {
-    marker.addTo(map.getMap() as any);
+    marker.addTo(map.getMap());
 
     return () => {
       marker.remove();
     };
   }, []);
+
+  useImperativeHandle(ref, () => marker, []);
 
   const {
     longitude,
@@ -171,4 +134,4 @@ function Marker(props: MarkerProps) {
   return createPortal(props.children, marker.getElement());
 }
 
-export default React.memo(Marker);
+export default memo(forwardRef(Marker));

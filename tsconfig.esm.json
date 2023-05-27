@@ -3,6 +3,7 @@
     "target": "es2018",
     "jsx": "react",
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "module": "ES2020",
     "declaration": true,
     "sourceMap": true,
