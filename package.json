@@ -37,19 +37,16 @@
     "update-release-branch": "scripts/update-release-branch.sh"
   },
   "dependencies": {
-    "@maplibre/maplibre-gl-style-spec": "^19.2.1"
+    "@maplibre/maplibre-gl-style-spec": "^19.2.1",
+    "@types/mapbox-gl": ">=1.0.0"
   },
   "peerDependencies": {
-    "@types/mapbox-gl": ">=1.0.0",
     "mapbox-gl": ">=1.13.0",
     "maplibregl": ">=1.13.0",
     "react": ">=16.3.0",
     "react-dom": ">=16.3.0"
   },
   "peerDependenciesMeta": {
-    "@types/mapbox-gl": {
-      "optional": true
-    },
     "mapbox-gl": {
       "optional": true
     },
@@ -58,7 +55,6 @@
     }
   },
   "devDependencies": {
-    "@types/mapbox-gl": "^2.7.11",
     "@types/react": "^16.0.0",
     "jsdom": "^16.5.0",
     "mapbox-gl": "^2.14.0",
