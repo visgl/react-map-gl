@@ -10,7 +10,7 @@ import maplibregl from 'maplibre-gl';
 
 function App() {
   return <Map
-    mapLib={import('mapbox-gl')}
+    mapLib={maplibregl}
     style={MAP_STYLE}
     maplibreLogo  // This will generate a TypeScript error because it's not defined in Mapbox options
     />;

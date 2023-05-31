@@ -53,14 +53,10 @@ export const Map = (() => {
 })();
 
 export type MarkerProps = _MarkerProps<MarkerOptions, MaplibreMarker>;
-export const Marker = _Marker as (
-  props: MarkerProps & React.RefAttributes<MaplibreMarker>
-) => React.ReactElement | null;
+export const Marker = _Marker as (props: MarkerProps) => React.ReactElement | null;
 
 export type PopupProps = _PopupProps<PopupOptions, MaplibrePopup>;
-export const Popup = _Popup as (
-  props: PopupProps & React.RefAttributes<MaplibrePopup>
-) => React.ReactElement | null;
+export const Popup = _Popup as (props: PopupProps) => React.ReactElement | null;
 
 type AttributionControlOptions = ConstructorParameters<typeof MaplibreAttributionControl>[0];
 export type AttributionControlProps = _AttributionControlProps<AttributionControlOptions>;

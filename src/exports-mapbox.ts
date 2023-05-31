@@ -53,14 +53,10 @@ export const Map = (() => {
 })();
 
 export type MarkerProps = _MarkerProps<MarkerOptions, MapboxMarker>;
-export const Marker = _Marker as (
-  props: MarkerProps & React.RefAttributes<MapboxMarker>
-) => React.ReactElement | null;
+export const Marker = _Marker as (props: MarkerProps) => React.ReactElement | null;
 
 export type PopupProps = _PopupProps<PopupOptions, MapboxPopup>;
-export const Popup = _Popup as (
-  props: PopupProps & React.RefAttributes<MapboxPopup>
-) => React.ReactElement | null;
+export const Popup = _Popup as (props: PopupProps) => React.ReactElement | null;
 
 type AttributionControlOptions = ConstructorParameters<typeof MapboxAttributionControl>[0];
 export type AttributionControlProps = _AttributionControlProps<AttributionControlOptions>;
