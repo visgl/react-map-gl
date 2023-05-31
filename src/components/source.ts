@@ -6,22 +6,25 @@ import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
 
 import type {
-  MapboxMap,
-  AnySourceData,
+  MapInstance,
+  AnySource,
+  CustomSource,
   GeoJSONSource,
+  GeoJSONSourceImplementation,
   ImageSource,
-  VideoSource,
-  AnySourceImpl
+  ImageSourceImplemtation,
+  VectorSource,
+  AnySourceImplementation
 } from '../types';
 
-export type SourceProps = AnySourceData & {
+export type SourceProps = (AnySource | CustomSource) & {
   id?: string;
   children?: any;
 };
 
 let sourceCounter = 0;
 
-function createSource(map: MapboxMap, id: string, props: SourceProps) {
+function createSource(map: MapInstance, id: string, props: SourceProps) {
   // @ts-ignore
   if (map.style && map.style._loaded) {
     const options = {...props};
@@ -35,7 +38,7 @@ function createSource(map: MapboxMap, id: string, props: SourceProps) {
 }
 
 /* eslint-disable complexity */
-function updateSource(source: AnySourceImpl, props: SourceProps, prevProps: SourceProps) {
+function updateSource(source: AnySourceImplementation, props: SourceProps, prevProps: SourceProps) {
   assert(props.id === prevProps.id, 'source id changed');
   assert(props.type === prevProps.type, 'source type changed');
 
@@ -56,26 +59,24 @@ function updateSource(source: AnySourceImpl, props: SourceProps, prevProps: Sour
   const type = props.type;
 
   if (type === 'geojson') {
-    // @ts-expect-error there seems to be mismatch between GeoJSONSource.setData and GeoJSONSourceRaw.data
-    (source as GeoJSONSource).setData(props.data);
+    (source as GeoJSONSourceImplementation).setData((props as GeoJSONSource).data as any);
   } else if (type === 'image') {
-    (source as ImageSource).updateImage({url: props.url, coordinates: props.coordinates});
-  } else if (
-    (type === 'canvas' || type === 'video') &&
-    changedKeyCount === 1 &&
-    changedKey === 'coordinates'
-  ) {
-    (source as VideoSource).setCoordinates(props.coordinates);
-  } else if (type === 'vector' && 'setUrl' in source) {
+    (source as ImageSourceImplemtation).updateImage({
+      url: props.url,
+      coordinates: props.coordinates
+    });
+  } else if ('setCoordinates' in source && changedKeyCount === 1 && changedKey === 'coordinates') {
+    source.setCoordinates((props as unknown as ImageSource).coordinates);
+  } else if ('setUrl' in source) {
     // Added in 1.12.0:
     // vectorTileSource.setTiles
     // vectorTileSource.setUrl
     switch (changedKey) {
       case 'url':
-        source.setUrl(props.url);
+        source.setUrl((props as unknown as VectorSource).url);
         break;
       case 'tiles':
-        source.setTiles(props.tiles);
+        source.setTiles((props as unknown as VectorSource).tiles);
         break;
       default:
     }
@@ -87,7 +88,7 @@ function updateSource(source: AnySourceImpl, props: SourceProps, prevProps: Sour
 /* eslint-enable complexity */
 
 function Source(props: SourceProps) {
-  const map: MapboxMap = useContext(MapContext).map.getMap();
+  const map = useContext(MapContext).map.getMap();
   const propsRef = useRef(props);
   const [, setStyleLoaded] = useState(0);
 
@@ -95,6 +96,7 @@ function Source(props: SourceProps) {
 
   useEffect(() => {
     if (map) {
+      /* global setTimeout */
       const forceUpdate = () => setTimeout(() => setStyleLoaded(version => version + 1), 0);
       map.on('styledata', forceUpdate);
       forceUpdate();

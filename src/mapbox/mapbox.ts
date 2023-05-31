@@ -4,20 +4,17 @@ import {deepEqual} from '../utils/deep-equal';
 
 import type {
   Transform,
-  Projection,
   ViewState,
   ViewStateChangeEvent,
-  DragPanOptions,
-  ZoomRotateOptions,
-  TransformRequestFunction,
+  Point,
+  PointLike,
+  PaddingOptions,
   Light,
   Fog,
-  Point,
-  TerrainSpecification,
+  Terrain,
   MapboxStyle,
   ImmutableLike,
   LngLatBoundsLike,
-  FitBoundsOptions,
   MapMouseEvent,
   MapLayerMouseEvent,
   MapLayerTouchEvent,
@@ -25,13 +22,14 @@ import type {
   MapBoxZoomEvent,
   MapStyleDataEvent,
   MapSourceDataEvent,
-  MapboxEvent,
+  MapEvent,
   ErrorEvent,
-  MapboxGeoJSONFeature,
-  MapboxMap
+  MapGeoJSONFeature,
+  MapInstance,
+  MapInstanceInternal
 } from '../types';
 
-export type MapboxProps = Partial<ViewState> & {
+export type MapboxProps<MapT extends MapInstance = MapInstance> = Partial<ViewState> & {
   // Init options
   mapboxAccessToken?: string;
 
@@ -40,208 +38,16 @@ export type MapboxProps = Partial<ViewState> & {
     /** The initial bounds of the map. If bounds is specified, it overrides longitude, latitude and zoom options. */
     bounds?: LngLatBoundsLike;
     /** A fitBounds options object to use only when setting the bounds option. */
-    fitBoundsOptions?: FitBoundsOptions;
+    fitBoundsOptions?: {
+      offset?: PointLike;
+      minZoom?: number;
+      maxZoom?: number;
+      padding?: number | PaddingOptions;
+    };
   };
 
   /** If provided, render into an external WebGL context */
   gl?: WebGLRenderingContext;
-
-  /**
-   * If true, the gl context will be created with MSA antialiasing, which can be useful for antialiasing custom layers.
-   * This is false by default as a performance optimization.
-   * @default false
-   */
-  antialias?: boolean;
-  /**
-   * If true, an attribution control will be added to the map.
-   * @default true
-   */
-  attributionControl?: boolean;
-  /**
-   * Snap to north threshold in degrees.
-   * @default 7
-   */
-  bearingSnap?: number;
-  /**
-   * The max number of pixels a user can shift the mouse pointer during a click for it to be
-   * considered a valid click (as opposed to a mouse drag).
-   * @default 3
-   */
-  clickTolerance?: number;
-  /**
-   * If `true`, Resource Timing API information will be collected for requests made by GeoJSON
-   * and Vector Tile web workers (this information is normally inaccessible from the main
-   * Javascript thread). Information will be returned in a `resourceTiming` property of
-   * relevant `data` events.
-   * @default false
-   */
-  collectResourceTiming?: boolean;
-  /**
-   * If `true` , scroll zoom will require pressing the ctrl or ⌘ key while scrolling to zoom map,
-   * and touch pan will require using two fingers while panning to move the map.
-   * Touch pitch will require three fingers to activate if enabled.
-   */
-  cooperativeGestures?: boolean;
-  /**
-   * If `true`, symbols from multiple sources can collide with each other during collision
-   * detection. If `false`, collision detection is run separately for the symbols in each source.
-   * @default true
-   */
-  crossSourceCollisions?: boolean;
-  /** String or strings to show in an AttributionControl.
-   * Only applicable if options.attributionControl is `true`. */
-  customAttribution?: string | string[];
-  /**
-   * Controls the duration of the fade-in/fade-out animation for label collisions, in milliseconds.
-   * This setting affects all symbol layers. This setting does not affect the duration of runtime
-   * styling transitions or raster tile cross-fading.
-   * @default 300
-   */
-  fadeDuration?: number;
-  /** If true, map creation will fail if the implementation determines that the performance of the created WebGL context would be dramatically lower than expected.
-   * @default false
-   */
-  failIfMajorPerformanceCaveat?: boolean;
-  /** If `true`, the map's position (zoom, center latitude, center longitude, bearing, and pitch) will be synced with the hash fragment of the page's URL.
-   * For example, `http://path/to/my/page.html#2.59/39.26/53.07/-24.1/60`.
-   * An additional string may optionally be provided to indicate a parameter-styled hash,
-   * e.g. http://path/to/my/page.html#map=2.59/39.26/53.07/-24.1/60&foo=bar, where foo
-   * is a custom parameter and bar is an arbitrary hash distinct from the map hash.
-   */
-  hash?: boolean | string;
-  /** If false, no mouse, touch, or keyboard listeners are attached to the map, so it will not respond to input
-   * @default true
-   */
-  interactive?: boolean;
-  /** A patch to apply to the default localization table for UI strings, e.g. control tooltips.
-   * The `locale` object maps namespaced UI string IDs to translated strings in the target language;
-   * see `src/ui/default_locale.js` for an example with all supported string IDs.
-   * The object may specify all UI strings (thereby adding support for a new translation) or
-   * only a subset of strings (thereby patching the default translation table).
-   */
-  locale?: {[key: string]: string};
-  /**
-   * Overrides the generation of all glyphs and font settings except font-weight keywords
-   * Also overrides localIdeographFontFamily
-   * @default null
-   */
-  localFontFamily?: string;
-  /**
-   * If specified, defines a CSS font-family for locally overriding generation of glyphs in the
-   * 'CJK Unified Ideographs' and 'Hangul Syllables' ranges. In these ranges, font settings from
-   * the map's style will be ignored, except for font-weight keywords (light/regular/medium/bold).
-   * The purpose of this option is to avoid bandwidth-intensive glyph server requests.
-   * @default "sans-serif"
-   */
-  localIdeographFontFamily?: string;
-  /**
-   * A string representing the position of the Mapbox wordmark on the map.
-   * @default "bottom-left"
-   */
-  logoPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-  /**
-   * The maximum number of tiles stored in the tile cache for a given source. If omitted, the
-   * cache will be dynamically sized based on the current viewport.
-   * @default null
-   */
-  maxTileCacheSize?: number;
-  /**
-   * If true, map will prioritize rendering for performance by reordering layers
-   * If false, layers will always be drawn in the specified order
-   * @default true
-   */
-  optimizeForTerrain?: boolean;
-  /**
-   * If `false`, the map's pitch (tilt) control with "drag to rotate" interaction will be disabled.
-   * @default true
-   */
-  pitchWithRotate?: boolean;
-  /** If true, The maps canvas can be exported to a PNG using map.getCanvas().toDataURL();. This is false by default as a performance optimization.
-   * @default false
-   */
-  preserveDrawingBuffer?: boolean;
-  /**
-   * If `false`, the map won't attempt to re-request tiles once they expire per their HTTP
-   * `cacheControl`/`expires` headers.
-   * @default true
-   */
-  refreshExpiredTiles?: boolean;
-  /**
-   * Allows for the usage of the map in automated tests without an accessToken with custom self-hosted test fixtures.
-   * @default null
-   */
-  testMode?: boolean;
-  /**
-   * If  true, the map will automatically resize when the browser window resizes
-   * @default true
-   */
-  trackResize?: boolean;
-  /**
-   * A callback run before the Map makes a request for an external URL. The callback can be
-   * used to modify the url, set headers, or set the credentials property for cross-origin requests.
-   * @default null
-   */
-  transformRequest?: TransformRequestFunction;
-
-  // Handlers
-
-  /**
-   * If true, enable the "box zoom" interaction (see BoxZoomHandler)
-   * @default true
-   */
-  boxZoom?: boolean;
-  /**
-   * If true, enable the "double click to zoom" interaction (see DoubleClickZoomHandler).
-   * @default true
-   */
-  doubleClickZoom?: boolean;
-  /**
-   * If `true`, the "drag to pan" interaction is enabled.
-   * An `Object` value is passed as options to {@link DragPanHandler#enable}.
-   * @default true
-   */
-  dragPan?: boolean | DragPanOptions;
-  /**
-   * If true, enable the "drag to rotate" interaction (see DragRotateHandler).
-   * @default true
-   */
-  dragRotate?: boolean;
-  /**
-   * If true, enable keyboard shortcuts (see KeyboardHandler).
-   * @default true
-   */
-  keyboard?: boolean;
-  /**
-   * If `true`, the "scroll to zoom" interaction is enabled.
-   * An `Object` value is passed as options to {@link ScrollZoomHandler#enable}.
-   * @default true
-   */
-  scrollZoom?: boolean | ZoomRotateOptions;
-  /**
-   * If `true`, the "drag to pitch" interaction is enabled.
-   * An `Object` value is passed as options to {@link TouchPitchHandler#enable}.
-   * @default true
-   */
-  touchPitch?: boolean;
-  /**
-   * If `true`, the "pinch to rotate and zoom" interaction is enabled.
-   * An `Object` value is passed as options to {@link TouchZoomRotateHandler#enable}.
-   * @default true
-   */
-  touchZoomRotate?: boolean | ZoomRotateOptions;
-
-  // Constraints
-
-  /** If set, the map is constrained to the given bounds. */
-  maxBounds?: LngLatBoundsLike;
-  /** Maximum pitch of the map. */
-  maxPitch?: number;
-  /** Maximum zoom of the map. */
-  maxZoom?: number;
-  /** Minimum pitch of the map. */
-  minPitch?: number;
-  /** Minimum zoom of the map. */
-  minZoom?: number;
 
   /** For external controller to override the camera state */
   viewState?: ViewState & {
@@ -252,82 +58,66 @@ export type MapboxProps = Partial<ViewState> & {
   // Styling
 
   /** Mapbox style */
-  mapStyle?: string | MapboxStyle | ImmutableLike;
+  mapStyle?: string | MapboxStyle | ImmutableLike<MapboxStyle>;
   /** Enable diffing when the map style changes
    * @default true
    */
   styleDiffing?: boolean;
-  /** The fog property of the style. Must conform to the Fog Style Specification .
-   * If `undefined` is provided, removes the fog from the map. */
-  fog?: Fog;
-  /** Light properties of the map. */
-  light?: Light;
-  /** Terrain property of the style. Must conform to the Terrain Style Specification .
-   * If `undefined` is provided, removes terrain from the map. */
-  terrain?: TerrainSpecification;
+
   /** Default layers to query on pointer events */
   interactiveLayerIds?: string[];
-  /** The projection the map should be rendered in
-   * @default "mercator"
-   */
-  projection?: Projection;
-  /**
-   * If `true`, multiple copies of the world will be rendered, when zoomed out.
-   * @default true
-   */
-  renderWorldCopies?: boolean;
   /** CSS cursor */
   cursor?: string;
 
   // Callbacks
-  onMouseDown?: (e: MapLayerMouseEvent) => void;
-  onMouseUp?: (e: MapLayerMouseEvent) => void;
-  onMouseOver?: (e: MapLayerMouseEvent) => void;
-  onMouseMove?: (e: MapLayerMouseEvent) => void;
-  onClick?: (e: MapLayerMouseEvent) => void;
-  onDblClick?: (e: MapLayerMouseEvent) => void;
-  onMouseEnter?: (e: MapLayerMouseEvent) => void;
-  onMouseLeave?: (e: MapLayerMouseEvent) => void;
-  onMouseOut?: (e: MapLayerMouseEvent) => void;
-  onContextMenu?: (e: MapLayerMouseEvent) => void;
-  onTouchStart?: (e: MapLayerTouchEvent) => void;
-  onTouchEnd?: (e: MapLayerTouchEvent) => void;
-  onTouchMove?: (e: MapLayerTouchEvent) => void;
-  onTouchCancel?: (e: MapLayerTouchEvent) => void;
+  onMouseDown?: (e: MapLayerMouseEvent<MapT>) => void;
+  onMouseUp?: (e: MapLayerMouseEvent<MapT>) => void;
+  onMouseOver?: (e: MapLayerMouseEvent<MapT>) => void;
+  onMouseMove?: (e: MapLayerMouseEvent<MapT>) => void;
+  onClick?: (e: MapLayerMouseEvent<MapT>) => void;
+  onDblClick?: (e: MapLayerMouseEvent<MapT>) => void;
+  onMouseEnter?: (e: MapLayerMouseEvent<MapT>) => void;
+  onMouseLeave?: (e: MapLayerMouseEvent<MapT>) => void;
+  onMouseOut?: (e: MapLayerMouseEvent<MapT>) => void;
+  onContextMenu?: (e: MapLayerMouseEvent<MapT>) => void;
+  onTouchStart?: (e: MapLayerTouchEvent<MapT>) => void;
+  onTouchEnd?: (e: MapLayerTouchEvent<MapT>) => void;
+  onTouchMove?: (e: MapLayerTouchEvent<MapT>) => void;
+  onTouchCancel?: (e: MapLayerTouchEvent<MapT>) => void;
 
-  onMoveStart?: (e: ViewStateChangeEvent) => void;
-  onMove?: (e: ViewStateChangeEvent) => void;
-  onMoveEnd?: (e: ViewStateChangeEvent) => void;
-  onDragStart?: (e: ViewStateChangeEvent) => void;
-  onDrag?: (e: ViewStateChangeEvent) => void;
-  onDragEnd?: (e: ViewStateChangeEvent) => void;
-  onZoomStart?: (e: ViewStateChangeEvent) => void;
-  onZoom?: (e: ViewStateChangeEvent) => void;
-  onZoomEnd?: (e: ViewStateChangeEvent) => void;
-  onRotateStart?: (e: ViewStateChangeEvent) => void;
-  onRotate?: (e: ViewStateChangeEvent) => void;
-  onRotateEnd?: (e: ViewStateChangeEvent) => void;
-  onPitchStart?: (e: ViewStateChangeEvent) => void;
-  onPitch?: (e: ViewStateChangeEvent) => void;
-  onPitchEnd?: (e: ViewStateChangeEvent) => void;
+  onMoveStart?: (e: ViewStateChangeEvent<MapT>) => void;
+  onMove?: (e: ViewStateChangeEvent<MapT>) => void;
+  onMoveEnd?: (e: ViewStateChangeEvent<MapT>) => void;
+  onDragStart?: (e: ViewStateChangeEvent<MapT>) => void;
+  onDrag?: (e: ViewStateChangeEvent<MapT>) => void;
+  onDragEnd?: (e: ViewStateChangeEvent<MapT>) => void;
+  onZoomStart?: (e: ViewStateChangeEvent<MapT>) => void;
+  onZoom?: (e: ViewStateChangeEvent<MapT>) => void;
+  onZoomEnd?: (e: ViewStateChangeEvent<MapT>) => void;
+  onRotateStart?: (e: ViewStateChangeEvent<MapT>) => void;
+  onRotate?: (e: ViewStateChangeEvent<MapT>) => void;
+  onRotateEnd?: (e: ViewStateChangeEvent<MapT>) => void;
+  onPitchStart?: (e: ViewStateChangeEvent<MapT>) => void;
+  onPitch?: (e: ViewStateChangeEvent<MapT>) => void;
+  onPitchEnd?: (e: ViewStateChangeEvent<MapT>) => void;
 
-  onWheel?: (e: MapWheelEvent) => void;
-  onBoxZoomStart?: (e: MapBoxZoomEvent) => void;
-  onBoxZoomEnd?: (e: MapBoxZoomEvent) => void;
-  onBoxZoomCancel?: (e: MapBoxZoomEvent) => void;
+  onWheel?: (e: MapWheelEvent<MapT>) => void;
+  onBoxZoomStart?: (e: MapBoxZoomEvent<MapT>) => void;
+  onBoxZoomEnd?: (e: MapBoxZoomEvent<MapT>) => void;
+  onBoxZoomCancel?: (e: MapBoxZoomEvent<MapT>) => void;
 
-  onResize?: (e: MapboxEvent) => void;
-  onLoad?: (e: MapboxEvent) => void;
-  onRender?: (e: MapboxEvent) => void;
-  onIdle?: (e: MapboxEvent) => void;
-  onError?: (e: ErrorEvent) => void;
-  onRemove?: (e: MapboxEvent) => void;
-  onData?: (e: MapStyleDataEvent | MapSourceDataEvent) => void;
-  onStyleData?: (e: MapStyleDataEvent) => void;
-  onSourceData?: (e: MapSourceDataEvent) => void;
+  onResize?: (e: MapEvent<MapT>) => void;
+  onLoad?: (e: MapEvent<MapT>) => void;
+  onRender?: (e: MapEvent<MapT>) => void;
+  onIdle?: (e: MapEvent<MapT>) => void;
+  onError?: (e: ErrorEvent<MapT>) => void;
+  onRemove?: (e: MapEvent<MapT>) => void;
+  onData?: (e: MapStyleDataEvent<MapT> | MapSourceDataEvent<MapT>) => void;
+  onStyleData?: (e: MapStyleDataEvent<MapT>) => void;
+  onSourceData?: (e: MapSourceDataEvent<MapT>) => void;
 };
 
-const DEFAULT_STYLE = {version: 8, sources: {}, layers: []};
+const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as MapboxStyle;
 
 const pointerEvents = {
   mousedown: 'onMouseDown',
@@ -377,7 +167,7 @@ const otherEvents = {
   sourcedata: 'onSourceData',
   error: 'onError'
 };
-const settingNames: (keyof MapboxProps)[] = [
+const settingNames = [
   'minZoom',
   'maxZoom',
   'minPitch',
@@ -386,7 +176,7 @@ const settingNames: (keyof MapboxProps)[] = [
   'projection',
   'renderWorldCopies'
 ];
-const handlerNames: (keyof MapboxProps)[] = [
+const handlerNames = [
   'scrollZoom',
   'boxZoom',
   'dragRotate',
@@ -400,13 +190,12 @@ const handlerNames: (keyof MapboxProps)[] = [
 /**
  * A wrapper for mapbox-gl's Map class
  */
-export default class Mapbox {
-  private _MapClass: typeof MapboxMap;
-  // mapboxgl.Map instance. Not using type here because we are accessing
-  // private members and methods
-  private _map: any = null;
+export default class Mapbox<MapT extends MapInstance = MapInstance> {
+  private _MapClass: {new (options: any): MapInstance};
+  // mapboxgl.Map instance
+  private _map: MapInstanceInternal<MapT> = null;
   // User-supplied props
-  props: MapboxProps;
+  props: MapboxProps<MapT>;
 
   // Mapbox map is stateful.
   // During method calls/user interactions, map.transform is mutated and
@@ -419,7 +208,7 @@ export default class Mapbox {
   // Internal states
   private _internalUpdate: boolean = false;
   private _inRender: boolean = false;
-  private _hoveredFeatures: MapboxGeoJSONFeature[] = null;
+  private _hoveredFeatures: MapGeoJSONFeature[] = null;
   private _deferredEvents: {
     move: boolean;
     zoom: boolean;
@@ -434,21 +223,25 @@ export default class Mapbox {
 
   static savedMaps: Mapbox[] = [];
 
-  constructor(MapClass: typeof MapboxMap, props: MapboxProps, container: HTMLDivElement) {
+  constructor(
+    MapClass: {new (options: any): MapInstance},
+    props: MapboxProps<MapT>,
+    container: HTMLDivElement
+  ) {
     this._MapClass = MapClass;
     this.props = props;
     this._initialize(container);
   }
 
-  get map(): MapboxMap {
-    return this._map as MapboxMap;
+  get map(): MapT {
+    return this._map;
   }
 
   get transform(): Transform {
     return this._renderTransform;
   }
 
-  setProps(props: MapboxProps) {
+  setProps(props: MapboxProps<MapT>) {
     const oldProps = this.props;
     this.props = props;
 
@@ -470,8 +263,11 @@ export default class Mapbox {
     }
   }
 
-  static reuse(props: MapboxProps, container: HTMLDivElement) {
-    const that = Mapbox.savedMaps.pop();
+  static reuse<MapT extends MapInstance>(
+    props: MapboxProps<MapT>,
+    container: HTMLDivElement
+  ): Mapbox<MapT> {
+    const that = Mapbox.savedMaps.pop() as Mapbox<MapT>;
     if (!that) {
       return null;
     }
@@ -557,7 +353,7 @@ export default class Mapbox {
       };
     }
 
-    const map: any = new this._MapClass(mapOptions);
+    const map = new this._MapClass(mapOptions) as MapInstanceInternal<MapT>;
     // Props that are not part of constructor options
     if (viewState.padding) {
       map.setPadding(viewState.padding);
@@ -582,6 +378,7 @@ export default class Mapbox {
     };
     map.on('render', () => this._onAfterRepaint());
     // Insert code into map's event pipeline
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const fireEvent = map.fire;
     map.fire = this._fireEvent.bind(this, fireEvent);
 
@@ -621,7 +418,7 @@ export default class Mapbox {
   // render cycle, which is managed by Mapbox's animation loop.
   // This removes the synchronization issue caused by requestAnimationFrame.
   redraw() {
-    const map = this._map;
+    const map = this._map as any;
     // map._render will throw error if style does not exist
     // https://github.com/mapbox/mapbox-gl-js/blob/fb9fc316da14e99ff4368f3e4faa3888fb43c513
     //   /src/ui/map.js#L1834
@@ -647,7 +444,7 @@ export default class Mapbox {
      @param {object} nextProps
      @returns {bool} true if size has changed
    */
-  _updateSize(nextProps: MapboxProps): boolean {
+  _updateSize(nextProps: MapboxProps<MapT>): boolean {
     // Check if size is controlled
     const {viewState} = nextProps;
     if (viewState) {
@@ -666,7 +463,7 @@ export default class Mapbox {
      @param {bool} triggerEvents - should fire camera events
      @returns {bool} true if anything is changed
    */
-  _updateViewState(nextProps: MapboxProps, triggerEvents: boolean): boolean {
+  _updateViewState(nextProps: MapboxProps<MapT>, triggerEvents: boolean): boolean {
     if (this._internalUpdate) {
       return false;
     }
@@ -713,13 +510,14 @@ export default class Mapbox {
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateSettings(nextProps: MapboxProps, currProps: MapboxProps): boolean {
+  _updateSettings(nextProps: MapboxProps<MapT>, currProps: MapboxProps<MapT>): boolean {
     const map = this._map;
     let changed = false;
     for (const propName of settingNames) {
       if (propName in nextProps && !deepEqual(nextProps[propName], currProps[propName])) {
         changed = true;
-        map[`set${propName[0].toUpperCase()}${propName.slice(1)}`](nextProps[propName]);
+        const setter = map[`set${propName[0].toUpperCase()}${propName.slice(1)}`];
+        setter?.(nextProps[propName]);
       }
     }
     return changed;
@@ -730,7 +528,7 @@ export default class Mapbox {
      @param {object} currProps
      @returns {bool} true if style is changed
    */
-  _updateStyle(nextProps: MapboxProps, currProps: MapboxProps): boolean {
+  _updateStyle(nextProps: MapboxProps<MapT>, currProps: MapboxProps<MapT>): boolean {
     if (nextProps.cursor !== currProps.cursor) {
       this._map.getCanvas().style.cursor = nextProps.cursor;
     }
@@ -740,6 +538,7 @@ export default class Mapbox {
         diff: styleDiffing
       };
       if ('localIdeographFontFamily' in nextProps) {
+        // @ts-ignore Mapbox specific prop
         options.localIdeographFontFamily = nextProps.localIdeographFontFamily;
       }
       this._map.setStyle(normalizeStyle(mapStyle), options);
@@ -753,19 +552,34 @@ export default class Mapbox {
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateStyleComponents(nextProps: MapboxProps, currProps: MapboxProps): boolean {
+  _updateStyleComponents(
+    nextProps: MapboxProps<MapT> & {
+      light?: Light;
+      fog?: Fog;
+      terrain?: Terrain;
+    },
+    currProps: MapboxProps<MapT> & {
+      light?: Light;
+      fog?: Fog;
+      terrain?: Terrain;
+    }
+  ): boolean {
     const map = this._map;
     let changed = false;
-    if (map.style.loaded()) {
-      if ('light' in nextProps && !deepEqual(nextProps.light, currProps.light)) {
+    if (map.isStyleLoaded()) {
+      if ('light' in nextProps && map.setLight && !deepEqual(nextProps.light, currProps.light)) {
         changed = true;
         map.setLight(nextProps.light);
       }
-      if ('fog' in nextProps && !deepEqual(nextProps.fog, currProps.fog)) {
+      if ('fog' in nextProps && map.setFog && !deepEqual(nextProps.fog, currProps.fog)) {
         changed = true;
         map.setFog(nextProps.fog);
       }
-      if ('terrain' in nextProps && !deepEqual(nextProps.terrain, currProps.terrain)) {
+      if (
+        'terrain' in nextProps &&
+        map.setTerrain &&
+        !deepEqual(nextProps.terrain, currProps.terrain)
+      ) {
         if (!nextProps.terrain || map.getSource(nextProps.terrain.source)) {
           changed = true;
           map.setTerrain(nextProps.terrain);
@@ -780,7 +594,7 @@ export default class Mapbox {
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateHandlers(nextProps: MapboxProps, currProps: MapboxProps): boolean {
+  _updateHandlers(nextProps: MapboxProps<MapT>, currProps: MapboxProps<MapT>): boolean {
     const map = this._map;
     let changed = false;
     for (const propName of handlerNames) {
@@ -798,13 +612,13 @@ export default class Mapbox {
     return changed;
   }
 
-  _onEvent = (e: MapboxEvent) => {
+  _onEvent = (e: MapEvent<MapT>) => {
     // @ts-ignore
     const cb = this.props[otherEvents[e.type]];
     if (cb) {
       cb(e);
     } else if (e.type === 'error') {
-      console.error((e as ErrorEvent).error); // eslint-disable-line
+      console.error((e as ErrorEvent<MapT>).error); // eslint-disable-line
     }
   };
 
@@ -821,7 +635,7 @@ export default class Mapbox {
     }
   }
 
-  _updateHover(e: MapMouseEvent) {
+  _updateHover(e: MapMouseEvent<MapT>) {
     const {props} = this;
     const shouldTrackHoveredFeatures =
       props.interactiveLayerIds && (props.onMouseMove || props.onMouseEnter || props.onMouseLeave);
@@ -847,7 +661,7 @@ export default class Mapbox {
     }
   }
 
-  _onPointerEvent = (e: MapLayerMouseEvent | MapLayerTouchEvent) => {
+  _onPointerEvent = (e: MapLayerMouseEvent<MapT> | MapLayerTouchEvent<MapT>) => {
     if (e.type === 'mousemove' || e.type === 'mouseout') {
       this._updateHover(e);
     }
@@ -863,7 +677,7 @@ export default class Mapbox {
     }
   };
 
-  _onCameraEvent = (e: ViewStateChangeEvent) => {
+  _onCameraEvent = (e: ViewStateChangeEvent<MapT>) => {
     if (!this._internalUpdate) {
       // @ts-ignore
       const cb = this.props[cameraEvents[e.type]];
@@ -876,7 +690,7 @@ export default class Mapbox {
     }
   };
 
-  _fireEvent(baseFire: Function, event: string | MapboxEvent, properties?: object) {
+  _fireEvent(baseFire: Function, event: string | MapEvent<MapT>, properties?: object) {
     const map = this._map;
     const tr = map.transform;
 
@@ -886,7 +700,7 @@ export default class Mapbox {
     }
     if (eventType in cameraEvents) {
       if (typeof event === 'object') {
-        (event as unknown as ViewStateChangeEvent).viewState = transformToViewState(tr);
+        (event as unknown as ViewStateChangeEvent<MapT>).viewState = transformToViewState(tr);
       }
       if (this._map.isMoving()) {
         // Replace map.transform with ours during the callbacks

@@ -20,6 +20,7 @@
   "files": [
     "src",
     "dist",
+    "maplibre",
     "README.md"
   ],
   "scripts": {
@@ -36,7 +37,8 @@
     "update-release-branch": "scripts/update-release-branch.sh"
   },
   "dependencies": {
-    "@types/mapbox-gl": "^2.7.11"
+    "@maplibre/maplibre-gl-style-spec": "^19.2.1",
+    "@types/mapbox-gl": ">=1.0.0"
   },
   "peerDependencies": {
     "mapbox-gl": ">=1.13.0",

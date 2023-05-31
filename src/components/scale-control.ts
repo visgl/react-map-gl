@@ -1,46 +1,46 @@
 import * as React from 'react';
-import {useEffect} from 'react';
+import {useEffect, useRef, memo} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
 import useControl from './use-control';
 
-import type {ControlPosition, MapboxScaleControl} from '../types';
+import type {ControlPosition, ScaleControlInstance} from '../types';
 
-export type ScaleControlProps = {
-  /** Unit of the distance.
-   * @default "metric"
-   */
-  unit?: 'imperial' | 'metric' | 'nautical';
-  /** The maximum length of the scale control in pixels.
-   * @default 100
-   */
+export type ScaleControlProps<OptionsT> = OptionsT & {
+  // These props will be further constraint by OptionsT
+  unit?: string;
   maxWidth?: number;
+
   /** Placement of the control relative to the map. */
   position?: ControlPosition;
   /** CSS style override, applied to the control's container */
   style?: React.CSSProperties;
 };
 
-function ScaleControl(props: ScaleControlProps): null {
-  const ctrl = useControl<MapboxScaleControl>(({mapLib}) => new mapLib.ScaleControl(props), {
+function ScaleControl<ScaleControlOptions, ControlT extends ScaleControlInstance>(
+  props: ScaleControlProps<ScaleControlOptions>
+): null {
+  const ctrl = useControl<ControlT>(({mapLib}) => new mapLib.ScaleControl(props) as ControlT, {
     position: props.position
   });
+  const propsRef = useRef<ScaleControlProps<ScaleControlOptions>>(props);
 
-  const {style, unit = 'metric', maxWidth = 100} = props;
+  const prevProps = propsRef.current;
+  propsRef.current = props;
 
-  // @ts-ignore
-  if (ctrl.options.unit !== unit || ctrl.options.maxWidth !== maxWidth) {
-    // @ts-ignore
-    ctrl.options.maxWidth = maxWidth;
-    // This method will trigger an update
-    ctrl.setUnit(unit);
+  const {style} = props;
+
+  if (props.maxWidth !== undefined && props.maxWidth !== prevProps.maxWidth) {
+    ctrl.options.maxWidth = props.maxWidth;
+  }
+  if (props.unit !== undefined && props.unit !== prevProps.unit) {
+    ctrl.setUnit(props.unit);
   }
 
   useEffect(() => {
-    // @ts-ignore
     applyReactStyle(ctrl._container, style);
   }, [style]);
 
   return null;
 }
 
-export default React.memo(ScaleControl);
+export default memo(ScaleControl);

@@ -99,9 +99,9 @@ test('Render test', async t => {
         goldenImage,
         region: boundingBox,
         tolerance: 0.05,
-        includeEmpty: false,
+        includeEmpty: false
         // Uncomment to save screenshot
-        saveOnFail: true
+        // saveOnFail: true
       });
 
       error = result.error;

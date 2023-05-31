@@ -1,14 +1,35 @@
 # Upgrade Guide
 
-## Upgrading to v8.0
+## Upgrading to v7.1
 
-In v8.0, `react-map-gl` no long require any vender-specific base map library as dependency. As a result, the `Map` component's `mapLib` prop must be provided. Users who use the package with `mapbox-gl` now need to specify `mapLib` as follows:
+- `maplibre-gl` users no longer need to install `mapbox-gl` or a placeholder package as dependency. Change your imports to the new endpoint `react-map-gl/maplibre`. Components imported from here do not require setting the `mapLib` prop, and use the types defined by `maplibre-gl`.
 
-```jsx
-<Map mapLib={import('mapbox-gl')} ...>
+```tsx title="map-v7.0.tsx"
+import Map from 'react-map-gl';
+import maplibregl from 'maplibre-gl';
+
+function App() {
+  return <Map
+    mapLib={maplibregl}
+    style={MAP_STYLE}
+    maplibreLogo  // This will generate a TypeScript error because it's not defined in Mapbox options
+    />;
+}
 ```
 
-For additional options and examples, see [mapLib](./api-reference/map.md#maplib) documentation.
+```tsx title="map-v7.1.tsx"
+import Map from 'react-map-gl/maplibre';
+
+function App() {
+  return <Map
+    // mapLib is default to `import('maplibre-gl')`
+    style={MAP_STYLE}
+    maplibreLogo
+    />
+}
+```
+
+- The `@types/mapbox-gl` dependency has relaxed its version constraint. If you use `mapbox-gl` as the base map library, it's recommended to explicitly list `@types/mapbox-gl` in your package.json with a version matching that of `mapbox-gl` (v1 or v2). This package is no longer required by the non-mapbox code path, and may be further demoted to an optional peer dependency in a future release.
 
 ## Upgrading to v7.0
 

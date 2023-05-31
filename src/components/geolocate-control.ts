@@ -1,83 +1,54 @@
 import * as React from 'react';
-import {forwardRef, useImperativeHandle, useRef, useEffect} from 'react';
+import {useImperativeHandle, useRef, useEffect, forwardRef, memo} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
 import useControl from './use-control';
 
 import type {
   ControlPosition,
-  PositionOptions,
-  FitBoundsOptions,
-  MapboxGeolocateControl,
+  GeolocateControlInstance,
   GeolocateEvent,
   GeolocateResultEvent,
   GeolocateErrorEvent
 } from '../types';
 
-export type GeolocateControlRef = {
-  /** Triggers a geolocate event */
-  trigger: () => boolean;
-};
-
-export type GeolocateControlProps = {
-  /**
-   * A Geolocation API PositionOptions object.
-   * @default {enableHighAccuracy:false,timeout:6000}
-   */
-  positionOptions?: PositionOptions;
-  /** A Map#fitBounds options object to use when the map is panned and zoomed to the user's location.
-   * @default {maxZoom:15}
-   */
-  fitBoundsOptions?: FitBoundsOptions;
-  /** If true the GeolocateControl becomes a toggle button and when active the map will receive
-   * updates to the user's location as it changes. Default false.
-   * @default false
-   */
-  trackUserLocation?: boolean;
-  /** Draw a transparent circle will be drawn around the user location indicating the accuracy
-   * (95% confidence level) of the user's location. Set to false to disable.
-   * This only has effect if `showUserLocation` is true.
-   * @default true
-   */
-  showAccuracyCircle?: boolean;
-  /**
-   * Show a dot on the map at the user's location. Set to false to disable.
-   * @default true
-   */
-  showUserLocation?: boolean;
-  /** If true an arrow will be drawn next to the user location dot indicating the device's heading.
-   * This only has affect when `trackUserLocation` is true. Default false.
-   * @default false
-   */
-  showUserHeading?: boolean;
+export type GeolocateControlProps<
+  OptionsT,
+  ControlT extends GeolocateControlInstance
+> = OptionsT & {
   /** Placement of the control relative to the map. */
   position?: ControlPosition;
   /** CSS style override, applied to the control's container */
   style?: React.CSSProperties;
 
   /** Called on each Geolocation API position update that returned as success. */
-  onGeolocate?: (e: GeolocateResultEvent) => void;
+  onGeolocate?: (e: GeolocateResultEvent<ControlT>) => void;
   /** Called on each Geolocation API position update that returned as an error. */
-  onError?: (e: GeolocateErrorEvent) => void;
+  onError?: (e: GeolocateErrorEvent<ControlT>) => void;
   /** Called on each Geolocation API position update that returned as success but user position
    * is out of map `maxBounds`. */
-  onOutOfMaxBounds?: (e: GeolocateResultEvent) => void;
+  onOutOfMaxBounds?: (e: GeolocateResultEvent<ControlT>) => void;
   /** Called when the GeolocateControl changes to the active lock state. */
-  onTrackUserLocationStart?: (e: GeolocateEvent) => void;
+  onTrackUserLocationStart?: (e: GeolocateEvent<ControlT>) => void;
   /** Called when the GeolocateControl changes to the background state. */
-  onTrackUserLocationEnd?: (e: GeolocateEvent) => void;
+  onTrackUserLocationEnd?: (e: GeolocateEvent<ControlT>) => void;
 };
 
-function GeolocateControl(props: GeolocateControlProps, ref: React.Ref<GeolocateControlRef>) {
+function GeolocateControl<GeolocateControlOptions, ControlT extends GeolocateControlInstance>(
+  props: GeolocateControlProps<GeolocateControlOptions, ControlT>,
+  ref: React.Ref<ControlT>
+) {
   const thisRef = useRef({props});
 
-  const ctrl = useControl<MapboxGeolocateControl>(
+  const ctrl = useControl<ControlT>(
     ({mapLib}) => {
-      const gc = new mapLib.GeolocateControl(props);
+      const gc = new mapLib.GeolocateControl(props) as ControlT;
 
       // Hack: fix GeolocateControl reuse
       // When using React strict mode, the component is mounted twice.
       // GeolocateControl's UI creation is asynchronous. Removing and adding it back causes the UI to be initialized twice.
+      // @ts-expect-error private method
       const setupUI = gc._setupUI;
+      // @ts-expect-error private method
       gc._setupUI = args => {
         if (!gc._container.hasChildNodes()) {
           setupUI(args);
@@ -85,19 +56,19 @@ function GeolocateControl(props: GeolocateControlProps, ref: React.Ref<Geolocate
       };
 
       gc.on('geolocate', e => {
-        thisRef.current.props.onGeolocate?.(e as GeolocateResultEvent);
+        thisRef.current.props.onGeolocate?.(e as GeolocateResultEvent<ControlT>);
       });
       gc.on('error', e => {
-        thisRef.current.props.onError?.(e as GeolocateErrorEvent);
+        thisRef.current.props.onError?.(e as GeolocateErrorEvent<ControlT>);
       });
       gc.on('outofmaxbounds', e => {
-        thisRef.current.props.onOutOfMaxBounds?.(e as GeolocateResultEvent);
+        thisRef.current.props.onOutOfMaxBounds?.(e as GeolocateResultEvent<ControlT>);
       });
       gc.on('trackuserlocationstart', e => {
-        thisRef.current.props.onTrackUserLocationStart?.(e as GeolocateEvent);
+        thisRef.current.props.onTrackUserLocationStart?.(e as GeolocateEvent<ControlT>);
       });
       gc.on('trackuserlocationend', e => {
-        thisRef.current.props.onTrackUserLocationEnd?.(e as GeolocateEvent);
+        thisRef.current.props.onTrackUserLocationEnd?.(e as GeolocateEvent<ControlT>);
       });
 
       return gc;
@@ -107,22 +78,13 @@ function GeolocateControl(props: GeolocateControlProps, ref: React.Ref<Geolocate
 
   thisRef.current.props = props;
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      trigger: () => ctrl.trigger()
-    }),
-    []
-  );
+  useImperativeHandle(ref, () => ctrl, []);
 
   useEffect(() => {
-    // @ts-ignore
     applyReactStyle(ctrl._container, props.style);
   }, [props.style]);
 
   return null;
 }
 
-const GeolocateControlWithRef = forwardRef(GeolocateControl);
-
-export default React.memo(GeolocateControlWithRef);
+export default memo(forwardRef(GeolocateControl));

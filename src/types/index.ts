@@ -1,43 +1,55 @@
-import {PaddingOptions, LngLat, Point, LngLatBounds} from 'mapbox-gl';
+export * from './public';
 
-export * from './external';
+import type GeoJSON from 'geojson';
+import type {CustomSourceImplementation} from './lib';
+import type {ImageSource} from './style-spec';
 
-// re-export mapbox types
-export type {
-  AnyLayer,
-  AnySourceData,
-  AnySourceImpl,
-  MapMouseEvent,
-  Marker as MapboxMarker,
-  Popup as MapboxPopup,
-  AttributionControl as MapboxAttributionControl,
-  FullscreenControl as MapboxFullscreenControl,
-  GeolocateControl as MapboxGeolocateControl,
-  NavigationControl as MapboxNavigationControl,
-  ScaleControl as MapboxScaleControl,
-  ElevationQueryOptions
-} from 'mapbox-gl';
+// Internal: source implementations
 
-/**
- * Stub for mapbox's Transform class
- * https://github.com/mapbox/mapbox-gl-js/blob/main/src/geo/transform.js
- */
-export type Transform = {
-  width: number;
-  height: number;
-  center: LngLat;
-  zoom: number;
-  bearing: number;
-  pitch: number;
-  padding: PaddingOptions;
-  elevation: any;
-  pixelsToGLUnits: [number, number];
-  cameraElevationReference: 'ground' | 'sea';
+export interface GeoJSONSourceImplementation {
+  type: 'geojson';
+  setData(
+    data: GeoJSON.Feature<GeoJSON.Geometry> | GeoJSON.FeatureCollection<GeoJSON.Geometry> | String
+  ): this;
+}
 
-  clone: () => Transform;
-  resize: (width: number, height: number) => void;
-  isPaddingEqual: (value: PaddingOptions) => boolean;
-  getBounds: () => LngLatBounds;
-  locationPoint: (lngLat: LngLat) => Point;
-  pointLocation: (p: Point) => LngLat;
-};
+export interface ImageSourceImplemtation {
+  type: 'image';
+  updateImage(options: Omit<ImageSource, 'type'>): this;
+  setCoordinates(coordinates: number[][]): this;
+}
+
+export interface CanvasSourceImplemtation {
+  type: 'canvas';
+  play(): void;
+  pause(): void;
+  getCanvas(): HTMLCanvasElement;
+  setCoordinates(coordinates: number[][]): this;
+}
+
+export interface VectorSourceImplementation {
+  type: 'vector';
+  setTiles(tiles: ReadonlyArray<string>): this;
+  setUrl(url: string): this;
+}
+
+export interface RasterSourceImplementation {
+  type: 'raster' | 'raster-dem';
+  setTiles(tiles: ReadonlyArray<string>): this;
+  setUrl(url: string): this;
+}
+
+export interface VideoSourceImplementation {
+  type: 'video';
+  getVideo(): HTMLVideoElement;
+  setCoordinates(coordinates: number[][]): this;
+}
+
+export type AnySourceImplementation =
+  | GeoJSONSourceImplementation
+  | VideoSourceImplementation
+  | ImageSourceImplemtation
+  | CanvasSourceImplemtation
+  | VectorSourceImplementation
+  | RasterSourceImplementation
+  | CustomSourceImplementation<HTMLImageElement | ImageData | ImageBitmap>;
