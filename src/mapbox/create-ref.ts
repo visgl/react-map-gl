@@ -61,13 +61,11 @@ export default function createRef<MapT extends MapInstance>(
       map.transform = tr;
       return result;
     },
-    queryTerrainElevation: (lnglat: LngLatLike, options: any) => {
-      // @ts-ignore transform not defined
+    // options diverge between mapbox and maplibre
+    queryTerrainElevation: (lnglat: LngLatLike, options?: any) => {
       const tr = map.transform;
-      // @ts-ignore transform not defined
       map.transform = mapInstance.transform;
       const result = map.queryTerrainElevation(lnglat, options);
-      // @ts-ignore transform not defined
       map.transform = tr;
       return result;
     }
