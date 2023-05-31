@@ -2,7 +2,7 @@
  * Mapbox Style Specification types
  * Note that these are NOT base map specific - all compatible map libraries implement the same spec
  */
-import {
+import type {
   FilterSpecification,
   PropertyValueSpecification,
   BackgroundLayerSpecification as BackgroundLayer,
@@ -23,7 +23,7 @@ import {
 } from '@maplibre/maplibre-gl-style-spec';
 
 // Layers
-export {
+export type {
   BackgroundLayer,
   CircleLayer,
   FillLayer,

@@ -1,7 +1,7 @@
 export * from './public';
 
 import type GeoJSON from 'geojson';
-import {CustomSourceImplementation} from './lib';
+import type {CustomSourceImplementation} from './lib';
 import type {ImageSource} from './style-spec';
 
 // Internal: source implementations
