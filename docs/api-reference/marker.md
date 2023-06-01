@@ -1,14 +1,21 @@
 # Marker
 
-React component that wraps [Marker](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker).
+React component that wraps the base library's `Marker` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#marker)).
 
-```js
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="map-library">
+  <TabItem value="mapbox" label="Mapbox">
+
+```tsx
 import * as React from 'react';
 import Map, {Marker} from 'react-map-gl';
 
 function App() {
   return <Map
-    mapLib={import('mapbox-gl')}
+    mapboxAccessToken="<Mapbox access token>"
     initialViewState={{
       longitude: -100,
       latitude: 40,
@@ -23,29 +30,38 @@ function App() {
 }
 ```
 
+  </TabItem>
+  <TabItem value="maplibre" label="Maplibre">
+
+
+```tsx
+import * as React from 'react';
+import Map, {Marker} from 'react-map-gl/maplibre';
+
+function App() {
+  return <Map
+    initialViewState={{
+      longitude: -100,
+      latitude: 40,
+      zoom: 3.5
+    }}
+    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
+  >
+    <Marker longitude={-100} latitude={40} anchor="bottom" >
+      <img src="./pin.png" />
+    </Marker>
+  </Map>;
+}
+```
+
+  </TabItem>
+</Tabs>
+
 If `Marker` is mounted with child components, then its content will be rendered to the specified location. If it is mounted with no content, then a default marker will be used.
 
 ## Properties
 
-### Render options
-
-#### `anchor`: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' {#anchor}
-
-Default: `'center'`
-
-A string indicating the part of the Marker that should be positioned closest to the coordinate set via `longitude` and `latitude`.
-
-#### `color`: string {#color}
-
-Default: `'#3FB1CE'`
-
-The color to use for the default marker if the component contains no content.
-
-#### `clickTolerance`: number {#clicktolerance}
-
-Default: `null` (inherits [Map](./map.md)'s `clickTolerance`)
-
-The max number of pixels a user can shift the mouse pointer during a click on the marker for it to be considered a valid click (as opposed to a marker drag).
+### Reactive Properties
 
 #### `draggable`: boolean {#draggable}
 
@@ -75,6 +91,10 @@ Default: `'auto'`
 - `viewport` aligns the `Marker` to the plane of the viewport.
 - `auto` automatically matches the value of `rotationAlignment`.
 
+#### `popup`: Popup | null {#popup}
+
+An instance of the `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#popup)) to attach to this marker. If undefined or null, any popup set on this Marker instance is unset.
+
 #### `rotation`: number {#rotation}
 
 Default: `0`
@@ -88,15 +108,6 @@ Default: `'auto'`
 - `map` aligns the `Marker`'s rotation relative to the map, maintaining a bearing as the map rotates.
 - `viewport` aligns the `Marker`'s rotation relative to the viewport, agnostic to map rotations.
 - `auto` is equivalent to `viewport`.
-
-#### `scale`: number {#scale}
-
-Default: `1`
-
-The scale to use for the default marker if the component contains no content.
-The default scale (`1`) corresponds to a height of `41px` and a width of `27px`.
-
-This prop is not reactive (only used when the marker is mounted).
 
 #### `style`: CSSProperties {#style}
 
@@ -119,6 +130,18 @@ Called while dragging, if `draggable` is `true`.
 #### `onDragEnd`: (evt: [MarkerDragEvent](./types.md#markerdragevent)) => void {#ondragend}
 
 Called when dragging ends, if `draggable` is `true`.
+
+
+### Other Properties
+
+The properties in this section are not reactive. They are only used when the component first mounts.
+
+Any options supported by the `Marker` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#marker)), such as
+
+- `anchor`
+- `color`
+- `scale`
+- `clickTolerance`
 
 
 ## Source

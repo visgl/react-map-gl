@@ -39,7 +39,7 @@ If you are using a third party service that requires header based authentication
 
 An example function:
 
-```js
+```ts
 const transformRequest = (url, resourceType) => {
   if (resourceType === 'Tile' && url.match('yourTileSource.com')) {
     return {

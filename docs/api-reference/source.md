@@ -2,18 +2,27 @@
 
 This component allows apps to create a [map source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources) using React. It may contain [Layer](./layer.md) components as children.
 
-```js
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="map-library">
+  <TabItem value="mapbox" label="Mapbox">
+
+```tsx
 import * as React from 'react';
 import Map, {Source, Layer} from 'react-map-gl';
+import type {CircleLayer} from 'react-map-gl';
+import type {FeatureCollection} from 'geojson';
 
-const geojson = {
+const geojson: FeatureCollection = {
   type: 'FeatureCollection',
   features: [
     {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.8]}}
   ]
 };
 
-const layerStyle = {
+const layerStyle: CircleLayer = {
   id: 'point',
   type: 'circle',
   paint: {
@@ -39,9 +48,55 @@ function App() {
 }
 ```
 
+  </TabItem>
+  <TabItem value="maplibre" label="Maplibre">
+
+
+```tsx
+import * as React from 'react';
+import Map, {Source, Layer} from 'react-map-gl/maplibre';
+import type {CircleLayer} from 'react-map-gl/maplibre';
+import type {FeatureCollection} from 'geojson';
+
+const geojson: FeatureCollection = {
+  type: 'FeatureCollection',
+  features: [
+    {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.8]}}
+  ]
+};
+
+const layerStyle: CircleLayer = {
+  id: 'point',
+  type: 'circle',
+  paint: {
+    'circle-radius': 10,
+    'circle-color': '#007cbf'
+  }
+};
+
+function App() {
+  return <Map
+    initialViewState={{
+      longitude: -122.4,
+      latitude: 37.8,
+      zoom: 14
+    }}
+    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
+  >
+    <Source id="my-data" type="geojson" data={geojson}>
+      <Layer {...layerStyle} />
+    </Source>
+  </Map>;
+}
+```
+
+  </TabItem>
+</Tabs>
+
+
 ## Properties
 
-The props provided to this component should be conforming to the [Mapbox source specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources)or [CanvasSourceOptions](https://docs.mapbox.com/mapbox-gl-js/api/#canvassourceoptions).
+The props provided to this component should be conforming to the [Mapbox source specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources) or [CanvasSourceOptions](https://docs.mapbox.com/mapbox-gl-js/api/#canvassourceoptions).
 
 When props change _shallowly_, the component will attempt to update the source. Do not define objects/arrays inline to avoid perf hit.
 
