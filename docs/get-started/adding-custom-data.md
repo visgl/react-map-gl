@@ -4,18 +4,20 @@
 
 You can inject data and mapbox native layers using the [Source](../api-reference/source.md) and [Layer](../api-reference/layer.md) components:
 
-```js
+```tsx
 import * as React from 'react';
 import Map, {Source, Layer} from 'react-map-gl';
+import type {CircleLayer} from 'react-map-gl';
+import type {FeatureCollection} from 'geojson';
 
-const geojson = {
+const geojson: FeatureCollection = {
   type: 'FeatureCollection',
   features: [
     {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.8]}}
   ]
 };
 
-const layerStyle = {
+const layerStyle: CircleLayer = {
   id: 'point',
   type: 'circle',
   paint: {
@@ -25,10 +27,8 @@ const layerStyle = {
 };
 
 function App() {
-  const [viewport, setViewport] = React.useState();
   return (
     <Map
-      mapLib={import('mapbox-gl')}
       initialViewState={{
         longitude: -122.45,
         latitude: 37.78,

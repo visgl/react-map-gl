@@ -30,6 +30,7 @@ function App() {
 ```
 
 - The `@types/mapbox-gl` dependency has relaxed its version constraint. If you use `mapbox-gl` as the base map library, it's recommended to explicitly list `@types/mapbox-gl` in your package.json with a version matching that of `mapbox-gl` (v1 or v2). This package is no longer required by the non-mapbox code path, and may be further demoted to an optional peer dependency in a future release.
+- If you use the `Map` component as a child of the `DeckGL` component from `deck.gl`, upgrade `deck.gl` to `>=8.9.18`.
 
 ## Upgrading to v7.0
 

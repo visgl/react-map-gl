@@ -151,13 +151,8 @@ An object with the following fields:
 
 - `offset?`: [PointLike](#pointlike) - The center of the given bounds relative to the map's center, measured in pixels.
 - `padding?`: [PaddingOptions](#paddingoptions) - The amount of padding in pixels to add to the given bounds.
-- `maxZoom?`: number - The maximum zoom level to allow when the map view transitions to the specified bounds.
-- `animate?`: boolean - When set to `false`, no animation happens.
-- `linear?`: boolean - If `true`, the map transitions using [Map#easeTo](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#easeto). If `false`, the map transitions using [Map#flyTo](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto) 
-- `duration?`: number - Duration in milliseconds
-- `maxDuration?`: number - Max duration in milliseconds
-- `easing?`: (t: number) => number - A function taking a time in the range 0..1 and returning a number where 0 is the initial state and 1 is the final state.
-- `essential?`: boolean - If `true`, then the animation is considered essential and will not be affected by `prefers-reduced-motion`. Otherwise, the transition will happen instantly if the user has enabled the `reduced motion` accesibility feature in their operating system.
+- `maxZoom?`: number - The maximum zoom level to allow when the map fits to the specified bounds.
+- `maxZoom?`: number - The minimum zoom level to allow when the map fits to the specified bounds.
 
 See [Map#fitBounds](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#fitbounds)
 

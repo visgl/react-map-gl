@@ -10,13 +10,12 @@ There are two ways to use a [Map](../api-reference/map.md):
 
 You may clone a full app configuration for this example [here](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/get-started/basic).
 
-```js
+```tsx
 import * as React from 'react';
 import Map from 'react-map-gl';
 
 function App() {
   return <Map
-    mapLib={import('mapbox-gl')}
     initialViewState={{
       longitude: -100,
       latitude: 40,
@@ -31,7 +30,7 @@ function App() {
 
 You may clone a full app configuration for this example [here](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/get-started/controlled).
 
-```js
+```tsx
 import * as React from 'react';
 import Map from 'react-map-gl';
 
@@ -43,7 +42,6 @@ function App() {
   });
 
   return <Map
-    mapLib={import('mapbox-gl')}
     {...viewState}
     onMove={evt => setViewState(evt.viewState)}
     mapStyle="mapbox://styles/mapbox/streets-v9"
@@ -61,7 +59,7 @@ A real-world application likely uses more complicated state flows:
 
 `Map` offers props that set basic constraints for the camera, e.g. `maxBounds`, `minZoom`, `maxPitch`. If you need more complicated logic to constrain the camera, you may use it as a controlled component. The following example restricts the map center inside a GeoJSON geofence:
 
-```js
+```tsx
 import * as React from 'react';
 import Map from 'react-map-gl';
 
@@ -87,7 +85,6 @@ function App() {
   }, [])
 
   return <Map
-    mapLib={import('mapbox-gl')}
     {...viewState}
     onMove={onMove}
     mapStyle="mapbox://styles/mapbox/streets-v9"

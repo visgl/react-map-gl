@@ -1,23 +1,28 @@
 # AttributionControl
 
-React component that wraps [AttributionControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#attributioncontrol).
+React component that wraps the base library's `AttributionControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#attributioncontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#attributioncontrol)).
 
-```js
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="map-library">
+  <TabItem value="mapbox" label="Mapbox">
+
+```tsx
 import * as React from 'react';
 import Map, {AttributionControl} from 'react-map-gl';
 
 function App() {
   return <Map
-    mapLib={import('mapbox-gl')}
+    mapboxAccessToken="<Mapbox access token>"
     initialViewState={{
       longitude: -100,
       latitude: 40,
       zoom: 3.5
     }}
     mapStyle="mapbox://styles/mapbox/streets-v9"
-    {
-      // disable the default attribution
-    }
+    // disable the default attribution
     attributionControl={false}
   >
     <AttributionControl customAttribution="Map design by me" />
@@ -25,21 +30,50 @@ function App() {
 }
 ```
 
+  </TabItem>
+  <TabItem value="maplibre" label="Maplibre">
+
+```tsx
+import * as React from 'react';
+import Map, {AttributionControl} from 'react-map-gl/maplibre';
+
+function App() {
+  return <Map
+    initialViewState={{
+      longitude: -100,
+      latitude: 40,
+      zoom: 3.5
+    }}
+    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
+    // disable the default attribution
+    attributionControl={false}
+  >
+    <AttributionControl customAttribution="Map design by me" />
+  </Map>;
+}
+```
+
+  </TabItem>
+</Tabs>
+
 ## Properties
 
-Note that the following properties are not reactive. They are only used when the component first mounts.
+### Reactive Properties
 
-#### `compact`: boolean | undefined {#compact}
+#### `style`: CSSProperties {#style}
 
-- If `true` , force a compact attribution that shows the full attribution on mouse hover.
-- If `false` , force the full attribution control.
-- If unset, shows a responsive attribution that collapses when the map is less than 640 pixels wide.
+CSS style override that applies to the control's container.
 
-Note that your attribution must adhere to Mapbox's [guidelines](https://docs.mapbox.com/help/getting-started/attribution/).
+### Other Properties
 
-#### `customAttribution`: string | string[] {#customattribution}
+The properties in this section are not reactive. They are only used when the component first mounts.
 
-String or strings to show in addition to any other attributions.
+Any options supported by the `AttributionControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#attributioncontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#attributioncontrol)), such as
+
+- `compact`
+- `customAttribution`
+
+Plus the following:
 
 #### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' {#position}
 
@@ -47,9 +81,6 @@ Default: `'bottom-right'`
 
 Placement of the control relative to the map.
 
-#### `style`: CSSProperties {#style}
-
-CSS style override that applies to the control's container.
 
 ## Source
 

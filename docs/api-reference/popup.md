@@ -1,19 +1,24 @@
 # Popup
 
+React component that wraps the base library's `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#popup)).
 
-## Properties
 
-React component that wraps [Popup](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup).
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-```js
+<Tabs groupId="map-library">
+  <TabItem value="mapbox" label="Mapbox">
+
+```tsx
 import * as React from 'react';
+import {useState} from 'react';
 import Map, {Popup} from 'react-map-gl';
 
 function App() {
-  const [showPopup, setShowPopup] = React.useState(true);
+  const [showPopup, setShowPopup] = useState<boolean>(true);
 
   return <Map
-    mapLib={import('mapbox-gl')}
+    mapboxAccessToken="<Mapbox access token>"
     initialViewState={{
       longitude: -100,
       latitude: 40,
@@ -31,7 +36,43 @@ function App() {
 }
 ```
 
-### Render options
+  </TabItem>
+  <TabItem value="maplibre" label="Maplibre">
+
+
+```tsx
+import * as React from 'react';
+import {useState} from 'react';
+import Map, {Popup} from 'react-map-gl/maplibre';
+
+function App() {
+  const [showPopup, setShowPopup] = useState<boolean>(true);
+
+  return <Map
+    initialViewState={{
+      longitude: -100,
+      latitude: 40,
+      zoom: 3.5
+    }}
+    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
+  >
+    {showPopup && (
+      <Popup longitude={-100} latitude={40}
+        anchor="bottom"
+        onClose={() => setShowPopup(false)}>
+        You are here
+      </Popup>)}
+  </Map>;
+}
+```
+
+  </TabItem>
+</Tabs>
+
+
+## Properties
+
+### Reactive Properties
 
 #### `anchor`: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | undefined {#anchor}
 
@@ -41,30 +82,6 @@ If unset, the anchor will be dynamically set to ensure the popup falls within th
 #### `className`: string {#classname}
 
 Space-separated CSS class names to add to popup container.
-
-#### `closeButton`: boolean {#closebutton}
-
-Default: `true`
-
-If `true`, a close button will appear in the top right corner of the popup.
-
-#### `closeOnClick`: boolean {#closeonclick}
-
-Default: `true`
-
-If `true`, the popup will close when the map is clicked.
-
-#### `closeOnMove`: boolean {#closeonmove}
-
-Default: `false`
-
-If `true`, the popup will closed when the map moves.
-
-#### `focusAfterOpen`: boolean {#focusafteropen}
-
-Default: `true`
-
-If `true`, the popup will try to focus the first focusable element inside the popup.
 
 #### `offset`: number | [PointLike](./types.md#pointlike) | Record\<string, [PointLike](./types.md#pointlike)\> {#offset}
 
@@ -97,6 +114,18 @@ Called when the popup is opened.
 #### `onClose`: (evt: [PopupEvent](./types.md#popupevent)) => void {#onclose}
 
 Called when the popup is closed by the user clicking on the close button or outside (if `closeOnClick: true`).
+
+
+### Other Properties
+
+The properties in this section are not reactive. They are only used when the component first mounts.
+
+Any options supported by the `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#popup)), such as
+
+- `closeButton`
+- `closeOnClick`
+- `closeOnMove`
+- `focusAfterOpen`
 
 
 ## Source

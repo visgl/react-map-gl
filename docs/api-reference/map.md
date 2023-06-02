@@ -1,61 +1,124 @@
 # default (Map)
 
-React component that wraps [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/). This is also the default export from react-map-gl.
+React component that wraps the base library's `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)). This is also the default export from react-map-gl.
 
-```js
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="map-library">
+  <TabItem value="mapbox" label="Mapbox">
+
+```tsx title="app.tsx"
 import * as React from 'react';
 import Map from 'react-map-gl';
 
 function App() {
-  return <Map
-    mapLib={import('mapbox-gl')}
-    initialViewState={{
-      longitude: -100,
-      latitude: 40,
-      zoom: 3.5
-    }}
-    style={{width: '100vw', height: '100vh'}}
-    mapStyle="mapbox://styles/mapbox/streets-v9"
-    mapboxAccessToken="MY_ACCESS_TOKEN"
-  />;
+  return (
+    <Map
+      mapboxAccessToken="<Mapbox access token>"
+      initialViewState={{
+        longitude: -122.4,
+        latitude: 37.8,
+        zoom: 14
+      }}
+      style={{width: 600, height: 400}}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+    />
+  );
 }
 ```
+
+  </TabItem>
+  <TabItem value="maplibre" label="Maplibre">
+
+```tsx title="app.tsx"
+import * as React from 'react';
+import Map from 'react-map-gl/maplibre';
+
+function App() {
+  return (
+    <Map
+      initialViewState={{
+        longitude: -122.4,
+        latitude: 37.8,
+        zoom: 14
+      }}
+      style={{width: 600, height: 400}}
+      mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
+    />
+  );
+}
+```
+
+  </TabItem>
+</Tabs>
+
 
 ## Methods
 
 Imperative methods are accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) or the [useMap](./use-map.md) hook.
 
+<Tabs groupId="map-library">
+  <TabItem value="mapbox" label="Mapbox">
 
 ```tsx
 import * as React from 'react';
+import {useRef, useCallback} from 'react';
 import Map from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
+import type {MapRef} from 'react-map-gl';
 
 function App() {
-  const mapRef = React.useRef<MapRef<mapboxgl.Map>>();
+  const mapRef = useRef<MapRef>();
 
-  const onMapLoad = React.useCallback(() => {
+  const onMapLoad = useCallback(() => {
     mapRef.current.on('move', () => {
       // do something
     });
   }, []);
 
-  return <Map mapLib={mapboxgl} ref={mapRef} onLoad={onMapLoad} />;
+  return <Map ref={mapRef} onLoad={onMapLoad} ... />;
 }
 ```
+
+  </TabItem>
+  <TabItem value="maplibre" label="Maplibre">
+
+
+```tsx
+import * as React from 'react';
+import {useRef, useCallback} from 'react';
+import Map from 'react-map-gl/maplibre';
+import type {MapRef} from 'react-map-gl/maplibre';
+
+function App() {
+  const mapRef = useRef<MapRef>();
+
+  const onMapLoad = useCallback(() => {
+    mapRef.current.on('move', () => {
+      // do something
+    });
+  }, []);
+
+  return <Map ref={mapRef} onLoad={onMapLoad} ... />;
+}
+```
+
+
+  </TabItem>
+</Tabs>
 
 The [MapRef](./types.md#mapref) object exposes [Map methods](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) that **are safe to call without breaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
 
 You can still access the hidden members via `getMap()`:
 
-#### `getMap()`: MapboxMap {#getmap}
+#### `getMap()` {#getmap}
 
-Returns the native [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/) instance associated with this component.
+Returns the native `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) instance associated with this component.
 
 
 ## Properties
 
-Aside from the props listed below, the `Map` component supports all parameters of the [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters) constructor. Beware that this is not an exhaustive list of all props. Different base map libraries may offer different options and default values. When in doubt, refer to your base map library's documentation.
+Aside from the props listed below, the `Map` component supports all parameters of the `Map` class constructor ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)). Beware that this is not an exhaustive list of all props. Different base map libraries may offer different options and default values. When in doubt, refer to your base map library's documentation.
 
 ### Layout options
 
@@ -455,29 +518,33 @@ Called when one of the map's sources loads or changes, including if a tile belon
 
 ### Other options
 
-The following props, along with any parameter of the [Map](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-parameters) not listed above, can be specified to construct the underlying `Map` instance. 
+The following props, along with any options of the `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) not listed above, can be specified to construct the underlying `Map` instance. 
 
 Note: props in this section are not reactive. They are only used once when the Map instance is constructed.
 
 #### `mapLib`: any {#maplib}
 
+Default:
+- `import('mapbox-gl')` if imported from `react-map-gl`
+- `import('maplibre-gl')` if imported from `react-map-gl/maplibre`
+
 Specify the underlying base map library for the Map component. The value can be provided with several options:
 
 By module import (and embedding in the final bundle):
 
-```js
+```tsx
 import * as React from 'react';
 import Map from 'react-map-gl';
-import maplibregl from 'maplibre-gl';
+import mapboxgl from 'mapbox-gl';
 
 function App() {
-  return <Map mapLib={maplibregl} />;
+  return <Map mapLib={mapboxgl} />;
 }
 ```
 
 By dynamic import (thus enable bundle splitting):
 
-```js
+```tsx
 import * as React from 'react';
 import Map from 'react-map-gl';
 
@@ -488,11 +555,11 @@ function App() {
 
 Or to load a pre-bundled version of the library:
 
-```html
+```html title="index.html"
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.4.0/mapbox-gl.js" ></script>
 ```
 
-```js
+```tsx title="app.tsx"
 import * as React from 'react';
 import Map from 'react-map-gl';
 
@@ -506,11 +573,11 @@ function App() {
 
 Token used to access the Mapbox data service. See [about map tokens](../get-started/mapbox-tokens.md).
 
-#### `baseApiUrl`: string
+#### `baseApiUrl`: string {#baseapiurl}
 
 The map's default API URL for requesting tiles, styles, sprites, and glyphs.
 
-#### `maxParallelImageRequests`: number
+#### `maxParallelImageRequests`: number {#maxparallelimagerequests}
 
 Default: `16`
 
@@ -522,7 +589,7 @@ Default: `false`
 
 By default, every time a map component is unmounted, all internal resources associated with the underlying `Map` instance are released. If the map gets mounted again, a new `Map` instance is constructed.
 
-If `reuseMaps` is set to `true`, when a map component is unmounted, the underlying `Map` instance is retained in memory. The next time a map component gets mounted, the saved instance is reused. This behavior may be desirable if an application frequently mounts/unmounts map(s), for example in a tabbed or collapsable UI, and wants to avoid [new billable events](https://github.com/mapbox/mapbox-gl-js/releases/tag/v2.0.0) triggered by initialization.
+If `reuseMaps` is set to `true`, when a map component is unmounted, the underlying `Map` instance is retained in memory. The next time a map component gets mounted, the saved instance is reused. This behavior may be desirable if an application frequently mounts/unmounts map(s), for example in a tabbed or collapsable UI, and wants to avoid Mapbox's [billable events](https://github.com/mapbox/mapbox-gl-js/releases/tag/v2.0.0) triggered by initialization.
 
 Note that since some map options cannot be modified after initialization, when reusing maps, only the reactive props and `initialViewState` of the new component are respected.
 

@@ -2,11 +2,18 @@
 
 This component allows apps to create a [map layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/#layers) using React.
 
-```js
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="map-library">
+  <TabItem value="mapbox" label="Mapbox">
+
+```tsx
 import * as React from 'react';
 import Map, {Layer} from 'react-map-gl';
+import type {FillLayer} from 'react-map-gl';
 
-const parkLayer = {
+const parkLayer: FillLayer = {
   id: 'landuse_park',
   type: 'fill',
   source: 'mapbox',
@@ -19,7 +26,7 @@ const parkLayer = {
 
 function App() {
   return <Map
-    mapLib={import('mapbox-gl')}
+    mapboxAccessToken="<Mapbox access token>"
     initialViewState={{
       longitude: -122.4,
       latitude: 37.8,
@@ -31,6 +38,43 @@ function App() {
   </Map>;
 }
 ```
+
+  </TabItem>
+  <TabItem value="maplibre" label="Maplibre">
+
+
+```tsx
+import * as React from 'react';
+import Map, {Layer} from 'react-map-gl/maplibre';
+import type {FillLayer} from 'react-map-gl/maplibre';
+
+const parkLayer: FillLayer = {
+  id: 'landuse_park',
+  type: 'fill',
+  source: 'mapbox',
+  'source-layer': 'landuse',
+  filter: ['==', 'class', 'park'],
+  paint: {
+    'fill-color': '#4E3FC8'
+  }
+};
+
+function App() {
+  return <Map
+    initialViewState={{
+      longitude: -122.4,
+      latitude: 37.8,
+      zoom: 14
+    }}
+    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
+  >
+    <Layer {...parkLayer} />
+  </Map>;
+}
+```
+
+  </TabItem>
+</Tabs>
 
 ## Properties
 
