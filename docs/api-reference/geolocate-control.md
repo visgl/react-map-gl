@@ -52,7 +52,60 @@ function App() {
   </TabItem>
 </Tabs>
 
-## Reference
+
+## Properties
+
+### Reactive Properties
+
+#### `style`: CSSProperties {#style}
+
+CSS style override that applies to the control's container.
+
+### Callbacks
+
+#### `onGeolocate`: (evt: [GeolocateResultEvent](./types.md#geolocateresultevent)) => void {#ongeolocate}
+
+Called on each Geolocation API position update that returned as success.
+
+#### `onError`: (evt: [GeolocateErrorEvent](./types.md#geolocateerrorevent)) => void {#onerror}
+
+Called on each Geolocation API position update that returned as an error.
+
+#### `onOutOfMaxBounds`: (evt: [GeolocateResultEvent](./types.md#geolocateresultevent)) => void {#onoutofmaxbounds}
+
+Called on each Geolocation API position update that returned as success but user position is out of map `maxBounds`.
+
+#### `onTrackUserLocationStart`: (evt: [GeolocateEvent](./types.md#geolocateevent)) => void {#ontrackuserlocationstart}
+
+Called when the GeolocateControl changes to the active lock state.
+
+#### `onTrackUserLocationEnd`: (evt: [GeolocateEvent](./types.md#geolocateevent)) => void {#ontrackuserlocationend}
+
+Called when the GeolocateControl changes to the background state.
+
+
+### Other Properties
+
+The properties in this section are not reactive. They are only used when the component first mounts.
+
+Any options supported by the `GeolocateControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#geolocatecontrol)), such as
+
+- `positionOptions`
+- `fitBoundsOptions`
+- `trackUserLocation`
+- `showAccuracyCircle`
+- `showUserLocation`
+
+Plus the following:
+
+#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' {#position}
+
+Default: `'bottom-right'`
+
+Placement of the control relative to the map.
+
+
+## Methods
 
 The underlying native `GeolocateControl` instance is accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) hook.
 You may use it to call any imperative methods:
@@ -106,59 +159,6 @@ function App() {
 
   </TabItem>
 </Tabs>
-
-
-## Properties
-
-
-### Reactive Properties
-
-#### `style`: CSSProperties {#style}
-
-CSS style override that applies to the control's container.
-
-### Callbacks
-
-#### `onGeolocate`: (evt: [GeolocateResultEvent](./types.md#geolocateresultevent)) => void {#ongeolocate}
-
-Called on each Geolocation API position update that returned as success.
-
-#### `onError`: (evt: [GeolocateErrorEvent](./types.md#geolocateerrorevent)) => void {#onerror}
-
-Called on each Geolocation API position update that returned as an error.
-
-#### `onOutOfMaxBounds`: (evt: [GeolocateResultEvent](./types.md#geolocateresultevent)) => void {#onoutofmaxbounds}
-
-Called on each Geolocation API position update that returned as success but user position is out of map `maxBounds`.
-
-#### `onTrackUserLocationStart`: (evt: [GeolocateEvent](./types.md#geolocateevent)) => void {#ontrackuserlocationstart}
-
-Called when the GeolocateControl changes to the active lock state.
-
-#### `onTrackUserLocationEnd`: (evt: [GeolocateEvent](./types.md#geolocateevent)) => void {#ontrackuserlocationend}
-
-Called when the GeolocateControl changes to the background state.
-
-
-### Other Properties
-
-The properties in this section are not reactive. They are only used when the component first mounts.
-
-Any options supported by the `GeolocateControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#geolocatecontrol)), such as
-
-- `positionOptions`
-- `fitBoundsOptions`
-- `trackUserLocation`
-- `showAccuracyCircle`
-- `showUserLocation`
-
-Plus the following:
-
-#### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' {#position}
-
-Default: `'bottom-right'`
-
-Placement of the control relative to the map.
 
 
 ## Source
