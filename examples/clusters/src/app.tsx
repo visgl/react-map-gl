@@ -5,7 +5,6 @@ import {Map, Source, Layer} from 'react-map-gl';
 
 import ControlPanel from './control-panel';
 import {clusterLayer, clusterCountLayer, unclusteredPointLayer} from './layers';
-import mapboxgl from 'mapbox-gl';
 
 import type {MapRef} from 'react-map-gl';
 import type {GeoJSONSource} from 'react-map-gl';
@@ -42,7 +41,6 @@ export default function App() {
           longitude: -103.59,
           zoom: 3
         }}
-        mapLib={mapboxgl}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         mapboxAccessToken={MAPBOX_TOKEN}
         interactiveLayerIds={[clusterLayer.id]}
