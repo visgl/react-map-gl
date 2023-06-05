@@ -1,7 +1,7 @@
 /* global document */
 import * as React from 'react';
 import {createPortal} from 'react-dom';
-import {useEffect, useMemo, useRef, useContext, memo} from 'react';
+import {useImperativeHandle, useEffect, useMemo, useRef, useContext, forwardRef, memo} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
 
 import type {MarkerEvent, MarkerDragEvent, PointLike, MarkerInstance} from '../types';
@@ -34,7 +34,8 @@ export type MarkerProps<OptionsT, MarkerT extends MarkerInstance> = OptionsT & {
 
 /* eslint-disable complexity,max-statements */
 function Marker<MarkerOptions, MarkerT extends MarkerInstance>(
-  props: MarkerProps<MarkerOptions, MarkerT>
+  props: MarkerProps<MarkerOptions, MarkerT>,
+  ref: React.Ref<MarkerT>
 ) {
   const {map, mapLib} = useContext(MapContext);
   const thisRef = useRef({props});
@@ -106,6 +107,8 @@ function Marker<MarkerOptions, MarkerT extends MarkerInstance>(
     applyReactStyle(marker.getElement(), style);
   }, [style]);
 
+  useImperativeHandle(ref, () => marker, []);
+
   if (marker.getLngLat().lng !== longitude || marker.getLngLat().lat !== latitude) {
     marker.setLngLat([longitude, latitude]);
   }
@@ -131,4 +134,4 @@ function Marker<MarkerOptions, MarkerT extends MarkerInstance>(
   return createPortal(props.children, marker.getElement());
 }
 
-export default memo(Marker);
+export default memo(forwardRef(Marker));

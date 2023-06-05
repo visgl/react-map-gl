@@ -128,6 +128,64 @@ Any options supported by the `Popup` class ([Mapbox](https://docs.mapbox.com/map
 - `focusAfterOpen`
 
 
+## Methods
+
+The underlying native `Popup` instance is accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) hook.
+You may use it to call any imperative methods:
+
+<Tabs groupId="map-library">
+  <TabItem value="mapbox" label="Mapbox">
+
+```tsx
+import * as React from 'react';
+import {useRef, useEffect} from 'react';
+import Map, {Popup} from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
+
+function App() {
+  const popupRef = useRef<mapboxgl.Popup>();
+
+  useEffect(() => {
+    popupRef.current?.trackPointer();
+  }, [popupRef.current])
+
+  return <Map>
+    <Popup longitude={-122.4} latitude={37.8} ref={popupRef} >
+      Tooltip
+    </Popup>
+  </Map>;
+}
+```
+
+  </TabItem>
+  <TabItem value="maplibre" label="Maplibre">
+
+
+```tsx
+import * as React from 'react';
+import {useRef, useEffect} from 'react';
+import Map, {Popup} from 'react-map-gl/maplibre';
+import maplibregl from 'maplibre-gl';
+
+function App() {
+  const popupRef = useRef<maplibregl.Popup>();
+
+  useEffect(() => {
+    popupRef.current?.trackPointer();
+  }, [popupRef.current])
+
+  return <Map>
+    <Popup longitude={-122.4} latitude={37.8} ref={popupRef} >
+      Tooltip
+    </Popup>
+  </Map>;
+}
+```
+
+  </TabItem>
+</Tabs>
+
+
 ## Source
 
 [popup.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/popup.ts)

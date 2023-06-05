@@ -1,7 +1,7 @@
 /* global document */
 import * as React from 'react';
 import {createPortal} from 'react-dom';
-import {useEffect, useMemo, useRef, useContext, memo} from 'react';
+import {useImperativeHandle, useEffect, useMemo, useRef, useContext, forwardRef, memo} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
 
 import type {PopupEvent, PopupInstance} from '../types';
@@ -36,7 +36,8 @@ function getClassList(className: string) {
 
 /* eslint-disable complexity,max-statements */
 function Popup<PopupOptions, PopupT extends PopupInstance>(
-  props: PopupProps<PopupOptions, PopupT>
+  props: PopupProps<PopupOptions, PopupT>,
+  ref: React.Ref<PopupT>
 ) {
   const {map, mapLib} = useContext(MapContext);
   const container = useMemo(() => {
@@ -78,6 +79,8 @@ function Popup<PopupOptions, PopupT extends PopupInstance>(
     applyReactStyle(popup.getElement(), props.style);
   }, [props.style]);
 
+  useImperativeHandle(ref, () => popup, []);
+
   if (popup.isOpen()) {
     if (popup.getLngLat().lng !== props.longitude || popup.getLngLat().lat !== props.latitude) {
       popup.setLngLat([props.longitude, props.latitude]);
@@ -110,4 +113,4 @@ function Popup<PopupOptions, PopupT extends PopupInstance>(
   return createPortal(props.children, container);
 }
 
-export default memo(Popup);
+export default memo(forwardRef(Popup));

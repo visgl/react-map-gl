@@ -144,6 +144,73 @@ Any options supported by the `Marker` class ([Mapbox](https://docs.mapbox.com/ma
 - `clickTolerance`
 
 
+## Methods
+
+The underlying native `Marker` instance is accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) hook.
+You may use it to call any imperative methods:
+
+<Tabs groupId="map-library">
+  <TabItem value="mapbox" label="Mapbox">
+
+```tsx
+import * as React from 'react';
+import {useRef, useMemo, useCallback} from 'react';
+import Map, {Marker} from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
+
+function App() {
+  const markerRef = useRef<mapboxgl.Marker>();
+
+  const popup = useMemo(() => {
+    return mapboxgl.Popup().setText('Hello world!');
+  }, [])
+
+  const togglePopup = useCallback(() => {
+    markerRef.current?.togglePopup();
+  }, []);
+
+  return <>
+    <Map>
+      <Marker longitude={-122.4} latitude={37.8} color="red" popup={popup} ref={markerRef} />
+    </Map>
+    <button onClick={togglePopup}>Toggle popup</button>
+  </>;
+}
+```
+
+  </TabItem>
+  <TabItem value="maplibre" label="Maplibre">
+
+
+```tsx
+import * as React from 'react';
+import {useRef, useMemo, useCallback} from 'react';
+import Map, {Marker} from 'react-map-gl/maplibre';
+import maplibregl from 'maplibre-gl';
+
+function App() {
+  const markerRef = useRef<maplibregl.Marker>();
+
+  const popup = useMemo(() => {
+    return maplibregl.Popup().setText('Hello world!');
+  }, [])
+
+  const togglePopup = useCallback(() => {
+    markerRef.current?.togglePopup();
+  }, []);
+
+  return <>
+    <Map>
+      <Marker longitude={-122.4} latitude={37.8} color="red" popup={popup} ref={markerRef} />
+    </Map>
+    <button onClick={togglePopup}>Toggle popup</button>
+  </>;
+}
+```
+
+  </TabItem>
+</Tabs>
+
 ## Source
 
 [marker.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/marker.ts)
