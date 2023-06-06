@@ -1,5 +1,15 @@
 # CHANGELOG
 
+# Version 7.1
+
+## 7.1.0-beta.1 (Jun 5, 2023)
+
+- Add ref forwarding to Marker and Popup (#2191)
+- Split exports into separate endpoints (#2178)
+- Make mapbox-gl an optional dependency (#2175)
+- Remove defaultProps and displayName (#2173)
+
+
 # Version 7.0
 
 ## 7.0.0 (Feb 4, 2022)

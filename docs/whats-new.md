@@ -4,7 +4,8 @@
 
 Release date: June 2023
 
-To better accommodate the API divergence between Mapbox and Maplibre, this version adds a new endpoint `react-map-gl/maplibre`. The new endpoint exports identical components as `react-map-gl`, but typed for `maplibre-gl` instead. After switching to this new endpoint, `maplibre-gl` users no longer need to install `mapbox-gl` or a placeholder package as dependency. See [upgrade guide](./upgrade-guide.md) for an example.
+- To better accommodate the API divergence between Mapbox and Maplibre, this version adds a new endpoint `react-map-gl/maplibre`. The new endpoint exports identical components as `react-map-gl`, but typed for `maplibre-gl` instead. After switching to this new endpoint, `maplibre-gl` users no longer need to install `mapbox-gl` or a placeholder package as dependency. See [upgrade guide](./upgrade-guide.md) for an example.
+- `Marker`, `Popup` and `GeolocateControl` components now expose the native instance via React ref.
 
 ## react-map-gl v7.0
 

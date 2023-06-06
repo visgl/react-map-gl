@@ -54,68 +54,6 @@ function App() {
 </Tabs>
 
 
-## Methods
-
-Imperative methods are accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) or the [useMap](./use-map.md) hook.
-
-<Tabs groupId="map-library">
-  <TabItem value="mapbox" label="Mapbox">
-
-```tsx
-import * as React from 'react';
-import {useRef, useCallback} from 'react';
-import Map from 'react-map-gl';
-import type {MapRef} from 'react-map-gl';
-
-function App() {
-  const mapRef = useRef<MapRef>();
-
-  const onMapLoad = useCallback(() => {
-    mapRef.current.on('move', () => {
-      // do something
-    });
-  }, []);
-
-  return <Map ref={mapRef} onLoad={onMapLoad} ... />;
-}
-```
-
-  </TabItem>
-  <TabItem value="maplibre" label="Maplibre">
-
-
-```tsx
-import * as React from 'react';
-import {useRef, useCallback} from 'react';
-import Map from 'react-map-gl/maplibre';
-import type {MapRef} from 'react-map-gl/maplibre';
-
-function App() {
-  const mapRef = useRef<MapRef>();
-
-  const onMapLoad = useCallback(() => {
-    mapRef.current.on('move', () => {
-      // do something
-    });
-  }, []);
-
-  return <Map ref={mapRef} onLoad={onMapLoad} ... />;
-}
-```
-
-
-  </TabItem>
-</Tabs>
-
-The [MapRef](./types.md#mapref) object exposes [Map methods](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) that **are safe to call without breaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
-
-You can still access the hidden members via `getMap()`:
-
-#### `getMap()` {#getmap}
-
-Returns the native `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) instance associated with this component.
-
-
 ## Properties
 
 Aside from the props listed below, the `Map` component supports all parameters of the `Map` class constructor ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)). Beware that this is not an exhaustive list of all props. Different base map libraries may offer different options and default values. When in doubt, refer to your base map library's documentation.
@@ -617,6 +555,70 @@ The number of web workers instantiated on a page with mapbox-gl maps.
 #### `workerUrl`: string {#workerurl}
 
 Provides an interface for loading mapbox-gl's WebWorker bundle from a self-hosted URL. This is useful if your site needs to operate in a strict CSP (Content Security Policy) environment wherein you are not allowed to load JavaScript code from a Blob URL, which is default behavior.
+
+
+
+## Methods
+
+Imperative methods are accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) or the [useMap](./use-map.md) hook.
+
+<Tabs groupId="map-library">
+  <TabItem value="mapbox" label="Mapbox">
+
+```tsx
+import * as React from 'react';
+import {useRef, useCallback} from 'react';
+import Map from 'react-map-gl';
+import type {MapRef} from 'react-map-gl';
+
+function App() {
+  const mapRef = useRef<MapRef>();
+
+  const onMapLoad = useCallback(() => {
+    mapRef.current.on('move', () => {
+      // do something
+    });
+  }, []);
+
+  return <Map ref={mapRef} onLoad={onMapLoad} ... />;
+}
+```
+
+  </TabItem>
+  <TabItem value="maplibre" label="Maplibre">
+
+
+```tsx
+import * as React from 'react';
+import {useRef, useCallback} from 'react';
+import Map from 'react-map-gl/maplibre';
+import type {MapRef} from 'react-map-gl/maplibre';
+
+function App() {
+  const mapRef = useRef<MapRef>();
+
+  const onMapLoad = useCallback(() => {
+    mapRef.current.on('move', () => {
+      // do something
+    });
+  }, []);
+
+  return <Map ref={mapRef} onLoad={onMapLoad} ... />;
+}
+```
+
+
+  </TabItem>
+</Tabs>
+
+The [MapRef](./types.md#mapref) object exposes [Map methods](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) that **are safe to call without breaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
+
+You can still access the hidden members via `getMap()`:
+
+#### `getMap()` {#getmap}
+
+Returns the native `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) instance associated with this component.
+
 
 
 ## Source
