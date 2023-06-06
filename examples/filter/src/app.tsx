@@ -2,7 +2,6 @@ import * as React from 'react';
 import {useState, useMemo, useCallback} from 'react';
 import {createRoot} from 'react-dom/client';
 import Map, {Popup, Source, Layer} from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
 import ControlPanel from './control-panel';
 
 import {countiesLayer, highlightLayer} from './map-style';
@@ -27,7 +26,6 @@ export default function App() {
   return (
     <>
       <Map
-        mapLib={mapboxgl}
         initialViewState={{
           latitude: 38.88,
           longitude: -98,

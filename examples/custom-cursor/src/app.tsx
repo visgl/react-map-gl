@@ -5,7 +5,6 @@ import {createRoot} from 'react-dom/client';
 import Map, {MapboxStyle} from 'react-map-gl';
 import ControlPanel from './control-panel';
 import MAP_STYLE from '../../map-style-basic-v8.json';
-import mapboxgl from 'mapbox-gl';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
@@ -39,7 +38,6 @@ export default function App() {
   return (
     <>
       <Map
-        mapLib={mapboxgl}
         initialViewState={initialViewState}
         mapStyle={MAP_STYLE as MapboxStyle}
         onClick={onClick}

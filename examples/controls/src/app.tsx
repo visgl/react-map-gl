@@ -9,7 +9,6 @@ import Map, {
   ScaleControl,
   GeolocateControl
 } from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
 
 import ControlPanel from './control-panel';
 import Pin from './pin';
@@ -52,7 +51,6 @@ export default function App() {
           bearing: 0,
           pitch: 0
         }}
-        mapLib={mapboxgl}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         mapboxAccessToken={TOKEN}
       >

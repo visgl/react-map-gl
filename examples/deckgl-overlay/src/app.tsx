@@ -4,7 +4,6 @@ import {ArcLayer} from '@deck.gl/layers/typed';
 import {DeckProps, PickingInfo} from '@deck.gl/core/typed';
 import {MapboxOverlay} from '@deck.gl/mapbox/typed';
 import {useControl} from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
 
 import Map, {NavigationControl} from 'react-map-gl';
 
@@ -52,7 +51,6 @@ export default function App() {
 
   return (
     <Map
-      mapLib={mapboxgl}
       initialViewState={initialViewState}
       mapStyle="mapbox://styles/mapbox/light-v9"
       mapboxAccessToken={TOKEN}

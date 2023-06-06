@@ -2,7 +2,6 @@
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import Map, {Marker} from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -17,7 +16,6 @@ function Root() {
 
   return (
     <Map
-      mapLib={mapboxgl}
       {...viewState}
       onMove={evt => setViewState(evt.viewState)}
       style={{width: 800, height: 600}}

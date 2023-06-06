@@ -2,7 +2,6 @@ import * as React from 'react';
 import {useRef, useCallback} from 'react';
 import {createRoot} from 'react-dom/client';
 import Map, {MapRef} from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
 
 import ControlPanel from './control-panel';
 
@@ -27,7 +26,6 @@ export default function App() {
     <>
       <Map
         ref={mapRef}
-        mapLib={mapboxgl}
         initialViewState={initialViewState}
         mapStyle="mapbox://styles/mapbox/light-v9"
         mapboxAccessToken={MAPBOX_TOKEN}

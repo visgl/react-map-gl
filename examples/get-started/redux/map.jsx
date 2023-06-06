@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Map from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
 
 import {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
@@ -20,7 +19,6 @@ export default function MapView() {
 
   return (
     <Map
-      mapLib={mapboxgl}
       {...viewState}
       onMove={onMove}
       style={{width: 800, height: 600}}
