@@ -42,7 +42,7 @@
   },
   "peerDependencies": {
     "mapbox-gl": ">=1.13.0",
-    "maplibregl": ">=1.13.0",
+    "maplibre-gl": ">=1.13.0",
     "react": ">=16.3.0",
     "react-dom": ">=16.3.0"
   },
