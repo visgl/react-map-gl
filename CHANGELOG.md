@@ -2,6 +2,11 @@
 
 # Version 7.1
 
+## 7.1.0-beta.2 (Jun 14, 2023)
+
+- Make source prop of Layer optional (#2200)
+- Fix maplibre-gl peerDependencies typo (#2197)
+
 ## 7.1.0-beta.1 (Jun 5, 2023)
 
 - Add ref forwarding to Marker and Popup (#2191)
