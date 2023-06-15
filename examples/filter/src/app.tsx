@@ -21,7 +21,10 @@ export default function App() {
   }, []);
 
   const selectedCounty = (hoverInfo && hoverInfo.countyName) || '';
-  const filter: ['in', string, string] = useMemo(() => ['in', 'COUNTY', selectedCounty], [selectedCounty]);
+  const filter: ['in', string, string] = useMemo(
+    () => ['in', 'COUNTY', selectedCounty],
+    [selectedCounty]
+  );
 
   return (
     <>
