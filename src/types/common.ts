@@ -1,4 +1,5 @@
-export type {IControl} from './lib';
+import type GeoJSON from 'geojson';
+import type {AnyLayer} from './style-spec';
 
 /* Data types */
 export interface Point {
@@ -81,3 +82,10 @@ export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'botto
 export interface ImmutableLike<T> {
   toJS: () => T;
 }
+
+export type MapGeoJSONFeature = GeoJSON.Feature<GeoJSON.Geometry> & {
+  layer: AnyLayer;
+  source: string;
+  sourceLayer: string;
+  state: {[key: string]: any};
+};
