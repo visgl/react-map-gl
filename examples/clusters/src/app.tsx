@@ -7,7 +7,7 @@ import ControlPanel from './control-panel';
 import {clusterLayer, clusterCountLayer, unclusteredPointLayer} from './layers';
 
 import type {MapRef} from 'react-map-gl';
-import type {GeoJSONSource} from 'react-map-gl';
+import type {GeoJSONSource} from 'mapbox-gl';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 

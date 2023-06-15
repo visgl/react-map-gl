@@ -1,11 +1,12 @@
-import type {FillLayer} from 'react-map-gl';
+import type {LayerProps} from 'react-map-gl';
 
 // For more information on data-driven styles, see https://www.mapbox.com/help/gl-dds-ref/
-export const dataLayer: FillLayer = {
+export const dataLayer: LayerProps = {
   id: 'data',
   type: 'fill',
   paint: {
     'fill-color': {
+      type: 'interval',
       property: 'percentile',
       stops: [
         [0, '#3288bd'],

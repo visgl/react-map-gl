@@ -9,7 +9,7 @@ import ControlPanel, {COLORS} from './control-panel';
 
 import electionData from '../../.data/us-election-2016.json';
 
-import type {MapboxMap} from 'react-map-gl';
+import type {Map as MapboxMap} from 'mapbox-gl';
 
 const TOKEN = ''; // Set your mapbox token here
 
