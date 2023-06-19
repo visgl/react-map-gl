@@ -63,6 +63,14 @@ export type MapboxProps<MapT extends MapInstance = MapInstance> = Partial<ViewSt
    * @default true
    */
   styleDiffing?: boolean;
+  /** The fog property of the style. Must conform to the Fog Style Specification .
+   * If `undefined` is provided, removes the fog from the map. */
+  fog?: Fog;
+  /** Light properties of the map. */
+  light?: Light;
+  /** Terrain property of the style. Must conform to the Terrain Style Specification .
+   * If `undefined` is provided, removes terrain from the map. */
+  terrain?: Terrain;
 
   /** Default layers to query on pointer events */
   interactiveLayerIds?: string[];
@@ -552,18 +560,7 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateStyleComponents(
-    nextProps: MapboxProps<MapT> & {
-      light?: Light;
-      fog?: Fog;
-      terrain?: Terrain;
-    },
-    currProps: MapboxProps<MapT> & {
-      light?: Light;
-      fog?: Fog;
-      terrain?: Terrain;
-    }
-  ): boolean {
+  _updateStyleComponents(nextProps: MapboxProps<MapT>, currProps: MapboxProps<MapT>): boolean {
     const map = this._map;
     let changed = false;
     if (map.isStyleLoaded()) {
