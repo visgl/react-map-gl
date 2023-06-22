@@ -1,5 +1,4 @@
-import type GeoJSON from 'geojson';
-import type {ViewState, Point, LngLat, LngLatBounds} from './common';
+import type {ViewState, Point, LngLat, LngLatBounds, MapGeoJSONFeature} from './common';
 import type {
   MapInstance,
   Evented,
@@ -7,14 +6,7 @@ import type {
   PopupInstance,
   GeolocateControlInstance
 } from './lib';
-import type {AnyLayer, AnySource} from './style-spec';
-
-export type MapGeoJSONFeature = GeoJSON.Feature<GeoJSON.Geometry> & {
-  layer: AnyLayer;
-  source: string;
-  sourceLayer: string;
-  state: {[key: string]: any};
-};
+import type {AnySource} from './style-spec';
 
 export interface MapEvent<SourceT extends Evented, OriginalEventT = undefined> {
   type: string;
