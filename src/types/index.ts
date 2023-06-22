@@ -1,4 +1,5 @@
 export * from './public';
+export * from './events';
 
 import type GeoJSON from 'geojson';
 import type {CustomSourceImplementation} from './lib';

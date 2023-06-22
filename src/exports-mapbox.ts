@@ -38,6 +38,7 @@ import {
 } from './components/scale-control';
 import {useMap as _useMap} from './components/use-map';
 import type {MapRef as _MapRef} from './mapbox/create-ref';
+import type * as events from './types/events';
 
 export function useMap() {
   return _useMap<MapboxMap>();
@@ -106,3 +107,22 @@ export default Map;
 export * from './types/public';
 export type {SourceProps} from './components/source';
 export type {LayerProps} from './components/layer';
+
+// Events
+export type MapEvent = events.MapEvent<MapboxMap>;
+export type ErrorEvent = events.ErrorEvent<MapboxMap>;
+export type MapStyleDataEvent = events.MapStyleDataEvent<MapboxMap>;
+export type MapSourceDataEvent = events.MapSourceDataEvent<MapboxMap>;
+export type MapMouseEvent = events.MapMouseEvent<MapboxMap>;
+export type MapLayerMouseEvent = events.MapLayerMouseEvent<MapboxMap>;
+export type MapTouchEvent = events.MapTouchEvent<MapboxMap>;
+export type MapLayerTouchEvent = events.MapLayerTouchEvent<MapboxMap>;
+export type MapWheelEvent = events.MapWheelEvent<MapboxMap>;
+export type MapBoxZoomEvent = events.MapBoxZoomEvent<MapboxMap>;
+export type ViewStateChangeEvent = events.ViewStateChangeEvent<MapboxMap>;
+export type PopupEvent = events.PopupEvent<MapboxPopup>;
+export type MarkerEvent = events.MarkerEvent<MapboxMarker>;
+export type MarkerDragEvent = events.MarkerDragEvent<MapboxMarker>;
+export type GeolocateEvent = events.GeolocateEvent<MapboxGeolocateControl>;
+export type GeolocateResultEvent = events.GeolocateResultEvent<MapboxGeolocateControl>;
+export type GeolocateErrorEvent = events.GeolocateErrorEvent<MapboxGeolocateControl>;
