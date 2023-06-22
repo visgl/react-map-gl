@@ -2,6 +2,11 @@
 
 # Version 7.1
 
+## 7.1.0-beta.3 (Jun 22, 2023)
+
+- Remap event types (#2207)
+- Restore fog, light and terrain types on MapProps (#2206)
+
 ## 7.1.0-beta.2 (Jun 14, 2023)
 
 - Make source prop of Layer optional (#2200)
