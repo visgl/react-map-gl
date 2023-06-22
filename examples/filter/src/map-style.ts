@@ -2,6 +2,7 @@ import type {FillLayer} from 'react-map-gl';
 
 export const countiesLayer: FillLayer = {
   id: 'counties',
+  source: '',
   type: 'fill',
   'source-layer': 'original',
   paint: {
