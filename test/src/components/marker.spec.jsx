@@ -91,6 +91,18 @@ test('Marker', async t => {
 
   t.ok(map.root.findByProps({id: 'marker-content'}), 'content is rendered');
 
+  act(() => {
+    map.update(
+      <Map ref={mapRef} mapLib={mapboxMock}>
+        <Marker longitude={-100} latitude={40} className="classA">
+          <div id="marker-content" />
+        </Marker>
+      </Map>
+    );
+  });
+
+  t.ok(map.root.findByProps({className: 'classA'}), 'className is updated');
+
   map.unmount();
 
   restoreMock();

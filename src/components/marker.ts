@@ -22,6 +22,7 @@ export type MarkerProps<OptionsT, MarkerT extends MarkerInstance> = OptionsT & {
   rotation?: number;
   rotationAlignment?: string;
   popup?: any;
+  className?: string;
 
   /** CSS style override, applied to the control's container */
   style?: React.CSSProperties;
@@ -32,6 +33,11 @@ export type MarkerProps<OptionsT, MarkerT extends MarkerInstance> = OptionsT & {
   children?: React.ReactNode;
 };
 
+// Adapted from https://github.com/mapbox/mapbox-gl-js/blob/v1.13.0/src/ui/popup.js
+function getClassList(className: string) {
+  return new Set(className ? className.trim().split(/\s+/) : []);
+}
+
 /* eslint-disable complexity,max-statements */
 function Marker<MarkerOptions, MarkerT extends MarkerInstance>(
   props: MarkerProps<MarkerOptions, MarkerT>,
@@ -40,6 +46,7 @@ function Marker<MarkerOptions, MarkerT extends MarkerInstance>(
   const {map, mapLib} = useContext(MapContext);
   const thisRef = useRef({props});
   thisRef.current.props = props;
+  const classNameRef = useRef(null);
 
   const marker: MarkerT = useMemo(() => {
     let hasChildren = false;
@@ -129,6 +136,24 @@ function Marker<MarkerOptions, MarkerT extends MarkerInstance>(
   }
   if (marker.getPopup() !== popup) {
     marker.setPopup(popup);
+  }
+
+  if (classNameRef.current !== props.className) {
+    const prevClassList = getClassList(classNameRef.current);
+    const nextClassList = getClassList(props.className);
+
+    for (const c of prevClassList) {
+      if (!nextClassList.has(c)) {
+        marker.getElement().classList.remove(c);
+      }
+    }
+    for (const c of nextClassList) {
+      if (!prevClassList.has(c)) {
+        marker.getElement().classList.add(c);
+      }
+    }
+
+    classNameRef.current = props.className;
   }
 
   return createPortal(props.children, marker.getElement());
