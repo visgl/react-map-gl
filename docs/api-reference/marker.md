@@ -77,6 +77,10 @@ Required. The latitude of the anchor location.
 
 Required. The longitude of the anchor location.
 
+#### `className`: string {#classname}
+
+Space-separated CSS class names to add to popup container.
+
 #### `offset`: [PointLike](./types.md#pointlike) {#offset}
 
 Default: `null`
