@@ -2,6 +2,11 @@
 
 # Version 7.1
 
+## 7.1.0 (Jun 30, 2023)
+
+- To better accommodate the API divergence between Mapbox and Maplibre, this version adds a new endpoint `react-map-gl/maplibre`. The new endpoint exports identical components as `react-map-gl`, but typed for `maplibre-gl` instead. After switching to this new endpoint, `maplibre-gl` users no longer need to install `mapbox-gl` or a placeholder package as dependency. See [upgrade guide](https://github.com/visgl/react-map-gl/blob/7.1-release/docs/upgrade-guide.md) for an example.
+- `Marker`, `Popup` and `GeolocateControl` components now expose the native instance via React ref.
+
 ## 7.1.0-beta.3 (Jun 22, 2023)
 
 - Remap event types (#2207)
