@@ -3,8 +3,8 @@
 
 <p align="center">
   These docs are for
-  <a href="https://github.com/visgl/react-map-gl/tree/7.0-release/docs">
-    <img src="https://img.shields.io/badge/v7.0-brightgreen.svg?style=flat-square" />
+  <a href="https://github.com/visgl/react-map-gl/tree/7.1-release/docs">
+    <img src="https://img.shields.io/badge/v7.1-brightgreen.svg?style=flat-square" />
   </a>
   Looking for an old version?
   <a href="https://github.com/visgl/react-map-gl/tree/6.1-release/docs">

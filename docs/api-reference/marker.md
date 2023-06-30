@@ -213,4 +213,4 @@ function App() {
 
 ## Source
 
-[marker.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/marker.ts)
+[marker.ts](https://github.com/visgl/react-map-gl/tree/7.1-release/src/components/marker.ts)

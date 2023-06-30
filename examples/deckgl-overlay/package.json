@@ -8,7 +8,7 @@
     "deck.gl": "^8.8.0-beta.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-map-gl": "^7.1.0-beta",
+    "react-map-gl": "^7.1.0",
     "mapbox-gl": "^2.0.0"
   },
   "devDependencies": {

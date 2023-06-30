@@ -89,4 +89,4 @@ Placement of the control relative to the map.
 
 ## Source
 
-[scale-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/scale-control.ts)
+[scale-control.ts](https://github.com/visgl/react-map-gl/tree/7.1-release/src/components/scale-control.ts)

@@ -32,7 +32,7 @@ function ControlPanel() {
       </p>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/7.0-release/examples/custom-overlay"
+          href="https://github.com/visgl/react-map-gl/tree/7.1-release/examples/custom-overlay"
           target="_new"
         >
           View Code ↗

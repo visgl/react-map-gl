@@ -109,4 +109,4 @@ Note that layers are added by the order that they mount. They are *NOT* reordere
 
 ## Source
 
-[layer.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/layer.ts)
+[layer.ts](https://github.com/visgl/react-map-gl/tree/7.1-release/src/components/layer.ts)

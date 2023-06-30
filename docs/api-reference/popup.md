@@ -188,4 +188,4 @@ function App() {
 
 ## Source
 
-[popup.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/popup.ts)
+[popup.ts](https://github.com/visgl/react-map-gl/tree/7.1-release/src/components/popup.ts)
