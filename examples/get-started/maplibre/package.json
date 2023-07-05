@@ -8,7 +8,7 @@
     "maplibre-gl": "^2.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-map-gl": "^7.1.0-beta"
+    "react-map-gl": "^7.1.0"
   },
   "devDependencies": {
     "typescript": "^4.0.0",
