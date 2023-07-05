@@ -16,7 +16,7 @@
 </p>
 
 react-map-gl is a suite of [React](http://facebook.github.io/react/) components for
-Mapbox GL JS-compatible libraries.
+[mapbox-gl](https://github.com/mapbox/mapbox-gl-js), [maplibre-gl](https://maplibre.org/maplibre-gl-js-docs/api/) or compatible libraries.
 
 | Library | Description |
 | --- | --- | 

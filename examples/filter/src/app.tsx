@@ -21,7 +21,10 @@ export default function App() {
   }, []);
 
   const selectedCounty = (hoverInfo && hoverInfo.countyName) || '';
-  const filter = useMemo(() => ['in', 'COUNTY', selectedCounty], [selectedCounty]);
+  const filter: ['in', string, string] = useMemo(
+    () => ['in', 'COUNTY', selectedCounty],
+    [selectedCounty]
+  );
 
   return (
     <>
@@ -45,7 +48,7 @@ export default function App() {
           <Popup
             longitude={hoverInfo.longitude}
             latitude={hoverInfo.latitude}
-            offset={[0, -10]}
+            offset={[0, -10] as [number, number]}
             closeButton={false}
             className="county-info"
           >

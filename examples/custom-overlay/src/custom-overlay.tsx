@@ -3,11 +3,11 @@ import {useState, cloneElement} from 'react';
 import {useControl} from 'react-map-gl';
 import {createPortal} from 'react-dom';
 
-import type {MapboxMap, IControl} from 'react-map-gl';
+import type {IControl, MapInstance} from 'react-map-gl';
 
 // Based on template in https://docs.mapbox.com/mapbox-gl-js/api/markers/#icontrol
 class OverlayControl implements IControl {
-  _map: MapboxMap = null;
+  _map: MapInstance = null;
   _container: HTMLElement;
   _redraw: () => void;
 

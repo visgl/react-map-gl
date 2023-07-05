@@ -25,7 +25,7 @@
   ],
   "scripts": {
     "typecheck": "tsc -p tsconfig.esm.json --noEmit",
-    "bootstrap": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn && ocular-bootstrap",
+    "bootstrap": "PUPPETEER_SKIP_DOWNLOAD=true yarn && ocular-bootstrap",
     "build": "ocular-clean && tsc -b tsconfig.esm.json && tsc -b tsconfig.es5.json",
     "lint": "ocular-lint",
     "cover": "ocular-test cover",
