@@ -525,7 +525,7 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
       if (propName in nextProps && !deepEqual(nextProps[propName], currProps[propName])) {
         changed = true;
         const setter = map[`set${propName[0].toUpperCase()}${propName.slice(1)}`];
-        setter?.(nextProps[propName]);
+        setter?.call(map, nextProps[propName]);
       }
     }
     return changed;
