@@ -2,6 +2,10 @@
 
 # Version 7.1
 
+## 7.1.2 (Jul 6, 2023)
+
+- Fix crash updating settings (#2222)
+
 ## 7.1.1 (Jul 5, 2023)
 
 - Remove redeclaration of react type (#2219)
