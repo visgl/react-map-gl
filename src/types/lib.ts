@@ -1,4 +1,5 @@
 import type {PaddingOptions, LngLat, Point, LngLatLike, PointLike} from './common';
+import type {Projection} from './style-spec';
 
 export interface IControl<MapT extends MapInstance = MapInstance> {
   onAdd(map: MapT): HTMLElement;
@@ -217,6 +218,10 @@ export type Transform = {
   getBounds: () => any;
   locationPoint: (lngLat: LngLat) => Point;
   pointLocation: (p: Point) => LngLat;
+
+  // Mapbox only
+  getProjection?: () => Projection;
+  setProjection?: (projection: Projection) => void;
 };
 
 export type MapInstanceInternal<MapT extends MapInstance> = MapT & {

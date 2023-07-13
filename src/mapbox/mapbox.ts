@@ -1,4 +1,9 @@
-import {transformToViewState, applyViewStateToTransform, cloneTransform} from '../utils/transform';
+import {
+  transformToViewState,
+  applyViewStateToTransform,
+  cloneTransform,
+  syncProjection
+} from '../utils/transform';
 import {normalizeStyle} from '../utils/style-utils';
 import {deepEqual} from '../utils/deep-equal';
 
@@ -394,7 +399,11 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
     map.on('resize', () => {
       this._renderTransform.resize(map.transform.width, map.transform.height);
     });
-    map.on('styledata', () => this._updateStyleComponents(this.props, {}));
+    map.on('styledata', () => {
+      this._updateStyleComponents(this.props, {});
+      // Projection can be set in stylesheet
+      syncProjection(map.transform, this._renderTransform);
+    });
     map.on('sourcedata', () => this._updateStyleComponents(this.props, {}));
     for (const eventName in pointerEvents) {
       map.on(eventName, this._onPointerEvent);
@@ -728,11 +737,14 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
 
     const tr = this._map.transform;
     // Make sure camera matches the current props
-    this._map.transform = this._renderTransform;
+    map.transform = this._renderTransform;
 
     this._onAfterRepaint = () => {
+      // Mapbox transitions between non-mercator projection and mercator during render time
+      // Copy it back to the other
+      syncProjection(this._renderTransform, tr);
       // Restores camera state before render/load events are fired
-      this._map.transform = tr;
+      map.transform = tr;
     };
   }
 
