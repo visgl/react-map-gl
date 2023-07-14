@@ -1,5 +1,6 @@
 import type {MapboxProps} from '../mapbox/mapbox';
 import type {Transform, ViewState} from '../types';
+import {deepEqual} from './deep-equal';
 
 /**
  * Make a copy of a transform
@@ -10,6 +11,23 @@ export function cloneTransform(tr: Transform): Transform {
   // Work around mapbox bug - this value is not assigned in clone(), only in resize()
   newTransform.pixelsToGLUnits = tr.pixelsToGLUnits;
   return newTransform;
+}
+
+/**
+ * Copy projection from one transform to another. This only applies to mapbox-gl transforms
+ * @param src the transform to copy projection settings from
+ * @param dest to transform to copy projection settings to
+ */
+export function syncProjection(src: Transform, dest: Transform): void {
+  if (!src.getProjection) {
+    return;
+  }
+  const srcProjection = src.getProjection();
+  const destProjection = dest.getProjection();
+
+  if (!deepEqual(srcProjection, destProjection)) {
+    dest.setProjection(srcProjection);
+  }
 }
 
 /**
