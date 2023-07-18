@@ -1,16 +1,20 @@
 # Types
 
-The following types can be imported from `react-map-gl` when using TypeScript.
+The following types can be imported from `react-map-gl` | `react-map-gl/maplibre` when using TypeScript.
 
 ## Components
 
 #### MapboxMap
 
-A [mapboxgl.Map](https://docs.mapbox.com/mapbox-gl-js/api/map/) instance.
+A [mapboxgl.Map](https://docs.mapbox.com/mapbox-gl-js/api/map/) instance. Avaliable via the `react-map-gl` import.
+
+#### MaplibreMap
+
+A [maplibregl.Map](hhttps://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/) instance. Avaliable via the `react-map-gl/maplibre` import.
 
 #### IControl
 
-A [mapboxgl.IControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#icontrol) implementation.
+A [mapboxgl.IControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#icontrol) | [maplibregl.IControl](https://maplibre.org/maplibre-gl-js/docs/API/interfaces/maplibregl.IControl/) implementation.
 
 #### CustomLayerInterface
 
@@ -194,7 +198,7 @@ See [RequestParameters](https://docs.mapbox.com/mapbox-gl-js/api/properties/#req
 
 #### LngLat
 
-A [mapboxgl.LngLat](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglat) object.
+A [mapboxgl.LngLat](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglat) | [maplibregl.LngLat](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.LngLat/) object.
 
 #### LngLatLike
 
@@ -202,7 +206,7 @@ A [LngLat](#lnglat) object, an array of two numbers representing longitude and l
 
 #### LngLatBounds
 
-A [mapboxgl.LngLatBounds](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatbounds) object.
+A [mapboxgl.LngLatBounds](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatbounds) | [maplibregl.LngLatBounds](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.LngLatBounds/) object.
 
 #### LngLatBoundsLike
 
@@ -241,19 +245,19 @@ The following are implementations of source types that could be retrieved with [
 
 #### GeoJSONSource
 
-A source containing GeoJSON. See [GeoJSONSource](https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource).
+A source containing GeoJSON. See [(Mapbox) GeoJSONSource](https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource) | [maplibregl.GeoJSONSource](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.GeoJSONSource/).
 
 #### VideoSource
 
-A source containing video. See [VideoSource](https://docs.mapbox.com/mapbox-gl-js/api/sources/#videosource).
+A source containing video. See [(Mapbox) VideoSource](https://docs.mapbox.com/mapbox-gl-js/api/sources/#videosource) | [maplibregl.VideoSource](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.VideoSource/).
 
 #### ImageSource
 
-A source containing image. See [ImageSource](https://docs.mapbox.com/mapbox-gl-js/api/sources/#imagesource).
+A source containing image. See [(Mapbox) ImageSource](https://docs.mapbox.com/mapbox-gl-js/api/sources/#imagesource) | [maplibregl.ImageSource](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.ImageSource/).
 
 #### CanvasSource
 
-A source containing the contents of an HTML canvas. See [CanvasSource](https://docs.mapbox.com/mapbox-gl-js/api/sources/#canvassource).
+A source containing the contents of an HTML canvas. See [(Mapbox) CanvasSource](https://docs.mapbox.com/mapbox-gl-js/api/sources/#canvassource) | [maplibregl.CanvasSource](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.CanvasSource/).
 
 #### VectorTileSource
 
@@ -263,10 +267,14 @@ A source containing vector tiles in [Mapbox Vector Tile format](https://docs.map
 
 #### MapboxEvent
 
+_Deprecated as of v7.1_ — Use [MapEvent](#mapevent) instead.
+
+#### MapEvent
+
 An object with the following fields:
 
 - `type`: string - Event type
-- `target`: [MapboxMap](#mapboxmap) - The map instance that fired the event
+- `target`: [MapboxMap](#mapboxmap) | [MaplibreMap](#maplibremap) - The map instance that fired the event
 - `originalEvent?`: [Event](https://developer.mozilla.org/en-US/docs/Web/API/Event)
 
 #### MapLayerMouseEvent
@@ -274,7 +282,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: [MapboxMap](#mapboxmap)
+- `target`: [MapboxMap](#mapboxmap) | [MaplibreMap](#maplibremap)
 - `originalEvent?`: [MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
 - `point`: [Point](#point)
 - `lngLat`: [LngLat](#lnglat)
@@ -287,7 +295,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: [MapboxMap](#mapboxmap)
+- `target`: [MapboxMap](#mapboxmap) | [MaplibreMap](#maplibremap)
 - `originalEvent?`: [WheelEvent](https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent)
 - `preventDefault`: () => void
 - `defaultPrevented`: boolean
@@ -297,7 +305,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: [MapboxMap](#mapboxmap)
+- `target`: [MapboxMap](#mapboxmap) | [MaplibreMap](#maplibremap)
 - `originalEvent?`: [TouchEvent](https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent)
 - `point`: [Point](#point)
 - `lngLat`: [LngLat](#lnglat)
@@ -312,15 +320,19 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string - Event type
-- `target`: [MapboxMap](#mapboxmap)
+- `target`: [MapboxMap](#mapboxmap) | [MaplibreMap](#maplibremap)
 - `viewState`: [ViewState](#viewstate) - the next view state that the camera wants to change to based on user input or transition.
 
 #### MapBoxZoomEvent
 
+_Deprecated as of v7.1_ — Use [MapZoomEvent](#mapzoomevent) instead.
+
+#### MapZoomEvent
+
 An object with the following fields:
 
 - `type`: string
-- `target`: [MapboxMap](#mapboxmap)
+- `target`: [MapboxMap](#mapboxmap) | [MaplibreMap](#maplibremap)
 - `originalEvent?`: [MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
 - `boxZoomBounds`: [LngLatBounds](#lnglatbounds)
 
@@ -329,7 +341,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: [MapboxMap](#mapboxmap)
+- `target`: [MapboxMap](#mapboxmap) | [MaplibreMap](#maplibremap)
 - `dataType`: 'style'
 
 #### MapSourceDataEvent
@@ -337,7 +349,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: [MapboxMap](#mapboxmap)
+- `target`: [MapboxMap](#mapboxmap) | [MaplibreMap](#maplibremap)
 - `dataType`: 'source'
 - `isSourceLoaded`: boolean
 - `source`: string
@@ -360,15 +372,15 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: [MapboxMap](#mapboxmap)
-- `target`: [mapboxgl.GeolocateControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol)
+- `target`: [MapboxMap](#mapboxmap) | [MaplibreMap](#maplibremap)
+- `target`: [mapboxgl.GeolocateControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [maplibregl.GeolocateControl](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.GeolocateControl/)
 
 #### GeolocateResultEvent
 
 An object with the following fields:
 
 - `type`: string
-- `target`: [mapboxgl.GeolocateControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol)
+- `target`: [mapboxgl.GeolocateControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [maplibregl.GeolocateControl](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.GeolocateControl/)
 - `coords`: [GeolocationCoordinates](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationCoordinates) - the current location.
 - `timestamp`: number - the time at which the location was retrieved.
 
@@ -377,7 +389,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: [mapboxgl.GeolocateControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol)
+- `target`: [mapboxgl.GeolocateControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [maplibregl.GeolocateControl](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.GeolocateControl/)
 - `code`: PERMISSION_DENIED | POSITION_UNAVAILABLE | TIMEOUT - see [GeolocationPositionError](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError)
 - `message`: string - the details of the error. Specifications note that this is primarily intended for debugging use and not to be shown directly in a user interface.
 
@@ -386,7 +398,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: [mapboxgl.Marker](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker)
+- `target`: [mapboxgl.Marker](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [maplibregl.Marker](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Marker/)
 - `lngLat`: [LngLat](#lnglat) - the new location of the marker
 
 #### PopupEvent

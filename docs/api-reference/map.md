@@ -223,7 +223,7 @@ If `true`, keyboard shortcuts are enabled (see [KeyboardHandler](https://docs.ma
 
 Default: `true`
 
-If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to  [ScrollZoomHandler#enable](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler).
+If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to [ScrollZoomHandler#enable](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler).
 
 #### `touchPitch`: boolean {#touchpitch}
 
@@ -251,19 +251,19 @@ See the [Callbacks](#callbacks) section for affected events.
 
 ### Callbacks
 
-#### `onResize`: (event: [MapboxEvent](./types.md#mapboxevent)) => void {#onresize}
+#### `onResize`: (event: [MapEvent](./types.md#mapevent)) => void {#onresize}
 
 Called when the map has been resized.
 
-#### `onLoad`: (event: [MapboxEvent](./types.md#mapboxevent)) => void {#onload}
+#### `onLoad`: (event: [MapEvent](./types.md#mapevent)) => void {#onload}
 
 Called after all necessary resources have been downloaded and the first visually complete rendering of the map has occurred.
 
-#### `onRender`: (event: [MapboxEvent](./types.md#mapboxevent)) => void {#onrender}
+#### `onRender`: (event: [MapEvent](./types.md#mapevent)) => void {#onrender}
 
 Called whenever the map is drawn to the screen.
 
-#### `onIdle`: (event: [MapboxEvent](./types.md#mapboxevent)) => void {#onidle}
+#### `onIdle`: (event: [MapEvent](./types.md#mapevent)) => void {#onidle}
 
 Called after the last frame rendered before the map enters an "idle" state:
 
@@ -271,7 +271,7 @@ Called after the last frame rendered before the map enters an "idle" state:
 - All currently requested tiles have loaded
 - All fade/transition animations have completed
 
-#### `onRemove`: (event: [MapboxEvent](./types.md#mapboxevent)) => void {#onremove}
+#### `onRemove`: (event: [MapEvent](./types.md#mapevent)) => void {#onremove}
 
 Called when the map has been removed.
 
@@ -456,7 +456,7 @@ Called when one of the map's sources loads or changes, including if a tile belon
 
 ### Other options
 
-The following props, along with any options of the `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) not listed above, can be specified to construct the underlying `Map` instance. 
+The following props, along with any options of the `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) not listed above, can be specified to construct the underlying `Map` instance.
 
 Note: props in this section are not reactive. They are only used once when the Map instance is constructed.
 
@@ -494,7 +494,7 @@ function App() {
 Or to load a pre-bundled version of the library:
 
 ```html title="index.html"
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.0/mapbox-gl.js" ></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.0/mapbox-gl.js"></script>
 ```
 
 ```tsx title="app.tsx"
