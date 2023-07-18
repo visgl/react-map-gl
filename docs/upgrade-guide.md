@@ -18,7 +18,7 @@ function App() {
 ```
 
 ```tsx title="map-v7.1.tsx"
-import Map from 'react-map-gl/maplibre';
+import Map from 'react-map-gl/maplibre'; // <- mind the updated import
 
 function App() {
   return <Map
