@@ -2,6 +2,10 @@
 
 # Version 7.1
 
+## 7.1.3 (Jul 20, 2023)
+
+- Fix globe/mercator projection transition (#2229)
+
 ## 7.1.2 (Jul 6, 2023)
 
 - Fix crash updating settings (#2222)
