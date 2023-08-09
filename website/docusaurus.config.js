@@ -28,7 +28,7 @@ const config = {
           path: '../docs',
           sidebarPath: resolve('./src/docs-sidebar.js'),
           // Point to to the website directory in your repo.
-          editUrl: 'https://github.com/visgl/deck.gl/tree/master/website'
+          editUrl: 'https://github.com/visgl/react-map-gl/tree/master/docs'
         },
         theme: {
           customCss: [
