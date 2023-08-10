@@ -1,4 +1,4 @@
-import {ImmutableLike, MapboxStyle} from '../types';
+import {ImmutableLike, MapStyle} from '../types';
 
 const refProps = ['type', 'source', 'source-layer', 'minzoom', 'maxzoom', 'filter', 'layout'];
 
@@ -6,8 +6,8 @@ const refProps = ['type', 'source', 'source-layer', 'minzoom', 'maxzoom', 'filte
 // If immutable - convert to plain object
 // Work around some issues in older styles that would fail Mapbox's diffing
 export function normalizeStyle(
-  style: string | MapboxStyle | ImmutableLike<MapboxStyle>
-): string | MapboxStyle {
+  style: string | MapStyle | ImmutableLike<MapStyle>
+): string | MapStyle {
   if (!style) {
     return null;
   }

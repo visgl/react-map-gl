@@ -1,5 +1,5 @@
 import type GeoJSON from 'geojson';
-import type {AnyLayer} from './style-spec';
+import type {AnyLayer} from './style-spec-maplibre';
 
 /* Data types */
 
@@ -13,7 +13,7 @@ export type PointLike = Point | [number, number];
 export interface LngLat {
   lng: number;
   lat: number;
-  
+
   wrap(): LngLat;
   /** Return a LngLat as an array */
   toArray(): number[];

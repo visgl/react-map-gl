@@ -12,6 +12,7 @@ import type {
   NavigationControl as MaplibreNavigationControl,
   ScaleControl as MaplibreScaleControl
 } from 'maplibre-gl';
+import {MapboxStyle, AnyLayer, AnySource} from './types/style-spec-maplibre';
 
 import {default as _Map, MapProps as _MapProps} from './components/map';
 import {default as _Marker, MarkerProps as _MarkerProps} from './components/marker';
@@ -36,6 +37,8 @@ import {
   default as _ScaleControl,
   ScaleControlProps as _ScaleControlProps
 } from './components/scale-control';
+import {default as _Layer, LayerProps as _LayerProps} from './components/layer';
+import {default as _Source, SourceProps as _SourceProps} from './components/source';
 import {useMap as _useMap} from './components/use-map';
 import type {MapRef as _MapRef} from './mapbox/create-ref';
 import type * as events from './types/events';
@@ -44,7 +47,7 @@ export function useMap() {
   return _useMap<MaplibreMap>();
 }
 
-export type MapProps = _MapProps<MapOptions, MaplibreMap>;
+export type MapProps = _MapProps<MapOptions, MapboxStyle, MaplibreMap>;
 export type MapRef = _MapRef<MaplibreMap>;
 const mapLib = import('maplibre-gl');
 export const Map = (() => {
@@ -96,8 +99,12 @@ export const ScaleControl = _ScaleControl as (
   props: ScaleControlProps
 ) => React.ReactElement | null;
 
-export {default as Source} from './components/source';
-export {default as Layer} from './components/layer';
+export type LayerProps = _LayerProps<AnyLayer>;
+export const Layer = _Layer as (props: LayerProps) => React.ReactElement | null;
+
+export type SourceProps = _SourceProps<AnySource>;
+export const Source = _Source as (props: SourceProps) => React.ReactElement | null;
+
 export {default as useControl} from './components/use-control';
 export {MapProvider} from './components/use-map';
 
@@ -105,8 +112,7 @@ export default Map;
 
 // Types
 export * from './types/public';
-export type {SourceProps} from './components/source';
-export type {LayerProps} from './components/layer';
+export * from './types/style-spec-maplibre';
 
 // Events
 export type MapEvent = events.MapEvent<MaplibreMap>;

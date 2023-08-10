@@ -3,20 +3,25 @@ import {MapContext} from './map';
 import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
 
-import type {MapInstance, AnyLayer, CustomLayerInterface} from '../types';
+import type {MapInstance, CustomLayerInterface, ILayer} from '../types';
 
 // Omiting property from a union type, see
 // https://github.com/microsoft/TypeScript/issues/39556#issuecomment-656925230
 type OptionalId<T> = T extends {id: string} ? Omit<T, 'id'> & {id?: string} : T;
 type OptionalSource<T> = T extends {source: string} ? Omit<T, 'source'> & {source?: string} : T;
 
-export type LayerProps = OptionalSource<OptionalId<AnyLayer | CustomLayerInterface>> & {
+export type LayerProps<LayerT> = OptionalSource<OptionalId<LayerT>> & {
   /** If set, the layer will be inserted before the specified layer */
   beforeId?: string;
 };
 
 /* eslint-disable complexity, max-statements */
-function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps: LayerProps) {
+function updateLayer<LayerT extends ILayer>(
+  map: MapInstance,
+  id: string,
+  props: LayerProps<LayerT>,
+  prevProps: LayerProps<LayerT>
+) {
   assert(props.id === prevProps.id, 'layer id changed');
   assert(props.type === prevProps.type, 'layer type changed');
 
@@ -24,15 +29,7 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
     return;
   }
 
-  const {
-    layout = {},
-    paint = {},
-    // @ts-expect-error filter is not defined on some layer types
-    filter,
-    minzoom,
-    maxzoom,
-    beforeId
-  } = props;
+  const {layout = {}, paint = {}, filter, minzoom, maxzoom, beforeId} = props;
 
   if (beforeId !== prevProps.beforeId) {
     map.moveLayer(id, beforeId);
@@ -63,7 +60,7 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
       }
     }
   }
-  // @ts-expect-error filter is not defined on some layer types
+
   if (!deepEqual(filter, prevProps.filter)) {
     map.setFilter(id, filter);
   }
@@ -72,10 +69,14 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
   }
 }
 
-function createLayer(map: MapInstance, id: string, props: LayerProps) {
+function createLayer<LayerT extends ILayer>(
+  map: MapInstance,
+  id: string,
+  props: LayerProps<LayerT>
+) {
   // @ts-ignore
   if (map.style && map.style._loaded && (!('source' in props) || map.getSource(props.source))) {
-    const options: LayerProps = {...props, id};
+    const options: LayerProps<LayerT> = {...props, id};
     delete options.beforeId;
 
     // @ts-ignore
@@ -87,7 +88,7 @@ function createLayer(map: MapInstance, id: string, props: LayerProps) {
 
 let layerCounter = 0;
 
-function Layer(props: LayerProps) {
+function Layer<LayerT extends ILayer>(props: LayerProps<LayerT | CustomLayerInterface>) {
   const map = useContext(MapContext).map.getMap();
   const propsRef = useRef(props);
   const [, setStyleLoaded] = useState(0);

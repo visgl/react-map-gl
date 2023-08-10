@@ -6,7 +6,7 @@ import type {
   PopupInstance,
   GeolocateControlInstance
 } from './lib';
-import type {AnySource} from './style-spec';
+import type {AnySource} from './style-spec-maplibre';
 
 export interface MapEvent<SourceT extends Evented, OriginalEventT = undefined> {
   type: string;

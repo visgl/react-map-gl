@@ -14,10 +14,7 @@ import type {
   Point,
   PointLike,
   PaddingOptions,
-  Light,
-  Fog,
-  Terrain,
-  MapboxStyle,
+  MapStyle,
   ImmutableLike,
   LngLatBoundsLike,
   MapMouseEvent,
@@ -34,7 +31,10 @@ import type {
   MapInstanceInternal
 } from '../types';
 
-export type MapboxProps<MapT extends MapInstance = MapInstance> = Partial<ViewState> & {
+export type MapboxProps<
+  StyleT extends MapStyle = MapStyle,
+  MapT extends MapInstance = MapInstance
+> = Partial<ViewState> & {
   // Init options
   mapboxAccessToken?: string;
 
@@ -63,19 +63,19 @@ export type MapboxProps<MapT extends MapInstance = MapInstance> = Partial<ViewSt
   // Styling
 
   /** Mapbox style */
-  mapStyle?: string | MapboxStyle | ImmutableLike<MapboxStyle>;
+  mapStyle?: string | StyleT | ImmutableLike<StyleT>;
   /** Enable diffing when the map style changes
    * @default true
    */
   styleDiffing?: boolean;
   /** The fog property of the style. Must conform to the Fog Style Specification .
    * If `undefined` is provided, removes the fog from the map. */
-  fog?: Fog;
+  fog?: StyleT['fog'];
   /** Light properties of the map. */
-  light?: Light;
+  light?: StyleT['light'];
   /** Terrain property of the style. Must conform to the Terrain Style Specification .
    * If `undefined` is provided, removes terrain from the map. */
-  terrain?: Terrain;
+  terrain?: StyleT['terrain'];
 
   /** Default layers to query on pointer events */
   interactiveLayerIds?: string[];
@@ -130,7 +130,7 @@ export type MapboxProps<MapT extends MapInstance = MapInstance> = Partial<ViewSt
   onSourceData?: (e: MapSourceDataEvent<MapT>) => void;
 };
 
-const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as MapboxStyle;
+const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as MapStyle;
 
 const pointerEvents = {
   mousedown: 'onMouseDown',
@@ -203,12 +203,15 @@ const handlerNames = [
 /**
  * A wrapper for mapbox-gl's Map class
  */
-export default class Mapbox<MapT extends MapInstance = MapInstance> {
+export default class Mapbox<
+  StyleT extends MapStyle = MapStyle,
+  MapT extends MapInstance = MapInstance
+> {
   private _MapClass: {new (options: any): MapInstance};
   // mapboxgl.Map instance
   private _map: MapInstanceInternal<MapT> = null;
   // User-supplied props
-  props: MapboxProps<MapT>;
+  props: MapboxProps<StyleT, MapT>;
 
   // Mapbox map is stateful.
   // During method calls/user interactions, map.transform is mutated and
@@ -238,7 +241,7 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
 
   constructor(
     MapClass: {new (options: any): MapInstance},
-    props: MapboxProps<MapT>,
+    props: MapboxProps<StyleT, MapT>,
     container: HTMLDivElement
   ) {
     this._MapClass = MapClass;
@@ -254,7 +257,7 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
     return this._renderTransform;
   }
 
-  setProps(props: MapboxProps<MapT>) {
+  setProps(props: MapboxProps<StyleT, MapT>) {
     const oldProps = this.props;
     this.props = props;
 
@@ -276,11 +279,11 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
     }
   }
 
-  static reuse<MapT extends MapInstance>(
-    props: MapboxProps<MapT>,
+  static reuse<StyleT extends MapStyle, MapT extends MapInstance>(
+    props: MapboxProps<StyleT, MapT>,
     container: HTMLDivElement
-  ): Mapbox<MapT> {
-    const that = Mapbox.savedMaps.pop() as Mapbox<MapT>;
+  ): Mapbox<StyleT, MapT> {
+    const that = Mapbox.savedMaps.pop() as Mapbox<StyleT, MapT>;
     if (!that) {
       return null;
     }
@@ -461,7 +464,7 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
      @param {object} nextProps
      @returns {bool} true if size has changed
    */
-  _updateSize(nextProps: MapboxProps<MapT>): boolean {
+  _updateSize(nextProps: MapboxProps<StyleT, MapT>): boolean {
     // Check if size is controlled
     const {viewState} = nextProps;
     if (viewState) {
@@ -480,7 +483,7 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
      @param {bool} triggerEvents - should fire camera events
      @returns {bool} true if anything is changed
    */
-  _updateViewState(nextProps: MapboxProps<MapT>, triggerEvents: boolean): boolean {
+  _updateViewState(nextProps: MapboxProps<StyleT, MapT>, triggerEvents: boolean): boolean {
     if (this._internalUpdate) {
       return false;
     }
@@ -527,7 +530,10 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateSettings(nextProps: MapboxProps<MapT>, currProps: MapboxProps<MapT>): boolean {
+  _updateSettings(
+    nextProps: MapboxProps<StyleT, MapT>,
+    currProps: MapboxProps<StyleT, MapT>
+  ): boolean {
     const map = this._map;
     let changed = false;
     for (const propName of settingNames) {
@@ -545,7 +551,10 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
      @param {object} currProps
      @returns {bool} true if style is changed
    */
-  _updateStyle(nextProps: MapboxProps<MapT>, currProps: MapboxProps<MapT>): boolean {
+  _updateStyle(
+    nextProps: MapboxProps<StyleT, MapT>,
+    currProps: MapboxProps<StyleT, MapT>
+  ): boolean {
     if (nextProps.cursor !== currProps.cursor) {
       this._map.getCanvas().style.cursor = nextProps.cursor;
     }
@@ -569,7 +578,10 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateStyleComponents(nextProps: MapboxProps<MapT>, currProps: MapboxProps<MapT>): boolean {
+  _updateStyleComponents(
+    nextProps: MapboxProps<StyleT, MapT>,
+    currProps: MapboxProps<StyleT, MapT>
+  ): boolean {
     const map = this._map;
     let changed = false;
     if (map.isStyleLoaded()) {
@@ -600,7 +612,10 @@ export default class Mapbox<MapT extends MapInstance = MapInstance> {
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateHandlers(nextProps: MapboxProps<MapT>, currProps: MapboxProps<MapT>): boolean {
+  _updateHandlers(
+    nextProps: MapboxProps<StyleT, MapT>,
+    currProps: MapboxProps<StyleT, MapT>
+  ): boolean {
     const map = this._map;
     let changed = false;
     for (const propName of handlerNames) {
