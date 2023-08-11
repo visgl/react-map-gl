@@ -116,7 +116,7 @@ export * from './types/public';
 export * from './types/style-spec-mapbox';
 
 // Events
-export {
+export type {
   MapEvent,
   MapMouseEvent,
   MapLayerMouseEvent,
