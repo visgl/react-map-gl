@@ -2,7 +2,7 @@
 import test from 'tape-promise/tape';
 import * as React from 'react';
 import Map from 'react-map-gl';
-import {render, unmountComponentAtNode} from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import mapboxgl from 'mapbox-gl';
 
 import TEST_CASES from './test-cases';
@@ -29,8 +29,9 @@ async function runTestCase({Component = Map, props}) {
   document.body.append(container);
 
   return new Promise((resolve, reject) => {
+    const root = createRoot(container);
     const unmount = () => {
-      unmountComponentAtNode(container);
+      root.unmount();
       container.remove();
     };
     const onLoad = ({target}) => {
@@ -55,7 +56,7 @@ async function runTestCase({Component = Map, props}) {
       reject(evt.error);
     };
 
-    render(<Component mapLib={mapboxgl} {...props} onLoad={onLoad} onError={onError} />, container);
+    root.render(<Component mapLib={mapboxgl} {...props} onLoad={onLoad} onError={onError} />);
   });
 }
 
