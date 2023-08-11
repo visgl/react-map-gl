@@ -1,5 +1,4 @@
 import type GeoJSON from 'geojson';
-import type {AnyLayer} from './style-spec-maplibre';
 
 /* Data types */
 
@@ -102,7 +101,7 @@ export interface ImmutableLike<T> {
 }
 
 export type MapGeoJSONFeature = GeoJSON.Feature<GeoJSON.Geometry> & {
-  layer: AnyLayer;
+  layer: any;
   source: string;
   sourceLayer: string;
   state: {[key: string]: any};

@@ -42,17 +42,18 @@ import {default as _Source, SourceProps as _SourceProps} from './components/sour
 import {useMap as _useMap} from './components/use-map';
 import type {MapRef as _MapRef} from './mapbox/create-ref';
 import type * as events from './types/events';
+import type {MapCallbacks} from './types/events-mapbox';
 
 export function useMap() {
   return _useMap<MapboxMap>();
 }
 
-export type MapProps = _MapProps<MapboxOptions, MapboxStyle, MapboxMap>;
+export type MapProps = _MapProps<MapboxOptions, MapboxStyle, MapCallbacks, MapboxMap>;
 export type MapRef = _MapRef<MapboxMap>;
 const mapLib = import('mapbox-gl');
 export const Map = (() => {
   return React.forwardRef(function Map(props: MapProps, ref: React.Ref<MapRef>) {
-    return _Map(props, ref, mapLib);
+    return _Map<MapboxOptions, MapboxStyle, MapCallbacks, MapboxMap>(props, ref, mapLib);
   });
 })();
 
@@ -115,17 +116,19 @@ export * from './types/public';
 export * from './types/style-spec-mapbox';
 
 // Events
-export type MapEvent = events.MapEvent<MapboxMap>;
-export type ErrorEvent = events.ErrorEvent<MapboxMap>;
-export type MapStyleDataEvent = events.MapStyleDataEvent<MapboxMap>;
-export type MapSourceDataEvent = events.MapSourceDataEvent<MapboxMap>;
-export type MapMouseEvent = events.MapMouseEvent<MapboxMap>;
-export type MapLayerMouseEvent = events.MapLayerMouseEvent<MapboxMap>;
-export type MapTouchEvent = events.MapTouchEvent<MapboxMap>;
-export type MapLayerTouchEvent = events.MapLayerTouchEvent<MapboxMap>;
-export type MapWheelEvent = events.MapWheelEvent<MapboxMap>;
-export type MapBoxZoomEvent = events.MapBoxZoomEvent<MapboxMap>;
-export type ViewStateChangeEvent = events.ViewStateChangeEvent<MapboxMap>;
+export {
+  MapEvent,
+  MapMouseEvent,
+  MapLayerMouseEvent,
+  MapTouchEvent,
+  MapLayerTouchEvent,
+  MapStyleDataEvent,
+  MapSourceDataEvent,
+  MapWheelEvent,
+  MapBoxZoomEvent,
+  ErrorEvent,
+  ViewStateChangeEvent
+} from './types/events-mapbox';
 export type PopupEvent = events.PopupEvent<MapboxPopup>;
 export type MarkerEvent = events.MarkerEvent<MapboxMarker>;
 export type MarkerDragEvent = events.MarkerDragEvent<MapboxMarker>;

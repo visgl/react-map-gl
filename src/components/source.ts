@@ -65,7 +65,9 @@ function updateSource<SourceT extends ISource>(
   const type = props.type;
 
   if (type === 'geojson') {
-    (source as GeoJSONSourceImplementation).setData((props as unknown as GeoJSONSource).data as any);
+    (source as GeoJSONSourceImplementation).setData(
+      (props as unknown as GeoJSONSource).data as any
+    );
   } else if (type === 'image') {
     (source as ImageSourceImplemtation).updateImage({
       url: (props as unknown as ImageSource).url,

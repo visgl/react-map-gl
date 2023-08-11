@@ -42,17 +42,18 @@ import {default as _Source, SourceProps as _SourceProps} from './components/sour
 import {useMap as _useMap} from './components/use-map';
 import type {MapRef as _MapRef} from './mapbox/create-ref';
 import type * as events from './types/events';
+import type {MapCallbacks} from './types/events-maplibre';
 
 export function useMap() {
   return _useMap<MaplibreMap>();
 }
 
-export type MapProps = _MapProps<MapOptions, MapboxStyle, MaplibreMap>;
+export type MapProps = _MapProps<MapOptions, MapboxStyle, MapCallbacks, MaplibreMap>;
 export type MapRef = _MapRef<MaplibreMap>;
 const mapLib = import('maplibre-gl');
 export const Map = (() => {
   return React.forwardRef(function Map(props: MapProps, ref: React.Ref<MapRef>) {
-    return _Map(props, ref, mapLib);
+    return _Map<MapOptions, MapboxStyle, MapCallbacks, MaplibreMap>(props, ref, mapLib);
   });
 })();
 
@@ -115,17 +116,19 @@ export * from './types/public';
 export * from './types/style-spec-maplibre';
 
 // Events
-export type MapEvent = events.MapEvent<MaplibreMap>;
-export type ErrorEvent = events.ErrorEvent<MaplibreMap>;
-export type MapStyleDataEvent = events.MapStyleDataEvent<MaplibreMap>;
-export type MapSourceDataEvent = events.MapSourceDataEvent<MaplibreMap>;
-export type MapMouseEvent = events.MapMouseEvent<MaplibreMap>;
-export type MapLayerMouseEvent = events.MapLayerMouseEvent<MaplibreMap>;
-export type MapTouchEvent = events.MapTouchEvent<MaplibreMap>;
-export type MapLayerTouchEvent = events.MapLayerTouchEvent<MaplibreMap>;
-export type MapWheelEvent = events.MapWheelEvent<MaplibreMap>;
-export type MapBoxZoomEvent = events.MapBoxZoomEvent<MaplibreMap>;
-export type ViewStateChangeEvent = events.ViewStateChangeEvent<MaplibreMap>;
+export {
+  MapEvent,
+  MapMouseEvent,
+  MapLayerMouseEvent,
+  MapTouchEvent,
+  MapLayerTouchEvent,
+  MapStyleDataEvent,
+  MapSourceDataEvent,
+  MapWheelEvent,
+  MapBoxZoomEvent,
+  ErrorEvent,
+  ViewStateChangeEvent
+} from './types/events-maplibre';
 export type PopupEvent = events.PopupEvent<MaplibrePopup>;
 export type MarkerEvent = events.MarkerEvent<MaplibreMarker>;
 export type MarkerDragEvent = events.MarkerDragEvent<MaplibreMarker>;

@@ -17,15 +17,10 @@ import type {
   MapStyle,
   ImmutableLike,
   LngLatBoundsLike,
-  MapMouseEvent,
-  MapLayerMouseEvent,
-  MapLayerTouchEvent,
-  MapWheelEvent,
-  MapBoxZoomEvent,
-  MapStyleDataEvent,
-  MapSourceDataEvent,
+  Callbacks,
   MapEvent,
   ErrorEvent,
+  MapMouseEvent,
   MapGeoJSONFeature,
   MapInstance,
   MapInstanceInternal
@@ -33,102 +28,56 @@ import type {
 
 export type MapboxProps<
   StyleT extends MapStyle = MapStyle,
-  MapT extends MapInstance = MapInstance
-> = Partial<ViewState> & {
-  // Init options
-  mapboxAccessToken?: string;
+  CallbacksT extends Callbacks = {}
+> = Partial<ViewState> &
+  CallbacksT & {
+    // Init options
+    mapboxAccessToken?: string;
 
-  /** Camera options used when constructing the Map instance */
-  initialViewState?: Partial<ViewState> & {
-    /** The initial bounds of the map. If bounds is specified, it overrides longitude, latitude and zoom options. */
-    bounds?: LngLatBoundsLike;
-    /** A fitBounds options object to use only when setting the bounds option. */
-    fitBoundsOptions?: {
-      offset?: PointLike;
-      minZoom?: number;
-      maxZoom?: number;
-      padding?: number | PaddingOptions;
+    /** Camera options used when constructing the Map instance */
+    initialViewState?: Partial<ViewState> & {
+      /** The initial bounds of the map. If bounds is specified, it overrides longitude, latitude and zoom options. */
+      bounds?: LngLatBoundsLike;
+      /** A fitBounds options object to use only when setting the bounds option. */
+      fitBoundsOptions?: {
+        offset?: PointLike;
+        minZoom?: number;
+        maxZoom?: number;
+        padding?: number | PaddingOptions;
+      };
     };
+
+    /** If provided, render into an external WebGL context */
+    gl?: WebGLRenderingContext;
+
+    /** For external controller to override the camera state */
+    viewState?: ViewState & {
+      width: number;
+      height: number;
+    };
+
+    // Styling
+
+    /** Mapbox style */
+    mapStyle?: string | StyleT | ImmutableLike<StyleT>;
+    /** Enable diffing when the map style changes
+     * @default true
+     */
+    styleDiffing?: boolean;
+    /** The fog property of the style. Must conform to the Fog Style Specification .
+     * If `undefined` is provided, removes the fog from the map. */
+    fog?: StyleT['fog'];
+    /** Light properties of the map. */
+    light?: StyleT['light'];
+    /** Terrain property of the style. Must conform to the Terrain Style Specification .
+     * If `undefined` is provided, removes terrain from the map. */
+    terrain?: StyleT['terrain'];
+
+    /** Default layers to query on pointer events */
+    interactiveLayerIds?: string[];
+    /** CSS cursor */
+    cursor?: string;
   };
-
-  /** If provided, render into an external WebGL context */
-  gl?: WebGLRenderingContext;
-
-  /** For external controller to override the camera state */
-  viewState?: ViewState & {
-    width: number;
-    height: number;
-  };
-
-  // Styling
-
-  /** Mapbox style */
-  mapStyle?: string | StyleT | ImmutableLike<StyleT>;
-  /** Enable diffing when the map style changes
-   * @default true
-   */
-  styleDiffing?: boolean;
-  /** The fog property of the style. Must conform to the Fog Style Specification .
-   * If `undefined` is provided, removes the fog from the map. */
-  fog?: StyleT['fog'];
-  /** Light properties of the map. */
-  light?: StyleT['light'];
-  /** Terrain property of the style. Must conform to the Terrain Style Specification .
-   * If `undefined` is provided, removes terrain from the map. */
-  terrain?: StyleT['terrain'];
-
-  /** Default layers to query on pointer events */
-  interactiveLayerIds?: string[];
-  /** CSS cursor */
-  cursor?: string;
-
-  // Callbacks
-  onMouseDown?: (e: MapLayerMouseEvent<MapT>) => void;
-  onMouseUp?: (e: MapLayerMouseEvent<MapT>) => void;
-  onMouseOver?: (e: MapLayerMouseEvent<MapT>) => void;
-  onMouseMove?: (e: MapLayerMouseEvent<MapT>) => void;
-  onClick?: (e: MapLayerMouseEvent<MapT>) => void;
-  onDblClick?: (e: MapLayerMouseEvent<MapT>) => void;
-  onMouseEnter?: (e: MapLayerMouseEvent<MapT>) => void;
-  onMouseLeave?: (e: MapLayerMouseEvent<MapT>) => void;
-  onMouseOut?: (e: MapLayerMouseEvent<MapT>) => void;
-  onContextMenu?: (e: MapLayerMouseEvent<MapT>) => void;
-  onTouchStart?: (e: MapLayerTouchEvent<MapT>) => void;
-  onTouchEnd?: (e: MapLayerTouchEvent<MapT>) => void;
-  onTouchMove?: (e: MapLayerTouchEvent<MapT>) => void;
-  onTouchCancel?: (e: MapLayerTouchEvent<MapT>) => void;
-
-  onMoveStart?: (e: ViewStateChangeEvent<MapT>) => void;
-  onMove?: (e: ViewStateChangeEvent<MapT>) => void;
-  onMoveEnd?: (e: ViewStateChangeEvent<MapT>) => void;
-  onDragStart?: (e: ViewStateChangeEvent<MapT>) => void;
-  onDrag?: (e: ViewStateChangeEvent<MapT>) => void;
-  onDragEnd?: (e: ViewStateChangeEvent<MapT>) => void;
-  onZoomStart?: (e: ViewStateChangeEvent<MapT>) => void;
-  onZoom?: (e: ViewStateChangeEvent<MapT>) => void;
-  onZoomEnd?: (e: ViewStateChangeEvent<MapT>) => void;
-  onRotateStart?: (e: ViewStateChangeEvent<MapT>) => void;
-  onRotate?: (e: ViewStateChangeEvent<MapT>) => void;
-  onRotateEnd?: (e: ViewStateChangeEvent<MapT>) => void;
-  onPitchStart?: (e: ViewStateChangeEvent<MapT>) => void;
-  onPitch?: (e: ViewStateChangeEvent<MapT>) => void;
-  onPitchEnd?: (e: ViewStateChangeEvent<MapT>) => void;
-
-  onWheel?: (e: MapWheelEvent<MapT>) => void;
-  onBoxZoomStart?: (e: MapBoxZoomEvent<MapT>) => void;
-  onBoxZoomEnd?: (e: MapBoxZoomEvent<MapT>) => void;
-  onBoxZoomCancel?: (e: MapBoxZoomEvent<MapT>) => void;
-
-  onResize?: (e: MapEvent<MapT>) => void;
-  onLoad?: (e: MapEvent<MapT>) => void;
-  onRender?: (e: MapEvent<MapT>) => void;
-  onIdle?: (e: MapEvent<MapT>) => void;
-  onError?: (e: ErrorEvent<MapT>) => void;
-  onRemove?: (e: MapEvent<MapT>) => void;
-  onData?: (e: MapStyleDataEvent<MapT> | MapSourceDataEvent<MapT>) => void;
-  onStyleData?: (e: MapStyleDataEvent<MapT>) => void;
-  onSourceData?: (e: MapSourceDataEvent<MapT>) => void;
-};
 
 const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as MapStyle;
 
@@ -205,13 +154,14 @@ const handlerNames = [
  */
 export default class Mapbox<
   StyleT extends MapStyle = MapStyle,
+  CallbacksT extends Callbacks = {},
   MapT extends MapInstance = MapInstance
 > {
   private _MapClass: {new (options: any): MapInstance};
   // mapboxgl.Map instance
   private _map: MapInstanceInternal<MapT> = null;
   // User-supplied props
-  props: MapboxProps<StyleT, MapT>;
+  props: MapboxProps<StyleT, CallbacksT>;
 
   // Mapbox map is stateful.
   // During method calls/user interactions, map.transform is mutated and
@@ -241,7 +191,7 @@ export default class Mapbox<
 
   constructor(
     MapClass: {new (options: any): MapInstance},
-    props: MapboxProps<StyleT, MapT>,
+    props: MapboxProps<StyleT, CallbacksT>,
     container: HTMLDivElement
   ) {
     this._MapClass = MapClass;
@@ -257,7 +207,7 @@ export default class Mapbox<
     return this._renderTransform;
   }
 
-  setProps(props: MapboxProps<StyleT, MapT>) {
+  setProps(props: MapboxProps<StyleT, CallbacksT>) {
     const oldProps = this.props;
     this.props = props;
 
@@ -279,11 +229,11 @@ export default class Mapbox<
     }
   }
 
-  static reuse<StyleT extends MapStyle, MapT extends MapInstance>(
-    props: MapboxProps<StyleT, MapT>,
+  static reuse<StyleT extends MapStyle, CallbacksT extends Callbacks, MapT extends MapInstance>(
+    props: MapboxProps<StyleT, CallbacksT>,
     container: HTMLDivElement
-  ): Mapbox<StyleT, MapT> {
-    const that = Mapbox.savedMaps.pop() as Mapbox<StyleT, MapT>;
+  ): Mapbox<StyleT, CallbacksT, MapT> {
+    const that = Mapbox.savedMaps.pop() as Mapbox<StyleT, CallbacksT, MapT>;
     if (!that) {
       return null;
     }
@@ -464,7 +414,7 @@ export default class Mapbox<
      @param {object} nextProps
      @returns {bool} true if size has changed
    */
-  _updateSize(nextProps: MapboxProps<StyleT, MapT>): boolean {
+  _updateSize(nextProps: MapboxProps<StyleT>): boolean {
     // Check if size is controlled
     const {viewState} = nextProps;
     if (viewState) {
@@ -483,7 +433,7 @@ export default class Mapbox<
      @param {bool} triggerEvents - should fire camera events
      @returns {bool} true if anything is changed
    */
-  _updateViewState(nextProps: MapboxProps<StyleT, MapT>, triggerEvents: boolean): boolean {
+  _updateViewState(nextProps: MapboxProps<StyleT>, triggerEvents: boolean): boolean {
     if (this._internalUpdate) {
       return false;
     }
@@ -530,10 +480,7 @@ export default class Mapbox<
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateSettings(
-    nextProps: MapboxProps<StyleT, MapT>,
-    currProps: MapboxProps<StyleT, MapT>
-  ): boolean {
+  _updateSettings(nextProps: MapboxProps<StyleT>, currProps: MapboxProps<StyleT>): boolean {
     const map = this._map;
     let changed = false;
     for (const propName of settingNames) {
@@ -551,10 +498,7 @@ export default class Mapbox<
      @param {object} currProps
      @returns {bool} true if style is changed
    */
-  _updateStyle(
-    nextProps: MapboxProps<StyleT, MapT>,
-    currProps: MapboxProps<StyleT, MapT>
-  ): boolean {
+  _updateStyle(nextProps: MapboxProps<StyleT>, currProps: MapboxProps<StyleT>): boolean {
     if (nextProps.cursor !== currProps.cursor) {
       this._map.getCanvas().style.cursor = nextProps.cursor;
     }
@@ -578,10 +522,7 @@ export default class Mapbox<
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateStyleComponents(
-    nextProps: MapboxProps<StyleT, MapT>,
-    currProps: MapboxProps<StyleT, MapT>
-  ): boolean {
+  _updateStyleComponents(nextProps: MapboxProps<StyleT>, currProps: MapboxProps<StyleT>): boolean {
     const map = this._map;
     let changed = false;
     if (map.isStyleLoaded()) {
@@ -612,10 +553,7 @@ export default class Mapbox<
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateHandlers(
-    nextProps: MapboxProps<StyleT, MapT>,
-    currProps: MapboxProps<StyleT, MapT>
-  ): boolean {
+  _updateHandlers(nextProps: MapboxProps<StyleT>, currProps: MapboxProps<StyleT>): boolean {
     const map = this._map;
     let changed = false;
     for (const propName of handlerNames) {
@@ -682,7 +620,7 @@ export default class Mapbox<
     }
   }
 
-  _onPointerEvent = (e: MapLayerMouseEvent<MapT> | MapLayerTouchEvent<MapT>) => {
+  _onPointerEvent = (e: MapMouseEvent<MapT> | MapMouseEvent<MapT>) => {
     if (e.type === 'mousemove' || e.type === 'mouseout') {
       this._updateHover(e);
     }

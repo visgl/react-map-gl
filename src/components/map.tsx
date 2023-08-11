@@ -8,7 +8,7 @@ import createRef, {MapRef} from '../mapbox/create-ref';
 import type {CSSProperties} from 'react';
 import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
 import setGlobals, {GlobalSettings} from '../utils/set-globals';
-import type {MapLib, MapInstance, MapStyle} from '../types';
+import type {MapLib, MapInstance, MapStyle, Callbacks} from '../types';
 
 export type MapContextValue<MapT extends MapInstance = MapInstance> = {
   mapLib: MapLib<MapT>;
@@ -25,9 +25,10 @@ type MapInitOptions<MapOptions> = Omit<
 export type MapProps<
   MapOptions,
   StyleT extends MapStyle,
+  CallbacksT extends Callbacks,
   MapT extends MapInstance
 > = MapInitOptions<MapOptions> &
-  MapboxProps<StyleT, MapT> &
+  MapboxProps<StyleT, CallbacksT> &
   GlobalSettings & {
     mapLib?: MapLib<MapT> | Promise<MapLib<MapT>>;
     reuseMaps?: boolean;
@@ -38,13 +39,18 @@ export type MapProps<
     children?: any;
   };
 
-export default function Map<MapOptions, StyleT extends MapStyle, MapT extends MapInstance>(
-  props: MapProps<MapOptions, StyleT, MapT>,
+export default function Map<
+  MapOptions,
+  StyleT extends MapStyle,
+  CallbacksT extends Callbacks,
+  MapT extends MapInstance
+>(
+  props: MapProps<MapOptions, StyleT, CallbacksT, MapT>,
   ref: React.Ref<MapRef<MapT>>,
   defaultLib: MapLib<MapT> | Promise<MapLib<MapT>>
 ) {
   const mountedMapsContext = useContext(MountedMapsContext);
-  const [mapInstance, setMapInstance] = useState<Mapbox<StyleT, MapT>>(null);
+  const [mapInstance, setMapInstance] = useState<Mapbox<StyleT, CallbacksT, MapT>>(null);
   const containerRef = useRef();
 
   const {current: contextValue} = useRef<MapContextValue<MapT>>({mapLib: null, map: null});
@@ -52,7 +58,7 @@ export default function Map<MapOptions, StyleT extends MapStyle, MapT extends Ma
   useEffect(() => {
     const mapLib = props.mapLib;
     let isMounted = true;
-    let mapbox: Mapbox<StyleT, MapT>;
+    let mapbox: Mapbox<StyleT, CallbacksT, MapT>;
 
     Promise.resolve(mapLib || defaultLib)
       .then((module: MapLib<MapT> | {default: MapLib<MapT>}) => {
