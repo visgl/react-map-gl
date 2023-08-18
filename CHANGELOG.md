@@ -2,6 +2,11 @@
 
 # Version 7.1
 
+## 7.1.4 (Aug 17, 2023)
+
+- Import style and event types from specific base libraries (#2252)
+- Fix typechecking (#1798) (#2250)
+
 ## 7.1.3 (Jul 20, 2023)
 
 - Fix globe/mercator projection transition (#2229)
