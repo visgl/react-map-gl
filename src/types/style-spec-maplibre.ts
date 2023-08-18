@@ -1,10 +1,8 @@
 /*
- * Mapbox Style Specification types
- * Note that these are NOT base map specific - all compatible map libraries implement the same spec
+ * Maplibre Style Specification types
+ * Type names are aligned with mapbox
  */
 import type {
-  FilterSpecification,
-  PropertyValueSpecification,
   BackgroundLayerSpecification as BackgroundLayer,
   CircleLayerSpecification as CircleLayer,
   FillLayerSpecification as FillLayer,
@@ -35,32 +33,6 @@ export type {
   SymbolLayer
 };
 
-/**
- * @deprecated use `fog` instead
- */
-export type SkyLayer = {
-  id: string;
-  type: 'sky';
-  metadata?: unknown;
-  minzoom?: number;
-  maxzoom?: number;
-  filter?: FilterSpecification;
-  layout?: {
-    visibility?: 'visible' | 'none';
-  };
-  paint?: {
-    'sky-atmosphere-color'?: PropertyValueSpecification<string>;
-    'sky-atmosphere-halo-color'?: PropertyValueSpecification<string>;
-    'sky-atmosphere-sun'?: PropertyValueSpecification<number[]>;
-    'sky-atmosphere-sun-intensity'?: PropertyValueSpecification<number>;
-    'sky-gradient'?: PropertyValueSpecification<string>;
-    'sky-gradient-center'?: PropertyValueSpecification<number[]>;
-    'sky-gradient-radius'?: PropertyValueSpecification<number>;
-    'sky-opacity'?: PropertyValueSpecification<number>;
-    'sky-type'?: 'gradient' | 'atmosphere';
-  };
-};
-
 export type AnyLayer =
   | BackgroundLayer
   | CircleLayer
@@ -70,8 +42,7 @@ export type AnyLayer =
   | HillshadeLayer
   | LineLayer
   | RasterLayer
-  | SymbolLayer
-  | SkyLayer;
+  | SymbolLayer;
 
 // Sources
 export {GeoJSONSource, VideoSource, ImageSource, VectorSource, RasterSource, RasterDemSource};
@@ -102,26 +73,5 @@ export type {
 } from '@maplibre/maplibre-gl-style-spec';
 
 // The following types are not yet supported by maplibre
-export interface Fog {
-  color?: PropertyValueSpecification<string>;
-  'horizon-blend'?: PropertyValueSpecification<number>;
-  range?: PropertyValueSpecification<number[]>;
-}
-
-type ProjectionNames =
-  | 'albers'
-  | 'equalEarth'
-  | 'equirectangular'
-  | 'lambertConformalConic'
-  | 'mercator'
-  | 'naturalEarth'
-  | 'winkelTripel'
-  | 'globe';
-
-export type Projection =
-  | ProjectionNames
-  | {
-      name: ProjectionNames;
-      center?: [number, number];
-      parallels?: [number, number];
-    };
+export type Fog = never;
+export type Projection = never;

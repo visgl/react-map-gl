@@ -1,4 +1,11 @@
-import type {MapInstance, MapInstanceInternal, LngLatLike, PointLike} from '../types';
+import type {
+  MapInstance,
+  MapInstanceInternal,
+  MapStyle,
+  Callbacks,
+  LngLatLike,
+  PointLike
+} from '../types';
 import type Mapbox from './mapbox';
 
 /** These methods may break the react binding if called directly */
@@ -29,9 +36,11 @@ export type MapRef<MapT extends MapInstance> = {
   getMap(): MapT;
 } & Omit<MapT, typeof skipMethods[number]>;
 
-export default function createRef<MapT extends MapInstance>(
-  mapInstance: Mapbox<MapT>
-): MapRef<MapT> {
+export default function createRef<
+  StyleT extends MapStyle,
+  CallbacksT extends Callbacks,
+  MapT extends MapInstance
+>(mapInstance: Mapbox<StyleT, CallbacksT, MapT>): MapRef<MapT> {
   if (!mapInstance) {
     return null;
   }

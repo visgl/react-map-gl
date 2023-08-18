@@ -1,4 +1,4 @@
-import type {ViewState, Point, LngLat, LngLatBounds, MapGeoJSONFeature} from './common';
+import type {ViewState, Point, LngLat, MapGeoJSONFeature} from './common';
 import type {
   MapInstance,
   Evented,
@@ -6,7 +6,10 @@ import type {
   PopupInstance,
   GeolocateControlInstance
 } from './lib';
-import type {AnySource} from './style-spec';
+
+export interface Callbacks {
+  [key: `on${string}`]: Function;
+}
 
 export interface MapEvent<SourceT extends Evented, OriginalEventT = undefined> {
   type: string;
@@ -19,80 +22,10 @@ export type ErrorEvent<MapT extends MapInstance> = MapEvent<MapT> & {
   error: Error;
 };
 
-export type MapStyleDataEvent<MapT extends MapInstance> = MapEvent<MapT> & {
-  dataType: 'style';
-};
-
-export type MapSourceDataEvent<MapT extends MapInstance> = MapEvent<MapT> & {
-  dataType: 'source';
-  isSourceLoaded: boolean;
-  source: AnySource;
-  sourceId: string;
-  sourceDataType: 'metadata' | 'content';
-  tile: any;
-  coord: {
-    canonical: {
-      x: number;
-      y: number;
-      z: number;
-      key: number;
-    };
-    wrap: number;
-    key: number;
-  };
-};
-
 export type MapMouseEvent<MapT extends MapInstance> = MapEvent<MapT, MouseEvent> & {
-  type:
-    | 'mousedown'
-    | 'mouseup'
-    | 'click'
-    | 'dblclick'
-    | 'mousemove'
-    | 'mouseover'
-    | 'mouseenter'
-    | 'mouseleave'
-    | 'mouseout'
-    | 'contextmenu';
-
   point: Point;
   lngLat: LngLat;
-
-  preventDefault(): void;
-  defaultPrevented: boolean;
-};
-
-export type MapLayerMouseEvent<MapT extends MapInstance> = MapMouseEvent<MapT> & {
-  features?: MapGeoJSONFeature[] | undefined;
-};
-
-export type MapTouchEvent<MapT extends MapInstance> = MapEvent<MapT, TouchEvent> & {
-  type: 'touchstart' | 'touchend' | 'touchcancel';
-
-  point: Point;
-  lngLat: LngLat;
-  points: Point[];
-  lngLats: LngLat[];
-
-  preventDefault(): void;
-  defaultPrevented: boolean;
-};
-
-export type MapLayerTouchEvent<MapT extends MapInstance> = MapTouchEvent<MapT> & {
-  features?: MapGeoJSONFeature[] | undefined;
-};
-
-export type MapWheelEvent<MapT extends MapInstance> = MapEvent<MapT, WheelEvent> & {
-  type: 'wheel';
-
-  preventDefault(): void;
-  defaultPrevented: boolean;
-};
-
-export type MapBoxZoomEvent<MapT extends MapInstance> = MapEvent<MapT, MouseEvent> & {
-  type: 'boxzoomstart' | 'boxzoomend' | 'boxzoomcancel';
-
-  boxZoomBounds: LngLatBounds;
+  features?: MapGeoJSONFeature[];
 };
 
 export type ViewStateChangeEvent<MapT extends MapInstance> =
