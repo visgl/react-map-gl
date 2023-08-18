@@ -8,7 +8,7 @@ import createRef, {MapRef} from '../mapbox/create-ref';
 import type {CSSProperties} from 'react';
 import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
 import setGlobals, {GlobalSettings} from '../utils/set-globals';
-import type {MapLib, MapInstance} from '../types';
+import type {MapLib, MapInstance, MapStyle, Callbacks} from '../types';
 
 export type MapContextValue<MapT extends MapInstance = MapInstance> = {
   mapLib: MapLib<MapT>;
@@ -22,8 +22,13 @@ type MapInitOptions<MapOptions> = Omit<
   'style' | 'container' | 'bounds' | 'fitBoundsOptions' | 'center'
 >;
 
-export type MapProps<MapOptions, MapT extends MapInstance> = MapInitOptions<MapOptions> &
-  MapboxProps<MapT> &
+export type MapProps<
+  MapOptions,
+  StyleT extends MapStyle,
+  CallbacksT extends Callbacks,
+  MapT extends MapInstance
+> = MapInitOptions<MapOptions> &
+  MapboxProps<StyleT, CallbacksT> &
   GlobalSettings & {
     mapLib?: MapLib<MapT> | Promise<MapLib<MapT>>;
     reuseMaps?: boolean;
@@ -34,13 +39,18 @@ export type MapProps<MapOptions, MapT extends MapInstance> = MapInitOptions<MapO
     children?: any;
   };
 
-export default function Map<MapOptions, MapT extends MapInstance>(
-  props: MapProps<MapOptions, MapT>,
+export default function Map<
+  MapOptions,
+  StyleT extends MapStyle,
+  CallbacksT extends Callbacks,
+  MapT extends MapInstance
+>(
+  props: MapProps<MapOptions, StyleT, CallbacksT, MapT>,
   ref: React.Ref<MapRef<MapT>>,
   defaultLib: MapLib<MapT> | Promise<MapLib<MapT>>
 ) {
   const mountedMapsContext = useContext(MountedMapsContext);
-  const [mapInstance, setMapInstance] = useState<Mapbox<MapT>>(null);
+  const [mapInstance, setMapInstance] = useState<Mapbox<StyleT, CallbacksT, MapT>>(null);
   const containerRef = useRef();
 
   const {current: contextValue} = useRef<MapContextValue<MapT>>({mapLib: null, map: null});
@@ -48,7 +58,7 @@ export default function Map<MapOptions, MapT extends MapInstance>(
   useEffect(() => {
     const mapLib = props.mapLib;
     let isMounted = true;
-    let mapbox: Mapbox<MapT>;
+    let mapbox: Mapbox<StyleT, CallbacksT, MapT>;
 
     Promise.resolve(mapLib || defaultLib)
       .then((module: MapLib<MapT> | {default: MapLib<MapT>}) => {

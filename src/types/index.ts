@@ -3,9 +3,45 @@ export * from './events';
 
 import type GeoJSON from 'geojson';
 import type {CustomSourceImplementation} from './lib';
-import type {ImageSource} from './style-spec';
 
 // Internal: source implementations
+
+export interface ISource {
+  type: string;
+}
+
+export interface ILayer {
+  id: string;
+  type: string;
+
+  metadata?: any;
+  source?: unknown;
+
+  minzoom?: number;
+  maxzoom?: number;
+
+  filter?: any;
+  layout?: {
+    [property: string]: any;
+  };
+  paint?: {
+    [property: string]: any;
+  };
+}
+
+export interface MapStyle {
+  name?: string;
+  metadata?: unknown;
+  version: number;
+  layers: ILayer[];
+  sources: {
+    [sourceName: string]: object;
+  };
+
+  fog?: any;
+  terrain?: any;
+  light?: any;
+}
 
 export interface GeoJSONSourceImplementation {
   type: 'geojson';
@@ -16,7 +52,7 @@ export interface GeoJSONSourceImplementation {
 
 export interface ImageSourceImplemtation {
   type: 'image';
-  updateImage(options: Omit<ImageSource, 'type'>): this;
+  updateImage(options: {url?: string; coordinates?: number[][]}): this;
   setCoordinates(coordinates: number[][]): this;
 }
 

@@ -7,24 +7,26 @@ import {deepEqual} from '../utils/deep-equal';
 
 import type {
   MapInstance,
-  AnySource,
+  ISource,
   CustomSource,
-  GeoJSONSource,
   GeoJSONSourceImplementation,
-  ImageSource,
   ImageSourceImplemtation,
-  VectorSource,
   AnySourceImplementation
 } from '../types';
+import type {GeoJSONSource, ImageSource, VectorSource} from '../types/style-spec-maplibre';
 
-export type SourceProps = (AnySource | CustomSource) & {
+export type SourceProps<SourceT> = (SourceT | CustomSource) & {
   id?: string;
   children?: any;
 };
 
 let sourceCounter = 0;
 
-function createSource(map: MapInstance, id: string, props: SourceProps) {
+function createSource<SourceT extends ISource>(
+  map: MapInstance,
+  id: string,
+  props: SourceProps<SourceT>
+) {
   // @ts-ignore
   if (map.style && map.style._loaded) {
     const options = {...props};
@@ -38,7 +40,11 @@ function createSource(map: MapInstance, id: string, props: SourceProps) {
 }
 
 /* eslint-disable complexity */
-function updateSource(source: AnySourceImplementation, props: SourceProps, prevProps: SourceProps) {
+function updateSource<SourceT extends ISource>(
+  source: AnySourceImplementation,
+  props: SourceProps<SourceT>,
+  prevProps: SourceProps<SourceT>
+) {
   assert(props.id === prevProps.id, 'source id changed');
   assert(props.type === prevProps.type, 'source type changed');
 
@@ -59,24 +65,26 @@ function updateSource(source: AnySourceImplementation, props: SourceProps, prevP
   const type = props.type;
 
   if (type === 'geojson') {
-    (source as GeoJSONSourceImplementation).setData((props as GeoJSONSource).data as any);
+    (source as GeoJSONSourceImplementation).setData(
+      (props as unknown as GeoJSONSource).data as any
+    );
   } else if (type === 'image') {
     (source as ImageSourceImplemtation).updateImage({
-      url: props.url,
-      coordinates: props.coordinates
+      url: (props as unknown as ImageSource).url,
+      coordinates: (props as unknown as ImageSource).coordinates
     });
   } else if ('setCoordinates' in source && changedKeyCount === 1 && changedKey === 'coordinates') {
-    source.setCoordinates((props as unknown as ImageSource).coordinates);
+    source.setCoordinates((props as ImageSource).coordinates);
   } else if ('setUrl' in source) {
     // Added in 1.12.0:
     // vectorTileSource.setTiles
     // vectorTileSource.setUrl
     switch (changedKey) {
       case 'url':
-        source.setUrl((props as unknown as VectorSource).url);
+        source.setUrl((props as VectorSource).url);
         break;
       case 'tiles':
-        source.setTiles((props as unknown as VectorSource).tiles);
+        source.setTiles((props as VectorSource).tiles);
         break;
       default:
     }
@@ -87,7 +95,7 @@ function updateSource(source: AnySourceImplementation, props: SourceProps, prevP
 }
 /* eslint-enable complexity */
 
-function Source(props: SourceProps) {
+function Source<SourceT extends ISource>(props: SourceProps<SourceT>) {
   const map = useContext(MapContext).map.getMap();
   const propsRef = useRef(props);
   const [, setStyleLoaded] = useState(0);
