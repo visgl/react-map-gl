@@ -178,8 +178,9 @@ If your application can do without complicated DOM objects and CSS styling, cons
             'icon-image': 'vehicle-icon',
             'icon-size': 1,
             'text-field': ['get', 'id']
-          }} >
-      </Sources>
+          }}
+        />
+      </Source>
     </Map>
   );
 ```
