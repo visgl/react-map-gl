@@ -40,7 +40,7 @@ export default function createRef<
   StyleT extends MapStyle,
   CallbacksT extends Callbacks,
   MapT extends MapInstance
->(mapInstance: Mapbox<StyleT, CallbacksT, MapT>): MapRef<MapT> {
+>(mapInstance: Mapbox<StyleT, CallbacksT, MapT>): MapRef<MapT> | null {
   if (!mapInstance) {
     return null;
   }
@@ -90,7 +90,7 @@ export default function createRef<
   return result;
 }
 
-function getMethodNames(obj) {
+function getMethodNames(obj: Object) {
   const result = new Set<string>();
 
   let proto = obj;
