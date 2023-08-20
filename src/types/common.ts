@@ -29,9 +29,6 @@ export type LngLatLike =
   | {lon: number; lat: number};
 
 export interface LngLatBounds {
-  sw: LngLatLike;
-  ne: LngLatLike;
-
   contains(lnglat: LngLatLike): boolean;
   setNorthEast(ne: LngLatLike): this;
   setSouthWest(sw: LngLatLike): this;
