@@ -52,10 +52,12 @@ export const MapProvider: React.FC<{children?: React.ReactNode}> = props => {
   );
 };
 
-export function useMap<MapT extends MapInstance>(): {
+export type MapCollection<MapT extends MapInstance> = {
   [id: string]: MapRef<MapT> | undefined;
   current?: MapRef<MapT>;
-} {
+};
+
+export function useMap<MapT extends MapInstance>(): MapCollection<MapT> {
   const maps = useContext(MountedMapsContext)?.maps;
   const currentMap = useContext(MapContext);
 
@@ -63,5 +65,5 @@ export function useMap<MapT extends MapInstance>(): {
     return {...maps, current: currentMap?.map};
   }, [maps, currentMap]);
 
-  return mapsWithCurrent as {current?: MapRef<MapT>; [id: string]: MapRef<MapT> | undefined};
+  return mapsWithCurrent as MapCollection<MapT>;
 }
