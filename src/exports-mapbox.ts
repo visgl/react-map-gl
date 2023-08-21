@@ -113,6 +113,16 @@ export default Map;
 
 // Types
 export * from './types/public';
+export type {
+  Point,
+  PointLike,
+  LngLat,
+  LngLatLike,
+  LngLatBounds,
+  LngLatBoundsLike,
+  PaddingOptions,
+  MapboxGeoJSONFeature as MapGeoJSONFeature
+} from 'mapbox-gl';
 export * from './types/style-spec-mapbox';
 
 // Events

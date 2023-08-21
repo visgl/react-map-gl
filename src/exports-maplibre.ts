@@ -113,6 +113,16 @@ export default Map;
 
 // Types
 export * from './types/public';
+export type {default as Point} from '@mapbox/point-geometry';
+export type {
+  PointLike,
+  LngLat,
+  LngLatLike,
+  LngLatBounds,
+  LngLatBoundsLike,
+  PaddingOptions,
+  MapGeoJSONFeature
+} from 'maplibre-gl';
 export * from './types/style-spec-maplibre';
 
 // Events
