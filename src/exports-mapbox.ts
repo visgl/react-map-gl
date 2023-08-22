@@ -156,8 +156,4 @@ export type GeolocateErrorEvent = events.GeolocateErrorEvent<MapboxGeolocateCont
 /** @deprecated use `MapStyle` */
 export type MapboxStyle = MapStyle;
 
-export type {
-  Map as MapboxMap,
-  MapboxEvent,
-  MapboxGeoJSONFeature
-} from 'mapbox-gl';
+export type {Map as MapboxMap, MapboxEvent, MapboxGeoJSONFeature} from 'mapbox-gl';
