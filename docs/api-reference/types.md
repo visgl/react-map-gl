@@ -19,7 +19,7 @@ Instance [ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) of 
 
 ## Styling
 
-#### MapboxStyle
+#### MapStyle
 
 An object conforming to the [Mapbox Style Specification](https://mapbox.com/mapbox-gl-style-spec/).
 
@@ -79,19 +79,19 @@ A JSON object that defines a `symbol` layer according to the [Mapbox Style Speci
 
 A JSON object that defines a `sky` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#sky).
 
-#### GeoJSONSource
+#### GeoJSONSourceRaw
 
 A JSON object that defines a `geojson` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#geojson).
 
-#### VideoSource
+#### VideoSourceRaw
 
 A JSON object that defines a `video` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#video).
 
-#### ImageSource
+#### ImageSourceRaw
 
 A JSON object that defines a `image` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#image).
 
-#### VectorSource
+#### VectorSourceRaw
 
 A JSON object that defines a `vector` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#vector).
 
@@ -103,7 +103,7 @@ A JSON object that defines a `raster` source according to the [Mapbox Style Spec
 
 A JSON object that defines a `raster-dem` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#raster-dem).
 
-#### CanvasSource
+#### CanvasSourceRaw
 
 A JSON object that defines a `canvas` source type. See [CanvasSourceOptions](https://docs.mapbox.com/mapbox-gl-js/api/sources/#canvassourceoptions).
 
@@ -168,6 +168,30 @@ An object with the following fields:
 - `zoom`: number - The zoom level.
 - `pitch`: number - The pitch (tilt) of the map, in degrees.
 - `bearing`: number - The bearing (rotation) of the map, in degrees.
+
+## Sources
+
+The following are implementations of source types that could be retrieved with `Map.getSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#getsource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#getsource)).
+
+#### GeoJSONSource
+
+A source containing GeoJSON. See `GeoJSONSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.GeoJSONSource/)).
+
+#### VideoSource
+
+A source containing video. See `VideoSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#videosource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.VideoSource/)).
+
+#### ImageSource
+
+A source containing image. See `ImageSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#imagesource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.ImageSource/)).
+
+#### CanvasSource
+
+A source containing the contents of an HTML canvas. See `CanvasSource`([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#canvassource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.CanvasSource/)).
+
+#### VectorTileSource
+
+A source containing vector tiles in [Mapbox Vector Tile format](https://docs.mapbox.com/vector-tiles/reference/). See `VectorTileSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#vectortilesource) |  [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.VectorTileSource/)).
 
 ## Events
 

@@ -42,37 +42,37 @@ export type {
 
 // Sources
 import type {
-  GeoJSONSourceRaw as GeoJSONSource,
-  VideoSourceRaw as VideoSource,
-  ImageSourceRaw as ImageSource,
-  VectorSource,
+  GeoJSONSourceRaw,
+  VideoSourceRaw,
+  ImageSourceRaw,
+  VectorSource as VectorSourceRaw,
   RasterSource,
-  CanvasSourceRaw as CanvasSource,
+  CanvasSourceRaw,
   RasterDemSource
 } from 'mapbox-gl';
 
 export type AnySource =
-  | GeoJSONSource
-  | VideoSource
-  | ImageSource
-  | CanvasSource
-  | VectorSource
+  | GeoJSONSourceRaw
+  | VideoSourceRaw
+  | ImageSourceRaw
+  | CanvasSourceRaw
+  | VectorSourceRaw
   | RasterSource
   | RasterDemSource;
 
 export type {
-  GeoJSONSource,
-  VideoSource,
-  ImageSource,
-  CanvasSource,
-  VectorSource,
+  GeoJSONSourceRaw,
+  VideoSourceRaw,
+  ImageSourceRaw,
+  CanvasSourceRaw,
+  VectorSourceRaw,
   RasterSource,
   RasterDemSource
 };
 
 // Other
 export type {
-  Style as MapboxStyle,
+  Style as MapStyle,
   Light,
   Fog,
   TerrainSpecification as Terrain,

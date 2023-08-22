@@ -12,13 +12,17 @@ import type {
   LineLayerSpecification as LineLayer,
   RasterLayerSpecification as RasterLayer,
   SymbolLayerSpecification as SymbolLayer,
-  GeoJSONSourceSpecification as GeoJSONSource,
-  VideoSourceSpecification as VideoSource,
-  ImageSourceSpecification as ImageSource,
-  VectorSourceSpecification as VectorSource,
+  GeoJSONSourceSpecification as GeoJSONSourceRaw,
+  VideoSourceSpecification as VideoSourceRaw,
+  ImageSourceSpecification as ImageSourceRaw,
+  VectorSourceSpecification as VectorSourceRaw,
   RasterSourceSpecification as RasterSource,
   RasterDEMSourceSpecification as RasterDemSource
 } from '@maplibre/maplibre-gl-style-spec';
+
+import {
+  CanvasSourceSpecification as CanvasSourceRaw
+} from 'maplibre-gl';
 
 // Layers
 export type {
@@ -45,29 +49,29 @@ export type AnyLayer =
   | SymbolLayer;
 
 // Sources
-export {GeoJSONSource, VideoSource, ImageSource, VectorSource, RasterSource, RasterDemSource};
-
-// Not part of the style spec but a valid source
-export interface CanvasSource {
-  type: 'canvas';
-  coordinates: number[][];
-  animate?: boolean;
-  canvas: string | HTMLCanvasElement;
-}
+export {
+  GeoJSONSourceRaw,
+  VideoSourceRaw,
+  ImageSourceRaw,
+  CanvasSourceRaw,
+  VectorSourceRaw,
+  RasterSource,
+  RasterDemSource
+};
 
 export type AnySource =
-  | GeoJSONSource
-  | VideoSource
-  | ImageSource
-  | VectorSource
+  | GeoJSONSourceRaw
+  | VideoSourceRaw
+  | ImageSourceRaw
+  | CanvasSourceRaw
+  | VectorSourceRaw
   | RasterSource
-  | RasterDemSource
-  | CanvasSource;
+  | RasterDemSource;
 
 // Other style types
 
 export type {
-  StyleSpecification as MapboxStyle,
+  StyleSpecification as MapStyle,
   LightSpecification as Light,
   TerrainSpecification as Terrain
 } from '@maplibre/maplibre-gl-style-spec';

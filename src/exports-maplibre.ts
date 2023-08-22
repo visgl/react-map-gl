@@ -12,7 +12,7 @@ import type {
   NavigationControl as MaplibreNavigationControl,
   ScaleControl as MaplibreScaleControl
 } from 'maplibre-gl';
-import {MapboxStyle, AnyLayer, AnySource} from './types/style-spec-maplibre';
+import {MapStyle, AnyLayer, AnySource} from './types/style-spec-maplibre';
 
 import {default as _Map, MapProps as _MapProps} from './components/map';
 import {default as _Marker, MarkerProps as _MarkerProps} from './components/marker';
@@ -48,12 +48,12 @@ export function useMap() {
   return _useMap<MaplibreMap>();
 }
 
-export type MapProps = _MapProps<MapOptions, MapboxStyle, MapCallbacks, MaplibreMap>;
+export type MapProps = _MapProps<MapOptions, MapStyle, MapCallbacks, MaplibreMap>;
 export type MapRef = _MapRef<MaplibreMap>;
 const mapLib = import('maplibre-gl');
 export const Map = (() => {
   return React.forwardRef(function Map(props: MapProps, ref: React.Ref<MapRef>) {
-    return _Map<MapOptions, MapboxStyle, MapCallbacks, MaplibreMap>(props, ref, mapLib);
+    return _Map<MapOptions, MapStyle, MapCallbacks, MaplibreMap>(props, ref, mapLib);
   });
 })();
 
@@ -121,7 +121,12 @@ export type {
   LngLatBounds,
   LngLatBoundsLike,
   PaddingOptions,
-  MapGeoJSONFeature
+  MapGeoJSONFeature,
+  GeoJSONSource,
+  VideoSource,
+  ImageSource,
+  CanvasSource,
+  VectorTileSource
 } from 'maplibre-gl';
 export * from './types/style-spec-maplibre';
 
