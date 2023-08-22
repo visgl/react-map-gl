@@ -1,5 +1,5 @@
-export {ViewState, ControlPosition} from './common';
-export {
+export type {ViewState, ControlPosition} from './common';
+export type {
   IControl,
   MapInstance,
   MapLib,
