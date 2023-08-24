@@ -93,7 +93,7 @@ Default: (empty style)
 
 The map's Mapbox style. This must be an a JSON object conforming to the schema described in the [Mapbox Style Specification](https://mapbox.com/mapbox-gl-style-spec/), or a URL to such JSON.
 
-#### `projection`: string | [ProjectionSpecification](./types.md#projectionspecification) {#projection}
+#### `projection`: string | [Projection](./types.md#projection) {#projection}
 
 Default: `'mercator'`
 
@@ -111,7 +111,7 @@ Default: `true`
 
 Enable diffing when `mapStyle` changes. If `false`, force a 'full' update, removing the current style and building the given one instead of attempting a diff-based update.
 
-#### `terrain`: [TerrainSpecification](./types.md#terrainspecification) {#terrain}
+#### `terrain`: [Terrain](./types.md#terrain) {#terrain}
 
 Terrain property of the style. Must conform to the [Terrain Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/terrain/).
 If `undefined` is provided, removes terrain from the map.
@@ -123,8 +123,12 @@ If `undefined` is provided, removes terrain from the map.
 
 The initial view state of the map. If specified, `longitude`, `latitude`, `zoom` etc. in props are ignored when constructing the map. Only specify `initialViewState` if `Map` is being used as an **uncontrolled component**. See [state management](../get-started/state-management.md) for examples.
 
-- `bounds?`: [LngLatBoundsLike](./types.md#lnglatboundslike) - The initial bounds of the map. If specified, it overrides the `longitude`, `latitude` and `zoom` options. Default `null`.
-- `fitBoundsOptions`: [FitBoundsOptions](./types.md#fitboundsoptions) - A `fitBounds` options object to use only when setting the `bounds` option. Default `null`.
+- `bounds`: [LngLatBoundsLike](./types.md#lnglatboundslike) - The initial bounds of the map. If specified, it overrides the `longitude`, `latitude` and `zoom` options. Default `null`.
+- `fitBoundsOptions` - An object to use only when setting the `bounds` option. Default `null`.
+  + `fitBoundsOptions.offset`: [PointLike](./types.md#pointlike)
+  + `fitBoundsOptions.minZoom`: number
+  + `fitBoundsOptions.maxZoom`: number
+  + `fitBoundsOptions.padding`: [PaddingOptions](./types.md#paddingoptions)
 - `longitude`: number - The initial longitude of the map center. Default `0`.
 - `latitude`: number - The initial latitude of the map center. Default `0`.
 - `zoom`: number - The initial zoom level. Default `0`.
@@ -193,49 +197,50 @@ If set, the map is constrained to the given bounds.
 
 Default: `true`
 
-If `true`, the "box zoom" interaction is enabled (see [BoxZoomHandler](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#boxzoomhandler)).
+If `true`, the "box zoom" interaction is enabled. See `BoxZoomHandler`
+([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#boxzoomhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.BoxZoomHandler/))
 
 #### `doubleClickZoom`: boolean {#doubleclickzoom}
 
 Default: `true`
 
-If `true`, the "double click to zoom" interaction is enabled (see [DoubleClickZoomHandler](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#doubleclickzoomhandler)).
+If `true`, the "double click to zoom" interaction is enabled. See `DoubleClickZoomHandler` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#doubleclickzoomhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.DoubleClickZoomHandler/)).
 
 #### `dragRotate`: boolean {#dragrotate}
 
 Default: `true`
 
-If `true`, the "drag to rotate" interaction is enabled (see [DragRotateHandler](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragrotatehandler)).
+If `true`, the "drag to rotate" interaction is enabled. See `DragRotateHandler` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragrotatehandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.DragRotateHandler/)).
 
-#### `dragPan`: boolean | [DragPanOptions](./types.md#dragpanoptions) {#dragpan}
+#### `dragPan`: boolean | Object {#dragpan}
 
 Default: `true`
 
-If `true`, the "drag to pan" interaction is enabled. Optionally accpt an object value that is the options to [DragPanHandler#enable](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragpanhandler).
+If `true`, the "drag to pan" interaction is enabled. Optionally accpt an object value that is the options to `DragPanHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragpanhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.DragPanHandler/#enable)).
 
 #### `keyboard`: boolean {#keyboard}
 
 Default: `true`
 
-If `true`, keyboard shortcuts are enabled (see [KeyboardHandler](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#keyboardhandler)).
+If `true`, keyboard shortcuts are enabled. See `KeyboardHandler` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#keyboardhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.KeyboardHandler/)).
 
-#### `scrollZoom`: boolean | [ZoomRotateOptions](./types.md#zoomrotateoptions) {#scrollzoom}
-
-Default: `true`
-
-If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to  [ScrollZoomHandler#enable](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler).
-
-#### `touchPitch`: boolean {#touchpitch}
+#### `scrollZoom`: boolean | Object {#scrollzoom}
 
 Default: `true`
 
-If `true`, the "drag to pitch" interaction is enabled. Optionally accpt an object value that is the options to [TouchPitchHandler#enable](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchpitchhandler).
+If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to  `ScrollZoomHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.ScrollZoomHandler/#enable))
 
-#### `touchZoomRotate`: boolean | [ZoomRotateOptions](./types.md#zoomrotateoptions) {#touchzoomrotate}
+#### `touchPitch`: boolean | Object {#touchpitch}
 
 Default: `true`
 
-If `true`, the "pinch to rotate and zoom" interaction is enabled. Optionally accpt an object value that is the options to [TouchZoomRotateHandler#enable](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchzoomrotatehandler).
+If `true`, the "drag to pitch" interaction is enabled. Optionally accpt an object value that is the options to `TouchPitchHandler.enable`([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchpitchhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.TwoFingersTouchPitchHandler/#enable)).
+
+#### `touchZoomRotate`: boolean | Object {#touchzoomrotate}
+
+Default: `true`
+
+If `true`, the "pinch to rotate and zoom" interaction is enabled. Optionally accpt an object value that is the options to `TouchZoomRotateHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchzoomrotatehandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.TwoFingersTouchZoomHandler/#enable)).
 
 #### `interactiveLayerIds`: string[] {#interactivelayerids}
 
@@ -251,19 +256,19 @@ See the [Callbacks](#callbacks) section for affected events.
 
 ### Callbacks
 
-#### `onResize`: (event: [MapboxEvent](./types.md#mapboxevent)) => void {#onresize}
+#### `onResize`: (event: [MapEvent](./types.md#mapevent)) => void {#onresize}
 
 Called when the map has been resized.
 
-#### `onLoad`: (event: [MapboxEvent](./types.md#mapboxevent)) => void {#onload}
+#### `onLoad`: (event: [MapEvent](./types.md#mapevent)) => void {#onload}
 
 Called after all necessary resources have been downloaded and the first visually complete rendering of the map has occurred.
 
-#### `onRender`: (event: [MapboxEvent](./types.md#mapboxevent)) => void {#onrender}
+#### `onRender`: (event: [MapEvent](./types.md#mapevent))) => void {#onrender}
 
 Called whenever the map is drawn to the screen.
 
-#### `onIdle`: (event: [MapboxEvent](./types.md#mapboxevent)) => void {#onidle}
+#### `onIdle`: (event: [MapEvent](./types.md#mapevent))) => void {#onidle}
 
 Called after the last frame rendered before the map enters an "idle" state:
 
@@ -271,7 +276,7 @@ Called after the last frame rendered before the map enters an "idle" state:
 - All currently requested tiles have loaded
 - All fade/transition animations have completed
 
-#### `onRemove`: (event: [MapboxEvent](./types.md#mapboxevent)) => void {#onremove}
+#### `onRemove`: (event: [MapEvent](./types.md#mapevent))) => void {#onremove}
 
 Called when the map has been removed.
 
@@ -611,7 +616,7 @@ function App() {
   </TabItem>
 </Tabs>
 
-The [MapRef](./types.md#mapref) object exposes [Map methods](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) that **are safe to call without breaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
+The [MapRef](./types.md#mapref) object exposes Map methods ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#methods)) that **are safe to call without breaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
 
 You can still access the hidden members via `getMap()`:
 

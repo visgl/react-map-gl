@@ -1,4 +1,5 @@
-export * from './public';
+export * from './common';
+export * from './lib';
 export * from './events';
 
 import type GeoJSON from 'geojson';

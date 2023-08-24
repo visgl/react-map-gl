@@ -13,7 +13,7 @@ import type {
   ImageSourceImplemtation,
   AnySourceImplementation
 } from '../types';
-import type {GeoJSONSource, ImageSource, VectorSource} from '../types/style-spec-maplibre';
+import type {GeoJSONSourceRaw, ImageSourceRaw, VectorSourceRaw} from '../types/style-spec-maplibre';
 
 export type SourceProps<SourceT> = (SourceT | CustomSource) & {
   id?: string;
@@ -66,25 +66,25 @@ function updateSource<SourceT extends ISource>(
 
   if (type === 'geojson') {
     (source as GeoJSONSourceImplementation).setData(
-      (props as unknown as GeoJSONSource).data as any
+      (props as unknown as GeoJSONSourceRaw).data as any
     );
   } else if (type === 'image') {
     (source as ImageSourceImplemtation).updateImage({
-      url: (props as unknown as ImageSource).url,
-      coordinates: (props as unknown as ImageSource).coordinates
+      url: (props as unknown as ImageSourceRaw).url,
+      coordinates: (props as unknown as ImageSourceRaw).coordinates
     });
   } else if ('setCoordinates' in source && changedKeyCount === 1 && changedKey === 'coordinates') {
-    source.setCoordinates((props as ImageSource).coordinates);
+    source.setCoordinates((props as ImageSourceRaw).coordinates);
   } else if ('setUrl' in source) {
     // Added in 1.12.0:
     // vectorTileSource.setTiles
     // vectorTileSource.setUrl
     switch (changedKey) {
       case 'url':
-        source.setUrl((props as VectorSource).url);
+        source.setUrl((props as VectorSourceRaw).url);
         break;
       case 'tiles':
-        source.setTiles((props as VectorSource).tiles);
+        source.setTiles((props as VectorSourceRaw).tiles);
         break;
       default:
     }
