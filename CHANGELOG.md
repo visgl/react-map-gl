@@ -2,6 +2,13 @@
 
 # Version 7.1
 
+## 7.1.5 (Aug 24, 2023)
+
+- Re-export native types where possible (#2263)
+- Fix useMap return type (#2262)
+- Fix LngLatBounds type (#2260)
+- fix missing types (#2259)
+
 ## 7.1.4 (Aug 17, 2023)
 
 - Import style and event types from specific base libraries (#2252)
