@@ -12,7 +12,7 @@ import type {
   NavigationControl as MapboxNavigationControl,
   ScaleControl as MapboxScaleControl
 } from 'mapbox-gl';
-import {MapboxStyle, AnyLayer, AnySource} from './types/style-spec-mapbox';
+import {MapStyle, AnyLayer, AnySource} from './types/style-spec-mapbox';
 
 import {default as _Map, MapProps as _MapProps} from './components/map';
 import {default as _Marker, MarkerProps as _MarkerProps} from './components/marker';
@@ -48,12 +48,12 @@ export function useMap() {
   return _useMap<MapboxMap>();
 }
 
-export type MapProps = _MapProps<MapboxOptions, MapboxStyle, MapCallbacks, MapboxMap>;
+export type MapProps = _MapProps<MapboxOptions, MapStyle, MapCallbacks, MapboxMap>;
 export type MapRef = _MapRef<MapboxMap>;
 const mapLib = import('mapbox-gl');
 export const Map = (() => {
   return React.forwardRef(function Map(props: MapProps, ref: React.Ref<MapRef>) {
-    return _Map<MapboxOptions, MapboxStyle, MapCallbacks, MapboxMap>(props, ref, mapLib);
+    return _Map<MapboxOptions, MapStyle, MapCallbacks, MapboxMap>(props, ref, mapLib);
   });
 })();
 
@@ -113,6 +113,21 @@ export default Map;
 
 // Types
 export * from './types/public';
+export type {
+  Point,
+  PointLike,
+  LngLat,
+  LngLatLike,
+  LngLatBounds,
+  LngLatBoundsLike,
+  PaddingOptions,
+  MapboxGeoJSONFeature as MapGeoJSONFeature,
+  GeoJSONSource,
+  VideoSource,
+  ImageSource,
+  CanvasSource,
+  VectorSourceImpl as VectorTileSource
+} from 'mapbox-gl';
 export * from './types/style-spec-mapbox';
 
 // Events
@@ -135,3 +150,10 @@ export type MarkerDragEvent = events.MarkerDragEvent<MapboxMarker>;
 export type GeolocateEvent = events.GeolocateEvent<MapboxGeolocateControl>;
 export type GeolocateResultEvent = events.GeolocateResultEvent<MapboxGeolocateControl>;
 export type GeolocateErrorEvent = events.GeolocateErrorEvent<MapboxGeolocateControl>;
+
+// v7.0 backward compatibility
+
+/** @deprecated use `MapStyle` */
+export type MapboxStyle = MapStyle;
+
+export type {Map as MapboxMap, MapboxEvent, MapboxGeoJSONFeature} from 'mapbox-gl';

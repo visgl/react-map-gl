@@ -1,4 +1,4 @@
-import type {PaddingOptions, LngLat, Point, LngLatLike, PointLike} from './common';
+import type {PaddingOptions, LngLat, Point, LngLatLike, PointLike, ControlPosition} from './common';
 
 export interface IControl<MapT extends MapInstance = MapInstance> {
   onAdd(map: MapT): HTMLElement;
@@ -27,10 +27,7 @@ export interface MapInstance extends Evented {
   // https://github.com/mapbox/mapbox-gl-js/issues/6522
   fire(type: string, properties?: {[key: string]: any});
 
-  addControl(
-    control: IControl<this>,
-    position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
-  );
+  addControl(control: IControl<this>, position?: ControlPosition);
 
   removeControl(control: IControl<this>);
 

@@ -1,6 +1,6 @@
 import type GeoJSON from 'geojson';
 
-/* Data types */
+/* Data types that are compatible with both mapbox and maplibre. Not exposed to the end user. */
 
 /** @mapbox/point-geometry */
 export interface Point {
@@ -55,18 +55,12 @@ export type LngLatBoundsLike =
   | [number, number, number, number]
   | LngLatLike;
 
-export type Anchor =
-  | 'center'
-  | 'left'
-  | 'right'
-  | 'top'
-  | 'bottom'
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right';
-
-export type Alignment = 'map' | 'viewport' | 'auto';
+export type MapGeoJSONFeature = GeoJSON.Feature<GeoJSON.Geometry> & {
+  layer: any;
+  source: string;
+  sourceLayer: string;
+  state: {[key: string]: any};
+};
 
 export type PaddingOptions = {
   top: number;
@@ -74,6 +68,8 @@ export type PaddingOptions = {
   left: number;
   right: number;
 };
+
+/* Public */
 
 /** Describes the camera's state */
 export type ViewState = {
@@ -96,10 +92,3 @@ export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'botto
 export interface ImmutableLike<T> {
   toJS: () => T;
 }
-
-export type MapGeoJSONFeature = GeoJSON.Feature<GeoJSON.Geometry> & {
-  layer: any;
-  source: string;
-  sourceLayer: string;
-  state: {[key: string]: any};
-};
