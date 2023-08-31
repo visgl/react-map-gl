@@ -17,6 +17,28 @@
   "types": "dist/esm/index.d.ts",
   "main": "dist/es5/index.js",
   "module": "dist/esm/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/es5/index.d.ts",
+        "default": "./dist/es5/index.js"
+      }
+    },
+    "./maplibre": {
+      "import": {
+        "types": "./dist/esm/exports-maplibre.d.ts",
+        "default": "./dist/esm/exports-maplibre.js"
+      },
+      "require": {
+        "types": "./dist/es5/exports-maplibre.d.ts",
+        "default": "./dist/es5/exports-maplibre.js"
+      }
+    }
+  },
   "files": [
     "src",
     "dist",
