@@ -12,6 +12,7 @@ import TabItem from '@theme/TabItem';
 ```tsx
 import * as React from 'react';
 import Map, {NavigationControl} from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 function App() {
   return <Map
