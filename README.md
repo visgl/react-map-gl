@@ -23,6 +23,12 @@ Using `react-map-gl` requires `react >= 16.3`.
 npm install --save react-map-gl mapbox-gl
 ```
 
+_or_
+
+```sh
+npm install --save react-map-gl maplibre-gl
+```
+
 ### Example
 
 ```js
