@@ -583,14 +583,18 @@ export default class Mapbox<
 
   private _queryRenderedFeatures(point: Point) {
     const map = this._map;
+    const tr = map.transform;
     const {interactiveLayerIds = []} = this.props;
     try {
+      map.transform = this._renderTransform;
       return map.queryRenderedFeatures(point, {
         layers: interactiveLayerIds.filter(map.getLayer.bind(map))
       });
     } catch {
       // May fail if style is not loaded
       return [];
+    } finally {
+      map.transform = tr;
     }
   }
 
