@@ -14,9 +14,22 @@
     "url": "https://github.com/visgl/react-map-gl.git"
   },
   "license": "MIT",
-  "types": "dist/esm/index.d.ts",
-  "main": "dist/es5/index.js",
-  "module": "dist/esm/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./maplibre": {
+      "import": "./dist/exports-maplibre.js",
+      "require": "./dist/exports-maplibre.cjs",
+      "types": "./dist/exports-maplibre.d.ts"
+    }
+  },
   "files": [
     "src",
     "dist",
@@ -26,7 +39,7 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.esm.json --noEmit",
     "bootstrap": "PUPPETEER_SKIP_DOWNLOAD=true yarn && ocular-bootstrap",
-    "build": "ocular-clean && tsc -b tsconfig.esm.json && tsc -b tsconfig.es5.json",
+    "build": "ocular-clean && ocular-build",
     "lint": "ocular-lint",
     "cover": "ocular-test cover",
     "publish-prod": "ocular-publish prod",

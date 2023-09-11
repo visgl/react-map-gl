@@ -1,12 +1,12 @@
-const {resolve} = require('path');
+import {resolve} from 'path';
 
-const config = {
+export default {
   lint: {
     paths: ['src', 'test', 'examples']
   },
 
   typescript: {
-    project: 'tsconfig.json'
+    project: 'tsconfig.build.json'
   },
 
   aliases: {
@@ -24,5 +24,3 @@ const config = {
     size: ['test/size/all.js', 'test/size/map.js']
   }
 };
-
-module.exports = config;

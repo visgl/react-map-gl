@@ -20,7 +20,7 @@ import type {
   RasterDEMSourceSpecification as RasterDemSource
 } from '@maplibre/maplibre-gl-style-spec';
 
-import {CanvasSourceSpecification as CanvasSourceRaw} from 'maplibre-gl';
+import type {CanvasSourceSpecification as CanvasSourceRaw} from 'maplibre-gl';
 
 // Layers
 export type {
@@ -47,7 +47,7 @@ export type AnyLayer =
   | SymbolLayer;
 
 // Sources
-export {
+export type {
   GeoJSONSourceRaw,
   VideoSourceRaw,
   ImageSourceRaw,
