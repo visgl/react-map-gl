@@ -500,7 +500,7 @@ export default class Mapbox<
    */
   _updateStyle(nextProps: MapboxProps<StyleT>, currProps: MapboxProps<StyleT>): boolean {
     if (nextProps.cursor !== currProps.cursor) {
-      this._map.getCanvas().style.cursor = nextProps.cursor;
+      this._map.getCanvas().style.cursor = nextProps.cursor || '';
     }
     if (nextProps.mapStyle !== currProps.mapStyle) {
       const {mapStyle = DEFAULT_STYLE, styleDiffing = true} = nextProps;
