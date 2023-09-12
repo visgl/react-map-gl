@@ -37,7 +37,7 @@
     "README.md"
   ],
   "scripts": {
-    "typecheck": "tsc -p tsconfig.esm.json --noEmit",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "bootstrap": "PUPPETEER_SKIP_DOWNLOAD=true yarn && ocular-bootstrap",
     "build": "ocular-clean && ocular-build",
     "lint": "ocular-lint",

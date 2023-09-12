@@ -3,11 +3,10 @@ import * as React from 'react';
 import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
 
-import {createPortalMock, waitForMapLoad} from '../utils/test-utils';
+import {waitForMapLoad} from '../utils/test-utils';
 import mapboxMock from '../utils/mapbox-gl-mock';
 
 test('Marker', async t => {
-  const restoreMock = createPortalMock();
   const mapRef = {current: null};
 
   let map;
@@ -92,8 +91,6 @@ test('Marker', async t => {
   t.ok(map.root.findByProps({id: 'marker-content'}), 'content is rendered');
 
   map.unmount();
-
-  restoreMock();
 
   t.end();
 });
