@@ -2,6 +2,11 @@
 
 # Version 7.1
 
+## 7.1.6 (Sep 12, 2023)
+
+- Use shadow transform for queryRenderedFeatures call (#2280)
+- Fix resetting cursor style (#2279)
+
 ## 7.1.5 (Aug 24, 2023)
 
 - Re-export native types where possible (#2263)
