@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es2018",
+    "target": "es2020",
     "jsx": "react",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "module": "ES2020",
     "declaration": true,
     "sourceMap": true,
-    "outDir": "./dist/esm"
+    "outDir": "./dist"
   },
   "include":[
     "src/**/*"
