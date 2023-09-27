@@ -1,17 +1,20 @@
-const {resolve} = require('path');
+import {resolve} from 'path';
 
-const config = {
+export default {
   lint: {
     paths: ['src', 'test', 'examples']
   },
 
   typescript: {
-    project: 'tsconfig.json'
+    project: 'tsconfig.build.json'
   },
 
   aliases: {
     'react-map-gl/test': resolve('./test'),
     'react-map-gl': resolve('./src')
+  },
+  nodeAliases: {
+    'react-dom': resolve('./test/src/utils/react-dom-mock.js')
   },
 
   browserTest: {
@@ -24,5 +27,3 @@ const config = {
     size: ['test/size/all.js', 'test/size/map.js']
   }
 };
-
-module.exports = config;

@@ -500,7 +500,7 @@ export default class Mapbox<
    */
   _updateStyle(nextProps: MapboxProps<StyleT>, currProps: MapboxProps<StyleT>): boolean {
     if (nextProps.cursor !== currProps.cursor) {
-      this._map.getCanvas().style.cursor = nextProps.cursor;
+      this._map.getCanvas().style.cursor = nextProps.cursor || '';
     }
     if (nextProps.mapStyle !== currProps.mapStyle) {
       const {mapStyle = DEFAULT_STYLE, styleDiffing = true} = nextProps;
@@ -583,14 +583,18 @@ export default class Mapbox<
 
   private _queryRenderedFeatures(point: Point) {
     const map = this._map;
+    const tr = map.transform;
     const {interactiveLayerIds = []} = this.props;
     try {
+      map.transform = this._renderTransform;
       return map.queryRenderedFeatures(point, {
         layers: interactiveLayerIds.filter(map.getLayer.bind(map))
       });
     } catch {
       // May fail if style is not loaded
       return [];
+    } finally {
+      map.transform = tr;
     }
   }
 
