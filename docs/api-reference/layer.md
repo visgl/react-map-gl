@@ -104,7 +104,7 @@ Note that layers are added by the order that they mount. They are *NOT* reordere
 
 #### `source`: string {#source}
 
-`source` is required by some layer types in the Mapbox style specification. If `<Layer>` is used as the child of a [Source](./source.md) component, this prop will be overwritten by the id of the parent source.
+`source` is required by some layer types in the Mapbox style specification. If `<Layer>` is used as the immediate child of a [Source](./source.md) component, this prop will be overwritten by the id of the parent source. If the `<Layer/>` component is not an immediate descendant of `<Source/>`, e.g wrapped inside a helper component, source property needs to be provided same as the id of the `<Source/>` component for the `<Layer/>` component to show.
 
 
 ## Source
