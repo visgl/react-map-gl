@@ -51,7 +51,7 @@ export default function setGlobals(mapLib: any, props: GlobalSettings) {
           console.error(error);
         }
       },
-      false
+      true
     );
   }
 }
