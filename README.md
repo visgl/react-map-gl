@@ -29,6 +29,9 @@ npm install --save react-map-gl mapbox-gl
 import * as React from 'react';
 import Map from 'react-map-gl';
 
+// MapBox styles
+import "mapbox-gl/dist/mapbox-gl.css";
+
 function App() {
   return <Map
     mapLib={import('mapbox-gl')}
