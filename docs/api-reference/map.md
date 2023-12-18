@@ -536,13 +536,13 @@ If `reuseMaps` is set to `true`, when a map component is unmounted, the underlyi
 
 Note that since some map options cannot be modified after initialization, when reusing maps, only the reactive props and `initialViewState` of the new component are respected.
 
-#### `RTLTextPlugin`: string {#rtltextplugin}
+#### `RTLTextPlugin`: string | false {#rtltextplugin}
 
 Default: `'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'`
 
 Sets the map's [RTL text plugin](https://www.mapbox.com/mapbox-gl-js/plugins/#mapbox-gl-rtl-text). Necessary for supporting the Arabic and Hebrew languages, which are written right-to-left.
 
-Setting this prop is the equivelant of calling [mapboxgl.setRTLTextPlugin](https://docs.mapbox.com/mapbox-gl-js/api/properties/#setrtltextplugin) with `lazy: true`.
+Setting this prop is the equivalent of calling [mapboxgl.setRTLTextPlugin](https://docs.mapbox.com/mapbox-gl-js/api/properties/#setrtltextplugin) with `lazy: true`. Set to `false` to disable loading the RTL text plugin.
 
 #### `workerClass`: object {#workerclass}
 

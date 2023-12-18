@@ -6,7 +6,7 @@ export type GlobalSettings = {
    */
   maxParallelImageRequests?: number;
   /** The map's RTL text plugin. Necessary for supporting the Arabic and Hebrew languages, which are written right-to-left.  */
-  RTLTextPlugin?: string;
+  RTLTextPlugin?: string | false;
   /** Provides an interface for external module bundlers such as Webpack or Rollup to package mapbox-gl's WebWorker into a separate class and integrate it with the library.
 Takes precedence over `workerUrl`. */
   workerClass?: any;
@@ -51,7 +51,7 @@ export default function setGlobals(mapLib: any, props: GlobalSettings) {
           console.error(error);
         }
       },
-      false
+      true
     );
   }
 }
