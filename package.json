@@ -41,7 +41,7 @@
     "@types/mapbox-gl": ">=1.0.0"
   },
   "peerDependencies": {
-    "mapbox-gl": ">=1.13.0",
+    "mapbox-gl": ">=1.0.0",
     "maplibre-gl": ">=1.13.0",
     "react": ">=16.3.0",
     "react-dom": ">=16.3.0"
