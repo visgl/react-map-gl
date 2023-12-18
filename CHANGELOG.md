@@ -2,6 +2,10 @@
 
 # Version 7.1
 
+## 7.1.7 (Dec 18, 2023)
+
+- Allow disabling RTLTextPlugin and load lazy (#2312)
+
 ## 7.1.6 (Sep 12, 2023)
 
 - Use shadow transform for queryRenderedFeatures call (#2280)
