@@ -87,7 +87,7 @@ If `undefined` is provided, removes the fog from the map.
 
 Light properties of the style. Must conform to the [Light Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light).
 
-#### `mapStyle`: [MapboxStyle](./types.md#mapboxstyle) | string | Immutable {#mapstyle}
+#### `mapStyle`: [MapStyle](./types.md#mapstyle) | string | Immutable {#mapstyle}
 
 Default: (empty style)
 
