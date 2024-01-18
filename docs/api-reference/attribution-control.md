@@ -68,7 +68,7 @@ CSS style override that applies to the control's container.
 
 The properties in this section are not reactive. They are only used when the component first mounts.
 
-Any options supported by the `AttributionControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#attributioncontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#attributioncontrol)), such as
+Any options supported by the `AttributionControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#attributioncontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.AttributionControl/)), such as
 
 - `compact`
 - `customAttribution`
