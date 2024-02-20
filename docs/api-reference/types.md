@@ -128,19 +128,19 @@ An object with the following fields:
 
 #### LngLat
 
-A [mapboxgl.LngLat](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglat) object.
+A `LngLat` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglat) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/LngLat/)).
 
 #### LngLatLike
 
-A [LngLat](#lnglat) object, an array of two numbers representing longitude and latitude, or an object with `lng` and `lat` or `lon` and `lat` properties.
+A `LngLat` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatlike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/LngLatLike/)), an array of two numbers representing longitude and latitude, or an object with `lng` and `lat` or `lon` and `lat` properties.
 
 #### LngLatBounds
 
-A [mapboxgl.LngLatBounds](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatbounds) object.
+A `LngLatBounds` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatbounds) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/LngLatBounds/)).
 
 #### LngLatBoundsLike
 
-A [LngLatBounds](#lnglatbounds) object, an array of [LngLatLike](#lnglatlike) objects in [sw, ne] order, or an array of numbers in [west, south, east, north] order.
+A `LngLatBounds` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatboundslike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/LngLatBoundsLike/)), an array of [LngLatLike](#lnglatlike) objects in [sw, ne] order, or an array of numbers in [west, south, east, north] order.
 
 #### Point
 
@@ -148,7 +148,7 @@ A [mapboxgl.Point](https://github.com/mapbox/point-geometry) object.
 
 #### PointLike
 
-A [Point](#point) or an array of two numbers representing x and y screen coordinates in pixels.
+A Point or an array of two numbers representing x and y screen coordinates in pixels ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#pointlike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/PointLike/)).
 
 #### MapGeoJSONFeature
 
@@ -171,27 +171,27 @@ An object with the following fields:
 
 ## Sources
 
-The following are implementations of source types that could be retrieved with `Map.getSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#getsource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#getsource)).
+The following are implementations of source types that could be retrieved with `Map.getSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#getsource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#getsource)).
 
 #### GeoJSONSource
 
-A source containing GeoJSON. See `GeoJSONSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.GeoJSONSource/)).
+A source containing GeoJSON. See `GeoJSONSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#geojsonsource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/GeoJSONSource/)).
 
 #### VideoSource
 
-A source containing video. See `VideoSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#videosource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.VideoSource/)).
+A source containing video. See `VideoSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#videosource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/VideoSource/)).
 
 #### ImageSource
 
-A source containing image. See `ImageSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#imagesource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.ImageSource/)).
+A source containing image. See `ImageSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#imagesource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/ImageSource/)).
 
 #### CanvasSource
 
-A source containing the contents of an HTML canvas. See `CanvasSource`([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#canvassource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.CanvasSource/)).
+A source containing the contents of an HTML canvas. See `CanvasSource`([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#canvassource) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/CanvasSource/)).
 
 #### VectorTileSource
 
-A source containing vector tiles in [Mapbox Vector Tile format](https://docs.mapbox.com/vector-tiles/reference/). See `VectorTileSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#vectortilesource) |  [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.VectorTileSource/)).
+A source containing vector tiles in [Mapbox Vector Tile format](https://docs.mapbox.com/vector-tiles/reference/). See `VectorTileSource` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/sources/#vectortilesource) |  [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/VectorTileSource/)).
 
 ## Events
 
