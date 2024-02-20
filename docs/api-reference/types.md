@@ -148,7 +148,7 @@ A [mapboxgl.Point](https://github.com/mapbox/point-geometry) object.
 
 #### PointLike
 
-A Point or an array of two numbers representing x and y screen coordinates in pixels ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#pointlike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/PointLike/)).
+A [Point](#point) or an array of two numbers representing x and y screen coordinates in pixels ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#pointlike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/PointLike/)).
 
 #### MapGeoJSONFeature
 
