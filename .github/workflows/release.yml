@@ -21,9 +21,9 @@ jobs:
         run: git fetch --tags -f
 
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: '16.x'
+          node-version: '22.x'
 
       - name: Publish release
         run: |
