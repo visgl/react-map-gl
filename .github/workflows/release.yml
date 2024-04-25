@@ -11,19 +11,19 @@ jobs:
 
     if: github.repository_owner == 'visgl'
 
+    permissions:
+      contents: write
+
     env:
-      ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v2.1.1
 
-      - name: Get git tags (https://github.com/actions/checkout/issues/206)
-        run: git fetch --tags -f
-
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '16.x'
+          node-version: '18.x'
 
       - name: Publish release
         run: |
@@ -33,4 +33,4 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/visgl/react-map-gl/releases \
             -d "${body}" \
-            -H "Authorization: token ${ADMIN_TOKEN}"
+            -H "Authorization: token ${GITHUB_TOKEN}"
