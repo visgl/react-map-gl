@@ -126,7 +126,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 </Tabs>
 
 
-## Using with a MapLibre
+## Use MapLibre GL JS
 
 ```bash
 npm install --save react-map-gl maplibre-gl
