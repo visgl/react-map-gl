@@ -57,7 +57,7 @@ export default function IndexPage() {
         <div style={{position: 'relative'}}>
           <TextContainer>
             <h2>
-              react-map-gl makes using Mapbox GL JS in React applications easy.
+              react-map-gl makes using MapLibre GL JS and Mapbox GL JS in React applications easy.
             </h2>
             <hr className="short" />
 
@@ -66,7 +66,7 @@ export default function IndexPage() {
               React Integration
             </h3>
             <p>
-              Use Mapbox GL JS Map as a fully controlled reactive component.
+              Use a MapLibre GL JS or Mapbox GL JS map as a fully controlled reactive component.
             </p>
 
             <h3>
@@ -88,7 +88,7 @@ export default function IndexPage() {
                 target="_blank"
                 rel="noopener noreferrer">
                 deck.gl</a> to render performant and compelling 2D and 3D
-                WebGL visualizations on top of your Mapbox GL JS based maps.
+                WebGL visualizations on top of your MapLibre GL JS and Mapbox GL JS based maps.
             </p>
           </TextContainer>
         </div>
