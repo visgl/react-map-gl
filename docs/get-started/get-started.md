@@ -126,10 +126,10 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 </Tabs>
 
 
-## Use MapLibre GL JS
+## Using with a Compatible GL JS Fork
 
 ```bash
-npm install --save react-map-gl maplibre-gl
+npm install --save react-map-gl my-gl-js-fork
 ```
 
 Then override the `mapLib` prop of `Map`:
@@ -137,12 +137,11 @@ Then override the `mapLib` prop of `Map`:
 ```tsx title="app.tsx"
 import * as React from 'react';
 import Map from 'react-map-gl';
-import MapLibre from 'maplibre-gl';
 
 // Include style sheet
-import 'maplibre-gl/dist/maplibre-gl.css';
+import 'my-gl-js-fork/path/to/style-sheet.css';
 
 function App() {
-  return <Map mapLib={MapLibre} />;
+  return <Map mapLib={import('my-gl-js-fork')} />;
 }
 ```
