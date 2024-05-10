@@ -30,9 +30,8 @@ export default function App() {
           zoom: 3
         }}
         minZoom={2}
-        mapStyle={`https://api.maptiler.com/maps/streets/style.json?key=${
-          import.meta.env.VITE_MAPTILER_TOKEN
-        }`}
+        maplibre
+        mapStyle="https://demotiles.maplibre.org/style.json"
         onMouseMove={onHover}
         interactiveLayerIds={['counties']}
       >
@@ -42,7 +41,10 @@ export default function App() {
           data="https://maplibre.org/maplibre-gl-js/docs/assets/us_states.geojson"
         >
           <Layer {...countiesLayer} />
-          <Layer {...highlightLayer} filter={['in', 'STATE_ID', selectedStateId]} />
+          <Layer
+            {...highlightLayer}
+            filter={['any', ['in', ['get', 'STATE_ID'], selectedStateId]]}
+          />
         </Source>
         {selectedStateId && (
           <Popup
