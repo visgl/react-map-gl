@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useMemo, useCallback} from 'react';
+import {useState, useCallback} from 'react';
 import {createRoot} from 'react-dom/client';
 import Map, {Popup, Source, Layer} from 'react-map-gl/maplibre';
 import ControlPanel from './control-panel';
