@@ -56,7 +56,7 @@ function App() {
 
 ## Properties
 
-Aside from the props listed below, the `Map` component supports all parameters of the `Map` class constructor ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)). Beware that this is not an exhaustive list of all props. Different base map libraries may offer different options and default values. When in doubt, refer to your base map library's documentation.
+Aside from the props listed below, the `Map` component supports all parameters of the `Map` class constructor ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/MapOptions/)). Beware that this is not an exhaustive list of all props. Different base map libraries may offer different options and default values. When in doubt, refer to your base map library's documentation.
 
 ### Layout options
 
