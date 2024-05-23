@@ -75,19 +75,10 @@ function updateSource<SourceT extends ISource>(
     });
   } else if ('setCoordinates' in source && changedKeyCount === 1 && changedKey === 'coordinates') {
     source.setCoordinates((props as ImageSourceRaw).coordinates);
-  } else if ('setUrl' in source) {
-    // Added in 1.12.0:
-    // vectorTileSource.setTiles
-    // vectorTileSource.setUrl
-    switch (changedKey) {
-      case 'url':
-        source.setUrl((props as VectorSourceRaw).url);
-        break;
-      case 'tiles':
-        source.setTiles((props as VectorSourceRaw).tiles);
-        break;
-      default:
-    }
+  } else if ('setUrl' in source && changedKey === 'url') {
+    source.setUrl((props as VectorSourceRaw).url);
+  } else if ('setTiles' in source && changedKey === 'tiles') {
+    source.setTiles((props as VectorSourceRaw).tiles);
   } else {
     // eslint-disable-next-line
     console.warn(`Unable to update <Source> prop: ${changedKey}`);
