@@ -577,7 +577,7 @@ import Map from 'react-map-gl';
 import type {MapRef} from 'react-map-gl';
 
 function App() {
-  const mapRef = useRef<MapRef>();
+  const mapRef = useRef<MapRef>(null);
 
   const onMapLoad = useCallback(() => {
     mapRef.current.on('move', () => {
