@@ -53,7 +53,6 @@ function App() {
   </TabItem>
 </Tabs>
 
-
 ## Properties
 
 Aside from the props listed below, the `Map` component supports all parameters of the `Map` class constructor ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)). Beware that this is not an exhaustive list of all props. Different base map libraries may offer different options and default values. When in doubt, refer to your base map library's documentation.
@@ -63,6 +62,10 @@ Aside from the props listed below, the `Map` component supports all parameters o
 #### `id`: string {#id}
 
 Map container id.
+
+Required when [`MapProvider`](./map-provider.md)s are used. Used to reference the map with [`useMap`](./use-map.md).
+
+Make sure to pick a name that has no conflict with other imports (there are no checks or errors in this case).
 
 #### `style`: CSSProperties {#style}
 
@@ -115,7 +118,6 @@ Enable diffing when `mapStyle` changes. If `false`, force a 'full' update, remov
 
 Terrain property of the style. Must conform to the [Terrain Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/terrain/).
 If `undefined` is provided, removes terrain from the map.
-
 
 ### Camera options
 
@@ -228,7 +230,7 @@ If `true`, keyboard shortcuts are enabled. See `KeyboardHandler` ([Mapbox](https
 
 Default: `true`
 
-If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to  `ScrollZoomHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.ScrollZoomHandler/#enable))
+If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to `ScrollZoomHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.ScrollZoomHandler/#enable))
 
 #### `touchPitch`: boolean | Object {#touchpitch}
 
@@ -461,13 +463,14 @@ Called when one of the map's sources loads or changes, including if a tile belon
 
 ### Other options
 
-The following props, along with any options of the `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) not listed above, can be specified to construct the underlying `Map` instance. 
+The following props, along with any options of the `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) not listed above, can be specified to construct the underlying `Map` instance.
 
 Note: props in this section are not reactive. They are only used once when the Map instance is constructed.
 
 #### `mapLib`: any {#maplib}
 
 Default:
+
 - `import('mapbox-gl')` if imported from `react-map-gl`
 - `import('maplibre-gl')` if imported from `react-map-gl/maplibre`
 
@@ -499,7 +502,7 @@ function App() {
 Or to load a pre-bundled version of the library:
 
 ```html title="index.html"
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.0/mapbox-gl.js" ></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.0/mapbox-gl.js"></script>
 ```
 
 ```tsx title="app.tsx"
@@ -510,7 +513,6 @@ function App() {
   return <Map mapLib={window.mapboxgl} />;
 }
 ```
-
 
 #### `mapboxAccessToken`: string {#mapboxaccesstoken}
 
@@ -561,8 +563,6 @@ The number of web workers instantiated on a page with mapbox-gl maps.
 
 Provides an interface for loading mapbox-gl's WebWorker bundle from a self-hosted URL. This is useful if your site needs to operate in a strict CSP (Content Security Policy) environment wherein you are not allowed to load JavaScript code from a Blob URL, which is default behavior.
 
-
-
 ## Methods
 
 Imperative methods are accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) or the [useMap](./use-map.md) hook.
@@ -592,7 +592,6 @@ function App() {
   </TabItem>
   <TabItem value="maplibre" label="Maplibre">
 
-
 ```tsx
 import * as React from 'react';
 import {useRef, useCallback} from 'react';
@@ -612,7 +611,6 @@ function App() {
 }
 ```
 
-
   </TabItem>
 </Tabs>
 
@@ -623,8 +621,6 @@ You can still access the hidden members via `getMap()`:
 #### `getMap()` {#getmap}
 
 Returns the native `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) instance associated with this component.
-
-
 
 ## Source
 
