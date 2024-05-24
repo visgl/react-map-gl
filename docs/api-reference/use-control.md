@@ -6,6 +6,14 @@ The `useControl` hook is used to create React wrappers for custom map controls.
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import Map, {useControl} from 'react-map-gl';
 
+type DrawControlProps = ConstructorParameters<typeof MapboxDraw>[0] & {
+  position?: ControlPosition;
+
+  onCreate?: (evt: {features: object[]}) => void;
+  onUpdate?: (evt: {features: object[]; action: string}) => void;
+  onDelete?: (evt: {features: object[]}) => void;
+};
+
 function DrawControl(props: DrawControlProps) {
   useControl(() => new MapboxDraw(props), {
     position: props.position
