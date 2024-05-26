@@ -1,6 +1,6 @@
 # default (Map)
 
-React component that wraps the base library's `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)). This is also the default export from react-map-gl.
+React component that wraps the base library's `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/)). This is also the default export from react-map-gl.
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
