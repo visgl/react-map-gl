@@ -1,6 +1,6 @@
 # ScaleControl
 
-React component that wraps the base library's `ScaleControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#scalecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#scalecontrol)).
+React component that wraps the base library's `ScaleControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#scalecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/ScaleControl/)).
 
 
 import Tabs from '@theme/Tabs';

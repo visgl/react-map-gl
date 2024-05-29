@@ -1,6 +1,6 @@
 # Popup
 
-React component that wraps the base library's `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#popup)).
+React component that wraps the base library's `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/)).
 
 
 import Tabs from '@theme/Tabs';
@@ -120,7 +120,7 @@ Called when the popup is closed by the user clicking on the close button or outs
 
 The properties in this section are not reactive. They are only used when the component first mounts.
 
-Any options supported by the `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#popup)), such as
+Any options supported by the `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/PopupOptions/)), such as
 
 - `closeButton`
 - `closeOnClick`

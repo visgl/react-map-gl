@@ -1,6 +1,6 @@
 # FullscreenControl
 
-React component that wraps the base library's `FullscreenControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#fullscreencontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#fullscreencontrol)).
+React component that wraps the base library's `FullscreenControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#fullscreencontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/FullscreenControl/)).
 
 
 import Tabs from '@theme/Tabs';

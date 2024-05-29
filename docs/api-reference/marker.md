@@ -1,6 +1,6 @@
 # Marker
 
-React component that wraps the base library's `Marker` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#marker)).
+React component that wraps the base library's `Marker` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Marker/)).
 
 
 import Tabs from '@theme/Tabs';
@@ -93,7 +93,7 @@ Default: `'auto'`
 
 #### `popup`: Popup | null {#popup}
 
-An instance of the `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#popup)) to attach to this marker. If undefined or null, any popup set on this Marker instance is unset.
+An instance of the `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/)) to attach to this marker. If undefined or null, any popup set on this Marker instance is unset.
 
 #### `rotation`: number {#rotation}
 
@@ -136,7 +136,7 @@ Called when dragging ends, if `draggable` is `true`.
 
 The properties in this section are not reactive. They are only used when the component first mounts.
 
-Any options supported by the `Marker` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#marker)), such as
+Any options supported by the `Marker` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/MarkerOptions/)), such as
 
 - `anchor`
 - `color`
