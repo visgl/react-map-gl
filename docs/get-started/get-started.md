@@ -126,10 +126,10 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 </Tabs>
 
 
-## Using with a Compatible Fork
+## Using with a Compatible GL JS Fork
 
 ```bash
-npm install --save react-map-gl my-mapbox-fork
+npm install --save react-map-gl my-gl-js-fork
 ```
 
 Then override the `mapLib` prop of `Map`:
@@ -139,9 +139,9 @@ import * as React from 'react';
 import Map from 'react-map-gl';
 
 // Include style sheet
-import 'my-mapbox-fork/path/to/style-sheet.css';
+import 'my-gl-js-fork/path/to/style-sheet.css';
 
 function App() {
-  return <Map mapLib={import('my-mapbox-fork')} />;
+  return <Map mapLib={import('my-gl-js-fork')} />;
 }
 ```
