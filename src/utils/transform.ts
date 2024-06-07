@@ -57,12 +57,6 @@ export function applyViewStateToTransform(tr: Transform, props: MapboxProps): bo
   const v: Partial<ViewState> = props.viewState || props;
   let changed = false;
 
-  if ('longitude' in v && 'latitude' in v) {
-    const center = tr.center;
-    // @ts-ignore
-    tr.center = new center.constructor(v.longitude, v.latitude);
-    changed = changed || center !== tr.center;
-  }
   if ('zoom' in v) {
     const zoom = tr.zoom;
     tr.zoom = v.zoom;
@@ -81,6 +75,12 @@ export function applyViewStateToTransform(tr: Transform, props: MapboxProps): bo
   if (v.padding && !tr.isPaddingEqual(v.padding)) {
     changed = true;
     tr.padding = v.padding;
+  }
+  if ('longitude' in v && 'latitude' in v) {
+    const center = tr.center;
+    // @ts-ignore
+    tr.center = new center.constructor(v.longitude, v.latitude);
+    changed = changed || center !== tr.center;
   }
   return changed;
 }
