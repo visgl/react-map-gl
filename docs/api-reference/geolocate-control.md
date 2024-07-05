@@ -1,6 +1,6 @@
 # GeolocateControl
 
-React component that wraps the base library's `GeolocateControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#geolocatecontrol)).
+React component that wraps the base library's `GeolocateControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/GeolocateControl/)).
 
 
 import Tabs from '@theme/Tabs';
@@ -88,7 +88,7 @@ Called when the GeolocateControl changes to the background state.
 
 The properties in this section are not reactive. They are only used when the component first mounts.
 
-Any options supported by the `GeolocateControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#geolocatecontrol)), such as
+Any options supported by the `GeolocateControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/GeolocateControl/)), such as
 
 - `positionOptions`
 - `fitBoundsOptions`
