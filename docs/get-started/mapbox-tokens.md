@@ -20,7 +20,7 @@ We recommend using an environment variable to minimize leaking risks. See [secur
 
 It is possible to use the map component without the Mapbox service, if you use another tile source (for example, if you host your own map tiles). Note that this is no longer allowed using `mapbox-gl` v2.0 and above. The options are:
 
-- Use [maplibre-gl](https://maplibre.org/maplibre-gl-js-docs/api/). See [Get Started](./get-started.md) for how to configure your project.
+- Use [maplibre-gl](https://maplibre.org/maplibre-gl-js/docs/). See [Get Started](./get-started.md) for how to configure your project.
 - Stay on `mapbox-gl@1.x`. react-map-gl plans to continue supporting this release in the foreseeable future, however, this version will not include any of the latest features of the map renderer, nor get any future updates from Mapbox.
 
 To use your own map service, you will need a custom map style that points to your own [tile source](https://maplibre.org/maplibre-style-spec/sources/), and pass it to `Map` using the `mapStyle` prop.
