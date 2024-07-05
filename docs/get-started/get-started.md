@@ -126,7 +126,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 </Tabs>
 
 
-## Using with a Compatible GL JS Fork
+## Using with a Compatible Fork
 
 ```bash
 npm install --save react-map-gl my-gl-js-fork
