@@ -90,5 +90,11 @@ test('applyViewStateToTransform', t => {
   changed = applyViewStateToTransform(tr, {viewState: {pitch: 30}});
   t.notOk(changed, 'nothing changed');
 
+  applyViewStateToTransform(tr, {longitude: 0, latitude: 0, zoom: 0});
+  changed = applyViewStateToTransform(tr, {longitude: 12, latitude: 34, zoom: 15});
+  t.ok(changed, 'center and zoom changed');
+  t.equal(tr.zoom, 15, 'zoom is correct');
+  t.equal(tr.center.lat, 34, 'center latitude is correct');
+
   t.end();
 });
