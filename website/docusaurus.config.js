@@ -9,7 +9,7 @@ const {resolve} = require('path');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'React Map GL',
-  tagline: 'React wrapper for Mapbox GL JS',
+  tagline: 'React wrapper for MapLibre GL JS and Mapbox GL JS',
   url: 'https://visgl.github.io/',
   baseUrl: '/react-map-gl/',
   onBrokenLinks: 'throw',
