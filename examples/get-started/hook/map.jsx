@@ -10,22 +10,18 @@ export default function MapView() {
   /**
    * ## This is how `useMap` works:
    * ```
-   * const demo = useMap();
-   * console.log('MapView', {demo});
+   * const maps = useMap();
+   * console.log('MapView useMap()', maps);
    * ```
    * ### First render:
    * ```
    * {
-   *     "demo": {
-   *         "current": undefined
-   *     }
+   *     "current": undefined
    * }
    * Second render:
    * {
-   *     "demo": {
-   *         "current": undefined,
-   *         "mymap": {...} // See https://visgl.github.io/react-map-gl/docs/api-reference/types#mapref
-   *     }
+   *     "current": undefined,
+   *     "mymap": {...} // See https://visgl.github.io/react-map-gl/docs/api-reference/types#mapref
    * }
    * ```
    */

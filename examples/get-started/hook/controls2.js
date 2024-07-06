@@ -8,16 +8,14 @@ export default function Controls2() {
    * See https://visgl.github.io/react-map-gl/docs/api-reference/use-map
    * See https://visgl.github.io/react-map-gl/docs/api-reference/types#mapref
    * ```
-   * const demo = useMap();
-   * console.log('Controls2', {demo});
+   * const maps = useMap();
+   * console.log('Controls2 useMap()', maps);
    * ```
    * ### First render:
    * ```
    * {
-   *     "demo": {
-   *       "current": {...},
-   *       "mymap": {...}
-   *     }
+   *     "current": {...}, // this is the same as `mymap`
+   *     "mymap": {...}
    * }
    * ```
    */
