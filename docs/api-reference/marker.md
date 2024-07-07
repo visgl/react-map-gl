@@ -192,7 +192,7 @@ function App() {
   const markerRef = useRef<maplibregl.Marker>();
 
   const popup = useMemo(() => {
-    return maplibregl.Popup().setText('Hello world!');
+    return new maplibregl.Popup().setText('Hello world!');
   }, [])
 
   const togglePopup = useCallback(() => {
