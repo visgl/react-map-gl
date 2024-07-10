@@ -51,7 +51,7 @@ export default function Controls() {
   }, []);
 
   const onSubmit = useCallback(() => {
-    if (!mymap) return undefined;
+    if (!mymap) return;
 
     const [lng, lat] = inputValue.split(',').map(Number);
     if (Math.abs(lng) <= 180 && Math.abs(lat) <= 85) {

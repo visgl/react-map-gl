@@ -1,5 +1,6 @@
 import * as React from 'react';
-import Map, {useMap} from 'react-map-gl';
+import Map from 'react-map-gl';
+// import {useMap} from 'react-map-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Controls2 from './controls2';
