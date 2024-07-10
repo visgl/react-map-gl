@@ -7,6 +7,8 @@ import Map from './map';
 import Controls from './controls';
 
 function Root() {
+  // Note: `useMap` will not work here, only child components of `MapProvider` or `Map` can use `useMap`
+
   return (
     <MapProvider>
       <Controls />
