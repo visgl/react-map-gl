@@ -40,8 +40,7 @@ function App() {
         longitude: -122.45,
         latitude: 37.78,
         zoom: 14
-      }}
-    >
+      }}>
       <Source id="my-data" type="geojson" data={geojson}>
         <Layer {...layerStyle} />
       </Source>
@@ -52,7 +51,7 @@ function App() {
 
 For details about data sources and layer configuration, check out the [Mapbox style specification](https://www.mapbox.com/mapbox-gl-js/style-spec).
 
-[For](For) dynamically updating data sources and layers, check out the [GeoJSON](http://visgl.github.io/react-map-gl/examples/geojson) and [GeoJSON animation](http://visgl.github.io/react-map-gl/examples/geojson-animation) examples.
+For dynamically updating data sources and layers, check out the [GeoJSON](http://visgl.github.io/react-map-gl/examples/geojson) and [GeoJSON animation](http://visgl.github.io/react-map-gl/examples/geojson-animation) examples.
 
 ## Custom Overlays
 
@@ -65,4 +64,3 @@ For more feature rich and performant data visualization overlay use cases, you m
 - [deck.gl](https://deck.gl) - WebGL-powered framework for the visualization of large datasets.
 - [loaders.gl](https://loaders.gl) - loaders for file formats focused on visualization of big data, including point clouds, 3D geometries, images, geospatial formats as well as tabular data.
 - [nebula.gl](https://nebula.gl) - 3D-enabled GeoJSON editing based on deck.gl and React.
-
