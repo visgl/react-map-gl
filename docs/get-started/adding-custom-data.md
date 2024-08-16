@@ -13,7 +13,14 @@ import type {FeatureCollection} from 'geojson';
 const geojson: FeatureCollection = {
   type: 'FeatureCollection',
   features: [
-    {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.8]}}
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [-122.4, 37.8]
+      },
+      properties: {title: '915 Front Street, San Francisco, California'}
+    }
   ]
 };
 
@@ -33,7 +40,8 @@ function App() {
         longitude: -122.45,
         latitude: 37.78,
         zoom: 14
-      }}>
+      }}
+    >
       <Source id="my-data" type="geojson" data={geojson}>
         <Layer {...layerStyle} />
       </Source>
@@ -44,13 +52,11 @@ function App() {
 
 For details about data sources and layer configuration, check out the [Mapbox style specification](https://www.mapbox.com/mapbox-gl-js/style-spec).
 
-For dynamically updating data sources and layers, check out the [GeoJSON](http://visgl.github.io/react-map-gl/examples/geojson) and [GeoJSON animation](http://visgl.github.io/react-map-gl/examples/geojson-animation) examples.
-
+[For](For) dynamically updating data sources and layers, check out the [GeoJSON](http://visgl.github.io/react-map-gl/examples/geojson) and [GeoJSON animation](http://visgl.github.io/react-map-gl/examples/geojson-animation) examples.
 
 ## Custom Overlays
 
 You can implement a custom HTML or SVG overlay on top of the map that redraws whenever the camera changes. By calling `map.project()` you can adjust the DOM or CSS properties so that the customly-drawn features are always aligned with the map. See a full example [here](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/custom-overlay).
-
 
 ## Other vis.gl Libraries
 
@@ -59,3 +65,4 @@ For more feature rich and performant data visualization overlay use cases, you m
 - [deck.gl](https://deck.gl) - WebGL-powered framework for the visualization of large datasets.
 - [loaders.gl](https://loaders.gl) - loaders for file formats focused on visualization of big data, including point clouds, 3D geometries, images, geospatial formats as well as tabular data.
 - [nebula.gl](https://nebula.gl) - 3D-enabled GeoJSON editing based on deck.gl and React.
+
