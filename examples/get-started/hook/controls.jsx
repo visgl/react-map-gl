@@ -4,14 +4,34 @@ import {useCallback, useState, useEffect} from 'react';
 import {useMap} from 'react-map-gl';
 
 export default function Controls() {
-  const {mymap} = useMap();
+  /**
+   * ## This is how `useMap` works:
+   * ```
+   * const maps = useMap();
+   * console.log('Controls useMap()', maps);
+   * ```
+   * ### First render:
+   * ```
+   * {
+   *     "current": undefined
+   * }
+   * ```
+   * ### Second render:
+   * ```
+   * {
+   *     "current": undefined,
+   *     "mymap": {...} // See https://visgl.github.io/react-map-gl/docs/api-reference/types#mapref
+   * }
+   * ```
+   */
+
+  const {mymap} = useMap(); // `mymap` is the id in <Map id="mymap" />
+
   const [inputValue, setInputValue] = useState('');
   const [hasError, setError] = useState(false);
 
   useEffect(() => {
-    if (!mymap) {
-      return undefined;
-    }
+    if (!mymap) return undefined;
 
     const onMove = () => {
       const {lng, lat} = mymap.getCenter();
@@ -31,6 +51,8 @@ export default function Controls() {
   }, []);
 
   const onSubmit = useCallback(() => {
+    if (!mymap) return;
+
     const [lng, lat] = inputValue.split(',').map(Number);
     if (Math.abs(lng) <= 180 && Math.abs(lat) <= 85) {
       mymap.easeTo({
