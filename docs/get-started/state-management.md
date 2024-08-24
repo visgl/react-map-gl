@@ -80,7 +80,7 @@ function App() {
     const newCenter = [viewState.longitude, viewState.latitude];
     // Only update the view state if the center is inside the geofence
     if (turf.booleanPointInPolygon(newCenter, GEOFENCE)) {
-      setViewState(newCenter);
+      setViewState(viewState);
     }
   }, [])
 
