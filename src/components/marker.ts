@@ -43,14 +43,26 @@ function Marker<MarkerOptions, MarkerT extends MarkerInstance>(
 
   const marker: MarkerT = useMemo(() => {
     let hasChildren = false;
+    let childElement = null;
+
     React.Children.forEach(props.children, el => {
       if (el) {
         hasChildren = true;
+
+        const element = el as JSX.Element;
+        const {children, ...other} = element.props;
+
+        childElement = document.createElement('div');
+
+        if (other['aria-label']) {
+          childElement.setAttribute('aria-label', other['aria-label']);
+        }
       }
     });
+
     const options = {
       ...props,
-      element: hasChildren ? document.createElement('div') : null
+      element: childElement
     };
 
     const mk = new mapLib.Marker(options) as MarkerT;
