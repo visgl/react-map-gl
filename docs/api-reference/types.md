@@ -128,19 +128,19 @@ An object with the following fields:
 
 #### LngLat
 
-A [mapboxgl.LngLat](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglat) object.
+A `LngLat` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglat) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/LngLat/)).
 
 #### LngLatLike
 
-A [LngLat](#lnglat) object, an array of two numbers representing longitude and latitude, or an object with `lng` and `lat` or `lon` and `lat` properties.
+A `LngLat` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatlike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/LngLatLike/)), an array of two numbers representing longitude and latitude, or an object with `lng` and `lat` or `lon` and `lat` properties.
 
 #### LngLatBounds
 
-A [mapboxgl.LngLatBounds](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatbounds) object.
+A `LngLatBounds` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatbounds) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/LngLatBounds/)).
 
 #### LngLatBoundsLike
 
-A [LngLatBounds](#lnglatbounds) object, an array of [LngLatLike](#lnglatlike) objects in [sw, ne] order, or an array of numbers in [west, south, east, north] order.
+A `LngLatBounds` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatboundslike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/LngLatBoundsLike/)), an array of [LngLatLike](#lnglatlike) objects in [sw, ne] order, or an array of numbers in [west, south, east, north] order.
 
 #### Point
 
@@ -148,7 +148,7 @@ A [mapboxgl.Point](https://github.com/mapbox/point-geometry) object.
 
 #### PointLike
 
-A [Point](#point) or an array of two numbers representing x and y screen coordinates in pixels.
+A [Point](#point) or an array of two numbers representing x and y screen coordinates in pixels ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#pointlike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/PointLike/)).
 
 #### MapGeoJSONFeature
 
