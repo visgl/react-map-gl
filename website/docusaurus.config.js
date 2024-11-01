@@ -10,7 +10,7 @@ const {resolve} = require('path');
 const config = {
   title: 'React Map GL',
   tagline: 'React wrapper for MapLibre GL JS and Mapbox GL JS',
-  url: 'https://visgl.github.io/',
+  url: 'https://visgl.github.io',
   baseUrl: '/react-map-gl/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -28,7 +28,7 @@ const config = {
           path: '../docs',
           sidebarPath: resolve('./src/docs-sidebar.js'),
           // Point to to the website directory in your repo.
-          editUrl: 'https://github.com/visgl/react-map-gl/tree/master/docs'
+          editUrl: 'https://github.com/visgl/react-map-gl/tree/master/website'
         },
         theme: {
           customCss: [
