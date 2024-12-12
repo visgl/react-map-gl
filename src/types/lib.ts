@@ -81,6 +81,18 @@ export interface MapInstance extends Evented {
 
   triggerRepaint(): void;
 
+  getCenter(): LngLat;
+
+  getZoom(): number;
+
+  getBearing(): number;
+
+  getPitch(): number;
+
+  getPadding(): PaddingOptions;
+
+  getRenderWorldCopies(): boolean;
+
   setPadding(padding: PaddingOptions);
 
   fitBounds(bounds: any, options?: any);
