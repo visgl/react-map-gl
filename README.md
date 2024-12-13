@@ -63,7 +63,7 @@ See [contribution guide](/CONTRIBUTING.md).
 
 ### Attributions
 
-react-map-gl is part of vis.gl, an [Urban Computing Foundation](https://uc.foundation) project.
+react-map-gl is part of vis.gl, an [OpenJS Foundation](https://openjsf.org) project.
 
 Development is also supported by
 
