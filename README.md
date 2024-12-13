@@ -46,7 +46,7 @@ function App() {
         zoom: 14
       }}
       style={{width: 600, height: 400}}
-      mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
+      mapStyle="https://api.maptiler.com/maps/streets/style.json?key=<Maptiler access token>"
     />
   );
 }
