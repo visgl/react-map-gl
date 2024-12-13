@@ -200,7 +200,7 @@ A source containing vector tiles in [Mapbox Vector Tile format](https://docs.map
 An object with the following fields:
 
 - `type`: string - Event type
-- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/))
+- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/))
 - `originalEvent?`: [Event](https://developer.mozilla.org/en-US/docs/Web/API/Event)
 
 #### MapLayerMouseEvent
@@ -208,7 +208,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/))
+- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/))
 - `originalEvent?`: [MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
 - `point`: [Point](#point)
 - `lngLat`: [LngLat](#lnglat)
@@ -221,7 +221,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/))
+- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/))
 - `originalEvent?`: [WheelEvent](https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent)
 - `preventDefault`: () => void
 - `defaultPrevented`: boolean
@@ -231,7 +231,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/))
+- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/))
 - `originalEvent?`: [TouchEvent](https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent)
 - `point`: [Point](#point)
 - `lngLat`: [LngLat](#lnglat)
@@ -246,7 +246,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string - Event type
-- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/))
+- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/))
 - `viewState`: [ViewState](#viewstate) - the next view state that the camera wants to change to based on user input or transition.
 
 #### MapBoxZoomEvent
@@ -254,7 +254,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/))
+- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/))
 - `originalEvent?`: [MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
 - `boxZoomBounds`: [LngLatBounds](#lnglatbounds)
 
@@ -263,7 +263,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/))
+- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/))
 - `dataType`: 'style'
 
 #### MapSourceDataEvent
@@ -271,7 +271,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/))
+- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/))
 - `dataType`: 'source'
 - `isSourceLoaded`: boolean
 - `source`: string
@@ -287,7 +287,7 @@ See [MapDataEvent](https://docs.mapbox.com/mapbox-gl-js/api/events/#mapdataevent
 An object with the following fields:
 
 - `type`: 'error'
-- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/))
+- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/))
 - `error`: [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)
 
 #### GeolocateEvent
@@ -295,15 +295,15 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/))
-- `target`: `GeolocateControl` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.GeolocateControl/))
+- `target`: `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/))
+- `target`: `GeolocateControl` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/GeolocateControl/))
 
 #### GeolocateResultEvent
 
 An object with the following fields:
 
 - `type`: string
-- `target`: `GeolocateControl` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.GeolocateControl/))
+- `target`: `GeolocateControl` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/GeolocateControl/))
 - `coords`: [GeolocationCoordinates](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationCoordinates) - the current location.
 - `timestamp`: number - the time at which the location was retrieved.
 
@@ -312,7 +312,7 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: `GeolocateControl` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.GeolocateControl/))
+- `target`: `GeolocateControl` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/GeolocateControl/))
 - `code`: PERMISSION_DENIED | POSITION_UNAVAILABLE | TIMEOUT - see [GeolocationPositionError](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError)
 - `message`: string - the details of the error. Specifications note that this is primarily intended for debugging use and not to be shown directly in a user interface.
 
@@ -321,14 +321,14 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: `Marker` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Marker/))
+- `target`: `Marker` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Marker/))
 
 #### MarkerDragEvent
 
 An object with the following fields:
 
 - `type`: string
-- `target`: `Marker` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Marker/))
+- `target`: `Marker` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Marker/))
 - `lngLat`: [LngLat](#lnglat) - the new location of the marker
 
 #### PopupEvent
@@ -336,4 +336,4 @@ An object with the following fields:
 An object with the following fields:
 
 - `type`: string
-- `target`: `Popup` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Popup/))
+- `target`: `Popup` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/))
