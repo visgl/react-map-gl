@@ -77,6 +77,13 @@ export default function createRef<
       const result = map.queryTerrainElevation(lnglat, options);
       map.transform = tr;
       return result;
+    },
+    queryRenderedFeatures: (geometry?: any, options?: any) => {
+      const tr = map.transform;
+      map.transform = mapInstance.transform;
+      const result = map.queryRenderedFeatures(geometry, options);
+      map.transform = tr;
+      return result;
     }
   };
 

@@ -3,11 +3,10 @@ import * as React from 'react';
 import {create, act} from 'react-test-renderer';
 import test from 'tape-promise/tape';
 
-import {createPortalMock, waitForMapLoad} from '../utils/test-utils';
+import {waitForMapLoad} from '../utils/test-utils';
 import mapboxMock from '../utils/mapbox-gl-mock';
 
 test('Popup', async t => {
-  const restoreMock = createPortalMock();
   const mapRef = {current: null};
 
   let map;
@@ -71,8 +70,6 @@ test('Popup', async t => {
   });
 
   t.is(popup.options.className, 'classA', 'className is updated');
-
-  restoreMock();
 
   t.end();
 });

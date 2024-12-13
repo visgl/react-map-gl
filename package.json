@@ -1,7 +1,7 @@
 {
   "name": "react-map-gl",
-  "description": "React components for Mapbox GL JS-compatible libraries",
-  "version": "7.1.0-beta.3",
+  "description": "React components for MapLibre GL JS and Mapbox GL JS",
+  "version": "7.2.0-beta.1",
   "keywords": [
     "mapbox",
     "mapbox-gl",
@@ -14,9 +14,22 @@
     "url": "https://github.com/visgl/react-map-gl.git"
   },
   "license": "MIT",
-  "types": "dist/esm/index.d.ts",
-  "main": "dist/es5/index.js",
-  "module": "dist/esm/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./maplibre": {
+      "types": "./dist/exports-maplibre.d.ts",
+      "require": "./dist/exports-maplibre.cjs",
+      "import": "./dist/exports-maplibre.js"
+    }
+  },
   "files": [
     "src",
     "dist",
@@ -24,9 +37,9 @@
     "README.md"
   ],
   "scripts": {
-    "typecheck": "tsc -p tsconfig.esm.json --noEmit",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "bootstrap": "PUPPETEER_SKIP_DOWNLOAD=true yarn && ocular-bootstrap",
-    "build": "ocular-clean && tsc -b tsconfig.esm.json && tsc -b tsconfig.es5.json",
+    "build": "ocular-clean && ocular-build",
     "lint": "ocular-lint",
     "cover": "ocular-test cover",
     "publish-prod": "ocular-publish prod",
@@ -59,7 +72,7 @@
     "jsdom": "^16.5.0",
     "mapbox-gl": "^2.14.0",
     "maplibre-gl": "^2.4.0",
-    "ocular-dev-tools": "2.0.0-alpha.13",
+    "ocular-dev-tools": "2.0.0-alpha.15",
     "pre-commit": "^1.2.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

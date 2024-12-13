@@ -11,7 +11,7 @@
 
 <h1 align="center">react-map-gl | <a href="https://visgl.github.io/react-map-gl">Docs</a></h1>
 
-`react-map-gl` is a suite of [React](http://facebook.github.io/react/) components designed to provide a React API for [mapbox-gl](https://github.com/mapbox/mapbox-gl-js) or [maplibre-gl](https://maplibre.org/maplibre-gl-js-docs/api/). More information in the online documentation.
+`react-map-gl` is a suite of [React](http://facebook.github.io/react/) components designed to provide a React API for [mapbox-gl](https://github.com/mapbox/mapbox-gl-js) or [maplibre-gl](https://maplibre.org/maplibre-gl-js/docs/). More information in the online documentation.
 
 See our [Design Philosophy](docs/README.md#design-philosophy).
 
@@ -69,7 +69,7 @@ See [contribution guide](/CONTRIBUTING.md).
 
 ### Attributions
 
-react-map-gl is part of vis.gl, an [Urban Computing Foundation](https://uc.foundation) project.
+react-map-gl is part of vis.gl, an [OpenJS Foundation](https://openjsf.org) project.
 
 Development is also supported by
 
