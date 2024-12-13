@@ -21,13 +21,13 @@ Using `react-map-gl` requires `react >= 16.3`.
 
 ```sh
 # Using Maplibre
-npm install --save react-map-gl maplibre-gl
+npm install react-map-gl maplibre-gl
 ```
 _or_
 
 ```sh
 # Using Mapbox
-npm install --save react-map-gl mapbox-gl @types/mapbox-gl
+npm install react-map-gl mapbox-gl @types/mapbox-gl
 ```
 
 ### Example
