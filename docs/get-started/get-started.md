@@ -13,14 +13,14 @@ import TabItem from '@theme/TabItem';
   <TabItem value="mapbox" label="Mapbox">
 
 ```bash
-npm install --save react-map-gl mapbox-gl @types/mapbox-gl
+npm install react-map-gl mapbox-gl @types/mapbox-gl
 ```
 
   </TabItem>
   <TabItem value="maplibre" label="Maplibre">
 
 ```bash
-npm install --save react-map-gl maplibre-gl
+npm install react-map-gl maplibre-gl
 ```
 
   </TabItem>
@@ -129,7 +129,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 ## Using with a Compatible Fork
 
 ```bash
-npm install --save react-map-gl my-map-gl-fork
+npm install react-map-gl my-map-gl-fork
 ```
 
 Then override the `mapLib` prop of `Map`:
