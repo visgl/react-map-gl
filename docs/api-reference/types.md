@@ -132,7 +132,7 @@ A `LngLat` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#
 
 #### LngLatLike
 
-A `LngLat` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatlike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/LngLatLike/)), an array of two numbers representing longitude and latitude, or an object with `lng` and `lat` or `lon` and `lat` properties.
+A [`LngLat`](#lnglat) object, an array of two numbers representing longitude and latitude, or an object with `lng` and `lat` or `lon` and `lat` properties. ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatlike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/LngLatLike/))
 
 #### LngLatBounds
 
@@ -140,15 +140,15 @@ A `LngLatBounds` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geogr
 
 #### LngLatBoundsLike
 
-A `LngLatBounds` object ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatboundslike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/LngLatBoundsLike/)), an array of [LngLatLike](#lnglatlike) objects in [sw, ne] order, or an array of numbers in [west, south, east, north] order.
+A [`LngLatBounds`](#lnglatbounds) object, an array of [`LngLatLike`](#lnglatlike) objects in [sw, ne] order, or an array of numbers in [west, south, east, north] order. ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatboundslike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/LngLatBoundsLike/))
 
 #### Point
 
-A [mapboxgl.Point](https://github.com/mapbox/point-geometry) object.
+A `Point` object. ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#point) | [Maplibre](https://github.com/mapbox/point-geometry))
 
 #### PointLike
 
-A [Point](#point) or an array of two numbers representing x and y screen coordinates in pixels ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#pointlike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/types/PointLike/)).
+A [Point](#point) or an array of two numbers representing x and y screen coordinates in pixels ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/geography/#pointlike) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/PointLike/)).
 
 #### MapGeoJSONFeature
 
