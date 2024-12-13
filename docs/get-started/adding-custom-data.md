@@ -13,7 +13,14 @@ import type {FeatureCollection} from 'geojson';
 const geojson: FeatureCollection = {
   type: 'FeatureCollection',
   features: [
-    {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.8]}}
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [-122.4, 37.8]
+      },
+      properties: {title: '915 Front Street, San Francisco, California'}
+    }
   ]
 };
 
