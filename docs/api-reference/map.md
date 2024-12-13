@@ -1,6 +1,6 @@
 # default (Map)
 
-React component that wraps the base library's `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)). This is also the default export from react-map-gl.
+React component that wraps the base library's `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/)). This is also the default export from react-map-gl.
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -56,7 +56,7 @@ function App() {
 
 ## Properties
 
-Aside from the props listed below, the `Map` component supports all parameters of the `Map` class constructor ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)). Beware that this is not an exhaustive list of all props. Different base map libraries may offer different options and default values. When in doubt, refer to your base map library's documentation.
+Aside from the props listed below, the `Map` component supports all parameters of the `Map` class constructor ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/MapOptions/)). Beware that this is not an exhaustive list of all props. Different base map libraries may offer different options and default values. When in doubt, refer to your base map library's documentation.
 
 ### Layout options
 
@@ -198,49 +198,49 @@ If set, the map is constrained to the given bounds.
 Default: `true`
 
 If `true`, the "box zoom" interaction is enabled. See `BoxZoomHandler`
-([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#boxzoomhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.BoxZoomHandler/))
+([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#boxzoomhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/BoxZoomHandler/))
 
 #### `doubleClickZoom`: boolean {#doubleclickzoom}
 
 Default: `true`
 
-If `true`, the "double click to zoom" interaction is enabled. See `DoubleClickZoomHandler` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#doubleclickzoomhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.DoubleClickZoomHandler/)).
+If `true`, the "double click to zoom" interaction is enabled. See `DoubleClickZoomHandler` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#doubleclickzoomhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/DoubleClickZoomHandler/)).
 
 #### `dragRotate`: boolean {#dragrotate}
 
 Default: `true`
 
-If `true`, the "drag to rotate" interaction is enabled. See `DragRotateHandler` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragrotatehandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.DragRotateHandler/)).
+If `true`, the "drag to rotate" interaction is enabled. See `DragRotateHandler` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragrotatehandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/DragRotateHandler/)).
 
 #### `dragPan`: boolean | Object {#dragpan}
 
 Default: `true`
 
-If `true`, the "drag to pan" interaction is enabled. Optionally accpt an object value that is the options to `DragPanHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragpanhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.DragPanHandler/#enable)).
+If `true`, the "drag to pan" interaction is enabled. Optionally accpt an object value that is the options to `DragPanHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragpanhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/DragPanHandler/#enable)).
 
 #### `keyboard`: boolean {#keyboard}
 
 Default: `true`
 
-If `true`, keyboard shortcuts are enabled. See `KeyboardHandler` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#keyboardhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.KeyboardHandler/)).
+If `true`, keyboard shortcuts are enabled. See `KeyboardHandler` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#keyboardhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/KeyboardHandler/)).
 
 #### `scrollZoom`: boolean | Object {#scrollzoom}
 
 Default: `true`
 
-If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to  `ScrollZoomHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.ScrollZoomHandler/#enable))
+If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to  `ScrollZoomHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/ScrollZoomHandler/#enable))
 
 #### `touchPitch`: boolean | Object {#touchpitch}
 
 Default: `true`
 
-If `true`, the "drag to pitch" interaction is enabled. Optionally accpt an object value that is the options to `TouchPitchHandler.enable`([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchpitchhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.TwoFingersTouchPitchHandler/#enable)).
+If `true`, the "drag to pitch" interaction is enabled. Optionally accpt an object value that is the options to `TouchPitchHandler.enable`([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchpitchhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/TwoFingersTouchPitchHandler/#enable)).
 
 #### `touchZoomRotate`: boolean | Object {#touchzoomrotate}
 
 Default: `true`
 
-If `true`, the "pinch to rotate and zoom" interaction is enabled. Optionally accpt an object value that is the options to `TouchZoomRotateHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchzoomrotatehandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.TwoFingersTouchZoomHandler/#enable)).
+If `true`, the "pinch to rotate and zoom" interaction is enabled. Optionally accpt an object value that is the options to `TouchZoomRotateHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchzoomrotatehandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/TwoFingersTouchZoomRotateHandler/#enable)).
 
 #### `interactiveLayerIds`: string[] {#interactivelayerids}
 
@@ -461,7 +461,7 @@ Called when one of the map's sources loads or changes, including if a tile belon
 
 ### Other options
 
-The following props, along with any options of the `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) not listed above, can be specified to construct the underlying `Map` instance. 
+The following props, along with any options of the `Map` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/MapOptions/)) not listed above, can be specified to construct the underlying `Map` instance. 
 
 Note: props in this section are not reactive. They are only used once when the Map instance is constructed.
 
@@ -577,7 +577,7 @@ import Map from 'react-map-gl';
 import type {MapRef} from 'react-map-gl';
 
 function App() {
-  const mapRef = useRef<MapRef>();
+  const mapRef = useRef<MapRef>(null);
 
   const onMapLoad = useCallback(() => {
     mapRef.current.on('move', () => {
@@ -616,13 +616,13 @@ function App() {
   </TabItem>
 </Tabs>
 
-The [MapRef](./types.md#mapref) object exposes Map methods ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#methods)) that **are safe to call without breaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
+The [MapRef](./types.md#mapref) object exposes Map methods ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-instance-members) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#methods)) that **are safe to call without breaking the React bindings**. For example, `setStyle()` is hidden from the ref object, because the style is supposed to be changed by updating the `mapStyle` prop. Calling the method directly may cause the the React prop to mismatch with the underlying state, and lead to unexpected behaviors.
 
 You can still access the hidden members via `getMap()`:
 
 #### `getMap()` {#getmap}
 
-Returns the native `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/map/)) instance associated with this component.
+Returns the native `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/)) instance associated with this component.
 
 
 
