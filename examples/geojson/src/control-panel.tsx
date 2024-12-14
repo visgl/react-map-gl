@@ -11,7 +11,10 @@ function ControlPanel(props) {
         see details.
       </p>
       <p>
-        Data source: <a href="https://www.census.gov" target="_new">US Census Bureau</a>
+        Data source:{' '}
+        <a href="https://www.census.gov" target="_new">
+          US Census Bureau
+        </a>
       </p>
       <div className="source-link">
         <a
