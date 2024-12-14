@@ -164,8 +164,8 @@ const config = {
                 href: 'https://loaders.gl'
               },
               {
-                label: 'nebula.gl',
-                href: 'https://nebula.gl'
+                label: 'kepler.gl',
+                href: 'https://kepler.gl'
               }
             ]
           },
