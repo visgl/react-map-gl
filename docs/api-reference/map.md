@@ -119,7 +119,7 @@ If `undefined` is provided, removes terrain from the map.
 
 ### Camera options
 
-#### `initialViewState`: object {#initialviewstate}
+#### `initialViewState`: object (`MapProps['initialViewState']`) {#initialviewstate}
 
 The initial view state of the map. If specified, `longitude`, `latitude`, `zoom` etc. in props are ignored when constructing the map. Only specify `initialViewState` if `Map` is being used as an **uncontrolled component**. See [state management](../get-started/state-management.md) for examples.
 
