@@ -625,18 +625,25 @@ export default class Mapbox<
   }
 
   _onPointerEvent = (e: MapMouseEvent<MapT> | MapMouseEvent<MapT>) => {
-    if (e.type === 'mousemove' || e.type === 'mouseout') {
-      this._updateHover(e);
-    }
-
-    // @ts-ignore
-    const cb = this.props[pointerEvents[e.type]];
-    if (cb) {
-      if (this.props.interactiveLayerIds && e.type !== 'mouseover' && e.type !== 'mouseout') {
-        e.features = this._hoveredFeatures || this._queryRenderedFeatures(e.point);
+    const map = this._map;
+    const tr = map.transform;
+    try {
+      map.transform = this._renderTransform;
+      if (e.type === 'mousemove' || e.type === 'mouseout') {
+        this._updateHover(e);
       }
-      cb(e);
-      delete e.features;
+
+      // @ts-ignore
+      const cb = this.props[pointerEvents[e.type]];
+      if (cb) {
+        if (this.props.interactiveLayerIds && e.type !== 'mouseover' && e.type !== 'mouseout') {
+          e.features = this._hoveredFeatures || this._queryRenderedFeatures(e.point);
+        }
+        cb(e);
+        delete e.features;
+      }
+    } finally {
+      map.transform = tr;
     }
   };
 
