@@ -1,6 +1,6 @@
 # FullscreenControl
 
-React component that wraps the base library's `FullscreenControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#fullscreencontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#fullscreencontrol)).
+React component that wraps the base library's `FullscreenControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#fullscreencontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/FullscreenControl/)).
 
 
 import Tabs from '@theme/Tabs';
@@ -78,4 +78,4 @@ Placement of the control relative to the map.
 
 ## Source
 
-[fullscreen-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/fullscreen-control.ts)
+[fullscreen-control.ts](https://github.com/visgl/react-map-gl/tree/7.1-release/src/components/fullscreen-control.tsx)

@@ -1,6 +1,6 @@
 # NavigationControl
 
-React component that wraps the base library's `NavigationControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#navigationcontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#navigationcontrol)).
+React component that wraps the base library's `NavigationControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#navigationcontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/NavigationControl/)).
 
 
 import Tabs from '@theme/Tabs';
@@ -66,7 +66,7 @@ CSS style override that applies to the control's container.
 
 The properties in this section are not reactive. They are only used when the component first mounts.
 
-Any options supported by the `NavigationControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#navigationcontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js-docs/api/markers/#navigationcontrol)), such as
+Any options supported by the `NavigationControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#navigationcontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/NavigationControlOptions/)), such as
 
 - `showCompass`
 - `showZoom`
