@@ -9,7 +9,7 @@ on:
 
 jobs:
   test-node:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     env:
       VITE_MAPBOX_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN_CI }}
