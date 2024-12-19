@@ -27,7 +27,7 @@ _or_
 
 ```sh
 # Using Mapbox
-npm install react-map-gl mapbox-gl @types/mapbox-gl
+npm install react-map-gl mapbox-gl
 ```
 
 ### Example
