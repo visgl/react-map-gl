@@ -77,6 +77,8 @@ export interface MapInstance extends Evented {
 
   getCanvas(): HTMLCanvasElement;
 
+  getCanvasContainer(): HTMLElement;
+
   remove(): void;
 
   triggerRepaint(): void;
@@ -182,7 +184,7 @@ export interface ScaleControlInstance extends IControl {
 /**
  * A user-facing type that represents the minimal intersection between Mapbox and Maplibre
  * User provided `mapLib` is supposed to implement this interface
- * Only losely typed for compatibility
+ * Only loosely typed for compatibility
  */
 export interface MapLib<MapT extends MapInstance> {
   supported?: (options: any) => boolean;
