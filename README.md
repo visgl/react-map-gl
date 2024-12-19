@@ -11,7 +11,7 @@
 
 <h1 align="center">react-map-gl | <a href="https://visgl.github.io/react-map-gl">Docs</a></h1>
 
-`react-map-gl` is a suite of [React](http://facebook.github.io/react/) components designed to provide a React API for [mapbox-gl](https://github.com/mapbox/mapbox-gl-js) or [maplibre-gl](https://maplibre.org/maplibre-gl-js/docs/). More information in the online documentation.
+`react-map-gl` is a suite of [React](https://react.dev/) components designed to provide a React API for [mapbox-gl](https://github.com/mapbox/mapbox-gl-js) or [maplibre-gl](https://maplibre.org/maplibre-gl-js/docs/). More information in the online documentation.
 
 See our [Design Philosophy](docs/README.md#design-philosophy).
 
@@ -20,28 +20,61 @@ See our [Design Philosophy](docs/README.md#design-philosophy).
 Using `react-map-gl` requires `react >= 16.3`.
 
 ```sh
-npm install --save react-map-gl mapbox-gl
+# Using Maplibre
+npm install react-map-gl maplibre-gl
+```
+_or_
+
+```sh
+# Using Mapbox
+npm install react-map-gl mapbox-gl
 ```
 
 ### Example
 
 ```js
+// Using Maplibre
+import * as React from 'react';
+import Map from 'react-map-gl/maplibre';
+
+function App() {
+  return (
+    <Map
+      initialViewState={{
+        longitude: -122.4,
+        latitude: 37.8,
+        zoom: 14
+      }}
+      style={{width: 600, height: 400}}
+      mapStyle="https://api.maptiler.com/maps/streets/style.json?key=<Maptiler access token>"
+    />
+  );
+}
+```
+_or_
+
+```js
+// Using Mapbox
 import * as React from 'react';
 import Map from 'react-map-gl';
 
 function App() {
-  return <Map
-    mapLib={import('mapbox-gl')}
-    initialViewState={{
-      longitude: -100,
-      latitude: 40,
-      zoom: 3.5
-    }}
-    style={{width: 600, height: 400}}
-    mapStyle="mapbox://styles/mapbox/streets-v9"
-  />;
+  return (
+    <Map
+      mapboxAccessToken="<Mapbox access token>"
+      initialViewState={{
+        longitude: -100,
+        latitude: 40,
+        zoom: 3.5
+      }}
+      style={{width: 600, height: 400}}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+    />
+  );
 }
 ```
+
+Learn more with in our [Getting Started](https://visgl.github.io/react-map-gl/docs/get-started) guide.
 
 ### Using Mapbox Tokens
 
