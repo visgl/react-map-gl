@@ -2,6 +2,12 @@
 
 # Version 7.1
 
+## 7.1.8 (Dec 19, 2024)
+
+- Improves Source#updateSource to use setTiles function if available (#2355)
+- Update common type for compatibility (#2448)
+- fix: change transformation setters call order (#2391)
+
 ## 7.1.7 (Dec 18, 2023)
 
 - Allow disabling RTLTextPlugin and load lazy (#2312)
