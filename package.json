@@ -68,5 +68,9 @@
   },
   "pre-commit": [
     "test-fast"
-  ]
+  ],
+  "volta": {
+    "node": "18.20.5",
+    "yarn": "1.22.22"
+  }
 }
