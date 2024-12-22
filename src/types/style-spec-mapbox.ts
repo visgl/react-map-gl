@@ -3,16 +3,16 @@
  */
 // Layers
 import type {
-  BackgroundLayer,
-  SkyLayer,
-  CircleLayer,
-  FillLayer,
-  FillExtrusionLayer,
-  HeatmapLayer,
-  HillshadeLayer,
-  LineLayer,
-  RasterLayer,
-  SymbolLayer
+  BackgroundLayerSpecification as BackgroundLayer,
+  SkyLayerSpecification as SkyLayer,
+  CircleLayerSpecification as CircleLayer,
+  FillLayerSpecification as FillLayer,
+  FillExtrusionLayerSpecification as FillExtrusionLayer,
+  HeatmapLayerSpecification as HeatmapLayer,
+  HillshadeLayerSpecification as HillshadeLayer,
+  LineLayerSpecification as LineLayer,
+  RasterLayerSpecification as RasterLayer,
+  SymbolLayerSpecification as SymbolLayer
 } from 'mapbox-gl';
 
 export type AnyLayer =
@@ -42,13 +42,13 @@ export type {
 
 // Sources
 import type {
-  GeoJSONSourceRaw,
-  VideoSourceRaw,
-  ImageSourceRaw,
-  VectorSource as VectorSourceRaw,
-  RasterSource,
-  CanvasSourceRaw,
-  RasterDemSource
+  GeoJSONSourceSpecification  as GeoJSONSourceRaw,
+  VideoSourceSpecification as VideoSourceRaw,
+  ImageSourceSpecification as ImageSourceRaw,
+  VectorSourceSpecification as VectorSourceRaw,
+  RasterSourceSpecification as RasterSource,
+  CanvasSourceSpecification as CanvasSourceRaw,
+  RasterDEMSourceSpecification as RasterDemSource
 } from 'mapbox-gl';
 
 export type AnySource =
@@ -72,9 +72,9 @@ export type {
 
 // Other
 export type {
-  Style as MapStyle,
-  Light,
-  Fog,
+  StyleSpecification as MapStyle,
+  LightsSpecification as Light,
+  FogSpecification as Fog,
   TerrainSpecification as Terrain,
-  Projection
+  ProjectionSpecification as Projection
 } from 'mapbox-gl';

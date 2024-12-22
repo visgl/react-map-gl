@@ -63,10 +63,10 @@ export type MapGeoJSONFeature = GeoJSON.Feature<GeoJSON.Geometry> & {
 };
 
 export type PaddingOptions = {
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
+  readonly top?: number;
+  readonly bottom?: number;
+  readonly right?: number;
+  readonly left?: number;
 };
 
 /* Public */
@@ -87,7 +87,7 @@ export type ViewState = {
   padding: PaddingOptions;
 };
 
-export type ControlPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+export type ControlPosition = 'top-left' | 'top' | 'top-right' | 'right' | 'bottom-right' | 'bottom' | 'bottom-left' | 'left';
 
 export interface ImmutableLike<T> {
   toJS: () => T;

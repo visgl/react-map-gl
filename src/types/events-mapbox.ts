@@ -1,13 +1,14 @@
 import {
   Map,
-  MapboxEvent as MapEvent,
+  MapEvent as MapEvent,
   MapMouseEvent,
-  MapLayerMouseEvent,
+  MapMouseEvent as MapLayerMouseEvent,
   MapTouchEvent,
-  MapLayerTouchEvent,
+  MapTouchEvent as MapLayerTouchEvent,
   MapStyleDataEvent,
   MapSourceDataEvent,
   MapWheelEvent,
+  // @ts-ignore
   MapBoxZoomEvent
 } from 'mapbox-gl';
 import {ErrorEvent as _ErrorEvent, ViewStateChangeEvent as _ViewStateChangeEvent} from './events';

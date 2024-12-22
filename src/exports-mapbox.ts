@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type {
   Map as MapboxMap,
-  MapboxOptions,
+  MapOptions as MapboxOptions,
   Marker as MapboxMarker,
   MarkerOptions,
   Popup as MapboxPopup,
