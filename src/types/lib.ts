@@ -5,7 +5,7 @@ export interface IControl<MapT extends MapInstance = MapInstance> {
 
   onRemove(map: MapT): void;
 
-  getDefaultPosition?: (() => string) | undefined;
+  getDefaultPosition?: (() => ControlPosition) | undefined;
 }
 
 type Listener = (event?: any) => any;
@@ -71,7 +71,7 @@ export interface MapInstance extends Evented {
 
   unproject(point: any): LngLat;
 
-  queryTerrainElevation?(lngLat: any, options?: any): number | null;
+  queryTerrainElevation?(lngLat: any, options?: any): number | null | undefined;
 
   getContainer(): HTMLElement;
 
@@ -145,7 +145,7 @@ export interface PopupInstance extends Evented {
   getLngLat(): LngLat;
   setLngLat(lnglat: LngLatLike): this;
 
-  getElement(): HTMLElement;
+  getElement(): HTMLElement | undefined;
 
   setDOMContent(htmlNode: any): this;
 
