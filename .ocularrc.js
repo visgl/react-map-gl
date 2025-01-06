@@ -1,17 +1,17 @@
+/** @typedef {import('@vis.gl/dev-tools').OcularConfig} OcularConfig */
 import {resolve} from 'path';
 
+/** @type {OcularConfig} */
 export default {
   lint: {
-    paths: ['src', 'test', 'examples']
+    paths: ['modules', 'test', 'examples']
   },
 
-  typescript: {
-    project: 'tsconfig.build.json'
+  coverage: {
+    test: 'browser'
   },
-
   aliases: {
-    'react-map-gl/test': resolve('./test'),
-    'react-map-gl': resolve('./src')
+    'react-map-gl/test': resolve('./test')
   },
   nodeAliases: {
     'react-dom': resolve('./test/src/utils/react-dom-mock.js')

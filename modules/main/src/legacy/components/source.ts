@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {useContext, useEffect, useMemo, useState, useRef} from 'react';
-import {cloneElement} from 'react';
+import {useContext, useEffect, useMemo, useState, useRef, cloneElement} from 'react';
 import {MapContext} from './map';
 import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';

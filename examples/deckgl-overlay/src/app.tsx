@@ -3,9 +3,8 @@ import {createRoot} from 'react-dom/client';
 import {ArcLayer} from '@deck.gl/layers/typed';
 import {DeckProps, PickingInfo} from '@deck.gl/core/typed';
 import {MapboxOverlay} from '@deck.gl/mapbox/typed';
-import {useControl} from 'react-map-gl';
+import Map, {useControl,NavigationControl} from 'react-map-gl';
 
-import Map, {NavigationControl} from 'react-map-gl';
 
 const TOKEN = ''; // Set your mapbox token here
 

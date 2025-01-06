@@ -624,7 +624,7 @@ export default class Mapbox<
     }
   }
 
-  _onPointerEvent = (e: MapMouseEvent<MapT> | MapMouseEvent<MapT>) => {
+  _onPointerEvent = (e: MapMouseEvent<MapT>) => {
     if (e.type === 'mousemove' || e.type === 'mouseout') {
       this._updateHover(e);
     }
@@ -727,12 +727,14 @@ function getAccessTokenFromEnv(): string {
 
   // Note: This depends on bundler plugins (e.g. webpack) importing environment correctly
   try {
+    // eslint-disable-next-line no-process-env
     accessToken = accessToken || process.env.MapboxAccessToken;
   } catch {
     // ignore
   }
 
   try {
+    // eslint-disable-next-line no-process-env
     accessToken = accessToken || process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
   } catch {
     // ignore

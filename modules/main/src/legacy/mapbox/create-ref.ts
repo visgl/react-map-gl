@@ -34,7 +34,7 @@ const skipMethods = [
 
 export type MapRef<MapT extends MapInstance> = {
   getMap(): MapT;
-} & Omit<MapT, typeof skipMethods[number]>;
+} & Omit<MapT, (typeof skipMethods)[number]>;
 
 export default function createRef<
   StyleT extends MapStyle,
@@ -46,7 +46,7 @@ export default function createRef<
   }
 
   const map = mapInstance.map as MapInstanceInternal<MapT>;
-  const result: any = {
+  const ref: any = {
     getMap: () => map,
 
     // Overwrite getters to use our shadow transform
@@ -90,11 +90,11 @@ export default function createRef<
   for (const key of getMethodNames(map)) {
     // @ts-expect-error
     if (!(key in result) && !skipMethods.includes(key)) {
-      result[key] = map[key].bind(map);
+      ref[key] = map[key].bind(map);
     }
   }
 
-  return result;
+  return ref;
 }
 
 function getMethodNames(obj: Object) {
