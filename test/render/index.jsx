@@ -1,7 +1,7 @@
 /* global window, document, FontFace */
 import test from 'tape-promise/tape';
 import * as React from 'react';
-import Map from 'react-map-gl';
+import {Map} from 'react-map-gl/mapbox-legacy';
 import {createRoot} from 'react-dom/client';
 import mapboxgl from 'mapbox-gl';
 

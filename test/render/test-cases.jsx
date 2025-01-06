@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {NavigationControl, GeolocateControl, Marker, Popup, Source, Layer} from 'react-map-gl';
+import {
+  NavigationControl,
+  GeolocateControl,
+  Marker,
+  Popup,
+  Source,
+  Layer
+} from 'react-map-gl/mapbox-legacy';
 
 const __MAPBOX_TOKEN__ = import.meta.env.VITE_MAPBOX_TOKEN;
 
