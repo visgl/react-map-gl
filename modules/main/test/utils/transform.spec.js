@@ -1,5 +1,8 @@
 import test from 'tape-promise/tape';
-import {transformToViewState, applyViewStateToTransform} from 'react-map-gl/mapbox-legacy/utils/transform';
+import {
+  transformToViewState,
+  applyViewStateToTransform
+} from 'react-map-gl/mapbox-legacy/utils/transform';
 
 import Transform from './mapbox-gl-mock/transform';
 
