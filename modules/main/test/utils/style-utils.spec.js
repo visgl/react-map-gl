@@ -1,6 +1,6 @@
 import test from 'tape-promise/tape';
 
-import {normalizeStyle} from 'react-map-gl/utils/style-utils';
+import {normalizeStyle} from 'react-map-gl/mapbox-legacy/utils/style-utils';
 
 const testStyle = {
   version: 8,

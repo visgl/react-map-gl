@@ -13,29 +13,24 @@
   ],
   "scripts": {
     "bootstrap": "yarn && ocular-bootstrap && npm run build",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "build": "ocular-clean && ocular-build",
     "lint": "ocular-lint",
     "publish-beta": "ocular-publish version-only-beta",
     "publish-prod": "ocular-publish version-only-prod",
     "test": "ocular-test",
-    "test-fast": "yarn typecheck && ocular-test node",
+    "test-fast": "ocular-build && ocular-test node",
     "metrics": "ocular-metrics",
     "update-release-branch": "scripts/update-release-branch.sh"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/react": "^16.0.0",
-    "jsdom": "^16.5.0",
-    "mapbox-gl": "^2.14.0",
-    "maplibre-gl": "^4.0.0",
     "@vis.gl/dev-tools": "1.0.0-alpha.21",
     "@vis.gl/ts-plugins": "1.0.0-alpha.21",
     "pre-commit": "^1.2.2",
     "puppeteer": "^22.4.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-test-renderer": "^18.0.0",
     "typescript": "^5.0.0"
   },
   "pre-commit": [

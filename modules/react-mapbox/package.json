@@ -31,6 +31,9 @@
   ],
   "dependencies": {
   },
+  "devDependencies": {
+    "mapbox-gl": "3.9.0"
+  },
   "peerDependencies": {
     "mapbox-gl": ">=3.5.0",
     "react": ">=16.3.0",

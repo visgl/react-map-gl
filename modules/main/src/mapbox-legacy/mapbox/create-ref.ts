@@ -89,7 +89,7 @@ export default function createRef<
 
   for (const key of getMethodNames(map)) {
     // @ts-expect-error
-    if (!(key in result) && !skipMethods.includes(key)) {
+    if (!(key in ref) && !skipMethods.includes(key)) {
       ref[key] = map[key].bind(map);
     }
   }

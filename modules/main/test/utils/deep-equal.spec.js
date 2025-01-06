@@ -1,5 +1,5 @@
 import test from 'tape-promise/tape';
-import {deepEqual, arePointsEqual} from 'react-map-gl/utils/deep-equal';
+import {deepEqual, arePointsEqual} from 'react-map-gl/mapbox-legacy/utils/deep-equal';
 
 test('deepEqual', t => {
   const testCases = [

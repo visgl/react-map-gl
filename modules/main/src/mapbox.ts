@@ -1,1 +1,1 @@
-// export * from '@vis.gl/react-mapbox';
+export * from '@vis.gl/react-mapbox';

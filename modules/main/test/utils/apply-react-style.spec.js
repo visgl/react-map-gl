@@ -1,8 +1,13 @@
 import test from 'tape-promise/tape';
-import {applyReactStyle} from 'react-map-gl/utils/apply-react-style';
+import {applyReactStyle} from 'react-map-gl/mapbox-legacy/utils/apply-react-style';
 
 test('applyReactStyle', t => {
   /* global document */
+  if (typeof document === 'undefined') {
+    t.end();
+    return;
+  }
+
   const div = document.createElement('div');
 
   t.doesNotThrow(() => applyReactStyle(null, {}), 'null element');

@@ -12,7 +12,7 @@ import type {
   ImageSourceImplemtation,
   AnySourceImplementation
 } from '../types';
-import type {GeoJSONSourceRaw, ImageSourceRaw, VectorSourceRaw} from '../types/style-spec-maplibre';
+import type {GeoJSONSourceRaw, ImageSourceRaw, VectorSourceRaw} from '../types/style-spec-mapbox';
 
 export type SourceProps<SourceT> = (SourceT | CustomSource) & {
   id?: string;

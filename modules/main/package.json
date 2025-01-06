@@ -15,9 +15,6 @@
   },
   "license": "MIT",
   "type": "module",
-  "types": "dist/index.d.ts",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
   "exports": {
     "./mapbox": {
       "types": "./dist/mapbox.d.ts",
@@ -30,9 +27,9 @@
       "import": "./dist/maplibre.js"
     },
     "./mapbox-legacy": {
-      "types": "./dist/legacy/index.d.ts",
-      "require": "./dist/legacy/index.cjs",
-      "import": "./dist/legacy/index.js"
+      "types": "./dist/mapbox-legacy/index.d.ts",
+      "require": "./dist/mapbox-legacy/index.cjs",
+      "import": "./dist/mapbox-legacy/index.js"
     }
   },
   "files": [
@@ -44,17 +41,17 @@
     "@vis.gl/react-maplibre": "8.0.0-alpha.0",
     "@vis.gl/react-mapbox": "8.0.0-alpha.0"
   },
+  "devDependencies": {
+    "@types/mapbox-gl": "3.4.0",
+    "mapbox-gl": "1.13.0"
+  },
   "peerDependencies": {
-    "@types/mapbox-gl": ">=1.0.0",
     "mapbox-gl": ">=1.13.0",
     "maplibre-gl": ">=1.13.0",
     "react": ">=16.3.0",
     "react-dom": ">=16.3.0"
   },
   "peerDependenciesMeta": {
-    "@types/mapbox-gl": {
-      "optional": true
-    },
     "mapbox-gl": {
       "optional": true
     },
