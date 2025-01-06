@@ -9,9 +9,11 @@ npm-debug.log
 package-lock.json
 examples/**/yarn.lock
 test/**/yarn.lock
-*/**/package-lock.json
+**/package-lock.json
+**/tsconfig.tsbuildinfo
 yarn-error.log
 .DS_Store
 .reify-cache
+tsconfig.tsbuildinfo
 
 .idea

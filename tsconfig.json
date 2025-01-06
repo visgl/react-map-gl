@@ -1,18 +1,44 @@
 {
+  "ts-node": {
+    "include": [
+      "modules",
+      "test"
+    ],
+    // It is faster to skip typechecking. Remove if you want ts-node to do typechecking.
+    "transpileOnly": true
+  },
   "compilerOptions": {
     "target": "es2020",
     "module": "es2020",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "jsx": "react",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "noEmit": true
+    "baseUrl": "./",
+    "paths": {
+      "react-map-gl": ["modules/main/src"],
+      "@vis.gl/react-mapbox": ["modules/react-mapbox/src"],
+      "@vis.gl/react-maplibre": ["modules/react-maplibre/src"]
+    },
+    "plugins": [
+      {
+        "transform": "@vis.gl/ts-plugins/ts-transform-append-extension",
+        "extensions": [".js"],
+        "after": true
+      },
+      {
+        "transform": "@vis.gl/ts-plugins/ts-transform-append-extension",
+        "extensions": [".js"],
+        "afterDeclarations": true
+      }
+    ]
   },
   "include":[
     "examples/**/*",
-    "src/**/*",
+    "modules/**/*",
     "test/**/*"
   ]
 }

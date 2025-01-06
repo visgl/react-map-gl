@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-function ControlPanel(props) {
+function ControlPanel() {
   return (
     <div className="control-panel">
       <h3>3D Terrain</h3>
