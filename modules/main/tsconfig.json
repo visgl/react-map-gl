@@ -8,6 +8,7 @@
     "outDir": "dist"
   },
   "references": [
+    {"path": "../react-mapbox"},
     {"path": "../react-maplibre"}
   ]
 }

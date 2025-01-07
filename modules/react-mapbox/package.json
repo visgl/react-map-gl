@@ -1,6 +1,6 @@
 {
   "name": "@vis.gl/react-mapbox",
-  "description": "React components for Maplibre GL JS",
+  "description": "React components for Mapbox GL JS",
   "version": "8.0.0-alpha.0",
   "keywords": [
     "mapbox",
