@@ -33,7 +33,7 @@
     "@maplibre/maplibre-gl-style-spec": "^19.2.1"
   },
   "devDependencies": {
-    "maplibre-gl": "5.0.0"
+    "maplibre-gl": "^5.0.0"
   },
   "peerDependencies": {
     "maplibre-gl": ">=4.0.0",
