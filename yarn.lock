@@ -5236,10 +5236,10 @@ mapbox-gl@1.13.0:
     tinyqueue "^2.0.3"
     vt-pbf "^3.1.1"
 
-mapbox-gl@3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-3.9.0.tgz#b6d0720f80d9ef3c8091359f2840615c7e973f48"
-  integrity sha512-QKAxLHcbdoqobXuhu2PP6HJDSy0/GhfZuO5O8BrmwfR0ihZbA5ihYD/u0wGqu2QTDWi/DbgCWJIlV2mXh2Sekg==
+mapbox-gl@^3.9.3:
+  version "3.9.3"
+  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-3.9.3.tgz#07e67fd774af52b6e50e82172ee8f1f016d74618"
+  integrity sha512-31mh95f35srpBMxAP32F9dKQXz7pT5VxQA5r6bFY6Aa5G6Z6NC/SVOTyWR+G/wY8wXWTHAnOaAAf5UkD5++/Kg==
   dependencies:
     "@mapbox/jsonlint-lines-primitives" "^2.0.2"
     "@mapbox/mapbox-gl-supported" "^3.0.0"
