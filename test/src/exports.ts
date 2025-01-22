@@ -31,6 +31,6 @@ function getMissingExports(module: any): null | string[] {
 test('Consistent component names#legacy', t => {
   t.notOk(getMissingExports(legacyComponents), 'Legacy endpoint contains all components');
   t.notOk(getMissingExports(maplibreComponents), 'Maplibre endpoint contains all components');
-  // t.notOk(getMissingExports(mapboxComponents), 'Mapbox endpoint contains all components');
+  t.notOk(getMissingExports(mapboxComponents), 'Mapbox endpoint contains all components');
   t.end();
 });
