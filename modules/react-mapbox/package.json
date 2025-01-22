@@ -32,7 +32,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "mapbox-gl": "3.9.0"
+    "mapbox-gl": "^3.9.0"
   },
   "peerDependencies": {
     "mapbox-gl": ">=3.5.0",
