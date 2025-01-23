@@ -1,32 +1,28 @@
 import * as React from 'react';
 import {useEffect, memo} from 'react';
 import {applyReactStyle} from '../utils/apply-react-style';
-import useControl from './use-control';
+import {useControl} from './use-control';
 
-import type {ControlPosition, AttributionControlInstance} from '../types';
+import type {ControlPosition, AttributionControlOptions} from '../types/lib';
 
-export type AttributionControlProps<OptionsT> = OptionsT & {
+export type AttributionControlProps = AttributionControlOptions & {
   /** Placement of the control relative to the map. */
   position?: ControlPosition;
   /** CSS style override, applied to the control's container */
   style?: React.CSSProperties;
 };
 
-function AttributionControl<AttributionControlOptions, ControlT extends AttributionControlInstance>(
-  props: AttributionControlProps<AttributionControlOptions>
-): null {
-  const ctrl = useControl<ControlT>(
-    ({mapLib}) => new mapLib.AttributionControl(props) as ControlT,
-    {
-      position: props.position
-    }
-  );
+function _AttributionControl(props: AttributionControlProps) {
+  const ctrl = useControl(({mapLib}) => new mapLib.AttributionControl(props), {
+    position: props.position
+  });
 
   useEffect(() => {
+    // @ts-expect-error accessing private member
     applyReactStyle(ctrl._container, props.style);
   }, [props.style]);
 
   return null;
 }
 
-export default memo(AttributionControl);
+export const AttributionControl = memo(_AttributionControl);

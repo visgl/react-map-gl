@@ -8,29 +8,27 @@ import {normalizeStyle} from '../utils/style-utils';
 import {deepEqual} from '../utils/deep-equal';
 
 import type {
-  Transform,
   ViewState,
-  ViewStateChangeEvent,
   Point,
   PointLike,
   PaddingOptions,
-  MapStyle,
   ImmutableLike,
   LngLatBoundsLike,
-  Callbacks,
+  MapGeoJSONFeature
+} from '../types/common';
+import type {MapStyle, Light, Terrain, Fog, Projection} from '../types/style-spec';
+import type {MapInstance} from '../types/lib';
+import type {Transform, MapInstanceInternal} from '../types/internal';
+import type {
+  MapCallbacks,
+  ViewStateChangeEvent,
   MapEvent,
   ErrorEvent,
-  MapMouseEvent,
-  MapGeoJSONFeature,
-  MapInstance,
-  MapInstanceInternal
-} from '../types';
+  MapMouseEvent
+} from '../types/events';
 
-export type MapboxProps<
-  StyleT extends MapStyle = MapStyle,
-  CallbacksT extends Callbacks = {}
-> = Partial<ViewState> &
-  CallbacksT & {
+export type MapboxProps = Partial<ViewState> &
+  MapCallbacks & {
     // Init options
     mapboxAccessToken?: string;
 
@@ -59,19 +57,23 @@ export type MapboxProps<
     // Styling
 
     /** Mapbox style */
-    mapStyle?: string | StyleT | ImmutableLike<StyleT>;
+    mapStyle?: string | MapStyle | ImmutableLike<MapStyle>;
     /** Enable diffing when the map style changes
      * @default true
      */
     styleDiffing?: boolean;
+    /** The projection property of the style. Must conform to the Projection Style Specification.
+     * @default 'mercator'
+     */
+    projection?: Projection;
     /** The fog property of the style. Must conform to the Fog Style Specification .
      * If `undefined` is provided, removes the fog from the map. */
-    fog?: StyleT['fog'];
+    fog?: Fog;
     /** Light properties of the map. */
-    light?: StyleT['light'];
+    light?: Light;
     /** Terrain property of the style. Must conform to the Terrain Style Specification .
      * If `undefined` is provided, removes terrain from the map. */
-    terrain?: StyleT['terrain'];
+    terrain?: Terrain;
 
     /** Default layers to query on pointer events */
     interactiveLayerIds?: string[];
@@ -152,16 +154,12 @@ const handlerNames = [
 /**
  * A wrapper for mapbox-gl's Map class
  */
-export default class Mapbox<
-  StyleT extends MapStyle = MapStyle,
-  CallbacksT extends Callbacks = {},
-  MapT extends MapInstance = MapInstance
-> {
+export default class Mapbox {
   private _MapClass: {new (options: any): MapInstance};
   // mapboxgl.Map instance
-  private _map: MapInstanceInternal<MapT> = null;
+  private _map: MapInstanceInternal = null;
   // User-supplied props
-  props: MapboxProps<StyleT, CallbacksT>;
+  props: MapboxProps;
 
   // Mapbox map is stateful.
   // During method calls/user interactions, map.transform is mutated and
@@ -191,7 +189,7 @@ export default class Mapbox<
 
   constructor(
     MapClass: {new (options: any): MapInstance},
-    props: MapboxProps<StyleT, CallbacksT>,
+    props: MapboxProps,
     container: HTMLDivElement
   ) {
     this._MapClass = MapClass;
@@ -199,7 +197,7 @@ export default class Mapbox<
     this._initialize(container);
   }
 
-  get map(): MapT {
+  get map(): MapInstance {
     return this._map;
   }
 
@@ -207,7 +205,7 @@ export default class Mapbox<
     return this._renderTransform;
   }
 
-  setProps(props: MapboxProps<StyleT, CallbacksT>) {
+  setProps(props: MapboxProps) {
     const oldProps = this.props;
     this.props = props;
 
@@ -229,11 +227,8 @@ export default class Mapbox<
     }
   }
 
-  static reuse<StyleT extends MapStyle, CallbacksT extends Callbacks, MapT extends MapInstance>(
-    props: MapboxProps<StyleT, CallbacksT>,
-    container: HTMLDivElement
-  ): Mapbox<StyleT, CallbacksT, MapT> {
-    const that = Mapbox.savedMaps.pop() as Mapbox<StyleT, CallbacksT, MapT>;
+  static reuse(props: MapboxProps, container: HTMLDivElement): Mapbox {
+    const that = Mapbox.savedMaps.pop();
     if (!that) {
       return null;
     }
@@ -250,16 +245,6 @@ export default class Mapbox<
     // Step 2: replace the internal container with new container from the react component
     // @ts-ignore
     map._container = container;
-
-    // With maplibre-gl as mapLib, map uses ResizeObserver to observe when its container resizes.
-    // When reusing the saved map, we need to disconnect the observer and observe the new container.
-    // Step 3: telling the ResizeObserver to disconnect and observe the new container
-    // @ts-ignore
-    const resizeObserver = map._resizeObserver;
-    if (resizeObserver) {
-      resizeObserver.disconnect();
-      resizeObserver.observe(container);
-    }
 
     // Step 4: apply new props
     that.setProps({...props, styleDiffing: false});
@@ -319,7 +304,7 @@ export default class Mapbox<
       };
     }
 
-    const map = new this._MapClass(mapOptions) as MapInstanceInternal<MapT>;
+    const map = new this._MapClass(mapOptions) as MapInstanceInternal;
     // Props that are not part of constructor options
     if (viewState.padding) {
       map.setPadding(viewState.padding);
@@ -331,12 +316,14 @@ export default class Mapbox<
 
     // Hack
     // Insert code into map's render cycle
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const renderMap = map._render;
     map._render = (arg: number) => {
       this._inRender = true;
       renderMap.call(map, arg);
       this._inRender = false;
     };
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const runRenderTaskQueue = map._renderTaskQueue.run;
     map._renderTaskQueue.run = (arg: number) => {
       runRenderTaskQueue.call(map._renderTaskQueue, arg);
@@ -414,7 +401,7 @@ export default class Mapbox<
      @param {object} nextProps
      @returns {bool} true if size has changed
    */
-  _updateSize(nextProps: MapboxProps<StyleT>): boolean {
+  _updateSize(nextProps: MapboxProps): boolean {
     // Check if size is controlled
     const {viewState} = nextProps;
     if (viewState) {
@@ -433,7 +420,7 @@ export default class Mapbox<
      @param {bool} triggerEvents - should fire camera events
      @returns {bool} true if anything is changed
    */
-  _updateViewState(nextProps: MapboxProps<StyleT>, triggerEvents: boolean): boolean {
+  _updateViewState(nextProps: MapboxProps, triggerEvents: boolean): boolean {
     if (this._internalUpdate) {
       return false;
     }
@@ -480,7 +467,7 @@ export default class Mapbox<
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateSettings(nextProps: MapboxProps<StyleT>, currProps: MapboxProps<StyleT>): boolean {
+  _updateSettings(nextProps: MapboxProps, currProps: MapboxProps): boolean {
     const map = this._map;
     let changed = false;
     for (const propName of settingNames) {
@@ -498,7 +485,7 @@ export default class Mapbox<
      @param {object} currProps
      @returns {bool} true if style is changed
    */
-  _updateStyle(nextProps: MapboxProps<StyleT>, currProps: MapboxProps<StyleT>): boolean {
+  _updateStyle(nextProps: MapboxProps, currProps: MapboxProps): boolean {
     if (nextProps.cursor !== currProps.cursor) {
       this._map.getCanvas().style.cursor = nextProps.cursor || '';
     }
@@ -522,7 +509,7 @@ export default class Mapbox<
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateStyleComponents(nextProps: MapboxProps<StyleT>, currProps: MapboxProps<StyleT>): boolean {
+  _updateStyleComponents(nextProps: MapboxProps, currProps: MapboxProps): boolean {
     const map = this._map;
     let changed = false;
     if (map.isStyleLoaded()) {
@@ -553,7 +540,7 @@ export default class Mapbox<
      @param {object} currProps
      @returns {bool} true if anything is changed
    */
-  _updateHandlers(nextProps: MapboxProps<StyleT>, currProps: MapboxProps<StyleT>): boolean {
+  _updateHandlers(nextProps: MapboxProps, currProps: MapboxProps): boolean {
     const map = this._map;
     let changed = false;
     for (const propName of handlerNames) {
@@ -571,13 +558,13 @@ export default class Mapbox<
     return changed;
   }
 
-  _onEvent = (e: MapEvent<MapT>) => {
+  _onEvent = (e: MapEvent) => {
     // @ts-ignore
     const cb = this.props[otherEvents[e.type]];
     if (cb) {
       cb(e);
     } else if (e.type === 'error') {
-      console.error((e as ErrorEvent<MapT>).error); // eslint-disable-line
+      console.error((e as ErrorEvent).error); // eslint-disable-line
     }
   };
 
@@ -598,7 +585,7 @@ export default class Mapbox<
     }
   }
 
-  _updateHover(e: MapMouseEvent<MapT>) {
+  _updateHover(e: MapMouseEvent) {
     const {props} = this;
     const shouldTrackHoveredFeatures =
       props.interactiveLayerIds && (props.onMouseMove || props.onMouseEnter || props.onMouseLeave);
@@ -624,7 +611,7 @@ export default class Mapbox<
     }
   }
 
-  _onPointerEvent = (e: MapMouseEvent<MapT>) => {
+  _onPointerEvent = (e: MapMouseEvent) => {
     if (e.type === 'mousemove' || e.type === 'mouseout') {
       this._updateHover(e);
     }
@@ -640,7 +627,7 @@ export default class Mapbox<
     }
   };
 
-  _onCameraEvent = (e: ViewStateChangeEvent<MapT>) => {
+  _onCameraEvent = (e: ViewStateChangeEvent) => {
     if (!this._internalUpdate) {
       // @ts-ignore
       const cb = this.props[cameraEvents[e.type]];
@@ -653,7 +640,7 @@ export default class Mapbox<
     }
   };
 
-  _fireEvent(baseFire: Function, event: string | MapEvent<MapT>, properties?: object) {
+  _fireEvent(baseFire: Function, event: string | MapEvent, properties?: object) {
     const map = this._map;
     const tr = map.transform;
 
@@ -663,7 +650,7 @@ export default class Mapbox<
     }
     if (eventType in cameraEvents) {
       if (typeof event === 'object') {
-        (event as unknown as ViewStateChangeEvent<MapT>).viewState = transformToViewState(tr);
+        (event as unknown as ViewStateChangeEvent).viewState = transformToViewState(tr);
       }
       if (this._map.isMoving()) {
         // Replace map.transform with ours during the callbacks

@@ -9,7 +9,7 @@ import type {
   ImageSourceImplemtation,
   AnySourceImplementation
 } from '../types/internal';
-import type {AnySource, ImageSourceRaw, VectorSourceRaw} from '../types/style-spec';
+import type {AnySource, ImageSource, VectorSource} from '../types/style-spec';
 import type {MapInstance} from '../types/lib';
 
 export type SourceProps = AnySource & {
@@ -61,11 +61,11 @@ function updateSource(source: AnySourceImplementation, props: SourceProps, prevP
       coordinates: props.coordinates
     });
   } else if ('setCoordinates' in source && changedKeyCount === 1 && changedKey === 'coordinates') {
-    source.setCoordinates((props as unknown as ImageSourceRaw).coordinates);
+    source.setCoordinates((props as unknown as ImageSource).coordinates);
   } else if ('setUrl' in source && changedKey === 'url') {
-    source.setUrl((props as VectorSourceRaw).url);
+    source.setUrl((props as VectorSource).url);
   } else if ('setTiles' in source && changedKey === 'tiles') {
-    source.setTiles((props as VectorSourceRaw).tiles);
+    source.setTiles((props as VectorSource).tiles);
   } else {
     // eslint-disable-next-line
     console.warn(`Unable to update <Source> prop: ${changedKey}`);

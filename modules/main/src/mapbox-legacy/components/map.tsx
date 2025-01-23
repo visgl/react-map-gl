@@ -8,29 +8,24 @@ import createRef, {MapRef} from '../mapbox/create-ref';
 import type {CSSProperties} from 'react';
 import useIsomorphicLayoutEffect from '../utils/use-isomorphic-layout-effect';
 import setGlobals, {GlobalSettings} from '../utils/set-globals';
-import type {MapLib, MapInstance, MapStyle, Callbacks} from '../types';
+import type {MapLib, MapOptions} from '../types/lib';
 
-export type MapContextValue<MapT extends MapInstance = MapInstance> = {
-  mapLib: MapLib<MapT>;
-  map: MapRef<MapT>;
+export type MapContextValue = {
+  mapLib: MapLib;
+  map: MapRef;
 };
 
 export const MapContext = React.createContext<MapContextValue>(null);
 
-type MapInitOptions<MapOptions> = Omit<
+type MapInitOptions = Omit<
   MapOptions,
   'style' | 'container' | 'bounds' | 'fitBoundsOptions' | 'center'
 >;
 
-export type MapProps<
-  MapOptions,
-  StyleT extends MapStyle,
-  CallbacksT extends Callbacks,
-  MapT extends MapInstance
-> = MapInitOptions<MapOptions> &
-  MapboxProps<StyleT, CallbacksT> &
+export type MapProps = MapInitOptions &
+  MapboxProps &
   GlobalSettings & {
-    mapLib?: MapLib<MapT> | Promise<MapLib<MapT>>;
+    mapLib?: MapLib | Promise<MapLib>;
     reuseMaps?: boolean;
     /** Map container id */
     id?: string;
@@ -39,29 +34,20 @@ export type MapProps<
     children?: any;
   };
 
-export default function Map<
-  MapOptions,
-  StyleT extends MapStyle,
-  CallbacksT extends Callbacks,
-  MapT extends MapInstance
->(
-  props: MapProps<MapOptions, StyleT, CallbacksT, MapT>,
-  ref: React.Ref<MapRef<MapT>>,
-  defaultLib: MapLib<MapT> | Promise<MapLib<MapT>>
-) {
+function _Map(props: MapProps, ref: React.Ref<MapRef>) {
   const mountedMapsContext = useContext(MountedMapsContext);
-  const [mapInstance, setMapInstance] = useState<Mapbox<StyleT, CallbacksT, MapT>>(null);
+  const [mapInstance, setMapInstance] = useState<Mapbox>(null);
   const containerRef = useRef();
 
-  const {current: contextValue} = useRef<MapContextValue<MapT>>({mapLib: null, map: null});
+  const {current: contextValue} = useRef<MapContextValue>({mapLib: null, map: null});
 
   useEffect(() => {
     const mapLib = props.mapLib;
     let isMounted = true;
-    let mapbox: Mapbox<StyleT, CallbacksT, MapT>;
+    let mapbox: Mapbox;
 
-    Promise.resolve(mapLib || defaultLib)
-      .then((module: MapLib<MapT> | {default: MapLib<MapT>}) => {
+    Promise.resolve(mapLib || import('mapbox-gl'))
+      .then((module: MapLib | {default: MapLib}) => {
         if (!isMounted) {
           return;
         }
@@ -98,8 +84,8 @@ export default function Map<
           onError({
             type: 'error',
             target: null,
-            originalEvent: null,
-            error
+            error,
+            originalEvent: error
           });
         } else {
           console.error(error); // eslint-disable-line
@@ -153,3 +139,5 @@ export default function Map<
     </div>
   );
 }
+
+export const Map = React.forwardRef(_Map);
