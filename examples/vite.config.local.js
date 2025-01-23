@@ -9,9 +9,8 @@ export default defineConfig(async () => {
     resolve: {
       alias: {
         // Use root dependencies
-        'react-map-gl': join(rootDir, './src/index.ts'),
-        'mapbox-gl': join(rootDir, './node_modules/mapbox-gl/dist/mapbox-gl-dev.js'),
-        'maplibre-gl': join(rootDir, './node_modules/maplibre-gl/dist/maplibre-gl-dev.js'),
+        'react-map-gl/mapbox': join(rootDir, './modules/main/src/mapbox.ts'),
+        'react-map-gl/maplibre': join(rootDir, './modules/main/src/maplibre.ts'),
         react: join(rootDir, './node_modules/react'),
         'react-dom': join(rootDir, './node_modules/react-dom')
       }

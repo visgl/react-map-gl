@@ -1,4 +1,4 @@
-// import {useMap} from 'react-map-gl';
+// import {useMap} from 'react-map-gl/mapbox';
 
 export default function Controls2() {
   /**

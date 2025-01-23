@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {useCallback, useState, useEffect} from 'react';
-import {useMap} from 'react-map-gl';
+import {useMap} from 'react-map-gl/mapbox';
 
 export default function Controls() {
   /**
