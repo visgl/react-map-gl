@@ -12,13 +12,13 @@ import type {
   LineLayerSpecification as LineLayer,
   RasterLayerSpecification as RasterLayer,
   SymbolLayerSpecification as SymbolLayer,
-  GeoJSONSourceSpecification as GeoJSONSourceRaw,
-  VideoSourceSpecification as VideoSourceRaw,
-  ImageSourceSpecification as ImageSourceRaw,
-  VectorSourceSpecification as VectorSourceRaw,
+  GeoJSONSourceSpecification as GeoJSONSource,
+  VideoSourceSpecification as VideoSource,
+  ImageSourceSpecification as ImageSource,
+  VectorSourceSpecification as VectorSource,
   RasterSourceSpecification as RasterSource,
   RasterDEMSourceSpecification as RasterDemSource,
-  CanvasSourceSpecification as CanvasSourceRaw,
+  CanvasSourceSpecification as CanvasSource,
   ProjectionSpecification
 } from 'maplibre-gl';
 
@@ -48,21 +48,21 @@ export type AnyLayer =
 
 // Sources
 export type {
-  GeoJSONSourceRaw,
-  VideoSourceRaw,
-  ImageSourceRaw,
-  CanvasSourceRaw,
-  VectorSourceRaw,
+  GeoJSONSource,
+  VideoSource,
+  ImageSource,
+  CanvasSource,
+  VectorSource,
   RasterSource,
   RasterDemSource
 };
 
 export type AnySource =
-  | GeoJSONSourceRaw
-  | VideoSourceRaw
-  | ImageSourceRaw
-  | CanvasSourceRaw
-  | VectorSourceRaw
+  | GeoJSONSource
+  | VideoSource
+  | ImageSource
+  | CanvasSource
+  | VectorSource
   | RasterSource
   | RasterDemSource;
 

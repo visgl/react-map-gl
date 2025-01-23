@@ -1,11 +1,7 @@
-import type {
-  MapInstance,
-  MapInstanceInternal,
-  MapStyle,
-  Callbacks,
-  LngLatLike,
-  PointLike
-} from '../types';
+import type {MapInstance} from '../types/lib';
+import type {MapInstanceInternal} from '../types/internal';
+import {LngLatLike, PointLike} from '../types/common';
+
 import type Mapbox from './mapbox';
 
 /** These methods may break the react binding if called directly */
@@ -32,22 +28,18 @@ const skipMethods = [
   'remove'
 ] as const;
 
-export type MapRef<MapT extends MapInstance> = {
-  getMap(): MapT;
-} & Omit<MapT, (typeof skipMethods)[number]>;
+export type MapRef = {
+  getMap(): MapInstance;
+} & Omit<MapInstance, (typeof skipMethods)[number]>;
 
-export default function createRef<
-  StyleT extends MapStyle,
-  CallbacksT extends Callbacks,
-  MapT extends MapInstance
->(mapInstance: Mapbox<StyleT, CallbacksT, MapT>): MapRef<MapT> | null {
+export default function createRef(mapInstance: Mapbox): MapRef | null {
   if (!mapInstance) {
     return null;
   }
 
-  const map = mapInstance.map as MapInstanceInternal<MapT>;
+  const map = mapInstance.map as MapInstanceInternal;
   const ref: any = {
-    getMap: () => map,
+    getMap: () => mapInstance.map,
 
     // Overwrite getters to use our shadow transform
     getCenter: () => mapInstance.transform.center,
