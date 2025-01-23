@@ -1,5 +1,5 @@
 import {useContext, useMemo, useEffect} from 'react';
-import type {IControl, ControlPosition} from '../types';
+import type {IControl, ControlPosition} from '../types/lib';
 import {MapContext} from './map';
 import type {MapContextValue} from './map';
 
@@ -7,25 +7,25 @@ type ControlOptions = {
   position?: ControlPosition;
 };
 
-function useControl<T extends IControl>(
+export function useControl<T extends IControl>(
   onCreate: (context: MapContextValue) => T,
   opts?: ControlOptions
 ): T;
 
-function useControl<T extends IControl>(
+export function useControl<T extends IControl>(
   onCreate: (context: MapContextValue) => T,
   onRemove: (context: MapContextValue) => void,
   opts?: ControlOptions
 ): T;
 
-function useControl<T extends IControl>(
+export function useControl<T extends IControl>(
   onCreate: (context: MapContextValue) => T,
   onAdd: (context: MapContextValue) => void,
   onRemove: (context: MapContextValue) => void,
   opts?: ControlOptions
 ): T;
 
-function useControl<T extends IControl>(
+export function useControl<T extends IControl>(
   onCreate: (context: MapContextValue) => T,
   arg1?: ((context: MapContextValue) => void) | ControlOptions,
   arg2?: ((context: MapContextValue) => void) | ControlOptions,
@@ -60,5 +60,3 @@ function useControl<T extends IControl>(
 
   return ctrl;
 }
-
-export default useControl;

@@ -1,4 +1,5 @@
-import {ImmutableLike, MapStyle} from '../types';
+import {ImmutableLike} from '../types/common';
+import {MapStyle} from '../types/style-spec';
 
 const refProps = ['type', 'source', 'source-layer', 'minzoom', 'maxzoom', 'filter', 'layout'];
 

@@ -3,20 +3,19 @@ import {useState, useCallback, useMemo, useContext} from 'react';
 
 import {MapRef} from '../mapbox/create-ref';
 import {MapContext} from './map';
-import {MapInstance} from '../types';
 
 type MountedMapsContextValue = {
-  maps: {[id: string]: MapRef<MapInstance>};
-  onMapMount: (map: MapRef<MapInstance>, id: string) => void;
+  maps: {[id: string]: MapRef};
+  onMapMount: (map: MapRef, id: string) => void;
   onMapUnmount: (id: string) => void;
 };
 
 export const MountedMapsContext = React.createContext<MountedMapsContextValue>(null);
 
 export const MapProvider: React.FC<{children?: React.ReactNode}> = props => {
-  const [maps, setMaps] = useState<{[id: string]: MapRef<MapInstance>}>({});
+  const [maps, setMaps] = useState<{[id: string]: MapRef}>({});
 
-  const onMapMount = useCallback((map: MapRef<MapInstance>, id: string = 'default') => {
+  const onMapMount = useCallback((map: MapRef, id: string = 'default') => {
     setMaps(currMaps => {
       if (id === 'current') {
         throw new Error("'current' cannot be used as map id");
@@ -52,12 +51,12 @@ export const MapProvider: React.FC<{children?: React.ReactNode}> = props => {
   );
 };
 
-export type MapCollection<MapT extends MapInstance> = {
-  [id: string]: MapRef<MapT> | undefined;
-  current?: MapRef<MapT>;
+export type MapCollection = {
+  [id: string]: MapRef | undefined;
+  current?: MapRef;
 };
 
-export function useMap<MapT extends MapInstance>(): MapCollection<MapT> {
+export function useMap(): MapCollection {
   const maps = useContext(MountedMapsContext)?.maps;
   const currentMap = useContext(MapContext);
 
@@ -65,5 +64,5 @@ export function useMap<MapT extends MapInstance>(): MapCollection<MapT> {
     return {...maps, current: currentMap?.map};
   }, [maps, currentMap]);
 
-  return mapsWithCurrent as MapCollection<MapT>;
+  return mapsWithCurrent as MapCollection;
 }

@@ -1,4 +1,4 @@
-import type {PointLike} from '../types';
+import type {PointLike} from '../types/common';
 
 /**
  * Compare two points

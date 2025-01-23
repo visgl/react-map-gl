@@ -42,39 +42,36 @@ export type {
 
 // Sources
 import type {
-  GeoJSONSourceRaw,
-  VideoSourceRaw,
-  ImageSourceRaw,
-  VectorSource as VectorSourceRaw,
+  Projection as ProjectionSpecification,
+  GeoJSONSourceRaw as GeoJSONSource,
+  VideoSourceRaw as VideoSource,
+  ImageSourceRaw as ImageSource,
+  VectorSource,
   RasterSource,
-  CanvasSourceRaw,
+  CanvasSourceRaw as CanvasSource,
   RasterDemSource
 } from 'mapbox-gl';
 
 export type AnySource =
-  | GeoJSONSourceRaw
-  | VideoSourceRaw
-  | ImageSourceRaw
-  | CanvasSourceRaw
-  | VectorSourceRaw
+  | GeoJSONSource
+  | VideoSource
+  | ImageSource
+  | CanvasSource
+  | VectorSource
   | RasterSource
   | RasterDemSource;
 
 export type {
-  GeoJSONSourceRaw,
-  VideoSourceRaw,
-  ImageSourceRaw,
-  CanvasSourceRaw,
-  VectorSourceRaw,
+  GeoJSONSource,
+  VideoSource,
+  ImageSource,
+  CanvasSource,
+  VectorSource,
   RasterSource,
   RasterDemSource
 };
 
 // Other
-export type {
-  Style as MapStyle,
-  Light,
-  Fog,
-  TerrainSpecification as Terrain,
-  Projection
-} from 'mapbox-gl';
+export type {Style as MapStyle, Light, Fog, TerrainSpecification as Terrain} from 'mapbox-gl';
+
+export type Projection = ProjectionSpecification | ProjectionSpecification['name'];
