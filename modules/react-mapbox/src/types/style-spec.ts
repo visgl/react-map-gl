@@ -13,16 +13,16 @@ import type {
   LineLayerSpecification as LineLayer,
   RasterLayerSpecification as RasterLayer,
   SymbolLayerSpecification as SymbolLayer,
-  GeoJSONSourceSpecification as GeoJSONSourceRaw,
-  VideoSourceSpecification as VideoSourceRaw,
-  ImageSourceSpecification as ImageSourceRaw,
-  VectorSourceSpecification as VectorSourceRaw,
+  GeoJSONSourceSpecification as GeoJSONSource,
+  VideoSourceSpecification as VideoSource,
+  ImageSourceSpecification as ImageSource,
+  VectorSourceSpecification as VectorSource,
   RasterSourceSpecification as RasterSource,
   RasterDEMSourceSpecification as RasterDemSource,
   ProjectionSpecification
 } from 'mapbox-gl';
 
-type CanvasSourceRaw = {
+type CanvasSource = {
   type: 'canvas';
   coordinates: [[number, number], [number, number], [number, number], [number, number]];
   animate?: boolean;
@@ -55,20 +55,20 @@ export type {
 };
 
 export type AnySource =
-  | GeoJSONSourceRaw
-  | VideoSourceRaw
-  | ImageSourceRaw
-  | CanvasSourceRaw
-  | VectorSourceRaw
+  | GeoJSONSource
+  | VideoSource
+  | ImageSource
+  | CanvasSource
+  | VectorSource
   | RasterSource
   | RasterDemSource;
 
 export type {
-  GeoJSONSourceRaw,
-  VideoSourceRaw,
-  ImageSourceRaw,
-  CanvasSourceRaw,
-  VectorSourceRaw,
+  GeoJSONSource,
+  VideoSource,
+  ImageSource,
+  CanvasSource,
+  VectorSource,
   RasterSource,
   RasterDemSource
 };

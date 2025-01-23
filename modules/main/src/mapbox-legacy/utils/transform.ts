@@ -1,5 +1,6 @@
 import type {MapboxProps} from '../mapbox/mapbox';
-import type {Transform, ViewState} from '../types';
+import type {Transform} from '../types/internal';
+import type {ViewState} from '../types/common';
 import {deepEqual} from './deep-equal';
 
 /**

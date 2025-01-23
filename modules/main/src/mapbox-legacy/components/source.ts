@@ -5,27 +5,21 @@ import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
 
 import type {
-  MapInstance,
-  ISource,
-  CustomSource,
   GeoJSONSourceImplementation,
   ImageSourceImplemtation,
   AnySourceImplementation
-} from '../types';
-import type {GeoJSONSourceRaw, ImageSourceRaw, VectorSourceRaw} from '../types/style-spec-mapbox';
+} from '../types/internal';
+import type {AnySource, ImageSource, VectorSource} from '../types/style-spec';
+import type {MapInstance} from '../types/lib';
 
-export type SourceProps<SourceT> = (SourceT | CustomSource) & {
+export type SourceProps = AnySource & {
   id?: string;
   children?: any;
 };
 
 let sourceCounter = 0;
 
-function createSource<SourceT extends ISource>(
-  map: MapInstance,
-  id: string,
-  props: SourceProps<SourceT>
-) {
+function createSource(map: MapInstance, id: string, props: SourceProps) {
   // @ts-ignore
   if (map.style && map.style._loaded) {
     const options = {...props};
@@ -39,11 +33,7 @@ function createSource<SourceT extends ISource>(
 }
 
 /* eslint-disable complexity */
-function updateSource<SourceT extends ISource>(
-  source: AnySourceImplementation,
-  props: SourceProps<SourceT>,
-  prevProps: SourceProps<SourceT>
-) {
+function updateSource(source: AnySourceImplementation, props: SourceProps, prevProps: SourceProps) {
   assert(props.id === prevProps.id, 'source id changed');
   assert(props.type === prevProps.type, 'source type changed');
 
@@ -64,20 +54,18 @@ function updateSource<SourceT extends ISource>(
   const type = props.type;
 
   if (type === 'geojson') {
-    (source as GeoJSONSourceImplementation).setData(
-      (props as unknown as GeoJSONSourceRaw).data as any
-    );
+    (source as GeoJSONSourceImplementation).setData(props.data as any);
   } else if (type === 'image') {
     (source as ImageSourceImplemtation).updateImage({
-      url: (props as unknown as ImageSourceRaw).url,
-      coordinates: (props as unknown as ImageSourceRaw).coordinates
+      url: props.url,
+      coordinates: props.coordinates
     });
   } else if ('setCoordinates' in source && changedKeyCount === 1 && changedKey === 'coordinates') {
-    source.setCoordinates((props as ImageSourceRaw).coordinates);
+    source.setCoordinates((props as unknown as ImageSource).coordinates);
   } else if ('setUrl' in source && changedKey === 'url') {
-    source.setUrl((props as VectorSourceRaw).url);
+    source.setUrl((props as VectorSource).url);
   } else if ('setTiles' in source && changedKey === 'tiles') {
-    source.setTiles((props as VectorSourceRaw).tiles);
+    source.setTiles((props as VectorSource).tiles);
   } else {
     // eslint-disable-next-line
     console.warn(`Unable to update <Source> prop: ${changedKey}`);
@@ -85,7 +73,7 @@ function updateSource<SourceT extends ISource>(
 }
 /* eslint-enable complexity */
 
-function Source<SourceT extends ISource>(props: SourceProps<SourceT>) {
+export function Source(props: SourceProps) {
   const map = useContext(MapContext).map.getMap();
   const propsRef = useRef(props);
   const [, setStyleLoaded] = useState(0);
@@ -144,5 +132,3 @@ function Source<SourceT extends ISource>(props: SourceProps<SourceT>) {
     null
   );
 }
-
-export default Source;
