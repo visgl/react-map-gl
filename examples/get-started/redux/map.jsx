@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Map from 'react-map-gl';
+import Map from 'react-map-gl/mapbox';
 
 import {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';

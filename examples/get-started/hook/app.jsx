@@ -1,7 +1,7 @@
 /* global document */
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
-import {MapProvider} from 'react-map-gl';
+import {MapProvider} from 'react-map-gl/mapbox';
 
 import Map from './map';
 import Controls from './controls';

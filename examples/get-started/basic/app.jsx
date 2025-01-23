@@ -1,7 +1,7 @@
 /* global document */
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
-import Map, {Marker} from 'react-map-gl';
+import Map, {Marker} from 'react-map-gl/mapbox';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
