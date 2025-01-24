@@ -2,12 +2,12 @@
 
 ## Native Mapbox Layers
 
-You can inject data and mapbox native layers using the [Source](../api-reference/source.md) and [Layer](../api-reference/layer.md) components:
+You can inject data and mapbox native layers using the [Source](../api-reference/mapbox/source.md) and [Layer](../api-reference/mapbox/layer.md) components:
 
 ```tsx
 import * as React from 'react';
-import Map, {Source, Layer} from 'react-map-gl';
-import type {CircleLayer} from 'react-map-gl';
+import Map, {Source, Layer} from 'react-map-gl/maplibre';
+import type {CircleLayer} from 'react-map-gl/maplibre';
 import type {FeatureCollection} from 'geojson';
 
 const geojson: FeatureCollection = {

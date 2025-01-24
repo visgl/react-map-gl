@@ -1,17 +1,11 @@
 # FullscreenControl
 
-React component that wraps the base library's `FullscreenControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#fullscreencontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/FullscreenControl/)).
-
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-<Tabs groupId="map-library">
-  <TabItem value="mapbox" label="Mapbox">
+React component that wraps mapbox-gl's [FullscreenControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#fullscreencontrol) class.
 
 ```tsx
 import * as React from 'react';
-import Map, {FullscreenControl} from 'react-map-gl';
+import Map, {FullscreenControl} from 'react-map-gl/mapbox';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 function App() {
   return <Map
@@ -28,29 +22,6 @@ function App() {
 }
 ```
 
-  </TabItem>
-  <TabItem value="maplibre" label="Maplibre">
-
-```tsx
-import * as React from 'react';
-import Map, {FullscreenControl} from 'react-map-gl/maplibre';
-
-function App() {
-  return <Map
-    initialViewState={{
-      longitude: -100,
-      latitude: 40,
-      zoom: 3.5
-    }}
-    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
-  >
-    <FullscreenControl />
-  </Map>;
-}
-```
-
-  </TabItem>
-</Tabs>
 
 ## Properties
 
