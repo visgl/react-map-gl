@@ -1,38 +1,40 @@
 {
-  "name": "react-map-gl-website",
+  "name": "project-website",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Website for vis.gl project",
   "scripts": {
-    "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "docusaurus clear && npm run write-heading-ids && docusaurus build",
-    "swizzle": "docusaurus swizzle",
+    "build": "docusaurus build",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
-    "write-heading-ids": "ts-node ./write-heading-ids.ts"
+    "write-heading-ids": "ocular-doc-headers ../docs",
+    "deploy": "docusaurus deploy"
+  },
+  "resolution_notes": {
+    "cheerio": "@cmfcmf/docusaurus-search-local breaks with v1.0.0 production release"
+  },
+  "resolutions": {
+    "cheerio": "1.0.0-rc.9"
   },
   "dependencies": {
+    "@docusaurus/core": "^3.0.0",
     "@mapbox/mapbox-gl-draw": "^1.3.0",
     "@mapbox/mapbox-gl-geocoder": "^4.7.4",
-    "@turf/area": "^6.0.1",
-    "@turf/bbox": "^6.0.1",
-    "d3-array": "^1.0.5",
-    "d3-scale": "^1.0.6",
-    "immutable": "^3.7.5",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "styled-components": "^4.3.2"
+    "@maplibre/maplibre-gl-geocoder": "^1.5.0",
+    "@vis.gl/docusaurus-website": "1.0.0-alpha.22",
+    "@turf/area": "^6.5.0",
+    "@turf/bbox": "^6.5.0",
+    "d3-array": "^3.1.1",
+    "d3-scale": "^4.0.2",
+    "immutable": "^4.0.0",
+    "mapbox-gl": "^3.9.0",
+    "maplibre-gl": "^5.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
-  "devDependencies": {
-    "@docusaurus/core": "^2.2.0",
-    "@docusaurus/plugin-content-docs": "^2.2.0",
-    "@docusaurus/preset-classic": "^2.2.0",
-    "@easyops-cn/docusaurus-search-local": "^0.35.0",
-    "@mdx-js/react": "^1.6.22",
-    "babel-plugin-styled-components": "^2.0.0",
-    "prism-react-renderer": "^1.2.1",
-    "ts-node": "~10.9.1"
-  },
-  "volta": {
-    "node": "18.20.5",
-    "yarn": "1.22.22"
-  }
+  "browserslist": [
+    ">0.2% and supports async-functions",
+    "not dead"
+  ]
 }

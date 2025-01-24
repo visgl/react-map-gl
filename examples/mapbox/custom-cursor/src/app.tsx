@@ -4,7 +4,7 @@ import {useState, useCallback} from 'react';
 import {createRoot} from 'react-dom/client';
 import Map, {MapStyle} from 'react-map-gl/mapbox';
 import ControlPanel from './control-panel';
-import MAP_STYLE from '../../../map-style-basic-v8.json';
+import MAP_STYLE from '../../map-style-basic-v8.json';
 
 const MAPBOX_TOKEN = ''; // Set your mapbox token here
 
