@@ -1,5 +1,23 @@
 # Upgrade Guide
 
+## Upgrading to v8.0
+
+- All imports from `react-map-gl` should be replaced with one of the following endpoints:
+  + If using with `mapbox-gl@>=3.5.0`: import from `react-map-gl/mapbox`
+  + If using with `mapbox-gl@<3.5.0`: import from `react-map-gl/mapbox-legacy`
+- Some TypeScript types have been renamed to align with the official types from the base map libraries:
+
+  | Old name | New name |
+  |----------|----------|
+  | `MapStyle` | `StyleSpecification` |
+  | `Fog` | `FogSpecification` |
+  | `Light` | `LightSpecification` |
+  | `Terrain` | `TerrainSpecification` |
+  | `Projection` | `ProjectionSpecification` |
+  | `*Layer` | `*LayerSpecification` |
+  | `*SourceRaw` | `*SourceSpecification` |
+
+
 ## Upgrading to v7.1
 
 - `maplibre-gl` users no longer need to install `mapbox-gl` or a placeholder package as dependency. Change your imports to the new endpoint `react-map-gl/maplibre`. Components imported from here do not require setting the `mapLib` prop, and use the types defined by `maplibre-gl`.

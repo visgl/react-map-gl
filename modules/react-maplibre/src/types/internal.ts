@@ -1,16 +1,5 @@
 // Internal types
-import type {
-  LngLat,
-  PaddingOptions,
-  GeoJSONSource as GeoJSONSourceImplementation,
-  ImageSource as ImageSourceImplemtation,
-  CanvasSource as CanvasSourceImplemtation,
-  VectorTileSource as VectorSourceImplementation,
-  RasterTileSource as RasterSourceImplementation,
-  RasterDEMTileSource as RasterDemSourceImplementation,
-  VideoSource as VideoSourceImplementation,
-  Source
-} from 'maplibre-gl';
+import type {LngLat, PaddingOptions} from 'maplibre-gl';
 
 /**
  * maplibre's Transform interface / CameraUpdateTransformFunction argument
@@ -26,21 +15,12 @@ export type TransformLike = {
 };
 
 export type {
-  GeoJSONSourceImplementation,
-  ImageSourceImplemtation,
-  CanvasSourceImplemtation,
-  VectorSourceImplementation,
-  RasterDemSourceImplementation,
-  RasterSourceImplementation,
-  VideoSourceImplementation
-};
-
-export type AnySourceImplementation =
-  | GeoJSONSourceImplementation
-  | VideoSourceImplementation
-  | ImageSourceImplemtation
-  | CanvasSourceImplemtation
-  | VectorSourceImplementation
-  | RasterSourceImplementation
-  | RasterDemSourceImplementation
-  | Source;
+  GeoJSONSource as GeoJSONSourceImplementation,
+  ImageSource as ImageSourceImplementation,
+  CanvasSource as CanvasSourceImplementation,
+  VectorTileSource as VectorSourceImplementation,
+  RasterTileSource as RasterSourceImplementation,
+  RasterDEMTileSource as RasterDemSourceImplementation,
+  VideoSource as VideoSourceImplementation,
+  Source as AnySourceImplementation
+} from 'maplibre-gl';

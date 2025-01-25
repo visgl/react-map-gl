@@ -4,9 +4,9 @@ import {applyReactStyle} from '../utils/apply-react-style';
 import {useControl} from './use-control';
 
 import type {ControlPosition} from '../types/lib';
-import type {Terrain} from '../types/style-spec';
+import type {TerrainSpecification} from '../types/style-spec';
 
-export type TerrainControlProps = Terrain & {
+export type TerrainControlProps = TerrainSpecification & {
   /** Placement of the control relative to the map. */
   position?: ControlPosition;
   /** CSS style override, applied to the control's container */

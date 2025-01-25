@@ -1,77 +1,34 @@
 /*
  * Mapbox Style Specification types
  */
-// Layers
-import type {
-  BackgroundLayer,
-  SkyLayer,
-  CircleLayer,
-  FillLayer,
-  FillExtrusionLayer,
-  HeatmapLayer,
-  HillshadeLayer,
-  LineLayer,
-  RasterLayer,
-  SymbolLayer
-} from 'mapbox-gl';
-
-export type AnyLayer =
-  | BackgroundLayer
-  | CircleLayer
-  | FillExtrusionLayer
-  | FillLayer
-  | HeatmapLayer
-  | HillshadeLayer
-  | LineLayer
-  | RasterLayer
-  | SymbolLayer
-  | SkyLayer;
-
 export type {
-  BackgroundLayer,
-  SkyLayer,
-  CircleLayer,
-  FillLayer,
-  FillExtrusionLayer,
-  HeatmapLayer,
-  HillshadeLayer,
-  LineLayer,
-  RasterLayer,
-  SymbolLayer
-};
+  // Layers
+  AnyLayer as LayerSpecification,
+  BackgroundLayer as BackgroundLayerSpecification,
+  SkyLayer as SkyLayerSpecification,
+  CircleLayer as CircleLayerSpecification,
+  FillLayer as FillLayerSpecification,
+  FillExtrusionLayer as FillExtrusionLayerSpecification,
+  HeatmapLayer as HeatmapLayerSpecification,
+  HillshadeLayer as HillshadeLayerSpecification,
+  LineLayer as LineLayerSpecification,
+  RasterLayer as RasterLayerSpecification,
+  SymbolLayer as SymbolLayerSpecification,
 
-// Sources
-import type {
-  Projection as ProjectionSpecification,
-  GeoJSONSourceRaw as GeoJSONSource,
-  VideoSourceRaw as VideoSource,
-  ImageSourceRaw as ImageSource,
-  VectorSource,
-  RasterSource,
-  CanvasSourceRaw as CanvasSource,
-  RasterDemSource
+  // Sources
+  AnySourceData as SourceSpecification,
+  CanvasSourceRaw as CanvasSourceSpecification,
+  GeoJSONSourceRaw as GeoJSONSourceSpecification,
+  VideoSourceRaw as VideoSourceSpecification,
+  ImageSourceRaw as ImageSourceSpecification,
+  VectorSource as VectorSourceSpecification,
+  RasterSource as RasterSourceSpecification,
+  RasterDemSource as RasterDemSourceSpecification,
+
+  // Style
+  Style as StyleSpecification,
+  Light as LightSpecification,
+  Fog as FogSpecification,
+  TerrainSpecification,
+  Projection as ProjectionSpecification
 } from 'mapbox-gl';
-
-export type AnySource =
-  | GeoJSONSource
-  | VideoSource
-  | ImageSource
-  | CanvasSource
-  | VectorSource
-  | RasterSource
-  | RasterDemSource;
-
-export type {
-  GeoJSONSource,
-  VideoSource,
-  ImageSource,
-  CanvasSource,
-  VectorSource,
-  RasterSource,
-  RasterDemSource
-};
-
-// Other
-export type {Style as MapStyle, Light, Fog, TerrainSpecification as Terrain} from 'mapbox-gl';
-
-export type Projection = ProjectionSpecification | ProjectionSpecification['name'];
