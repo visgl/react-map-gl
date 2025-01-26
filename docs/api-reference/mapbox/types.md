@@ -19,91 +19,91 @@ Instance [ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) of 
 
 ## Styling
 
-#### MapStyle
+#### StyleSpecification
 
 An object conforming to the [Mapbox Style Specification](https://mapbox.com/mapbox-gl-style-spec/).
 
-#### Fog
+#### FogSpecification
 
 An object conforming to the [Fog Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/fog/).
 
-#### Light
+#### LightSpecification
 
 An object conforming to the [Light Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light).
 
-#### Terrain
+#### TerrainSpecification
 
 An object conforming to the [Terrain Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/terrain/).
 
-#### Projection
+#### ProjectionSpecification
 
 An object conforming to the [Projection Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/projection/).
 
-#### BackgroundLayer
+#### BackgroundLayerSpecification
 
 A JSON object that defines a `background` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#background).
 
-#### CircleLayer
+#### CircleLayerSpecification
 
 A JSON object that defines a `circle` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#circle).
 
-#### FillExtrusionLayer
+#### FillExtrusionLayerSpecification
 
 A JSON object that defines a `fill-extrusion` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#fill-extrusion).
 
-#### FillLayer
+#### FillLayerSpecification
 
 A JSON object that defines a `fill` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#fill).
 
-#### HeatmapLayer
+#### HeatmapLayerSpecification
 
 A JSON object that defines a `heatmap` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#heatmap).
 
-#### HillshadeLayer
+#### HillshadeLayerSpecification
 
 A JSON object that defines a `hillshade` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#hillshade).
 
-#### LineLayer
+#### LineLayerSpecification
 
 A JSON object that defines a `line` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#line).
 
-#### RasterLayer
+#### RasterLayerSpecification
 
 A JSON object that defines a `raster` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#raster).
 
-#### SymbolLayer
+#### SymbolLayerSpecification
 
 A JSON object that defines a `symbol` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#symbol).
 
-#### SkyLayer
+#### SkyLayerSpecification
 
 A JSON object that defines a `sky` layer according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#sky).
 
-#### GeoJSONSource
+#### GeoJSONSourceSpecification
 
 A JSON object that defines a `geojson` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#geojson).
 
-#### VideoSource
+#### VideoSourceSpecification
 
 A JSON object that defines a `video` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#video).
 
-#### ImageSource
+#### ImageSourceSpecification
 
 A JSON object that defines a `image` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#image).
 
-#### VectorSource
+#### VectorSourceSpecification
 
 A JSON object that defines a `vector` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#vector).
 
-#### RasterSource
+#### RasterSourceSpecification
 
 A JSON object that defines a `raster` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#raster).
 
-#### RasterDemSource
+#### RasterDEMSourceSpecification
 
 A JSON object that defines a `raster-dem` source according to the [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#raster-dem).
 
-#### CanvasSource
+#### CanvasSourceSpecification
 
 A JSON object that defines a `canvas` source type. See [CanvasSourceOptions](https://docs.mapbox.com/mapbox-gl-js/api/sources/#canvassourceoptions).
 
@@ -132,7 +132,7 @@ A Mapbox [LngLat](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglat) ob
 
 #### LngLatLike
 
-A [`LngLat`](#lnglat) object, an array of two numbers representing longitude and latitude, or an object with `lng` and `lat` or `lon` and `lat` properties.
+A Mapbox [LngLatLike](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatlike) object.
 
 #### LngLatBounds
 
@@ -140,7 +140,7 @@ A Mapbox [LngLatBounds](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lngl
 
 #### LngLatBoundsLike
 
-A [`LngLatBounds`](#lnglatbounds) object, an array of [`LngLatLike`](#lnglatlike) objects in [sw, ne] order, or an array of numbers in [west, south, east, north] order.
+A Mapbox [LngLatBoundsLike](https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatboundslike) object.
 
 #### Point
 
@@ -148,7 +148,7 @@ A Mapbox [Point](https://docs.mapbox.com/mapbox-gl-js/api/geography/#point) obje
 
 #### PointLike
 
-A [Point](#point) or an array of two numbers representing x and y screen coordinates in pixels.
+A Mapbox [PointLike](https://docs.mapbox.com/mapbox-gl-js/api/geography/#pointlike) object.
 
 #### MapGeoJSONFeature
 

@@ -19,88 +19,88 @@ Instance [ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) of 
 
 ## Styling
 
-#### MapStyle
+#### StyleSpecification
 
 An object conforming to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/).
 
-#### Sky
+#### SkySpecification
 
 An object conforming to the [Sky Style Specification](https://maplibre.org/maplibre-style-spec/sky/).
 
-#### Light
+#### LightSpecification
 
 An object conforming to the [Light Style Specification](https://maplibre.org/maplibre-style-spec/light/).
 
-#### Terrain
+#### TerrainSpecification
 
 An object conforming to the [Terrain Style Specification](https://maplibre.org/maplibre-style-spec/terrain/).
 
-#### Projection
+#### ProjectionSpecification
 
 An object conforming to the [Projection Style Specification](https://maplibre.org/maplibre-style-spec/projection/).
 
-#### BackgroundLayer
+#### BackgroundLayerSpecification
 
 A JSON object that defines a `background` layer according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/layers/#background).
 
-#### CircleLayer
+#### CircleLayerSpecification
 
 A JSON object that defines a `circle` layer according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/layers//#circle).
 
-#### FillExtrusionLayer
+#### FillExtrusionLayerSpecification
 
 A JSON object that defines a `fill-extrusion` layer according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/layers/#fill-extrusion).
 
-#### FillLayer
+#### FillLayerSpecification
 
 A JSON object that defines a `fill` layer according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/layers/#fill).
 
-#### HeatmapLayer
+#### HeatmapLayerSpecification
 
 A JSON object that defines a `heatmap` layer according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/layers/#heatmap).
 
-#### HillshadeLayer
+#### HillshadeLayerSpecification
 
 A JSON object that defines a `hillshade` layer according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/layers/#hillshade).
 
-#### LineLayer
+#### LineLayerSpecification
 
 A JSON object that defines a `line` layer according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/layers/#line).
 
-#### RasterLayer
+#### RasterLayerSpecification
 
 A JSON object that defines a `raster` layer according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/layers/#raster).
 
-#### SymbolLayer
+#### SymbolLayerSpecification
 
 A JSON object that defines a `symbol` layer according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/layers/#symbol).
 
 
-#### GeoJSONSource
+#### GeoJSONSourceSpecification
 
 A JSON object that defines a `geojson` source according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/sources/#geojson).
 
-#### VideoSource
+#### VideoSourceSpecification
 
 A JSON object that defines a `video` source according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/sources/#video).
 
-#### ImageSource
+#### ImageSourceSpecification
 
 A JSON object that defines a `image` source according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/sources/#image).
 
-#### VectorSource
+#### VectorSourceSpecification
 
 A JSON object that defines a `vector` source according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/sources/#vector).
 
-#### RasterSource
+#### RasterSourceSpecification
 
 A JSON object that defines a `raster` source according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/sources/#raster).
 
-#### RasterDemSource
+#### RasterDEMSourceSpecification
 
 A JSON object that defines a `raster-dem` source according to the [Maplibre Style Specification](https://maplibre.org/maplibre-style-spec/sources/#raster-dem).
 
-#### CanvasSource
+#### CanvasSourceSpecification
 
 A JSON object that defines a `canvas` source type. See [CanvasSourceSpecification](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/CanvasSourceSpecification/).
 
@@ -129,7 +129,7 @@ A Maplibre [LngLat](https://maplibre.org/maplibre-gl-js/docs/API/classes/LngLat/
 
 #### LngLatLike
 
-A [LngLat](#lnglat) object, an array of two numbers representing longitude and latitude, or an object with `lng` and `lat` or `lon` and `lat` properties.
+A Maplibre [LngLatLike](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/LngLatLike/) object.
 
 #### LngLatBounds
 
@@ -137,7 +137,7 @@ A Maplibre [LngLatBounds](https://maplibre.org/maplibre-gl-js/docs/API/classes/L
 
 #### LngLatBoundsLike
 
-A [LngLatBounds](#lnglatbounds) object, an array of [LngLatLike](#lnglatlike) objects in [sw, ne] order, or an array of numbers in [west, south, east, north] order.
+A Maplibre [LngLatBoundsLike](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/LngLatBoundsLike/) object.
 
 #### Point
 
@@ -145,7 +145,7 @@ A Maplibre [Point](https://github.com/mapbox/point-geometry) object.
 
 #### PointLike
 
-A [Point](#point) or an array of two numbers representing x and y screen coordinates in pixels.
+A Maplibre [PointLike](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/PointLike/) object.
 
 #### MapGeoJSONFeature
 

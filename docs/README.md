@@ -1,19 +1,25 @@
 
 # Introduction
 
+> These docs are for v8.0. For v7, see [here](https://github.com/visgl/react-map-gl/tree/7.1-release/docs).
+
 react-map-gl is a suite of [React](http://facebook.github.io/react/) components for
-[mapbox-gl](https://github.com/mapbox/mapbox-gl-js), [maplibre-gl](https://maplibre.org/maplibre-gl-js/docs/) or compatible libraries.
+[mapbox-gl](https://www.npmjs.com/package/mapbox-gl), [maplibre-gl](https://www.npmjs.com/package/maplibre-gl) or compatible libraries.
 
 | Library | Description |
 | --- | --- | 
-| [MapLibre GL JS](https://github.com/MapLibre/maplibre-gl-js) | An open fork of mapbox-gl v1, that can be used without a mapbox token. |
-| [Mapbox GL JS v1](https://github.com/mapbox/mapbox-gl-js) | The previous version of mapbox GL JS. This version is free open source and can be used with non-mapbox basemaps without a mapbox token. |
-| [Mapbox GL JS v2](https://github.com/mapbox/mapbox-gl-js) | The latest version of Mapbox GL JS. Note that version 2 is not free open source, and a mapbox token is required and billable events are generated even if you do not use mapbox hosted basemaps. |
-| Other mapbox-gl forks | It may be possible to use react-map-gl with other mapbox forks, but this is not a supported use case. Minor PRs to enable other forks to be used may be accepted. |
+| [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) | An Open-source TypeScript library for publishing web maps. |
+| [Mapbox GL JS](https://www.mapbox.com/mapbox-gljs) | A JavaScript library for interactive, customizable vector maps on the web. |
+| [Mapbox GL JS v1](https://github.com/mapbox/mapbox-gl-js/tree/release-v1.13.3) | The last free-open-source version of Mapbox GL JS. This version can be used without a Mapbox token if you do not use Mapbox hosted basemaps. |
+| Other compatible forks | It may be possible to use react-map-gl with mapbox-gl/maplibre-gl forks, but this is not a supported use case. Minor PRs to enable other forks to be used may be accepted. |
 
-For basemaps:
-- You can load map data from Mapbox's own service.
-- You can create and host your own map data using one of the many [open source tools](https://github.com/mapbox/awesome-vector-tiles).
+If you need help choosing a base map library that is right for you:
+
+- Decide where to get your vector map data.
+  + `mapbox-gl` is designed to work seamlessly with Mapbox's own data service. You will need a billable Mapbox token to use it.
+  + There are a number of [map data providers](./get-started/mapbox-tokens.md#display-maps-without-a-mapbox-token) who support `maplibre-gl`, with a variaty of data quality and price options.
+  + You can create and host your own map tiles and use them with `maplibre-gl` for (almost) free, if you are comfortable of using [open source tools](./get-started/mapbox-tokens.md#display-maps-without-a-mapbox-token) and setting up a cloud storage account.
+- Visit Mapbox and MapLibre websites for examples and documentation. Each library offer unique features that may not exist in another.
 
 New to react-map-gl? [Get Started](./get-started/get-started.md)
 

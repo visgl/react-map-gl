@@ -34,6 +34,8 @@ npm install react-map-gl maplibre-gl
 ```tsx title="app.tsx"
 import * as React from 'react';
 import Map from 'react-map-gl/mapbox';
+// If using with mapbox-gl v1:
+// import Map from 'react-map-gl/mapbox-legacy';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 function App() {
