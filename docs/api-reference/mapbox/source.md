@@ -3,17 +3,12 @@
 This component allows apps to create a [map source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources) using React. It may contain [Layer](./layer.md) components as children.
 
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-<Tabs groupId="map-library">
-  <TabItem value="mapbox" label="Mapbox">
-
 ```tsx
 import * as React from 'react';
-import Map, {Source, Layer} from 'react-map-gl';
-import type {CircleLayer} from 'react-map-gl';
+import Map, {Source, Layer} from 'react-map-gl/mapbox';
+import type {CircleLayer} from 'react-map-gl/mapbox';
 import type {FeatureCollection} from 'geojson';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const geojson: FeatureCollection = {
   type: 'FeatureCollection',
@@ -47,51 +42,6 @@ function App() {
   </Map>;
 }
 ```
-
-  </TabItem>
-  <TabItem value="maplibre" label="Maplibre">
-
-
-```tsx
-import * as React from 'react';
-import Map, {Source, Layer} from 'react-map-gl/maplibre';
-import type {CircleLayer} from 'react-map-gl/maplibre';
-import type {FeatureCollection} from 'geojson';
-
-const geojson: FeatureCollection = {
-  type: 'FeatureCollection',
-  features: [
-    {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.8]}}
-  ]
-};
-
-const layerStyle: CircleLayer = {
-  id: 'point',
-  type: 'circle',
-  paint: {
-    'circle-radius': 10,
-    'circle-color': '#007cbf'
-  }
-};
-
-function App() {
-  return <Map
-    initialViewState={{
-      longitude: -122.4,
-      latitude: 37.8,
-      zoom: 14
-    }}
-    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
-  >
-    <Source id="my-data" type="geojson" data={geojson}>
-      <Layer {...layerStyle} />
-    </Source>
-  </Map>;
-}
-```
-
-  </TabItem>
-</Tabs>
 
 
 ## Properties

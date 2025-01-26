@@ -1,18 +1,13 @@
 # Popup
 
-React component that wraps the base library's `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/)).
+React component that wraps mapbox-gl's [Popup](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) class.
 
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-<Tabs groupId="map-library">
-  <TabItem value="mapbox" label="Mapbox">
 
 ```tsx
 import * as React from 'react';
 import {useState} from 'react';
-import Map, {Popup} from 'react-map-gl';
+import Map, {Popup} from 'react-map-gl/mapbox';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 function App() {
   const [showPopup, setShowPopup] = useState<boolean>(true);
@@ -35,39 +30,6 @@ function App() {
   </Map>;
 }
 ```
-
-  </TabItem>
-  <TabItem value="maplibre" label="Maplibre">
-
-
-```tsx
-import * as React from 'react';
-import {useState} from 'react';
-import Map, {Popup} from 'react-map-gl/maplibre';
-
-function App() {
-  const [showPopup, setShowPopup] = useState<boolean>(true);
-
-  return <Map
-    initialViewState={{
-      longitude: -100,
-      latitude: 40,
-      zoom: 3.5
-    }}
-    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
-  >
-    {showPopup && (
-      <Popup longitude={-100} latitude={40}
-        anchor="bottom"
-        onClose={() => setShowPopup(false)}>
-        You are here
-      </Popup>)}
-  </Map>;
-}
-```
-
-  </TabItem>
-</Tabs>
 
 
 ## Properties
@@ -133,13 +95,10 @@ Any options supported by the `Popup` class ([Mapbox](https://docs.mapbox.com/map
 The underlying native `Popup` instance is accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) hook.
 You may use it to call any imperative methods:
 
-<Tabs groupId="map-library">
-  <TabItem value="mapbox" label="Mapbox">
-
 ```tsx
 import * as React from 'react';
 import {useRef, useEffect} from 'react';
-import Map, {Popup} from 'react-map-gl';
+import Map, {Popup} from 'react-map-gl/mapbox';
 import mapboxgl from 'mapbox-gl';
 
 function App() {
@@ -156,35 +115,6 @@ function App() {
   </Map>;
 }
 ```
-
-  </TabItem>
-  <TabItem value="maplibre" label="Maplibre">
-
-
-```tsx
-import * as React from 'react';
-import {useRef, useEffect} from 'react';
-import Map, {Popup} from 'react-map-gl/maplibre';
-import maplibregl from 'maplibre-gl';
-
-function App() {
-  const popupRef = useRef<maplibregl.Popup>();
-
-  useEffect(() => {
-    popupRef.current?.trackPointer();
-  }, [popupRef.current])
-
-  return <Map>
-    <Popup longitude={-122.4} latitude={37.8} ref={popupRef} >
-      Tooltip
-    </Popup>
-  </Map>;
-}
-```
-
-  </TabItem>
-</Tabs>
-
 
 ## Source
 

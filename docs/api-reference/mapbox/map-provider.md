@@ -5,7 +5,7 @@ A [Context.Provider](https://reactjs.org/docs/context.html#contextprovider) that
 The component should wrap all nodes in which you may want to access the maps:
 
 ```tsx
-import {MapProvider} from 'react-map-gl';
+import {MapProvider} from 'react-map-gl/mapbox';
 
 function Root() {
   return (
