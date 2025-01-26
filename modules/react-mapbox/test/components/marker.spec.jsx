@@ -4,6 +4,7 @@ import {createRoot} from 'react-dom/client';
 import test from 'tape-promise/tape';
 
 import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {MapboxAccessToken} from '../utils/token';
 
 test('Marker', async t => {
   const rootContainer = document.createElement('div');
@@ -12,7 +13,7 @@ test('Marker', async t => {
   const mapRef = {current: null};
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
       <Marker ref={markerRef} longitude={-122} latitude={38} />
     </Map>
   );
@@ -31,7 +32,7 @@ test('Marker', async t => {
   const rotationAlignment = marker.getRotationAlignment();
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
       <Marker ref={markerRef} longitude={-122} latitude={38} offset={[0, 0]} />
     </Map>
   );
@@ -40,7 +41,7 @@ test('Marker', async t => {
 
   let callbackType = '';
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
       <Marker
         ref={markerRef}
         longitude={-122}
@@ -48,8 +49,8 @@ test('Marker', async t => {
         offset={[0, 1]}
         rotation={30}
         draggable
-        pitchAlignment="viewport"
-        rotationAlignment="viewport"
+        pitchAlignment="map"
+        rotationAlignment="map"
         onDragStart={() => (callbackType = 'dragstart')}
         onDrag={() => (callbackType = 'drag')}
         onDragEnd={() => (callbackType = 'dragend')}
@@ -71,13 +72,15 @@ test('Marker', async t => {
   marker.fire('dragend');
   t.is(callbackType, 'dragend', 'onDragEnd called');
 
-  root.render(<Map ref={mapRef} />);
+  root.render(
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken} />
+  );
   await sleep(1);
 
   t.notOk(markerRef.current, 'marker is removed');
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
       <Marker ref={markerRef} longitude={-100} latitude={40}>
         <div id="marker-content" />
       </Marker>

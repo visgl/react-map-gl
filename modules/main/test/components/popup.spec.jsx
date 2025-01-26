@@ -11,7 +11,7 @@ test('Popup', async t => {
   const popupRef = {current: null};
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <Popup ref={popupRef} longitude={-122} latitude={38} offset={[0, 10]}>
         You are here
       </Popup>
@@ -27,7 +27,7 @@ test('Popup', async t => {
   const {anchor, offset, maxWidth} = popup.options;
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <Popup ref={popupRef} longitude={-122} latitude={38} offset={[0, 10]}>
         <div id="popup-content">You are here</div>
       </Popup>
@@ -39,7 +39,7 @@ test('Popup', async t => {
   t.ok(rootContainer.querySelector('#popup-content'), 'content is rendered');
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <Popup
         ref={popupRef}
         longitude={-122}
@@ -59,7 +59,7 @@ test('Popup', async t => {
   t.not(maxWidth, popup.options.maxWidth, 'maxWidth is updated');
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <Popup ref={popupRef} longitude={-122} latitude={38} className="classA">
         <div id="popup-content">You are here</div>
       </Popup>

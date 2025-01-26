@@ -17,7 +17,7 @@ test('Controls', async t => {
   const mapRef = {current: null};
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <AttributionControl />
     </Map>
   );
@@ -26,7 +26,7 @@ test('Controls', async t => {
   t.ok(rootContainer.querySelector('.mapboxgl-ctrl-attrib'), 'Rendered <AttributionControl />');
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <FullscreenControl />
     </Map>
   );
@@ -35,7 +35,7 @@ test('Controls', async t => {
 
   const geolocateControlRef = {current: null};
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <GeolocateControl ref={geolocateControlRef} />
     </Map>
   );
@@ -44,7 +44,7 @@ test('Controls', async t => {
   t.ok(geolocateControlRef.current, 'GeolocateControl created');
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <NavigationControl />
     </Map>
   );
@@ -52,7 +52,7 @@ test('Controls', async t => {
   t.ok(rootContainer.querySelector('.mapboxgl-ctrl-zoom-in'), 'Rendered <NavigationControl />');
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <ScaleControl />
     </Map>
   );

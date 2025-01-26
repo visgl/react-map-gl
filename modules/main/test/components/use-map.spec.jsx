@@ -16,8 +16,8 @@ test('useMap', async t => {
 
   root.render(
     <MapProvider>
-      <Map id="mapA" />
-      <Map id="mapB" ref={mapRef} />
+      <Map id="mapA" mapLib={import('mapbox-gl-v1')} />
+      <Map id="mapB" ref={mapRef} mapLib={import('mapbox-gl-v1')} />
       <TestControl />
     </MapProvider>
   );
@@ -29,7 +29,7 @@ test('useMap', async t => {
 
   root.render(
     <MapProvider>
-      <Map id="mapA" />
+      <Map id="mapA" mapLib={import('mapbox-gl-v1')} />
       <TestControl />
     </MapProvider>
   );
