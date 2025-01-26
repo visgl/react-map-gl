@@ -1,6 +1,6 @@
 # Get Started
 
-You may find complete project setups in [get-started examples](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/get-started).
+You may find complete project setups in [get-started examples](https://github.com/visgl/react-map-gl/tree/8.0-release/examples/get-started).
 
 ## Installation
 
@@ -33,7 +33,10 @@ npm install react-map-gl maplibre-gl
 
 ```tsx title="app.tsx"
 import * as React from 'react';
-import Map from 'react-map-gl';
+import Map from 'react-map-gl/mapbox';
+// If using with mapbox-gl v1:
+// import Map from 'react-map-gl/mapbox-legacy';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 function App() {
   return (
@@ -59,6 +62,7 @@ See [about Mapbox tokens](./mapbox-tokens.md) for alternatives to providing a Ma
 ```tsx title="app.tsx"
 import * as React from 'react';
 import Map from 'react-map-gl/maplibre';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 function App() {
   return (
@@ -81,9 +85,11 @@ function App() {
 
 ## Styling
 
-The base map library requires its stylesheet be included at all times. The marker, popup and navigation components in react-map-gl also need the stylesheet to work properly.
+The base map library requires its stylesheet be included at all times. The marker, popup and navigation components in react-map-gl also need the stylesheet to work properly. 
 
-You may add the stylesheet to the head of your page:
+The above example code imports the CSS file directly into the app. Most bundlers support this syntax out-of-the-box or with an official plugin.
+
+Alternatively, you may add the stylesheet to the head of your page:
 
 <Tabs groupId="map-library">
   <TabItem value="mapbox" label="Mapbox">
@@ -105,43 +111,3 @@ Find out your maplibre version by running `yarn list maplibre-gl` or `npm ls map
 
   </TabItem>
 </Tabs>
-
-Or embed it in your app by using [css-loader](https://webpack.github.io/docs/stylesheets.html) with Webpack or [postcss](https://www.npmjs.com/package/rollup-plugin-postcss) with rollup:
-
-<Tabs groupId="map-library">
-  <TabItem value="mapbox" label="Mapbox">
-
-```ts title="app.tsx"
-import 'mapbox-gl/dist/mapbox-gl.css';
-```
-
-  </TabItem>
-  <TabItem value="maplibre" label="Maplibre">
-
-```ts title="app.tsx"
-import 'maplibre-gl/dist/maplibre-gl.css';
-```
-
-  </TabItem>
-</Tabs>
-
-
-## Using with a Compatible Fork
-
-```bash
-npm install react-map-gl my-map-gl-fork
-```
-
-Then override the `mapLib` prop of `Map`:
-
-```tsx title="app.tsx"
-import * as React from 'react';
-import Map from 'react-map-gl';
-
-// Include style sheet
-import 'my-map-gl-fork/path/to/style-sheet.css';
-
-function App() {
-  return <Map mapLib={import('my-map-gl-fork')} />;
-}
-```

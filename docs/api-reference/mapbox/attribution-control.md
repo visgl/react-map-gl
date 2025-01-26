@@ -1,17 +1,11 @@
 # AttributionControl
 
-React component that wraps the base library's `AttributionControl` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#attributioncontrol) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/AttributionControl/)).
-
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-<Tabs groupId="map-library">
-  <TabItem value="mapbox" label="Mapbox">
+React component that wraps mapbox-gl's [AttributionControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#attributioncontrol) class.
 
 ```tsx
 import * as React from 'react';
-import Map, {AttributionControl} from 'react-map-gl';
+import Map, {AttributionControl} from 'react-map-gl/mapbox';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 function App() {
   return <Map
@@ -29,32 +23,6 @@ function App() {
   </Map>;
 }
 ```
-
-  </TabItem>
-  <TabItem value="maplibre" label="Maplibre">
-
-```tsx
-import * as React from 'react';
-import Map, {AttributionControl} from 'react-map-gl/maplibre';
-
-function App() {
-  return <Map
-    initialViewState={{
-      longitude: -100,
-      latitude: 40,
-      zoom: 3.5
-    }}
-    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
-    // disable the default attribution
-    attributionControl={false}
-  >
-    <AttributionControl customAttribution="Map design by me" />
-  </Map>;
-}
-```
-
-  </TabItem>
-</Tabs>
 
 ## Properties
 

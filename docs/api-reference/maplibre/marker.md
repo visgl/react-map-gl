@@ -1,42 +1,12 @@
 # Marker
 
-React component that wraps the base library's `Marker` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Marker/)).
-
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-<Tabs groupId="map-library">
-  <TabItem value="mapbox" label="Mapbox">
-
-```tsx
-import * as React from 'react';
-import Map, {Marker} from 'react-map-gl';
-
-function App() {
-  return <Map
-    mapboxAccessToken="<Mapbox access token>"
-    initialViewState={{
-      longitude: -100,
-      latitude: 40,
-      zoom: 3.5
-    }}
-    mapStyle="mapbox://styles/mapbox/streets-v9"
-  >
-    <Marker longitude={-100} latitude={40} anchor="bottom" >
-      <img src="./pin.png" />
-    </Marker>
-  </Map>;
-}
-```
-
-  </TabItem>
-  <TabItem value="maplibre" label="Maplibre">
+React component that wraps maplibre-gl's [Marker](https://maplibre.org/maplibre-gl-js/docs/API/classes/Marker/) class.
 
 
 ```tsx
 import * as React from 'react';
-import Map, {Marker} from 'react-map-gl/maplibre';
+import {Map, Marker} from 'react-map-gl/maplibre';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 function App() {
   return <Map
@@ -45,7 +15,7 @@ function App() {
       latitude: 40,
       zoom: 3.5
     }}
-    mapStyle="https://api.maptiler.com/maps/streets/style.json?key=get_your_own_key"
+    mapStyle="https://demotiles.maplibre.org/style.json"
   >
     <Marker longitude={-100} latitude={40} anchor="bottom" >
       <img src="./pin.png" />
@@ -54,8 +24,6 @@ function App() {
 }
 ```
 
-  </TabItem>
-</Tabs>
 
 If `Marker` is mounted with child components, then its content will be rendered to the specified location. If it is mounted with no content, then a default marker will be used.
 
@@ -81,7 +49,7 @@ Required. The longitude of the anchor location.
 
 Default: `null`
 
-The offset in pixels as a [PointLike](https://docs.mapbox.com/mapbox-gl-js/api/geography/#pointlike) object to apply relative to the element's center. Negatives indicate left and up.
+The offset in pixels as a [PointLike](./types.md#pointlike) object to apply relative to the element's center. Negatives indicate left and up.
 
 #### `pitchAlignment`: 'map' | 'viewport' | 'auto' {#pitchalignment}
 
@@ -93,7 +61,7 @@ Default: `'auto'`
 
 #### `popup`: Popup | null {#popup}
 
-An instance of the `Popup` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#popup) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/)) to attach to this marker. If undefined or null, any popup set on this Marker instance is unset.
+An instance of the [Popup](https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/) class to attach to this marker. If undefined or null, any popup set on this Marker instance is unset.
 
 #### `rotation`: number {#rotation}
 
@@ -136,7 +104,7 @@ Called when dragging ends, if `draggable` is `true`.
 
 The properties in this section are not reactive. They are only used when the component first mounts.
 
-Any options supported by the `Marker` class ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/markers/#marker) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/MarkerOptions/)), such as
+Any [options](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/MarkerOptions/) supported by the `Marker` class, such as
 
 - `anchor`
 - `color`
@@ -149,50 +117,18 @@ Any options supported by the `Marker` class ([Mapbox](https://docs.mapbox.com/ma
 The underlying native `Marker` instance is accessible via a [React ref](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs) hook.
 You may use it to call any imperative methods:
 
-<Tabs groupId="map-library">
-  <TabItem value="mapbox" label="Mapbox">
 
 ```tsx
 import * as React from 'react';
 import {useRef, useMemo, useCallback} from 'react';
-import Map, {Marker} from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
-
-function App() {
-  const markerRef = useRef<mapboxgl.Marker>();
-
-  const popup = useMemo(() => {
-    return mapboxgl.Popup().setText('Hello world!');
-  }, [])
-
-  const togglePopup = useCallback(() => {
-    markerRef.current?.togglePopup();
-  }, []);
-
-  return <>
-    <Map>
-      <Marker longitude={-122.4} latitude={37.8} color="red" popup={popup} ref={markerRef} />
-    </Map>
-    <button onClick={togglePopup}>Toggle popup</button>
-  </>;
-}
-```
-
-  </TabItem>
-  <TabItem value="maplibre" label="Maplibre">
-
-
-```tsx
-import * as React from 'react';
-import {useRef, useMemo, useCallback} from 'react';
-import Map, {Marker} from 'react-map-gl/maplibre';
+import {Map, Marker} from 'react-map-gl/maplibre';
 import maplibregl from 'maplibre-gl';
 
 function App() {
   const markerRef = useRef<maplibregl.Marker>();
 
   const popup = useMemo(() => {
-    return new maplibregl.Popup().setText('Hello world!');
+    return maplibregl.Popup().setText('Hello world!');
   }, [])
 
   const togglePopup = useCallback(() => {
@@ -208,9 +144,6 @@ function App() {
 }
 ```
 
-  </TabItem>
-</Tabs>
-
 ## Source
 
-[marker.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/marker.ts)
+[marker.ts](https://github.com/visgl/react-map-gl/tree/master/modules/maplibre/src/components/marker.ts)
