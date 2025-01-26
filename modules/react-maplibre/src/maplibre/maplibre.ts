@@ -12,7 +12,13 @@ import type {
   LngLatBoundsLike,
   MapGeoJSONFeature
 } from '../types/common';
-import type {MapStyle, Sky, Light, Terrain, Projection} from '../types/style-spec';
+import type {
+  StyleSpecification,
+  SkySpecification,
+  LightSpecification,
+  TerrainSpecification,
+  ProjectionSpecification
+} from '../types/style-spec';
 import type {MapInstance} from '../types/lib';
 import type {
   MapCallbacks,
@@ -49,7 +55,7 @@ export type MaplibreProps = Partial<ViewState> &
     // Styling
 
     /** Mapbox style */
-    mapStyle?: string | MapStyle | ImmutableLike<MapStyle>;
+    mapStyle?: string | StyleSpecification | ImmutableLike<StyleSpecification>;
     /** Enable diffing when the map style changes
      * @default true
      */
@@ -57,14 +63,14 @@ export type MaplibreProps = Partial<ViewState> &
     /** The projection property of the style. Must conform to the Projection Style Specification.
      * @default 'mercator'
      */
-    projection?: Projection;
+    projection?: ProjectionSpecification | 'mercator' | 'globe';
     /** Light properties of the map. */
-    light?: Light;
+    light?: LightSpecification;
     /** Terrain property of the style. Must conform to the Terrain Style Specification.
      * If `undefined` is provided, removes terrain from the map. */
-    terrain?: Terrain;
+    terrain?: TerrainSpecification;
     /** Sky properties of the map. Must conform to the Sky Style Specification. */
-    sky?: Sky;
+    sky?: SkySpecification;
 
     /** Default layers to query on pointer events */
     interactiveLayerIds?: string[];
@@ -72,7 +78,7 @@ export type MaplibreProps = Partial<ViewState> &
     cursor?: string;
   };
 
-const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as MapStyle;
+const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as StyleSpecification;
 
 const pointerEvents = {
   mousedown: 'onMouseDown',
@@ -157,10 +163,10 @@ export default class Maplibre {
   private _hoveredFeatures: MapGeoJSONFeature[] = null;
   private _propsedCameraUpdate: ViewState | null = null;
   private _styleComponents: {
-    light?: Light;
-    sky?: Sky;
-    projection?: Projection;
-    terrain?: Terrain | null;
+    light?: LightSpecification;
+    sky?: SkySpecification;
+    projection?: ProjectionSpecification;
+    terrain?: TerrainSpecification | null;
   } = {};
 
   static savedMaps: Maplibre[] = [];
@@ -451,12 +457,11 @@ export default class Maplibre {
       if (
         projection &&
         !deepEqual(projection, currProps.projection) &&
-        // @ts-expect-error currProps.projection may be a string
         projection !== currProps.projection?.type
       ) {
-        currProps.projection = projection;
+        currProps.projection = typeof projection === 'string' ? {type: projection} : projection;
         // @ts-ignore setProjection does not exist in v4
-        map.setProjection?.(typeof projection === 'string' ? {type: projection} : projection);
+        map.setProjection?.(currProps.projection);
       }
       if (sky && !deepEqual(sky, currProps.sky)) {
         currProps.sky = sky;

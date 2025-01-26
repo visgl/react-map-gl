@@ -4,11 +4,11 @@ import Map, {Source, Layer} from 'react-map-gl/mapbox';
 
 import ControlPanel from './control-panel';
 
-import type {SkyLayer} from 'react-map-gl/mapbox';
+import type {SkyLayerSpecification} from 'react-map-gl/mapbox';
 
 const TOKEN = ''; // Set your mapbox token here
 
-const skyLayer: SkyLayer = {
+const skyLayer: SkyLayerSpecification = {
   id: 'sky',
   type: 'sky',
   paint: {
