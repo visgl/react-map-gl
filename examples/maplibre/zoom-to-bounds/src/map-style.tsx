@@ -1,13 +1,17 @@
-import type {GeoJSONSource, FillLayer, LineLayer} from 'react-map-gl/maplibre';
+import type {
+  GeoJSONSourceSpecification,
+  FillLayerSpecification,
+  LineLayerSpecification
+} from 'react-map-gl/maplibre';
 
 import MAP_STYLE from '../../../map-style-basic-v8.json';
 
-const sfNeighborhoods: GeoJSONSource = {
+const sfNeighborhoods: GeoJSONSourceSpecification = {
   type: 'geojson',
   data: 'https://raw.githubusercontent.com/visgl/react-map-gl/master/examples/.data/feature-example-sf.json'
 };
 
-const fillLayer: FillLayer = {
+const fillLayer: FillLayerSpecification = {
   id: 'sf-neighborhoods-fill',
   source: 'sf-neighborhoods',
   type: 'fill',
@@ -18,7 +22,7 @@ const fillLayer: FillLayer = {
   }
 };
 
-const lineLayer: LineLayer = {
+const lineLayer: LineLayerSpecification = {
   id: 'sf-neighborhoods-outline',
   source: 'sf-neighborhoods',
   type: 'line',
