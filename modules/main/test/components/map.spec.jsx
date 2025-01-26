@@ -16,7 +16,12 @@ test('Map', async t => {
   const onLoad = () => onloadCalled++;
 
   root.render(
-    <Map ref={mapRef} initialViewState={{longitude: -100, latitude: 40, zoom: 4}} onLoad={onLoad} />
+    <Map
+      ref={mapRef}
+      mapLib={import('mapbox-gl-v1')}
+      initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
+      onLoad={onLoad}
+    />
   );
 
   await waitForMapLoad(mapRef);
@@ -26,7 +31,16 @@ test('Map', async t => {
   t.is(mapRef.current.getCenter().lat, 40, 'latitude is set');
   t.is(mapRef.current.getZoom(), 4, 'zoom is set');
 
-  root.render(<Map ref={mapRef} longitude={-122} latitude={38} zoom={14} onLoad={onLoad} />);
+  root.render(
+    <Map
+      ref={mapRef}
+      mapLib={import('mapbox-gl-v1')}
+      longitude={-122}
+      latitude={38}
+      zoom={14}
+      onLoad={onLoad}
+    />
+  );
   await sleep(1);
 
   t.is(mapRef.current.getCenter().lng, -122, 'longitude is updated');
@@ -63,6 +77,7 @@ test('Map#uncontrolled', t => {
   root.render(
     <Map
       ref={mapRef}
+      mapLib={import('mapbox-gl-v1')}
       initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
       onLoad={onLoad}
       onRender={onRender}
@@ -90,6 +105,7 @@ test('Map#controlled#no-update', t => {
   root.render(
     <Map
       ref={mapRef}
+      mapLib={import('mapbox-gl-v1')}
       longitude={-100}
       latitude={40}
       zoom={4}
@@ -129,6 +145,7 @@ test('Map#controlled#mirror-back', t => {
     return (
       <Map
         ref={mapRef}
+        mapLib={import('mapbox-gl-v1')}
         {...viewState}
         onLoad={onLoad}
         onMove={e => setViewState(e.viewState)}
@@ -170,6 +187,7 @@ test('Map#controlled#delayed-update', t => {
     return (
       <Map
         ref={mapRef}
+        mapLib={import('mapbox-gl-v1')}
         {...viewState}
         onLoad={onLoad}
         onMove={e => setTimeout(() => setViewState(e.viewState))}

@@ -3,6 +3,7 @@ import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import test from 'tape-promise/tape';
 import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {MapboxAccessToken} from '../utils/token';
 
 test('Source/Layer', async t => {
   const root = createRoot(document.createElement('div'));
@@ -19,7 +20,7 @@ test('Source/Layer', async t => {
   };
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
       <Source id="my-data" type="geojson" data={geoJSON} />
     </Map>
   );
@@ -28,7 +29,12 @@ test('Source/Layer', async t => {
   t.ok(mapRef.current.getSource('my-data'), 'Source is added');
 
   root.render(
-    <Map ref={mapRef} mapStyle={mapStyle}>
+    <Map
+      ref={mapRef}
+      mapLib={import('mapbox-gl-v3')}
+      mapStyle={mapStyle}
+      mapboxAccessToken={MapboxAccessToken}
+    >
       <Source id="my-data" type="geojson" data={geoJSON} />
     </Map>
   );
@@ -36,7 +42,12 @@ test('Source/Layer', async t => {
   t.ok(mapRef.current.getSource('my-data'), 'Source is added after style change');
 
   root.render(
-    <Map ref={mapRef} mapStyle={mapStyle}>
+    <Map
+      ref={mapRef}
+      mapLib={import('mapbox-gl-v3')}
+      mapStyle={mapStyle}
+      mapboxAccessToken={MapboxAccessToken}
+    >
       <Source id="my-data" type="geojson" data={geoJSON2} />
     </Map>
   );
@@ -44,7 +55,14 @@ test('Source/Layer', async t => {
   const sourceData = await mapRef.current.getSource('my-data')?._data;
   t.deepEqual(sourceData, geoJSON2, 'Source is updated');
 
-  root.render(<Map ref={mapRef} mapStyle={mapStyle} />);
+  root.render(
+    <Map
+      ref={mapRef}
+      mapLib={import('mapbox-gl-v3')}
+      mapStyle={mapStyle}
+      mapboxAccessToken={MapboxAccessToken}
+    />
+  );
   await sleep(1);
   t.notOk(mapRef.current.getSource('my-data'), 'Source is removed');
 

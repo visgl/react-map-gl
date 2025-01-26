@@ -19,7 +19,7 @@ test('Source/Layer', async t => {
   };
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <Source id="my-data" type="geojson" data={geoJSON} />
     </Map>
   );
@@ -28,7 +28,7 @@ test('Source/Layer', async t => {
   t.ok(mapRef.current.getSource('my-data'), 'Source is added');
 
   root.render(
-    <Map ref={mapRef} mapStyle={mapStyle}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')} mapStyle={mapStyle}>
       <Source id="my-data" type="geojson" data={geoJSON} />
     </Map>
   );
@@ -36,7 +36,7 @@ test('Source/Layer', async t => {
   t.ok(mapRef.current.getSource('my-data'), 'Source is added after style change');
 
   root.render(
-    <Map ref={mapRef} mapStyle={mapStyle}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')} mapStyle={mapStyle}>
       <Source id="my-data" type="geojson" data={geoJSON2} />
     </Map>
   );
@@ -44,7 +44,7 @@ test('Source/Layer', async t => {
   const sourceData = await mapRef.current.getSource('my-data')?._data;
   t.deepEqual(sourceData, geoJSON2, 'Source is updated');
 
-  root.render(<Map ref={mapRef} mapStyle={mapStyle} />);
+  root.render(<Map ref={mapRef} mapLib={import('mapbox-gl-v1')} mapStyle={mapStyle} />);
   await sleep(1);
   t.notOk(mapRef.current.getSource('my-data'), 'Source is removed');
 

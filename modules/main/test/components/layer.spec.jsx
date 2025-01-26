@@ -33,7 +33,7 @@ test('Source/Layer', async t => {
   };
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <Source id="my-data" type="geojson" data={geoJSON}>
         <Layer id="my-layer" {...pointLayer} />
       </Source>
@@ -45,7 +45,7 @@ test('Source/Layer', async t => {
   t.ok(layer, 'Layer is added');
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
       <Source id="my-data" type="geojson" data={geoJSON}>
         <Layer id="my-layer" {...pointLayer2} />
       </Source>
@@ -55,7 +55,7 @@ test('Source/Layer', async t => {
   t.is(layer.visibility, 'none', 'Layer is updated');
 
   root.render(
-    <Map ref={mapRef} mapStyle={mapStyle}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')} mapStyle={mapStyle}>
       <Source id="my-data" type="geojson" data={geoJSON}>
         <Layer id="my-layer" {...pointLayer2} />
       </Source>
@@ -64,7 +64,7 @@ test('Source/Layer', async t => {
   await sleep(50);
   t.ok(mapRef.current.getLayer('my-layer'), 'Layer is added after style change');
 
-  root.render(<Map ref={mapRef} mapStyle={mapStyle} />);
+  root.render(<Map ref={mapRef} mapLib={import('mapbox-gl-v1')} mapStyle={mapStyle} />);
   await sleep(1);
   t.notOk(mapRef.current.getSource('my-data'), 'Source is removed');
   t.notOk(mapRef.current.getLayer('my-layer'), 'Layer is removed');
