@@ -36,6 +36,7 @@ npm install react-map-gl mapbox-gl
 // Using Maplibre
 import * as React from 'react';
 import Map from 'react-map-gl/maplibre';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 function App() {
   return (
@@ -56,11 +57,13 @@ _or_
 ```js
 // Using Mapbox
 import * as React from 'react';
-import Map from 'react-map-gl';
+import Map from 'react-map-gl/mapbox';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 function App() {
   return (
     <Map
+      // https://visgl.github.io/react-map-gl/docs/get-started/mapbox-tokens
       mapboxAccessToken="<Mapbox access token>"
       initialViewState={{
         longitude: -100,
@@ -75,18 +78,6 @@ function App() {
 ```
 
 Learn more with in our [Getting Started](https://visgl.github.io/react-map-gl/docs/get-started) guide.
-
-### Using Mapbox Tokens
-
-**Starting with v2.0, mapbox-gl requires a Mapbox token for any usage, with or without the Mapbox data service. See [about Mapbox tokens](/docs/get-started/mapbox-tokens.md) for your options.**
-
-To show maps from a service such as Mapbox you will need to register on their website in order to retrieve an access token required by the map component, which will be used to identify you and start serving up map tiles. The service will be free until a certain level of traffic is exceeded.
-
-There are several ways to provide a token to your app, as showcased in some of the example folders:
-
-* Provide a `mapboxAccessToken` prop to the map component
-* Set the `MapboxAccessToken` environment variable (or set `REACT_APP_MAPBOX_ACCESS_TOKEN` if you are using Create React App)
-* Provide it in the URL, e.g `?access_token=TOKEN`
 
 
 ### Contribute

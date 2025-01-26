@@ -1,6 +1,6 @@
 # State Management
 
-There are two ways to use a [Map](../api-reference/map.md):
+There are two ways to use a [Map](../api-reference/maplibre/map.md):
 
 - [Uncontrolled](https://reactjs.org/docs/uncontrolled-components.html): The application sets the initial view state (Camera options) when the map is mounted, and the component automatically makes changes to the view states afterwards. This mode works very similarly to the mapbox-gl `Map` class.
 - [Controlled](https://reactjs.org/docs/forms.html#controlled-components): The application manages the view state, and pass it to the map via props. The map invokes a callback with a new view state during user interaction transition, and the application can decide what to do with it. This mode is the most powerful when an application has other components that need to interact with the map, or implements its own user input and data handling logic.
@@ -12,7 +12,7 @@ You may clone a full app configuration for this example [here](https://github.co
 
 ```tsx
 import * as React from 'react';
-import Map from 'react-map-gl';
+import Map from 'react-map-gl/maplibre';
 
 function App() {
   return <Map
@@ -32,7 +32,7 @@ You may clone a full app configuration for this example [here](https://github.co
 
 ```tsx
 import * as React from 'react';
-import Map from 'react-map-gl';
+import Map from 'react-map-gl/maplibre';
 
 function App() {
   const [viewState, setViewState] = React.useState({
@@ -61,7 +61,7 @@ A real-world application likely uses more complicated state flows:
 
 ```tsx
 import * as React from 'react';
-import Map from 'react-map-gl';
+import Map from 'react-map-gl/maplibre';
 
 // npm install @turf/turf
 import * as turf from '@turf/turf';

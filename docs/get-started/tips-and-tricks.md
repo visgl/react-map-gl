@@ -78,7 +78,7 @@ In a moderately complex single-page app, as the user navigates through the UI, a
 
 Every time the user clicks the "table" tab, the map is unmounted. When they click the "map" tab, the map is mounted again. As of v2.0, mapbox-gl generates a [billable event](https://www.mapbox.com/pricing#maploads) every time a Map object is initialized. It is obviously not ideal to get billed for just collapsing and expanding part of the UI.
 
-In this case, it is recommended that you set the [reuseMaps](../api-reference/map.md#reuseMaps) prop to `true`:
+In this case, it is recommended that you set the [reuseMaps](../api-reference/mapbox/map.md#reuseMaps) prop to `true`:
 
 ```tsx
   <TabPanel value="map">
@@ -96,7 +96,7 @@ If your application uses externally managed camera state, like with Redux, the n
 
 ```tsx
 import {useSelector, useDispatch} from 'react-redux';
-import Map, {Marker} from 'react-map-gl';
+import Map, {Marker} from 'react-map-gl/maplibre';
 
 function MapView() {
   const viewState = useSelector((s: RootState) => s.viewState);

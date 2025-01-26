@@ -24,20 +24,48 @@
     "type": "category",
     "label": "API Reference",
     "items": [
-      "api-reference/map",
-      "api-reference/attribution-control",
-      "api-reference/fullscreen-control",
-      "api-reference/geolocate-control",
-      "api-reference/layer",
-      "api-reference/map-provider",
-      "api-reference/marker",
-      "api-reference/navigation-control",
-      "api-reference/popup",
-      "api-reference/scale-control",
-      "api-reference/source",
-      "api-reference/use-control",
-      "api-reference/use-map",
-      "api-reference/types"
+      {
+        "type": "category",
+        "label": "Mapbox",
+        "items": [
+          "api-reference/mapbox/map",
+          "api-reference/mapbox/attribution-control",
+          "api-reference/mapbox/fullscreen-control",
+          "api-reference/mapbox/geolocate-control",
+          "api-reference/mapbox/layer",
+          "api-reference/mapbox/map-provider",
+          "api-reference/mapbox/marker",
+          "api-reference/mapbox/navigation-control",
+          "api-reference/mapbox/popup",
+          "api-reference/mapbox/scale-control",
+          "api-reference/mapbox/source",
+          "api-reference/mapbox/use-control",
+          "api-reference/mapbox/use-map",
+          "api-reference/mapbox/types"
+        ]
+      },
+      {
+        "type": "category",
+        "label": "Maplibre",
+        "items": [
+          "api-reference/maplibre/map",
+          "api-reference/maplibre/attribution-control",
+          "api-reference/maplibre/fullscreen-control",
+          "api-reference/maplibre/geolocate-control",
+          "api-reference/maplibre/layer",
+          "api-reference/maplibre/logo-control",
+          "api-reference/maplibre/map-provider",
+          "api-reference/maplibre/marker",
+          "api-reference/maplibre/navigation-control",
+          "api-reference/maplibre/popup",
+          "api-reference/maplibre/scale-control",
+          "api-reference/maplibre/source",
+          "api-reference/maplibre/terrain-control",
+          "api-reference/maplibre/use-control",
+          "api-reference/maplibre/use-map",
+          "api-reference/maplibre/types"
+        ]
+      }
     ]
   }
 ]
