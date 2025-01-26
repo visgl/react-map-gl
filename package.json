@@ -27,6 +27,8 @@
     "@types/react": "^16.0.0",
     "@vis.gl/dev-tools": "1.0.0-alpha.21",
     "@vis.gl/ts-plugins": "1.0.0-alpha.21",
+    "mapbox-gl-v1": "npm:mapbox-gl@1.13.0",
+    "mapbox-gl-v3": "npm:mapbox-gl@3.9.0",
     "pre-commit": "^1.2.2",
     "puppeteer": "^22.4.0",
     "react": "^18.0.0",

@@ -3,6 +3,7 @@ import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import test from 'tape-promise/tape';
 import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {MapboxAccessToken} from '../utils/token';
 
 test('useMap', async t => {
   const root = createRoot(document.createElement('div'));
@@ -16,8 +17,13 @@ test('useMap', async t => {
 
   root.render(
     <MapProvider>
-      <Map id="mapA" />
-      <Map id="mapB" ref={mapRef} />
+      <Map id="mapA" mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken} />
+      <Map
+        id="mapB"
+        ref={mapRef}
+        mapLib={import('mapbox-gl-v3')}
+        mapboxAccessToken={MapboxAccessToken}
+      />
       <TestControl />
     </MapProvider>
   );
@@ -29,7 +35,7 @@ test('useMap', async t => {
 
   root.render(
     <MapProvider>
-      <Map id="mapA" />
+      <Map id="mapA" mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken} />
       <TestControl />
     </MapProvider>
   );
