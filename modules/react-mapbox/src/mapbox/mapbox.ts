@@ -16,7 +16,13 @@ import type {
   LngLatBoundsLike,
   MapGeoJSONFeature
 } from '../types/common';
-import type {MapStyle, Light, Terrain, Fog, Projection} from '../types/style-spec';
+import type {
+  StyleSpecification,
+  LightSpecification,
+  TerrainSpecification,
+  FogSpecification,
+  ProjectionSpecification
+} from '../types/style-spec';
 import type {MapInstance} from '../types/lib';
 import type {Transform} from '../types/internal';
 import type {
@@ -57,7 +63,7 @@ export type MapboxProps = Partial<ViewState> &
     // Styling
 
     /** Mapbox style */
-    mapStyle?: string | MapStyle | ImmutableLike<MapStyle>;
+    mapStyle?: string | StyleSpecification | ImmutableLike<StyleSpecification>;
     /** Enable diffing when the map style changes
      * @default true
      */
@@ -65,15 +71,15 @@ export type MapboxProps = Partial<ViewState> &
     /** The projection property of the style. Must conform to the Projection Style Specification.
      * @default 'mercator'
      */
-    projection?: Projection;
+    projection?: ProjectionSpecification | ProjectionSpecification['name'];
     /** The fog property of the style. Must conform to the Fog Style Specification .
      * If `undefined` is provided, removes the fog from the map. */
-    fog?: Fog;
+    fog?: FogSpecification;
     /** Light properties of the map. */
-    light?: Light;
+    light?: LightSpecification;
     /** Terrain property of the style. Must conform to the Terrain Style Specification .
      * If `undefined` is provided, removes terrain from the map. */
-    terrain?: Terrain;
+    terrain?: TerrainSpecification;
 
     /** Default layers to query on pointer events */
     interactiveLayerIds?: string[];
@@ -81,7 +87,7 @@ export type MapboxProps = Partial<ViewState> &
     cursor?: string;
   };
 
-const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as MapStyle;
+const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as StyleSpecification;
 
 const pointerEvents = {
   mousedown: 'onMouseDown',

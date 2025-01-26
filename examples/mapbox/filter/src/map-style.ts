@@ -1,6 +1,6 @@
-import type {FillLayer} from 'react-map-gl/mapbox';
+import type {FillLayerSpecification} from 'react-map-gl/mapbox';
 
-export const countiesLayer: FillLayer = {
+export const countiesLayer: FillLayerSpecification = {
   id: 'counties',
   source: '',
   type: 'fill',
@@ -11,7 +11,7 @@ export const countiesLayer: FillLayer = {
   }
 };
 // Highlighted county polygons
-export const highlightLayer: FillLayer = {
+export const highlightLayer: FillLayerSpecification = {
   id: 'counties-highlighted',
   type: 'fill',
   source: 'counties',

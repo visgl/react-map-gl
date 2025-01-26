@@ -5,14 +5,19 @@ import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
 
 import type {
+  SourceSpecification,
+  CanvasSourceSpecification,
+  ImageSourceSpecification,
+  VectorSourceSpecification
+} from '../types/style-spec';
+import type {MapInstance} from '../types/lib';
+import type {
   GeoJSONSourceImplementation,
-  ImageSourceImplemtation,
+  ImageSourceImplementation,
   AnySourceImplementation
 } from '../types/internal';
-import type {AnySource, ImageSource, VectorSource} from '../types/style-spec';
-import type {MapInstance} from '../types/lib';
 
-export type SourceProps = AnySource & {
+export type SourceProps = (SourceSpecification | CanvasSourceSpecification) & {
   id?: string;
   children?: any;
 };
@@ -56,16 +61,16 @@ function updateSource(source: AnySourceImplementation, props: SourceProps, prevP
   if (type === 'geojson') {
     (source as GeoJSONSourceImplementation).setData(props.data);
   } else if (type === 'image') {
-    (source as ImageSourceImplemtation).updateImage({
+    (source as ImageSourceImplementation).updateImage({
       url: props.url,
       coordinates: props.coordinates
     });
   } else if ('setCoordinates' in source && changedKeyCount === 1 && changedKey === 'coordinates') {
-    source.setCoordinates((props as unknown as ImageSource).coordinates);
+    source.setCoordinates((props as unknown as ImageSourceSpecification).coordinates);
   } else if ('setUrl' in source && changedKey === 'url') {
-    source.setUrl((props as VectorSource).url);
+    source.setUrl((props as VectorSourceSpecification).url);
   } else if ('setTiles' in source && changedKey === 'tiles') {
-    source.setTiles((props as VectorSource).tiles);
+    source.setTiles((props as VectorSourceSpecification).tiles);
   } else {
     // eslint-disable-next-line
     console.warn(`Unable to update <Source> prop: ${changedKey}`);

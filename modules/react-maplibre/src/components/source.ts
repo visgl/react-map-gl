@@ -6,13 +6,13 @@ import {deepEqual} from '../utils/deep-equal';
 
 import type {
   GeoJSONSourceImplementation,
-  ImageSourceImplemtation,
+  ImageSourceImplementation,
   AnySourceImplementation
 } from '../types/internal';
-import type {AnySource} from '../types/style-spec';
+import type {SourceSpecification} from '../types/style-spec';
 import type {MapInstance} from '../types/lib';
 
-export type SourceProps = AnySource & {
+export type SourceProps = SourceSpecification & {
   id?: string;
   children?: any;
 };
@@ -56,7 +56,7 @@ function updateSource(source: AnySourceImplementation, props: SourceProps, prevP
   if (type === 'geojson') {
     (source as GeoJSONSourceImplementation).setData(props.data);
   } else if (type === 'image') {
-    (source as ImageSourceImplemtation).updateImage({
+    (source as ImageSourceImplementation).updateImage({
       url: props.url,
       coordinates: props.coordinates
     });
