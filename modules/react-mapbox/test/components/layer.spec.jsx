@@ -4,6 +4,7 @@ import {createRoot} from 'react-dom/client';
 import test from 'tape-promise/tape';
 
 import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {MapboxAccessToken} from '../utils/token';
 
 test('Source/Layer', async t => {
   const root = createRoot(document.createElement('div'));
@@ -33,7 +34,7 @@ test('Source/Layer', async t => {
   };
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
       <Source id="my-data" type="geojson" data={geoJSON}>
         <Layer id="my-layer" {...pointLayer} />
       </Source>
@@ -41,21 +42,25 @@ test('Source/Layer', async t => {
   );
   await waitForMapLoad(mapRef);
   await sleep(1);
-  const layer = mapRef.current.getLayer('my-layer');
-  t.ok(layer, 'Layer is added');
+  t.ok(mapRef.current.getLayer('my-layer'), 'Layer is added');
 
   root.render(
-    <Map ref={mapRef}>
+    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
       <Source id="my-data" type="geojson" data={geoJSON}>
         <Layer id="my-layer" {...pointLayer2} />
       </Source>
     </Map>
   );
   await sleep(1);
-  t.is(layer.visibility, 'none', 'Layer is updated');
+  t.is(mapRef.current.getLayer('my-layer').layout.visibility, 'none', 'Layer is updated');
 
   root.render(
-    <Map ref={mapRef} mapStyle={mapStyle}>
+    <Map
+      ref={mapRef}
+      mapLib={import('mapbox-gl-v3')}
+      mapStyle={mapStyle}
+      mapboxAccessToken={MapboxAccessToken}
+    >
       <Source id="my-data" type="geojson" data={geoJSON}>
         <Layer id="my-layer" {...pointLayer2} />
       </Source>
@@ -64,7 +69,7 @@ test('Source/Layer', async t => {
   await sleep(50);
   t.ok(mapRef.current.getLayer('my-layer'), 'Layer is added after style change');
 
-  root.render(<Map ref={mapRef} mapStyle={mapStyle} />);
+  root.render(<Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapStyle={mapStyle} />);
   await sleep(1);
   t.notOk(mapRef.current.getSource('my-data'), 'Source is removed');
   t.notOk(mapRef.current.getLayer('my-layer'), 'Layer is removed');
