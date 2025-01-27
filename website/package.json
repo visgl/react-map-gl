@@ -22,7 +22,7 @@
     "@mapbox/mapbox-gl-draw": "^1.3.0",
     "@mapbox/mapbox-gl-geocoder": "^4.7.4",
     "@maplibre/maplibre-gl-geocoder": "^1.5.0",
-    "@vis.gl/docusaurus-website": "1.0.0-alpha.22",
+    "@vis.gl/docusaurus-website": "1.0.0-alpha.23",
     "@turf/area": "^6.5.0",
     "@turf/bbox": "^6.5.0",
     "d3-array": "^3.1.1",
@@ -36,5 +36,9 @@
   "browserslist": [
     ">0.2% and supports async-functions",
     "not dead"
-  ]
+  ],
+  "volta": {
+    "node": "18.20.5",
+    "yarn": "1.22.22"
+  }
 }

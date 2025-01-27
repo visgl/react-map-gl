@@ -2956,10 +2956,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.3.0.tgz#d06bbb384ebcf6c505fde1c3d0ed4ddffe0aaff8"
   integrity sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==
 
-"@vis.gl/docusaurus-website@1.0.0-alpha.22":
-  version "1.0.0-alpha.22"
-  resolved "https://registry.yarnpkg.com/@vis.gl/docusaurus-website/-/docusaurus-website-1.0.0-alpha.22.tgz#862a434149b0f2cee44d6dc92ec794b275e040e3"
-  integrity sha512-P/v+CgG5/5CpaY+DNVHUwKhq/RdNK+rURi5DtlQ+VCH6yZKuITI/u1UJZqkfVEDCkJd0ObPvO0vCQV4cpljHFQ==
+"@vis.gl/docusaurus-website@1.0.0-alpha.23":
+  version "1.0.0-alpha.23"
+  resolved "https://registry.yarnpkg.com/@vis.gl/docusaurus-website/-/docusaurus-website-1.0.0-alpha.23.tgz#5fb81b96c5f423b1a82e022db1cae136dc4114b9"
+  integrity sha512-0iEr7gXf1L8fdocpHiwhYFo/r2YouXV99FPri3UU6wVTN5cj47MY+10Sgs8oGIPH30PS39PMl5NB4wQ+GcaPFg==
   dependencies:
     "@cmfcmf/docusaurus-search-local" "^1.0.0"
     "@docusaurus/plugin-client-redirects" "^3.0.0"
