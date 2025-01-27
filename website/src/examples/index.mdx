@@ -1,3 +1,9 @@
-import {ExamplesIndex} from '../components';
+# Examples
 
-<ExamplesIndex getThumbnail={item => `/images/examples/${item.docId || item.label.toLowerCase()}.jpg`} />
+import {ExamplesIndex} from '@vis.gl/docusaurus-website/components';
+
+<ExamplesIndex getThumbnail={item => {
+  let id = item.docId || item.label.toLowerCase();
+  id = id.slice(id.indexOf('/'));
+  return `/images/examples/${id}.jpg`;
+}} />

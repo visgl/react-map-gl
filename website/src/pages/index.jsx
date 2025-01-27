@@ -1,5 +1,5 @@
 import React from 'react';
-import {Home} from '../components';
+import {Home} from '@vis.gl/docusaurus-website/components';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styled from 'styled-components';
 import Layout from '@theme/Layout';
@@ -53,7 +53,7 @@ export default function IndexPage() {
 
   return (
     <Layout title="Home" description="react-map-gl">
-      <Home HeroExample={HeroExample}>
+      <Home theme="dark" HeroExample={HeroExample}>
         <div style={{position: 'relative'}}>
           <TextContainer>
             <h2>
