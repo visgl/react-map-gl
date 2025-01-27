@@ -4,7 +4,7 @@ import type {
   LineLayerSpecification
 } from 'react-map-gl/mapbox';
 
-import MAP_STYLE from '../../../map-style-basic-v8.json';
+import MAP_STYLE from '../../map-style-basic-v8.json';
 
 const sfNeighborhoods: GeoJSONSourceSpecification = {
   type: 'geojson',
