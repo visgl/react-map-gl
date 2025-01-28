@@ -2,7 +2,7 @@
 
 # Version 8.0
 
-## v8.0.0-alpha.1 (Jan 27, 2025)
+## v8.0.0-alpha.2 (Jan 27, 2025)
 
 - Migrate to monorepo (#2459)
 
