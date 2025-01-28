@@ -2,6 +2,10 @@
 
 # Version 7.1
 
+## 7.1.9 (Jan 27, 2024)
+
+- Update maplibre-gl version requirement to <5.0.0 (#2464)
+
 ## 7.1.8 (Dec 19, 2024)
 
 - Improves Source#updateSource to use setTiles function if available (#2355)
