@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# Version 8.0
+
+## v8.0.0-alpha.1 (Jan 27, 2025)
+
+- Migrate to monorepo (#2459)
+
 # Version 7.2
 
 ## 7.2.0-beta.1 (Sep 12, 2023)
