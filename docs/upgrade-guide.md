@@ -5,6 +5,7 @@
 - All imports from `react-map-gl` should be replaced with one of the following endpoints:
   + If using with `mapbox-gl@>=3.5.0`: import from `react-map-gl/mapbox`
   + If using with `mapbox-gl@<3.5.0`: import from `react-map-gl/mapbox-legacy`
+- `maplibre-gl@<=3` is no longer supported.
 - Some TypeScript types have been renamed to align with the official types from the base map libraries:
 
   | Old name | New name |

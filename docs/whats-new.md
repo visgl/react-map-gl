@@ -1,5 +1,19 @@
 # What's new
 
+## react-map-gl v8.0
+
+Release date: Jan 2025
+
+- First version to support Mapbox GL JS' official types and MapLibre GL JS v5.
+  This version fully separates the code that support each compatible map library:
+  + `react-map-gl/mapbox`: for use with `mapbox-gl>=3.5.0`
+  + `react-map-gl/maplibre`: for use with `maplibre-gl>=4`
+  + `react-map-gl/mapbox-legacy`: for use with `mapbox-gl` v1.x and v2.x and `@types/mapbox-gl`
+- As a result, each endpoint now have slightly smaller bundle size and more precise types.
+- Maplibre wrapper is expected to have better functionality and performance than v7 by utilizing an [upstream API](https://github.com/maplibre/maplibre-gl-js/issues/1545) for the React use case.
+
+For a full list of breaking changes, please visit the [upgrade guide](./upgrade-guide.md#upgrading-to-v80).
+
 ## react-map-gl v7.1
 
 Release date: June 2023
