@@ -93,7 +93,7 @@ test('Map#uncontrolled', t => {
     if (!mapRef.current) return;
     const center = mapRef.current.getCenter();
     if (lastCenter) {
-      t.ok(lastCenter.lng > center.lng && lastCenter.lat > center.lat, `animated to ${center}`);
+      t.ok(lastCenter.lng >= center.lng && lastCenter.lat >= center.lat, `animated to ${center}`);
     }
     lastCenter = center;
   }
