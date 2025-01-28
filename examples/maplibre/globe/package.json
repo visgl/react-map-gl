@@ -8,10 +8,10 @@
     "maplibre-gl": "^5.0.0-pre.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "@vis.gl/react-maplibre": "*"
+    "react-map-gl": "^8.0.0"
   },
   "devDependencies": {
-    "typescript": "^4.0.0",
+    "typescript": "^5.0.0",
     "vite": "^4.0.0"
   }
 }
