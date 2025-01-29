@@ -183,7 +183,7 @@ If `true`, the "drag to rotate" interaction is enabled. See [DragRotateHandler](
 
 Default: `true`
 
-If `true`, the "drag to pan" interaction is enabled. Optionally accpt an object value that is the options to [DragPanHandler](https://maplibre.org/maplibre-gl-js/docs/API/classes/DragPanHandler/).
+If `true`, the "drag to pan" interaction is enabled. Optionally accept an object value that is the options to [DragPanHandler](https://maplibre.org/maplibre-gl-js/docs/API/classes/DragPanHandler/).
 
 #### `keyboard`: boolean {#keyboard}
 
@@ -195,19 +195,19 @@ If `true`, keyboard shortcuts are enabled. See [KeyboardHandler](https://maplibr
 
 Default: `true`
 
-If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to [ScrollZoomHandler](https://maplibre.org/maplibre-gl-js/docs/API/classes/ScrollZoomHandler/).
+If `true`, the "scroll to zoom" interaction is enabled. Optionally accept an object value that is the options to [ScrollZoomHandler](https://maplibre.org/maplibre-gl-js/docs/API/classes/ScrollZoomHandler/).
 
 #### `touchPitch`: boolean | Object {#touchpitch}
 
 Default: `true`
 
-If `true`, the "drag to pitch" interaction is enabled. Optionally accpt an object value that is the options to [TwoFingersTouchPitchHandler](https://maplibre.org/maplibre-gl-js/docs/API/classes/TwoFingersTouchPitchHandler/).
+If `true`, the "drag to pitch" interaction is enabled. Optionally accept an object value that is the options to [TwoFingersTouchPitchHandler](https://maplibre.org/maplibre-gl-js/docs/API/classes/TwoFingersTouchPitchHandler/).
 
 #### `touchZoomRotate`: boolean | Object {#touchzoomrotate}
 
 Default: `true`
 
-If `true`, the "pinch to rotate and zoom" interaction is enabled. Optionally accpt an object value that is the options to [TwoFingersTouchZoomRotateHandler](https://maplibre.org/maplibre-gl-js/docs/API/classes/TwoFingersTouchZoomRotateHandler/).
+If `true`, the "pinch to rotate and zoom" interaction is enabled. Optionally accept an object value that is the options to [TwoFingersTouchZoomRotateHandler](https://maplibre.org/maplibre-gl-js/docs/API/classes/TwoFingersTouchZoomRotateHandler/).
 
 #### `interactiveLayerIds`: string[] {#interactivelayerids}
 
