@@ -189,7 +189,7 @@ If `true`, the "drag to rotate" interaction is enabled. See `DragRotateHandler` 
 
 Default: `true`
 
-If `true`, the "drag to pan" interaction is enabled. Optionally accpt an object value that is the options to `DragPanHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragpanhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/DragPanHandler/#enable)).
+If `true`, the "drag to pan" interaction is enabled. Optionally accept an object value that is the options to `DragPanHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#dragpanhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/DragPanHandler/#enable)).
 
 #### `keyboard`: boolean {#keyboard}
 
@@ -201,19 +201,19 @@ If `true`, keyboard shortcuts are enabled. See `KeyboardHandler` ([Mapbox](https
 
 Default: `true`
 
-If `true`, the "scroll to zoom" interaction is enabled. Optionally accpt an object value that is the options to  `ScrollZoomHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/ScrollZoomHandler/#enable))
+If `true`, the "scroll to zoom" interaction is enabled. Optionally accept an object value that is the options to  `ScrollZoomHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#scrollzoomhandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/ScrollZoomHandler/#enable))
 
 #### `touchPitch`: boolean | Object {#touchpitch}
 
 Default: `true`
 
-If `true`, the "drag to pitch" interaction is enabled. Optionally accpt an object value that is the options to `TouchPitchHandler.enable`([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchpitchhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/TwoFingersTouchPitchHandler/#enable)).
+If `true`, the "drag to pitch" interaction is enabled. Optionally accept an object value that is the options to `TouchPitchHandler.enable`([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchpitchhandler) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/TwoFingersTouchPitchHandler/#enable)).
 
 #### `touchZoomRotate`: boolean | Object {#touchzoomrotate}
 
 Default: `true`
 
-If `true`, the "pinch to rotate and zoom" interaction is enabled. Optionally accpt an object value that is the options to `TouchZoomRotateHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchzoomrotatehandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/TwoFingersTouchZoomRotateHandler/#enable)).
+If `true`, the "pinch to rotate and zoom" interaction is enabled. Optionally accept an object value that is the options to `TouchZoomRotateHandler.enable` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/handlers/#touchzoomrotatehandler#enable) | [Maplibre](https://maplibre.org/maplibre-gl-js/docs/API/classes/TwoFingersTouchZoomRotateHandler/#enable)).
 
 #### `interactiveLayerIds`: string[] {#interactivelayerids}
 
