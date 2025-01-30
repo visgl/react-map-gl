@@ -4,7 +4,7 @@ export type GlobalSettings = {
    */
   maxParallelImageRequests?: number;
   /** The map's RTL text plugin. Necessary for supporting the Arabic and Hebrew languages, which are written right-to-left.  */
-  RTLTextPlugin?: string | false;
+  RTLTextPlugin?: {pluginUrl: string; lazy?: boolean};
   /** The number of web workers instantiated on a page with maplibre-gl maps.
    * @default 2
    */
@@ -16,26 +16,21 @@ export type GlobalSettings = {
 };
 
 export default function setGlobals(mapLib: any, props: GlobalSettings) {
-  const {
-    RTLTextPlugin = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-    maxParallelImageRequests,
-    workerCount,
-    workerUrl
-  } = props;
+  const {RTLTextPlugin, maxParallelImageRequests, workerCount, workerUrl} = props;
   if (
     RTLTextPlugin &&
     mapLib.getRTLTextPluginStatus &&
     mapLib.getRTLTextPluginStatus() === 'unavailable'
   ) {
     mapLib.setRTLTextPlugin(
-      RTLTextPlugin,
+      RTLTextPlugin.pluginUrl,
       (error?: Error) => {
         if (error) {
           // eslint-disable-next-line
           console.error(error);
         }
       },
-      true
+      RTLTextPlugin.lazy ?? true
     );
   }
   if (maxParallelImageRequests !== undefined) {

@@ -493,14 +493,12 @@ If `reuseMaps` is set to `true`, when a map component is unmounted, the underlyi
 
 Note that since some map options cannot be modified after initialization, when reusing maps, only the reactive props and `initialViewState` of the new component are respected.
 
-#### `RTLTextPlugin`: string | false {#rtltextplugin}
+#### `RTLTextPlugin`: object {#rtltextplugin}
 
-Default: `'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'`
+- `pluginUrl`: `string` URL to the plugin JS file.
+- `lazy`: `boolean` When true, the plugin is only loaded when the map first encounters Hebrew or Arabic text. Default `true`.
 
-Sets the map's [RTL text plugin](https://www.mapbox.com/mapbox-gl-js/plugins/#mapbox-gl-rtl-text). Necessary for supporting the Arabic and Hebrew languages, which are written right-to-left.
-
-Setting this prop is the equivalent of calling [setRTLTextPlugin](https://maplibre.org/maplibre-gl-js/docs/API/functions/setRTLTextPlugin/) with `lazy: true`. Set to `false` to disable loading the RTL text plugin.
-
+Sets the map's RTL text plugin via [setRTLTextPlugin](https://maplibre.org/maplibre-gl-js/docs/API/functions/setRTLTextPlugin/). Can be used with [mapbox-gl-rtl-text](https://github.com/mapbox/mapbox-gl-rtl-text). Necessary for supporting the Arabic and Hebrew languages, which are written right-to-left.
 
 #### `workerCount`: number {#workercount}
 
