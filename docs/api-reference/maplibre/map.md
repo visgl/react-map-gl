@@ -493,7 +493,7 @@ If `reuseMaps` is set to `true`, when a map component is unmounted, the underlyi
 
 Note that since some map options cannot be modified after initialization, when reusing maps, only the reactive props and `initialViewState` of the new component are respected.
 
-#### `RTLTextPlugin`: object {#rtltextplugin}
+#### `RTLTextPlugin`: string | object {#rtltextplugin}
 
 - `pluginUrl`: `string` URL to the plugin JS file.
 - `lazy`: `boolean` When true, the plugin is only loaded when the map first encounters Hebrew or Arabic text. Default `true`.

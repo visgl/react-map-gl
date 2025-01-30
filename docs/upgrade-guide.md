@@ -26,12 +26,7 @@ The default `RTLTextPlugin` loaded from mapbox.com has been removed to align wit
 To keep the previous behavior, specify the `pluginUrl` which was previously used or supply the plugin from any other source:
 
 ```tsx
-<Map
-  RTLTextPlugin={{
-    pluginUrl:
-      'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'
-  }}
-/>
+<Map RTLTextPlugin="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js" />
 ```
 
 

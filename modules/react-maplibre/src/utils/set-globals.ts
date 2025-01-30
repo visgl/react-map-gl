@@ -4,7 +4,7 @@ export type GlobalSettings = {
    */
   maxParallelImageRequests?: number;
   /** The map's RTL text plugin. Necessary for supporting the Arabic and Hebrew languages, which are written right-to-left.  */
-  RTLTextPlugin?: {pluginUrl: string; lazy?: boolean};
+  RTLTextPlugin?: string | {pluginUrl: string; lazy?: boolean};
   /** The number of web workers instantiated on a page with maplibre-gl maps.
    * @default 2
    */
@@ -22,15 +22,18 @@ export default function setGlobals(mapLib: any, props: GlobalSettings) {
     mapLib.getRTLTextPluginStatus &&
     mapLib.getRTLTextPluginStatus() === 'unavailable'
   ) {
+    const {pluginUrl, lazy = true} =
+      typeof RTLTextPlugin === 'string' ? {pluginUrl: RTLTextPlugin} : RTLTextPlugin;
+
     mapLib.setRTLTextPlugin(
-      RTLTextPlugin.pluginUrl,
+      pluginUrl,
       (error?: Error) => {
         if (error) {
           // eslint-disable-next-line
           console.error(error);
         }
       },
-      RTLTextPlugin.lazy ?? true
+      lazy
     );
   }
   if (maxParallelImageRequests !== undefined) {
