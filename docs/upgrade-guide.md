@@ -22,7 +22,7 @@
 
 #### Removed default for `RTLTextPlugin`
 
-The default `RTLTextPlugin` loaded from mapbox.com has been removed for MapBox.
+The default `RTLTextPlugin` loaded from mapbox.com has been removed to align with the default behavior of MapLibre.
 To keep the previous behavior, specify the `pluginUrl` which was previously used or supply the plugin from any other source:
 
 ```tsx
