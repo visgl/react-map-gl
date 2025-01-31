@@ -2,6 +2,10 @@
 
 # Version 8.0
 
+## v8.0.0-beta.1 (Jan 31, 2025)
+
+- feat: remove `RTLTextPlugin` default for MapLibre (#2480)
+
 ## v8.0.0-alpha.2 (Jan 27, 2025)
 
 - Migrate to monorepo (#2459)
