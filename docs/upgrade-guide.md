@@ -18,6 +18,17 @@
   | `*Layer` | `*LayerSpecification` |
   | `*SourceRaw` | `*SourceSpecification` |
 
+### MapLibre
+
+#### Removed default for `RTLTextPlugin`
+
+The default `RTLTextPlugin` loaded from mapbox.com has been removed to align with the default behavior of MapLibre.
+To keep the previous behavior, specify the `pluginUrl` which was previously used or supply the plugin from any other source:
+
+```tsx
+<Map RTLTextPlugin="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js" />
+```
+
 
 ## Upgrading to v7.1
 
