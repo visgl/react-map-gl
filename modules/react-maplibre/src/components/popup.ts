@@ -78,15 +78,13 @@ export const Popup = memo(
         popup.setOffset(props.offset);
       }
       if (oldProps.anchor !== props.anchor || oldProps.maxWidth !== props.maxWidth) {
+        popup.options.anchor = props.anchor;
         popup.setMaxWidth(props.maxWidth);
       }
       const classNameDiff = compareClassNames(oldProps.className, props.className);
       if (classNameDiff) {
-        for (const c of classNameDiff[0]) {
-          popup.addClassName(c);
-        }
-        for (const c of classNameDiff[1]) {
-          popup.removeClassName(c);
+        for (const c of classNameDiff) {
+          popup.toggleClassName(c);
         }
       }
       thisRef.current.props = props;

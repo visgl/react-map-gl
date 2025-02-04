@@ -126,11 +126,8 @@ export const Marker = memo(
     }
     const classNameDiff = compareClassNames(oldProps.className, props.className);
     if (classNameDiff) {
-      for (const c of classNameDiff[0]) {
-        marker.addClassName(c);
-      }
-      for (const c of classNameDiff[1]) {
-        marker.removeClassName(c);
+      for (const c of classNameDiff) {
+        marker.toggleClassName(c);
       }
     }
 

@@ -2,33 +2,26 @@
 export function compareClassNames(
   prevClassName: string | undefined,
   nextClassName: string | undefined
-): [added: string[], removed: string[]] | null {
+): string[] | null {
   if (prevClassName === nextClassName) {
     return null;
   }
 
   const prevClassList = getClassList(prevClassName);
   const nextClassList = getClassList(nextClassName);
-  const added: string[] = [];
-  const removed: string[] = [];
-
-  for (const c of prevClassList) {
-    if (!nextClassList.has(c)) {
-      removed.push(c);
-    }
-  }
-
-  if (removed.length === 0 && prevClassList.size === nextClassList.size) {
-    return null;
-  }
+  const diff: string[] = [];
 
   for (const c of nextClassList) {
     if (!prevClassList.has(c)) {
-      added.push(c);
+      diff.push(c);
     }
   }
-
-  return [added, removed];
+  for (const c of prevClassList) {
+    if (!nextClassList.has(c)) {
+      diff.push(c);
+    }
+  }
+  return diff.length === 0 ? null : diff;
 }
 
 function getClassList(className: string | undefined) {

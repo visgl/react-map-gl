@@ -19,25 +19,25 @@ test('compareClassNames', t => {
       title: 'Addition',
       prevClassName: undefined,
       nextClassName: 'marker',
-      output: [['marker'], []]
+      output: ['marker']
     },
     {
       title: 'Addition',
       prevClassName: 'marker',
       nextClassName: 'marker active',
-      output: [['active'], []]
+      output: ['active']
     },
     {
       title: 'Removal',
       prevClassName: 'marker active',
       nextClassName: 'marker',
-      output: [[], ['active']]
+      output: ['active']
     },
     {
       title: 'Multiple addition & removal',
       prevClassName: 'marker active',
       nextClassName: 'marker hovered hidden',
-      output: [['hovered', 'hidden'], ['active']]
+      output: ['hovered', 'hidden', 'active']
     }
   ];
 
