@@ -49,6 +49,7 @@ test('Marker', async t => {
         offset={[0, 1]}
         rotation={30}
         draggable
+        className="classA"
         pitchAlignment="map"
         rotationAlignment="map"
         onDragStart={() => (callbackType = 'dragstart')}
@@ -64,6 +65,7 @@ test('Marker', async t => {
   t.not(rotation, marker.getRotation(), 'rotation is updated');
   t.not(pitchAlignment, marker.getPitchAlignment(), 'pitchAlignment is updated');
   t.not(rotationAlignment, marker.getRotationAlignment(), 'rotationAlignment is updated');
+  t.ok(marker._element.classList.contains('classA'), 'className is updated');
 
   marker.fire('dragstart');
   t.is(callbackType, 'dragstart', 'onDragStart called');

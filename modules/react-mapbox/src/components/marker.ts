@@ -9,6 +9,7 @@ import type {MarkerEvent, MarkerDragEvent} from '../types/events';
 
 import {MapContext} from './map';
 import {arePointsEqual} from '../utils/deep-equal';
+import {compareClassNames} from '../utils/compare-class-names';
 
 export type MarkerProps = MarkerOptions & {
   /** Longitude of the anchor location */
@@ -32,7 +33,6 @@ export const Marker = memo(
   forwardRef((props: MarkerProps, ref: React.Ref<MarkerInstance>) => {
     const {map, mapLib} = useContext(MapContext);
     const thisRef = useRef({props});
-    thisRef.current.props = props;
 
     const marker: MarkerInstance = useMemo(() => {
       let hasChildren = false;
@@ -102,6 +102,7 @@ export const Marker = memo(
 
     useImperativeHandle(ref, () => marker, []);
 
+    const oldProps = thisRef.current.props;
     if (marker.getLngLat().lng !== longitude || marker.getLngLat().lat !== latitude) {
       marker.setLngLat([longitude, latitude]);
     }
@@ -123,7 +124,14 @@ export const Marker = memo(
     if (marker.getPopup() !== popup) {
       marker.setPopup(popup);
     }
+    const classNameDiff = compareClassNames(oldProps.className, props.className);
+    if (classNameDiff) {
+      for (const c of classNameDiff) {
+        marker.toggleClassName(c);
+      }
+    }
 
+    thisRef.current.props = props;
     return createPortal(props.children, marker.getElement());
   })
 );
