@@ -32,6 +32,19 @@
       "import": "./dist/mapbox-legacy/index.js"
     }
   },
+  "typesVersions": {
+    "*": {
+      "mapbox": [
+        "./dist/mapbox.d.ts"
+      ],
+      "maplibre": [
+        "./dist/maplibre.d.ts"
+      ],
+      "mapbox-legacy": [
+        "./dist/mapbox-legacy/index.d.ts"
+      ]
+    }
+  },
   "files": [
     "src",
     "dist",
