@@ -40,6 +40,7 @@ export default function App() {
         }}
         mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
         interactiveLayerIds={[clusterLayer.id]}
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={onClick}
         ref={mapRef}
       >
