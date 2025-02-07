@@ -2,6 +2,10 @@
 
 # Version 8.0
 
+## v8.0.1 (Feb 6, 2025)
+
+- Fix type resolution for subpath exports when using `moduleResolution: node` (#2486)
+
 ## v8.0.0 (Feb 3, 2025)
 
 - First version to support Mapbox GL JS' official types and MapLibre GL JS v5.
