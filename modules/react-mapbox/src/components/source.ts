@@ -26,7 +26,7 @@ let sourceCounter = 0;
 
 function createSource(map: MapInstance, id: string, props: SourceProps) {
   // @ts-ignore
-  if (map.style && map.style._loaded) {
+  if (map.isStyleLoaded()) {
     const options = {...props};
     delete options.id;
     delete options.children;
