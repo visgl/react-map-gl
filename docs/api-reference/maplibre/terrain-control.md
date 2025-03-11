@@ -82,4 +82,4 @@ Placement of the control relative to the map.
 
 ## Source
 
-[terrain-control.ts](https://github.com/visgl/react-map-gl/tree/master/modules/maplibre/src/components/terrain-control.ts)
+[terrain-control.ts](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-maplibre/src/components/terrain-control.ts)

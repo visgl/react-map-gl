@@ -18,7 +18,7 @@ function ControlPanel(props) {
       )}
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/7.0-release/examples/draw-polygon"
+          href="https://github.com/visgl/react-map-gl/tree/8.0-release/examples/mapbox/draw-polygon"
           target="_new"
         >
           View Code ↗

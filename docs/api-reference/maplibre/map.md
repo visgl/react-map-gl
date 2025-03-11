@@ -549,4 +549,4 @@ Returns the native [Map](https://maplibre.org/maplibre-gl-js/docs/API/classes/Ma
 
 ## Source
 
-[map.tsx](https://github.com/visgl/react-map-gl/tree/master/modules/maplibre/src/components/map.tsx)
+[map.tsx](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-maplibre/src/components/map.tsx)

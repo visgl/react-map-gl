@@ -82,7 +82,7 @@ function StyleControls(props) {
       <p>Dynamically show/hide map layers and change color with Immutable map style.</p>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/7.0-release/examples/layers"
+          href="https://github.com/visgl/react-map-gl/tree/8.0-release/examples/mapbox/layers"
           target="_new"
         >
           View Code ↗
