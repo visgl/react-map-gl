@@ -102,4 +102,4 @@ function App() {
 
 ## Source
 
-[geolocate-control.ts](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/geolocate-control.ts)
+[geolocate-control.ts](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-mapbox/src/components/geolocate-control.ts)
