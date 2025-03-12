@@ -57,7 +57,7 @@ function NavigateButton() {
 ```
 
 
-See a full example [here](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/get-started/hook).
+See a full example [here](https://github.com/visgl/react-map-gl/tree/8.0-release/examples/get-started/hook).
 
 ## Signature
 
@@ -69,4 +69,4 @@ If the hook is used inside a decendent of a `Map` component, the returned object
 
 ## Source
 
-[use-map.tsx](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/use-map.tsx)
+[use-map.tsx](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-mapbox/src/components/use-map.tsx)

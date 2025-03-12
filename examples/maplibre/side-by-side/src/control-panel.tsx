@@ -26,7 +26,7 @@ function ControlPanel(props: {mode: Mode; onModeChange: (newMode: Mode) => void}
 
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-maplibre/tree/1.0-release/examples/side-by-side"
+          href="https://github.com/visgl/react-map-gl/tree/8.0-release/examples/maplibre/side-by-side"
           target="_new"
         >
           View Code ↗

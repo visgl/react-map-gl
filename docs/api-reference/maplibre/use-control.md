@@ -84,4 +84,4 @@ Returns:
 
 ## Source
 
-[use-control.ts](https://github.com/visgl/react-map-gl/tree/master/modules/maplibre/src/components/use-control.ts)
+[use-control.ts](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-maplibre/src/components/use-control.ts)
