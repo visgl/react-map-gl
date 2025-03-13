@@ -568,4 +568,4 @@ Returns the native `Map` ([Mapbox](https://docs.mapbox.com/mapbox-gl-js/api/map/
 
 ## Source
 
-[map.tsx](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/map.tsx)
+[map.tsx](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-mapbox/src/components/map.tsx)

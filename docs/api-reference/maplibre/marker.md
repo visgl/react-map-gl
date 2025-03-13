@@ -146,4 +146,4 @@ function App() {
 
 ## Source
 
-[marker.ts](https://github.com/visgl/react-map-gl/tree/master/modules/maplibre/src/components/marker.ts)
+[marker.ts](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-maplibre/src/components/marker.ts)

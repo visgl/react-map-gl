@@ -23,4 +23,4 @@ See [useMap](./use-map.md) for more information.
 
 ## Source
 
-[use-map.tsx](https://github.com/visgl/react-map-gl/tree/7.0-release/src/components/use-map.tsx)
+[use-map.tsx](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-mapbox/src/components/use-map.tsx)

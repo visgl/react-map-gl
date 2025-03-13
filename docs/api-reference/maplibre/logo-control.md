@@ -50,4 +50,4 @@ Placement of the control relative to the map.
 
 ## Source
 
-[logo-control.ts](https://github.com/visgl/react-map-gl/tree/master/modules/maplibre/src/components/logo-control.ts)
+[logo-control.ts](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-maplibre/src/components/logo-control.ts)
