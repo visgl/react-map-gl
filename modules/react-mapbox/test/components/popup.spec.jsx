@@ -67,8 +67,7 @@ test('Popup', async t => {
     </Map>
   );
   await sleep(1);
-
-  t.is(popup.options.className, 'classA', 'className is updated');
+  t.ok(popup._container.classList.contains('classA'), 'className is updated');
 
   root.unmount();
   t.end();
