@@ -43,7 +43,7 @@ export const Marker = memo(
       });
       const options = {
         ...props,
-        element: hasChildren ? document.createElement('div') : null
+        element: hasChildren ? document.createElement('div') : undefined
       };
 
       const mk = new mapLib.Marker(options);
