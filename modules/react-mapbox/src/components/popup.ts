@@ -9,6 +9,7 @@ import type {PopupEvent} from '../types/events';
 
 import {MapContext} from './map';
 import {deepEqual} from '../utils/deep-equal';
+import {compareClassNames} from '../utils/compare-class-names';
 
 export type PopupProps = PopupOptions & {
   /** Longitude of the anchor location */
@@ -24,11 +25,6 @@ export type PopupProps = PopupOptions & {
   children?: React.ReactNode;
 };
 
-// Adapted from https://github.com/mapbox/mapbox-gl-js/blob/v1.13.0/src/ui/popup.js
-function getClassList(className: string) {
-  return new Set(className ? className.trim().split(/\s+/) : []);
-}
-
 /* eslint-disable complexity,max-statements */
 export const Popup = memo(
   forwardRef((props: PopupProps, ref: React.Ref<PopupInstance>) => {
@@ -37,7 +33,6 @@ export const Popup = memo(
       return document.createElement('div');
     }, []);
     const thisRef = useRef({props});
-    thisRef.current.props = props;
 
     const popup: PopupInstance = useMemo(() => {
       const options = {...props};
@@ -75,32 +70,24 @@ export const Popup = memo(
     useImperativeHandle(ref, () => popup, []);
 
     if (popup.isOpen()) {
+      const oldProps = thisRef.current.props;
       if (popup.getLngLat().lng !== props.longitude || popup.getLngLat().lat !== props.latitude) {
         popup.setLngLat([props.longitude, props.latitude]);
       }
-      if (props.offset && !deepEqual(popup.options.offset, props.offset)) {
+      if (props.offset && !deepEqual(oldProps.offset, props.offset)) {
+        popup.options.anchor = props.anchor;
         popup.setOffset(props.offset);
       }
-      if (popup.options.anchor !== props.anchor || popup.options.maxWidth !== props.maxWidth) {
-        popup.options.anchor = props.anchor;
+      if (oldProps.anchor !== props.anchor || oldProps.maxWidth !== props.maxWidth) {
         popup.setMaxWidth(props.maxWidth);
       }
-      if (popup.options.className !== props.className) {
-        const prevClassList = getClassList(popup.options.className);
-        const nextClassList = getClassList(props.className);
-
-        for (const c of prevClassList) {
-          if (!nextClassList.has(c)) {
-            popup.removeClassName(c);
-          }
+      const classNameDiff = compareClassNames(oldProps.className, props.className);
+      if (classNameDiff) {
+        for (const c of classNameDiff) {
+          popup.toggleClassName(c);
         }
-        for (const c of nextClassList) {
-          if (!prevClassList.has(c)) {
-            popup.addClassName(c);
-          }
-        }
-        popup.options.className = props.className;
       }
+      thisRef.current.props = props;
     }
 
     return createPortal(props.children, container);
