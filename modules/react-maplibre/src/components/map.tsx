@@ -59,24 +59,18 @@ function _Map(props: MapProps, ref: React.Ref<MapRef>) {
           throw new Error('Invalid mapLib');
         }
 
-        // workerUrl & workerClass may change the result of supported()
-        // https://github.com/visgl/react-map-gl/discussions/2027
         setGlobals(mapboxgl, props);
-        if (!mapboxgl.supported || mapboxgl.supported(props)) {
-          if (props.reuseMaps) {
-            maplibre = Maplibre.reuse(props, containerRef.current);
-          }
-          if (!maplibre) {
-            maplibre = new Maplibre(mapboxgl.Map, props, containerRef.current);
-          }
-          contextValue.map = createRef(maplibre);
-          contextValue.mapLib = mapboxgl;
-
-          setMapInstance(maplibre);
-          mountedMapsContext?.onMapMount(contextValue.map, props.id);
-        } else {
-          throw new Error('Map is not supported by this browser');
+        if (props.reuseMaps) {
+          maplibre = Maplibre.reuse(props, containerRef.current);
         }
+        if (!maplibre) {
+          maplibre = new Maplibre(mapboxgl.Map, props, containerRef.current);
+        }
+        contextValue.map = createRef(maplibre);
+        contextValue.mapLib = mapboxgl;
+
+        setMapInstance(maplibre);
+        mountedMapsContext?.onMapMount(contextValue.map, props.id);
       })
       .catch(error => {
         const {onError} = props;
