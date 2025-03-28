@@ -168,6 +168,7 @@ An object with the following fields:
 - `zoom`: number - The zoom level.
 - `pitch`: number - The pitch (tilt) of the map, in degrees.
 - `bearing`: number - The bearing (rotation) of the map, in degrees.
+- `elevation`: number|undefined - The map center elevation from sea leavel on terrain surface, if any
 
 
 ## Events

@@ -1,9 +1,5 @@
-import {
-  transformToViewState,
-  applyViewStateToTransform,
-  cloneTransform,
-  syncProjection
-} from '../utils/transform';
+import {transformToViewState, compareViewStateWithTransform} from '../utils/transform';
+import {ProxyTransform, createProxyTransform} from './proxy-transform';
 import {normalizeStyle} from '../utils/style-utils';
 import {deepEqual} from '../utils/deep-equal';
 
@@ -162,23 +158,27 @@ const handlerNames = [
  */
 export default class Mapbox {
   private _MapClass: {new (options: any): MapInstance};
-  // mapboxgl.Map instance
+  /** mapboxgl.Map instance */
   private _map: MapInstance = null;
-  // User-supplied props
+  /** User-supplied props */
   props: MapboxProps;
 
-  // Mapbox map is stateful.
-  // During method calls/user interactions, map.transform is mutated and
-  // deviate from user-supplied props.
-  // In order to control the map reactively, we shadow the transform
-  // with the one below, which reflects the view state resolved from
-  // both user-supplied props and the underlying state
-  private _renderTransform: Transform;
+  /** The transform that replaces native map.transform to resolve changes vs. React props
+   * See proxy-transform.ts
+   */
+  private _proxyTransform: ProxyTransform;
 
   // Internal states
+  /** Making updates driven by React props. Do not trigger React callbacks to avoid infinite loop */
   private _internalUpdate: boolean = false;
+  /** Map is currently rendering */
   private _inRender: boolean = false;
+  /** Map features under the pointer */
   private _hoveredFeatures: MapGeoJSONFeature[] = null;
+  /** View state changes driven by React props
+   * They still need to fire move/etc. events because controls such as marker/popup
+   * subscribe to the move event internally to update their position
+   * React callbacks like onMove are not called for these */
   private _deferredEvents: {
     move: boolean;
     zoom: boolean;
@@ -208,7 +208,7 @@ export default class Mapbox {
   }
 
   get transform(): Transform {
-    return this._renderTransform;
+    return this._map.transform;
   }
 
   setProps(props: MapboxProps) {
@@ -217,7 +217,7 @@ export default class Mapbox {
 
     const settingsChanged = this._updateSettings(props, oldProps);
     if (settingsChanged) {
-      this._createShadowTransform(this._map);
+      this._createProxyTransform(this._map);
     }
     const sizeChanged = this._updateSize(props);
     const viewStateChanged = this._updateViewState(props, true);
@@ -318,13 +318,14 @@ export default class Mapbox {
     if (props.cursor) {
       map.getCanvas().style.cursor = props.cursor;
     }
-    this._createShadowTransform(map);
+    this._createProxyTransform(map);
 
     // Hack
     // Insert code into map's render cycle
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const renderMap = map._render;
     map._render = (arg: number) => {
+      // Hijacked to set this state flag
       this._inRender = true;
       renderMap.call(map, arg);
       this._inRender = false;
@@ -332,25 +333,25 @@ export default class Mapbox {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const runRenderTaskQueue = map._renderTaskQueue.run;
     map._renderTaskQueue.run = (arg: number) => {
+      // This is where camera updates from input handler/animation happens
+      // And where all view state change events are fired
+      this._proxyTransform.$internalUpdate = true;
       runRenderTaskQueue.call(map._renderTaskQueue, arg);
-      this._onBeforeRepaint();
+      this._proxyTransform.$internalUpdate = false;
+      this._fireDefferedEvents();
     };
-    map.on('render', () => this._onAfterRepaint());
     // Insert code into map's event pipeline
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const fireEvent = map.fire;
     map.fire = this._fireEvent.bind(this, fireEvent);
 
     // add listeners
-    map.on('resize', () => {
-      this._renderTransform.resize(map.transform.width, map.transform.height);
-    });
     map.on('styledata', () => {
       this._updateStyleComponents(this.props, {});
-      // Projection can be set in stylesheet
-      syncProjection(map.transform, this._renderTransform);
     });
-    map.on('sourcedata', () => this._updateStyleComponents(this.props, {}));
+    map.on('sourcedata', () => {
+      this._updateStyleComponents(this.props, {});
+    });
     for (const eventName in pointerEvents) {
       map.on(eventName, this._onPointerEvent);
     }
@@ -396,11 +397,11 @@ export default class Mapbox {
     }
   }
 
-  _createShadowTransform(map: any) {
-    const renderTransform = cloneTransform(map.transform);
-    map.painter.transform = renderTransform;
-
-    this._renderTransform = renderTransform;
+  _createProxyTransform(map: any) {
+    const proxyTransform = createProxyTransform(map.transform);
+    map.transform = proxyTransform;
+    map.painter.transform = proxyTransform;
+    this._proxyTransform = proxyTransform;
   }
 
   /* Trigger map resize if size is controlled
@@ -427,28 +428,11 @@ export default class Mapbox {
      @returns {bool} true if anything is changed
    */
   _updateViewState(nextProps: MapboxProps, triggerEvents: boolean): boolean {
-    if (this._internalUpdate) {
-      return false;
-    }
-    const map = this._map;
-
-    const tr = this._renderTransform;
-    // Take a snapshot of the transform before mutation
+    const viewState: Partial<ViewState> = nextProps.viewState || nextProps;
+    const tr = this._proxyTransform;
     const {zoom, pitch, bearing} = tr;
-    const isMoving = map.isMoving();
-
-    if (isMoving) {
-      // All movement of the camera is done relative to the sea level
-      tr.cameraElevationReference = 'sea';
-    }
-    const changed = applyViewStateToTransform(tr, {
-      ...transformToViewState(map.transform),
-      ...nextProps
-    });
-    if (isMoving) {
-      // Reset camera reference
-      tr.cameraElevationReference = 'ground';
-    }
+    const changed = compareViewStateWithTransform(this._proxyTransform, viewState);
+    tr.$reactViewState = viewState;
 
     if (changed && triggerEvents) {
       const deferredEvents = this._deferredEvents;
@@ -457,12 +441,6 @@ export default class Mapbox {
       deferredEvents.zoom ||= zoom !== tr.zoom;
       deferredEvents.rotate ||= bearing !== tr.bearing;
       deferredEvents.pitch ||= pitch !== tr.pitch;
-    }
-
-    // Avoid manipulating the real transform when interaction/animation is ongoing
-    // as it would interfere with Mapbox's handlers
-    if (!isMoving) {
-      applyViewStateToTransform(map.transform, nextProps);
     }
 
     return changed;
@@ -576,18 +554,14 @@ export default class Mapbox {
 
   private _queryRenderedFeatures(point: Point) {
     const map = this._map;
-    const tr = map.transform;
     const {interactiveLayerIds = []} = this.props;
     try {
-      map.transform = this._renderTransform;
       return map.queryRenderedFeatures(point, {
         layers: interactiveLayerIds.filter(map.getLayer.bind(map))
       });
     } catch {
       // May fail if style is not loaded
       return [];
-    } finally {
-      map.transform = tr;
     }
   }
 
@@ -637,8 +611,13 @@ export default class Mapbox {
     if (!this._internalUpdate) {
       // @ts-ignore
       const cb = this.props[cameraEvents[e.type]];
+      const tr = this._proxyTransform;
       if (cb) {
+        e.viewState = transformToViewState(tr.$proposedTransform ?? tr);
         cb(e);
+      }
+      if (e.type === 'moveend') {
+        tr.$proposedTransform = null;
       }
     }
     if (e.type in this._deferredEvents) {
@@ -648,35 +627,23 @@ export default class Mapbox {
 
   _fireEvent(baseFire: Function, event: string | MapEvent, properties?: object) {
     const map = this._map;
-    const tr = map.transform;
+    const tr = this._proxyTransform;
 
-    const eventType = typeof event === 'string' ? event : event.type;
-    if (eventType === 'move') {
-      this._updateViewState(this.props, false);
+    // Always expose the controlled transform to controls/end user
+    const internal = tr.$internalUpdate;
+    try {
+      tr.$internalUpdate = false;
+      baseFire.call(map, event, properties);
+    } finally {
+      tr.$internalUpdate = internal;
     }
-    if (eventType in cameraEvents) {
-      if (typeof event === 'object') {
-        (event as unknown as ViewStateChangeEvent).viewState = transformToViewState(tr);
-      }
-      if (this._map.isMoving()) {
-        // Replace map.transform with ours during the callbacks
-        map.transform = this._renderTransform;
-        baseFire.call(map, event, properties);
-        map.transform = tr;
-
-        return map;
-      }
-    }
-    baseFire.call(map, event, properties);
 
     return map;
   }
 
-  // All camera manipulations are complete, ready to repaint
-  _onBeforeRepaint() {
+  // If there are camera changes driven by props, invoke camera events so that DOM controls are synced
+  _fireDefferedEvents() {
     const map = this._map;
-
-    // If there are camera changes driven by props, invoke camera events so that DOM controls are synced
     this._internalUpdate = true;
     for (const eventType in this._deferredEvents) {
       if (this._deferredEvents[eventType]) {
@@ -684,21 +651,7 @@ export default class Mapbox {
       }
     }
     this._internalUpdate = false;
-
-    const tr = this._map.transform;
-    // Make sure camera matches the current props
-    map.transform = this._renderTransform;
-
-    this._onAfterRepaint = () => {
-      // Mapbox transitions between non-mercator projection and mercator during render time
-      // Copy it back to the other
-      syncProjection(this._renderTransform, tr);
-      // Restores camera state before render/load events are fired
-      map.transform = tr;
-    };
   }
-
-  _onAfterRepaint: () => void;
 }
 
 /**
