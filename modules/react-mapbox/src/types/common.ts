@@ -28,7 +28,7 @@ export type ViewState = {
   /** Dimensions in pixels applied on each side of the viewport for shifting the vanishing point. */
   padding: PaddingOptions;
   /** Center elevation on terrain */
-  altitude?: number;
+  elevation?: number;
 };
 
 export interface ImmutableLike<T> {

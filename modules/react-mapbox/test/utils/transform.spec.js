@@ -27,7 +27,7 @@ test('applyViewStateToTransform', t => {
       pitch: 0,
       bearing: 0,
       padding: {left: 0, right: 0, top: 0, bottom: 0},
-      altitude: 0
+      elevation: 0
     },
     'view state is correct'
   );
@@ -45,7 +45,7 @@ test('applyViewStateToTransform', t => {
       pitch: 0,
       bearing: 0,
       padding: {left: 0, right: 0, top: 0, bottom: 0},
-      altitude: 0
+      elevation: 0
     },
     'view state is correct'
   );
@@ -63,7 +63,7 @@ test('applyViewStateToTransform', t => {
       pitch: 30,
       bearing: 0,
       padding: {left: 0, right: 0, top: 0, bottom: 0},
-      altitude: 0
+      elevation: 0
     },
     'view state is correct'
   );
@@ -81,7 +81,7 @@ test('applyViewStateToTransform', t => {
       pitch: 30,
       bearing: -90,
       padding: {left: 0, right: 0, top: 0, bottom: 0},
-      altitude: 0
+      elevation: 0
     },
     'view state is correct'
   );
@@ -99,7 +99,7 @@ test('applyViewStateToTransform', t => {
       pitch: 30,
       bearing: -90,
       padding: {left: 10, right: 10, top: 10, bottom: 10},
-      altitude: 0
+      elevation: 0
     },
     'view state is correct'
   );

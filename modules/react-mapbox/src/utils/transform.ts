@@ -14,7 +14,7 @@ export function transformToViewState(tr: Transform): ViewState {
     pitch: tr.pitch,
     bearing: tr.bearing,
     padding: tr.padding,
-    altitude: tr._centerAltitude
+    elevation: tr._centerAltitude
   };
 }
 
@@ -86,7 +86,7 @@ export function applyViewStateToTransform(tr: Transform, v: Partial<ViewState>) 
     tr._center = new center.constructor(v.longitude ?? center.lng, v.latitude ?? center.lat);
   }
   if (Number.isFinite(v.zoom)) {
-    tr._centerAltitude = v.altitude ?? 0;
+    tr._centerAltitude = v.elevation ?? 0;
     if (tr.elevation) {
       tr._seaLevelZoom = v.zoom;
       const mercatorElevation = (tr.pixelsPerMeter / tr.worldSize) * tr._centerAltitude;

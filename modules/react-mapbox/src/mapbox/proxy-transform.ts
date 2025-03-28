@@ -120,7 +120,7 @@ export function createProxyTransform(tr: Transform): ProxyTransform {
           controlledValue = controlledTransform[prop];
         }
       } else if (prop === '_centerAltitude') {
-        if (Number.isFinite(reactViewState.altitude)) {
+        if (Number.isFinite(reactViewState.elevation)) {
           controlledValue = controlledTransform[prop];
         }
       } else if (prop === 'pitch' || prop === '_pitch') {
