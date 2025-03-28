@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# Version 8.1
+
+## v8.1.0-alpha.1 (Mar 28, 2025)
+
+- feat(mapbox): Replace shadow transform with proxied approach (#2514)
+
 # Version 8.0
 
 ## v8.0.0-beta.1 (Jan 31, 2025)
