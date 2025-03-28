@@ -25,7 +25,6 @@ export type SourceProps = (SourceSpecification | CanvasSourceSpecification) & {
 let sourceCounter = 0;
 
 function createSource(map: MapInstance, id: string, props: SourceProps) {
-  // @ts-ignore
   if (map.isStyleLoaded()) {
     const options = {...props};
     delete options.id;
@@ -89,10 +88,12 @@ export function Source(props: SourceProps) {
     if (map) {
       /* global setTimeout */
       const forceUpdate = () => setTimeout(() => setStyleLoaded(version => version + 1), 0);
+      map.on('load', forceUpdate);
       map.on('styledata', forceUpdate);
       forceUpdate();
 
       return () => {
+        map.off('load', forceUpdate);
         map.off('styledata', forceUpdate);
         // @ts-ignore
         if (map.style && map.style._loaded && map.getSource(id)) {
