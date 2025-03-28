@@ -1,5 +1,5 @@
-import type {Transform, LngLat} from '../types/internal';
-import type {ViewState} from '../types/common';
+import type {Transform} from '../types/internal';
+import type {ViewState, LngLat} from '../types/common';
 import {applyViewStateToTransform, isViewStateControlled} from '../utils/transform';
 
 /**

@@ -20,6 +20,7 @@ export default class Transform {
     this.angle = 0;
     this._pitch = 0;
     this._edgeInsets = new EdgeInsets();
+    this._centerAltitude = 0;
   }
 
   get bearing() {
@@ -88,4 +89,8 @@ export default class Transform {
   isPaddingEqual(padding) {
     return this._edgeInsets.equals(padding);
   }
+
+  _constrain() {}
+
+  _calcMatrices() {}
 }
