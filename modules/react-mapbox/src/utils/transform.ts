@@ -18,6 +18,20 @@ export function transformToViewState(tr: Transform): ViewState {
   };
 }
 
+/** Returns `true` if the given props can potentially override view state updates */
+export function isViewStateControlled(v: Partial<ViewState>): boolean {
+  return (
+    Number.isFinite(v.longitude) ||
+    Number.isFinite(v.latitude) ||
+    Number.isFinite(v.zoom) ||
+    Number.isFinite(v.pitch) ||
+    Number.isFinite(v.bearing)
+  );
+}
+
+/**
+ * Returns `true` if transform needs to be updated to match view state
+ */
 export function compareViewStateWithTransform(tr: Transform, v: Partial<ViewState>): boolean {
   if (Number.isFinite(v.longitude) && tr.center.lng !== v.longitude) {
     return true;

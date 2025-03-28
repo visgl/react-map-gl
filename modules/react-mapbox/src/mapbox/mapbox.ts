@@ -158,17 +158,27 @@ const handlerNames = [
  */
 export default class Mapbox {
   private _MapClass: {new (options: any): MapInstance};
-  // mapboxgl.Map instance
+  /** mapboxgl.Map instance */
   private _map: MapInstance = null;
-  // User-supplied props
+  /** User-supplied props */
   props: MapboxProps;
 
+  /** The transform that replaces native map.transform to resolve changes vs. React props
+   * See proxy-transform.ts
+   */
   private _proxyTransform: ProxyTransform;
 
   // Internal states
+  /** Making updates driven by React props. Do not trigger React callbacks to avoid infinite loop */
   private _internalUpdate: boolean = false;
+  /** Map is currently rendering */
   private _inRender: boolean = false;
+  /** Map features under the pointer */
   private _hoveredFeatures: MapGeoJSONFeature[] = null;
+  /** View state changes driven by React props
+   * They still need to fire move/etc. events because controls such as marker/popup
+   * subscribe to the move event internally to update their position
+   * React callbacks like onMove are not called for these */
   private _deferredEvents: {
     move: boolean;
     zoom: boolean;
@@ -315,6 +325,7 @@ export default class Mapbox {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const renderMap = map._render;
     map._render = (arg: number) => {
+      // Hijacked to set this state flag
       this._inRender = true;
       renderMap.call(map, arg);
       this._inRender = false;
@@ -322,10 +333,12 @@ export default class Mapbox {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const runRenderTaskQueue = map._renderTaskQueue.run;
     map._renderTaskQueue.run = (arg: number) => {
+      // This is where camera updates from input handler/animation happens
+      // And where all view state change events are fired
       this._proxyTransform.$internalUpdate = true;
       runRenderTaskQueue.call(map._renderTaskQueue, arg);
       this._proxyTransform.$internalUpdate = false;
-      this._onBeforeRepaint();
+      this._fireDefferedEvents();
     };
     // Insert code into map's event pipeline
     // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -628,11 +641,9 @@ export default class Mapbox {
     return map;
   }
 
-  // All camera manipulations are complete, ready to repaint
-  _onBeforeRepaint() {
+  // If there are camera changes driven by props, invoke camera events so that DOM controls are synced
+  _fireDefferedEvents() {
     const map = this._map;
-
-    // If there are camera changes driven by props, invoke camera events so that DOM controls are synced
     this._internalUpdate = true;
     for (const eventType in this._deferredEvents) {
       if (this._deferredEvents[eventType]) {

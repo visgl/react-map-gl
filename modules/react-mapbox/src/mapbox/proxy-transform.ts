@@ -1,15 +1,23 @@
-import type {Transform} from '../types/internal';
-import type {ViewState, LngLat} from '../types/common';
-import { applyViewStateToTransform } from '../utils/transform';
+import type {Transform, LngLat} from '../types/internal';
+import type {ViewState} from '../types/common';
+import {applyViewStateToTransform, isViewStateControlled} from '../utils/transform';
 
+/**
+ * Mapbox map is stateful.
+ * During method calls/user interactions, map.transform is mutated and deviate from user-supplied props.
+ * In order to control the map reactively, we trap the transform mutations with a proxy,
+ * which reflects the view state resolved from both user-supplied props and the underlying state
+ */
 export type ProxyTransform = Transform & {
   $internalUpdate: boolean;
   $proposedTransform: Transform | null;
   $reactViewState: Partial<ViewState>;
 };
 
-// These are Transform class methods that should not trigger any proxied getter/setter
-// See https://github.com/mapbox/mapbox-gl-js/blob/main/src/ui/handler_manager.ts
+// These are Transform class methods that:
+// + do not mutate any view state properties
+// + populate private members derived from view state properties
+// They should always reflect the state of their owning instance and NOT trigger any proxied getter/setter
 const unproxiedMethods = new Set([
   '_calcMatrices',
   '_calcFogMatrices',
@@ -17,14 +25,6 @@ const unproxiedMethods = new Set([
   '_updateSeaLevelZoom'
 ]);
 
-/**
- * Mapbox map is stateful.
- * During method calls/user interactions, map.transform is mutated and
- * deviate from user-supplied props.
- * In order to control the map reactively, we trap the transform mutations
- * with a proxy, which reflects the view state resolved from
- * both user-supplied props and the underlying state
- */
 export function createProxyTransform(tr: Transform): ProxyTransform {
   let internalUpdate = false;
   let reactViewState: Partial<ViewState> = {};
@@ -34,7 +34,7 @@ export function createProxyTransform(tr: Transform): ProxyTransform {
    */
   const controlledTransform: Transform = tr;
   /** Populated during camera move (handler/easeTo) if there is a discrepency between react props and proposed view state
-   * This is the transform seen by input handlers
+   * This is the transform seen by Mapbox's input handlers
    */
   let proposedTransform: Transform | null = null;
 
@@ -51,7 +51,7 @@ export function createProxyTransform(tr: Transform): ProxyTransform {
         return internalUpdate;
       }
 
-      // Ugly - this is indirectly called from HandlerManager bypassing zoom setter
+      // Ugly - this method is called from HandlerManager bypassing zoom setter
       if (prop === '_setZoom') {
         return (z: number) => {
           if (internalUpdate) {
@@ -63,25 +63,29 @@ export function createProxyTransform(tr: Transform): ProxyTransform {
         };
       }
 
+      // Ugly - this method is called from HandlerManager and mutates transform._camera
       if (
         internalUpdate &&
         prop === '_translateCameraConstrained' &&
-        Number.isFinite(reactViewState.zoom)
+        isViewStateControlled(reactViewState)
       ) {
-        // mapbox is about to start mutating transform, and the view state is controlled by React props
         proposedTransform = proposedTransform || controlledTransform.clone();
       }
 
-      // When this function is executed, it updates both transforms respectively
       if (unproxiedMethods.has(prop)) {
+        // When this function is executed, it updates both transforms respectively
         return function (...parms: unknown[]) {
           proposedTransform?.[prop](...parms);
           controlledTransform[prop](...parms);
         };
       }
+
+      // Expose the proposed transform to input handlers
       if (internalUpdate && proposedTransform) {
         return proposedTransform[prop];
       }
+
+      // Expose the controlled transform to renderer, markers, and event listeners
       return controlledTransform[prop];
     },
 
@@ -104,13 +108,12 @@ export function createProxyTransform(tr: Transform): ProxyTransform {
       // Controlled props
       let controlledValue = value;
       if (prop === 'center' || prop === '_center') {
-        // @ts-expect-error LngLat constructor is not typed
-        controlledValue = new value.constructor(value.lng, value.lat);
-        if (Number.isFinite(reactViewState.longitude)) {
-          (controlledValue as LngLat).lng = reactViewState.longitude;
-        }
-        if (Number.isFinite(reactViewState.latitude)) {
-          (controlledValue as LngLat).lat = reactViewState.latitude;
+        if (Number.isFinite(reactViewState.longitude) || Number.isFinite(reactViewState.latitude)) {
+          // @ts-expect-error LngLat constructor is not typed
+          controlledValue = new value.constructor(
+            reactViewState.longitude ?? (value as LngLat).lng,
+            reactViewState.latitude ?? (value as LngLat).lat
+          );
         }
       } else if (prop === 'zoom' || prop === '_zoom' || prop === '_seaLevelZoom') {
         if (Number.isFinite(reactViewState.zoom)) {
@@ -130,10 +133,15 @@ export function createProxyTransform(tr: Transform): ProxyTransform {
         }
       }
 
+      // During camera update, we save view states that are overriden by controlled values in proposedTransform
+      if (internalUpdate && controlledValue !== value) {
+        proposedTransform = proposedTransform || controlledTransform.clone();
+      }
       if (internalUpdate && proposedTransform) {
         proposedTransform[prop] = value;
       }
 
+      // controlledTransform is not exposed to view state mutation
       controlledTransform[prop] = controlledValue;
       return true;
     }
