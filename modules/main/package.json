@@ -1,7 +1,7 @@
 {
   "name": "react-map-gl",
   "description": "React components for MapLibre GL JS and Mapbox GL JS",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "keywords": [
     "mapbox",
     "maplibre",
@@ -51,8 +51,8 @@
     "README.md"
   ],
   "dependencies": {
-    "@vis.gl/react-mapbox": "8.0.1",
-    "@vis.gl/react-maplibre": "8.0.1"
+    "@vis.gl/react-mapbox": "8.0.2",
+    "@vis.gl/react-maplibre": "8.0.2"
   },
   "devDependencies": {
     "@types/mapbox-gl": "3.4.0",

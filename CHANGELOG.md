@@ -2,6 +2,14 @@
 
 # Version 8.0
 
+## v8.0.2 (Mar 28, 2025)
+
+- Fix source loading condition (#2513)
+- Remove support() check (#2508)
+- marker.ts: `undefined` instead of `null` (#2500)
+- Fix: Handle className prop change (#2483)
+- Fix style loading check on Source layers (#2377) (#2493)
+
 ## v8.0.1 (Feb 6, 2025)
 
 - Fix type resolution for subpath exports when using `moduleResolution: node` (#2486)
