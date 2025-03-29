@@ -340,6 +340,15 @@ export default class Mapbox {
       this._proxyTransform.$internalUpdate = false;
       this._fireDefferedEvents();
     };
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const jumpTo = map.jumpTo;
+    map.jumpTo = (...args: Parameters<MapInstance['jumpTo']>) => {
+      // This method will fire view state change events immediately
+      this._proxyTransform.$internalUpdate = true;
+      jumpTo.apply(map, args);
+      this._proxyTransform.$internalUpdate = false;
+      return map;
+    };
     // Insert code into map's event pipeline
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const fireEvent = map.fire;
