@@ -9,7 +9,7 @@ import {Map, useMap} from 'react-map-gl/maplibre';
 function Root() {
   return (
     <Map ... >
-      <NavigationButton />
+      <NavigateButton />
     </Map>
   );
 }
