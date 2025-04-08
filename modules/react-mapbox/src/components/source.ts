@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useContext, useEffect, useMemo, useState, useRef, cloneElement} from 'react';
+import {useContext, useEffect, useMemo, useCallback, useState, useRef, cloneElement} from 'react';
 import {MapContext} from './map';
 import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
@@ -83,17 +83,20 @@ export function Source(props: SourceProps) {
   const [, setStyleLoaded] = useState(0);
 
   const id = useMemo(() => props.id || `jsx-source-${sourceCounter++}`, []);
+  /* global setTimeout */
+  const forceUpdate = useCallback(
+    () => setTimeout(() => setStyleLoaded(version => version + 1), 0),
+    []
+  );
 
   useEffect(() => {
     if (map) {
-      /* global setTimeout */
-      const forceUpdate = () => setTimeout(() => setStyleLoaded(version => version + 1), 0);
-      map.on('load', forceUpdate);
+      // Fired on initial load signaling the map is ready to add custom sources
+      // Subsequently fired on style changes
       map.on('styledata', forceUpdate);
       forceUpdate();
 
       return () => {
-        map.off('load', forceUpdate);
         map.off('styledata', forceUpdate);
         // @ts-ignore
         if (map.style && map.style._loaded && map.getSource(id)) {
@@ -124,6 +127,20 @@ export function Source(props: SourceProps) {
     source = createSource(map, id, props);
   }
   propsRef.current = props;
+
+  useEffect(() => {
+    if (!source) {
+      // on `styledata` event, `map.isStyleLoaded()` still returns false.
+      // `load` and `style.load` only fire once and not when `isStyleLoaded` changes from true to false to true.
+      // `sourcedata` potentially suggests that `isStyleLoaded` has changed. But it fires on every tile load.
+      // Unsubscribe once source is added.
+      map.on('sourcedata', forceUpdate);
+      return () => {
+        map.off('sourcedata', forceUpdate);
+      };
+    }
+    return undefined;
+  }, [map, source]);
 
   return (
     (source &&
