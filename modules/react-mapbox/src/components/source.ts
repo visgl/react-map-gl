@@ -83,11 +83,7 @@ export function Source(props: SourceProps) {
   const [, setStyleLoaded] = useState(0);
 
   const id = useMemo(() => props.id || `jsx-source-${sourceCounter++}`, []);
-  /* global setTimeout */
-  const forceUpdate = useCallback(
-    () => setTimeout(() => setStyleLoaded(version => version + 1), 0),
-    []
-  );
+  const forceUpdate = useCallback(() => setStyleLoaded(version => version + 1), []);
 
   useEffect(() => {
     if (map) {
