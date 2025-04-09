@@ -2,6 +2,10 @@
 
 # Version 8.0
 
+## v8.0.3 (Apr 9, 2025)
+
+- Fix addSource condition (#2524)
+
 ## v8.0.2 (Mar 28, 2025)
 
 - Fix source loading condition (#2513)
