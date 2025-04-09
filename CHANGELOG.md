@@ -2,6 +2,10 @@
 
 # Version 8.1
 
+## v8.1.0-alpha.2 (Apr 9, 2025)
+
+- wrap jumpTo as internal update (#2516)
+
 ## v8.1.0-alpha.1 (Mar 28, 2025)
 
 - feat(mapbox): Replace shadow transform with proxied approach (#2514)
