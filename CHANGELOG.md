@@ -2,6 +2,10 @@
 
 # Version 8.0
 
+## v8.0.4 (Apr 15, 2025)
+
+- Revert changes to add source condition (#2526)
+
 ## v8.0.3 (Apr 9, 2025)
 
 - Fix addSource condition (#2524)
