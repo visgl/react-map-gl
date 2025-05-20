@@ -216,9 +216,6 @@ export default class Mapbox {
     this.props = props;
 
     const settingsChanged = this._updateSettings(props, oldProps);
-    if (settingsChanged) {
-      this._createProxyTransform(this._map);
-    }
     const sizeChanged = this._updateSize(props);
     const viewStateChanged = this._updateViewState(props, true);
     this._updateStyle(props, oldProps);
