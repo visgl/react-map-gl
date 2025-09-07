@@ -18,7 +18,8 @@ import type {
   TerrainControl,
   TerrainSpecification,
   LogoControl,
-  LogoControlOptions
+  LogoControlOptions,
+  GlobeControl,
 } from 'maplibre-gl';
 
 export type {
@@ -43,6 +44,7 @@ export type {
   TerrainControl as TerrainControlInstance,
   LogoControl as LogoControlInstance,
   LogoControlOptions,
+  GlobeControl as GlobeControlInstance,
   CustomLayerInterface
 } from 'maplibre-gl';
 
@@ -73,4 +75,6 @@ export interface MapLib {
   TerrainControl: {new (options: TerrainSpecification): TerrainControl};
 
   LogoControl: {new (options: LogoControlOptions): LogoControl};
+
+  GlobeControl: {new (options: any): GlobeControl};
 }
