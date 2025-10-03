@@ -2,6 +2,12 @@
 
 # Version 8.1
 
+## v8.1.0 (Oct 3, 2025)
+
+The core logic in the Mapbox GL JS wrapper has been rewritten to use [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) to intercept camera updates. We expect the new approach to improve camera synchronization between the native controller and React props when terrain and/or non-mercator projections are used. See more backgrounds in [#2514](https://github.com/visgl/react-map-gl/pull/2514).
+
+The Maplibre wrapper is unaffected by this change.
+
 ## v8.1.0-alpha.2 (Apr 9, 2025)
 
 - wrap jumpTo as internal update (#2516)

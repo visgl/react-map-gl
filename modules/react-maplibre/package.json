@@ -1,7 +1,7 @@
 {
   "name": "@vis.gl/react-maplibre",
   "description": "React components for Maplibre GL JS",
-  "version": "8.1.0-alpha.2",
+  "version": "8.1.0",
   "keywords": [
     "maplibre",
     "maplibre-gl",
