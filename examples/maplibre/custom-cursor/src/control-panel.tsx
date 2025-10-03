@@ -50,7 +50,7 @@ function StyleControls(props) {
       <p>Customize the cursor based on interactivity.</p>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/8.0-release/examples/maplibre/custom-cursor"
+          href="https://github.com/visgl/react-map-gl/tree/8.1-release/examples/maplibre/custom-cursor"
           target="_new"
         >
           View Code ↗

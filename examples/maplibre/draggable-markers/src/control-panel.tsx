@@ -26,7 +26,7 @@ function ControlPanel(props: {events: Record<string, LngLat>}) {
       </div>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/8.0-release/examples/maplibre/draggable-markers"
+          href="https://github.com/visgl/react-map-gl/tree/8.1-release/examples/maplibre/draggable-markers"
           target="_new"
         >
           View Code ↗

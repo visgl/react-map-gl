@@ -47,7 +47,7 @@ function ControlPanel(props) {
       <p>Turn interactive features off/on.</p>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/8.0-release/examples/maplibre/interaction"
+          href="https://github.com/visgl/react-map-gl/tree/8.1-release/examples/maplibre/interaction"
           target="_new"
         >
           View Code ↗

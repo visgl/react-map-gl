@@ -1,6 +1,6 @@
 # Get Started
 
-You may find complete project setups in [get-started examples](https://github.com/visgl/react-map-gl/tree/8.0-release/examples/get-started).
+You may find complete project setups in [get-started examples](https://github.com/visgl/react-map-gl/tree/8.1-release/examples/get-started).
 
 ## Installation
 

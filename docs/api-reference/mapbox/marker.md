@@ -148,4 +148,4 @@ function App() {
 
 ## Source
 
-[marker.ts](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-mapbox/src/components/marker.ts)
+[marker.ts](https://github.com/visgl/react-map-gl/tree/8.1-release/modules/react-mapbox/src/components/marker.ts)

@@ -7,7 +7,7 @@ function ControlPanel() {
       <p>Hover over counties to highlight counties that share the same name.</p>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/8.0-release/examples/mapbox/filter"
+          href="https://github.com/visgl/react-map-gl/tree/8.1-release/examples/mapbox/filter"
           target="_new"
         >
           View Code ↗

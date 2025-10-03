@@ -6,7 +6,7 @@ function ControlPanel() {
       <h3>Geocoder</h3>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/8.0-release/examples/mapbox/geocoder"
+          href="https://github.com/visgl/react-map-gl/tree/8.1-release/examples/mapbox/geocoder"
           target="_new"
         >
           View Code ↗

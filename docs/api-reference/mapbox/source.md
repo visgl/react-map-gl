@@ -62,4 +62,4 @@ Required. Type of the source.
 
 ## Source
 
-[source.ts](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-mapbox/src/components/source.ts)
+[source.ts](https://github.com/visgl/react-map-gl/tree/8.1-release/modules/react-mapbox/src/components/source.ts)

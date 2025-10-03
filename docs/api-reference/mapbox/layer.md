@@ -68,4 +68,4 @@ Note that layers are added by the order that they mount. They are *NOT* reordere
 
 ## Source
 
-[layer.ts](https://github.com/visgl/react-map-gl/tree/8.0-release/modules/react-mapbox/src/components/layer.ts)
+[layer.ts](https://github.com/visgl/react-map-gl/tree/8.1-release/modules/react-mapbox/src/components/layer.ts)

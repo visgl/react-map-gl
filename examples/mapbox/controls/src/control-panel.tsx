@@ -16,7 +16,7 @@ function ControlPanel() {
       </p>
       <div className="source-link">
         <a
-          href="https://github.com/visgl/react-map-gl/tree/8.0-release/examples/mapbox/controls"
+          href="https://github.com/visgl/react-map-gl/tree/8.1-release/examples/mapbox/controls"
           target="_new"
         >
           View Code ↗

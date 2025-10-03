@@ -9,7 +9,7 @@
     "@types/mapbox__mapbox-gl-geocoder": "^4.7.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-map-gl": "^8.0.0",
+    "react-map-gl": "^8.1.0",
     "mapbox-gl": "^3.5.0"
   },
   "devDependencies": {
