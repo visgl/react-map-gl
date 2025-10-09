@@ -31,6 +31,8 @@ export type MapProps = MapInitOptions &
     id?: string;
     /** Map container CSS style */
     style?: CSSProperties;
+    /** Map child container CSS style */
+    childContainerStyle?: CSSProperties;
     children?: any;
   };
 
@@ -118,7 +120,8 @@ function _Map(props: MapProps, ref: React.Ref<MapRef>) {
   );
 
   const CHILD_CONTAINER_STYLE = {
-    height: '100%'
+    height: '100%',
+    ...props.childContainerStyle
   };
 
   return (
