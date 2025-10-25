@@ -147,6 +147,40 @@ test('Map#controlled#no-update', t => {
   );
 });
 
+test('Map#uncontrolled#delayedSettingsUpdate', async t => {
+  const root = createRoot(document.createElement('div'));
+  const mapRef = {current: null};
+
+  function App() {
+    const [settings, setSettings] = React.useState({
+      maxPitch: 85
+    });
+
+    async function onLoad() {
+      await sleep(1);
+      setSettings({maxPitch: 60});
+    }
+
+    return (
+      <Map
+        ref={mapRef}
+        mapLib={import('mapbox-gl-v3')}
+        mapboxAccessToken={MapboxAccessToken}
+        initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
+        {...settings}
+        onLoad={onLoad}
+      />
+    );
+  }
+
+  root.render(<App />);
+
+  await waitForMapLoad(mapRef);
+  await sleep(1);
+
+  t.is(mapRef.current.getMaxPitch(), 60, 'maxPitch is updated');
+});
+
 test('Map#controlled#mirror-back', t => {
   const root = createRoot(document.createElement('div'));
   const mapRef = {current: null};
