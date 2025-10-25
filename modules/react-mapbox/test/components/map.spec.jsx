@@ -168,9 +168,7 @@ test('Map#uncontrolled#delayedSettingsUpdate', async t => {
         mapboxAccessToken={MapboxAccessToken}
         initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
         {...settings}
-        onLoad={() => {
-          onLoad();
-        }}
+        onLoad={onLoad}
       />
     );
   }
