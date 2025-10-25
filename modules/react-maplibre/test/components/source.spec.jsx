@@ -2,7 +2,7 @@
 import test from 'tape-promise/tape';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
-import {Map, Source} from '@vis.gl/react-maplibre';
+import {Map, Source, Layer} from '@vis.gl/react-maplibre';
 import {sleep, waitForMapLoad} from '../utils/test-utils';
 
 test('Source/Layer', async t => {
@@ -53,3 +53,39 @@ test('Source/Layer', async t => {
 
   t.end();
 });
+
+test('Composable Layers', async t => {
+
+  const root = createRoot(document.createElement('div'));
+  const mapRef = {current: null};
+
+  const geoJSON = {
+    type: 'Point',
+    coordinates: [0, 0]
+  };
+  const MyLayer = () =>
+    <Layer {...{
+      id: 'my-layer',
+      type: 'circle',
+      paint: {
+        'circle-radius': 10,
+        'circle-color': '#000000'
+      }
+    }}/>
+
+
+  root.render(
+    <Map ref={mapRef}>
+      <Source id="my-data" type="geojson" data={geoJSON}>
+        <MyLayer/>
+      </Source>
+    </Map>
+  );
+  await waitForMapLoad(mapRef);
+  await sleep(1);
+  t.ok(mapRef.current.getLayer('my-layer'), 'Layer is added');
+
+  root.unmount();
+
+  t.end();
+})

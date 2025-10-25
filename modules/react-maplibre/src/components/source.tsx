@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useContext, useEffect, useMemo, useState, useRef, cloneElement} from 'react';
+import {useContext, useEffect, useMemo, useState, useRef} from 'react';
 import {MapContext} from './map';
 import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
@@ -128,16 +128,10 @@ export function Source(props: SourceProps) {
   }
   propsRef.current = props;
 
-  return (
-    (source &&
-      React.Children.map(
-        props.children,
-        child =>
-          child &&
-          cloneElement(child, {
-            source: id
-          })
-      )) ||
-    null
-  );
+  return <SourceIdContext.Provider value={id}>
+    {props.children}
+  </SourceIdContext.Provider>
 }
+
+export const SourceIdContext =
+  React.createContext<string | null>(null);
