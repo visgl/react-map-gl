@@ -1,3 +1,6 @@
 dist/
 node_modules/
-test/src/utils/mapbox-gl-mock/*.js
+test/
+modules/**/test/
+**/vite.config.js
+examples/vite.config.local.js

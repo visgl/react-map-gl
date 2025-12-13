@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Head from 'next/head';
-import Map, {Marker} from 'react-map-gl';
+import Map, {Marker} from 'react-map-gl/mapbox';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 

@@ -1,31 +1,44 @@
 {
-  "name": "react-map-gl-website",
+  "name": "project-website",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Website for vis.gl project",
   "scripts": {
-    "start": "yarn clean && yarn develop",
-    "build": "yarn clean-examples && yarn clean && gatsby build --prefix-paths",
-    "clean": "rm -rf ./.cache ./public",
-    "clean-examples": "find ../examples -name node_modules -exec rm -rf {} \\; || true",
-    "develop": "yarn clean-examples && gatsby develop",
-    "serve": "gatsby serve",
-    "deploy": "NODE_DEBUG=gh-pages gh-pages -d public"
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-heading-ids": "ocular-doc-headers ../docs",
+    "deploy": "docusaurus deploy"
+  },
+  "resolution_notes": {
+    "cheerio": "@cmfcmf/docusaurus-search-local breaks with v1.0.0 production release"
+  },
+  "resolutions": {
+    "cheerio": "1.0.0-rc.9"
   },
   "dependencies": {
+    "@docusaurus/core": "^3.0.0",
     "@mapbox/mapbox-gl-draw": "^1.3.0",
     "@mapbox/mapbox-gl-geocoder": "^4.7.4",
-    "@turf/area": "^6.0.1",
-    "@turf/bbox": "^6.0.1",
-    "d3-array": "^1.0.5",
-    "d3-scale": "^1.0.6",
-    "immutable": "^3.7.5",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "styled-components": "^4.3.2"
+    "@maplibre/maplibre-gl-geocoder": "^1.5.0",
+    "@vis.gl/docusaurus-website": "1.0.0-alpha.23",
+    "@turf/area": "^6.5.0",
+    "@turf/bbox": "^6.5.0",
+    "d3-array": "^3.1.1",
+    "d3-scale": "^4.0.2",
+    "immutable": "^4.0.0",
+    "mapbox-gl": "^3.9.0",
+    "maplibre-gl": "^5.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
-  "devDependencies": {
-    "gatsby": "^2.20.24",
-    "gatsby-plugin-env-variables": "^1.0.1",
-    "gatsby-plugin-no-sourcemaps": "^2.1.1",
-    "gatsby-theme-ocular": "^1.2.3",
-    "gh-pages": "^2.1.0"
+  "browserslist": [
+    ">0.2% and supports async-functions",
+    "not dead"
+  ],
+  "volta": {
+    "node": "18.20.5",
+    "yarn": "1.22.22"
   }
 }

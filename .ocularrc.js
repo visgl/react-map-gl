@@ -1,13 +1,17 @@
-const {resolve} = require('path');
+/** @typedef {import('@vis.gl/dev-tools').OcularConfig} OcularConfig */
+import {resolve} from 'path';
 
-const config = {
+/** @type {OcularConfig} */
+export default {
   lint: {
-    paths: ['src', 'test', 'examples']
+    paths: ['modules', 'test', 'examples']
+  },
+
+  coverage: {
+    test: 'browser'
   },
 
   aliases: {
-    'react-map-gl/test': resolve('./test'),
-    'react-map-gl': resolve('./src')
   },
 
   browserTest: {
@@ -17,8 +21,10 @@ const config = {
   entry: {
     test: 'test/node.js',
     'test-browser': 'test/browser.js',
-    size: 'test/size/import-nothing.js'
+    size: [
+      'test/size/mapbox-legacy.js',
+      'test/size/maplibre.js',
+      'test/size/mapbox.js'
+    ]
   }
 };
-
-module.exports = config;

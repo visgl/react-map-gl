@@ -1,5 +1,69 @@
 # Upgrade Guide
 
+## Upgrading to v8.0
+
+- All imports from `react-map-gl` should be replaced with one of the following endpoints:
+  + If using with `mapbox-gl@>=3.5.0`: import from `react-map-gl/mapbox`
+  + If using with `mapbox-gl@<3.5.0`: import from `react-map-gl/mapbox-legacy`
+- `maplibre-gl@<=3` is no longer supported.
+- Some TypeScript types have been renamed to align with the official types from the base map libraries:
+
+  | Old name | New name |
+  |----------|----------|
+  | `MapStyle` | `StyleSpecification` |
+  | `Fog` | `FogSpecification` |
+  | `Light` | `LightSpecification` |
+  | `Terrain` | `TerrainSpecification` |
+  | `Projection` | `ProjectionSpecification` |
+  | `*Layer` | `*LayerSpecification` |
+  | `*SourceRaw` | `*SourceSpecification` |
+
+### MapLibre
+
+#### Removed default for `RTLTextPlugin`
+
+The default `RTLTextPlugin` loaded from mapbox.com has been removed to align with the default behavior of MapLibre.
+To keep the previous behavior, specify the `pluginUrl` which was previously used or supply the plugin from any other source:
+
+```tsx
+<Map RTLTextPlugin="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js" />
+```
+
+
+## Upgrading to v7.1
+
+- `maplibre-gl` users no longer need to install `mapbox-gl` or a placeholder package as dependency. Change your imports to the new endpoint `react-map-gl/maplibre`. Components imported from here do not require setting the `mapLib` prop, and use the types defined by `maplibre-gl`.
+
+```tsx title="map-v7.0.tsx"
+import Map from 'react-map-gl';
+import maplibregl from 'maplibre-gl';
+
+function App() {
+  return <Map
+    mapLib={maplibregl}
+    style={MAP_STYLE}
+    maplibreLogo  // This will generate a TypeScript error because it's not defined in Mapbox options
+    />;
+}
+```
+
+```tsx title="map-v7.1.tsx"
+import Map from 'react-map-gl/maplibre'; // <- mind the updated import
+
+function App() {
+  return <Map
+    // mapLib is default to `import('maplibre-gl')`
+    style={MAP_STYLE}
+    maplibreLogo
+    />
+}
+```
+
+If you installed `mapbox-gl` from a placeholder such as `npm:empty-npm-package@^1.0.0` as suggested by the previous version's documentation, it should be removed from your package.json.
+
+- The `@types/mapbox-gl` dependency has relaxed its version constraint. If you use `mapbox-gl` as the base map library, it's recommended to explicitly list `@types/mapbox-gl` in your package.json with a version matching that of `mapbox-gl` (v1 or v2). This package is no longer required by the non-mapbox code path, and may be further demoted to an optional peer dependency in a future release.
+- If you use the `Map` component as a child of the `DeckGL` component from `deck.gl`, upgrade `deck.gl` to `>=8.9.18`.
+
 ## Upgrading to v7.0
 
 v7 is a complete rewrite of the library. It is redesigned to be fast, lightweight, fully typed, to behave the same and expose the same APIs as the wrapped map library, and to provide the maximum compatibility with third-party plugins. To take advantages of these new features, you need to make some changes to your code that was previously depending on react-map-gl v5 and v6.
@@ -16,13 +80,13 @@ v7 is a complete rewrite of the library. It is redesigned to be fast, lightweigh
 - `InteractiveMap` and `StaticMap` are removed. Instead, import `Map`.
 - `setRTLTextPlugin` is removed. Use the `Map` component's `RTLTextPlugin` prop (default enabled).
 - `MapController` is removed.  v7.0 has removed its own implementation of user input handling in favor of the [native handlers](https://docs.mapbox.com/mapbox-gl-js/api/handlers/). If you are using a custom implementation of `MapController`, check if the native handlers offer options to address your application's needs.
-- `MapContext` and `useMapControl` are removed. Check out the new API [useMap](/docs/api-reference/use-map.md) and [useControl](/docs/api-reference/use-control.md).
+- `MapContext` and `useMapControl` are removed. Check out the new API [useMap](./api-reference/mapbox/use-map.md) and [useControl](./api-reference/mapbox/use-control.md).
 - The overlay components (`HTMLOverlay`, `CanvasOverlay` and `SVGOverlay`) are removed. Check out [this example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/custom-overlay) for implementing similar controls in your own application.
 - `LinearInterpolator` and `FlyToInterpolator` are removed. Use `map.easeTo()` and `map.flyTo()` instead, see [this example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/viewport-animation).
 
 ### Map
 
-[documentation](/docs/api-reference/map.md)
+[documentation](./api-reference/mapbox/map.md)
 
 - Renamed props for better consistency with the wrapped library:
   + `mapboxApiAccessToken` is now `mapboxAccessToken`
@@ -33,7 +97,7 @@ v7 is a complete rewrite of the library. It is redesigned to be fast, lightweigh
   + `width`
   + `height`
   + `visible`
-- `onViewportChange`, `onViewStateChange` and `onInteractionStateChange` are removed. You can either use `Map` as an uncontrolled component with the new `initialViewState` prop, or if you need to manage the camera state externally (e.g. in Redux), use the `onMove` callback instead. See examples in [state management](/docs/get-started/state-management.md).
+- `onViewportChange`, `onViewStateChange` and `onInteractionStateChange` are removed. You can either use `Map` as an uncontrolled component with the new `initialViewState` prop, or if you need to manage the camera state externally (e.g. in Redux), use the `onMove` callback instead. See examples in [state management](./get-started/state-management.md).
 - `transition*` props are removed. Use `map.easeTo()` and `map.flyTo()` instead, see [this example](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/viewport-animation).
 - `mapOptions` is removed. Almost all of the options for the native `Map` class are exposed as props. 
 - `onHover` is removed. Use `onMouseMove` or `onMouseEnter`.
@@ -52,7 +116,7 @@ v7 is a complete rewrite of the library. It is redesigned to be fast, lightweigh
 
 - `MapContext` is now an official API. The experimental `_MapContext` export will be removed in a future release.
 - `react-virtualized-auto-sizer` is no longer a dependency.
-- Inertia has been enabled by default on the map controller. To revert to the behavior in previous versions, set the [interaction options](/docs/api-reference/interactive-map.md#interaction-options):
+- Inertia has been enabled by default on the map controller. To revert to the behavior in previous versions, set the [interaction options](https://github.com/visgl/react-map-gl/tree/6.1-release/docs/api-reference/interactive-map.md#interaction-options):
 
 ```js
 const CONTROLLER_OPTS = {
@@ -84,7 +148,7 @@ const CONTROLLER_OPTS = {
 
 ## Upgrading to v3.2
 
-- The latest mapbox-gl release requires stylesheet to be included at all times. See [Get Started](/docs/get-started/get-started.md) for information about styling.
+- The latest mapbox-gl release requires stylesheet to be included at all times. See [Get Started](./get-started/get-started.md) for information about styling.
 - Immutable.js is no longer a hard dependency and will be removed in the next major release. If you are importing immutable in your application, it is recommended that you explicitly list it in the application's dependencies.
 
 

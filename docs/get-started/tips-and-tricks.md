@@ -9,6 +9,12 @@ Because Mapbox tokens are required for the client application to make requests t
 - Create separate tokens for development (often times on `http://localhost`), public code snippet (Gist, Codepen etc.) and production (deployed to `https://mycompany.com`). The public token should be rotated regularly. The production token should have strict [scope and URL restrictions](https://docs.mapbox.com/help/troubleshooting/how-to-use-mapbox-securely/#access-tokens) that only allows it to be used on a domain that you own.
 - Add the following to your bundler config:
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="webpack" label="Webpack">
+
   ```js
   /// webpack.config.js
   const {DefinePlugin} = require('webpack');
@@ -22,6 +28,9 @@ Because Mapbox tokens are required for the client application to make requests t
     ]
   };
   ```
+
+  </TabItem>
+  <TabItem value="rollup" label="Rollup">
 
   ```js
   /// rollup.config.js
@@ -37,6 +46,9 @@ Because Mapbox tokens are required for the client application to make requests t
   };
   ```
 
+  </TabItem>
+</Tabs>
+
   react-map-gl automatically picks up `process.env.MapboxAccessToken` or `process.env.REACT_APP_MAPBOX_ACCESS_TOKEN` if they are defined. Alternatively, you can use your own variable name (e.g. `__SUPER_SECRET_TOKEN__`) and pass it in manually with `mapboxAccessToken={__SUPER_SECRET_TOKEN__}`.
 
 
@@ -44,7 +56,7 @@ Because Mapbox tokens are required for the client application to make requests t
 
 In a moderately complex single-page app, as the user navigates through the UI, a map component may unmount and mount again many times during a session. Consider the following layout:
 
-```jsx
+```tsx
 /// Example using Tabs from Material UI
 <TabContext value={selectedTab}>
   <TabList onChange={handleTabChange}>
@@ -52,8 +64,7 @@ In a moderately complex single-page app, as the user navigates through the UI, a
     <Tab label="List" value="table" />
   </TabList>
   <TabPanel value="map">
-    <Map
-      mapStyle="mapbox://styles/mapbox/streets-v9" >
+    <Map mapStyle="mapbox://styles/mapbox/streets-v9" >
       {items.map(renderMarker)}
     </Map>
   </TabPanel>
@@ -67,12 +78,11 @@ In a moderately complex single-page app, as the user navigates through the UI, a
 
 Every time the user clicks the "table" tab, the map is unmounted. When they click the "map" tab, the map is mounted again. As of v2.0, mapbox-gl generates a [billable event](https://www.mapbox.com/pricing#maploads) every time a Map object is initialized. It is obviously not ideal to get billed for just collapsing and expanding part of the UI.
 
-In this case, it is recommended that you set the [reuseMaps](/docs/api-reference/map.md#reuseMaps) prop to `true`:
+In this case, it is recommended that you set the [reuseMaps](../api-reference/mapbox/map.md#reuseMaps) prop to `true`:
 
-```jsx
+```tsx
   <TabPanel value="map">
-    <Map reuseMaps
-      mapStyle="mapbox://styles/mapbox/streets-v9" >
+    <Map reuseMaps mapStyle="mapbox://styles/mapbox/streets-v9" >
       {items.map(renderMarker)}
     </Map>
   </TabPanel>
@@ -84,13 +94,13 @@ This bypasses the initialization when a map is removed then added back.
 
 If your application uses externally managed camera state, like with Redux, the number of React rerenders may be very high when the user is interacting with the map. Consider the following setup:
 
-```jsx
+```tsx
 import {useSelector, useDispatch} from 'react-redux';
-import Map, {Marker} from 'react-map-gl';
+import Map, {Marker} from 'react-map-gl/maplibre';
 
 function MapView() {
-  const viewState = useSelector(s => s.viewState);
-  const vehicles = useSelector(s => s.vehicles);
+  const viewState = useSelector((s: RootState) => s.viewState);
+  const vehicles = useSelector((s: RootState) => s.vehicles);
   const dispatch = useDispatch();
 
   const onMove = useCallback(evt => {
@@ -121,7 +131,7 @@ This component is rerendered on every animation frame when the user is dragging 
 
 One way to improve the performance is `useMemo`:
 
-```jsx
+```tsx
   const markers = useMemo(() => vehicles.map(vehicle => (
     <Marker key={vehicle.id}
       longitude={vehicle.coordinates[0]}
@@ -148,7 +158,7 @@ This prevents React from rerendering the markers unless they have changed.
 
 If your application can do without complicated DOM objects and CSS styling, consider switching to a [symbol layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#symbol). Layers are rendered in WebGL and are much more performant than markers:
 
-```jsx
+```tsx
   const vehiclesGeoJSON = useMemo(() => {
     return {
       type: 'FeatureCollection',
@@ -168,8 +178,9 @@ If your application can do without complicated DOM objects and CSS styling, cons
             'icon-image': 'vehicle-icon',
             'icon-size': 1,
             'text-field': ['get', 'id']
-          }} >
-      </Sources>
+          }}
+        />
+      </Source>
     </Map>
   );
 ```
@@ -179,13 +190,13 @@ If your application can do without complicated DOM objects and CSS styling, cons
 There are some situations where you want to know if a point is currently visible on the map.  
 Checking this is simple and can be done like so:
 
-```jsx
+```tsx
 const mapRef = useRef<MapRef>();
 
 const checkIfPositionInViewport = (lat, lng) => {
-    const bounds = mapRef.current.getMap().getBounds();
-    return (lat >= bounds._sw.lat && lat <= bounds._nw.lat && lng >= bounds._sw.lng && lng <= bounds._nw.lng);
+    const bounds = mapRef.current.getBounds();
+    return bounds.contains([lng, lat]);
 }
 
-return <Map ref={mapRef} [..]/>
+return <Map ref={mapRef} ... />
 ```

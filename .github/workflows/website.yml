@@ -6,44 +6,53 @@ on:
       - '*-release'
 
 jobs:
-  publish-website:
-    runs-on: ubuntu-latest
-
-    if: github.repository_owner == 'visgl'
-
-    env:
-      MapboxAccessToken: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+  check_branch:
+    runs-on: ubuntu-22.04
+    outputs:
+      should_deploy: ${{ endsWith(github.ref, steps.get_version.outputs.latest) }}
 
     steps:
-      - uses: actions/checkout@v2.1.1
-
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14.x'
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Get version
-        id: get-version
-        run: LATEST=$(npm show react-map-gl version | grep -o -E "^[0-9]+\.[0-9]+") && echo "::set-output name=latest::/${LATEST}-release"
-
-      - name: Check version
-        if: ${{ !endsWith(github.ref, steps.get-version.outputs.latest) }}
+        id: get_version
         run: |
-          echo "Website is only published from the latest release branch"
+          LATEST=$(npm show react-map-gl version | grep -o -E "^[0-9]+\.[0-9]+")
+          echo "latest=${LATEST}-release" >> "$GITHUB_OUTPUT"
 
-      - name: Build website
-        if: ${{ endsWith(github.ref, steps.get-version.outputs.latest) }}
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: check_branch
+    
+    permissions:
+      contents: write
+
+    if: ${{ github.repository_owner == 'visgl' && needs.check_branch.outputs.should_deploy }}
+
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          token: ${{ secrets.WEBSITE_DEPLOY_TOKEN }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
         run: |
           yarn bootstrap
-          cd website
-          yarn
-          yarn build
+          (cd website && yarn)
+
+      - name: Build website
+        env:
+          MapboxAccessToken: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+        run: (cd website && yarn build)
 
       - name: Deploy
-        if: ${{ endsWith(github.ref, steps.get-version.outputs.latest) }}
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: JamesIves/github-pages-deploy-action@132898c54c57c7cc6b80eb3a89968de8fc283505 # 3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: website/public
+          FOLDER: website/build
           CLEAN: true

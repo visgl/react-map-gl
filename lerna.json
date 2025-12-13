@@ -1,0 +1,7 @@
+{
+  "version": "8.1.0-alpha.2",
+  "npmClient": "yarn",
+  "packages": [
+    "modules/*"
+  ]
+}

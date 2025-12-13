@@ -1,0 +1,51 @@
+[
+  {
+    "type": "doc",
+    "label": "Overview",
+    "id": "index"
+  },
+  {
+    "type": "category",
+    "label": "Mapbox",
+    "items": [
+      "mapbox/clusters",
+      "mapbox/controls",
+      "mapbox/custom-cursor",
+      "mapbox/draggable-markers",
+      "mapbox/draw-polygon",
+      "mapbox/filter",
+      "mapbox/geocoder",
+      "mapbox/geojson-animation",
+      "mapbox/geojson",
+      "mapbox/heatmap",
+      "mapbox/interaction",
+      "mapbox/layers",
+      "mapbox/side-by-side",
+      "mapbox/terrain",
+      "mapbox/viewport-animation",
+      "mapbox/zoom-to-bounds"
+    ]
+  },
+  {
+    "type": "category",
+    "label": "MapLibre",
+    "items": [
+      "maplibre/clusters",
+      "maplibre/controls",
+      "maplibre/custom-cursor",
+      "maplibre/draggable-markers",
+      "maplibre/draw-polygon",
+      "maplibre/filter",
+      "maplibre/geocoder",
+      "maplibre/geojson-animation",
+      "maplibre/geojson",
+      "maplibre/heatmap",
+      "maplibre/interaction",
+      "maplibre/layers",
+      "maplibre/side-by-side",
+      "maplibre/terrain",
+      "maplibre/viewport-animation",
+      "maplibre/zoom-to-bounds"
+    ]
+  }
+]

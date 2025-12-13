@@ -1,4 +1,4 @@
-# Contributing to react-map-gl
+# Contributing
 
 **Thanks for taking the time to contribute!**
 
@@ -68,7 +68,7 @@ react-map-gl follows the [Semantic Versioning](https://semver.org/) guidelines. 
 
 ## Community Governance
 
-vis.gl is part of the [Urban Computing Foundation](https://uc.foundation/). See the organization's [Technical Charter](https://github.com/visgl/tsc/blob/master/Technical%20Charter.md).
+vis.gl is part of the [OpenJS Foundation](https://openjsf.org/). See the organization's [Technical Charter](https://github.com/visgl/tsc/blob/master/Technical%20Charter.md).
 
 ### Technical Steering Committee
 
@@ -85,7 +85,3 @@ If you are interested in becoming a maintainer, read the [governance guidelines]
 
 The vis.gl TSC meets monthly and publishes meeting notes via a [mailing list](https://lists.uc.foundation/g/visgl).
 This mailing list can also be utilized to reach out to the TSC.
-
-## Code of Conduct
-
-Please be mindful of and adhere to the Linux Foundation's [Code of Conduct](https://lfprojects.org/policies/code-of-conduct/) when contributing to react-map-gl.

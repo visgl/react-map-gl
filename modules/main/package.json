@@ -1,0 +1,75 @@
+{
+  "name": "react-map-gl",
+  "description": "React components for MapLibre GL JS and Mapbox GL JS",
+  "version": "8.1.0-alpha.2",
+  "keywords": [
+    "mapbox",
+    "maplibre",
+    "mapbox-gl",
+    "maplibre-gl",
+    "react"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/visgl/react-map-gl.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./mapbox": {
+      "types": "./dist/mapbox.d.ts",
+      "require": "./dist/mapbox.cjs",
+      "import": "./dist/mapbox.js"
+    },
+    "./maplibre": {
+      "types": "./dist/maplibre.d.ts",
+      "require": "./dist/maplibre.cjs",
+      "import": "./dist/maplibre.js"
+    },
+    "./mapbox-legacy": {
+      "types": "./dist/mapbox-legacy/index.d.ts",
+      "require": "./dist/mapbox-legacy/index.cjs",
+      "import": "./dist/mapbox-legacy/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "mapbox": [
+        "./dist/mapbox.d.ts"
+      ],
+      "maplibre": [
+        "./dist/maplibre.d.ts"
+      ],
+      "mapbox-legacy": [
+        "./dist/mapbox-legacy/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "src",
+    "dist",
+    "README.md"
+  ],
+  "dependencies": {
+    "@vis.gl/react-mapbox": "8.1.0-alpha.2",
+    "@vis.gl/react-maplibre": "8.1.0-alpha.2"
+  },
+  "devDependencies": {
+    "@types/mapbox-gl": "3.4.0",
+    "mapbox-gl": "1.13.0"
+  },
+  "peerDependencies": {
+    "mapbox-gl": ">=1.13.0",
+    "maplibre-gl": ">=1.13.0",
+    "react": ">=16.3.0",
+    "react-dom": ">=16.3.0"
+  },
+  "peerDependenciesMeta": {
+    "mapbox-gl": {
+      "optional": true
+    },
+    "maplibre-gl": {
+      "optional": true
+    }
+  }
+}

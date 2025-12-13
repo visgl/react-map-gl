@@ -1,0 +1,48 @@
+{
+  "name": "@vis.gl/react-maplibre",
+  "description": "React components for Maplibre GL JS",
+  "version": "8.1.0-alpha.2",
+  "keywords": [
+    "maplibre",
+    "maplibre-gl",
+    "react",
+    "react maplibre"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/visgl/react-map-gl.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "src",
+    "dist",
+    "README.md"
+  ],
+  "dependencies": {
+    "@maplibre/maplibre-gl-style-spec": "^19.2.1"
+  },
+  "devDependencies": {
+    "maplibre-gl": "^5.0.0"
+  },
+  "peerDependencies": {
+    "maplibre-gl": ">=4.0.0",
+    "react": ">=16.3.0",
+    "react-dom": ">=16.3.0"
+  },
+  "peerDependenciesMeta": {
+    "maplibre-gl": {
+      "optional": true
+    }
+  }
+}

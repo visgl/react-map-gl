@@ -9,28 +9,26 @@ on:
 
 jobs:
   test-node:
-    runs-on: ubuntu-latest
-
-    env:
-      MapboxAccessToken: ${{ secrets.MAPBOX_ACCESS_TOKEN_CI }}
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v2.1.1
-
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: volta-cli/action@2d68418f32546fd191eb666e232b321d5726484d # v4.1.1
         with:
-          node-version: '14.x'
+          cache: "yarn"
 
       - name: Install dependencies
         run: |
           yarn bootstrap
 
       - name: Run tests
+        env:
+          VITE_MAPBOX_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN_CI }}
         run: |
+          yarn lint
           yarn test ci
 
       - name: Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@09b709cf6a16e30b0808ba050c7a6e8a5ef13f8d # v1.2.5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

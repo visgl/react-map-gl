@@ -2,20 +2,29 @@
 
 ## Native Mapbox Layers
 
-You can inject data and mapbox native layers using the [Source](/docs/api-reference/source.md) and [Layer](/docs/api-reference/layer.md) components:
+You can inject data and mapbox native layers using the [Source](../api-reference/mapbox/source.md) and [Layer](../api-reference/mapbox/layer.md) components:
 
-```js
+```tsx
 import * as React from 'react';
-import Map, {Source, Layer} from 'react-map-gl';
+import Map, {Source, Layer} from 'react-map-gl/maplibre';
+import type {CircleLayer} from 'react-map-gl/maplibre';
+import type {FeatureCollection} from 'geojson';
 
-const geojson = {
+const geojson: FeatureCollection = {
   type: 'FeatureCollection',
   features: [
-    {type: 'Feature', geometry: {type: 'Point', coordinates: [-122.4, 37.8]}}
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [-122.4, 37.8]
+      },
+      properties: {title: '915 Front Street, San Francisco, California'}
+    }
   ]
 };
 
-const layerStyle = {
+const layerStyle: CircleLayer = {
   id: 'point',
   type: 'circle',
   paint: {
@@ -25,13 +34,13 @@ const layerStyle = {
 };
 
 function App() {
-  const [viewport, setViewport] = React.useState();
   return (
-    <Map initialViewState={{
-      longitude: -122.45,
-      latitude: 37.78,
-      zoom: 14
-    }}>
+    <Map
+      initialViewState={{
+        longitude: -122.45,
+        latitude: 37.78,
+        zoom: 14
+      }}>
       <Source id="my-data" type="geojson" data={geojson}>
         <Layer {...layerStyle} />
       </Source>
@@ -42,12 +51,12 @@ function App() {
 
 For details about data sources and layer configuration, check out the [Mapbox style specification](https://www.mapbox.com/mapbox-gl-js/style-spec).
 
-For dynamically updating data sources and layers, check out the [GeoJSON](http://visgl.github.io/react-map-gl/examples/geojson) and [GeoJSON animation](http://visgl.github.io/react-map-gl/examples/geojson-animation) examples.
+For dynamically updating data sources and layers, check out the [GeoJSON](https://visgl.github.io/react-map-gl/examples/maplibre/geojson) and [GeoJSON animation](http://visgl.github.io/react-map-gl/examples/maplibre/geojson-animation) examples.
 
 
 ## Custom Overlays
 
-You can implement a custom HTML or SVG overlay on top of the map that redraws whenever the camera changes. By calling `map.project()` you can adjust the DOM or CSS properties so that the customly-drawn features are always aligned with the map. See a full example [here](https://github.com/visgl/react-map-gl/tree/7.0-release/examples/custom-overlay).
+You can implement a custom HTML or SVG overlay on top of the map that redraws whenever the camera changes. By calling `map.project()` you can adjust the DOM or CSS properties so that the customly-drawn features are always aligned with the map. See a full example [here](https://github.com/visgl/react-map-gl/tree/8.0-release/examples/maplibre/custom-overlay).
 
 
 ## Other vis.gl Libraries
