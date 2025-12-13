@@ -1,0 +1,9 @@
+ git clone --recurse-submodules https://gerrit.googlesource.com/gerrit
+هذا --recurse-submodulesالخيار مطلوب git cloneللتأكد من أن المكونات الإضافية الأساسية ، والتي يتم تضمينها كوحدات git الفرعية ، مستنسخة أيضًا.
+
+بعد ذلك ، قم بإعداد خطاف التنفيذ. يعد هذا ضروريًا للتأكد من أن كل التزام له ملف Change-Id.
+
+  سي دي جيريت && (
+    cd .git / هوكس
+    ln -s ../../resources/com/google/gerrit/server/tools/root/hooks/commit-msg
+  )
