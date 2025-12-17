@@ -80,6 +80,16 @@ export type MaplibreProps = Partial<ViewState> &
 
 const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as StyleSpecification;
 
+const DEFAULT_SETTINGS = {
+  minZoom: 0,
+  maxZoom: 22,
+  minPitch: 0,
+  maxPitch: 85,
+  maxBounds: [-180, -85.051129, 180, 85.051129],
+  projection: 'mercator',
+  renderWorldCopies: true
+};
+
 const pointerEvents = {
   mousedown: 'onMouseDown',
   mouseup: 'onMouseUp',
@@ -413,10 +423,13 @@ export default class Maplibre {
     const map = this._map;
     let changed = false;
     for (const propName of settingNames) {
-      if (propName in nextProps && !deepEqual(nextProps[propName], currProps[propName])) {
+      const propPresent = propName in nextProps || propName in currProps;
+
+      if (propPresent && !deepEqual(nextProps[propName], currProps[propName])) {
         changed = true;
+        const nextValue = propName in nextProps ? nextProps[propName] : DEFAULT_SETTINGS[propName];
         const setter = map[`set${propName[0].toUpperCase()}${propName.slice(1)}`];
-        setter?.call(map, nextProps[propName]);
+        setter?.call(map, nextValue);
       }
     }
     return changed;
