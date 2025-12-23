@@ -1,4 +1,4 @@
-import {transformToViewState, applyViewStateToTransform} from '../utils/transform';
+import {transformToViewState, applyViewStateToTransform, updateZoomConstraint} from '../utils/transform';
 import {normalizeStyle} from '../utils/style-utils';
 import {deepEqual} from '../utils/deep-equal';
 
@@ -146,7 +146,7 @@ const settingNames = [
   'maxBounds',
   'projection',
   'renderWorldCopies'
-];
+] as const;
 const handlerNames = [
   'scrollZoom',
   'boxZoom',
@@ -427,9 +427,21 @@ export default class Maplibre {
 
       if (propPresent && !deepEqual(nextProps[propName], currProps[propName])) {
         changed = true;
-        const nextValue = propName in nextProps ? nextProps[propName] : DEFAULT_SETTINGS[propName];
-        const setter = map[`set${propName[0].toUpperCase()}${propName.slice(1)}`];
-        setter?.call(map, nextValue);
+        if (propName === 'minZoom' || propName === 'maxZoom') {
+          const next = {
+            min: 'minZoom' in nextProps ? nextProps.minZoom as number : DEFAULT_SETTINGS.minZoom,
+            max: 'maxZoom' in nextProps ? nextProps.maxZoom as number : DEFAULT_SETTINGS.maxZoom
+          }
+          const curr = {
+            min: 'minZoom' in currProps ? currProps.minZoom as number : DEFAULT_SETTINGS.minZoom,
+            max: 'maxZoom' in currProps ? currProps.maxZoom as number : DEFAULT_SETTINGS.maxZoom
+          }
+          updateZoomConstraint(map, next, curr)
+        } else {
+          const nextValue = propName in nextProps ? nextProps[propName] : DEFAULT_SETTINGS[propName];
+          const setter = map[`set${propName[0].toUpperCase()}${propName.slice(1)}`];
+          setter?.call(map, nextValue);
+        }
       }
     }
     return changed;
