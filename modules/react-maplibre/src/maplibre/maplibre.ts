@@ -76,7 +76,32 @@ export type MaplibreProps = Partial<ViewState> &
     interactiveLayerIds?: string[];
     /** CSS cursor */
     cursor?: string;
-  };
+
+    /** Minimum zoom available to the map.
+     * @default 0
+     */
+    minZoom?: number
+    /** Maximum zoom available to the map.
+     * @default 22
+    */
+    maxZoom?: number
+    /** Minimum pitch available to the map.
+     * @default 0
+    */
+    minPitch?: number
+    /** Maximum pitch available to the map.
+     * @default 85
+    */
+    maxPitch?: number
+    /** Bounds of the map.
+     * @default [-180, -85.051129, 180, 85.051129]
+    */
+    maxBounds?: [number, number, number, number]
+    /** Whether to render copies of the world or not.
+     * @default true
+    */
+    renderWorldCopies?: boolean
+  }
 
 const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as StyleSpecification;
 
@@ -414,6 +439,22 @@ export default class Maplibre {
     return false;
   }
 
+  private _updateZoomConstraint(nextProps: MaplibreProps, currProps: MaplibreProps): boolean {
+    if (!('minZoom' in nextProps) && !('maxZoom' in nextProps)) {
+      return false
+    }
+
+    updateZoomConstraint(this._map, {
+      min: nextProps.minZoom ?? DEFAULT_SETTINGS.minZoom,
+      max: nextProps.maxZoom ?? DEFAULT_SETTINGS.maxZoom
+    }, {
+      min: currProps.minZoom ?? DEFAULT_SETTINGS.minZoom,
+      max: currProps.maxZoom ?? DEFAULT_SETTINGS.maxZoom,
+    })
+
+    return true
+  }
+
   /* Update camera constraints and projection settings to match props
      @param {object} nextProps
      @param {object} currProps
@@ -421,30 +462,22 @@ export default class Maplibre {
    */
   private _updateSettings(nextProps: MaplibreProps, currProps: MaplibreProps): boolean {
     const map = this._map;
-    let changed = false;
+    let settingsChanged = false;
     for (const propName of settingNames) {
-      const propPresent = propName in nextProps || propName in currProps;
+      if (propName === 'minZoom' || propName === 'maxZoom') {
+        // eslint-disable-next-line no-continue
+        continue
+      }
 
-      if (propPresent && !deepEqual(nextProps[propName], currProps[propName])) {
-        changed = true;
-        if (propName === 'minZoom' || propName === 'maxZoom') {
-          const next = {
-            min: 'minZoom' in nextProps ? nextProps.minZoom as number : DEFAULT_SETTINGS.minZoom,
-            max: 'maxZoom' in nextProps ? nextProps.maxZoom as number : DEFAULT_SETTINGS.maxZoom
-          }
-          const curr = {
-            min: 'minZoom' in currProps ? currProps.minZoom as number : DEFAULT_SETTINGS.minZoom,
-            max: 'maxZoom' in currProps ? currProps.maxZoom as number : DEFAULT_SETTINGS.maxZoom
-          }
-          updateZoomConstraint(map, next, curr)
-        } else {
-          const nextValue = propName in nextProps ? nextProps[propName] : DEFAULT_SETTINGS[propName];
-          const setter = map[`set${propName[0].toUpperCase()}${propName.slice(1)}`];
-          setter?.call(map, nextValue);
-        }
+      if (propName in nextProps && !deepEqual(nextProps[propName], currProps[propName])) {
+        settingsChanged = true;
+        const nextValue = propName in nextProps ? nextProps[propName] : DEFAULT_SETTINGS[propName]
+        const setter = map[`set${propName[0].toUpperCase()}${propName.slice(1)}`];
+        setter?.call(map, nextValue);
       }
     }
-    return changed;
+    const zoomChanged = this._updateZoomConstraint(nextProps, currProps)
+    return settingsChanged || zoomChanged;
   }
 
   /* Update map style to match props */
