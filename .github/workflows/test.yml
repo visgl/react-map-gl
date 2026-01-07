@@ -7,19 +7,30 @@ on:
     - master
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test-node:
     runs-on: ubuntu-22.04
+    permissions:
+      checks: write
+      contents: read
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      - uses: volta-cli/action@2d68418f32546fd191eb666e232b321d5726484d # v4.1.1
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
-          cache: "yarn"
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable yarn
 
       - name: Install dependencies
-        run: |
-          yarn bootstrap
+        run: yarn bootstrap
 
       - name: Run tests
         env:
@@ -29,6 +40,6 @@ jobs:
           yarn test ci
 
       - name: Coveralls
-        uses: coverallsapp/github-action@09b709cf6a16e30b0808ba050c7a6e8a5ef13f8d # v1.2.5
+        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
