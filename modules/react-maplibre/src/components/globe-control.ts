@@ -1,8 +1,8 @@
-import * as React from "react";
-import { useEffect, memo } from "react";
-import { applyReactStyle } from "../utils/apply-react-style";
-import { useControl } from "./use-control";
-import { ControlPosition } from "../types/lib";
+import * as React from 'react';
+import {useEffect, memo} from 'react';
+import {applyReactStyle} from '../utils/apply-react-style';
+import {useControl} from './use-control';
+import {ControlPosition} from '../types/lib';
 
 export type GlobeControlProps = {
   /** Placement of the control relative to the map. */
@@ -12,8 +12,8 @@ export type GlobeControlProps = {
 };
 
 function _GlobeControl(props: GlobeControlProps) {
-  const ctrl = useControl(({ mapLib }) => new mapLib.GlobeControl(props), {
-    position: props.position,
+  const ctrl = useControl(({mapLib}) => new mapLib.GlobeControl(props), {
+    position: props.position
   });
 
   useEffect(() => {
