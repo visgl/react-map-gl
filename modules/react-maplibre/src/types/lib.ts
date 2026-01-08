@@ -19,7 +19,7 @@ import type {
   TerrainSpecification,
   LogoControl,
   LogoControlOptions,
-  GlobeControl,
+  GlobeControl
 } from 'maplibre-gl';
 
 export type {
