@@ -1,7 +1,7 @@
 import type {MaplibreProps} from '../maplibre/maplibre';
 import type {ViewState} from '../types/common';
 import type {TransformLike} from '../types/internal';
-import { MapInstance } from '../types/lib';
+import type {MapInstance} from '../types/lib';
 import {deepEqual} from './deep-equal';
 
 /**
@@ -64,28 +64,68 @@ export function applyViewStateToTransform(
  * @param {object} nextRange
  * @param {object} currRange
  **/
-export function updateZoomConstraint(map: MapInstance, nextRange: { min: number; max: number}, currentRange: { min: number; max: number }): void {
-    if (nextRange.min === currentRange.min && nextRange.max === currentRange.max) {
-      return
-    }
-  
-    // if moving up ie. 1 - 3 -> 5 - 10
-    if (nextRange.min >= currentRange.min) {
-      if (nextRange.max !== currentRange.max) {
-        map.setMaxZoom(nextRange.max)
-      }
-      if (nextRange.min !== currentRange.min) {
-        map.setMinZoom(nextRange.min)
-      }
-    }
+export function updateZoomConstraint(
+  map: MapInstance,
+  nextRange: {min: number; max: number},
+  currentRange: {min: number; max: number}
+): void {
+  if (nextRange.min === currentRange.min && nextRange.max === currentRange.max) {
+    return;
+  }
 
-    // if moving down ie. 5 - 10 -> 1 - 3
-    if (nextRange.min < currentRange.min) {
-      if (nextRange.min !== currentRange.min) {
-        map.setMinZoom(nextRange.min)
-      }
-      if (nextRange.max !== currentRange.max) {
-        map.setMaxZoom(nextRange.max)
-      }
+  // if moving up ie. 1 - 3 -> 5 - 10
+  if (nextRange.min >= currentRange.min) {
+    if (nextRange.max !== currentRange.max) {
+      map.setMaxZoom(nextRange.max);
+    }
+    if (nextRange.min !== currentRange.min) {
+      map.setMinZoom(nextRange.min);
     }
   }
+
+  // if moving down ie. 5 - 10 -> 1 - 3
+  if (nextRange.min < currentRange.min) {
+    if (nextRange.min !== currentRange.min) {
+      map.setMinZoom(nextRange.min);
+    }
+    if (nextRange.max !== currentRange.max) {
+      map.setMaxZoom(nextRange.max);
+    }
+  }
+}
+
+/**
+ * Update pitch constraints to match props by calling
+ * `setMinPitch` and `setMaxPitch` in the right order
+ * @param {object} nextRange
+ * @param {object} currRange
+ **/
+export function updatePitchConstraint(
+  map: MapInstance,
+  nextRange: {min: number; max: number},
+  currentRange: {min: number; max: number}
+): void {
+  if (nextRange.min === currentRange.min && nextRange.max === currentRange.max) {
+    return;
+  }
+
+  // if moving up ie. 1 - 3 -> 5 - 10
+  if (nextRange.min >= currentRange.min) {
+    if (nextRange.max !== currentRange.max) {
+      map.setMaxPitch(nextRange.max);
+    }
+    if (nextRange.min !== currentRange.min) {
+      map.setMinPitch(nextRange.min);
+    }
+  }
+
+  // if moving down ie. 5 - 10 -> 1 - 3
+  if (nextRange.min < currentRange.min) {
+    if (nextRange.min !== currentRange.min) {
+      map.setMinPitch(nextRange.min);
+    }
+    if (nextRange.max !== currentRange.max) {
+      map.setMaxPitch(nextRange.max);
+    }
+  }
+}
