@@ -68,9 +68,9 @@ export function updateZoomConstraint(
   map: MapInstance,
   nextRange: {min: number; max: number},
   currentRange: {min: number; max: number}
-): void {
+): boolean {
   if (nextRange.min === currentRange.min && nextRange.max === currentRange.max) {
-    return;
+    return false;
   }
 
   // if moving up ie. 1 - 3 -> 5 - 10
@@ -92,6 +92,8 @@ export function updateZoomConstraint(
       map.setMaxZoom(nextRange.max);
     }
   }
+
+  return true;
 }
 
 /**
@@ -104,9 +106,9 @@ export function updatePitchConstraint(
   map: MapInstance,
   nextRange: {min: number; max: number},
   currentRange: {min: number; max: number}
-): void {
+): boolean {
   if (nextRange.min === currentRange.min && nextRange.max === currentRange.max) {
-    return;
+    return false;
   }
 
   // if moving up ie. 1 - 3 -> 5 - 10
@@ -128,4 +130,6 @@ export function updatePitchConstraint(
       map.setMaxPitch(nextRange.max);
     }
   }
+
+  return true;
 }

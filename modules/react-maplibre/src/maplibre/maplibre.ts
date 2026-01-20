@@ -443,7 +443,7 @@ export default class Maplibre {
      @returns {bool} true if anything is changed
    */
   private _updateConstraints(nextProps: MaplibreProps, currProps: MaplibreProps): boolean {
-    updateZoomConstraint(
+    const didUpdateZoom = updateZoomConstraint(
       this._map,
       {
         min: nextProps.minZoom ?? DEFAULT_SETTINGS.minZoom,
@@ -454,7 +454,7 @@ export default class Maplibre {
         max: currProps.maxZoom ?? DEFAULT_SETTINGS.maxZoom
       }
     );
-    updatePitchConstraint(
+    const didUpdatePitch = updatePitchConstraint(
       this._map,
       {
         min: nextProps.minPitch ?? DEFAULT_SETTINGS.minPitch,
@@ -466,7 +466,7 @@ export default class Maplibre {
       }
     );
 
-    return true;
+    return didUpdateZoom || didUpdatePitch;
   }
 
   /* Update camera constraints and projection settings to match props
