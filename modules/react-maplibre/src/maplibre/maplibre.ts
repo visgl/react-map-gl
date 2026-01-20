@@ -483,7 +483,8 @@ export default class Maplibre {
         continue;
       }
 
-      if (propName in nextProps && !deepEqual(nextProps[propName], currProps[propName])) {
+      const propPresent = propName in nextProps || propName in currProps;
+      if (propPresent && !deepEqual(nextProps[propName], currProps[propName])) {
         settingsChanged = true;
         const nextValue = propName in nextProps ? nextProps[propName] : DEFAULT_SETTINGS[propName];
         const setter = map[`set${propName[0].toUpperCase()}${propName.slice(1)}`];
