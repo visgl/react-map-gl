@@ -7,26 +7,41 @@ import ControlPanel from './control-panel';
 
 import type {RasterLayerSpecification} from 'react-map-gl/maplibre';
 
-// VFR Sectional tiles from vfrmap.com
-// These tiles show Visual Flight Rules (VFR) sectional charts used for aviation navigation
-const VFR_TILE_URL = 'https://vfrmap.com/20250110/tiles/vfrc/{z}/{x}/{y}.jpg';
+// FAA Official ArcGIS Tile Servers
+// These are the official FAA aeronautical chart tiles served via ArcGIS
+// Data is updated every 28 days following the AIRAC (Aeronautical Information Regulation And Control) cycle
+export const CHART_SOURCES = {
+  'VFR Sectional': {
+    url: 'https://tiles.arcgis.com/tiles/ssFJjBXIUyZDrSYZ/arcgis/rest/services/VFR_Sectional/MapServer/tile/{z}/{y}/{x}',
+    description: 'VFR Sectional Charts - Primary navigation charts for visual flight rules operations'
+  },
+  'VFR Terminal (TAC)': {
+    url: 'https://tiles.arcgis.com/tiles/ssFJjBXIUyZDrSYZ/arcgis/rest/services/VFR_Terminal/MapServer/tile/{z}/{y}/{x}',
+    description: 'Terminal Area Charts - Detailed charts for busy airspace around major airports'
+  },
+  'IFR Low': {
+    url: 'https://tiles.arcgis.com/tiles/ssFJjBXIUyZDrSYZ/arcgis/rest/services/IFR_AreaLow/MapServer/tile/{z}/{y}/{x}',
+    description: 'IFR Low Altitude Enroute Charts - For instrument flight below 18,000 ft MSL'
+  },
+  'IFR High': {
+    url: 'https://tiles.arcgis.com/tiles/ssFJjBXIUyZDrSYZ/arcgis/rest/services/IFR_High/MapServer/tile/{z}/{y}/{x}',
+    description: 'IFR High Altitude Enroute Charts - For instrument flight at and above 18,000 ft MSL'
+  }
+} as const;
 
-// Alternative tile sources you can try:
-// Terminal Area Charts (TAC): 'https://vfrmap.com/20250110/tiles/tac/{z}/{x}/{y}.jpg'
-// IFR Low Charts: 'https://vfrmap.com/20250110/tiles/ifrlc/{z}/{x}/{y}.jpg'
-// IFR High Charts: 'https://vfrmap.com/20250110/tiles/ifrhc/{z}/{x}/{y}.jpg'
+export type ChartType = keyof typeof CHART_SOURCES;
 
-const vfrLayer: RasterLayerSpecification = {
-  id: 'vfr-tiles',
+const chartLayer: RasterLayerSpecification = {
+  id: 'chart-tiles',
   type: 'raster',
-  source: 'vfr-source',
+  source: 'chart-source',
   paint: {
     'raster-opacity': 1.0,
     'raster-fade-duration': 0
   }
 };
 
-// Empty style with no base layers - VFR tiles will be the only basemap
+// Empty style with no base layers - chart tiles will be the only basemap
 const emptyStyle = {
   version: 8 as const,
   sources: {},
@@ -34,17 +49,24 @@ const emptyStyle = {
 };
 
 export default function App() {
+  const [chartType, setChartType] = useState<ChartType>('VFR Sectional');
   const [opacity, setOpacity] = useState(1.0);
+
+  const onChartTypeChange = useCallback((value: ChartType) => {
+    setChartType(value);
+  }, []);
 
   const onOpacityChange = useCallback((value: number) => {
     setOpacity(value);
   }, []);
 
+  const tileUrl = CHART_SOURCES[chartType].url;
+
   return (
     <>
       <Map
         initialViewState={{
-          // Centered on Los Angeles area - good for seeing VFR sectional detail
+          // Centered on Los Angeles area - good for seeing chart detail
           latitude: 34.0522,
           longitude: -118.2437,
           zoom: 8
@@ -54,16 +76,17 @@ export default function App() {
         minZoom={4}
       >
         <Source
-          id="vfr-source"
+          key={chartType} // Force re-mount when chart type changes
+          id="chart-source"
           type="raster"
-          tiles={[VFR_TILE_URL]}
+          tiles={[tileUrl]}
           tileSize={256}
-          attribution='&copy; <a href="https://vfrmap.com/">VFRMap.com</a>'
+          attribution='&copy; <a href="https://www.faa.gov/">FAA</a> | <a href="https://adds-faa.opendata.arcgis.com/">FAA AIS Open Data</a>'
         >
           <Layer
-            {...vfrLayer}
+            {...chartLayer}
             paint={{
-              ...vfrLayer.paint,
+              ...chartLayer.paint,
               'raster-opacity': opacity
             }}
           />
@@ -72,7 +95,12 @@ export default function App() {
         <NavigationControl position="top-left" />
         <ScaleControl position="bottom-left" unit="nautical" />
       </Map>
-      <ControlPanel opacity={opacity} onOpacityChange={onOpacityChange} />
+      <ControlPanel
+        chartType={chartType}
+        opacity={opacity}
+        onChartTypeChange={onChartTypeChange}
+        onOpacityChange={onOpacityChange}
+      />
     </>
   );
 }
