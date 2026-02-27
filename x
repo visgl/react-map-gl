@@ -1,0 +1,1 @@
+<!DOCTYPE html> <html lang="ar"> <head> <meta charset="UTF-8"> <title>إدارة الموافقات والحقوق</title> <link rel="stylesheet" href="styles.css"> </head> <body dir="rtl"> <h1>موافقاتك وحقوقك</h1> <div id="consents"> <h3>تحليلات الأداء</h3>.
