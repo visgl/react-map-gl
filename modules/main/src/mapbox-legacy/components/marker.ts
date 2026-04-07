@@ -77,7 +77,14 @@ export const Marker = memo(
     }, []);
 
     useEffect(() => {
-      marker.addTo(map.getMap());
+      const mapInstance = map.getMap();
+      const canvasContainer = mapInstance?.getCanvasContainer?.();
+
+      if (!canvasContainer || !canvasContainer.isConnected) {
+        return undefined;
+      }
+
+      marker.addTo(mapInstance);
 
       return () => {
         marker.remove();

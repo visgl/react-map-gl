@@ -3,5 +3,6 @@ import './controls.spec';
 import './source.spec';
 import './layer.spec';
 import './marker.spec';
+import './marker-lifecycle.spec';
 import './popup.spec';
 import './use-map.spec';
