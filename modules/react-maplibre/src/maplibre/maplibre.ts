@@ -462,7 +462,7 @@ export default class Maplibre {
     const map = this._map;
     const currProps = this._styleComponents;
     // We can safely manipulate map style once it's loaded
-    if (map.style._loaded) {
+    if (map.style?._loaded) {
       if (light && !deepEqual(light, currProps.light)) {
         currProps.light = light;
         map.setLight(light);
