@@ -168,8 +168,7 @@ const otherEvents = {
   sourcedata: 'onSourceData',
   error: 'onError'
 };
-const constraintNames = ['minZoom', 'maxZoom', 'minPitch', 'maxPitch'] as const;
-const settingNames = [...constraintNames, 'maxBounds', 'projection', 'renderWorldCopies'] as const;
+const settingNames = ['maxBounds', 'projection', 'renderWorldCopies'] as const;
 const handlerNames = [
   'scrollZoom',
   'boxZoom',
@@ -478,11 +477,6 @@ export default class Maplibre {
     const map = this._map;
     let settingsChanged = false;
     for (const propName of settingNames) {
-      if (constraintNames.includes(propName as (typeof constraintNames)[number])) {
-        // eslint-disable-next-line no-continue
-        continue;
-      }
-
       const propPresent = propName in nextProps || propName in currProps;
       if (propPresent && !deepEqual(nextProps[propName], currProps[propName])) {
         settingsChanged = true;

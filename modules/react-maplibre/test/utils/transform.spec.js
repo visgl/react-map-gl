@@ -67,130 +67,108 @@ test('applyViewStateToTransform', t => {
   t.end();
 });
 
-test('updateZoomConstraint', t => {
+function createConstraintMap(setMinName, setMaxName) {
   let first = null;
-  let currentMinZoom = 0;
-  let currentMaxZoom = 0;
+  let currentMin = 0;
+  let currentMax = 0;
   const map = {
-    setMinZoom: nextMinZoom => {
-      if (nextMinZoom > currentMaxZoom) {
-        throw new Error('Setting minZoom > maxZoom');
+    [setMinName]: nextMin => {
+      if (nextMin > currentMax) {
+        throw new Error(`Setting ${setMinName} (${nextMin}) > current max (${currentMax})`);
       }
-      currentMinZoom = nextMinZoom;
+      currentMin = nextMin;
       if (!first) {
         first = 'min';
       }
     },
-    setMaxZoom: nextMaxZoom => {
-      if (nextMaxZoom < currentMinZoom) {
-        throw new Error('Setting maxZoom < minZoom');
+    [setMaxName]: nextMax => {
+      if (nextMax < currentMin) {
+        throw new Error(`Setting ${setMaxName} (${nextMax}) < current min (${currentMin})`);
       }
-      currentMaxZoom = nextMaxZoom;
+      currentMax = nextMax;
       if (!first) {
         first = 'max';
       }
     }
   };
+  return {
+    map,
+    reset(min, max) {
+      currentMin = min;
+      currentMax = max;
+      first = null;
+    },
+    getFirst() {
+      return first;
+    }
+  };
+}
 
-  currentMinZoom = 5;
-  currentMaxZoom = 10;
-  updateZoomConstraint(map, {min: 1, max: 3}, {min: currentMinZoom, max: currentMaxZoom});
-  t.equal(first, 'min', '5 - 10 -> 1 - 3, update min first');
-  first = null;
+function testConstraintUpdate(t, updateFn, setMinName, setMaxName, label) {
+  const helper = createConstraintMap(setMinName, setMaxName);
 
-  currentMinZoom = 1;
-  currentMaxZoom = 3;
-  updateZoomConstraint(map, {min: 5, max: 10}, {min: currentMinZoom, max: currentMaxZoom});
-  t.equal(first, 'max', '1 - 3 -> 5 - 10, update max first');
-  first = null;
+  // Range shifting down
+  helper.reset(5, 10);
+  updateFn(helper.map, {min: 1, max: 3}, {min: 5, max: 10});
+  t.equal(helper.getFirst(), 'min', `${label}: 5 - 10 -> 1 - 3, update min first`);
 
-  currentMinZoom = 5;
-  currentMaxZoom = 18;
-  updateZoomConstraint(map, {min: 3, max: 22}, {min: currentMinZoom, max: currentMaxZoom});
-  t.equal(first, 'min', '5 - 18 -> 3 - 22, update min first');
-  first = null;
+  // Range shifting up
+  helper.reset(1, 3);
+  updateFn(helper.map, {min: 5, max: 10}, {min: 1, max: 3});
+  t.equal(helper.getFirst(), 'max', `${label}: 1 - 3 -> 5 - 10, update max first`);
 
-  currentMinZoom = 5;
-  currentMaxZoom = 18;
-  updateZoomConstraint(map, {min: 3, max: 18}, {min: currentMinZoom, max: currentMaxZoom});
-  t.equal(first, 'min', '5 - 18 -> 3 - 18, update min first');
-  first = null;
+  // Range expanding
+  helper.reset(5, 18);
+  updateFn(helper.map, {min: 3, max: 22}, {min: 5, max: 18});
+  t.equal(helper.getFirst(), 'min', `${label}: 5 - 18 -> 3 - 22, update min first`);
 
-  currentMinZoom = 3;
-  currentMaxZoom = 22;
-  updateZoomConstraint(map, {min: 5, max: 18}, {min: currentMinZoom, max: currentMaxZoom});
-  t.equal(first, 'max', '3 - 22 -> 5 - 18, update max first');
-  first = null;
+  // Only min changing (decreasing)
+  helper.reset(5, 18);
+  updateFn(helper.map, {min: 3, max: 18}, {min: 5, max: 18});
+  t.equal(helper.getFirst(), 'min', `${label}: 5 - 18 -> 3 - 18, update min first`);
 
-  currentMinZoom = 12;
-  currentMaxZoom = 22;
-  updateZoomConstraint(map, {min: 5, max: 10}, {min: currentMinZoom, max: currentMaxZoom});
-  t.equal(first, 'min', '12 - 22 -> 5 - 10, update min first');
-  first = null;
+  // Range contracting
+  helper.reset(3, 22);
+  updateFn(helper.map, {min: 5, max: 18}, {min: 3, max: 22});
+  t.equal(helper.getFirst(), 'max', `${label}: 3 - 22 -> 5 - 18, update max first`);
 
+  // Range shifting down with high start
+  helper.reset(12, 22);
+  updateFn(helper.map, {min: 5, max: 10}, {min: 12, max: 22});
+  t.equal(helper.getFirst(), 'min', `${label}: 12 - 22 -> 5 - 10, update min first`);
+
+  // Locked to single value (min === max)
+  helper.reset(3, 10);
+  updateFn(helper.map, {min: 5, max: 5}, {min: 3, max: 10});
+  t.equal(helper.getFirst(), 'max', `${label}: 3 - 10 -> 5 - 5, lock to single value`);
+
+  // Unlock from single value
+  helper.reset(5, 5);
+  updateFn(helper.map, {min: 3, max: 10}, {min: 5, max: 5});
+  t.equal(helper.getFirst(), 'min', `${label}: 5 - 5 -> 3 - 10, unlock from single value`);
+
+  // Partial overlap (shifting up)
+  helper.reset(3, 8);
+  updateFn(helper.map, {min: 6, max: 10}, {min: 3, max: 8});
+  t.equal(helper.getFirst(), 'max', `${label}: 3 - 8 -> 6 - 10, partial overlap shifting up`);
+
+  // Partial overlap (shifting down)
+  helper.reset(6, 10);
+  updateFn(helper.map, {min: 3, max: 8}, {min: 6, max: 10});
+  t.equal(helper.getFirst(), 'min', `${label}: 6 - 10 -> 3 - 8, partial overlap shifting down`);
+
+  // No change returns false
+  helper.reset(3, 10);
+  const changed = updateFn(helper.map, {min: 3, max: 10}, {min: 3, max: 10});
+  t.equal(changed, false, `${label}: no change returns false`);
+}
+
+test('updateZoomConstraint', t => {
+  testConstraintUpdate(t, updateZoomConstraint, 'setMinZoom', 'setMaxZoom', 'zoom');
   t.end();
 });
 
 test('updatePitchConstraint', t => {
-  let first = null;
-  let currentMinPitch = 0;
-  let currentMaxPitch = 0;
-  const map = {
-    setMinPitch: nextMinPitch => {
-      if (nextMinPitch > currentMaxPitch) {
-        throw new Error('Setting minPitch > maxPitch');
-      }
-      currentMinPitch = nextMinPitch;
-      if (!first) {
-        first = 'min';
-      }
-    },
-    setMaxPitch: nextMaxPitch => {
-      if (nextMaxPitch < currentMinPitch) {
-        throw new Error('Setting maxPitch < minPitch');
-      }
-      currentMaxPitch = nextMaxPitch;
-      if (!first) {
-        first = 'max';
-      }
-    }
-  };
-
-  currentMinPitch = 5;
-  currentMaxPitch = 10;
-  updatePitchConstraint(map, {min: 1, max: 3}, {min: currentMinPitch, max: currentMaxPitch});
-  t.equal(first, 'min', '5 - 10 -> 1 - 3, update min first');
-  first = null;
-
-  currentMinPitch = 1;
-  currentMaxPitch = 3;
-  updatePitchConstraint(map, {min: 5, max: 10}, {min: currentMinPitch, max: currentMaxPitch});
-  t.equal(first, 'max', '1 - 3 -> 5 - 10, update max first');
-  first = null;
-
-  currentMinPitch = 5;
-  currentMaxPitch = 18;
-  updatePitchConstraint(map, {min: 3, max: 22}, {min: currentMinPitch, max: currentMaxPitch});
-  t.equal(first, 'min', '5 - 18 -> 3 - 22, update min first');
-  first = null;
-
-  currentMinPitch = 5;
-  currentMaxPitch = 18;
-  updatePitchConstraint(map, {min: 3, max: 18}, {min: currentMinPitch, max: currentMaxPitch});
-  t.equal(first, 'min', '5 - 18 -> 3 - 18, update min first');
-  first = null;
-
-  currentMinPitch = 3;
-  currentMaxPitch = 22;
-  updatePitchConstraint(map, {min: 5, max: 18}, {min: currentMinPitch, max: currentMaxPitch});
-  t.equal(first, 'max', '3 - 22 -> 5 - 18, update max first');
-  first = null;
-
-  currentMinPitch = 12;
-  currentMaxPitch = 22;
-  updatePitchConstraint(map, {min: 5, max: 10}, {min: currentMinPitch, max: currentMaxPitch});
-  t.equal(first, 'min', '12 - 22 -> 5 - 10, update min first');
-  first = null;
-
+  testConstraintUpdate(t, updatePitchConstraint, 'setMinPitch', 'setMaxPitch', 'pitch');
   t.end();
 });
