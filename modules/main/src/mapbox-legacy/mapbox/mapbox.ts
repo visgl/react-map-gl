@@ -501,7 +501,7 @@ export default class Mapbox {
         diff: styleDiffing
       };
       if ('localIdeographFontFamily' in nextProps) {
-        // @ts-ignore Mapbox specific prop
+        // mapbox-gl v1 ships no bundled types but supports this option at runtime; TS 4.9+ in-narrowing makes this type-safe
         options.localIdeographFontFamily = nextProps.localIdeographFontFamily;
       }
       this._map.setStyle(normalizeStyle(mapStyle), options);
