@@ -5,7 +5,7 @@
   "description": "Website for vis.gl project",
   "scripts": {
     "start": "docusaurus start",
-    "build": "docusaurus build",
+    "build": "docusaurus build && node scripts/append-examples-to-llms.js",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-heading-ids": "ocular-doc-headers ../docs",
@@ -22,9 +22,9 @@
     "@mapbox/mapbox-gl-draw": "^1.3.0",
     "@mapbox/mapbox-gl-geocoder": "^4.7.4",
     "@maplibre/maplibre-gl-geocoder": "^1.5.0",
-    "@vis.gl/docusaurus-website": "1.0.0-alpha.23",
     "@turf/area": "^6.5.0",
     "@turf/bbox": "^6.5.0",
+    "@vis.gl/docusaurus-website": "1.0.0-alpha.23",
     "d3-array": "^3.1.1",
     "d3-scale": "^4.0.2",
     "immutable": "^4.0.0",
@@ -40,5 +40,8 @@
   "volta": {
     "node": "18.20.5",
     "yarn": "1.22.22"
+  },
+  "devDependencies": {
+    "docusaurus-plugin-llms": "^0.4.0"
   }
 }
