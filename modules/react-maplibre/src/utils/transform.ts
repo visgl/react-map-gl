@@ -1,7 +1,24 @@
 import type {MaplibreProps} from '../maplibre/maplibre';
 import type {ViewState} from '../types/common';
 import type {TransformLike} from '../types/internal';
+import type {MapInstance} from '../types/lib';
 import {deepEqual} from './deep-equal';
+
+/**
+ * maplibre-gl v6 removed the public `map.transform` property in favor of
+ * discrete getters. Reconstruct a TransformLike snapshot from those getters
+ * so it works across maplibre-gl v4/v5/v6.
+ */
+export function getTransformLike(map: MapInstance): TransformLike {
+  return {
+    center: map.getCenter(),
+    zoom: map.getZoom(),
+    bearing: map.getBearing(),
+    pitch: map.getPitch(),
+    elevation: map.getCenterElevation(),
+    padding: map.getPadding()
+  };
+}
 
 /**
  * Capture a transform's current state

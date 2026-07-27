@@ -1,5 +1,9 @@
 # What's new
 
+## react-map-gl v8.2
+
+- The Maplibre wrapper (`react-map-gl/maplibre`) now supports `maplibre-gl` v6, which replaced the public `map.transform` property and the `map.transformCameraUpdate` field with getter methods (`getCenter()`, `getZoom()`, etc.) and `map.setTransformCameraUpdate()`. The wrapper now uses these getters and falls back to the old field assignment when running against `maplibre-gl` v4/v5.
+
 ## react-map-gl v8.1
 
 Release date: Oct 2025
@@ -14,9 +18,9 @@ Release date: Jan 2025
 
 - First version to support Mapbox GL JS' official types and MapLibre GL JS v5.
   This version fully separates the code that support each compatible map library:
-  + `react-map-gl/mapbox`: for use with `mapbox-gl>=3.5.0`
-  + `react-map-gl/maplibre`: for use with `maplibre-gl>=4`
-  + `react-map-gl/mapbox-legacy`: for use with `mapbox-gl` v1.x and v2.x and `@types/mapbox-gl`
+  - `react-map-gl/mapbox`: for use with `mapbox-gl>=3.5.0`
+  - `react-map-gl/maplibre`: for use with `maplibre-gl>=4`
+  - `react-map-gl/mapbox-legacy`: for use with `mapbox-gl` v1.x and v2.x and `@types/mapbox-gl`
 - As a result, each endpoint now have slightly smaller bundle size and more precise types.
 - Maplibre wrapper is expected to have better functionality and performance than v7 by utilizing an [upstream API](https://github.com/maplibre/maplibre-gl-js/issues/1545) for the React use case.
 
@@ -109,7 +113,7 @@ Release date: Mar 14, 2019
 
 - **New Components**: [`FullscreenControl`](https://github.com/visgl/react-map-gl/tree/4.1-release/docs/components/fullscreen-control.md), [`GeolocateControl`](https://github.com/visgl/react-map-gl/tree/4.1-release/docs/components/geolocate-control.md) have been added to provide better React parity with the `Mapbox GL JS` API.
 - **New callback props** `InteractiveMap` supports more callbacks:
-  + `onNativeClick`
+  - `onNativeClick`
 
 ## react-map-gl v4.0
 
@@ -126,17 +130,17 @@ Release date: Nov 5, 2018
 - **Interaction states** `onViewportChange` is now called with richer descriptors of the user interaction, including `isPanning`, `isZooming` and `isRotating`.
 - **Interactive layers** Dropped the requirement for the deprecated `interactive` property on the layer styles. Use the `interactiveLayerIds` prop to specify which layers are clickable.
 - **New callback props** `InteractiveMap` supports more callbacks:
-  + `onDblClick`
-  + `onMouseDown`
-  + `onMouseMove`
-  + `onMouseUp`
-  + `onTouchStart`
-  + `onTouchMove`
-  + `onTouchEnd`
-  + `onMouseEnter`
-  + `onMouseLeave`
-  + `onWheel`
-  + `onMouseOut`
+  - `onDblClick`
+  - `onMouseDown`
+  - `onMouseMove`
+  - `onMouseUp`
+  - `onTouchStart`
+  - `onTouchMove`
+  - `onTouchEnd`
+  - `onMouseEnter`
+  - `onMouseLeave`
+  - `onWheel`
+  - `onMouseOut`
 
 See [upgrade guide](./upgrade-guide.md) for breaking changes.
 
@@ -149,7 +153,6 @@ Release date: July, 2018
 - **New `viewState` Property**: Makes it possible to specify all map state properties (`longitude`, `latitude`, `zoom`, `bearing` and `pitch`) as a single property.
 - **New `onViewStateChange` callback**: An alternative callback that matches the new `viewState` prop.
 
-
 ## react-map-gl v3.2
 
 Realease date: January, 2018
@@ -161,10 +164,9 @@ Realease date: January, 2018
 - **Support for Map Reuse (experimental)**: A new property `reuseMaps` is provided for applications that create and destroy maps, to help work around a mapbox-gl resource leak issue that can lead to a browser crash in certain situations.
 - **mapbox-gl 0.42.2**
 - **New props** of the InteractiveMap component:
-  + Map creation: `transformRequest`, `reuseMaps`
-  + Interaction: `touchZoom`, `touchRotate`
-  + Transition: `transitionDuration`, `transitionInterpolator`, `transitionEasing`, `transitionInterruption`, `onTransitionStart`, `onTransitionInterrupt`, `onTransitionEnd`
-
+  - Map creation: `transformRequest`, `reuseMaps`
+  - Interaction: `touchZoom`, `touchRotate`
+  - Transition: `transitionDuration`, `transitionInterpolator`, `transitionEasing`, `transitionInterruption`, `onTransitionStart`, `onTransitionInterrupt`, `onTransitionEnd`
 
 ## react-map-gl v3.1
 
@@ -173,13 +175,12 @@ Release date: October 19, 2017
 ### Highlights
 
 - **Event handling**
-  + Support right mouse drag to rotate
-  + Support keyboard navigation
-  + Allow controls and overlays to block map interactions
+  - Support right mouse drag to rotate
+  - Support keyboard navigation
+  - Allow controls and overlays to block map interactions
 - **React 16** - react-map-gl is now being tested with React 16, but the React peer dependency requirement is unchanged at `>=15.4.x`.
 - **mapbox-gl v0.40.1**
 - **No Token warning**: react-map-gl now renders an HTML message if no mapbox token is supplied.
-
 
 ## react-map-gl v3.0
 
@@ -192,7 +193,7 @@ Release date: July 27th, 2017
 - **New Components**: The `MapGL` component has been split into [`StaticMap`](https://github.com/visgl/react-map-gl/tree/3.0-release/docs/components/static-map.md) and [`InteractiveMap`](https://github.com/visgl/react-map-gl/tree/3.0-release/docs/components/interactive-map.md) (the default). Also, [`Popup`](https://github.com/visgl/react-map-gl/tree/3.0-release/docs/components/popup.md), [`Marker`](https://github.com/visgl/react-map-gl/tree/3.0-release/docs/components/marker.md), [`NavigationControl`](https://github.com/visgl/react-map-gl/tree/3.0-release/docs/components/navigation-control.md) have been added to provide better React parity with the `Mapbox GL JS` API.
 - **Improved Overlay Components**: Supplying viewport props (`width` `height` `zoom` `longitude` and `latitude`) are no longer required if you render [`SVGOverlay`](https://github.com/visgl/react-map-gl/tree/3.0-release/docs/overlays/svg-overlay.md), [`CanvasOverlay`](https://github.com/visgl/react-map-gl/tree/3.0-release/docs/overlays/canvas-overlay.md) or [`HTMLOverlay`](https://github.com/visgl/react-map-gl/tree/3.0-release/docs/overlays/html-overlay.md) as a child of the map. Perspective mode is now supported in all overlays.
 - **New Props**: `maxPitch`, `minPitch`, `dragPan`, `doubleClickZoom`, `touchZoomRotate`,
-`scrollZoom` are now provided to allow granular control of map interactivity.
+  `scrollZoom` are now provided to allow granular control of map interactivity.
 - **Documentation**: Significantly expanded and linked with our other geospatial frameworks.
 - **Examples**: New stand-alone examples to get you started instantly with the new features.
 - **Event Handling**: New event handling architecture that enables full customization of event handling (experimental).
@@ -209,37 +210,35 @@ This is the React wrapper around `Mapbox GL JS` and takes in viewport properties
 
 #### Overlays
 
-* Three overlays (`ScatterplotOverlay`, `DraggablePointsOverlay`, `ChoroplethOverlay`), have been moved out of the library and are now only provided as examples.
+- Three overlays (`ScatterplotOverlay`, `DraggablePointsOverlay`, `ChoroplethOverlay`), have been moved out of the library and are now only provided as examples.
 
 ### Property Changes
 
 - **Property Names** - some prop names have been modernized, the old ones will still work for now with a warning.
 - **Internal Properties** such as `isHovering`, `isDragging`, `startDragLngLat` have been removed.
-These were never meant to be useful publicly and have caused confusions in the past.
+  These were never meant to be useful publicly and have caused confusions in the past.
 
 ### Utilities
 
-* **fitBounds**: `fitBounds` has been moved to another repository and has been rewritten to provide a more logical interface.
+- **fitBounds**: `fitBounds` has been moved to another repository and has been rewritten to provide a more logical interface.
 
 For more information, see the `Upgrade Guide`.
-
 
 ## react-map-gl v2.0
 
 Date: Jan 17, 2017
 
 ### Highlights
+
 - **Latest mapbox-gl**: Bump `mapbox-gl` to v0.31.0
 - **new maxZoom prop** - Add `maxZoom` prop and defaults to `20`
 - **New onLoad prop** - Add `onLoad` event handler
 - **new onClick prop** - Add `onClick` prop handler (#140)
 
-
 ## react-map-gl v1.0
 
-* **Perspective Mode** - Now supports `bearing` and `pitch` properties, per mapbox-gl api documentation. These props default to 0 which means that maps will still be rendered in flat/ortographic mode when they are not provided
-* **Support for ES6 imports** - The map overlay components (HTMLOverlay, CanvasOverlay, SVGOverlay etc) previously had to be imported via their relative source paths can now be imported directly.
-
+- **Perspective Mode** - Now supports `bearing` and `pitch` properties, per mapbox-gl api documentation. These props default to 0 which means that maps will still be rendered in flat/ortographic mode when they are not provided
+- **Support for ES6 imports** - The map overlay components (HTMLOverlay, CanvasOverlay, SVGOverlay etc) previously had to be imported via their relative source paths can now be imported directly.
 
 ## react-map-gl v0.6
 

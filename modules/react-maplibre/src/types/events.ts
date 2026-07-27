@@ -13,7 +13,7 @@ import type {
   MapStyleDataEvent,
   MapSourceDataEvent,
   MapWheelEvent,
-  MapLibreZoomEvent as MapBoxZoomEvent
+  MapBoxZoomEvent
 } from 'maplibre-gl';
 
 export type {
