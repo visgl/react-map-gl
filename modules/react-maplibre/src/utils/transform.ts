@@ -15,7 +15,8 @@ export function getTransformLike(map: MapInstance): TransformLike {
     zoom: map.getZoom(),
     bearing: map.getBearing(),
     pitch: map.getPitch(),
-    elevation: map.getCenterElevation(),
+    // @ts-ignore getCenterElevation does not exist before v5.0.0
+    elevation: map.getCenterElevation?.() ?? 0,
     padding: map.getPadding()
   };
 }

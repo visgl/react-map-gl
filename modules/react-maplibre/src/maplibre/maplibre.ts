@@ -387,8 +387,8 @@ export default class Maplibre {
     const {viewState} = nextProps;
     if (viewState) {
       const map = this._map;
-      const container = map.getContainer();
-      if (viewState.width !== container.clientWidth || viewState.height !== container.clientHeight) {
+      const canvas = map.getCanvas();
+      if (viewState.width !== canvas.clientWidth || viewState.height !== canvas.clientHeight) {
         map.resize();
         return true;
       }
