@@ -1,9 +1,5 @@
 # What's new
 
-## react-map-gl v8.2
-
-- The Maplibre wrapper (`react-map-gl/maplibre`) now supports `maplibre-gl` v6, which replaced the public `map.transform` property and the `map.transformCameraUpdate` field with getter methods (`getCenter()`, `getZoom()`, etc.) and `map.setTransformCameraUpdate()`. The wrapper now uses these getters and falls back to the old field assignment when running against `maplibre-gl` v4/v5.
-
 ## react-map-gl v8.1
 
 Release date: Oct 2025
