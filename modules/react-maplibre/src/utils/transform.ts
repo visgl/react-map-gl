@@ -1,6 +1,7 @@
 import type {MaplibreProps} from '../maplibre/maplibre';
 import type {ViewState} from '../types/common';
 import type {TransformLike} from '../types/internal';
+import type {MapInstance} from '../types/lib';
 import {deepEqual} from './deep-equal';
 
 /**
@@ -55,4 +56,69 @@ export function applyViewStateToTransform(
     changes.padding = v.padding;
   }
   return changes;
+}
+
+/**
+ * Update a min/max constraint pair in the right order to avoid
+ * temporarily setting min > max (which maplibre rejects).
+ * @param nextRange - the desired constraint range
+ * @param currentRange - the current constraint range
+ * @param setMin - setter for the minimum value
+ * @param setMax - setter for the maximum value
+ */
+function updateConstraint(
+  nextRange: {min: number; max: number},
+  currentRange: {min: number; max: number},
+  setMin: (v: number) => void,
+  setMax: (v: number) => void
+): boolean {
+  if (nextRange.min === currentRange.min && nextRange.max === currentRange.max) {
+    return false;
+  }
+
+  // When moving up (min increasing), update max first to make room
+  if (nextRange.min >= currentRange.min) {
+    if (nextRange.max !== currentRange.max) {
+      setMax(nextRange.max);
+    }
+    if (nextRange.min !== currentRange.min) {
+      setMin(nextRange.min);
+    }
+  } else {
+    // When moving down (min decreasing), update min first to make room
+    if (nextRange.min !== currentRange.min) {
+      setMin(nextRange.min);
+    }
+    if (nextRange.max !== currentRange.max) {
+      setMax(nextRange.max);
+    }
+  }
+
+  return true;
+}
+
+export function updateZoomConstraint(
+  map: MapInstance,
+  nextRange: {min: number; max: number},
+  currentRange: {min: number; max: number}
+): boolean {
+  return updateConstraint(
+    nextRange,
+    currentRange,
+    v => map.setMinZoom(v),
+    v => map.setMaxZoom(v)
+  );
+}
+
+export function updatePitchConstraint(
+  map: MapInstance,
+  nextRange: {min: number; max: number},
+  currentRange: {min: number; max: number}
+): boolean {
+  return updateConstraint(
+    nextRange,
+    currentRange,
+    v => map.setMinPitch(v),
+    v => map.setMaxPitch(v)
+  );
 }
