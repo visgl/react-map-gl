@@ -6,7 +6,9 @@ import {
   updateZoomConstraint,
   updatePitchConstraint
 } from '@vis.gl/react-maplibre/utils/transform';
-import {LngLat} from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
+
+const {LngLat} = maplibregl.default || maplibregl;
 
 test('getTransformLike', t => {
   const center = new LngLat(-122.45, 37.78);

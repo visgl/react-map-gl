@@ -5,7 +5,6 @@ import {deepEqual} from '../utils/deep-equal';
 
 import type {MapInstance, CustomLayerInterface} from '../types/lib';
 import type {LayerSpecification} from '../types/style-spec';
-import type {AllLayoutProperties, AllPaintProperties} from 'maplibre-gl';
 
 // Omiting property from a union type, see
 // https://github.com/microsoft/TypeScript/issues/39556#issuecomment-656925230
@@ -26,6 +25,11 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
     return;
   }
 
+  const mapWithLayerPropertySetters = map as {
+    setLayoutProperty(layerId: string, name: string, value: unknown): void;
+    setPaintProperty(layerId: string, name: string, value: unknown): void;
+  };
+
   // @ts-ignore filter does not exist in some Layer types
   const {layout = {}, paint = {}, filter, minzoom, maxzoom, beforeId} = props;
 
@@ -36,12 +40,12 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
     const prevLayout = prevProps.layout || {};
     for (const key in layout) {
       if (!deepEqual(layout[key], prevLayout[key])) {
-        map.setLayoutProperty(id, key as keyof AllLayoutProperties, layout[key]);
+        mapWithLayerPropertySetters.setLayoutProperty(id, key, layout[key]);
       }
     }
     for (const key in prevLayout) {
       if (!layout.hasOwnProperty(key)) {
-        map.setLayoutProperty(id, key as keyof AllLayoutProperties, undefined);
+        mapWithLayerPropertySetters.setLayoutProperty(id, key, undefined);
       }
     }
   }
@@ -49,12 +53,12 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
     const prevPaint = prevProps.paint || {};
     for (const key in paint) {
       if (!deepEqual(paint[key], prevPaint[key])) {
-        map.setPaintProperty(id, key as keyof AllPaintProperties, paint[key]);
+        mapWithLayerPropertySetters.setPaintProperty(id, key, paint[key]);
       }
     }
     for (const key in prevPaint) {
       if (!paint.hasOwnProperty(key)) {
-        map.setPaintProperty(id, key as keyof AllPaintProperties, undefined);
+        mapWithLayerPropertySetters.setPaintProperty(id, key, undefined);
       }
     }
   }

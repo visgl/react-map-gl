@@ -26,7 +26,7 @@ import type {
   ProjectionSpecification
 } from '../types/style-spec';
 import type {MapInstance} from '../types/lib';
-import type {MapEventType} from 'maplibre-gl';
+import type {CameraUpdateTransformFunction, MapEventType} from 'maplibre-gl';
 import type {
   MapCallbacks,
   ViewStateChangeEvent,
@@ -334,12 +334,15 @@ export default class Maplibre {
     }
 
     // add listeners
-    if (typeof map.setTransformCameraUpdate === 'function') {
+    const mapWithCameraUpdate = map as MapInstance & {
+      setTransformCameraUpdate?: (value: CameraUpdateTransformFunction | null) => void;
+      transformCameraUpdate?: CameraUpdateTransformFunction | null;
+    };
+    if (typeof mapWithCameraUpdate.setTransformCameraUpdate === 'function') {
       // maplibre-gl v6+
-      map.setTransformCameraUpdate(this._onCameraUpdate);
+      mapWithCameraUpdate.setTransformCameraUpdate(this._onCameraUpdate);
     } else {
-      // @ts-ignore transformCameraUpdate does not exist in v6, replaced by setTransformCameraUpdate()
-      map.transformCameraUpdate = this._onCameraUpdate;
+      mapWithCameraUpdate.transformCameraUpdate = this._onCameraUpdate;
     }
     map.on('style.load', () => {
       // Map style has changed, this would have wiped out all settings from props
