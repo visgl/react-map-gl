@@ -4,7 +4,7 @@ name: test
 on:
   push:
     branches:
-    - master
+      - master
   pull_request:
 
 permissions:
@@ -13,6 +13,10 @@ permissions:
 jobs:
   test-node:
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        maplibre: ['^4.0.0', '^5.0.0']
     permissions:
       checks: write
       contents: read
@@ -29,6 +33,9 @@ jobs:
       - name: Enable Corepack
         run: corepack enable yarn
 
+      - name: Install MapLibre GL JS ${{ matrix.maplibre }}
+        run: yarn workspace @vis.gl/react-maplibre add --dev "maplibre-gl@${{ matrix.maplibre }}"
+
       - name: Install dependencies
         run: yarn bootstrap
 
@@ -40,6 +47,7 @@ jobs:
           yarn test ci
 
       - name: Coveralls
+        if: matrix.maplibre == '^5.0.0'
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
