@@ -1,5 +1,10 @@
 /* global window */
 import test from 'tape';
+import {setWorkerUrl} from 'maplibre-gl';
+
+// MapLibre v6 resolves its worker relative to import.meta.url. Vite prebundles
+// dependencies into .vite/deps, where the sibling worker file is not present.
+setWorkerUrl('/node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs');
 
 test.onFinish(window.browserTestDriver_finish);
 test.onFailure(window.browserTestDriver_fail);
