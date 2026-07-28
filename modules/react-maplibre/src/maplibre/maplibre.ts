@@ -1,4 +1,8 @@
-import {transformToViewState, applyViewStateToTransform, getTransformLike} from '../utils/transform';
+import {
+  transformToViewState,
+  applyViewStateToTransform,
+  getTransformLike
+} from '../utils/transform';
 import {normalizeStyle} from '../utils/style-utils';
 import {deepEqual} from '../utils/deep-equal';
 
@@ -311,7 +315,7 @@ export default class Maplibre {
     }
 
     // add listeners
-    if (map.setTransformCameraUpdate) {
+    if (typeof map.setTransformCameraUpdate === 'function') {
       // maplibre-gl v6+
       map.setTransformCameraUpdate(this._onCameraUpdate);
     } else {
