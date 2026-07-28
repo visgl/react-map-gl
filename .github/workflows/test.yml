@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        maplibre: ['^4.0.0', '^5.0.0']
+        maplibre: ['^4.0.0', '^5.0.0', '^6.0.0']
     permissions:
       checks: write
       contents: read
