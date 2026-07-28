@@ -1,4 +1,9 @@
-import {transformToViewState, applyViewStateToTransform} from '../utils/transform';
+import {
+  transformToViewState,
+  applyViewStateToTransform,
+  updateZoomConstraint,
+  updatePitchConstraint
+} from '../utils/transform';
 import {normalizeStyle} from '../utils/style-utils';
 import {deepEqual} from '../utils/deep-equal';
 
@@ -76,6 +81,31 @@ export type MaplibreProps = Partial<ViewState> &
     interactiveLayerIds?: string[];
     /** CSS cursor */
     cursor?: string;
+
+    /** Minimum zoom available to the map.
+     * @default 0
+     */
+    minZoom?: number;
+    /** Maximum zoom available to the map.
+     * @default 22
+     */
+    maxZoom?: number;
+    /** Minimum pitch available to the map.
+     * @default 0
+     */
+    minPitch?: number;
+    /** Maximum pitch available to the map.
+     * @default 85
+     */
+    maxPitch?: number;
+    /** Bounds of the map.
+     * @default [-180, -85.051129, 180, 85.051129]
+     */
+    maxBounds?: [number, number, number, number];
+    /** Whether to render copies of the world or not.
+     * @default true
+     */
+    renderWorldCopies?: boolean;
   };
 
 const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as StyleSpecification;
@@ -138,15 +168,7 @@ const otherEvents = {
   sourcedata: 'onSourceData',
   error: 'onError'
 };
-const settingNames = [
-  'minZoom',
-  'maxZoom',
-  'minPitch',
-  'maxPitch',
-  'maxBounds',
-  'projection',
-  'renderWorldCopies'
-];
+const settingNames = ['maxBounds', 'projection', 'renderWorldCopies'] as const;
 const handlerNames = [
   'scrollZoom',
   'boxZoom',
@@ -414,6 +436,38 @@ export default class Maplibre {
     return false;
   }
 
+  /* Update camera constraints to match props
+     @param {object} nextProps
+     @param {object} currProps
+     @returns {bool} true if anything is changed
+   */
+  private _updateConstraints(nextProps: MaplibreProps, currProps: MaplibreProps): boolean {
+    const didUpdateZoom = updateZoomConstraint(
+      this._map,
+      {
+        min: nextProps.minZoom ?? DEFAULT_SETTINGS.minZoom,
+        max: nextProps.maxZoom ?? DEFAULT_SETTINGS.maxZoom
+      },
+      {
+        min: currProps.minZoom ?? DEFAULT_SETTINGS.minZoom,
+        max: currProps.maxZoom ?? DEFAULT_SETTINGS.maxZoom
+      }
+    );
+    const didUpdatePitch = updatePitchConstraint(
+      this._map,
+      {
+        min: nextProps.minPitch ?? DEFAULT_SETTINGS.minPitch,
+        max: nextProps.maxPitch ?? DEFAULT_SETTINGS.maxPitch
+      },
+      {
+        min: currProps.minPitch ?? DEFAULT_SETTINGS.minPitch,
+        max: currProps.maxPitch ?? DEFAULT_SETTINGS.maxPitch
+      }
+    );
+
+    return didUpdateZoom || didUpdatePitch;
+  }
+
   /* Update camera constraints and projection settings to match props
      @param {object} nextProps
      @param {object} currProps
@@ -421,18 +475,18 @@ export default class Maplibre {
    */
   private _updateSettings(nextProps: MaplibreProps, currProps: MaplibreProps): boolean {
     const map = this._map;
-    let changed = false;
+    let settingsChanged = false;
     for (const propName of settingNames) {
       const propPresent = propName in nextProps || propName in currProps;
-
       if (propPresent && !deepEqual(nextProps[propName], currProps[propName])) {
-        changed = true;
+        settingsChanged = true;
         const nextValue = propName in nextProps ? nextProps[propName] : DEFAULT_SETTINGS[propName];
         const setter = map[`set${propName[0].toUpperCase()}${propName.slice(1)}`];
         setter?.call(map, nextValue);
       }
     }
-    return changed;
+    const constraintsChanged = this._updateConstraints(nextProps, currProps);
+    return settingsChanged || constraintsChanged;
   }
 
   /* Update map style to match props */
