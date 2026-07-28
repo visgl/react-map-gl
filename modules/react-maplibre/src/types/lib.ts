@@ -19,7 +19,7 @@ import type {
   TerrainSpecification,
   LogoControl,
   LogoControlOptions,
-  GlobeControl
+  IControl
 } from 'maplibre-gl';
 
 export type {
@@ -44,9 +44,16 @@ export type {
   TerrainControl as TerrainControlInstance,
   LogoControl as LogoControlInstance,
   LogoControlOptions,
-  GlobeControl as GlobeControlInstance,
   CustomLayerInterface
 } from 'maplibre-gl';
+
+type MaplibreModule = typeof import('maplibre-gl');
+
+export type GlobeControlInstance = MaplibreModule extends {
+  GlobeControl: new () => infer Instance;
+}
+  ? Instance
+  : IControl & {_container: HTMLElement};
 
 /**
  * A user-facing type that represents the minimal intersection between Mapbox and Maplibre
@@ -76,5 +83,5 @@ export interface MapLib {
 
   LogoControl: {new (options: LogoControlOptions): LogoControl};
 
-  GlobeControl: {new (options: any): GlobeControl};
+  GlobeControl?: {new (options: any): GlobeControlInstance};
 }

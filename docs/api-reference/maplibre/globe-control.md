@@ -2,6 +2,8 @@
 
 React component that wraps maplibre-gl's [GlobeControl](https://maplibre.org/maplibre-gl-js/docs/API/classes/GlobeControl/) class.
 
+Requires `maplibre-gl` v5 or later.
+
 ```tsx
 import * as React from 'react';
 import {Map, GlobeControl} from 'react-map-gl/maplibre';
