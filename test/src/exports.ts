@@ -21,7 +21,7 @@ const Components = [
 function getMissingExports(module: any): null | string[] {
   const missingExports: string[] = [];
   for (const key of Components) {
-    if (!legacyComponents[key]) {
+    if (!module[key]) {
       missingExports.push(key);
     }
   }
@@ -32,5 +32,6 @@ test('Consistent component names#legacy', t => {
   t.notOk(getMissingExports(legacyComponents), 'Legacy endpoint contains all components');
   t.notOk(getMissingExports(maplibreComponents), 'Maplibre endpoint contains all components');
   t.notOk(getMissingExports(mapboxComponents), 'Mapbox endpoint contains all components');
+  t.ok(maplibreComponents.GlobeControl, 'Maplibre endpoint exports GlobeControl');
   t.end();
 });
