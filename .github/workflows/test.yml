@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  test-node:
+  test-node-matrix:
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
@@ -51,3 +51,12 @@ jobs:
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  test-node:
+    runs-on: ubuntu-22.04
+    needs: test-node-matrix
+    if: ${{ always() }}
+
+    steps:
+      - name: Check test matrix
+        run: test "${{ needs.test-node-matrix.result }}" = "success"
