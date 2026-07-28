@@ -18,9 +18,19 @@ const Components = [
   'ScaleControl'
 ] as const;
 
-function getMissingExports(module: any): null | string[] {
+const MaplibreComponents = [
+  ...Components,
+  'TerrainControl',
+  'LogoControl',
+  'GlobeControl'
+] as const;
+
+function getMissingExports(
+  module: any,
+  components = Components as readonly string[]
+): null | string[] {
   const missingExports: string[] = [];
-  for (const key of Components) {
+  for (const key of components) {
     if (!module[key]) {
       missingExports.push(key);
     }
@@ -30,8 +40,10 @@ function getMissingExports(module: any): null | string[] {
 
 test('Consistent component names#legacy', t => {
   t.notOk(getMissingExports(legacyComponents), 'Legacy endpoint contains all components');
-  t.notOk(getMissingExports(maplibreComponents), 'Maplibre endpoint contains all components');
+  t.notOk(
+    getMissingExports(maplibreComponents, MaplibreComponents),
+    'Maplibre endpoint contains all components'
+  );
   t.notOk(getMissingExports(mapboxComponents), 'Mapbox endpoint contains all components');
-  t.ok(maplibreComponents.GlobeControl, 'Maplibre endpoint exports GlobeControl');
   t.end();
 });
