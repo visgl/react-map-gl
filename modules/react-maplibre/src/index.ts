@@ -11,6 +11,7 @@ export {NavigationControl} from './components/navigation-control';
 export {ScaleControl} from './components/scale-control';
 export {TerrainControl} from './components/terrain-control';
 export {LogoControl} from './components/logo-control';
+export {GlobeControl} from './components/globe-control';
 export {Source} from './components/source';
 export {Layer} from './components/layer';
 export {useControl} from './components/use-control';
@@ -27,6 +28,7 @@ export type {NavigationControlProps} from './components/navigation-control';
 export type {ScaleControlProps} from './components/scale-control';
 export type {TerrainControlProps} from './components/terrain-control';
 export type {LogoControlProps} from './components/logo-control';
+export type {GlobeControlProps} from './components/globe-control';
 export type {SourceProps} from './components/source';
 export type {LayerProps} from './components/layer';
 
