@@ -12,9 +12,18 @@ export type GlobeControlProps = {
 };
 
 function _GlobeControl(props: GlobeControlProps) {
-  const ctrl = useControl(({mapLib}) => new mapLib.GlobeControl(props), {
-    position: props.position
-  });
+  const ctrl = useControl(
+    ({mapLib}) => {
+      const GlobeControl = mapLib.GlobeControl;
+      if (!GlobeControl) {
+        throw new Error('GlobeControl is not supported by this version of MapLibre GL JS');
+      }
+      return new GlobeControl(props);
+    },
+    {
+      position: props.position
+    }
+  );
 
   useEffect(() => {
     applyReactStyle(ctrl._container, props.style);
