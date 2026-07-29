@@ -444,7 +444,7 @@ By module import (and embedding in the final bundle):
 ```tsx
 import * as React from 'react';
 import {Map} from 'react-map-gl/maplibre';
-import maplibregl from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
 
 function App() {
   return <Map mapLib={maplibregl} />;

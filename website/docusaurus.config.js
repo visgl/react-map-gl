@@ -24,7 +24,10 @@ const config = getDocusaurusConfig({
     resolve: {
       alias: {
         'mapbox-examples': resolve('../examples/mapbox'),
-        'maplibre-examples': resolve('../examples/maplibre')
+        'maplibre-examples': resolve('../examples/maplibre'),
+        // MapLibre v6 is ESM-only. Docusaurus's server compiler otherwise attempts
+        // to resolve the package using its CommonJS export conditions.
+        'maplibre-gl$': require.resolve('maplibre-gl/dist/maplibre-gl.mjs')
       }
     }
   },
