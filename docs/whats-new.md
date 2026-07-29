@@ -8,13 +8,7 @@ The core logic in the Mapbox GL JS wrapper has been rewritten to use [Proxy](htt
 
 The MapLibre wrapper is unaffected by this change.
 
-The v8.1 release line supports MapLibre GL JS v4, v5 and v6. MapLibre v6
-applications must use named or namespace imports and configure the worker when
-using a bundler. See the
-[Get Started guide](./get-started/get-started.md) for setup instructions and
-MapLibre's
-[v5 to v6 migration guide](https://maplibre.org/maplibre-gl-js/docs/guides/v5-to-v6-migration-guide/)
-for other changes in MapLibre v6.
+The v8.1 release line supports MapLibre GL JS v4, v5 and v6. MapLibre v6 applications must use named or namespace imports and configure the worker when using a bundler. See the [Get Started guide](./get-started/get-started.md) for setup instructions and MapLibre's [v5 to v6 migration guide](https://maplibre.org/maplibre-gl-js/docs/guides/v5-to-v6-migration-guide/) for other changes in MapLibre v6.
 
 ## react-map-gl v8.0
 

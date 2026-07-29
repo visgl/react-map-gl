@@ -508,11 +508,7 @@ The number of web workers instantiated on a page with maplibre-gl maps.
 
 #### `workerUrl`: string {#workerurl}
 
-Provides an interface for loading maplibre-gl's WebWorker bundle from a
-self-hosted URL. MapLibre GL JS v6 applications that use a bundler must
-configure the worker before rendering a map. Follow MapLibre's
-[installation instructions](https://maplibre.org/maplibre-gl-js/docs/#installation)
-to generate the appropriate worker URL for your bundler.
+Provides an interface for loading maplibre-gl's WebWorker bundle from a self-hosted URL. MapLibre GL JS v6 applications that use a bundler must configure the worker before rendering a map. Follow MapLibre's [installation instructions](https://maplibre.org/maplibre-gl-js/docs/#installation) to generate the appropriate worker URL for your bundler.
 
 
 ## Methods
