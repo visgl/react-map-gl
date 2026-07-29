@@ -25,11 +25,6 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
     return;
   }
 
-  const mapWithLayerPropertySetters = map as {
-    setLayoutProperty(layerId: string, name: string, value: unknown): void;
-    setPaintProperty(layerId: string, name: string, value: unknown): void;
-  };
-
   // @ts-ignore filter does not exist in some Layer types
   const {layout = {}, paint = {}, filter, minzoom, maxzoom, beforeId} = props;
 
@@ -40,12 +35,12 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
     const prevLayout = prevProps.layout || {};
     for (const key in layout) {
       if (!deepEqual(layout[key], prevLayout[key])) {
-        mapWithLayerPropertySetters.setLayoutProperty(id, key, layout[key]);
+        map.setLayoutProperty(id, key as any, layout[key]);
       }
     }
     for (const key in prevLayout) {
       if (!layout.hasOwnProperty(key)) {
-        mapWithLayerPropertySetters.setLayoutProperty(id, key, undefined);
+        map.setLayoutProperty(id, key as any, undefined);
       }
     }
   }
@@ -53,12 +48,12 @@ function updateLayer(map: MapInstance, id: string, props: LayerProps, prevProps:
     const prevPaint = prevProps.paint || {};
     for (const key in paint) {
       if (!deepEqual(paint[key], prevPaint[key])) {
-        mapWithLayerPropertySetters.setPaintProperty(id, key, paint[key]);
+        map.setPaintProperty(id, key as any, paint[key]);
       }
     }
     for (const key in prevPaint) {
       if (!paint.hasOwnProperty(key)) {
-        mapWithLayerPropertySetters.setPaintProperty(id, key, undefined);
+        map.setPaintProperty(id, key as any, undefined);
       }
     }
   }
