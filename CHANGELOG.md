@@ -2,6 +2,12 @@
 
 # Version 8.1
 
+## v8.1.2 (Jul 29, 2026)
+
+- Support MapLibre GL JS v6 (#2598)
+- Export GlobeControl from the MapLibre entry point (#2600)
+- Call MapLibre zoom and pitch constraint setters in a valid order (#2573)
+
 ## v8.1.1 (Apr 10, 2026)
 
 - fix(react-maplibre): guard against undefined map.style in _updateStyleComponents (#2580)
