@@ -4,7 +4,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "maplibre-gl": "^5.0.0",
+    "maplibre-gl": "^6.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-map-gl": "^8.1.0"

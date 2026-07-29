@@ -122,7 +122,7 @@ You may use it to call any imperative methods:
 import * as React from 'react';
 import {useRef, useMemo, useCallback} from 'react';
 import {Map, Marker} from 'react-map-gl/maplibre';
-import maplibregl from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
 
 function App() {
   const markerRef = useRef<maplibregl.Marker>();

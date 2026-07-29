@@ -444,7 +444,7 @@ By module import (and embedding in the final bundle):
 ```tsx
 import * as React from 'react';
 import {Map} from 'react-map-gl/maplibre';
-import maplibregl from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
 
 function App() {
   return <Map mapLib={maplibregl} />;
@@ -508,8 +508,7 @@ The number of web workers instantiated on a page with maplibre-gl maps.
 
 #### `workerUrl`: string {#workerurl}
 
-Provides an interface for loading maplibre-gl's WebWorker bundle from a self-hosted URL. This is useful if your site needs to operate in a strict CSP (Content Security Policy) environment wherein you are not allowed to load JavaScript code from a Blob URL, which is default behavior.
-
+Provides an interface for loading maplibre-gl's WebWorker bundle from a self-hosted URL. MapLibre GL JS v6 applications that use a bundler must configure the worker before rendering a map. Follow MapLibre's [installation instructions](https://maplibre.org/maplibre-gl-js/docs/#installation) to generate the appropriate worker URL for your bundler.
 
 
 ## Methods

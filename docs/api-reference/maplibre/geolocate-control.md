@@ -84,7 +84,7 @@ You may use it to call any imperative methods:
 import * as React from 'react';
 import {useRef, useEffect} from 'react';
 import {Map, GeolocateControl} from 'react-map-gl/maplibre';
-import type maplibregl from 'maplibre-gl';
+import type * as maplibregl from 'maplibre-gl';
 
 function App() {
   const geoControlRef = useRef<maplibregl.GeolocateControl>();
