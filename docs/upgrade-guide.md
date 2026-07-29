@@ -36,7 +36,7 @@ To keep the previous behavior, specify the `pluginUrl` which was previously used
 
 ```tsx title="map-v7.0.tsx"
 import Map from 'react-map-gl';
-import * as maplibregl from 'maplibre-gl';
+import maplibregl from 'maplibre-gl';
 
 function App() {
   return <Map
