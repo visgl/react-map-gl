@@ -1,6 +1,16 @@
 const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 const {getDocusaurusConfig} = require('@vis.gl/docusaurus-website');
 const {resolve} = require('path');
+
+function maplibreWorkerPlugin() {
+  return {
+    name: 'maplibre-worker',
+    getClientModules() {
+      return [resolve(__dirname, 'src/maplibre-worker.js')];
+    }
+  };
+}
 
 const config = getDocusaurusConfig({
   projectName: 'react-map-gl',
@@ -15,16 +25,33 @@ const config = getDocusaurusConfig({
 
   search: 'local',
 
+  plugins: [maplibreWorkerPlugin],
+
   webpackConfig: {
     plugins: [
       new webpack.EnvironmentPlugin({
         MapboxAccessToken: 'MapboxAccessToken'
+      }),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: require.resolve('maplibre-gl/dist/maplibre-gl-worker.mjs'),
+            to: 'maplibre-gl-worker.mjs'
+          },
+          {
+            from: require.resolve('maplibre-gl/dist/maplibre-gl-shared.mjs'),
+            to: 'maplibre-gl-shared.mjs'
+          }
+        ]
       })
     ],
     resolve: {
       alias: {
         'mapbox-examples': resolve('../examples/mapbox'),
-        'maplibre-examples': resolve('../examples/maplibre')
+        'maplibre-examples': resolve('../examples/maplibre'),
+        // MapLibre v6 is ESM-only. Docusaurus's server compiler otherwise attempts
+        // to resolve the package using its CommonJS export conditions.
+        'maplibre-gl$': require.resolve('maplibre-gl/dist/maplibre-gl.mjs')
       }
     }
   },
