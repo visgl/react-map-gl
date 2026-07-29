@@ -1,6 +1,7 @@
 import {
   transformToViewState,
   applyViewStateToTransform,
+  getTransformLike,
   updateZoomConstraint,
   updatePitchConstraint
 } from '../utils/transform';
@@ -25,6 +26,7 @@ import type {
   ProjectionSpecification
 } from '../types/style-spec';
 import type {MapInstance} from '../types/lib';
+import type {CameraUpdateTransformFunction, MapEventType} from 'maplibre-gl';
 import type {
   MapCallbacks,
   ViewStateChangeEvent,
@@ -332,7 +334,16 @@ export default class Maplibre {
     }
 
     // add listeners
-    map.transformCameraUpdate = this._onCameraUpdate;
+    const mapWithCameraUpdate = map as MapInstance & {
+      setTransformCameraUpdate?: (value: CameraUpdateTransformFunction | null) => void;
+      transformCameraUpdate?: CameraUpdateTransformFunction | null;
+    };
+    if (typeof mapWithCameraUpdate.setTransformCameraUpdate === 'function') {
+      // maplibre-gl v6+
+      mapWithCameraUpdate.setTransformCameraUpdate(this._onCameraUpdate);
+    } else {
+      mapWithCameraUpdate.transformCameraUpdate = this._onCameraUpdate;
+    }
     map.on('style.load', () => {
       // Map style has changed, this would have wiped out all settings from props
       this._styleComponents = {
@@ -349,13 +360,13 @@ export default class Maplibre {
       this._updateStyleComponents(this.props);
     });
     for (const eventName in pointerEvents) {
-      map.on(eventName, this._onPointerEvent);
+      map.on(eventName as keyof MapEventType, this._onPointerEvent);
     }
     for (const eventName in cameraEvents) {
-      map.on(eventName, this._onCameraEvent);
+      map.on(eventName as keyof MapEventType, this._onCameraEvent);
     }
     for (const eventName in otherEvents) {
-      map.on(eventName, this._onEvent);
+      map.on(eventName as keyof MapEventType, this._onEvent);
     }
     this._map = map;
   }
@@ -402,7 +413,8 @@ export default class Maplibre {
     const {viewState} = nextProps;
     if (viewState) {
       const map = this._map;
-      if (viewState.width !== map.transform.width || viewState.height !== map.transform.height) {
+      const canvas = map.getCanvas();
+      if (viewState.width !== canvas.clientWidth || viewState.height !== canvas.clientHeight) {
         map.resize();
         return true;
       }
@@ -418,7 +430,7 @@ export default class Maplibre {
    */
   private _updateViewState(nextProps: MaplibreProps): boolean {
     const map = this._map;
-    const tr = map.transform;
+    const tr = getTransformLike(map);
     const isMoving = map.isMoving();
 
     // Avoid manipulating the real transform when interaction/animation is ongoing
@@ -573,7 +585,7 @@ export default class Maplibre {
     if (this._internalUpdate) {
       return;
     }
-    e.viewState = this._propsedCameraUpdate || transformToViewState(this._map.transform);
+    e.viewState = this._propsedCameraUpdate || transformToViewState(getTransformLike(this._map));
     // @ts-ignore
     const cb = this.props[cameraEvents[e.type]];
     if (cb) {

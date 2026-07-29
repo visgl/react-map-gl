@@ -10,11 +10,16 @@ import type {
   MapLayerMouseEvent,
   MapTouchEvent,
   MapLayerTouchEvent,
+  MapEventType,
   MapStyleDataEvent,
   MapSourceDataEvent,
-  MapWheelEvent,
-  MapLibreZoomEvent as MapBoxZoomEvent
+  MapWheelEvent
 } from 'maplibre-gl';
+
+// MapLibre renamed this type from `MapLibreZoomEvent` (v4/v5) to
+// `MapBoxZoomEvent` (v6). The event map is exported under the same name
+// across supported versions.
+export type MapBoxZoomEvent = MapEventType['boxzoomstart' | 'boxzoomend' | 'boxzoomcancel'];
 
 export type {
   MapLibreEvent as MapEvent,
@@ -23,8 +28,7 @@ export type {
   MapLayerTouchEvent,
   MapStyleDataEvent,
   MapSourceDataEvent,
-  MapWheelEvent,
-  MapBoxZoomEvent
+  MapWheelEvent
 };
 
 export type MapCallbacks = {
