@@ -23,6 +23,12 @@ npm install react-map-gl mapbox-gl @types/mapbox-gl
 npm install react-map-gl maplibre-gl
 ```
 
+MapLibre GL JS v6 applications that use a bundler must also configure the
+worker before rendering a map. Follow MapLibre's
+[installation instructions](https://maplibre.org/maplibre-gl-js/docs/#installation)
+for your bundler. The MapLibre get-started example uses Vite's
+`?worker&url` import as recommended.
+
   </TabItem>
 </Tabs>
 

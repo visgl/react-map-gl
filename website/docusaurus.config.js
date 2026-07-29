@@ -1,6 +1,16 @@
 const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 const {getDocusaurusConfig} = require('@vis.gl/docusaurus-website');
 const {resolve} = require('path');
+
+function maplibreWorkerPlugin() {
+  return {
+    name: 'maplibre-worker',
+    getClientModules() {
+      return [resolve(__dirname, 'src/maplibre-worker.js')];
+    }
+  };
+}
 
 const config = getDocusaurusConfig({
   projectName: 'react-map-gl',
@@ -15,10 +25,24 @@ const config = getDocusaurusConfig({
 
   search: 'local',
 
+  plugins: [maplibreWorkerPlugin],
+
   webpackConfig: {
     plugins: [
       new webpack.EnvironmentPlugin({
         MapboxAccessToken: 'MapboxAccessToken'
+      }),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: require.resolve('maplibre-gl/dist/maplibre-gl-worker.mjs'),
+            to: 'maplibre-gl-worker.mjs'
+          },
+          {
+            from: require.resolve('maplibre-gl/dist/maplibre-gl-shared.mjs'),
+            to: 'maplibre-gl-shared.mjs'
+          }
+        ]
       })
     ],
     resolve: {
