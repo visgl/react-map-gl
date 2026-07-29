@@ -1,15 +1,68 @@
 import test from 'tape-promise/tape';
 import {
+  getTransformLike,
   transformToViewState,
   applyViewStateToTransform,
   updateZoomConstraint,
   updatePitchConstraint
 } from '@vis.gl/react-maplibre/utils/transform';
-import maplibregl from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
+
+const {LngLat} = maplibregl.default || maplibregl;
+
+test('getTransformLike', t => {
+  const center = new LngLat(-122.45, 37.78);
+  const padding = {top: 1, left: 2, right: 3, bottom: 4};
+  const map = {
+    get transform() {
+      throw new Error('map.transform should not be accessed');
+    },
+    getCenter: () => center,
+    getZoom: () => 10.5,
+    getBearing: () => -70,
+    getPitch: () => 30,
+    getCenterElevation: () => 100,
+    getPadding: () => padding
+  };
+
+  const tr = getTransformLike(map);
+
+  t.is(tr.center, center, 'center retains its LngLat instance');
+  t.is(tr.padding, padding, 'padding retains its identity');
+  t.deepEqual(
+    tr,
+    {
+      center,
+      zoom: 10.5,
+      bearing: -70,
+      pitch: 30,
+      elevation: 100,
+      padding
+    },
+    'camera state is read from public getters'
+  );
+
+  t.end();
+});
+
+test('getTransformLike#pre-v5', t => {
+  const center = new LngLat(-122.45, 37.78);
+  const map = {
+    getCenter: () => center,
+    getZoom: () => 10.5,
+    getBearing: () => -70,
+    getPitch: () => 30,
+    getPadding: () => ({top: 0, left: 0, right: 0, bottom: 0})
+  };
+
+  t.is(getTransformLike(map).elevation, 0, 'missing center elevation defaults to zero');
+
+  t.end();
+});
 
 test('transformToViewState', t => {
   const tr = {
-    center: new maplibregl.LngLat(-122.45, 37.78),
+    center: new LngLat(-122.45, 37.78),
     zoom: 10.5,
     bearing: -70,
     pitch: 30,
@@ -30,7 +83,7 @@ test('transformToViewState', t => {
 
 test('applyViewStateToTransform', t => {
   const tr = {
-    center: new maplibregl.LngLat(-122.45, 37.78),
+    center: new LngLat(-122.45, 37.78),
     zoom: 10.5,
     bearing: -70,
     pitch: 30,
@@ -44,7 +97,7 @@ test('applyViewStateToTransform', t => {
   t.deepEqual(
     changed,
     {
-      center: new maplibregl.LngLat(-10, 5)
+      center: new LngLat(-10, 5)
     },
     'center changed'
   );
