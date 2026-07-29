@@ -23,13 +23,16 @@ npm install react-map-gl mapbox-gl @types/mapbox-gl
 npm install react-map-gl maplibre-gl
 ```
 
-MapLibre GL JS v4 and v5 expose a default export. MapLibre GL JS v6 is
-ESM-only, so direct imports must use named or namespace imports instead.
-Version 6 applications that use a bundler must also configure the worker
-before rendering a map. Follow MapLibre's
+MapLibre GL JS setup depends on the version:
+
+- **v4 and v5:** Default imports are supported.
+- **v6:** Use named or namespace imports. Applications that use a bundler
+  must also configure the worker before rendering a map.
+
+Follow MapLibre's
 [installation instructions](https://maplibre.org/maplibre-gl-js/docs/#installation)
-for your bundler. The MapLibre get-started example uses Vite's
-`?worker&url` import as recommended.
+for your bundler. The MapLibre get-started example uses Vite's recommended
+`?worker&url` import.
 
   </TabItem>
 </Tabs>
