@@ -123,6 +123,11 @@ prismjs/prism.js:
  * @license MIT
  */
 
+/**
+* MapLibre GL JS
+* @license 3-Clause BSD. Full text of license: https://github.com/maplibre/maplibre-gl-js/blob/v6.0.0/LICENSE.txt
+*/
+
 /** @license React v16.13.1
  * react-is.production.min.js
  *
