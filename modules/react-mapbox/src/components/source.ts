@@ -108,7 +108,19 @@ export function Source(props: SourceProps) {
               }
             }
           }
-          map.removeSource(id);
+          
+          /**
+           * There is a bug in mapbox where style.terrain.properties may be undefined.
+           * @see https://github.com/mapbox/mapbox-gl-js/blob/7a72385de5c7400647ea7d3539637145fdf616a7/src/terrain/terrain.ts#L380
+           * To prevent this component to crash, we catch it for now.
+           * This seems to be happening the majority of time with <StrictMode> but not only.
+           */
+          try {
+            map.removeSource(id);
+          } catch (error) {
+            // eslint-disable-next-line
+            console.error(error);
+          }
         }
       };
     }
