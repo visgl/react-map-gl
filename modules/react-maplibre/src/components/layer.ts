@@ -1,5 +1,6 @@
 import {useContext, useEffect, useMemo, useState, useRef} from 'react';
 import {MapContext} from './map';
+import { SourceIdContext } from './source';
 import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
 
@@ -105,6 +106,13 @@ export function Layer(props: LayerProps) {
     }
     return undefined;
   }, [map]);
+
+  const sourceId = useContext(SourceIdContext)
+  // @ts-ignore source is not a key for every type
+  if (props.source === undefined && sourceId !== null) {
+    // @ts-ignore source is not a key for every type
+    props = { ...props, source: sourceId }
+  }
 
   // @ts-ignore
   const layer = map && map.style && map.getLayer(id);
