@@ -1,5 +1,5 @@
 /* global window, document, FontFace */
-import test from 'test/utils/vitest-tape';
+import {expect, test} from 'vitest';
 import * as React from 'react';
 import {Map} from 'react-map-gl/mapbox-legacy';
 import {createRoot} from 'react-dom/client';
@@ -79,46 +79,50 @@ async function loadStyles() {
   document.head.append(stylesheet);
 }
 
-test('Render test', async t => {
-  // Default tape test timeout is 500ms - allow enough time for render and screenshot
-  t.timeoutAfter(TEST_CASES.length * 4000);
+test(
+  'Render test',
+  async () => {
+    // Allow enough time for every render and screenshot comparison.
 
-  await loadStyles();
+    await loadStyles();
 
-  for (const testCase of TEST_CASES) {
-    t.comment(testCase.title);
+    for (const testCase of TEST_CASES) {
+      console.log(testCase.title);
 
-    const {threshold = 0.99, goldenImage} = testCase;
-    let result;
-    let error;
+      const {threshold = 0.99, goldenImage} = testCase;
+      let result;
+      let error;
 
-    try {
-      const {boundingBox, unmount} = await runTestCase(testCase);
+      try {
+        const {boundingBox, unmount} = await runTestCase(testCase);
 
-      result = await window.browserTestDriver_captureAndDiffScreen({
-        threshold,
-        goldenImage,
-        region: boundingBox,
-        tolerance: 0.05,
-        includeEmpty: false
-        // Uncomment to save screenshot
-        // saveOnFail: true
-      });
+        result = await window.browserTestDriver_captureAndDiffScreen({
+          threshold,
+          goldenImage,
+          region: boundingBox,
+          tolerance: 0.05,
+          includeEmpty: false
+          // Uncomment to save screenshot
+          // saveOnFail: true
+        });
 
-      error = result.error;
-      unmount();
-    } catch (err) {
-      error = err;
+        error = result.error;
+        unmount();
+      } catch (err) {
+        error = err;
+      }
+
+      if (testCase.mapError) {
+        expect(error, 'Map should throw error').toBeTruthy();
+      } else if (error) {
+        expect.unreachable(error.message);
+      } else {
+        expect(
+          result && result.success,
+          `Render test matched ${result.matchPercentage}`
+        ).toBeTruthy();
+      }
     }
-
-    if (testCase.mapError) {
-      t.ok(error, 'Map should throw error');
-    } else if (error) {
-      t.fail(error.message);
-    } else {
-      t.ok(result && result.success, `Render test matched ${result.matchPercentage}`);
-    }
-  }
-
-  t.end();
-});
+  },
+  TEST_CASES.length * 4000
+);

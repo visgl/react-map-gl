@@ -8,11 +8,11 @@ import {
 } from '@vis.gl/react-mapbox';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
-import test from 'test/utils/vitest-tape';
+import {expect, test} from 'vitest';
 import {sleep, waitForMapLoad} from '../utils/test-utils';
 import {MapboxAccessToken} from '../utils/token';
 
-test('Controls', async t => {
+test('Controls', async () => {
   const rootContainer = document.createElement('div');
   const root = createRoot(rootContainer);
   const mapRef = {current: null};
@@ -24,7 +24,10 @@ test('Controls', async t => {
   );
   await waitForMapLoad(mapRef);
   await sleep(1);
-  t.ok(rootContainer.querySelector('.mapboxgl-ctrl-attrib'), 'Rendered <AttributionControl />');
+  expect(
+    rootContainer.querySelector('.mapboxgl-ctrl-attrib'),
+    'Rendered <AttributionControl />'
+  ).toBeTruthy();
 
   root.render(
     <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
@@ -32,7 +35,10 @@ test('Controls', async t => {
     </Map>
   );
   await sleep(1);
-  t.ok(rootContainer.querySelector('.mapboxgl-ctrl-fullscreen'), 'Rendered <FullscreenControl />');
+  expect(
+    rootContainer.querySelector('.mapboxgl-ctrl-fullscreen'),
+    'Rendered <FullscreenControl />'
+  ).toBeTruthy();
 
   const geolocateControlRef = {current: null};
   root.render(
@@ -41,8 +47,11 @@ test('Controls', async t => {
     </Map>
   );
   await sleep(1);
-  t.ok(rootContainer.querySelector('.mapboxgl-ctrl-geolocate'), 'Rendered <GeolocateControl />');
-  t.ok(geolocateControlRef.current, 'GeolocateControl created');
+  expect(
+    rootContainer.querySelector('.mapboxgl-ctrl-geolocate'),
+    'Rendered <GeolocateControl />'
+  ).toBeTruthy();
+  expect(geolocateControlRef.current, 'GeolocateControl created').toBeTruthy();
 
   root.render(
     <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
@@ -50,7 +59,10 @@ test('Controls', async t => {
     </Map>
   );
   await sleep(1);
-  t.ok(rootContainer.querySelector('.mapboxgl-ctrl-zoom-in'), 'Rendered <NavigationControl />');
+  expect(
+    rootContainer.querySelector('.mapboxgl-ctrl-zoom-in'),
+    'Rendered <NavigationControl />'
+  ).toBeTruthy();
 
   root.render(
     <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
@@ -58,9 +70,10 @@ test('Controls', async t => {
     </Map>
   );
   await sleep(1);
-  t.ok(rootContainer.querySelector('.mapboxgl-ctrl-scale'), 'Rendered <ScaleControl />');
+  expect(
+    rootContainer.querySelector('.mapboxgl-ctrl-scale'),
+    'Rendered <ScaleControl />'
+  ).toBeTruthy();
 
   root.unmount();
-
-  t.end();
 });
