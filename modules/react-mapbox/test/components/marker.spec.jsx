@@ -1,9 +1,10 @@
 import {Map, Marker} from '@vis.gl/react-mapbox';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
+import {act} from 'react-dom/test-utils';
 import {expect, test} from 'vitest';
 
-import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {waitForMapLoad} from '../utils/test-utils';
 import {MapboxAccessToken} from '../utils/token';
 
 test('Marker', async () => {
@@ -12,14 +13,15 @@ test('Marker', async () => {
   const markerRef = {current: null};
   const mapRef = {current: null};
 
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
-      <Marker ref={markerRef} longitude={-122} latitude={38} />
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
+        <Marker ref={markerRef} longitude={-122} latitude={38} offset={[0, 0]} />
+      </Map>
+    )
   );
 
   await waitForMapLoad(mapRef);
-  await sleep(1);
 
   expect(rootContainer.querySelector('.mapboxgl-marker'), 'Marker is attached to DOM').toBeTruthy();
   expect(markerRef.current, 'Marker is created').toBeTruthy();
@@ -31,34 +33,37 @@ test('Marker', async () => {
   const pitchAlignment = marker.getPitchAlignment();
   const rotationAlignment = marker.getRotationAlignment();
 
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
-      <Marker ref={markerRef} longitude={-122} latitude={38} offset={[0, 0]} />
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
+        <Marker ref={markerRef} longitude={-122} latitude={38} offset={[0, 0]} />
+      </Map>
+    )
   );
 
   expect(offset, 'offset did not change deeply').toBe(marker.getOffset());
 
   let callbackType = '';
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
-      <Marker
-        ref={markerRef}
-        longitude={-122}
-        latitude={38}
-        offset={[0, 1]}
-        rotation={30}
-        draggable
-        className="classA"
-        pitchAlignment="map"
-        rotationAlignment="map"
-        onDragStart={() => (callbackType = 'dragstart')}
-        onDrag={() => (callbackType = 'drag')}
-        onDragEnd={() => (callbackType = 'dragend')}
-      />
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
+        <Marker
+          ref={markerRef}
+          longitude={-122}
+          latitude={38}
+          offset={[0, 1]}
+          rotation={30}
+          draggable
+          className="classA"
+          pitchAlignment="map"
+          rotationAlignment="map"
+          onDragStart={() => (callbackType = 'dragstart')}
+          onDrag={() => (callbackType = 'drag')}
+          onDragEnd={() => (callbackType = 'dragend')}
+        />
+      </Map>
+    )
   );
-  await sleep(1);
 
   expect(offset, 'offset is updated').not.toBe(marker.getOffset());
   expect(draggable, 'draggable is updated').not.toBe(marker.isDraggable());
@@ -74,23 +79,25 @@ test('Marker', async () => {
   marker.fire('dragend');
   expect(callbackType, 'onDragEnd called').toBe('dragend');
 
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken} />
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken} />
+    )
   );
-  await sleep(1);
 
   expect(markerRef.current, 'marker is removed').toBeFalsy();
 
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
-      <Marker ref={markerRef} longitude={-100} latitude={40}>
-        <div id="marker-content" />
-      </Marker>
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v3')} mapboxAccessToken={MapboxAccessToken}>
+        <Marker ref={markerRef} longitude={-100} latitude={40}>
+          <div id="marker-content" />
+        </Marker>
+      </Map>
+    )
   );
-  await sleep(1);
 
   expect(rootContainer.querySelector('#marker-content'), 'content is rendered').toBeTruthy();
 
-  root.unmount();
+  await act(() => root.unmount());
 });

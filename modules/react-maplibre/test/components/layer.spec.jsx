@@ -2,8 +2,9 @@
 import {expect, test} from 'vitest';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
+import {act} from 'react-dom/test-utils';
 import {Map, Source, Layer} from '@vis.gl/react-maplibre';
-import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {waitForMapLoad, waitForMapStyleLoad, actUntil} from '../utils/test-utils';
 
 test('Source/Layer', async () => {
   const root = createRoot(document.createElement('div'));
@@ -32,42 +33,46 @@ test('Source/Layer', async () => {
     }
   };
 
-  root.render(
-    <Map ref={mapRef}>
-      <Source id="my-data" type="geojson" data={geoJSON}>
-        <Layer id="my-layer" {...pointLayer} />
-      </Source>
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef}>
+        <Source id="my-data" type="geojson" data={geoJSON}>
+          <Layer id="my-layer" {...pointLayer} />
+        </Source>
+      </Map>
+    )
   );
   await waitForMapLoad(mapRef);
-  await sleep(1);
   const layer = mapRef.current.getLayer('my-layer');
   expect(layer, 'Layer is added').toBeTruthy();
 
-  root.render(
-    <Map ref={mapRef}>
-      <Source id="my-data" type="geojson" data={geoJSON}>
-        <Layer id="my-layer" {...pointLayer2} />
-      </Source>
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef}>
+        <Source id="my-data" type="geojson" data={geoJSON}>
+          <Layer id="my-layer" {...pointLayer2} />
+        </Source>
+      </Map>
+    )
   );
-  await sleep(1);
   expect(layer.visibility, 'Layer is updated').toBe('none');
 
-  root.render(
-    <Map ref={mapRef} mapStyle={mapStyle}>
-      <Source id="my-data" type="geojson" data={geoJSON}>
-        <Layer id="my-layer" {...pointLayer2} />
-      </Source>
-    </Map>
+  const styleLoaded = waitForMapStyleLoad(mapRef);
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapStyle={mapStyle}>
+        <Source id="my-data" type="geojson" data={geoJSON}>
+          <Layer id="my-layer" {...pointLayer2} />
+        </Source>
+      </Map>
+    )
   );
-  await sleep(50);
+  await actUntil(resolveTest => styleLoaded.then(resolveTest));
   expect(mapRef.current.getLayer('my-layer'), 'Layer is added after style change').toBeTruthy();
 
-  root.render(<Map ref={mapRef} mapStyle={mapStyle} />);
-  await sleep(1);
+  await act(() => root.render(<Map ref={mapRef} mapStyle={mapStyle} />));
   expect(mapRef.current.getSource('my-data'), 'Source is removed').toBeFalsy();
   expect(mapRef.current.getLayer('my-layer'), 'Layer is removed').toBeFalsy();
 
-  root.unmount();
+  await act(() => root.unmount());
 });
