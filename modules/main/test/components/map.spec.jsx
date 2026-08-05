@@ -2,9 +2,10 @@
 import {Map} from 'react-map-gl/mapbox-legacy';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
+import {act} from 'react-dom/test-utils';
 import {expect, test} from 'vitest';
 
-import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {waitForMapLoad, actUntil} from '../utils/test-utils';
 
 test('Map', async () => {
   expect(Map, 'Map is defined').toBeTruthy();
@@ -15,13 +16,15 @@ test('Map', async () => {
   let onloadCalled = 0;
   const onLoad = () => onloadCalled++;
 
-  root.render(
-    <Map
-      ref={mapRef}
-      mapLib={import('mapbox-gl-v1')}
-      initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
-      onLoad={onLoad}
-    />
+  await act(() =>
+    root.render(
+      <Map
+        ref={mapRef}
+        mapLib={import('mapbox-gl-v1')}
+        initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
+        onLoad={onLoad}
+      />
+    )
   );
 
   await waitForMapLoad(mapRef);
@@ -31,17 +34,18 @@ test('Map', async () => {
   expect(mapRef.current.getCenter().lat, 'latitude is set').toBe(40);
   expect(mapRef.current.getZoom(), 'zoom is set').toBe(4);
 
-  root.render(
-    <Map
-      ref={mapRef}
-      mapLib={import('mapbox-gl-v1')}
-      longitude={-122}
-      latitude={38}
-      zoom={14}
-      onLoad={onLoad}
-    />
+  await act(() =>
+    root.render(
+      <Map
+        ref={mapRef}
+        mapLib={import('mapbox-gl-v1')}
+        longitude={-122}
+        latitude={38}
+        zoom={14}
+        onLoad={onLoad}
+      />
+    )
   );
-  await sleep(1);
 
   expect(mapRef.current.getCenter().lng, 'longitude is updated').toBe(-122);
   expect(mapRef.current.getCenter().lat, 'latitude is updated').toBe(38);
@@ -49,11 +53,11 @@ test('Map', async () => {
 
   expect(onloadCalled, 'onLoad is called').toBe(1);
 
-  root.unmount();
+  await act(() => root.unmount());
 });
 
 test('Map#uncontrolled', async () => {
-  await new Promise(resolveTest => {
+  await actUntil(resolveTest => {
     const root = createRoot(document.createElement('div'));
     const mapRef = {current: null};
 
@@ -90,7 +94,7 @@ test('Map#uncontrolled', async () => {
 });
 
 test('Map#controlled#no-update', async () => {
-  await new Promise(resolveTest => {
+  await actUntil(resolveTest => {
     const root = createRoot(document.createElement('div'));
     const mapRef = {current: null};
 
@@ -125,7 +129,7 @@ test('Map#controlled#no-update', async () => {
 });
 
 test('Map#controlled#mirror-back', async () => {
-  await new Promise(resolveTest => {
+  await actUntil(resolveTest => {
     const root = createRoot(document.createElement('div'));
     const mapRef = {current: null};
 
@@ -169,7 +173,7 @@ test('Map#controlled#mirror-back', async () => {
 });
 
 test('Map#controlled#delayed-update', async () => {
-  await new Promise(resolveTest => {
+  await actUntil(resolveTest => {
     const root = createRoot(document.createElement('div'));
     const mapRef = {current: null};
 

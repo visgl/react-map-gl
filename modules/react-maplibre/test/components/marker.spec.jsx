@@ -2,8 +2,9 @@
 import {expect, test} from 'vitest';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
+import {act} from 'react-dom/test-utils';
 import {Map, Marker} from '@vis.gl/react-maplibre';
-import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {waitForMapLoad} from '../utils/test-utils';
 
 test('Marker', async () => {
   const rootContainer = document.createElement('div');
@@ -11,14 +12,15 @@ test('Marker', async () => {
   const markerRef = {current: null};
   const mapRef = {current: null};
 
-  root.render(
-    <Map ref={mapRef}>
-      <Marker ref={markerRef} longitude={-122} latitude={38} />
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef}>
+        <Marker ref={markerRef} longitude={-122} latitude={38} offset={[0, 0]} />
+      </Map>
+    )
   );
 
   await waitForMapLoad(mapRef);
-  await sleep(1);
 
   expect(
     rootContainer.querySelector('.maplibregl-marker'),
@@ -33,34 +35,37 @@ test('Marker', async () => {
   const pitchAlignment = marker.getPitchAlignment();
   const rotationAlignment = marker.getRotationAlignment();
 
-  root.render(
-    <Map ref={mapRef}>
-      <Marker ref={markerRef} longitude={-122} latitude={38} offset={[0, 0]} />
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef}>
+        <Marker ref={markerRef} longitude={-122} latitude={38} offset={[0, 0]} />
+      </Map>
+    )
   );
 
   expect(offset, 'offset did not change deeply').toBe(marker.getOffset());
 
   let callbackType = '';
-  root.render(
-    <Map ref={mapRef}>
-      <Marker
-        ref={markerRef}
-        longitude={-122}
-        latitude={38}
-        offset={[0, 1]}
-        rotation={30}
-        draggable
-        className="classA"
-        pitchAlignment="viewport"
-        rotationAlignment="viewport"
-        onDragStart={() => (callbackType = 'dragstart')}
-        onDrag={() => (callbackType = 'drag')}
-        onDragEnd={() => (callbackType = 'dragend')}
-      />
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef}>
+        <Marker
+          ref={markerRef}
+          longitude={-122}
+          latitude={38}
+          offset={[0, 1]}
+          rotation={30}
+          draggable
+          className="classA"
+          pitchAlignment="viewport"
+          rotationAlignment="viewport"
+          onDragStart={() => (callbackType = 'dragstart')}
+          onDrag={() => (callbackType = 'drag')}
+          onDragEnd={() => (callbackType = 'dragend')}
+        />
+      </Map>
+    )
   );
-  await sleep(1);
 
   expect(offset, 'offset is updated').not.toBe(marker.getOffset());
   expect(draggable, 'draggable is updated').not.toBe(marker.isDraggable());
@@ -76,21 +81,21 @@ test('Marker', async () => {
   marker.fire('dragend');
   expect(callbackType, 'onDragEnd called').toBe('dragend');
 
-  root.render(<Map ref={mapRef} />);
-  await sleep(1);
+  await act(() => root.render(<Map ref={mapRef} />));
 
   expect(markerRef.current, 'marker is removed').toBeFalsy();
 
-  root.render(
-    <Map ref={mapRef}>
-      <Marker ref={markerRef} longitude={-100} latitude={40}>
-        <div id="marker-content" />
-      </Marker>
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef}>
+        <Marker ref={markerRef} longitude={-100} latitude={40}>
+          <div id="marker-content" />
+        </Marker>
+      </Map>
+    )
   );
-  await sleep(1);
 
   expect(rootContainer.querySelector('#marker-content'), 'content is rendered').toBeTruthy();
 
-  root.unmount();
+  await act(() => root.unmount());
 });
