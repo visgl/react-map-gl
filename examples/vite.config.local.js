@@ -1,7 +1,7 @@
 import {defineConfig} from 'vite';
 import {join} from 'path';
 
-const rootDir = join(__dirname, '..');
+const rootDir = join(import.meta.dirname, '..');
 
 /** https://vitejs.dev/config/ */
 export default defineConfig(async () => {
@@ -23,7 +23,9 @@ export default defineConfig(async () => {
       port: 8080
     },
     optimizeDeps: {
-      esbuildOptions: {target: 'es2020'}
+      rolldownOptions: {
+        transform: {target: 'es2020'}
+      }
     }
   };
 });
