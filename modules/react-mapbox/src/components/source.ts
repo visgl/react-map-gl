@@ -3,6 +3,7 @@ import {useContext, useEffect, useMemo, useState, useRef, cloneElement} from 're
 import {MapContext} from './map';
 import assert from '../utils/assert';
 import {deepEqual} from '../utils/deep-equal';
+import {removeSource} from '../utils/remove-source';
 
 import type {
   SourceSpecification,
@@ -108,7 +109,7 @@ export function Source(props: SourceProps) {
               }
             }
           }
-          map.removeSource(id);
+          removeSource(map, id);
         }
       };
     }
