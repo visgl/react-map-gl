@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'test/utils/vitest-tape';
 import {applyReactStyle} from '@vis.gl/react-maplibre/utils/apply-react-style';
 
 test('applyReactStyle', t => {

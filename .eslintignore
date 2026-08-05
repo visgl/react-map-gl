@@ -1,6 +1,0 @@
-dist/
-node_modules/
-test/
-modules/**/test/
-**/vite.config.js
-examples/vite.config.local.js
