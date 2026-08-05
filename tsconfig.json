@@ -12,16 +12,20 @@
     "module": "es2020",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "jsx": "react",
+    "strict": false,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "ignoreDeprecations": "6.0",
     "baseUrl": "./",
+    "types": ["geojson", "node"],
     "paths": {
       "react-map-gl": ["modules/main/src"],
       "@vis.gl/react-mapbox": ["modules/react-mapbox/src"],
-      "@vis.gl/react-maplibre": ["modules/react-maplibre/src"]
+      "@vis.gl/react-maplibre": ["modules/react-maplibre/src"],
+      "test/*": ["test/*"]
     },
     "plugins": [
       {

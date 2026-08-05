@@ -14,32 +14,43 @@
   "scripts": {
     "bootstrap": "yarn && ocular-bootstrap && npm run build",
     "build": "ocular-clean && ocular-build",
+    "cover": "ocular-test headless --coverage",
     "lint": "ocular-lint",
+    "playwright:install": "playwright install chromium",
     "publish-beta": "ocular-publish version-only-beta",
     "publish-prod": "ocular-publish version-only-prod",
-    "test": "ocular-test",
+    "test": "ocular-test node headless",
+    "test-browser": "ocular-test browser",
     "test-fast": "ocular-build && ocular-test node",
+    "test-headless": "ocular-test headless",
+    "test-node": "ocular-test node",
     "metrics": "ocular-metrics",
     "update-release-branch": "scripts/update-release-branch.sh"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@types/react": "^16.0.0",
-    "@vis.gl/dev-tools": "1.0.0-alpha.21",
-    "@vis.gl/ts-plugins": "1.0.0-alpha.21",
+    "@types/geojson": "^7946.0.8",
+    "@types/node": "^22.12.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@vis.gl/dev-tools": "2.0.0-alpha.6",
+    "@vis.gl/ts-plugins": "2.0.0-alpha.6",
+    "@vitest/coverage-v8": "^4.0.18",
+    "jsdom": "^16.0.0",
     "mapbox-gl-v1": "npm:mapbox-gl@1.13.0",
     "mapbox-gl-v3": "npm:mapbox-gl@3.9.0",
+    "playwright": "^1.58.0",
     "pre-commit": "^1.2.2",
-    "puppeteer": "^22.4.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "typescript": "^5.0.0"
+    "vitest": "^4.0.18"
   },
   "pre-commit": [
     "test-fast"
   ],
-  "volta": {
-    "node": "24.18.0",
-    "yarn": "1.22.22"
-  }
+  "dependenciesMeta": {
+    "esbuild": {
+      "built": true
+    }
+  },
+  "packageManager": "yarn@4.17.1+sha512.ccbfabf7d7b6b32075088be9386fb9a2e00bb6887ef07fa56effabc890a56d53da1ccc4128d62db245fcbd3961b236d75335bdf7d5320ed6eafb7588b7ad4697"
 }

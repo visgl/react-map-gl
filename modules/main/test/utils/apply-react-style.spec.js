@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'test/utils/vitest-tape';
 import {applyReactStyle} from 'react-map-gl/mapbox-legacy/utils/apply-react-style';
 
 test('applyReactStyle', t => {
