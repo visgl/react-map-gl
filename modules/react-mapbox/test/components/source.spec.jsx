@@ -1,11 +1,11 @@
 import {Map, Source} from '@vis.gl/react-mapbox';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
-import test from 'test/utils/vitest-tape';
+import {expect, test} from 'vitest';
 import {sleep, waitForMapLoad} from '../utils/test-utils';
 import {MapboxAccessToken} from '../utils/token';
 
-test('Source/Layer', async t => {
+test('Source/Layer', async () => {
   const root = createRoot(document.createElement('div'));
   const mapRef = {current: null};
 
@@ -26,7 +26,7 @@ test('Source/Layer', async t => {
   );
   await waitForMapLoad(mapRef);
   await sleep(1);
-  t.ok(mapRef.current.getSource('my-data'), 'Source is added');
+  expect(mapRef.current.getSource('my-data'), 'Source is added').toBeTruthy();
 
   root.render(
     <Map
@@ -39,7 +39,7 @@ test('Source/Layer', async t => {
     </Map>
   );
   await sleep(50);
-  t.ok(mapRef.current.getSource('my-data'), 'Source is added after style change');
+  expect(mapRef.current.getSource('my-data'), 'Source is added after style change').toBeTruthy();
 
   root.render(
     <Map
@@ -53,7 +53,7 @@ test('Source/Layer', async t => {
   );
   await sleep(1);
   const sourceData = await mapRef.current.getSource('my-data')?._data;
-  t.deepEqual(sourceData, geoJSON2, 'Source is updated');
+  expect(sourceData, 'Source is updated').toEqual(geoJSON2);
 
   root.render(
     <Map
@@ -64,9 +64,7 @@ test('Source/Layer', async t => {
     />
   );
   await sleep(1);
-  t.notOk(mapRef.current.getSource('my-data'), 'Source is removed');
+  expect(mapRef.current.getSource('my-data'), 'Source is removed').toBeFalsy();
 
   root.unmount();
-
-  t.end();
 });

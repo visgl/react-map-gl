@@ -1,4 +1,4 @@
-import test from 'test/utils/vitest-tape';
+import {expect, test} from 'vitest';
 import {
   transformToViewState,
   applyViewStateToTransform
@@ -6,98 +6,76 @@ import {
 
 import Transform from './mapbox-gl-mock/transform';
 
-test('applyViewStateToTransform', t => {
+test('applyViewStateToTransform', () => {
   const tr = new Transform();
 
   let changed = applyViewStateToTransform(tr, {});
-  t.notOk(changed, 'empty view state');
+  expect(changed, 'empty view state').toBeFalsy();
 
   changed = applyViewStateToTransform(tr, {longitude: -10, latitude: 5});
-  t.ok(changed, 'center changed');
-  t.deepEqual(
-    transformToViewState(tr),
-    {
-      longitude: -10,
-      latitude: 5,
-      zoom: 0,
-      pitch: 0,
-      bearing: 0,
-      padding: {left: 0, right: 0, top: 0, bottom: 0}
-    },
-    'view state is correct'
-  );
+  expect(changed, 'center changed').toBeTruthy();
+  expect(transformToViewState(tr), 'view state is correct').toEqual({
+    longitude: -10,
+    latitude: 5,
+    zoom: 0,
+    pitch: 0,
+    bearing: 0,
+    padding: {left: 0, right: 0, top: 0, bottom: 0}
+  });
 
   changed = applyViewStateToTransform(tr, {zoom: -1});
-  t.notOk(changed, 'zoom is clamped');
+  expect(changed, 'zoom is clamped').toBeFalsy();
 
   changed = applyViewStateToTransform(tr, {zoom: 10});
-  t.ok(changed, 'zoom changed');
-  t.deepEqual(
-    transformToViewState(tr),
-    {
-      longitude: -10,
-      latitude: 5,
-      zoom: 10,
-      pitch: 0,
-      bearing: 0,
-      padding: {left: 0, right: 0, top: 0, bottom: 0}
-    },
-    'view state is correct'
-  );
+  expect(changed, 'zoom changed').toBeTruthy();
+  expect(transformToViewState(tr), 'view state is correct').toEqual({
+    longitude: -10,
+    latitude: 5,
+    zoom: 10,
+    pitch: 0,
+    bearing: 0,
+    padding: {left: 0, right: 0, top: 0, bottom: 0}
+  });
 
   changed = applyViewStateToTransform(tr, {pitch: 30});
-  t.ok(changed, 'pitch changed');
-  t.deepEqual(
-    transformToViewState(tr),
-    {
-      longitude: -10,
-      latitude: 5,
-      zoom: 10,
-      pitch: 30,
-      bearing: 0,
-      padding: {left: 0, right: 0, top: 0, bottom: 0}
-    },
-    'view state is correct'
-  );
+  expect(changed, 'pitch changed').toBeTruthy();
+  expect(transformToViewState(tr), 'view state is correct').toEqual({
+    longitude: -10,
+    latitude: 5,
+    zoom: 10,
+    pitch: 30,
+    bearing: 0,
+    padding: {left: 0, right: 0, top: 0, bottom: 0}
+  });
 
   changed = applyViewStateToTransform(tr, {bearing: 270});
-  t.ok(changed, 'bearing changed');
-  t.deepEqual(
-    transformToViewState(tr),
-    {
-      longitude: -10,
-      latitude: 5,
-      zoom: 10,
-      pitch: 30,
-      bearing: -90,
-      padding: {left: 0, right: 0, top: 0, bottom: 0}
-    },
-    'view state is correct'
-  );
+  expect(changed, 'bearing changed').toBeTruthy();
+  expect(transformToViewState(tr), 'view state is correct').toEqual({
+    longitude: -10,
+    latitude: 5,
+    zoom: 10,
+    pitch: 30,
+    bearing: -90,
+    padding: {left: 0, right: 0, top: 0, bottom: 0}
+  });
 
   changed = applyViewStateToTransform(tr, {padding: {left: 10, right: 10, top: 10, bottom: 10}});
-  t.ok(changed, 'padding changed');
-  t.deepEqual(
-    transformToViewState(tr),
-    {
-      longitude: -10,
-      latitude: 5,
-      zoom: 10,
-      pitch: 30,
-      bearing: -90,
-      padding: {left: 10, right: 10, top: 10, bottom: 10}
-    },
-    'view state is correct'
-  );
+  expect(changed, 'padding changed').toBeTruthy();
+  expect(transformToViewState(tr), 'view state is correct').toEqual({
+    longitude: -10,
+    latitude: 5,
+    zoom: 10,
+    pitch: 30,
+    bearing: -90,
+    padding: {left: 10, right: 10, top: 10, bottom: 10}
+  });
 
   changed = applyViewStateToTransform(tr, {viewState: {pitch: 30}});
-  t.notOk(changed, 'nothing changed');
+  expect(changed, 'nothing changed').toBeFalsy();
 
   applyViewStateToTransform(tr, {longitude: 0, latitude: 0, zoom: 0});
   changed = applyViewStateToTransform(tr, {longitude: 12, latitude: 34, zoom: 15});
-  t.ok(changed, 'center and zoom changed');
-  t.equal(tr.zoom, 15, 'zoom is correct');
-  t.equal(tr.center.lat, 34, 'center latitude is correct');
-
-  t.end();
+  expect(changed, 'center and zoom changed').toBeTruthy();
+  expect(tr.zoom, 'zoom is correct').toBe(15);
+  expect(tr.center.lat, 'center latitude is correct').toBe(34);
 });
