@@ -1,4 +1,4 @@
-import test from 'test/utils/vitest-tape';
+import {expect, test} from 'vitest';
 import * as legacyComponents from 'react-map-gl/mapbox-legacy';
 import * as maplibreComponents from '@vis.gl/react-maplibre';
 import * as mapboxComponents from '@vis.gl/react-mapbox';
@@ -38,12 +38,17 @@ function getMissingExports(
   return missingExports.length ? missingExports : null;
 }
 
-test('Consistent component names#legacy', t => {
-  t.notOk(getMissingExports(legacyComponents), 'Legacy endpoint contains all components');
-  t.notOk(
+test('Consistent component names#legacy', () => {
+  expect(
+    getMissingExports(legacyComponents),
+    'Legacy endpoint contains all components'
+  ).toBeFalsy();
+  expect(
     getMissingExports(maplibreComponents, MaplibreComponents),
     'Maplibre endpoint contains all components'
-  );
-  t.notOk(getMissingExports(mapboxComponents), 'Mapbox endpoint contains all components');
-  t.end();
+  ).toBeFalsy();
+  expect(
+    getMissingExports(mapboxComponents),
+    'Mapbox endpoint contains all components'
+  ).toBeFalsy();
 });

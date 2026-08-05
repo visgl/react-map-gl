@@ -1,7 +1,7 @@
-import test from 'test/utils/vitest-tape';
+import {expect, test} from 'vitest';
 import {compareClassNames} from '@vis.gl/react-mapbox/utils/compare-class-names';
 
-test('compareClassNames', t => {
+test('compareClassNames', () => {
   const TEST_CASES = [
     {
       title: 'Empty class names',
@@ -42,11 +42,9 @@ test('compareClassNames', t => {
   ];
 
   for (const testCase of TEST_CASES) {
-    t.deepEqual(
+    expect(
       compareClassNames(testCase.prevClassName, testCase.nextClassName),
-      testCase.output,
       testCase.title
-    );
+    ).toEqual(testCase.output);
   }
-  t.end();
 });
