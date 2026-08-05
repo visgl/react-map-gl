@@ -1,0 +1,67 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.10/schema.json",
+  "extends": ["@vis.gl/dev-tools/biome.jsonc"],
+  "files": {
+    "includes": [
+      "modules/**/*.{js,mjs,jsx,ts,tsx}",
+      "test/**/*.{js,mjs,jsx,ts,tsx}",
+      "examples/**/*.{js,mjs,jsx,ts,tsx}",
+      "!**/dist/**",
+      "!**/node_modules/**",
+      "!**/*.min.js",
+      "!modules/**/types/style-spec.ts"
+    ]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "bracketSpacing": false
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "asNeeded",
+      "bracketSpacing": false,
+      "jsxQuoteStyle": "double",
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "none"
+    }
+  },
+  "linter": {
+    "rules": {
+      "recommended": false,
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "warn"
+      },
+      "correctness": {
+        "noUnreachable": "error",
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "error"
+      },
+      "suspicious": {
+        "noAssignInExpressions": "error",
+        "noAsyncPromiseExecutor": "error",
+        "noConsole": "warn",
+        "noDebugger": "error",
+        "noDoubleEquals": "error",
+        "noGlobalIsNan": "off",
+        "noRedeclare": "error",
+        "noShadow": "warn",
+        "noShadowRestrictedNames": "off"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["test/render/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    }
+  ]
+}

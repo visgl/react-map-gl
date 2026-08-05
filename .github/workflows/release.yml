@@ -58,13 +58,16 @@ jobs:
         run: corepack enable yarn
 
       - name: Install dependencies
-        run: yarn
+        run: yarn install --immutable
+
+      - name: Install Playwright browser
+        run: yarn playwright:install
 
       - name: Build packages
         run: yarn build
       
-      - name: Run tests from transpiled code
-        run: npx ocular-test dist
+      - name: Run tests
+        run: yarn test
 
       - name: Publish to NPM
         run: npx ocular-publish from-git

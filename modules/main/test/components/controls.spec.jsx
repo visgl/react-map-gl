@@ -8,7 +8,7 @@ import {
 } from 'react-map-gl/mapbox-legacy';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
-import test from 'tape-promise/tape';
+import test from 'test/utils/vitest-tape';
 import {sleep, waitForMapLoad} from '../utils/test-utils';
 
 test('Controls', async t => {

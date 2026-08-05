@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'test/utils/vitest-tape';
 
 import {normalizeStyle} from '@vis.gl/react-maplibre/utils/style-utils';
 

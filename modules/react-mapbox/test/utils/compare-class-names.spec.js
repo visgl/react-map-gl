@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'test/utils/vitest-tape';
 import {compareClassNames} from '@vis.gl/react-mapbox/utils/compare-class-names';
 
 test('compareClassNames', t => {
