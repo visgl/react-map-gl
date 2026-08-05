@@ -1,8 +1,9 @@
 import {Map, MapProvider, useMap} from 'react-map-gl/mapbox-legacy';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
+import {act} from 'react-dom/test-utils';
 import {expect, test} from 'vitest';
-import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {waitForMapLoad} from '../utils/test-utils';
 
 test('useMap', async () => {
   const root = createRoot(document.createElement('div'));
@@ -14,12 +15,14 @@ test('useMap', async () => {
     return null;
   }
 
-  root.render(
-    <MapProvider>
-      <Map id="mapA" mapLib={import('mapbox-gl-v1')} />
-      <Map id="mapB" ref={mapRef} mapLib={import('mapbox-gl-v1')} />
-      <TestControl />
-    </MapProvider>
+  await act(() =>
+    root.render(
+      <MapProvider>
+        <Map id="mapA" mapLib={import('mapbox-gl-v1')} />
+        <Map id="mapB" ref={mapRef} mapLib={import('mapbox-gl-v1')} />
+        <TestControl />
+      </MapProvider>
+    )
   );
 
   await waitForMapLoad(mapRef);
@@ -27,23 +30,25 @@ test('useMap', async () => {
   expect(maps.mapA, 'Context has mapA').toBeTruthy();
   expect(maps.mapB, 'Context has mapB').toBeTruthy();
 
-  root.render(
-    <MapProvider>
-      <Map id="mapA" mapLib={import('mapbox-gl-v1')} />
-      <TestControl />
-    </MapProvider>
+  await act(() =>
+    root.render(
+      <MapProvider>
+        <Map id="mapA" mapLib={import('mapbox-gl-v1')} />
+        <TestControl />
+      </MapProvider>
+    )
   );
-  await sleep(50);
   expect(maps.mapA, 'Context has mapA').toBeTruthy();
   expect(maps.mapB, 'mapB is removed').toBeFalsy();
 
-  root.render(
-    <MapProvider>
-      <TestControl />
-    </MapProvider>
+  await act(() =>
+    root.render(
+      <MapProvider>
+        <TestControl />
+      </MapProvider>
+    )
   );
-  await sleep(50);
   expect(maps.mapA, 'mapA is removed').toBeFalsy();
 
-  root.unmount();
+  await act(() => root.unmount());
 });

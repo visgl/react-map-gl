@@ -2,9 +2,10 @@
 import {Map} from '@vis.gl/react-mapbox';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
+import {act} from 'react-dom/test-utils';
 import {expect, test} from 'vitest';
 
-import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {sleep, waitForMapLoad, actUntil} from '../utils/test-utils';
 import {MapboxAccessToken} from '../utils/token';
 
 test('Map', async () => {
@@ -16,14 +17,16 @@ test('Map', async () => {
   let onloadCalled = 0;
   const onLoad = () => onloadCalled++;
 
-  root.render(
-    <Map
-      ref={mapRef}
-      mapLib={import('mapbox-gl-v3')}
-      mapboxAccessToken={MapboxAccessToken}
-      initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
-      onLoad={onLoad}
-    />
+  await act(() =>
+    root.render(
+      <Map
+        ref={mapRef}
+        mapLib={import('mapbox-gl-v3')}
+        mapboxAccessToken={MapboxAccessToken}
+        initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
+        onLoad={onLoad}
+      />
+    )
   );
 
   await waitForMapLoad(mapRef);
@@ -33,17 +36,18 @@ test('Map', async () => {
   expect(mapRef.current.getCenter().lat, 'latitude is set').toBe(40);
   expect(mapRef.current.getZoom(), 'zoom is set').toBe(4);
 
-  root.render(
-    <Map
-      ref={mapRef}
-      mapLib={import('mapbox-gl-v3')}
-      longitude={-122}
-      latitude={38}
-      zoom={14}
-      onLoad={onLoad}
-    />
+  await act(() =>
+    root.render(
+      <Map
+        ref={mapRef}
+        mapLib={import('mapbox-gl-v3')}
+        longitude={-122}
+        latitude={38}
+        zoom={14}
+        onLoad={onLoad}
+      />
+    )
   );
-  await sleep(1);
 
   expect(mapRef.current.getCenter().lng, 'longitude is updated').toBe(-122);
   expect(mapRef.current.getCenter().lat, 'latitude is updated').toBe(38);
@@ -51,7 +55,7 @@ test('Map', async () => {
 
   expect(onloadCalled, 'onLoad is called').toBe(1);
 
-  root.unmount();
+  await act(() => root.unmount());
 });
 
 test('Map#invalid token', async () => {
@@ -63,22 +67,26 @@ test('Map#invalid token', async () => {
     errorMessage = error.message;
   };
 
-  root.render(
-    <Map
-      ref={mapRef}
-      mapLib={import('mapbox-gl-v3')}
-      initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
-      onError={onError}
-    />
+  await act(() =>
+    root.render(
+      <Map
+        ref={mapRef}
+        mapLib={import('mapbox-gl-v3')}
+        initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
+        onError={onError}
+      />
+    )
   );
 
   await waitForMapLoad(mapRef);
 
   expect(errorMessage?.includes('access token'), 'Throws on missing access token').toBeTruthy();
+
+  await act(() => root.unmount());
 });
 
 test('Map#uncontrolled', async () => {
-  await new Promise(resolveTest => {
+  await actUntil(resolveTest => {
     const root = createRoot(document.createElement('div'));
     const mapRef = {current: null};
 
@@ -117,7 +125,7 @@ test('Map#uncontrolled', async () => {
 });
 
 test('Map#controlled#no-update', async () => {
-  await new Promise(resolveTest => {
+  await actUntil(resolveTest => {
     const root = createRoot(document.createElement('div'));
     const mapRef = {current: null};
 
@@ -156,6 +164,10 @@ test('Map#controlled#no-update', async () => {
 test('Map#uncontrolled#delayedSettingsUpdate', async () => {
   const root = createRoot(document.createElement('div'));
   const mapRef = {current: null};
+  let resolveSettingsUpdated;
+  const settingsUpdated = new Promise(resolve => {
+    resolveSettingsUpdated = resolve;
+  });
 
   function App() {
     const [settings, setSettings] = React.useState({
@@ -165,6 +177,7 @@ test('Map#uncontrolled#delayedSettingsUpdate', async () => {
     async function onLoad() {
       await sleep(1);
       setSettings({maxPitch: 60});
+      resolveSettingsUpdated();
     }
 
     return (
@@ -179,16 +192,18 @@ test('Map#uncontrolled#delayedSettingsUpdate', async () => {
     );
   }
 
-  root.render(<App />);
+  await act(() => root.render(<App />));
 
   await waitForMapLoad(mapRef);
-  await sleep(1);
+  await actUntil(resolveTest => settingsUpdated.then(resolveTest));
 
   expect(mapRef.current.getMaxPitch(), 'maxPitch is updated').toBe(60);
+
+  await act(() => root.unmount());
 });
 
 test('Map#controlled#mirror-back', async () => {
-  await new Promise(resolveTest => {
+  await actUntil(resolveTest => {
     const root = createRoot(document.createElement('div'));
     const mapRef = {current: null};
 
@@ -234,7 +249,7 @@ test('Map#controlled#mirror-back', async () => {
 });
 
 test('Map#controlled#delayed-update', async () => {
-  await new Promise(resolveTest => {
+  await actUntil(resolveTest => {
     const root = createRoot(document.createElement('div'));
     const mapRef = {current: null};
 
