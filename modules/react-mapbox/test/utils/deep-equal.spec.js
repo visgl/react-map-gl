@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'test/utils/vitest-tape';
 import {deepEqual, arePointsEqual} from '@vis.gl/react-mapbox/utils/deep-equal';
 
 test('deepEqual', t => {

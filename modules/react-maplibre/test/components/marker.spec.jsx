@@ -1,5 +1,5 @@
 /* global document */
-import test from 'tape-promise/tape';
+import test from 'test/utils/vitest-tape';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import {Map, Marker} from '@vis.gl/react-maplibre';

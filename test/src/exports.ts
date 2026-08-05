@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import test from 'test/utils/vitest-tape';
 import * as legacyComponents from 'react-map-gl/mapbox-legacy';
 import * as maplibreComponents from '@vis.gl/react-maplibre';
 import * as mapboxComponents from '@vis.gl/react-mapbox';
