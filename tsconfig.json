@@ -18,14 +18,12 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "moduleResolution": "bundler",
-    "ignoreDeprecations": "6.0",
-    "baseUrl": "./",
     "types": ["geojson", "node"],
     "paths": {
-      "react-map-gl": ["modules/main/src"],
-      "@vis.gl/react-mapbox": ["modules/react-mapbox/src"],
-      "@vis.gl/react-maplibre": ["modules/react-maplibre/src"],
-      "test/*": ["test/*"]
+      "react-map-gl": ["./modules/main/src"],
+      "@vis.gl/react-mapbox": ["./modules/react-mapbox/src"],
+      "@vis.gl/react-maplibre": ["./modules/react-maplibre/src"],
+      "test/*": ["./test/*"]
     },
     "plugins": [
       {
