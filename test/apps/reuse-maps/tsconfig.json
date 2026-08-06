@@ -3,7 +3,7 @@
     "target": "es2020",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "sourceMap": true,
     "module": "ES2020"
   }
