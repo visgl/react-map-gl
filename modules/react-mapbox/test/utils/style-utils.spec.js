@@ -1,4 +1,4 @@
-import test from 'tape-promise/tape';
+import {expect, test} from 'vitest';
 
 import {normalizeStyle} from '@vis.gl/react-mapbox/utils/style-utils';
 
@@ -174,26 +174,22 @@ const expectedStyle = {
   ]
 };
 
-test('normalizeStyle', t => {
+test('normalizeStyle', () => {
   // Make sure the style is not mutated
   freezeRecursive(testStyle);
 
-  t.is(normalizeStyle(null), null, 'Handles null');
-  t.is(
-    normalizeStyle('mapbox://styles/mapbox/light-v9'),
-    'mapbox://styles/mapbox/light-v9',
-    'Handles url string'
+  expect(normalizeStyle(null), 'Handles null').toBe(null);
+  expect(normalizeStyle('mapbox://styles/mapbox/light-v9'), 'Handles url string').toBe(
+    'mapbox://styles/mapbox/light-v9'
   );
 
   let result = normalizeStyle(testStyle);
-  t.notEqual(result, testStyle, 'style is not mutated');
-  t.deepEqual(result, expectedStyle, 'plain object style is normalized');
+  expect(result, 'style is not mutated').not.toBe(testStyle);
+  expect(result, 'plain object style is normalized').toEqual(expectedStyle);
 
   // Immutable-like object
   result = normalizeStyle({toJS: () => testStyle});
-  t.deepEqual(result, expectedStyle, 'immutable style is normalized');
-
-  t.end();
+  expect(result, 'immutable style is normalized').toEqual(expectedStyle);
 });
 
 function freezeRecursive(obj) {

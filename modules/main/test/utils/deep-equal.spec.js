@@ -1,7 +1,7 @@
-import test from 'tape-promise/tape';
+import {expect, test} from 'vitest';
 import {deepEqual, arePointsEqual} from 'react-map-gl/mapbox-legacy/utils/deep-equal';
 
-test('deepEqual', t => {
+test('deepEqual', () => {
   const testCases = [
     {
       a: null,
@@ -46,16 +46,14 @@ test('deepEqual', t => {
   ];
 
   for (const {a, b, result} of testCases) {
-    t.is(deepEqual(a, b), result, `${JSON.stringify(a)} vs ${JSON.stringify(b)}`);
+    expect(deepEqual(a, b), `${JSON.stringify(a)} vs ${JSON.stringify(b)}`).toBe(result);
     if (a !== b) {
-      t.is(deepEqual(b, a), result, `${JSON.stringify(b)} vs ${JSON.stringify(a)}`);
+      expect(deepEqual(b, a), `${JSON.stringify(b)} vs ${JSON.stringify(a)}`).toBe(result);
     }
   }
-
-  t.end();
 });
 
-test('arePointsEqual', t => {
+test('arePointsEqual', () => {
   const testCases = [
     {
       a: undefined,
@@ -85,11 +83,9 @@ test('arePointsEqual', t => {
   ];
 
   for (const {a, b, result} of testCases) {
-    t.is(arePointsEqual(a, b), result, `${JSON.stringify(a)}, ${JSON.stringify(b)}`);
+    expect(arePointsEqual(a, b), `${JSON.stringify(a)}, ${JSON.stringify(b)}`).toBe(result);
     if (a !== b) {
-      t.is(arePointsEqual(b, a), result, `${JSON.stringify(b)}, ${JSON.stringify(a)}`);
+      expect(arePointsEqual(b, a), `${JSON.stringify(b)}, ${JSON.stringify(a)}`).toBe(result);
     }
   }
-
-  t.end();
 });

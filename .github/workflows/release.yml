@@ -48,19 +48,21 @@ jobs:
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
 
       - name: Enable Corepack
         run: corepack enable yarn
 
       - name: Install dependencies
-        run: yarn
+        run: yarn install --immutable
+
+      - name: Install Playwright browser
+        run: yarn playwright:install
 
       - name: Build packages
         run: yarn build
       
-      - name: Run tests from transpiled code
-        run: npx ocular-test dist
+      - name: Run tests
+        run: yarn test
 
       - name: Login to NPM
         run: npm config set "//registry.npmjs.org/:_authToken=${NPM_ACCESS_TOKEN}"

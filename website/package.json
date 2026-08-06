@@ -25,11 +25,12 @@
     "@vis.gl/docusaurus-website": "1.0.0-alpha.23",
     "@turf/area": "^6.5.0",
     "@turf/bbox": "^6.5.0",
+    "copy-webpack-plugin": "^11.0.0",
     "d3-array": "^3.1.1",
     "d3-scale": "^4.0.2",
     "immutable": "^4.0.0",
     "mapbox-gl": "^3.9.0",
-    "maplibre-gl": "^5.0.0",
+    "maplibre-gl": "^6.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

@@ -1,11 +1,12 @@
 import {Map, Source, Layer} from 'react-map-gl/mapbox-legacy';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
-import test from 'tape-promise/tape';
+import {act} from 'react-dom/test-utils';
+import {expect, test} from 'vitest';
 
-import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {waitForMapLoad, waitForMapStyleLoad, actUntil} from '../utils/test-utils';
 
-test('Source/Layer', async t => {
+test('Source/Layer', async () => {
   const root = createRoot(document.createElement('div'));
   const mapRef = {current: null};
 
@@ -32,44 +33,48 @@ test('Source/Layer', async t => {
     }
   };
 
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
-      <Source id="my-data" type="geojson" data={geoJSON}>
-        <Layer id="my-layer" {...pointLayer} />
-      </Source>
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
+        <Source id="my-data" type="geojson" data={geoJSON}>
+          <Layer id="my-layer" {...pointLayer} />
+        </Source>
+      </Map>
+    )
   );
   await waitForMapLoad(mapRef);
-  await sleep(1);
   const layer = mapRef.current.getLayer('my-layer');
-  t.ok(layer, 'Layer is added');
+  expect(layer, 'Layer is added').toBeTruthy();
 
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
-      <Source id="my-data" type="geojson" data={geoJSON}>
-        <Layer id="my-layer" {...pointLayer2} />
-      </Source>
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
+        <Source id="my-data" type="geojson" data={geoJSON}>
+          <Layer id="my-layer" {...pointLayer2} />
+        </Source>
+      </Map>
+    )
   );
-  await sleep(1);
-  t.is(layer.visibility, 'none', 'Layer is updated');
+  expect(layer.visibility, 'Layer is updated').toBe('none');
 
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')} mapStyle={mapStyle}>
-      <Source id="my-data" type="geojson" data={geoJSON}>
-        <Layer id="my-layer" {...pointLayer2} />
-      </Source>
-    </Map>
+  const styleLoaded = waitForMapStyleLoad(mapRef);
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v1')} mapStyle={mapStyle}>
+        <Source id="my-data" type="geojson" data={geoJSON}>
+          <Layer id="my-layer" {...pointLayer2} />
+        </Source>
+      </Map>
+    )
   );
-  await sleep(50);
-  t.ok(mapRef.current.getLayer('my-layer'), 'Layer is added after style change');
+  await actUntil(resolveTest => styleLoaded.then(resolveTest));
+  expect(mapRef.current.getLayer('my-layer'), 'Layer is added after style change').toBeTruthy();
 
-  root.render(<Map ref={mapRef} mapLib={import('mapbox-gl-v1')} mapStyle={mapStyle} />);
-  await sleep(1);
-  t.notOk(mapRef.current.getSource('my-data'), 'Source is removed');
-  t.notOk(mapRef.current.getLayer('my-layer'), 'Layer is removed');
+  await act(() =>
+    root.render(<Map ref={mapRef} mapLib={import('mapbox-gl-v1')} mapStyle={mapStyle} />)
+  );
+  expect(mapRef.current.getSource('my-data'), 'Source is removed').toBeFalsy();
+  expect(mapRef.current.getLayer('my-layer'), 'Layer is removed').toBeFalsy();
 
-  root.unmount();
-
-  t.end();
+  await act(() => root.unmount());
 });

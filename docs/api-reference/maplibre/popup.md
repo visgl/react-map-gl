@@ -99,7 +99,7 @@ You may use it to call any imperative methods:
 import * as React from 'react';
 import {useRef, useEffect} from 'react';
 import {Map, Popup} from 'react-map-gl/maplibre';
-import maplibregl from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
 
 function App() {
   const popupRef = useRef<maplibregl.Popup>();

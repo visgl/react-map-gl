@@ -1,28 +1,25 @@
-import test from 'tape-promise/tape';
+import {expect, test} from 'vitest';
 import {applyReactStyle} from '@vis.gl/react-maplibre/utils/apply-react-style';
 
-test('applyReactStyle', t => {
+test('applyReactStyle', () => {
   /* global document */
   if (typeof document === 'undefined') {
-    t.end();
     return;
   }
 
   const div = document.createElement('div');
 
-  t.doesNotThrow(() => applyReactStyle(null, {}), 'null element');
+  expect(() => applyReactStyle(null, {}), 'null element').not.toThrow();
 
-  t.doesNotThrow(() => applyReactStyle(div, null), 'null style');
+  expect(() => applyReactStyle(div, null), 'null style').not.toThrow();
 
   applyReactStyle(div, {marginLeft: 4, height: 24, lineHeight: 2, zIndex: 1, flexGrow: 0.5});
 
-  t.is(div.style.marginLeft, '4px', 'appended px to numeric value');
-  t.is(div.style.height, '24px', 'appended px to numeric value');
-  t.is(div.style.lineHeight, '2', 'unitless numeric property');
-  t.is(div.style.zIndex, '1', 'unitless numeric property');
-  t.is(div.style.flexGrow, '0.5', 'unitless numeric property');
-
-  t.end();
+  expect(div.style.marginLeft, 'appended px to numeric value').toBe('4px');
+  expect(div.style.height, 'appended px to numeric value').toBe('24px');
+  expect(div.style.lineHeight, 'unitless numeric property').toBe('2');
+  expect(div.style.zIndex, 'unitless numeric property').toBe('1');
+  expect(div.style.flexGrow, 'unitless numeric property').toBe('0.5');
 });
 
 test('applyReactStyle#unset removed properties', t => {

@@ -19,9 +19,9 @@
   "module": "dist/index.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
@@ -33,7 +33,7 @@
     "@maplibre/maplibre-gl-style-spec": "^19.2.1"
   },
   "devDependencies": {
-    "maplibre-gl": "^5.0.0"
+    "maplibre-gl": "^6.0.0"
   },
   "peerDependencies": {
     "maplibre-gl": ">=4.0.0",

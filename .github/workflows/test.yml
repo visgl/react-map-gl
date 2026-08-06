@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        maplibre: ['^4.0.0', '^5.0.0']
+        maplibre: ['^4.0.0', '^5.0.0', '^6.0.0']
     permissions:
       checks: write
       contents: read
@@ -28,29 +28,36 @@ jobs:
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
 
       - name: Enable Corepack
         run: corepack enable yarn
 
+      - name: Install dependencies
+        run: yarn install --immutable
+
       - name: Install MapLibre GL JS ${{ matrix.maplibre }}
         run: yarn workspace @vis.gl/react-maplibre add --dev "maplibre-gl@${{ matrix.maplibre }}"
 
-      - name: Install dependencies
-        run: yarn bootstrap
+      - name: Install Playwright browser
+        run: yarn playwright:install
+
+      - name: Build packages
+        run: yarn build
 
       - name: Run tests
         env:
           VITE_MAPBOX_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN_CI }}
         run: |
           yarn lint
-          yarn test ci
+          yarn test-node
+          yarn cover
 
       - name: Coveralls
         if: matrix.maplibre == '^5.0.0'
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          fail-on-error: false
 
   test-node:
     runs-on: ubuntu-22.04
