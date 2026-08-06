@@ -1,27 +1,29 @@
 import {Map, Marker} from 'react-map-gl/mapbox-legacy';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
-import test from 'test/utils/vitest-tape';
+import {act} from 'react-dom/test-utils';
+import {expect, test} from 'vitest';
 
-import {sleep, waitForMapLoad} from '../utils/test-utils';
+import {waitForMapLoad} from '../utils/test-utils';
 
-test('Marker', async t => {
+test('Marker', async () => {
   const rootContainer = document.createElement('div');
   const root = createRoot(rootContainer);
   const markerRef = {current: null};
   const mapRef = {current: null};
 
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
-      <Marker ref={markerRef} longitude={-122} latitude={38} />
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
+        <Marker ref={markerRef} longitude={-122} latitude={38} offset={[0, 0]} />
+      </Map>
+    )
   );
 
   await waitForMapLoad(mapRef);
-  await sleep(1);
 
-  t.ok(rootContainer.querySelector('.mapboxgl-marker'), 'Marker is attached to DOM');
-  t.ok(markerRef.current, 'Marker is created');
+  expect(rootContainer.querySelector('.mapboxgl-marker'), 'Marker is attached to DOM').toBeTruthy();
+  expect(markerRef.current, 'Marker is created').toBeTruthy();
 
   const marker = markerRef.current;
   const offset = marker.getOffset();
@@ -30,64 +32,65 @@ test('Marker', async t => {
   const pitchAlignment = marker.getPitchAlignment();
   const rotationAlignment = marker.getRotationAlignment();
 
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
-      <Marker ref={markerRef} longitude={-122} latitude={38} offset={[0, 0]} />
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
+        <Marker ref={markerRef} longitude={-122} latitude={38} offset={[0, 0]} />
+      </Map>
+    )
   );
 
-  t.is(offset, marker.getOffset(), 'offset did not change deeply');
+  expect(offset, 'offset did not change deeply').toBe(marker.getOffset());
 
   let callbackType = '';
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
-      <Marker
-        ref={markerRef}
-        longitude={-122}
-        latitude={38}
-        offset={[0, 1]}
-        rotation={30}
-        draggable
-        pitchAlignment="map"
-        rotationAlignment="map"
-        onDragStart={() => (callbackType = 'dragstart')}
-        onDrag={() => (callbackType = 'drag')}
-        onDragEnd={() => (callbackType = 'dragend')}
-      />
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
+        <Marker
+          ref={markerRef}
+          longitude={-122}
+          latitude={38}
+          offset={[0, 1]}
+          rotation={30}
+          draggable
+          pitchAlignment="map"
+          rotationAlignment="map"
+          onDragStart={() => (callbackType = 'dragstart')}
+          onDrag={() => (callbackType = 'drag')}
+          onDragEnd={() => (callbackType = 'dragend')}
+        />
+      </Map>
+    )
   );
-  await sleep(1);
 
-  t.not(offset, marker.getOffset(), 'offset is updated');
-  t.not(draggable, marker.isDraggable(), 'draggable is updated');
-  t.not(rotation, marker.getRotation(), 'rotation is updated');
-  t.not(pitchAlignment, marker.getPitchAlignment(), 'pitchAlignment is updated');
-  t.not(rotationAlignment, marker.getRotationAlignment(), 'rotationAlignment is updated');
+  expect(offset, 'offset is updated').not.toBe(marker.getOffset());
+  expect(draggable, 'draggable is updated').not.toBe(marker.isDraggable());
+  expect(rotation, 'rotation is updated').not.toBe(marker.getRotation());
+  expect(pitchAlignment, 'pitchAlignment is updated').not.toBe(marker.getPitchAlignment());
+  expect(rotationAlignment, 'rotationAlignment is updated').not.toBe(marker.getRotationAlignment());
 
   marker.fire('dragstart');
-  t.is(callbackType, 'dragstart', 'onDragStart called');
+  expect(callbackType, 'onDragStart called').toBe('dragstart');
   marker.fire('drag');
-  t.is(callbackType, 'drag', 'onDrag called');
+  expect(callbackType, 'onDrag called').toBe('drag');
   marker.fire('dragend');
-  t.is(callbackType, 'dragend', 'onDragEnd called');
+  expect(callbackType, 'onDragEnd called').toBe('dragend');
 
-  root.render(<Map ref={mapRef} mapLib={import('mapbox-gl-v1')} />);
-  await sleep(1);
+  await act(() => root.render(<Map ref={mapRef} mapLib={import('mapbox-gl-v1')} />));
 
-  t.notOk(markerRef.current, 'marker is removed');
+  expect(markerRef.current, 'marker is removed').toBeFalsy();
 
-  root.render(
-    <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
-      <Marker ref={markerRef} longitude={-100} latitude={40}>
-        <div id="marker-content" />
-      </Marker>
-    </Map>
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapLib={import('mapbox-gl-v1')}>
+        <Marker ref={markerRef} longitude={-100} latitude={40}>
+          <div id="marker-content" />
+        </Marker>
+      </Map>
+    )
   );
-  await sleep(1);
 
-  t.ok(rootContainer.querySelector('#marker-content'), 'content is rendered');
+  expect(rootContainer.querySelector('#marker-content'), 'content is rendered').toBeTruthy();
 
-  root.unmount();
-
-  t.end();
+  await act(() => root.unmount());
 });
