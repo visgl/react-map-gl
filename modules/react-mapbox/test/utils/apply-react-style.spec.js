@@ -21,3 +21,28 @@ test('applyReactStyle', () => {
   expect(div.style.zIndex, 'unitless numeric property').toBe('1');
   expect(div.style.flexGrow, 'unitless numeric property').toBe('0.5');
 });
+
+test('applyReactStyle#unset removed properties', t => {
+  /* global document */
+  if (typeof document === 'undefined') {
+    t.end();
+    return;
+  }
+
+  const div = document.createElement('div');
+
+  applyReactStyle(div, {background: 'red', color: 'blue'});
+  t.is(div.style.background, 'red', 'sets background');
+  t.is(div.style.color, 'blue', 'sets color');
+
+  // A property whose value becomes undefined should be unset, others preserved
+  applyReactStyle(div, {background: undefined, color: 'blue'});
+  t.is(div.style.background, '', 'unset property that became undefined');
+  t.is(div.style.color, 'blue', 'kept property that is still set');
+
+  // A property omitted from the style object should also be unset
+  applyReactStyle(div, {});
+  t.is(div.style.color, '', 'unset property that was removed from styles');
+
+  t.end();
+});
