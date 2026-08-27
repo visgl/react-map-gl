@@ -129,25 +129,25 @@ Default: `null`
 
 The padding in pixels around the viewport.
 
-#### `minZoom`: number {#minzoom}
+#### `minZoom`: number | null {#minzoom}
 
 Default: `0`
 
 The minimum zoom level of the map (0-24).
 
-#### `maxZoom`: number {#maxzoom}
+#### `maxZoom`: number | null {#maxzoom}
 
 Default: `22`
 
 The maximum zoom level of the map (0-24).
 
-#### `minPitch`: number {#minpitch}
+#### `minPitch`: number | null {#minpitch}
 
 Default: `0`
 
 The minimum pitch of the map (0-85).
 
-#### `maxPitch`: number {#maxpitch}
+#### `maxPitch`: number | null {#maxpitch}
 
 Default: `60`
 

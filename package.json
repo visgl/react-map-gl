@@ -19,11 +19,12 @@
     "playwright:install": "playwright install chromium",
     "publish-beta": "ocular-publish version-only-beta",
     "publish-prod": "ocular-publish version-only-prod",
-    "test": "ocular-test node headless",
+    "test": "npm run test-types && ocular-test node headless",
     "test-browser": "ocular-test browser",
     "test-fast": "ocular-build && ocular-test node",
     "test-headless": "ocular-test headless",
-    "test-node": "ocular-test node",
+    "test-node": "npm run test-types && ocular-test node",
+    "test-types": "tsc --build modules/main/tsconfig.json && tsc --project test/types/tsconfig.json",
     "metrics": "ocular-metrics",
     "update-release-branch": "scripts/update-release-branch.sh"
   },
@@ -42,6 +43,7 @@
     "pre-commit": "^1.2.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "typescript": "^6.0.3",
     "vitest": "^4.0.18"
   },
   "pre-commit": [

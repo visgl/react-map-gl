@@ -25,7 +25,7 @@ import type {
   TerrainSpecification,
   ProjectionSpecification
 } from '../types/style-spec';
-import type {MapInstance} from '../types/lib';
+import type {MapInstance, MapOptions} from '../types/lib';
 import type {CameraUpdateTransformFunction, MapEventType} from 'maplibre-gl';
 import type {
   MapCallbacks,
@@ -87,27 +87,27 @@ export type MaplibreProps = Partial<ViewState> &
     /** Minimum zoom available to the map.
      * @default 0
      */
-    minZoom?: number;
+    minZoom?: MapOptions['minZoom'];
     /** Maximum zoom available to the map.
      * @default 22
      */
-    maxZoom?: number;
+    maxZoom?: MapOptions['maxZoom'];
     /** Minimum pitch available to the map.
      * @default 0
      */
-    minPitch?: number;
+    minPitch?: MapOptions['minPitch'];
     /** Maximum pitch available to the map.
      * @default 85
      */
-    maxPitch?: number;
+    maxPitch?: MapOptions['maxPitch'];
     /** Bounds of the map.
      * @default [-180, -85.051129, 180, 85.051129]
      */
-    maxBounds?: [number, number, number, number];
+    maxBounds?: MapOptions['maxBounds'];
     /** Whether to render copies of the world or not.
      * @default true
      */
-    renderWorldCopies?: boolean;
+    renderWorldCopies?: MapOptions['renderWorldCopies'];
   };
 
 const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as StyleSpecification;
