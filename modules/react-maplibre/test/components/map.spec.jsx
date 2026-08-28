@@ -4,7 +4,17 @@ import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import {act} from 'react-dom/test-utils';
 import {Map} from '@vis.gl/react-maplibre';
+import Maplibre from '../../src/maplibre/maplibre';
 import {waitForMapLoad, actUntil} from '../utils/test-utils';
+
+function getCameraConstraints(map) {
+  return {
+    minZoom: map.getMinZoom(),
+    maxZoom: map.getMaxZoom(),
+    minPitch: map.getMinPitch(),
+    maxPitch: map.getMaxPitch()
+  };
+}
 
 test('Map', async () => {
   expect(Map, 'Map is defined').toBeTruthy();
@@ -43,6 +53,107 @@ test('Map', async () => {
   expect(onloadCalled, 'onLoad is called').toBe(1);
 
   await act(() => root.unmount());
+});
+
+test('Map resets camera constraints to MapLibre defaults', async () => {
+  const root = createRoot(document.createElement('div'));
+  const mapRef = {current: null};
+
+  await act(() => root.render(<Map ref={mapRef} />));
+  await waitForMapLoad(mapRef);
+
+  const defaults = getCameraConstraints(mapRef.current);
+
+  await act(() =>
+    root.render(<Map ref={mapRef} minZoom={2} maxZoom={10} minPitch={5} maxPitch={40} />)
+  );
+
+  expect(getCameraConstraints(mapRef.current)).toEqual({
+    minZoom: 2,
+    maxZoom: 10,
+    minPitch: 5,
+    maxPitch: 40
+  });
+
+  await act(() =>
+    root.render(<Map ref={mapRef} minZoom={null} maxZoom={null} minPitch={null} maxPitch={null} />)
+  );
+
+  expect(getCameraConstraints(mapRef.current)).toEqual(defaults);
+
+  await act(() =>
+    root.render(<Map ref={mapRef} minZoom={3} maxZoom={11} minPitch={6} maxPitch={41} />)
+  );
+  await act(() =>
+    root.render(
+      <Map
+        ref={mapRef}
+        minZoom={undefined}
+        maxZoom={undefined}
+        minPitch={undefined}
+        maxPitch={undefined}
+      />
+    )
+  );
+
+  expect(getCameraConstraints(mapRef.current)).toEqual(defaults);
+
+  await act(() =>
+    root.render(<Map ref={mapRef} minZoom={4} maxZoom={12} minPitch={7} maxPitch={42} />)
+  );
+  await act(() => root.render(<Map ref={mapRef} />));
+
+  expect(getCameraConstraints(mapRef.current)).toEqual(defaults);
+
+  await act(() => root.unmount());
+
+  for (const resetValue of [null, undefined]) {
+    const initialRoot = createRoot(document.createElement('div'));
+    const initialMapRef = {current: null};
+    await act(() =>
+      initialRoot.render(
+        <Map
+          ref={initialMapRef}
+          minZoom={resetValue}
+          maxZoom={resetValue}
+          minPitch={resetValue}
+          maxPitch={resetValue}
+        />
+      )
+    );
+    await waitForMapLoad(initialMapRef);
+    expect(getCameraConstraints(initialMapRef.current)).toEqual(defaults);
+    await act(() => initialRoot.unmount());
+  }
+});
+
+test('Map resets camera constraints when reusing a map', async () => {
+  const firstRoot = createRoot(document.createElement('div'));
+  const firstMapRef = {current: null};
+
+  await act(() => firstRoot.render(<Map ref={firstMapRef} reuseMaps />));
+  await waitForMapLoad(firstMapRef);
+
+  const defaults = getCameraConstraints(firstMapRef.current);
+
+  await act(() =>
+    firstRoot.render(
+      <Map ref={firstMapRef} reuseMaps minZoom={2} maxZoom={10} minPitch={5} maxPitch={40} />
+    )
+  );
+  await act(() => firstRoot.unmount());
+
+  const secondRoot = createRoot(document.createElement('div'));
+  const secondMapRef = {current: null};
+  await act(() => secondRoot.render(<Map ref={secondMapRef} reuseMaps />));
+  await waitForMapLoad(secondMapRef);
+
+  expect(getCameraConstraints(secondMapRef.current)).toEqual(defaults);
+
+  await act(() => secondRoot.unmount());
+  while (Maplibre.savedMaps.length > 0) {
+    Maplibre.savedMaps.pop().destroy();
+  }
 });
 
 test('Map#uncontrolled', async () => {

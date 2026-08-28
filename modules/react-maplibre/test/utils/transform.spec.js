@@ -104,12 +104,15 @@ test('applyViewStateToTransform', () => {
   expect(changed, 'nothing changed').toEqual({});
 });
 
-function createConstraintMap(setMinName, setMaxName) {
+function createConstraintMap(setMinName, setMaxName, defaultRange) {
   let first = null;
   let currentMin = 0;
   let currentMax = 0;
+  const getMinName = setMinName.replace('set', 'get');
   const map = {
+    [getMinName]: () => currentMin,
     [setMinName]: nextMin => {
+      nextMin ??= defaultRange.min;
       if (nextMin > currentMax) {
         throw new Error(`Setting ${setMinName} (${nextMin}) > current max (${currentMax})`);
       }
@@ -119,6 +122,7 @@ function createConstraintMap(setMinName, setMaxName) {
       }
     },
     [setMaxName]: nextMax => {
+      nextMax ??= defaultRange.max;
       if (nextMax < currentMin) {
         throw new Error(`Setting ${setMaxName} (${nextMax}) < current min (${currentMin})`);
       }
@@ -141,8 +145,8 @@ function createConstraintMap(setMinName, setMaxName) {
   };
 }
 
-function testConstraintUpdate(updateFn, setMinName, setMaxName, label) {
-  const helper = createConstraintMap(setMinName, setMaxName);
+function testConstraintUpdate(updateFn, setMinName, setMaxName, label, defaultRange) {
+  const helper = createConstraintMap(setMinName, setMaxName, defaultRange);
 
   // Range shifting down
   helper.reset(5, 10);
@@ -194,6 +198,25 @@ function testConstraintUpdate(updateFn, setMinName, setMaxName, label) {
   updateFn(helper.map, {min: 3, max: 8}, {min: 6, max: 10});
   expect(helper.getFirst(), `${label}: 6 - 10 -> 3 - 8, partial overlap shifting down`).toBe('min');
 
+  // Resetting max may lower it below the current min
+  helper.reset(defaultRange.max + 1, defaultRange.max + 2);
+  updateFn(
+    helper.map,
+    {min: defaultRange.max - 2, max: undefined},
+    {min: defaultRange.max + 1, max: defaultRange.max + 2}
+  );
+  expect(helper.getFirst(), `${label}: lower min before resetting max`).toBe('min');
+
+  // All nullable forms represent the same native reset
+  helper.reset(defaultRange.min, defaultRange.max);
+  const nullableChanged = updateFn(
+    helper.map,
+    {min: null, max: undefined},
+    {min: undefined, max: null}
+  );
+  expect(nullableChanged, `${label}: nullable reset forms are equivalent`).toBe(false);
+  expect(helper.getFirst(), `${label}: nullable reset forms do not call setters`).toBe(null);
+
   // No change returns false
   helper.reset(3, 10);
   const changed = updateFn(helper.map, {min: 3, max: 10}, {min: 3, max: 10});
@@ -201,9 +224,15 @@ function testConstraintUpdate(updateFn, setMinName, setMaxName, label) {
 }
 
 test('updateZoomConstraint', () => {
-  testConstraintUpdate(updateZoomConstraint, 'setMinZoom', 'setMaxZoom', 'zoom');
+  testConstraintUpdate(updateZoomConstraint, 'setMinZoom', 'setMaxZoom', 'zoom', {
+    min: -2,
+    max: 22
+  });
 });
 
 test('updatePitchConstraint', () => {
-  testConstraintUpdate(updatePitchConstraint, 'setMinPitch', 'setMaxPitch', 'pitch');
+  testConstraintUpdate(updatePitchConstraint, 'setMinPitch', 'setMaxPitch', 'pitch', {
+    min: 0,
+    max: 60
+  });
 });

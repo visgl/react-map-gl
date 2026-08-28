@@ -6444,7 +6444,6 @@ __metadata:
     pre-commit: "npm:^1.2.2"
     react: "npm:^18.0.0"
     react-dom: "npm:^18.0.0"
-    typescript: "npm:^6.0.3"
     vitest: "npm:^4.0.18"
   dependenciesMeta:
     esbuild:
