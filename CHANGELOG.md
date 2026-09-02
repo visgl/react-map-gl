@@ -2,6 +2,11 @@
 
 # Version 8.1
 
+## v8.1.3 (Sep 2, 2026)
+
+- fix: prevent app wide crash when terrain properties are undefined (#2582)
+- fix: declare the published packages side-effect free so unused components can be tree-shaken (#2610)
+
 ## v8.1.2 (Jul 29, 2026)
 
 - Support MapLibre GL JS v6 (#2598)
