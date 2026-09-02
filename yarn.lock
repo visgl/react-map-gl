@@ -1954,7 +1954,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vis.gl/react-mapbox@npm:8.1.0-alpha.2, @vis.gl/react-mapbox@workspace:modules/react-mapbox":
+"@vis.gl/react-mapbox@npm:8.1.2, @vis.gl/react-mapbox@workspace:modules/react-mapbox":
   version: 0.0.0-use.local
   resolution: "@vis.gl/react-mapbox@workspace:modules/react-mapbox"
   dependencies:
@@ -1969,7 +1969,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@vis.gl/react-maplibre@npm:8.1.0-alpha.2, @vis.gl/react-maplibre@workspace:modules/react-maplibre":
+"@vis.gl/react-maplibre@npm:8.1.2, @vis.gl/react-maplibre@workspace:modules/react-maplibre":
   version: 0.0.0-use.local
   resolution: "@vis.gl/react-maplibre@workspace:modules/react-maplibre"
   dependencies:
@@ -6456,8 +6456,8 @@ __metadata:
   resolution: "react-map-gl@workspace:modules/main"
   dependencies:
     "@types/mapbox-gl": "npm:3.4.0"
-    "@vis.gl/react-mapbox": "npm:8.1.0-alpha.2"
-    "@vis.gl/react-maplibre": "npm:8.1.0-alpha.2"
+    "@vis.gl/react-mapbox": "npm:8.1.2"
+    "@vis.gl/react-maplibre": "npm:8.1.2"
     mapbox-gl: "npm:1.13.0"
   peerDependencies:
     mapbox-gl: ">=1.13.0"
