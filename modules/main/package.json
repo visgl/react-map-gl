@@ -15,6 +15,7 @@
   },
   "license": "MIT",
   "type": "module",
+  "sideEffects": false,
   "exports": {
     "./mapbox": {
       "types": "./dist/mapbox.d.ts",
