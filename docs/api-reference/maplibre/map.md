@@ -129,29 +129,29 @@ Default: `null`
 
 The padding in pixels around the viewport.
 
-#### `minZoom`: number {#minzoom}
+#### `minZoom`: number | null | undefined {#minzoom}
 
-Default: `0`
+Default: native MapLibre default (currently `-2`)
 
-The minimum zoom level of the map (0-24).
+The minimum zoom level of the map. Passing `null` or `undefined` resets it to the native MapLibre default.
 
-#### `maxZoom`: number {#maxzoom}
+#### `maxZoom`: number | null | undefined {#maxzoom}
 
-Default: `22`
+Default: native MapLibre default (currently `22`)
 
-The maximum zoom level of the map (0-24).
+The maximum zoom level of the map. Passing `null` or `undefined` resets it to the native MapLibre default.
 
-#### `minPitch`: number {#minpitch}
+#### `minPitch`: number | null | undefined {#minpitch}
 
-Default: `0`
+Default: native MapLibre default (currently `0`)
 
-The minimum pitch of the map (0-85).
+The minimum pitch of the map. Passing `null` or `undefined` resets it to the native MapLibre default.
 
-#### `maxPitch`: number {#maxpitch}
+#### `maxPitch`: number | null | undefined {#maxpitch}
 
-Default: `60`
+Default: native MapLibre default (currently `60`)
 
-The maximum pitch of the map (0-85).
+The maximum pitch of the map. Passing `null` or `undefined` resets it to the native MapLibre default.
 
 #### `maxBounds`: [LngLatBoundsLike](./types.md#lnglatboundslike) {#maxbounds}
 

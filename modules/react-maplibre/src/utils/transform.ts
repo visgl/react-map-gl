@@ -83,31 +83,47 @@ export function applyViewStateToTransform(
  * @param setMin - setter for the minimum value
  * @param setMax - setter for the maximum value
  */
+type ConstraintValue = number | null | undefined;
+
+type ConstraintRange = {min: ConstraintValue; max: ConstraintValue};
+
+function isConstraintReset(value: ConstraintValue): value is null | undefined {
+  return value === null || value === undefined;
+}
+
+function sameConstraintValue(a: ConstraintValue, b: ConstraintValue): boolean {
+  return (isConstraintReset(a) && isConstraintReset(b)) || a === b;
+}
+
 function updateConstraint(
-  nextRange: {min: number; max: number},
-  currentRange: {min: number; max: number},
-  setMin: (v: number) => void,
-  setMax: (v: number) => void
+  nextRange: ConstraintRange,
+  currentRange: ConstraintRange,
+  getCurrentMin: () => number,
+  setMin: (v?: number | null) => void,
+  setMax: (v?: number | null) => void
 ): boolean {
-  if (nextRange.min === currentRange.min && nextRange.max === currentRange.max) {
+  const minChanged = !sameConstraintValue(nextRange.min, currentRange.min);
+  const maxChanged = !sameConstraintValue(nextRange.max, currentRange.max);
+
+  if (!minChanged && !maxChanged) {
     return false;
   }
 
-  // When moving up (min increasing), update max first to make room
-  if (nextRange.min >= currentRange.min) {
-    if (nextRange.max !== currentRange.max) {
-      setMax(nextRange.max);
-    }
-    if (nextRange.min !== currentRange.min) {
+  // When lowering or resetting min, update it first to make room.
+  // Otherwise update max first before raising min.
+  if (isConstraintReset(nextRange.min) || nextRange.min < getCurrentMin()) {
+    if (minChanged) {
       setMin(nextRange.min);
+    }
+    if (maxChanged) {
+      setMax(nextRange.max);
     }
   } else {
-    // When moving down (min decreasing), update min first to make room
-    if (nextRange.min !== currentRange.min) {
-      setMin(nextRange.min);
-    }
-    if (nextRange.max !== currentRange.max) {
+    if (maxChanged) {
       setMax(nextRange.max);
+    }
+    if (minChanged) {
+      setMin(nextRange.min);
     }
   }
 
@@ -116,12 +132,13 @@ function updateConstraint(
 
 export function updateZoomConstraint(
   map: MapInstance,
-  nextRange: {min: number; max: number},
-  currentRange: {min: number; max: number}
+  nextRange: ConstraintRange,
+  currentRange: ConstraintRange
 ): boolean {
   return updateConstraint(
     nextRange,
     currentRange,
+    () => map.getMinZoom(),
     v => map.setMinZoom(v),
     v => map.setMaxZoom(v)
   );
@@ -129,12 +146,13 @@ export function updateZoomConstraint(
 
 export function updatePitchConstraint(
   map: MapInstance,
-  nextRange: {min: number; max: number},
-  currentRange: {min: number; max: number}
+  nextRange: ConstraintRange,
+  currentRange: ConstraintRange
 ): boolean {
   return updateConstraint(
     nextRange,
     currentRange,
+    () => map.getMinPitch(),
     v => map.setMinPitch(v),
     v => map.setMaxPitch(v)
   );

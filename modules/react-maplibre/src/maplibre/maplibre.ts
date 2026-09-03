@@ -25,7 +25,7 @@ import type {
   TerrainSpecification,
   ProjectionSpecification
 } from '../types/style-spec';
-import type {MapInstance} from '../types/lib';
+import type {MapInstance, MapOptions} from '../types/lib';
 import type {CameraUpdateTransformFunction, MapEventType} from 'maplibre-gl';
 import type {
   MapCallbacks,
@@ -35,8 +35,24 @@ import type {
   MapMouseEvent
 } from '../types/events';
 
+const cameraConstraintNames = ['minZoom', 'maxZoom', 'minPitch', 'maxPitch'] as const;
+
+type ReactiveMapOptions = Pick<
+  MapOptions,
+  (typeof cameraConstraintNames)[number] | 'maxBounds' | 'renderWorldCopies'
+>;
+
+function removeNullishCameraConstraints(options: ReactiveMapOptions): void {
+  for (const propName of cameraConstraintNames) {
+    if (options[propName] === null || options[propName] === undefined) {
+      delete options[propName];
+    }
+  }
+}
+
 export type MaplibreProps = Partial<ViewState> &
-  MapCallbacks & {
+  MapCallbacks &
+  ReactiveMapOptions & {
     /** Camera options used when constructing the Map instance */
     initialViewState?: Partial<ViewState> & {
       /** The initial bounds of the map. If bounds is specified, it overrides longitude, latitude and zoom options. */
@@ -83,40 +99,11 @@ export type MaplibreProps = Partial<ViewState> &
     interactiveLayerIds?: string[];
     /** CSS cursor */
     cursor?: string;
-
-    /** Minimum zoom available to the map.
-     * @default 0
-     */
-    minZoom?: number;
-    /** Maximum zoom available to the map.
-     * @default 22
-     */
-    maxZoom?: number;
-    /** Minimum pitch available to the map.
-     * @default 0
-     */
-    minPitch?: number;
-    /** Maximum pitch available to the map.
-     * @default 85
-     */
-    maxPitch?: number;
-    /** Bounds of the map.
-     * @default [-180, -85.051129, 180, 85.051129]
-     */
-    maxBounds?: [number, number, number, number];
-    /** Whether to render copies of the world or not.
-     * @default true
-     */
-    renderWorldCopies?: boolean;
   };
 
 const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as StyleSpecification;
 
 const DEFAULT_SETTINGS = {
-  minZoom: 0,
-  maxZoom: 22,
-  minPitch: 0,
-  maxPitch: 85,
   maxBounds: [-180, -85.051129, 180, 85.051129],
   projection: 'mercator',
   renderWorldCopies: true
@@ -302,6 +289,7 @@ export default class Maplibre {
       container,
       style: normalizeStyle(mapStyle)
     };
+    removeNullishCameraConstraints(mapOptions);
 
     const viewState = mapOptions.initialViewState || mapOptions.viewState || mapOptions;
     Object.assign(mapOptions, {
@@ -457,23 +445,23 @@ export default class Maplibre {
     const didUpdateZoom = updateZoomConstraint(
       this._map,
       {
-        min: nextProps.minZoom ?? DEFAULT_SETTINGS.minZoom,
-        max: nextProps.maxZoom ?? DEFAULT_SETTINGS.maxZoom
+        min: nextProps.minZoom,
+        max: nextProps.maxZoom
       },
       {
-        min: currProps.minZoom ?? DEFAULT_SETTINGS.minZoom,
-        max: currProps.maxZoom ?? DEFAULT_SETTINGS.maxZoom
+        min: currProps.minZoom,
+        max: currProps.maxZoom
       }
     );
     const didUpdatePitch = updatePitchConstraint(
       this._map,
       {
-        min: nextProps.minPitch ?? DEFAULT_SETTINGS.minPitch,
-        max: nextProps.maxPitch ?? DEFAULT_SETTINGS.maxPitch
+        min: nextProps.minPitch,
+        max: nextProps.maxPitch
       },
       {
-        min: currProps.minPitch ?? DEFAULT_SETTINGS.minPitch,
-        max: currProps.maxPitch ?? DEFAULT_SETTINGS.maxPitch
+        min: currProps.minPitch,
+        max: currProps.maxPitch
       }
     );
 
