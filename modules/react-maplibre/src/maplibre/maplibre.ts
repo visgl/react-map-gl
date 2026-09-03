@@ -500,7 +500,7 @@ export default class Maplibre {
         diff: styleDiffing
       };
       if ('localIdeographFontFamily' in nextProps) {
-        // @ts-ignore Mapbox specific prop
+        // localIdeographFontFamily is a MapLibre StyleOptions field; TS 4.9+ in-narrowing makes this type-safe
         options.localIdeographFontFamily = nextProps.localIdeographFontFamily;
       }
       this._map.setStyle(normalizeStyle(mapStyle), options);
