@@ -104,7 +104,7 @@ export type MaplibreProps = Partial<ViewState> &
 const DEFAULT_STYLE = {version: 8, sources: {}, layers: []} as StyleSpecification;
 
 const DEFAULT_SETTINGS = {
-  maxBounds: [-180, -85.051129, 180, 85.051129],
+  maxBounds: null,
   projection: 'mercator',
   renderWorldCopies: true
 };

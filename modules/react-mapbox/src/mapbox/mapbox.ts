@@ -90,7 +90,7 @@ const DEFAULT_SETTINGS = {
   maxZoom: 22,
   minPitch: 0,
   maxPitch: 85,
-  maxBounds: [-180, -85.051129, 180, 85.051129],
+  maxBounds: null,
   projection: 'mercator',
   renderWorldCopies: true
 };
