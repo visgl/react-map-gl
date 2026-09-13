@@ -156,6 +156,27 @@ test('Map resets camera constraints when reusing a map', async () => {
   }
 });
 
+test('Map resets maxBounds when the prop is removed', async () => {
+  const root = createRoot(document.createElement('div'));
+  const mapRef = {current: null};
+  const maxBounds = [-120, 20, -80, 50];
+
+  await act(() => root.render(<Map ref={mapRef} maxBounds={maxBounds} />));
+  await waitForMapLoad(mapRef);
+
+  const applied = mapRef.current.getMaxBounds();
+  expect(applied.getWest()).toBe(-120);
+  expect(applied.getSouth()).toBe(20);
+  expect(applied.getEast()).toBe(-80);
+  expect(applied.getNorth()).toBe(50);
+
+  await act(() => root.render(<Map ref={mapRef} />));
+
+  expect(mapRef.current.getMaxBounds()).toBe(null);
+
+  await act(() => root.unmount());
+});
+
 test('Map#uncontrolled', async () => {
   await actUntil(resolveTest => {
     const root = createRoot(document.createElement('div'));
