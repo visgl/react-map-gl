@@ -56,3 +56,67 @@ test('Source/Layer', async () => {
 
   await act(() => root.unmount());
 });
+
+test('Source/geojson cluster options', async () => {
+  const root = createRoot(document.createElement('div'));
+  const mapRef = {current: null};
+
+  const mapStyle = {version: 8, sources: {}, layers: []};
+  const geoJSON = {
+    type: 'FeatureCollection',
+    features: [{type: 'Feature', geometry: {type: 'Point', coordinates: [0, 0]}, properties: {}}]
+  };
+
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapStyle={mapStyle}>
+        <Source id="my-data" type="geojson" data={geoJSON} cluster={false} />
+      </Map>
+    )
+  );
+  await waitForMapLoad(mapRef);
+
+  const source = mapRef.current.getSource('my-data');
+  expect(source, 'Source is added').toBeTruthy();
+
+  const setClusterOptionsCalls = [];
+  const setDataCalls = [];
+  const setClusterOptions = source.setClusterOptions.bind(source);
+  const setData = source.setData.bind(source);
+  source.setClusterOptions = options => {
+    setClusterOptionsCalls.push(options);
+    return setClusterOptions(options);
+  };
+  source.setData = data => {
+    setDataCalls.push(data);
+    return setData(data);
+  };
+
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapStyle={mapStyle}>
+        <Source id="my-data" type="geojson" data={geoJSON} cluster clusterRadius={30} />
+      </Map>
+    )
+  );
+  expect(setClusterOptionsCalls, 'Cluster options are updated').toEqual([
+    {cluster: true, clusterMaxZoom: undefined, clusterRadius: 30}
+  ]);
+  expect(setDataCalls, 'Data is not reset when only cluster options change').toEqual([]);
+
+  const geoJSON2 = {
+    type: 'FeatureCollection',
+    features: [{type: 'Feature', geometry: {type: 'Point', coordinates: [1, 1]}, properties: {}}]
+  };
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapStyle={mapStyle}>
+        <Source id="my-data" type="geojson" data={geoJSON2} cluster clusterRadius={30} />
+      </Map>
+    )
+  );
+  expect(setClusterOptionsCalls.length, 'Cluster options are not updated again').toBe(1);
+  expect(setDataCalls, 'Data is updated').toEqual([geoJSON2]);
+
+  await act(() => root.unmount());
+});
