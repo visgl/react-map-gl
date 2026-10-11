@@ -52,23 +52,24 @@ function updateSource(source: AnySourceImplementation, props: SourceProps, prevP
     }
   }
 
-  if (!changedKeyCount) {
+  const type = props.type;
+  // Also catches cluster options that were removed from props
+  const clusterOptionsChanged =
+    type === 'geojson' && CLUSTER_OPTIONS.some(key => !deepEqual(prevProps[key], props[key]));
+
+  if (!changedKeyCount && !clusterOptionsChanged) {
     return;
   }
-
-  const type = props.type;
 
   if (type === 'geojson') {
     const geojsonSource = source as GeoJSONSourceImplementation;
     let clusterOptionsUpdated = false;
-    if (
-      'setClusterOptions' in geojsonSource &&
-      CLUSTER_OPTIONS.some(key => !deepEqual(prevProps[key], props[key]))
-    ) {
+    if ('setClusterOptions' in geojsonSource && clusterOptionsChanged) {
+      // setClusterOptions ignores undefined values, so pass the library defaults explicitly
       geojsonSource.setClusterOptions({
         cluster: props.cluster,
-        clusterMaxZoom: props.clusterMaxZoom,
-        clusterRadius: props.clusterRadius
+        clusterMaxZoom: props.clusterMaxZoom ?? geojsonSource.maxzoom - 1,
+        clusterRadius: props.clusterRadius ?? 50
       });
       clusterOptionsUpdated = true;
     }
