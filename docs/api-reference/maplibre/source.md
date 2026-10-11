@@ -49,6 +49,8 @@ The props provided to this component should be conforming to the [Mapbox source 
 
 When props change _shallowly_, the component will attempt to update the source. Do not define objects/arrays inline to avoid perf hit.
 
+For `geojson` sources, changes to `cluster`, `clusterMaxZoom` and `clusterRadius` are applied with [setClusterOptions](https://maplibre.org/maplibre-gl-js/docs/API/classes/GeoJSONSource/#setclusteroptions). Removing one of these props resets it to the MapLibre default.
+
 Once a `<Source>` is mounted, the following props should not change. If add/remove multiple JSX sources dynamically, make sure you use React's [key prop](https://reactjs.org/docs/lists-and-keys.html#keys) to give each element a stable identity.
 
 #### `id`: string {#id}

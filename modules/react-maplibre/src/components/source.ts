@@ -32,6 +32,9 @@ function createSource(map: MapInstance, id: string, props: SourceProps) {
   return null;
 }
 
+/** GeoJSON source props that can be updated with `GeoJSONSource.setClusterOptions` */
+const CLUSTER_OPTIONS = ['cluster', 'clusterMaxZoom', 'clusterRadius'] as const;
+
 /* eslint-disable complexity */
 function updateSource(source: AnySourceImplementation, props: SourceProps, prevProps: SourceProps) {
   assert(props.id === prevProps.id, 'source id changed');
@@ -39,22 +42,43 @@ function updateSource(source: AnySourceImplementation, props: SourceProps, prevP
 
   let changedKey = '';
   let changedKeyCount = 0;
+  const changedKeys: string[] = [];
 
   for (const key in props) {
     if (key !== 'children' && key !== 'id' && !deepEqual(prevProps[key], props[key])) {
       changedKey = key;
       changedKeyCount++;
+      changedKeys.push(key);
     }
   }
 
-  if (!changedKeyCount) {
+  const type = props.type;
+  // Also catches cluster options that were removed from props
+  const clusterOptionsChanged =
+    type === 'geojson' && CLUSTER_OPTIONS.some(key => !deepEqual(prevProps[key], props[key]));
+
+  if (!changedKeyCount && !clusterOptionsChanged) {
     return;
   }
 
-  const type = props.type;
-
   if (type === 'geojson') {
-    (source as GeoJSONSourceImplementation).setData(props.data);
+    const geojsonSource = source as GeoJSONSourceImplementation;
+    let clusterOptionsUpdated = false;
+    if ('setClusterOptions' in geojsonSource && clusterOptionsChanged) {
+      // setClusterOptions ignores undefined values, so pass the library defaults explicitly
+      geojsonSource.setClusterOptions({
+        cluster: props.cluster ?? false,
+        clusterMaxZoom: props.clusterMaxZoom ?? geojsonSource.maxzoom - 1,
+        clusterRadius: props.clusterRadius ?? 50
+      });
+      clusterOptionsUpdated = true;
+    }
+    if (
+      !clusterOptionsUpdated ||
+      changedKeys.some(key => !CLUSTER_OPTIONS.includes(key as (typeof CLUSTER_OPTIONS)[number]))
+    ) {
+      geojsonSource.setData(props.data);
+    }
   } else if (type === 'image') {
     (source as ImageSourceImplementation).updateImage({
       url: props.url,
