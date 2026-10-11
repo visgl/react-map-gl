@@ -67,7 +67,7 @@ function updateSource(source: AnySourceImplementation, props: SourceProps, prevP
     if ('setClusterOptions' in geojsonSource && clusterOptionsChanged) {
       // setClusterOptions ignores undefined values, so pass the library defaults explicitly
       geojsonSource.setClusterOptions({
-        cluster: props.cluster,
+        cluster: props.cluster ?? false,
         clusterMaxZoom: props.clusterMaxZoom ?? geojsonSource.maxzoom - 1,
         clusterRadius: props.clusterRadius ?? 50
       });

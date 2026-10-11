@@ -168,7 +168,7 @@ test('Source/geojson removing cluster turns clustering off', async () => {
 
   await render({});
   expect(setClusterOptionsCalls.length, 'Cluster options are updated').toBe(1);
-  expect(setClusterOptionsCalls[0].cluster, 'Clustering is turned off').toBeFalsy();
+  expect(setClusterOptionsCalls[0].cluster, 'Clustering is turned off').toBe(false);
   expect(setDataCalls, 'Data is not reset').toEqual([]);
 
   await act(() => root.unmount());
