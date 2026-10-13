@@ -49,7 +49,7 @@ The properties in this section are not reactive. They are only used when the com
   
 #### `position`: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' {#position}
 
-Default: `'top-right'`
+Default: `'bottom-left'`
 
 Placement of the control relative to the map.
 
