@@ -17,6 +17,29 @@
   | `Projection` | `ProjectionSpecification` |
   | `*Layer` | `*LayerSpecification` |
   | `*SourceRaw` | `*SourceSpecification` |
+  | `AnyLayer` | `LayerSpecification` |
+  | `AnySource` | `SourceSpecification` |
+  | `RasterSource` | `RasterSourceSpecification` |
+  | `RasterDemSource` | `RasterDEMSourceSpecification` (`RasterDemSourceSpecification` in `react-map-gl/mapbox-legacy`) |
+  | `MapboxStyle` | `StyleSpecification` |
+
+- When importing from `react-map-gl/mapbox` or `react-map-gl/mapbox-legacy`, these Mapbox-specific names have also changed:
+
+  | Old name | New name |
+  |----------|----------|
+  | `MapboxMap` | `MapInstance` |
+  | `MapboxEvent` | `MapEvent` |
+  | `MapboxGeoJSONFeature` | `MapGeoJSONFeature` |
+  | `MapLayerMouseEvent` | `MapMouseEvent` |
+  | `MapLayerTouchEvent` | `MapTouchEvent` |
+
+  `react-map-gl/maplibre` still exports `MapLayerMouseEvent` and `MapLayerTouchEvent`.
+- The source classes `GeoJSONSource`, `ImageSource`, `CanvasSource`, `VideoSource` and `VectorTileSource` are no longer re-exported. Import them from `mapbox-gl` or `maplibre-gl` directly.
+- `LayerProps` now also accepts custom layers (`CustomLayerInterface`), which have no style properties such as `metadata`. Code that reads those fields from a `LayerProps` value needs to narrow it first:
+
+  ```ts
+  const metadata = layer.type !== 'custom' ? layer.metadata : undefined;
+  ```
 
 ### MapLibre
 
