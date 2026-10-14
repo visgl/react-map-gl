@@ -92,11 +92,19 @@ export function Layer(props: LayerProps) {
   useEffect(() => {
     if (map) {
       const forceUpdate = () => setStyleLoaded(version => version + 1);
-      map.on('styledata', forceUpdate);
+      // `styledata` fires on every style change, e.g. addImage or setPaintProperty.
+      // Only re-render if the layer is missing, e.g. after the style was swapped
+      const onStyleData = () => {
+        // @ts-ignore
+        if (!(map.style && map.style._loaded && map.getLayer(id))) {
+          forceUpdate();
+        }
+      };
+      map.on('styledata', onStyleData);
       forceUpdate();
 
       return () => {
-        map.off('styledata', forceUpdate);
+        map.off('styledata', onStyleData);
         // @ts-ignore
         if (map.style && map.style._loaded && map.getLayer(id)) {
           map.removeLayer(id);

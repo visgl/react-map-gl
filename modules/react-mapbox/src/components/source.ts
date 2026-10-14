@@ -90,11 +90,19 @@ export function Source(props: SourceProps) {
     if (map) {
       /* global setTimeout */
       const forceUpdate = () => setTimeout(() => setStyleLoaded(version => version + 1), 0);
-      map.on('styledata', forceUpdate);
+      // `styledata` fires on every style change, e.g. addImage or setPaintProperty.
+      // Only re-render if the source is missing, e.g. after the style was swapped
+      const onStyleData = () => {
+        // @ts-ignore
+        if (!(map.style && map.style._loaded && map.getSource(id))) {
+          forceUpdate();
+        }
+      };
+      map.on('styledata', onStyleData);
       forceUpdate();
 
       return () => {
-        map.off('styledata', forceUpdate);
+        map.off('styledata', onStyleData);
         // @ts-ignore
         if (map.style && map.style._loaded && map.getSource(id)) {
           // Parent effects are destroyed before child ones, see
