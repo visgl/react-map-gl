@@ -1,5 +1,5 @@
 /* global document */
-import {expect, test} from 'vitest';
+import {expect, test, vi} from 'vitest';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import {act} from 'react-dom/test-utils';
@@ -53,6 +53,46 @@ test('Source/Layer', async () => {
 
   await act(() => root.render(<Map ref={mapRef} mapStyle={mapStyle} />));
   expect(mapRef.current.getSource('my-data'), 'Source is removed').toBeFalsy();
+
+  await act(() => root.unmount());
+});
+
+test('Source/geojson keeps data set imperatively when another prop changes', async () => {
+  const root = createRoot(document.createElement('div'));
+  const mapRef = {current: null};
+
+  const mapStyle = {version: 8, sources: {}, layers: []};
+  const emptyData = {type: 'FeatureCollection', features: []};
+  const pushedData = {
+    type: 'FeatureCollection',
+    features: [{type: 'Feature', geometry: {type: 'Point', coordinates: [0, 0]}, properties: {}}]
+  };
+
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapStyle={mapStyle}>
+        <Source id="my-data" type="geojson" data={emptyData} tolerance={0.375} />
+      </Map>
+    )
+  );
+  await waitForMapLoad(mapRef);
+  const source = mapRef.current.getSource('my-data');
+  expect(source, 'Source is added').toBeTruthy();
+  source.setData(pushedData);
+
+  const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapStyle={mapStyle}>
+        <Source id="my-data" type="geojson" data={emptyData} tolerance={1} />
+      </Map>
+    )
+  );
+  expect(await source.getData(), 'Data set with setData is kept').toEqual(pushedData);
+  expect(warn, 'Option that cannot be applied is reported').toHaveBeenCalledWith(
+    'Unable to update <Source> prop: tolerance'
+  );
+  warn.mockRestore();
 
   await act(() => root.unmount());
 });
