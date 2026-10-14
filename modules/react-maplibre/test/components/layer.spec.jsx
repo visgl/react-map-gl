@@ -129,3 +129,40 @@ test('Source/Layer do not re-render on unrelated style changes', async () => {
 
   await act(() => root.unmount());
 });
+
+test('Source renders its children when the style already has its source', async () => {
+  const root = createRoot(document.createElement('div'));
+  const mapRef = {current: null};
+
+  const geoJSON = {
+    type: 'Point',
+    coordinates: [0, 0]
+  };
+  const mapStyle = {
+    version: 8,
+    sources: {'my-data': {type: 'geojson', data: geoJSON}},
+    layers: []
+  };
+  const pointLayer = {
+    type: 'circle',
+    paint: {
+      'circle-radius': 10,
+      'circle-color': '#007cbf'
+    }
+  };
+
+  await act(() =>
+    root.render(
+      <Map ref={mapRef} mapStyle={mapStyle}>
+        <Source id="my-data" type="geojson" data={geoJSON}>
+          <Layer id="my-layer" {...pointLayer} />
+        </Source>
+      </Map>
+    )
+  );
+  await waitForMapLoad(mapRef);
+  await actUntil(resolveTest => setTimeout(resolveTest, 0));
+  expect(mapRef.current.getLayer('my-layer'), 'Layer is added').toBeTruthy();
+
+  await act(() => root.unmount());
+});
