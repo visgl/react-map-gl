@@ -45,11 +45,13 @@ function updateSource(source: AnySourceImplementation, props: SourceProps, prevP
 
   let changedKey = '';
   let changedKeyCount = 0;
+  const changedKeys: string[] = [];
 
   for (const key in props) {
     if (key !== 'children' && key !== 'id' && !deepEqual(prevProps[key], props[key])) {
       changedKey = key;
       changedKeyCount++;
+      changedKeys.push(key);
     }
   }
 
@@ -60,7 +62,15 @@ function updateSource(source: AnySourceImplementation, props: SourceProps, prevP
   const type = props.type;
 
   if (type === 'geojson') {
-    (source as GeoJSONSourceImplementation).setData(props.data);
+    // Only send data when it changed, it may have been set imperatively
+    for (const key of changedKeys) {
+      if (key === 'data') {
+        (source as GeoJSONSourceImplementation).setData(props.data);
+      } else {
+        // eslint-disable-next-line
+        console.warn(`Unable to update <Source> prop: ${key}`);
+      }
+    }
   } else if (type === 'image') {
     (source as ImageSourceImplementation).updateImage({
       url: props.url,
