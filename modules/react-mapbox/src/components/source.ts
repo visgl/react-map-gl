@@ -83,6 +83,7 @@ export function Source(props: SourceProps) {
   const map = useContext(MapContext).map.getMap();
   const propsRef = useRef(props);
   const [, setStyleLoaded] = useState(0);
+  const sourceRef = useRef(null);
 
   const id = useMemo(() => props.id || `jsx-source-${sourceCounter++}`, []);
 
@@ -90,11 +91,21 @@ export function Source(props: SourceProps) {
     if (map) {
       /* global setTimeout */
       const forceUpdate = () => setTimeout(() => setStyleLoaded(version => version + 1), 0);
-      map.on('styledata', forceUpdate);
+      // `styledata` fires on every style change, e.g. addImage or setPaintProperty.
+      // Only re-render if the source is missing or not the one children were rendered with,
+      // e.g. after the style was swapped or when the style defines a source with the same id
+      const onStyleData = () => {
+        // @ts-ignore
+        const source = map.style && map.style._loaded && map.getSource(id);
+        if (!source || source !== sourceRef.current) {
+          forceUpdate();
+        }
+      };
+      map.on('styledata', onStyleData);
       forceUpdate();
 
       return () => {
-        map.off('styledata', forceUpdate);
+        map.off('styledata', onStyleData);
         // @ts-ignore
         if (map.style && map.style._loaded && map.getSource(id)) {
           // Parent effects are destroyed before child ones, see
@@ -124,6 +135,7 @@ export function Source(props: SourceProps) {
     source = createSource(map, id, props);
   }
   propsRef.current = props;
+  sourceRef.current = source;
 
   return (
     (source &&
