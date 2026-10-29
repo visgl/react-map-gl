@@ -574,6 +574,10 @@ export default class Maplibre {
       return;
     }
     e.viewState = this._propsedCameraUpdate || transformToViewState(getTransformLike(this._map));
+    if (e.type === 'moveend') {
+      // Apply controlled props that were deferred while the camera was moving.
+      this._updateViewState(this.props);
+    }
     // @ts-ignore
     const cb = this.props[cameraEvents[e.type]];
     if (cb) {

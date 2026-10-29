@@ -5,7 +5,7 @@ import {createRoot} from 'react-dom/client';
 import {act} from 'react-dom/test-utils';
 import {Map} from '@vis.gl/react-maplibre';
 import Maplibre from '../../src/maplibre/maplibre';
-import {waitForMapLoad, actUntil} from '../utils/test-utils';
+import {waitForMapLoad, actUntil, sleep} from '../utils/test-utils';
 
 function getCameraConstraints(map) {
   return {
@@ -302,4 +302,46 @@ test('Map#controlled#delayed-update', async () => {
 
     root.render(<App />);
   });
+});
+
+test('Map#controlled#scroll reaches maxZoom', async () => {
+  const root = createRoot(document.createElement('div'));
+  const mapRef = {current: null};
+
+  function App() {
+    const [viewState, setViewState] = React.useState({
+      longitude: -3.16,
+      latitude: 51.5,
+      zoom: 15
+    });
+
+    return (
+      <Map
+        ref={mapRef}
+        {...viewState}
+        maxZoom={18}
+        onMove={e => setViewState(e.viewState)}
+        mapStyle={{version: 8, sources: {}, layers: []}}
+        style={{width: 600, height: 400}}
+      />
+    );
+  }
+
+  await act(() => root.render(<App />));
+  await waitForMapLoad(mapRef);
+
+  const canvas = mapRef.current.getCanvas();
+  let moveEndPromise;
+  for (let i = 0; i < 60; i++) {
+    if (i === 59) {
+      moveEndPromise = new Promise(resolve => mapRef.current.once('moveend', resolve));
+    }
+    canvas.dispatchEvent(new WheelEvent('wheel', {deltaY: -100, bubbles: true}));
+    await act(() => sleep(50));
+  }
+  await actUntil(resolveTest => moveEndPromise.then(resolveTest));
+
+  expect(mapRef.current.getZoom()).toBe(18);
+
+  await act(() => root.unmount());
 });
