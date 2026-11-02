@@ -95,8 +95,6 @@ function _Map(props: MapProps, ref: React.Ref<MapRef>) {
         } else {
           maplibre.destroy();
         }
-        contextValue.map = null;
-        contextValue.mapLib = null;
         setMapInstance(null);
       }
     };

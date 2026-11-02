@@ -251,9 +251,12 @@ export default class Mapbox {
     // intoto the new container from the props.
     // Step 1: reparenting child nodes from old container to new container
     const oldContainer = map.getContainer();
-    container.className = oldContainer.className;
-    while (oldContainer.childNodes.length > 0) {
-      container.appendChild(oldContainer.childNodes[0]);
+    oldContainer.querySelector('[mapboxgl-children]')?.remove();
+    if (oldContainer !== container) {
+      container.className = oldContainer.className;
+      while (oldContainer.childNodes.length > 0) {
+        container.appendChild(oldContainer.childNodes[0]);
+      }
     }
     // Step 2: replace the internal container with new container from the react component
     // @ts-ignore
@@ -382,11 +385,6 @@ export default class Mapbox {
   /* eslint-enable complexity,max-statements */
 
   recycle() {
-    // Clean up unnecessary elements before storing for reuse.
-    const container = this.map.getContainer();
-    const children = container.querySelector('[mapboxgl-children]');
-    children?.remove();
-
     Mapbox.savedMaps.push(this);
   }
 
