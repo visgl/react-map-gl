@@ -40,8 +40,8 @@
     "mapbox-gl-v3": "npm:mapbox-gl@3.9.0",
     "playwright": "^1.58.0",
     "pre-commit": "^1.2.2",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "vitest": "^4.0.18"
   },
   "pre-commit": [

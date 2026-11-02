@@ -1,5 +1,5 @@
 /* global setTimeout */
-import {Map} from '@vis.gl/react-mapbox';
+import {Map, Marker, useControl} from '@vis.gl/react-mapbox';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import {act} from 'react-dom/test-utils';
@@ -7,6 +7,18 @@ import {expect, test} from 'vitest';
 
 import {sleep, waitForMapLoad, actUntil} from '../utils/test-utils';
 import {MapboxAccessToken} from '../utils/token';
+import Mapbox from '../../src/mapbox/mapbox';
+
+function TestControl({onRemove}) {
+  useControl(
+    () => ({
+      onAdd: () => document.createElement('div'),
+      onRemove: () => {}
+    }),
+    onRemove
+  );
+  return null;
+}
 
 test('Map', async () => {
   expect(Map, 'Map is defined').toBeTruthy();
@@ -54,6 +66,83 @@ test('Map', async () => {
   expect(mapRef.current.getZoom(), 'zoom is updated').toBe(14);
 
   expect(onloadCalled, 'onLoad is called').toBe(1);
+
+  await act(() => root.unmount());
+});
+
+test('Map recreates its instance when an Activity becomes visible again', async () => {
+  const rootContainer = document.createElement('div');
+  const root = createRoot(rootContainer);
+  const mapRef = {current: null};
+
+  const render = mode =>
+    act(() =>
+      root.render(
+        <React.Activity mode={mode}>
+          <Map
+            ref={mapRef}
+            mapLib={import('mapbox-gl-v3')}
+            mapboxAccessToken={MapboxAccessToken}
+            initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
+          >
+            <Marker longitude={-100} latitude={40} />
+            <TestControl
+              onRemove={({map}) => expect(map, 'Map is available during cleanup').toBeTruthy()}
+            />
+          </Map>
+        </React.Activity>
+      )
+    );
+
+  await render('visible');
+  await waitForMapLoad(mapRef);
+  const firstMap = mapRef.current.getMap();
+
+  await render('hidden');
+  await render('visible');
+  await waitForMapLoad(mapRef);
+
+  expect(mapRef.current.getMap(), 'Map instance is recreated').not.toBe(firstMap);
+  expect(rootContainer.querySelector('.mapboxgl-marker'), 'Marker is reattached').toBeTruthy();
+
+  await act(() => root.unmount());
+  while (Mapbox.savedMaps.length > 0) {
+    Mapbox.savedMaps.pop().destroy();
+  }
+});
+
+test('Map reconnects its children when an Activity reuses a map', async () => {
+  const rootContainer = document.createElement('div');
+  const root = createRoot(rootContainer);
+  const mapRef = {current: null};
+
+  const render = mode =>
+    act(() =>
+      root.render(
+        <React.Activity mode={mode}>
+          <Map
+            ref={mapRef}
+            mapLib={import('mapbox-gl-v3')}
+            mapboxAccessToken={MapboxAccessToken}
+            initialViewState={{longitude: -100, latitude: 40, zoom: 4}}
+            reuseMaps
+          >
+            <Marker longitude={-100} latitude={40} />
+          </Map>
+        </React.Activity>
+      )
+    );
+
+  await render('visible');
+  await waitForMapLoad(mapRef);
+  const firstMap = mapRef.current.getMap();
+
+  await render('hidden');
+  await render('visible');
+  await waitForMapLoad(mapRef);
+
+  expect(mapRef.current.getMap(), 'Map instance is reused').toBe(firstMap);
+  expect(rootContainer.querySelector('.mapboxgl-marker'), 'Marker is reattached').toBeTruthy();
 
   await act(() => root.unmount());
 });
