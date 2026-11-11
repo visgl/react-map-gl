@@ -5,8 +5,8 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@mapbox/mapbox-gl-geocoder": "^4.7.4",
-    "@types/mapbox__mapbox-gl-geocoder": "^4.7.2",
+    "@mapbox/mapbox-gl-geocoder": "^5.1.3",
+    "@types/mapbox__mapbox-gl-geocoder": "^5.1.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-map-gl": "^8.0.0",
