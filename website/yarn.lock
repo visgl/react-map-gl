@@ -2971,19 +2971,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mapbox/mapbox-gl-geocoder@npm:^4.7.4":
-  version: 4.7.4
-  resolution: "@mapbox/mapbox-gl-geocoder@npm:4.7.4"
+"@mapbox/mapbox-gl-geocoder@npm:^5.1.3":
+  version: 5.1.3
+  resolution: "@mapbox/mapbox-gl-geocoder@npm:5.1.3"
   dependencies:
-    "@mapbox/mapbox-sdk": "npm:^0.13.2"
+    "@mapbox/mapbox-sdk": "npm:^0.16.1"
+    events: "npm:^3.3.0"
     lodash.debounce: "npm:^4.0.6"
-    nanoid: "npm:^2.0.1"
+    nanoid: "npm:^3.1.31"
     subtag: "npm:^0.5.0"
     suggestions: "npm:^1.6.0"
     xtend: "npm:^4.0.1"
-  peerDependencies:
-    mapbox-gl: ">= 0.47.0 < 3.0.0"
-  checksum: 10c0/5818f8a0fef3c4d7a0279910d6839986906d2823250b7742c3cb073f2f215f5c69c65f8b345d577513680d11167844578bbb35e651bc82791d10b8252f5bef69
+  checksum: 10c0/f9b806600acee042bd7752dcafd77c2b2c5532150b50f0f3a4311b2cdafed758daf17d6751f3673f0767ebab8c2c2dc89de4454d4949880c640f68566421d305
   languageName: node
   linkType: hard
 
@@ -2994,19 +2993,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mapbox/mapbox-sdk@npm:^0.13.2":
-  version: 0.13.7
-  resolution: "@mapbox/mapbox-sdk@npm:0.13.7"
+"@mapbox/mapbox-sdk@npm:^0.16.1":
+  version: 0.16.2
+  resolution: "@mapbox/mapbox-sdk@npm:0.16.2"
   dependencies:
     "@mapbox/fusspot": "npm:^0.4.0"
     "@mapbox/parse-mapbox-token": "npm:^0.2.0"
     "@mapbox/polyline": "npm:^1.0.0"
     eventemitter3: "npm:^3.1.0"
-    form-data: "npm:^3.0.0"
+    form-data: "npm:^3.0.4"
     got: "npm:^11.8.5"
     is-plain-obj: "npm:^1.1.0"
     xtend: "npm:^4.0.1"
-  checksum: 10c0/c50ad95153f5dd3464ec2a9f2a87fbdb96c2bb39d4232f51017a4bacb84ed6687aac61e037c270d8a20ba52c4761bcb528166b12514afffa251582f6be1b72fb
+  checksum: 10c0/22aa95e00c814d72fc3b38186aed4cbbb1a8e40c8aee4eac1035cd6a4e8822d92dd1fadd03377268a77851490e94ab3823d48b5a6b0f13d548acfb3a5c1f9eae
   languageName: node
   linkType: hard
 
@@ -6365,6 +6364,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"es-set-tostringtag@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "es-set-tostringtag@npm:2.1.0"
+  dependencies:
+    es-errors: "npm:^1.3.0"
+    get-intrinsic: "npm:^1.2.6"
+    has-tostringtag: "npm:^1.0.2"
+    hasown: "npm:^2.0.2"
+  checksum: 10c0/ef2ca9ce49afe3931cb32e35da4dcb6d86ab02592cfc2ce3e49ced199d9d0bb5085fc7e73e06312213765f5efa47cc1df553a6a5154584b21448e9fb8355b1af
+  languageName: node
+  linkType: hard
+
 "esast-util-from-estree@npm:^2.0.0":
   version: 2.0.0
   resolution: "esast-util-from-estree@npm:2.0.0"
@@ -6922,14 +6933,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^3.0.0":
-  version: 3.0.2
-  resolution: "form-data@npm:3.0.2"
+"form-data@npm:^3.0.4":
+  version: 3.0.5
+  resolution: "form-data@npm:3.0.5"
   dependencies:
     asynckit: "npm:^0.4.0"
     combined-stream: "npm:^1.0.8"
-    mime-types: "npm:^2.1.12"
-  checksum: 10c0/1157ba53ce3a381ea3321b5506ae843ead4027e1b4567b74afa7d84df7043b33c5e518bb267dac56036c3dd8f4d8268be3e7181691488fff766bfccdc98d3bf7
+    es-set-tostringtag: "npm:^2.1.0"
+    hasown: "npm:^2.0.4"
+    mime-types: "npm:^2.1.35"
+  checksum: 10c0/899fdb1ee507f5d44159314a53d05d0c41cbf58f92f99b2dd258dd23a5d2d08d069046523b5f12f38f1870ea4f2338266dc0628ea7c8e9b440a4a31d9b88b4d5
   languageName: node
   linkType: hard
 
@@ -7343,10 +7356,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"has-symbols@npm:^1.1.0":
+"has-symbols@npm:^1.0.3, has-symbols@npm:^1.1.0":
   version: 1.1.0
   resolution: "has-symbols@npm:1.1.0"
   checksum: 10c0/dde0a734b17ae51e84b10986e651c664379018d10b91b6b0e9b293eddb32f0f069688c841fb40f19e9611546130153e0a2a48fd7f512891fb000ddfa36f5a20e
+  languageName: node
+  linkType: hard
+
+"has-tostringtag@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "has-tostringtag@npm:1.0.2"
+  dependencies:
+    has-symbols: "npm:^1.0.3"
+  checksum: 10c0/a8b166462192bafe3d9b6e420a1d581d93dd867adb61be223a17a8d6dad147aa77a8be32c961bb2f27b3ef893cae8d36f564ab651f5e9b7938ae86f74027c48c
   languageName: node
   linkType: hard
 
@@ -7363,6 +7385,15 @@ __metadata:
   dependencies:
     function-bind: "npm:^1.1.2"
   checksum: 10c0/3769d434703b8ac66b209a4cca0737519925bbdb61dd887f93a16372b14694c63ff4e797686d87c90f08168e81082248b9b028bad60d4da9e0d1148766f56eb9
+  languageName: node
+  linkType: hard
+
+"hasown@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "hasown@npm:2.0.4"
+  dependencies:
+    function-bind: "npm:^1.1.2"
+  checksum: 10c0/2d8de939e270b70618f8cebb69746620db10617dbb495bc66ddad326955ea24d3ca4af133aff3eb7c1853e0218f867bc2b050ec26fe02e3aea58f880ffc5e506
   languageName: node
   linkType: hard
 
@@ -9585,7 +9616,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime-types@npm:^2.1.12, mime-types@npm:^2.1.27, mime-types@npm:^2.1.31, mime-types@npm:~2.1.17, mime-types@npm:~2.1.24, mime-types@npm:~2.1.34":
+"mime-types@npm:^2.1.27, mime-types@npm:^2.1.31, mime-types@npm:^2.1.35, mime-types@npm:~2.1.17, mime-types@npm:~2.1.24, mime-types@npm:~2.1.34":
   version: 2.1.35
   resolution: "mime-types@npm:2.1.35"
   dependencies:
@@ -9740,10 +9771,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^2.0.1":
-  version: 2.1.11
-  resolution: "nanoid@npm:2.1.11"
-  checksum: 10c0/8640d17698633ff78b2549ec8d5dffd8f56909bad1cf0da08bf3a4012f98553b1b9f2327a2d7fb3613084f33189a8ab4b889eb4c7939f3f9e242d9fd8ff059d5
+"nanoid@npm:^3.1.31":
+  version: 3.3.20
+  resolution: "nanoid@npm:3.3.20"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 10c0/856e8bf3bddb959d65997bd94908be030dbc5e6ed88fb3af2a638e51d1938f4d4f454c7c7231aba340775224f88b8cfd3ce1693c70471bfd05f5b6a2227c0c1e
   languageName: node
   linkType: hard
 
@@ -11284,7 +11317,7 @@ __metadata:
     "@algolia/autocomplete-js": "npm:^1.8.2"
     "@docusaurus/core": "npm:^3.0.0"
     "@mapbox/mapbox-gl-draw": "npm:^1.3.0"
-    "@mapbox/mapbox-gl-geocoder": "npm:^4.7.4"
+    "@mapbox/mapbox-gl-geocoder": "npm:^5.1.3"
     "@maplibre/maplibre-gl-geocoder": "npm:^1.5.0"
     "@turf/area": "npm:^6.5.0"
     "@turf/bbox": "npm:^6.5.0"
