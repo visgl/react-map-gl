@@ -106,9 +106,6 @@ test('Map recreates its instance when an Activity becomes visible again', async 
   expect(rootContainer.querySelector('.mapboxgl-marker'), 'Marker is reattached').toBeTruthy();
 
   await act(() => root.unmount());
-  while (Mapbox.savedMaps.length > 0) {
-    Mapbox.savedMaps.pop().destroy();
-  }
 });
 
 test('Map reconnects its children when an Activity reuses a map', async () => {
@@ -145,6 +142,9 @@ test('Map reconnects its children when an Activity reuses a map', async () => {
   expect(rootContainer.querySelector('.mapboxgl-marker'), 'Marker is reattached').toBeTruthy();
 
   await act(() => root.unmount());
+  while (Mapbox.savedMaps.length > 0) {
+    Mapbox.savedMaps.pop().destroy();
+  }
 });
 
 test('Map#invalid token', async () => {
