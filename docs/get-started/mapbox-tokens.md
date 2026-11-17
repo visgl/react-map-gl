@@ -32,7 +32,7 @@ Some alternative map data providers include:
 
 Useful resources for creating your own map tiles and service:
 
-- [Martin Tile Server](https://maplibre.org/martin/introduction.html)
+- [Martin Tile Server](https://maplibre.org/martin/)
 - [OpenMapTiles](https://openmaptiles.org)
 - [Mapbox Vector Tile Spec](https://github.com/mapbox/vector-tile-spec)
 - [PMTiles](https://github.com/protomaps/PMTiles)

@@ -43,4 +43,4 @@ Placement of the control relative to the map.
 
 ## Source
 
-[globe-control.ts](https://github.com/visgl/react-map-gl/tree/9.0-release/modules/react-maplibre/src/components/globe-control.ts)
+[globe-control.ts](https://github.com/visgl/react-map-gl/blob/8.1-release/modules/react-maplibre/src/components/globe-control.ts)
